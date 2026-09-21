@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { RecordTrustView } from "@/components/record-trust-view"
 import { StateRulesTable } from "@/components/state-rules-table"
 import { TrustArticle } from "@/components/trust-article"
 import { formatCatalogDate } from "@/lib/catalog"
@@ -22,6 +23,7 @@ export const metadata: Metadata = {
 export default function SourcesPage() {
   return (
     <TrustArticle title="Sources">
+      <RecordTrustView />
       <p>
         Manifest {MANIFEST_VERSION}. Each row names the source, the URL, the
         owner, the license note, how the file was reached, how often it is

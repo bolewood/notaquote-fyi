@@ -65,10 +65,11 @@ import {
   type Scenario,
   type StateCode,
 } from "@/lib/scenario"
+import { recordCount, recordMountedCount } from "@/lib/counts"
 import { useCatalog } from "@/lib/use-catalog"
 import { runVinLookup, selectionAfterVin } from "@/lib/vin-lookup"
 import { cn } from "cn"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 const PERSONA_ORDER: PersonaId[] = ["molly", "jayden", "ava"]
 
@@ -118,6 +119,15 @@ export function Calculator({ initialSearch = "" }: { initialSearch?: string }) {
   const arrivalInvalid = initial.arrivalInvalid
   const catalogLoad = useCatalog()
 
+  useEffect(() => {
+    recordMountedCount("calculator_session")
+    const onPrint = () => {
+      recordCount("worksheet_print")
+    }
+    window.addEventListener("beforeprint", onPrint)
+    return () => window.removeEventListener("beforeprint", onPrint)
+  }, [])
+
   const sample = buildSampleRange(scenario, null)
   const catalogTrim = catalogLoad.catalog ? trimRecord(catalogLoad.catalog, scenario) : null
   const trimConfidence = confidenceOverride ?? catalogTrim?.confidence ?? null
@@ -139,6 +149,7 @@ export function Calculator({ initialSearch = "" }: { initialSearch?: string }) {
   }
 
   function applyPersona(next: PersonaId) {
+    recordCount("persona_click")
     setPersona(next)
     setScenario(PRESETS[next])
     setPremiumText("")
@@ -156,6 +167,7 @@ export function Calculator({ initialSearch = "" }: { initialSearch?: string }) {
       (key) => scenario[key] !== partial[key],
     )
     if (!changed) return
+    recordCount("adjustment")
     setPersona(null)
     setScenario((current) => ({ ...current, ...partial }))
     clearShareDraft()
@@ -171,6 +183,7 @@ export function Calculator({ initialSearch = "" }: { initialSearch?: string }) {
         current: scenario,
       })
       if (result.ok) {
+        recordCount("adjustment")
         setPersona(null)
         setScenario((current) => ({ ...current, ...selectionAfterVin(current, result) }))
         setConfidenceOverride(result.confidence)
@@ -186,12 +199,14 @@ export function Calculator({ initialSearch = "" }: { initialSearch?: string }) {
     setPremiumText(value)
     clearShareDraft()
     if (value.trim() === "") {
+      if (anchor !== null) recordCount("adjustment")
       setAnchor(null)
       setPremiumError(null)
       return
     }
     const parsed = parseAnnualPremium(value)
     if (parsed === null) {
+      if (anchor !== null) recordCount("adjustment")
       setAnchor(null)
       setPremiumError(
         "Enter an annual amount from 1 to 100,000, or clear the field to return to the labeled sample.",
@@ -199,10 +214,12 @@ export function Calculator({ initialSearch = "" }: { initialSearch?: string }) {
       return
     }
     setPremiumError(null)
+    if (anchor?.amount !== parsed) recordCount("adjustment")
     setAnchor({ amount: parsed, snapshot: factorSnapshot(scenario) })
   }
 
   function saveCurrent() {
+    recordCount("save")
     tray.replace(
       rememberComparison(tray.items, {
         scenario,
@@ -238,6 +255,7 @@ export function Calculator({ initialSearch = "" }: { initialSearch?: string }) {
   }
 
   function copyShareLink() {
+    recordCount("share_link_copy")
     const path = encodeSharePath({
       scenario,
       anchorAmount: anchor?.amount ?? null,

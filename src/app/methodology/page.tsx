@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { FactorTables } from "@/components/factor-tables"
+import { RecordTrustView } from "@/components/record-trust-view"
 import { TrustArticle } from "@/components/trust-article"
 import { CATALOG_VERSION } from "@/lib/catalog-meta"
 import { DATA_BUNDLE_VERSION, MANIFEST_VERSION, MODEL_VERSION } from "@/lib/copy"
@@ -58,6 +59,7 @@ const FLAG_LABELS: Record<keyof typeof FLAG_WEIGHT, string> = {
 export default function MethodologyPage() {
   return (
     <TrustArticle title="Methodology">
+      <RecordTrustView />
       <p>
         NotAQuote.FYI is a planning calculator for one driver and one vehicle.
         The home page opens on a finished sample scenario. The calculation is

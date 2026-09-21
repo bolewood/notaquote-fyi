@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { CountLedgerPanel } from "@/components/count-ledger"
 import { TrustArticle } from "@/components/trust-article"
 import { PUBLISHER } from "@/lib/copy"
 
@@ -33,8 +34,8 @@ export default function PrivacyPage() {
         The optional current annual premium is an anchor for the open scenario.
         Leaving it empty keeps the labeled sample. Choosing Molly, Jayden, or
         Ava clears the open field. Reloading a page that is not a share link
-        clears the open field. This page does not send the amount to a server
-        or to analytics.
+        clears the open field. This page does not send the amount to a server.
+        The count tally does not record that amount.
       </p>
       <p>
         Saving a comparison writes that scenario to local storage on this
@@ -52,21 +53,28 @@ export default function PrivacyPage() {
         model on this page, the page says so. The optional premium is added to
         the link only as the amount entered, and the page still calls that
         amount the visitor’s anchor, not a cleared baseline. Copying the link
-        does not send it to an analytics service.
+        does not send the link. The count tally records that a copy happened,
+        and it does not record the address or any amount in it.
       </p>
       <p>
         Printing uses the browser’s own print dialog. The worksheet is part of
         this page. Nothing is uploaded.
       </p>
       <p>
-        There is no account, no document upload, and no visitor database. This
-        version does not set analytics cookies. Pages send a noindex, nofollow
-        request to crawlers.
+        There is no account, no document upload, and no visitor database. Product
+        counts stay in this browser. This version does not set a cookie for
+        them. There is no advertising pixel, no session replay, and no
+        fingerprint. Pages send a noindex, nofollow request to crawlers.
       </p>
       <p>
-        A corrections form is not part of this version. This page does not ask
-        you to send a personal story, and it does not publish a contact address.
+        The corrections form asks for a state, a page on this site, a source
+        URL, and one category: wrong minimum, stale source, vehicle mapping,
+        display error, or other. It does not ask for a name, an email address,
+        a phone number, a carrier, a premium, or a written note. When the queue
+        is not configured, the form stays disabled and does not save a row.
+        This page does not publish a contact address.
       </p>
+      <CountLedgerPanel />
       <p>
         Location is a state and a region class: urban, suburban, or rural.
         Springfield appears only as the label for Molly’s Illinois urban

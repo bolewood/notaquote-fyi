@@ -23,6 +23,12 @@ export function SiteFooter() {
           >
             Model version {MODEL_VERSION}
           </Link>
+          <Link
+            href="/corrections"
+            className="focus-visible:ring-ring rounded-sm focus-visible:ring-3"
+          >
+            Corrections
+          </Link>
         </nav>
         <p>{PUBLISHER}</p>
         <p className="text-muted-foreground">

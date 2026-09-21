@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { RecordTrustView } from "@/components/record-trust-view"
 import { TrustArticle } from "@/components/trust-article"
 import {
   DISCLAIMER,
@@ -14,6 +15,7 @@ export const metadata: Metadata = {
 export default function DisclaimerPage() {
   return (
     <TrustArticle title="Disclaimer" closingDisclaimer={false}>
+      <RecordTrustView />
       <p className="text-base leading-7">{DISCLAIMER}</p>
       <p>
         With no current premium entered, the dollars are a labeled sample. The

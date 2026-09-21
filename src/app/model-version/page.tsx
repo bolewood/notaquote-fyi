@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { RecordTrustView } from "@/components/record-trust-view"
 import { TrustArticle } from "@/components/trust-article"
 import { DATA_BUNDLE_VERSION, MANIFEST_VERSION, MODEL_VERSION } from "@/lib/copy"
 import { formatCatalogDate } from "@/lib/catalog"
@@ -21,6 +22,7 @@ export const metadata: Metadata = {
 export default function ModelVersionPage() {
   return (
     <TrustArticle title="Model version">
+      <RecordTrustView />
       <dl className="grid gap-3">
         <div>
           <dt className="font-medium">Model</dt>

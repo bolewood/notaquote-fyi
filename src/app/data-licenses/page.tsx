@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { RecordTrustView } from "@/components/record-trust-view"
 import { TrustArticle } from "@/components/trust-article"
 import { formatCatalogDate } from "@/lib/catalog"
 import { DATA_BUNDLE_VERSION, MANIFEST_VERSION } from "@/lib/copy"
@@ -18,6 +19,7 @@ export const metadata: Metadata = {
 export default function DataLicensesPage() {
   return (
     <TrustArticle title="Data licenses">
+      <RecordTrustView />
       <p>
         The factor bundle is {DATA_BUNDLE_VERSION}. The source manifest is{" "}
         {MANIFEST_VERSION}. The vehicle catalog bundle is {CATALOG_VERSION},
