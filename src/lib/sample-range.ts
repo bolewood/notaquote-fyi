@@ -7,10 +7,11 @@ import {
 } from "./scenario"
 
 /**
- * Illustrative sample arithmetic for sprint 1.
- * These weights are arbitrary display numbers so a reviewer can see controls
- * move a labeled sample. They are not insurance factors, relativities, or
- * published premiums.
+ * Illustrative sample arithmetic for the opening screen.
+ * These weights are arbitrary display numbers so a labeled sample can move
+ * while the general baseline is not cleared. They are not the factor engine,
+ * not insurance factors, and not published premiums. The calculator uses them
+ * only when no current annual premium is entered.
  */
 
 export const SAMPLE_BASE_ANNUAL = 2400

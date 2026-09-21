@@ -139,11 +139,18 @@ test("confidence copy stays on the sample label and drops when the trim is weak"
   assert.match(
     rangeConfidenceCopy({
       catalogStatus: "ready",
-      trimConfidence: "limited",
+      trimConfidence: "high",
       stale: false,
     }),
-    /limited/,
+    /^Low\./,
   )
+  const limited = rangeConfidenceCopy({
+    catalogStatus: "ready",
+    trimConfidence: "limited",
+    stale: false,
+  })
+  assert.match(limited, /limited/)
+  assert.match(limited, /^Lower\./)
   assert.match(
     rangeConfidenceCopy({
       catalogStatus: "failed",

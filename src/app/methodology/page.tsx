@@ -1,11 +1,19 @@
 import type { Metadata } from "next"
+import { FactorTables } from "@/components/factor-tables"
 import { TrustArticle } from "@/components/trust-article"
-import { BUNDLE_VERSION, MODEL_VERSION } from "@/lib/copy"
+import { CATALOG_VERSION } from "@/lib/catalog-meta"
+import { DATA_BUNDLE_VERSION, MANIFEST_VERSION, MODEL_VERSION } from "@/lib/copy"
+import {
+  FACTOR_CHANGELOG,
+  FACTOR_EFFECTIVE_DATE,
+  FACTOR_FORMULA,
+} from "@/lib/factor-engine"
+import { formatCatalogDate } from "@/lib/catalog"
+import { NAIC_PARAPHRASE } from "@/lib/source-manifest"
 import { STATE_RULES_VERSION } from "@/lib/state-rules"
 import {
   AGE_WEIGHT,
   COVERAGE_WEIGHT,
-  CREDIT_FACTOR,
   DEDUCTIBLE_WEIGHT,
   FLAG_WEIGHT,
   formatDollars,
@@ -58,23 +66,31 @@ export default function MethodologyPage() {
       </p>
       <h2 className="text-base font-semibold">Working formula</h2>
       <p>
-        The working formula for a later baseline is: premium midpoint = base
-        premium × geography × driver × coverage × vehicle × trend × lawful
-        sensitivity factors.
+        The factor engine uses this formula: {FACTOR_FORMULA}. The general base
+        is not cleared, so the engine does not emit a dollar range from it. A
+        current annual premium, when the visitor enters one, is the base for
+        that scenario only. Trend is not applied. BLS CPI is not in the bundle.
+        The lawful sensitivity factor is credit, locked at 1.00. There is no
+        credit control. For a California scenario the page says the credit rule
+        is unreviewed.
       </p>
       <p>
-        This version does not run that formula on a cleared baseline. Trend is
-        not applied. The only sensitivity factor in the product is credit, and
-        it is locked at {CREDIT_FACTOR.toFixed(2)}. There is no credit control.
-        For a California scenario the page says the credit rule is unreviewed.
+        Bundle {DATA_BUNDLE_VERSION}, effective {formatCatalogDate(FACTOR_EFFECTIVE_DATE)}.{" "}
+        {FACTOR_CHANGELOG} Manifest {MANIFEST_VERSION}. Low, likely, and high stay
+        a range. A thin factor or a weak trim widens that range. Confidence stays
+        low while the baseline is not cleared, and it is lower when the trim match
+        is limited or unresolved.
       </p>
-      <h2 className="text-base font-semibold">What the dollars are</h2>
+      <p>{NAIC_PARAPHRASE}</p>
+      <FactorTables />
+      <h2 className="text-base font-semibold">Sample display, not the model</h2>
       <p>
-        The labeled sample likely figure starts from an arbitrary baseline of{" "}
-        {formatDollars(SAMPLE_BASE_ANNUAL)} and multiplies the sample display
-        weights below. {formatDollars(SAMPLE_BASE_ANNUAL)} is not a published
-        premium. The words on the calculator are “Sample range. Baseline not
-        cleared.”
+        With no current premium entered, the home page still shows a labeled
+        sample so the first paint has figures. The words are “Sample range.
+        Baseline not cleared.” Those figures come from the sample display weights
+        below, starting at an arbitrary {formatDollars(SAMPLE_BASE_ANNUAL)}. That
+        amount is not a published premium. The factor engine did not produce the
+        sample. The weights are not the model.
       </p>
       <p>
         Low and high are a wide band around that likely figure because the
@@ -123,7 +139,7 @@ export default function MethodologyPage() {
         The monthly planning midpoint is the sample likely figure divided by 12,
         rounded to the nearest dollar.
       </p>
-      <h2 className="text-base font-semibold">Sample display weights</h2>
+      <h2 className="text-base font-semibold">Sample display weights, not the model</h2>
       <p>
         An unchecked flag contributes 1. A deductible contributes 1 when the
         package has no comprehensive or collision. Model years 2022 and newer
@@ -250,24 +266,27 @@ export default function MethodologyPage() {
         the NHTSA model, the trim says it is not resolved. No trim name was
         added by hand. Honda Civic and Hyundai Ioniq 5 N are in the snapshot.
         An optional VIN is sent from the browser to NHTSA and then discarded.
-        The sample weights above are not a vehicle rating. A weak trim does not
-        change the dollar weights.
+        The sample weights above are not the factor engine. A weak trim does not
+        change those sample weights. It does widen a range the engine produced
+        from an entered premium, and it lowers confidence.
       </p>
       <h2 className="text-base font-semibold">Optional current premium</h2>
       <p>
-        An empty field uses the sample baseline. An annual amount from 1 to
-        100,000 replaces that baseline for the open page. The likely figure
-        starts at the amount entered, then moves in proportion if a control
-        changes afterward. If that arithmetic would show zero or a negative
-        dollar, a sample display floor holds the low, likely, high, and monthly
-        midpoint above zero. That floor is not a premium. Clearing the field
-        returns to the sample baseline.
-        Choosing Molly, Jayden, or Ava clears the field. The amount stays in
-        the page while it is open. This version does not store it or send it.
+        An empty field leaves the labeled sample. The factor engine emits no
+        dollars in that case. An annual amount from 1 to 100,000 is the base for
+        the open scenario. The likely figure starts at the amount entered. If a
+        driver, geography, coverage, or vehicle input then changes, the engine
+        applies the versioned factors and names that factor family. If the
+        arithmetic would show zero or a negative dollar, a display floor holds
+        the low, likely, high, and monthly midpoint above zero. That floor is not
+        a premium. Clearing the field returns to the labeled sample. Choosing
+        Molly, Jayden, or Ava clears the field. The amount stays in the page
+        while it is open. This version does not store it or send it.
       </p>
       <h2 className="text-base font-semibold">Version</h2>
       <p>
-        Model {MODEL_VERSION}. Data bundle {BUNDLE_VERSION}. State rules{" "}
+        Model {MODEL_VERSION}. Data bundle {DATA_BUNDLE_VERSION}. Manifest{" "}
+        {MANIFEST_VERSION}. Catalog {CATALOG_VERSION}. State rules{" "}
         {STATE_RULES_VERSION}. The model version page is the changelog.
       </p>
     </TrustArticle>

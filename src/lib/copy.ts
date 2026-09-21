@@ -1,15 +1,23 @@
+import factorBundle from "@/data/model-factors.json"
+import sourceManifest from "@/data/source-manifest.json"
 import { CATALOG_VERSION } from "./catalog-meta"
 
 export const PUBLISHER = "Bolewood Group, LLC"
 
-export const MODEL_VERSION = "0.1.0-sample"
+export const MODEL_VERSION = "0.2.0"
 
-export const BUNDLE_VERSION = CATALOG_VERSION
+export const DATA_BUNDLE_VERSION = factorBundle.version
+
+export const MANIFEST_VERSION = sourceManifest.version
+
+export { CATALOG_VERSION }
 
 export const DISCLAIMER =
   "THIS IS NOT A QUOTE. NotAQuote.FYI is an independent educational estimate tool, not an insurance company, agency, broker, producer, or lead-generation service. Actual premiums are set by licensed insurers after underwriting and may vary materially."
 
 export const SAMPLE_RANGE_HEADING = "Sample range. Baseline not cleared."
+
+export const ENGINE_RANGE_HEADING = "Planning range. Baseline not cleared."
 
 export const STATE_MINIMUM_COUNSEL_LABEL = "For counsel, not a legal conclusion."
 

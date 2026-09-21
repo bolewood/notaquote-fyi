@@ -220,7 +220,11 @@ export function rangeConfidenceCopy(input: {
   trimConfidence: TrimConfidence | null
   stale: boolean
 }): string {
-  const base = "Low. Sample display. Baseline not cleared."
+  const weak =
+    input.trimConfidence === "limited" || input.trimConfidence === "unresolved"
+  const base = weak
+    ? "Lower. Sample display. Baseline not cleared."
+    : "Low. Sample display. Baseline not cleared."
   if (input.catalogStatus === "loading") {
     return `${base} The vehicle catalog is loading.`
   }
@@ -232,10 +236,10 @@ export function rangeConfidenceCopy(input: {
     return `${base} Trim match is strong.${staleNote}`
   }
   if (input.trimConfidence === "limited") {
-    return `${base} Trim match is limited, so confidence stays low.${staleNote}`
+    return `${base} The trim match is limited, so confidence is lower.${staleNote}`
   }
   if (input.trimConfidence === "unresolved") {
-    return `${base} Trim is not resolved, so confidence stays low.${staleNote}`
+    return `${base} The trim is not resolved, so confidence is lower.${staleNote}`
   }
   return `${base} Trim confidence is not available yet.${staleNote}`
 }

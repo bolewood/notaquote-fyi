@@ -1,7 +1,14 @@
 import type { Metadata } from "next"
 import { StateRulesTable } from "@/components/state-rules-table"
 import { TrustArticle } from "@/components/trust-article"
-import { SOURCE_ROWS } from "@/lib/sources"
+import { formatCatalogDate } from "@/lib/catalog"
+import {
+  citationLabel,
+  derivedFieldLabel,
+  MANIFEST_VERSION,
+  NAIC_PARAPHRASE,
+  SOURCE_MANIFEST,
+} from "@/lib/source-manifest"
 import {
   sourcedStateRules,
   STATE_RULES_VERSION,
@@ -16,32 +23,43 @@ export default function SourcesPage() {
   return (
     <TrustArticle title="Sources">
       <p>
-        The vehicle catalog is a snapshot of NHTSA vPIC and FuelEconomy.gov.
-        The sample range still uses arbitrary display weights, documented on
-        the methodology page. Those weights are not figures from the sources
-        below. A source that is not snapshotted has no figures on the page.
+        Manifest {MANIFEST_VERSION}. Each row names the source, the URL, the
+        owner, the license note, how the file was reached, how often it is
+        refreshed, when it was last checked, and which fields were derived. A
+        row with no derived fields contributed no figures to the bundle.
       </p>
+      <p>{NAIC_PARAPHRASE}</p>
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse text-left">
-          <caption className="sr-only">
-            Intended sources and their status in this version
-          </caption>
+        <table className="w-full min-w-[64rem] border-collapse text-left text-sm">
+          <caption className="sr-only">Source manifest {MANIFEST_VERSION}</caption>
           <thead>
             <tr className="border-b border-border">
               <th scope="col" className="py-2 pr-3 font-medium">
                 Source
               </th>
               <th scope="col" className="py-2 pr-3 font-medium">
-                Intended use
+                Owner
+              </th>
+              <th scope="col" className="py-2 pr-3 font-medium">
+                License note
+              </th>
+              <th scope="col" className="py-2 pr-3 font-medium">
+                Access
+              </th>
+              <th scope="col" className="py-2 pr-3 font-medium">
+                Refresh
+              </th>
+              <th scope="col" className="py-2 pr-3 font-medium">
+                Last checked
               </th>
               <th scope="col" className="py-2 font-medium">
-                Status
+                Derived fields
               </th>
             </tr>
           </thead>
           <tbody>
-            {SOURCE_ROWS.map((row) => (
-              <tr key={row.name} className="border-b border-border align-top">
+            {SOURCE_MANIFEST.map((row) => (
+              <tr key={row.id} className="border-b border-border align-top">
                 <th scope="row" className="py-3 pr-3 font-medium">
                   {row.url ? (
                     <a
@@ -49,23 +67,27 @@ export default function SourcesPage() {
                       className="underline underline-offset-4"
                       rel="noreferrer"
                     >
-                      {row.name}
+                      {citationLabel(row)}
                     </a>
                   ) : (
-                    row.name
+                    citationLabel(row)
                   )}
                 </th>
-                <td className="py-3 pr-3">{row.use}</td>
-                <td className="py-3">{row.status}</td>
+                <td className="py-3 pr-3">{row.owner}</td>
+                <td className="py-3 pr-3">{row.licenseNote}</td>
+                <td className="py-3 pr-3">{row.accessMethod}</td>
+                <td className="py-3 pr-3">{row.refreshCadence}</td>
+                <td className="py-3 pr-3">{formatCatalogDate(row.lastChecked)}</td>
+                <td className="py-3">{derivedFieldLabel(row)}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
       <p>
-        Public entry points are listed so a later snapshot has a starting URL.
-        Listing a URL is not a claim that the page was reviewed, and it is not
-        permission to copy a table.
+        A link is not permission to copy a table. The two auto-database rows say
+        not cleared and have no figures. No PDF from those publications is in
+        this repository.
       </p>
       <h2 id="state-rules" className="text-base font-semibold">
         State rules {STATE_RULES_VERSION}

@@ -1,5 +1,6 @@
 import Link from "next/link"
-import { BUNDLE_VERSION, MODEL_VERSION, PUBLISHER } from "@/lib/copy"
+import { CATALOG_VERSION } from "@/lib/catalog-meta"
+import { DATA_BUNDLE_VERSION, MODEL_VERSION, PUBLISHER } from "@/lib/copy"
 import { STATE_RULES_VERSION } from "@/lib/state-rules"
 
 export function SiteFooter() {
@@ -25,8 +26,10 @@ export function SiteFooter() {
         </nav>
         <p>{PUBLISHER}</p>
         <p className="text-muted-foreground">
-          Displayed dollars are a sample range. Data bundle {BUNDLE_VERSION}. State
-          rules {STATE_RULES_VERSION}. The baseline is not cleared.
+          With no current premium entered, the dollars are a labeled sample. The
+          factor engine does not price an uncleared baseline. Data bundle{" "}
+          {DATA_BUNDLE_VERSION}. Catalog {CATALOG_VERSION}. State rules{" "}
+          {STATE_RULES_VERSION}.
         </p>
       </div>
     </footer>

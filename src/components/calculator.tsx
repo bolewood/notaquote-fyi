@@ -17,12 +17,8 @@ import {
   STATE_MINIMUM_COUNSEL_LABEL,
   STATE_MINIMUM_COUNSEL_NOTICE,
 } from "@/lib/copy"
-import {
-  buildSampleRange,
-  parseAnnualPremium,
-  sampleWeight,
-  type Anchor,
-} from "@/lib/sample-range"
+import { factorSnapshot, runFactorEngine, type PremiumAnchor } from "@/lib/factor-engine"
+import { buildSampleRange, parseAnnualPremium } from "@/lib/sample-range"
 import {
   formatVerifiedDate,
   stateRule,
@@ -71,7 +67,7 @@ export function Calculator() {
   const [scenario, setScenario] = useState<Scenario>(PRESETS.molly)
   const [premiumText, setPremiumText] = useState("")
   const [premiumError, setPremiumError] = useState<string | null>(null)
-  const [anchor, setAnchor] = useState<Anchor | null>(null)
+  const [anchor, setAnchor] = useState<PremiumAnchor | null>(null)
   const [filter, setFilter] = useState("")
   const [vinText, setVinText] = useState("")
   const [vinMessage, setVinMessage] = useState<string | null>(null)
@@ -79,13 +75,19 @@ export function Calculator() {
   const [confidenceOverride, setConfidenceOverride] = useState<TrimConfidence | null>(null)
   const catalogLoad = useCatalog()
 
-  const range = buildSampleRange(scenario, anchor)
-  const weight = sampleWeight(scenario)
+  const sample = buildSampleRange(scenario, null)
   const catalogTrim = catalogLoad.catalog ? trimRecord(catalogLoad.catalog, scenario) : null
   const trimConfidence = confidenceOverride ?? catalogTrim?.confidence ?? null
   const stale = catalogLoad.catalog
     ? isCatalogStale(catalogLoad.catalog, new Date())
     : false
+  const engine = runFactorEngine({
+    scenario,
+    anchor,
+    trimConfidence,
+    catalogStatus: catalogLoad.status,
+    stale,
+  })
 
   function applyPersona(next: PersonaId) {
     setPersona(next)
@@ -140,12 +142,12 @@ export function Calculator() {
     if (parsed === null) {
       setAnchor(null)
       setPremiumError(
-        "Enter an annual amount from 1 to 100,000, or clear the field to use the sample baseline.",
+        "Enter an annual amount from 1 to 100,000, or clear the field to return to the labeled sample.",
       )
       return
     }
     setPremiumError(null)
-    setAnchor({ amount: parsed, weight })
+    setAnchor({ amount: parsed, snapshot: factorSnapshot(scenario) })
   }
 
   return (
@@ -154,7 +156,8 @@ export function Calculator() {
         <RangePanel
           scenario={scenario}
           persona={persona}
-          range={range}
+          sample={sample}
+          engine={engine}
           catalogStatus={catalogLoad.status}
           trimConfidence={trimConfidence}
           stale={stale}
@@ -294,7 +297,7 @@ export function Calculator() {
               value={premiumText}
               aria-describedby="current-premium-hint"
               aria-invalid={premiumError ? true : undefined}
-              placeholder="Empty uses the sample baseline"
+              placeholder="Empty keeps the labeled sample"
               onChange={(event) => onPremiumChange(event.target.value)}
             />
             <p
@@ -305,7 +308,7 @@ export function Calculator() {
               )}
             >
               {premiumError ??
-                "Empty uses the sample baseline. An amount re-anchors this scenario and stays on this page only."}
+                "Empty keeps the labeled sample. An amount is the base for this scenario only, stays on this page, and is not sent."}
             </p>
           </div>
         </fieldset>
@@ -339,7 +342,7 @@ export function Calculator() {
             />
           </div>
           <p className="text-xs leading-snug">
-            No credit control. The sample credit factor stays locked at 1.00.
+            No credit control. The lawful sensitivity factor stays locked at 1.00.
             {scenario.state === "CA"
               ? " For this California scenario, credit rules are unreviewed, so this tool does not model credit as a rating sensitivity."
               : null}

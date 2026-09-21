@@ -16,9 +16,11 @@ export default function DisclaimerPage() {
     <TrustArticle title="Disclaimer" closingDisclaimer={false}>
       <p className="text-base leading-7">{DISCLAIMER}</p>
       <p>
-        The dollars on the calculator are a sample range. The baseline is not
-        cleared. They are not a premium from an insurer, and they are not an
-        offer of coverage.
+        With no current premium entered, the dollars are a labeled sample. The
+        baseline is not cleared. When a current annual premium is entered, the
+        factor engine uses that amount as the base for that scenario only. Those
+        figures are still a planning range. They are not a premium from an
+        insurer, and they are not an offer of coverage.
       </p>
       <p>
         Package names on the calculator are assumptions with the limits written

@@ -1,8 +1,13 @@
 import type { Metadata } from "next"
 import { TrustArticle } from "@/components/trust-article"
-import { BUNDLE_VERSION, MODEL_VERSION } from "@/lib/copy"
+import { DATA_BUNDLE_VERSION, MANIFEST_VERSION, MODEL_VERSION } from "@/lib/copy"
 import { formatCatalogDate } from "@/lib/catalog"
-import { CATALOG_RETRIEVED_ON, CATALOG_YEAR_MAX, CATALOG_YEAR_MIN } from "@/lib/catalog-meta"
+import {
+  CATALOG_RETRIEVED_ON,
+  CATALOG_VERSION,
+  CATALOG_YEAR_MAX,
+  CATALOG_YEAR_MIN,
+} from "@/lib/catalog-meta"
 import {
   sourcedStateRules,
   STATE_RULES_VERSION,
@@ -23,10 +28,34 @@ export default function ModelVersionPage() {
         </div>
         <div>
           <dt className="font-medium">Data bundle</dt>
-          <dd className="font-mono">{BUNDLE_VERSION}</dd>
+          <dd className="font-mono">{DATA_BUNDLE_VERSION}</dd>
+        </div>
+        <div>
+          <dt className="font-medium">Manifest</dt>
+          <dd className="font-mono">{MANIFEST_VERSION}</dd>
+        </div>
+        <div>
+          <dt className="font-medium">Catalog</dt>
+          <dd className="font-mono">{CATALOG_VERSION}</dd>
         </div>
       </dl>
       <h2 className="text-base font-semibold">Changelog</h2>
+      <section aria-labelledby="changelog-020" className="grid gap-2">
+        <h3 id="changelog-020" className="font-medium">
+          0.2.0
+        </h3>
+        <p>
+          Adds the factor engine and source manifest {MANIFEST_VERSION}. Data
+          bundle {DATA_BUNDLE_VERSION}. The formula is midpoint = base ×
+          geography × driver × coverage × vehicle × trend × lawful sensitivity.
+          The general base is not cleared, so the engine emits no dollar range
+          until a current annual premium is entered for that scenario. Trend is
+          not applied. Credit stays locked at 1.00. A thin factor or a weak trim
+          widens the range. The opening screen still shows the labeled sample
+          from 0.1.0-sample. Those sample weights are not this model. No premium
+          figure from NAIC, HLDI, SERFF, or a publisher was added.
+        </p>
+      </section>
       <section aria-labelledby="changelog-state-rules" className="grid gap-2">
         <h3 id="changelog-state-rules" className="font-medium">
           State rules {STATE_RULES_VERSION}
@@ -37,14 +66,13 @@ export default function ModelVersionPage() {
           insurance-department page opened on 21 September 2026.{" "}
           {unsourcedStateRules().length} rows have no source URL and no dollar
           minimum. Credit is unreviewed and the factor is 1.00 on every row.
-          The reviewer field is unsigned. California marks uninsured and underinsured motorist coverage required unless a named insured deletes it in writing. Texas marks personal injury protection and uninsured and underinsured motorist coverage required unless a named insured rejects it in writing. The sample model is still{" "}
-          {MODEL_VERSION}. No premium baseline was added. Standard liability,
+          The reviewer field is unsigned. California marks uninsured and underinsured motorist coverage required unless a named insured deletes it in writing. Texas marks personal injury protection and uninsured and underinsured motorist coverage required unless a named insured rejects it in writing. The sample model at that point was 0.1.0-sample. No premium baseline was added. Standard liability,
           full coverage, and high limits stay 100/300/100 and 250/500/250.
         </p>
       </section>
       <section aria-labelledby="changelog-catalog" className="grid gap-2">
         <h3 id="changelog-catalog" className="font-medium">
-          Data bundle {BUNDLE_VERSION}
+          Catalog {CATALOG_VERSION}
         </h3>
         <p>
           Adds the vehicle catalog snapshot retrieved{" "}
@@ -53,7 +81,7 @@ export default function ModelVersionPage() {
           trim read that snapshot in the browser. Trim confidence is limited or
           unresolved when the NHTSA and FuelEconomy.gov names do not join
           cleanly. An optional VIN is decoded in the browser against NHTSA and
-          discarded. The sample model is still {MODEL_VERSION}. No premium
+          discarded. The sample model at that point was 0.1.0-sample. No premium
           baseline was added.
         </p>
       </section>

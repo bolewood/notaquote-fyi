@@ -16,9 +16,10 @@ export default function PrivacyPage() {
         field for those items.
       </p>
       <p>
-        The sample range is calculated in the browser. Changing a control does
-        not send the scenario to a server. The vehicle catalog is a static file
-        on this site. Choosing a year, make, model, or trim does not create a
+        The labeled sample and the factor engine both run in the browser.
+        Changing a control does not send the scenario to a server. The vehicle
+        catalog, the factor bundle, and the source manifest are static files on
+        this site. Choosing a year, make, model, or trim does not create a
         profile on a server.
       </p>
       <p>
@@ -29,9 +30,10 @@ export default function PrivacyPage() {
         model, and trim controls as they were.
       </p>
       <p>
-        The optional current annual premium stays on the open page. This version
-        does not write it to storage, a cookie, or a server. Reloading the page
-        clears it. Switching to Molly, Jayden, or Ava clears it as well.
+        The optional current annual premium stays on the open page. When it is
+        filled in, it is the base for that scenario only. This version does not
+        write it to storage, a cookie, or a server. Reloading the page clears
+        it. Switching to Molly, Jayden, or Ava clears it as well.
       </p>
       <p>
         There is no account, no document upload, and no visitor database. This

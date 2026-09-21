@@ -4,14 +4,18 @@ export function UncertaintyBar({
   low,
   likely,
   high,
+  sample,
 }: {
   low: number
   likely: number
   high: number
+  sample: boolean
 }) {
   const span = high - low
   const likelyPercent = span <= 0 ? 50 : ((likely - low) / span) * 100
-  const label = `Sample modeled uncertainty from ${formatDollars(low)} low to ${formatDollars(high)} high, with the likely sample figure at ${formatDollars(likely)}. Baseline not cleared.`
+  const label = sample
+    ? `Sample modeled uncertainty from ${formatDollars(low)} low to ${formatDollars(high)} high, with the likely sample figure at ${formatDollars(likely)}. Baseline not cleared. Not the factor engine.`
+    : `Modeled uncertainty from ${formatDollars(low)} low to ${formatDollars(high)} high, with the likely figure at ${formatDollars(likely)}. Anchored to an entered premium. The general baseline is not cleared.`
 
   return (
     <figure className="grid gap-1.5">

@@ -1,0 +1,206 @@
+{
+  "version": "factors-2026-09-21",
+  "effectiveDate": "2026-09-21",
+  "scale": 100,
+  "baselineCleared": false,
+  "formula": "midpoint = base × geography × driver × coverage × vehicle × trend × lawful sensitivity",
+  "changelogNote": "First factor bundle. The general base is not cleared, so the engine emits no dollar range unless a current annual premium is entered for that scenario. State relativities are not included. BLS CPI is not applied. These factors are not the 0.1.0 sample display weights.",
+  "range": {
+    "low": 78,
+    "high": 128,
+    "thinLow": 6,
+    "thinHigh": 9,
+    "limitedTrimLow": 5,
+    "limitedTrimHigh": 8,
+    "unresolvedTrimLow": 8,
+    "unresolvedTrimHigh": 12
+  },
+  "trend": {
+    "applied": false,
+    "value": 100,
+    "confidence": "not-applied",
+    "note": "BLS motor-vehicle-insurance CPI is not applied until a baseline is cleared. No index value is stored."
+  },
+  "lawfulSensitivity": {
+    "note": "Credit is unreviewed. The factor stays at 1.00 until counsel approves a versioned rule. There is no credit control.",
+    "credit": {
+      "value": 100,
+      "confidence": "locked"
+    }
+  },
+  "driver": {
+    "note": "Original planning relativities. Not a filed rate and not computed from a premium table.",
+    "age": {
+      "16-18": { "value": 164, "confidence": "modeled" },
+      "19-21": { "value": 136, "confidence": "modeled" },
+      "22-25": { "value": 115, "confidence": "modeled" },
+      "26-39": { "value": 105, "confidence": "modeled" },
+      "40-64": { "value": 100, "confidence": "modeled" },
+      "65+": { "value": 107, "confidence": "modeled" }
+    },
+    "yearsLicensed": {
+      "under-1": { "value": 118, "confidence": "modeled" },
+      "1-3": { "value": 109, "confidence": "modeled" },
+      "4-9": { "value": 100, "confidence": "modeled" },
+      "10+": { "value": 97, "confidence": "modeled" }
+    },
+    "incidents": {
+      "clean": { "value": 100, "confidence": "modeled" },
+      "one": { "value": 128, "confidence": "modeled" },
+      "two-or-more": { "value": 155, "confidence": "modeled" }
+    },
+    "mileage": {
+      "under-7500": { "value": 94, "confidence": "modeled" },
+      "7500-15000": { "value": 100, "confidence": "modeled" },
+      "over-15000": { "value": 109, "confidence": "modeled" }
+    },
+    "flags": {
+      "teen": { "value": 111, "confidence": "modeled" },
+      "goodStudent": { "value": 94, "confidence": "modeled" },
+      "driverTraining": { "value": 96, "confidence": "modeled" },
+      "householdPolicy": { "value": 91, "confidence": "modeled" }
+    }
+  },
+  "geography": {
+    "note": "Region class is an original planning relativity. It is not a territory rate.",
+    "state": {
+      "value": 100,
+      "confidence": "thin",
+      "note": "No state premium relativity is cleared. This factor is 1.00 for every state. It is not a state average."
+    },
+    "region": {
+      "urban": { "value": 104, "confidence": "modeled" },
+      "suburban": { "value": 100, "confidence": "modeled" },
+      "rural": { "value": 96, "confidence": "modeled" }
+    }
+  },
+  "coverage": {
+    "note": "Original planning relativities for the named assumption packages. Not a quote and not a filed rate.",
+    "package": {
+      "state-minimum": { "value": 62, "confidence": "modeled" },
+      "standard": { "value": 78, "confidence": "modeled" },
+      "full": { "value": 100, "confidence": "modeled" },
+      "high": { "value": 122, "confidence": "modeled" }
+    },
+    "deductible": {
+      "500": { "value": 106, "confidence": "modeled" },
+      "1000": { "value": 100, "confidence": "modeled" },
+      "2000": { "value": 93, "confidence": "modeled" }
+    },
+    "loanLease": { "value": 106, "confidence": "modeled" }
+  },
+  "vehicle": {
+    "note": "Planning classes from the catalog name. Not an HLDI loss cost and not a publisher symbol.",
+    "year": [
+      {
+        "min": 2022,
+        "label": "2022 and newer",
+        "value": 100,
+        "confidence": "modeled"
+      },
+      {
+        "min": 2016,
+        "label": "2016–2021",
+        "value": 97,
+        "confidence": "modeled"
+      },
+      {
+        "min": 0,
+        "label": "2015 and earlier",
+        "value": 93,
+        "confidence": "modeled"
+      }
+    ],
+    "class": [
+      {
+        "id": "electric",
+        "label": "Electric",
+        "value": 118,
+        "confidence": "modeled",
+        "makes": ["tesla"],
+        "match": ["ioniq", "leaf", "bolt", "mache", "ev6", "lightning", "ariya", "bz4x"]
+      },
+      {
+        "id": "pickup",
+        "label": "Pickup",
+        "value": 111,
+        "confidence": "modeled",
+        "makes": [],
+        "match": [
+          "f150",
+          "silverado",
+          "sierra",
+          "ram1500",
+          "tundra",
+          "tacoma",
+          "colorado",
+          "ranger",
+          "frontier",
+          "canyon",
+          "ridgeline",
+          "gladiator",
+          "maverick"
+        ]
+      },
+      {
+        "id": "suv",
+        "label": "SUV or crossover",
+        "value": 100,
+        "confidence": "modeled",
+        "makes": [],
+        "match": [
+          "rav4",
+          "crv",
+          "explorer",
+          "pilot",
+          "highlander",
+          "4runner",
+          "outback",
+          "forester",
+          "cx5",
+          "tucson",
+          "sportage",
+          "rogue",
+          "escape",
+          "equinox",
+          "edge",
+          "pathfinder",
+          "telluride",
+          "palisade",
+          "wrangler",
+          "bronco",
+          "tahoe",
+          "suburban",
+          "expedition"
+        ]
+      },
+      {
+        "id": "car",
+        "label": "Car",
+        "value": 96,
+        "confidence": "modeled",
+        "makes": [],
+        "match": [
+          "civic",
+          "camry",
+          "accord",
+          "corolla",
+          "mazda3",
+          "altima",
+          "sentra",
+          "elantra",
+          "sonata",
+          "jetta",
+          "impreza"
+        ]
+      }
+    ],
+    "other": {
+      "id": "other",
+      "label": "No modeled class",
+      "value": 100,
+      "confidence": "thin",
+      "note": "No modeled class for this name. The factor stays at 1.00 and the range widens."
+    }
+  }
+}

@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start --hostname 127.0.0.1 --port 41731",
     "lint": "eslint",
-    "test": "tsx --test src/lib/sample-range.test.ts src/lib/catalog-match.test.ts src/lib/catalog.test.ts src/lib/vin-lookup.test.ts src/lib/state-rules.test.ts",
+    "test": "tsx --test src/lib/sample-range.test.ts src/lib/catalog-match.test.ts src/lib/catalog.test.ts src/lib/vin-lookup.test.ts src/lib/state-rules.test.ts src/lib/factor-engine.test.ts",
     "catalog:build": "tsx scripts/build-vehicle-catalog.ts"
   },
   "dependencies": {
