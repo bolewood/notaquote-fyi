@@ -42,6 +42,8 @@ const GENERIC_SUFFIXES = [
 const EXCLUDED_NAME =
   /\b(cab chassis|chassis|incomplete|motorhome|motor home|trailer|bus|motorcycle|scooter|moped|robotaxi|robo taxi|taxi|hearse|limo|limousine|cutaway|glider)\b/i
 
+const RAM_CHASSIS = new Set(["2500", "3500", "4000", "4500", "5500"])
+
 export function normalizeName(value: string): string {
   return value
     .toLowerCase()
@@ -58,6 +60,18 @@ export function compactName(value: string): string {
 
 export function isExcludedVehicleName(value: string): boolean {
   return EXCLUDED_NAME.test(normalizeName(value))
+}
+
+/**
+ * Ram 2500–5500 and the Ford E-450 are commercial chassis cabs, not personal
+ * light-duty cars or light trucks. The model name has to be the whole name so
+ * a personal trim that merely contains those digits stays.
+ */
+export function isCommercialChassisModel(make: string, model: string): boolean {
+  const compactMake = compactName(make)
+  const compactModel = compactName(model)
+  if (compactMake === "ram" && RAM_CHASSIS.has(compactModel)) return true
+  return compactMake === "ford" && compactModel === "e450"
 }
 
 export function includesQuery(value: string, query: string): boolean {

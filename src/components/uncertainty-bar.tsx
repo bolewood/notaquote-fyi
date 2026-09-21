@@ -15,24 +15,20 @@ export function UncertaintyBar({
 
   return (
     <figure className="grid gap-1.5">
-      <div className="relative h-5" role="img" aria-label={label}>
-        <div className="absolute top-1/2 right-0 left-0 h-px -translate-y-1/2 bg-foreground/40" />
-        <div className="absolute top-1/2 left-0 h-3 w-px -translate-y-1/2 bg-foreground" />
-        <div className="absolute top-1/2 right-0 h-3 w-px -translate-y-1/2 bg-foreground" />
+      <div className="relative h-6" role="img" aria-label={label}>
         <div
-          className="bg-primary absolute top-1/2 h-5 w-0.5 -translate-x-1/2 -translate-y-1/2"
+          className="absolute inset-x-0 top-1/2 h-2 -translate-y-1/2 rounded-full"
+          style={{
+            background:
+              "linear-gradient(90deg, var(--range-low), var(--range-likely), var(--range-high))",
+          }}
+        />
+        <span className="bg-range-low absolute top-1/2 left-0 h-5 w-1 -translate-y-1/2 rounded-full" />
+        <span
+          className="bg-range-likely absolute top-1/2 h-6 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full"
           style={{ left: `${likelyPercent}%` }}
         />
-      </div>
-      <div className="relative h-4 text-xs" aria-hidden="true">
-        <span className="absolute left-0">Low</span>
-        <span
-          className="text-primary absolute -translate-x-1/2 font-medium"
-          style={{ left: `${likelyPercent}%` }}
-        >
-          Likely
-        </span>
-        <span className="absolute right-0">High</span>
+        <span className="bg-range-high absolute top-1/2 right-0 h-5 w-1 -translate-y-1/2 rounded-full" />
       </div>
       <figcaption className="sr-only">{label}</figcaption>
     </figure>

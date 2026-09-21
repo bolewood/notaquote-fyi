@@ -1,8 +1,4 @@
-import {
-  compactName,
-  includesQuery,
-  type TrimConfidence,
-} from "./catalog-match"
+import { compactName, type TrimConfidence } from "./catalog-match"
 import {
   coercePick,
   trimRecord,
@@ -46,6 +42,13 @@ export function selectionAfterVin(
     model: result.model,
     trim: result.trim,
   }
+}
+
+function hintNamesTrim(trimName: string, hint: string): boolean {
+  const hintCompact = compactName(hint)
+  const trimCompact = compactName(trimName)
+  if (hintCompact.length < 5 || trimCompact.length < 5) return false
+  return hintCompact === trimCompact || hintCompact.includes(trimCompact)
 }
 
 type DecodeRow = {
@@ -187,11 +190,7 @@ export async function runVinLookup(
   })
   const trims = input.catalog.vehicles[String(pick.year)]?.[pick.make]?.[pick.model] ?? []
   const hinted = decoded.trimHint
-    ? trims.find(
-        (trim) =>
-          includesQuery(trim.name, decoded.trimHint) ||
-          includesQuery(decoded.trimHint, trim.name),
-      )
+    ? trims.find((trim) => hintNamesTrim(trim.name, decoded.trimHint))
     : undefined
   const sameModel =
     input.current &&

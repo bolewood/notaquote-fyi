@@ -10,6 +10,7 @@ import type { CatalogTrim, VehicleCatalog } from "../src/lib/catalog"
 import {
   compactName,
   higherConfidence,
+  isCommercialChassisModel,
   isExcludedVehicleName,
   matchFeRow,
   UNRESOLVED_TRIM_NAME,
@@ -297,6 +298,7 @@ async function main() {
 
   const vehicles: VehicleCatalog["vehicles"] = {}
   const droppedTrucks: string[] = []
+  const droppedChassis: string[] = []
   let highCount = 0
   let limitedCount = 0
   let unresolvedCount = 0
@@ -337,6 +339,11 @@ async function main() {
       }
     }
     const matched = names.length > 0 ? matchFeRow(row.baseModel, row.model, names) : null
+    const modelName = matched?.name ?? row.baseModel
+    if (isCommercialChassisModel(make, modelName) || isCommercialChassisModel(make, row.baseModel)) {
+      droppedChassis.push(`${row.year} ${make} ${modelName}`)
+      continue
+    }
     if (!matched) {
       ownModel += 1
       addTrim(row.year, make, row.baseModel, { name: row.model, confidence: "limited" })
@@ -362,6 +369,10 @@ async function main() {
         (name) => compactName(name) === compactName(model.name),
       )
       if (present) continue
+      if (isCommercialChassisModel(make, model.name)) {
+        droppedChassis.push(`${year} ${make} ${model.name}`)
+        continue
+      }
       if (!personal) {
         droppedTrucks.push(`${year} ${make} ${model.name}`)
         continue
@@ -506,6 +517,7 @@ Initial snapshot. No earlier snapshot was in the repository, so this report is t
 - FuelEconomy rows filed on their own base model: ${ownModel}
 - FuelEconomy rows attached with a weak prefix: ${weakAttached}
 - NHTSA truck models with no FuelEconomy join, omitted: ${droppedTrucks.length}
+- Commercial chassis cabs omitted (Ram 2500, 3500, 4000, 4500, 5500, and Ford E-450): ${droppedChassis.length}
 - FuelEconomy makes with no NHTSA make: ${unmatchedMakes.length === 0 ? "none" : unmatchedMakes.join(", ")}
 
 Persona defaults this build wrote:
@@ -513,6 +525,10 @@ Persona defaults this build wrote:
 - Molly: 2023 Ford F-150, ${mollyTrim}
 - Jayden: 2023 Toyota RAV4, ${jaydenTrim}
 - Ava: 2023 Tesla Model Y, ${avaTrim}
+
+Omitted commercial chassis cabs (not a complete list):
+
+${droppedChassis.slice(0, 24).map((item) => `- ${item}`).join("\n") || "- none"}
 
 Omitted truck examples (not a complete list):
 

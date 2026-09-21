@@ -14,7 +14,7 @@ export function SiteHeader() {
   const pathname = usePathname()
 
   return (
-    <header className="border-b border-border">
+    <header className="border-range-likely/50 border-b-2">
       <a
         href="#content"
         className="bg-background text-foreground border-border focus-visible:ring-ring absolute top-3 left-3 z-50 -translate-y-24 rounded-md border px-3 py-2 text-sm focus-visible:translate-y-0 focus-visible:ring-3"

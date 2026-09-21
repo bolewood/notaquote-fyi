@@ -3,8 +3,10 @@ import { readFileSync } from "node:fs"
 import test from "node:test"
 import {
   catalogFilterIsEmpty,
+  catalogFilterYears,
   catalogMakes,
   catalogModels,
+  filterMissCopy,
   isCatalogStale,
   isVehicleCatalog,
   rangeConfidenceCopy,
@@ -91,6 +93,38 @@ test("local filter finds Civic without another network call", () => {
   assert.deepEqual(makes, ["Honda"])
   assert.ok(catalogModels(catalog, 2024, "Honda", "civic").includes("Civic"))
   assert.equal(catalogFilterIsEmpty(catalog, 2024, "not-a-real-vehicle"), true)
+  assert.equal(
+    filterMissCopy(2024, catalogFilterYears(catalog, "not-a-real-vehicle")),
+    "Nothing in this snapshot matches that filter.",
+  )
+})
+
+test("a year-scoped miss names the other years instead of the whole snapshot", () => {
+  assert.equal(catalogFilterIsEmpty(catalog, 2023, "Ioniq 5 N"), true)
+  const years = catalogFilterYears(catalog, "Ioniq 5 N")
+  assert.ok(years.includes(2025))
+  assert.equal(years.includes(2023), false)
+  const copy = filterMissCopy(2023, years)
+  assert.match(copy, /Nothing in 2023 matches that filter/)
+  assert.match(copy, /2025/)
+  assert.equal(copy.includes("Nothing in this snapshot matches"), false)
+})
+
+test("commercial chassis cabs are not selectable", () => {
+  const banned = [
+    ["Ram", "2500"],
+    ["Ram", "3500"],
+    ["Ram", "4000"],
+    ["Ram", "4500"],
+    ["Ram", "5500"],
+    ["Ford", "E-450"],
+  ]
+  for (const [make, model] of banned) {
+    for (const makes of Object.values(catalog.vehicles)) {
+      assert.equal(makes[make]?.[model], undefined, `${make} ${model}`)
+    }
+  }
+  assert.ok(catalog.vehicles["2023"]?.Ram?.["1500"])
 })
 
 test("confidence copy stays on the sample label and drops when the trim is weak", () => {

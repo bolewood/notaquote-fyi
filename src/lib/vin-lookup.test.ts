@@ -114,7 +114,7 @@ test("VIN lookup does not write the VIN to storage, cookies, analytics, or logs"
                 Make: "FORD",
                 Model: "F-150",
                 ModelYear: "2023",
-                Trim: "Raptor",
+                Trim: "F150 RAPTOR 4WD",
                 Series: "",
                 VehicleType: "TRUCK",
                 VIN,
@@ -135,6 +135,63 @@ test("VIN lookup does not write the VIN to storage, cookies, analytics, or logs"
     assert.equal(spies.hits.length, 0)
   } finally {
     spies.restore()
+  }
+})
+
+test("a short trim hint does not fill a confident trim the decode did not name", async () => {
+  const shelf = {
+    ...catalog,
+    vehicles: {
+      "2023": {
+        Ford: {
+          "F-150": [
+            { name: "F150 Pickup 4WD", confidence: "high" },
+            { name: "F-150 Lightning 4WD", confidence: "high" },
+            { name: "F150 RAPTOR 37 4WD", confidence: "high" },
+          ],
+        },
+      },
+    },
+  } as VehicleCatalog
+  const rav4 = { year: 2023, make: "Toyota", model: "RAV4", trim: "RAV4" }
+
+  async function decode(trim: string) {
+    return runVinLookup(VIN, {
+      catalog: shelf,
+      current: rav4,
+      fetchImpl: async () =>
+        new Response(
+          JSON.stringify({
+            Results: [
+              {
+                ErrorCode: "0",
+                Make: "FORD",
+                Model: "F-150",
+                ModelYear: "2023",
+                Trim: trim,
+                Series: "",
+                VehicleType: "TRUCK",
+              },
+            ],
+          }),
+        ),
+    })
+  }
+
+  const drivetrain = await decode("4WD")
+  assert.equal(drivetrain.ok, true)
+  if (drivetrain.ok) {
+    assert.notEqual(drivetrain.trim, "F-150 Lightning 4WD")
+    assert.equal(drivetrain.confidence, "limited")
+    assert.equal(drivetrain.message.includes("Filled from NHTSA"), false)
+  }
+
+  const raptor = await decode("Raptor")
+  assert.equal(raptor.ok, true)
+  if (raptor.ok) {
+    assert.notEqual(raptor.trim, "F150 RAPTOR 37 4WD")
+    assert.equal(raptor.confidence, "limited")
+    assert.match(raptor.message, /Raptor/)
   }
 })
 

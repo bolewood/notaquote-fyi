@@ -25,9 +25,9 @@ export function RangePanel({
   stale: boolean
 }) {
   return (
-    <section aria-labelledby="sample-range-heading" className="grid gap-3">
-      <div className="border-primary grid gap-1 border-l-2 pl-3">
-        <p className="text-primary text-xs font-medium tracking-widest uppercase">
+    <section aria-labelledby="sample-range-heading" className="bg-range-likely/8 grid gap-3 rounded-lg px-3 py-3 sm:px-4">
+      <div className="border-range-likely grid gap-1 border-l-4 pl-3">
+        <p className="text-range-likely text-xs font-medium tracking-widest uppercase">
           Sample display
         </p>
         <h1 id="sample-range-heading" className="text-xl font-semibold tracking-tight">
@@ -36,51 +36,49 @@ export function RangePanel({
       </div>
       <p className="text-sm leading-snug">{scenarioIdentity(scenario, persona)}</p>
       <div aria-live="polite" aria-atomic="true" className="grid gap-3">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          <div className="grid flex-1 gap-2">
-            <p className="text-xs font-medium tracking-wide uppercase">Annual</p>
-            <div className="grid grid-cols-3 items-end gap-2">
-              <Figure
-                amount={range.low}
-                label="Sample low"
-                testId="sample-low"
-                align="left"
-                size="text-xl sm:text-2xl"
-              />
-              <Figure
-                amount={range.likely}
-                label="Sample likely"
-                testId="sample-likely"
-                align="center"
-                size="text-4xl sm:text-5xl"
-              />
-              <Figure
-                amount={range.high}
-                label="Sample high"
-                testId="sample-high"
-                align="right"
-                size="text-xl sm:text-2xl"
-              />
-            </div>
-          </div>
-          <div className="sm:text-right">
-            <p className="text-xs font-medium tracking-wide uppercase">
-              Monthly planning midpoint
-            </p>
-            <p
-              data-testid="sample-monthly"
-              className="font-mono text-3xl tracking-tight tabular-nums sm:text-4xl"
-            >
-              {formatDollars(range.monthly)}
-            </p>
-            <p className="text-muted-foreground text-xs">
-              {range.monthly === Math.round(range.likely / 12)
-                ? "Sample likely divided by 12"
-                : "Sample display floor held this midpoint above zero. Not a premium."}
-            </p>
+        <div className="grid gap-2">
+          <p className="text-xs font-medium tracking-wide uppercase">Annual</p>
+          <div className="grid grid-cols-3 items-end gap-3">
+            <Figure
+              amount={range.low}
+              label="Sample low"
+              testId="sample-low"
+              tone="low"
+              size="text-xl sm:text-2xl"
+            />
+            <Figure
+              amount={range.likely}
+              label="Sample likely"
+              testId="sample-likely"
+              tone="likely"
+              size="text-4xl sm:text-5xl"
+            />
+            <Figure
+              amount={range.high}
+              label="Sample high"
+              testId="sample-high"
+              tone="high"
+              size="text-xl sm:text-2xl"
+            />
           </div>
         </div>
         <UncertaintyBar low={range.low} likely={range.likely} high={range.high} />
+        <div className="border-range-likely/30 grid gap-1 border-t pt-3">
+          <p className="text-range-likely text-xs font-medium tracking-wide uppercase">
+            Monthly planning midpoint
+          </p>
+          <p
+            data-testid="sample-monthly"
+            className="text-range-likely font-mono text-3xl tracking-tight tabular-nums sm:text-4xl"
+          >
+            {formatDollars(range.monthly)}
+          </p>
+          <p className="text-muted-foreground text-xs">
+            {range.monthly === Math.round(range.likely / 12)
+              ? "Sample likely divided by 12"
+              : "Sample display floor held this midpoint above zero. Not a premium."}
+          </p>
+        </div>
         <p data-testid="confidence">
           <span className="font-medium">Confidence. </span>
           {rangeConfidenceCopy({ catalogStatus, trimConfidence, stale })}
@@ -116,23 +114,24 @@ function Figure({
   amount,
   label,
   testId,
-  align,
+  tone,
   size,
 }: {
   amount: number
   label: string
   testId: string
-  align: "left" | "center" | "right"
+  tone: "low" | "likely" | "high"
   size: string
 }) {
-  const alignClass =
-    align === "center" ? "text-center" : align === "right" ? "text-right" : "text-left"
+  const toneClass =
+    tone === "likely" ? "text-range-likely" : tone === "high" ? "text-range-high" : "text-range-low"
+  const alignClass = tone === "likely" ? "text-center" : tone === "high" ? "text-right" : "text-left"
 
   return (
-    <div className={`min-w-0 ${alignClass}`}>
+    <div className={`min-w-0 ${alignClass} ${toneClass}`}>
       <p
         data-testid={testId}
-        className={`font-mono tracking-tight tabular-nums ${size}`}
+        className={`font-mono tracking-tight tabular-nums whitespace-nowrap ${size}`}
       >
         {formatDollars(amount)}
       </p>

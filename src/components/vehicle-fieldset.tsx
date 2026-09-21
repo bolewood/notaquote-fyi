@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/select"
 import {
   catalogFilterIsEmpty,
+  catalogFilterYears,
+  filterMissCopy,
   catalogMakes,
   catalogModels,
   catalogTrims,
@@ -68,6 +70,7 @@ export function VehicleFieldset({
     pick.trim,
   )
   const empty = ready && catalogFilterIsEmpty(catalog, pick.year, filter)
+  const otherYears = empty && catalog ? catalogFilterYears(catalog, filter) : []
   const stale = ready && isCatalogStale(catalog, new Date())
   const record = ready ? trimRecord(catalog, pick) : null
   const shownConfidence = confidence ?? record?.confidence ?? null
@@ -77,7 +80,7 @@ export function VehicleFieldset({
     status =
       "The vehicle catalog did not load. Year, make, model, and trim stay on the vehicle already shown."
   } else if (empty) {
-    status = "Nothing in this snapshot matches that filter."
+    status = filterMissCopy(pick.year, otherYears)
   } else if (ready && catalog && shownConfidence) {
     status = trimConfidenceCopy(shownConfidence, catalog.version, catalog.retrievedOn)
     if (stale) status = `${status} This snapshot is past its refresh date.`

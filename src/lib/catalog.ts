@@ -160,6 +160,26 @@ export function catalogFilterIsEmpty(
   return query.trim().length > 0 && catalogMakes(catalog, year, query).length === 0
 }
 
+export function catalogFilterYears(catalog: VehicleCatalog, query: string): number[] {
+  if (!query.trim()) return []
+  return catalogYears(catalog).filter((year) => catalogMakes(catalog, year, query).length > 0)
+}
+
+export function filterMissCopy(year: number, otherYears: number[]): string {
+  const listed = [...otherYears].filter((item) => item !== year).sort((left, right) => left - right)
+  if (listed.length === 0) return "Nothing in this snapshot matches that filter."
+  if (listed.length > 4) {
+    return `Nothing in ${year} matches that filter. It is in this snapshot for other model years.`
+  }
+  return `Nothing in ${year} matches that filter. It is in this snapshot for ${formatYearList(listed)}.`
+}
+
+function formatYearList(years: number[]): string {
+  if (years.length === 1) return String(years[0])
+  if (years.length === 2) return `${years[0]} and ${years[1]}`
+  return `${years.slice(0, -1).join(", ")}, and ${years.at(-1)}`
+}
+
 export function trimRecord(
   catalog: VehicleCatalog,
   pick: VehiclePick,

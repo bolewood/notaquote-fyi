@@ -13,10 +13,11 @@ Initial snapshot. No earlier snapshot was in the repository, so this report is t
 - FuelEconomy rows excluded by name: 147
 - Trim rows, high confidence: 14971
 - Trim rows, limited confidence: 2478
-- Trim rows, unresolved: 1296
+- Trim rows, unresolved: 1231
 - FuelEconomy rows filed on their own base model: 1097
 - FuelEconomy rows attached with a weak prefix: 1382
-- NHTSA truck models with no FuelEconomy join, omitted: 377
+- NHTSA truck models with no FuelEconomy join, omitted: 367
+- Commercial chassis cabs omitted (Ram 2500, 3500, 4000, 4500, 5500, and Ford E-450): 75
 - FuelEconomy makes with no NHTSA make: bmwalpina, bugattirimac, codaautomotive, ineosautomotive, mclarenautomotive, mobilityventuresllc, roushperformance, rufautomobile, saleenperformance, scion, srt, tecstarlp, vpg
 
 Persona defaults this build wrote:
@@ -24,6 +25,33 @@ Persona defaults this build wrote:
 - Molly: 2023 Ford F-150, F150 Pickup 4WD
 - Jayden: 2023 Toyota RAV4, RAV4
 - Ava: 2023 Tesla Model Y, Model Y Long Range AWD
+
+Omitted commercial chassis cabs (not a complete list):
+
+- 2006 Ford E-450
+- 2007 Ford E-450
+- 2008 Ford E-450
+- 2009 Ford E-450
+- 2010 Ford E-450
+- 2011 Ford E-450
+- 2012 Ford E-450
+- 2012 Ram 3500
+- 2013 Ford E-450
+- 2013 Ram 2500
+- 2013 Ram 3500
+- 2013 Ram 4000
+- 2013 Ram 4500
+- 2013 Ram 5500
+- 2014 Ford E-450
+- 2014 Ram 2500
+- 2014 Ram 3500
+- 2014 Ram 4000
+- 2014 Ram 4500
+- 2014 Ram 5500
+- 2015 Ram 2500
+- 2015 Ram 3500
+- 2015 Ram 4000
+- 2015 Ram 4500
 
 Omitted truck examples (not a complete list):
 
