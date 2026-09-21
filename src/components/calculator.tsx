@@ -1,6 +1,8 @@
 "use client"
 
+import { ComparisonList, ComparisonSheet, useComparisonTray } from "@/components/comparison-tray"
 import { PersonaMark } from "@/components/persona-mark"
+import { PrintWorksheet } from "@/components/print-worksheet"
 import { RangePanel } from "@/components/range-panel"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -17,8 +19,16 @@ import {
   STATE_MINIMUM_COUNSEL_LABEL,
   STATE_MINIMUM_COUNSEL_NOTICE,
 } from "@/lib/copy"
+import { matchingPersona, rememberComparison, type SavedComparison } from "@/lib/comparison-tray"
 import { factorSnapshot, runFactorEngine, type PremiumAnchor } from "@/lib/factor-engine"
 import { buildSampleRange, parseAnnualPremium } from "@/lib/sample-range"
+import {
+  decodeShareSearch,
+  encodeSharePath,
+  SHARE_INVALID_NOTE,
+  shareArrivalNotes,
+  type ShareLinkOk,
+} from "@/lib/share-link"
 import {
   formatVerifiedDate,
   stateRule,
@@ -62,17 +72,50 @@ import { useState } from "react"
 
 const PERSONA_ORDER: PersonaId[] = ["molly", "jayden", "ava"]
 
-export function Calculator() {
-  const [persona, setPersona] = useState<PersonaId | null>("molly")
-  const [scenario, setScenario] = useState<Scenario>(PRESETS.molly)
-  const [premiumText, setPremiumText] = useState("")
+function readInitial(search: string) {
+  const decoded = decodeShareSearch(search)
+  if (decoded.status === "ok") {
+    return {
+      persona: matchingPersona(decoded.scenario),
+      scenario: decoded.scenario,
+      premiumText: decoded.anchorAmount === null ? "" : String(decoded.anchorAmount),
+      anchor:
+        decoded.anchorAmount === null
+          ? null
+          : { amount: decoded.anchorAmount, snapshot: factorSnapshot(decoded.scenario) },
+      arrival: decoded,
+      arrivalInvalid: false,
+    }
+  }
+  return {
+    persona: "molly" as PersonaId | null,
+    scenario: PRESETS.molly,
+    premiumText: "",
+    anchor: null as PremiumAnchor | null,
+    arrival: null as ShareLinkOk | null,
+    arrivalInvalid: decoded.status === "invalid",
+  }
+}
+
+export function Calculator({ initialSearch = "" }: { initialSearch?: string }) {
+  const initial = readInitial(initialSearch)
+  const [persona, setPersona] = useState<PersonaId | null>(initial.persona)
+  const [scenario, setScenario] = useState<Scenario>(initial.scenario)
+  const [premiumText, setPremiumText] = useState(initial.premiumText)
   const [premiumError, setPremiumError] = useState<string | null>(null)
-  const [anchor, setAnchor] = useState<PremiumAnchor | null>(null)
+  const [anchor, setAnchor] = useState<PremiumAnchor | null>(initial.anchor)
   const [filter, setFilter] = useState("")
   const [vinText, setVinText] = useState("")
   const [vinMessage, setVinMessage] = useState<string | null>(null)
   const [vinPending, setVinPending] = useState(false)
   const [confidenceOverride, setConfidenceOverride] = useState<TrimConfidence | null>(null)
+  const tray = useComparisonTray()
+  const [sheetOpen, setSheetOpen] = useState(false)
+  const [shareUrl, setShareUrl] = useState<string | null>(null)
+  const [shareStatus, setShareStatus] = useState<string | null>(null)
+  const [shareIncludedAnchor, setShareIncludedAnchor] = useState(false)
+  const arrival = initial.arrival
+  const arrivalInvalid = initial.arrivalInvalid
   const catalogLoad = useCatalog()
 
   const sample = buildSampleRange(scenario, null)
@@ -89,6 +132,12 @@ export function Calculator() {
     stale,
   })
 
+  function clearShareDraft() {
+    setShareUrl(null)
+    setShareStatus(null)
+    setShareIncludedAnchor(false)
+  }
+
   function applyPersona(next: PersonaId) {
     setPersona(next)
     setScenario(PRESETS[next])
@@ -99,6 +148,7 @@ export function Calculator() {
     setVinText("")
     setVinMessage(null)
     setConfidenceOverride(null)
+    clearShareDraft()
   }
 
   function patch(partial: Partial<Scenario>) {
@@ -108,6 +158,7 @@ export function Calculator() {
     if (!changed) return
     setPersona(null)
     setScenario((current) => ({ ...current, ...partial }))
+    clearShareDraft()
   }
 
   async function decodeVin() {
@@ -133,6 +184,7 @@ export function Calculator() {
 
   function onPremiumChange(value: string) {
     setPremiumText(value)
+    clearShareDraft()
     if (value.trim() === "") {
       setAnchor(null)
       setPremiumError(null)
@@ -150,8 +202,81 @@ export function Calculator() {
     setAnchor({ amount: parsed, snapshot: factorSnapshot(scenario) })
   }
 
+  function saveCurrent() {
+    tray.replace(
+      rememberComparison(tray.items, {
+        scenario,
+        anchorAmount: anchor?.amount ?? null,
+      }),
+    )
+  }
+
+  function openSaved(item: SavedComparison) {
+    setPersona(matchingPersona(item.scenario))
+    setScenario(item.scenario)
+    setFilter("")
+    setVinText("")
+    setVinMessage(null)
+    setConfidenceOverride(null)
+    setPremiumError(null)
+    if (item.anchorAmount !== null) {
+      setPremiumText(String(item.anchorAmount))
+      setAnchor({
+        amount: item.anchorAmount,
+        snapshot: factorSnapshot(item.scenario),
+      })
+    } else {
+      setPremiumText("")
+      setAnchor(null)
+    }
+    clearShareDraft()
+    setSheetOpen(false)
+  }
+
+  function removeSaved(id: string) {
+    tray.replace(tray.items.filter((item) => item.id !== id))
+  }
+
+  function copyShareLink() {
+    const path = encodeSharePath({
+      scenario,
+      anchorAmount: anchor?.amount ?? null,
+      baselineCleared: engine.baselineCleared,
+    })
+    const url = new URL(path, window.location.origin).toString()
+    const included = new URL(url).searchParams.has("anchor")
+    setShareUrl(url)
+    setShareIncludedAnchor(included)
+    const clipboard = navigator.clipboard
+    if (!clipboard?.writeText) {
+      setShareStatus("The share link is shown below. Copy it from there. It was not sent.")
+      return
+    }
+    void clipboard.writeText(url).then(
+      () => {
+        setShareStatus("Link copied. It carries the inputs and the model and data-bundle versions. It does not freeze a dollar result. It was not sent.")
+      },
+      () => {
+        setShareStatus("The share link is shown below. Copy it from there. It was not sent.")
+      },
+    )
+  }
+
+  const notices = [
+    ...(arrivalInvalid ? [SHARE_INVALID_NOTE] : []),
+    ...(arrival ? shareArrivalNotes(arrival) : []),
+  ]
+  const listProps = {
+    items: tray.items,
+    ready: tray.ready,
+    error: tray.error,
+    onOpen: openSaved,
+    onRemove: removeSaved,
+  }
+
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] lg:items-start lg:gap-8">
+    <>
+    <div className="no-print grid gap-6 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] lg:items-start lg:gap-8">
       <div className="grid gap-4">
         <RangePanel
           scenario={scenario}
@@ -161,6 +286,8 @@ export function Calculator() {
           catalogStatus={catalogLoad.status}
           trimConfidence={trimConfidence}
           stale={stale}
+          anchorAmount={anchor?.amount ?? null}
+          notices={notices}
         />
         <div
           role="group"
@@ -194,6 +321,55 @@ export function Calculator() {
             )
           })}
         </div>
+        <div className="flex flex-wrap gap-2">
+          <Button type="button" onClick={saveCurrent} data-testid="save-scenario">
+            Save this scenario
+          </Button>
+          <Button type="button" variant="outline" onClick={copyShareLink} data-testid="copy-share-link">
+            Copy share link
+          </Button>
+          <Button type="button" variant="outline" onClick={() => window.print()} data-testid="print-worksheet-button">
+            Print worksheet
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            className="lg:hidden"
+            aria-haspopup="dialog"
+            onClick={() => setSheetOpen(true)}
+          >
+            Saved comparisons ({tray.items.length})
+          </Button>
+        </div>
+        {shareStatus ? (
+          <p className="text-sm leading-snug" data-testid="share-status">
+            {shareStatus}
+          </p>
+        ) : null}
+        {shareUrl ? (
+          <div className="grid gap-1">
+            <p className="text-sm font-medium" id="share-link-label">
+              Share link
+            </p>
+            <p
+              data-testid="share-url"
+              aria-labelledby="share-link-label"
+              className="font-mono text-xs leading-snug break-all"
+            >
+              {shareUrl}
+            </p>
+            {shareIncludedAnchor ? (
+              <p className="text-xs leading-snug" data-testid="share-anchor-note">
+                The annual amount in this link is the visitor&apos;s anchor for this
+                scenario. It is not a cleared baseline.
+              </p>
+            ) : (
+              <p className="text-muted-foreground text-xs leading-snug">
+                No current premium is in this link.
+              </p>
+            )}
+          </div>
+        ) : null}
       </div>
 
       <form
@@ -308,7 +484,7 @@ export function Calculator() {
               )}
             >
               {premiumError ??
-                "Empty keeps the labeled sample. An amount is the base for this scenario only, stays on this page, and is not sent."}
+                "Empty keeps the labeled sample. An amount is this scenario's anchor, not a cleared baseline. Saving a comparison keeps it in this browser. A share link can include it as that anchor. It is not sent to a server."}
             </p>
           </div>
         </fieldset>
@@ -416,7 +592,27 @@ export function Calculator() {
           }}
         />
       </form>
+      <div className="hidden lg:block lg:col-span-2" data-testid="comparison-tray">
+        <ComparisonList {...listProps} headingId="comparison-heading" />
+      </div>
     </div>
+    <ComparisonSheet open={sheetOpen} onClose={() => setSheetOpen(false)}>
+      <ComparisonList {...listProps} headingId="comparison-sheet-heading" />
+    </ComparisonSheet>
+    <PrintWorksheet
+      scenario={scenario}
+      persona={persona}
+      sample={sample}
+      engine={engine}
+      anchorAmount={anchor?.amount ?? null}
+      trimConfidence={trimConfidence}
+      catalogStatus={catalogLoad.status}
+      stale={stale}
+      saved={tray.items}
+      trayReady={tray.ready}
+      notices={notices}
+    />
+    </>
   )
 }
 

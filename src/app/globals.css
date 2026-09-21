@@ -141,6 +141,77 @@
   outline-offset: 2px !important;
 }
 
+.comparison-sheet {
+  position: fixed;
+  inset: auto 0 0 0;
+  width: 100%;
+  max-width: none;
+  max-height: 85vh;
+  margin: 0;
+  overflow: auto;
+  border: 0;
+  border-top: 1px solid var(--border);
+  background: var(--background);
+  color: var(--foreground);
+  padding: 1rem 1rem 1.5rem;
+}
+
+.comparison-sheet::backdrop {
+  background: oklch(0.25 0.015 70 / 0.35);
+}
+
+.worksheet {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  border: 1px solid var(--border);
+  background: white;
+  padding: 1.5rem 1rem 2rem;
+  color: var(--foreground);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.write-line {
+  height: 2rem;
+  border-bottom: 1px solid var(--foreground);
+}
+
+@media print {
+  @page {
+    margin: 0.6in;
+  }
+
+  body > header,
+  body > footer,
+  .no-print,
+  dialog {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+    color: black;
+  }
+
+  .worksheet {
+    margin: 0;
+    border: 0;
+    padding: 0;
+    color: black;
+    background: white;
+  }
+
+  .worksheet a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .write-line {
+    border-bottom-color: black;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

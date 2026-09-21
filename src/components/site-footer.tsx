@@ -27,7 +27,8 @@ export function SiteFooter() {
         <p>{PUBLISHER}</p>
         <p className="text-muted-foreground">
           With no current premium entered, the dollars are a labeled sample. The
-          factor engine does not price an uncleared baseline. Data bundle{" "}
+          factor engine does not price an uncleared baseline. Saved comparisons
+          stay in this browser. Data bundle{" "}
           {DATA_BUNDLE_VERSION}. Catalog {CATALOG_VERSION}. State rules{" "}
           {STATE_RULES_VERSION}.
         </p>

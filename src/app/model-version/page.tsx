@@ -56,6 +56,18 @@ export default function ModelVersionPage() {
           figure from NAIC, HLDI, SERFF, or a publisher was added.
         </p>
       </section>
+      <section aria-labelledby="changelog-comparisons" className="grid gap-2">
+        <h3 id="changelog-comparisons" className="font-medium">
+          Still {MODEL_VERSION}
+        </h3>
+        <p>
+          Saved comparisons, share links, and the print worksheet do not change
+          the factors. A saved optional premium stays in this browser. A share
+          link records model {MODEL_VERSION} and data bundle {DATA_BUNDLE_VERSION}.
+          It does not freeze a dollar result. Opening a link that names another
+          model version says so, and this page recomputes on {MODEL_VERSION}.
+        </p>
+      </section>
       <section aria-labelledby="changelog-state-rules" className="grid gap-2">
         <h3 id="changelog-state-rules" className="font-medium">
           State rules {STATE_RULES_VERSION}

@@ -262,7 +262,7 @@ export default function MethodologyPage() {
         FuelEconomy.gov. The trim name is the FuelEconomy.gov model string.
         When that string joins the NHTSA model cleanly, trim confidence is
         strong. When the names only partly agree, trim confidence is limited
-        and the confidence line stays low. When no FuelEconomy.gov trim joined
+        and the confidence line says lower. When no FuelEconomy.gov trim joined
         the NHTSA model, the trim says it is not resolved. No trim name was
         added by hand. Honda Civic and Hyundai Ioniq 5 N are in the snapshot.
         An optional VIN is sent from the browser to NHTSA and then discarded.
@@ -279,9 +279,36 @@ export default function MethodologyPage() {
         applies the versioned factors and names that factor family. If the
         arithmetic would show zero or a negative dollar, a display floor holds
         the low, likely, high, and monthly midpoint above zero. That floor is not
-        a premium. Clearing the field returns to the labeled sample. Choosing
-        Molly, Jayden, or Ava clears the field. The amount stays in the page
-        while it is open. This version does not store it or send it.
+        a premium.         Clearing the field returns to the labeled sample. Choosing
+        Molly, Jayden, or Ava clears the open field. The amount is the
+        visitor&apos;s anchor for that scenario, not a cleared baseline. Saving the
+        scenario keeps the amount in this browser&apos;s local storage. A share
+        link may include it only as that anchor. This page does not send it to
+        a server or to analytics. Reloading an address that is not a share link
+        clears the open field.
+      </p>
+      <h2 className="text-base font-semibold">Comparisons, share links, and the worksheet</h2>
+      <p>
+        Save keeps the open scenario in this browser. Molly and Jayden are two
+        scenarios, each with one driver and one car. Refresh keeps the saved
+        list. There is no account and no server profile. Remove deletes that
+        scenario from this browser.
+      </p>
+      <p>
+        A share link encodes the inputs and the model and data-bundle versions.
+        It does not encode a finished low, likely, or high figure. Opening the
+        link shows the disclaimer and recalculates. If the model version in the
+        link is not the model on this page, the page says so and still
+        recalculates on the current model. The optional premium is included only
+        as the visitor&apos;s anchor, and the page still says it is not a cleared
+        baseline.
+      </p>
+      <p>
+        Print uses the browser&apos;s print dialog. The worksheet lists the
+        assumptions, coverage limits, source dates, model version, and
+        data-bundle version, repeats the disclaimer, and leaves blank lines for
+        a licensed professional&apos;s figure. It has no partner mark and no code
+        that opens another site.
       </p>
       <h2 className="text-base font-semibold">Version</h2>
       <p>

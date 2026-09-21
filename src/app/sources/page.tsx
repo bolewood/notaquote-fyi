@@ -29,60 +29,53 @@ export default function SourcesPage() {
         row with no derived fields contributed no figures to the bundle.
       </p>
       <p>{NAIC_PARAPHRASE}</p>
-      <div className="overflow-x-auto">
-        <table className="w-full min-w-[64rem] border-collapse text-left text-sm">
-          <caption className="sr-only">Source manifest {MANIFEST_VERSION}</caption>
-          <thead>
-            <tr className="border-b border-border">
-              <th scope="col" className="py-2 pr-3 font-medium">
-                Source
-              </th>
-              <th scope="col" className="py-2 pr-3 font-medium">
-                Owner
-              </th>
-              <th scope="col" className="py-2 pr-3 font-medium">
-                License note
-              </th>
-              <th scope="col" className="py-2 pr-3 font-medium">
-                Access
-              </th>
-              <th scope="col" className="py-2 pr-3 font-medium">
-                Refresh
-              </th>
-              <th scope="col" className="py-2 pr-3 font-medium">
-                Last checked
-              </th>
-              <th scope="col" className="py-2 font-medium">
-                Derived fields
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {SOURCE_MANIFEST.map((row) => (
-              <tr key={row.id} className="border-b border-border align-top">
-                <th scope="row" className="py-3 pr-3 font-medium">
-                  {row.url ? (
-                    <a
-                      href={row.url}
-                      className="underline underline-offset-4"
-                      rel="noreferrer"
-                    >
-                      {citationLabel(row)}
-                    </a>
-                  ) : (
-                    citationLabel(row)
-                  )}
-                </th>
-                <td className="py-3 pr-3">{row.owner}</td>
-                <td className="py-3 pr-3">{row.licenseNote}</td>
-                <td className="py-3 pr-3">{row.accessMethod}</td>
-                <td className="py-3 pr-3">{row.refreshCadence}</td>
-                <td className="py-3 pr-3">{formatCatalogDate(row.lastChecked)}</td>
-                <td className="py-3">{derivedFieldLabel(row)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="grid gap-4">
+        {SOURCE_MANIFEST.map((row) => (
+          <section
+            key={row.id}
+            id={`manifest-${row.id}`}
+            className="grid min-w-0 gap-2 border-b border-border pb-4 break-words"
+            data-testid="manifest-row"
+          >
+            <h2 className="text-sm font-semibold break-words">
+              {row.url ? (
+                <a href={row.url} className="underline underline-offset-4" rel="noreferrer">
+                  {citationLabel(row)}
+                </a>
+              ) : (
+                citationLabel(row)
+              )}
+            </h2>
+            <dl className="grid gap-2">
+              <div className="min-w-0">
+                <dt className="font-medium">License note</dt>
+                <dd className="break-words" data-testid="manifest-license">
+                  {row.licenseNote}
+                </dd>
+              </div>
+              <div>
+                <dt className="font-medium">Owner</dt>
+                <dd>{row.owner}</dd>
+              </div>
+              <div>
+                <dt className="font-medium">Access</dt>
+                <dd>{row.accessMethod}</dd>
+              </div>
+              <div>
+                <dt className="font-medium">Refresh</dt>
+                <dd>{row.refreshCadence}</dd>
+              </div>
+              <div>
+                <dt className="font-medium">Last checked</dt>
+                <dd>{formatCatalogDate(row.lastChecked)}</dd>
+              </div>
+              <div>
+                <dt className="font-medium">Derived fields</dt>
+                <dd>{derivedFieldLabel(row)}</dd>
+              </div>
+            </dl>
+          </section>
+        ))}
       </div>
       <p>
         A link is not permission to copy a table. The two auto-database rows say

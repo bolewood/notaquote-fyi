@@ -22,6 +22,8 @@ export function RangePanel({
   catalogStatus,
   trimConfidence,
   stale,
+  anchorAmount,
+  notices,
 }: {
   scenario: Scenario
   persona: PersonaId | null
@@ -30,6 +32,8 @@ export function RangePanel({
   catalogStatus: CatalogStatus
   trimConfidence: TrimConfidence | null
   stale: boolean
+  anchorAmount: number | null
+  notices: string[]
 }) {
   const dollars = engine.dollars
   const modeled = dollars !== null
@@ -95,8 +99,23 @@ export function RangePanel({
             Sample display floor. This range was held above zero. The floor is not a premium.
           </p>
         ) : null}
+        {modeled && anchorAmount !== null ? (
+          <p data-testid="visitor-anchor" className="text-sm leading-snug">
+            Entered annual premium {formatDollars(anchorAmount)}. This amount is the
+            visitor&apos;s anchor for this scenario. It is not a cleared baseline.
+          </p>
+        ) : null}
       </div>
       <DisclaimerText />
+      {notices.length > 0 ? (
+        <div data-testid="share-notice" className="grid gap-2">
+          {notices.map((note) => (
+            <p key={note} className="text-sm leading-snug">
+              {note}
+            </p>
+          ))}
+        </div>
+      ) : null}
       <p className="text-muted-foreground text-xs" data-testid="versions">
         Model {MODEL_VERSION}. Data bundle {DATA_BUNDLE_VERSION}. Manifest {MANIFEST_VERSION}.
         Catalog {CATALOG_VERSION}. State rules {STATE_RULES_VERSION}. One driver and one vehicle.

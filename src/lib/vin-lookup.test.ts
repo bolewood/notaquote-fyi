@@ -298,4 +298,9 @@ test("vehicle and VIN modules do not reference storage or analytics sinks", () =
       assert.equal(source.includes(token), false, `${file} contains ${token}`)
     }
   }
+
+  const tray = readFileSync("src/components/comparison-tray.tsx", "utf8")
+  assert.match(tray, /localStorage/)
+  assert.doesNotMatch(tray, /vin/i)
+  assert.doesNotMatch(tray, /analytics|gtag|plausible|document\.cookie|sessionStorage/)
 })
