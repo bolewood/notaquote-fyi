@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { TrustArticle } from "@/components/trust-article"
 import { formatCatalogDate } from "@/lib/catalog"
+import { STATE_RULES_VERSION } from "@/lib/state-rules"
 import {
   CATALOG_RETRIEVED_ON,
   CATALOG_TERMS,
@@ -18,8 +19,10 @@ export default function DataLicensesPage() {
     <TrustArticle title="Data licenses">
       <p>
         The vehicle catalog bundle is {CATALOG_VERSION}, retrieved{" "}
-        {formatCatalogDate(CATALOG_RETRIEVED_ON)}. It is not a premium baseline.
-        There is still no state-rules table and no cleared dollar baseline.
+        {formatCatalogDate(CATALOG_RETRIEVED_ON)}. The state-rules table is{" "}
+        {STATE_RULES_VERSION}. It cites public statute and insurance-department
+        pages. It is not a premium baseline. Rows without a source URL have no
+        dollar minimum. There is no cleared dollar baseline.
       </p>
       <p>{CATALOG_TERMS}</p>
       <p>

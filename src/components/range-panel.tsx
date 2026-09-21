@@ -6,6 +6,7 @@ import {
   type TrimConfidence,
 } from "@/lib/catalog"
 import { BUNDLE_VERSION, MODEL_VERSION, SAMPLE_RANGE_HEADING } from "@/lib/copy"
+import { STATE_RULES_VERSION } from "@/lib/state-rules"
 import { scenarioIdentity, type PersonaId, type Scenario } from "@/lib/scenario"
 import { formatDollars, type SampleRange } from "@/lib/sample-range"
 
@@ -103,8 +104,8 @@ export function RangePanel({
       </div>
       <DisclaimerText />
       <p className="text-muted-foreground text-xs">
-        Model {MODEL_VERSION}. Data bundle {BUNDLE_VERSION}. One driver and one
-        vehicle.
+        Model {MODEL_VERSION}. Data bundle {BUNDLE_VERSION}. State rules{" "}
+        {STATE_RULES_VERSION}. One driver and one vehicle.
       </p>
     </section>
   )

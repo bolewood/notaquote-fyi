@@ -1,6 +1,11 @@
 import type { Metadata } from "next"
 import { TrustArticle } from "@/components/trust-article"
-import { DISCLAIMER, PUBLISHER } from "@/lib/copy"
+import {
+  DISCLAIMER,
+  PUBLISHER,
+  STATE_MINIMUM_COUNSEL_LABEL,
+  STATE_MINIMUM_COUNSEL_NOTICE,
+} from "@/lib/copy"
 
 export const metadata: Metadata = {
   title: "Disclaimer",
@@ -17,8 +22,15 @@ export default function DisclaimerPage() {
       </p>
       <p>
         Package names on the calculator are assumptions with the limits written
-        next to them. State-minimum dollar amounts are not shown, because the
-        sourced state-rules table is not in this version.
+        next to them. A state-minimum dollar amount is shown only when that
+        state’s row has a source URL. A row with no source URL says the sourced
+        table has no figure yet. Standard liability stays 100/300/100. Full
+        coverage stays 100/300/100 plus comprehensive and collision. High limits
+        stay 250/500/250 plus comprehensive and collision.
+      </p>
+      <p>
+        <span className="font-medium">{STATE_MINIMUM_COUNSEL_LABEL}</span>{" "}
+        {STATE_MINIMUM_COUNSEL_NOTICE}
       </p>
       <p>
         {PUBLISHER} publishes this educational tool. This page does not provide a

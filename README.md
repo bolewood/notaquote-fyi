@@ -39,6 +39,10 @@ Year, make, model, and trim read that file in the browser. An optional VIN is se
 
 ## This version
 
-Molly, Jayden, and Ava are one-click presets. Their default vehicles resolve in the catalog snapshot. Coverage packages are assumptions with their limits written on the page. State-minimum dollar amounts are not invented here; they wait for a sourced state-rules table. Displayed dollars remain a sample range. The baseline is not cleared. There is no account and no document upload.
+Molly, Jayden, and Ava are one-click presets. Their default vehicles resolve in the catalog snapshot. Coverage packages are assumptions with their limits written on the page. Standard liability stays 100/300/100. Full coverage stays 100/300/100 plus comprehensive and collision. High limits stay 250/500/250 plus comprehensive and collision.
+
+The state-rules table is version `state-rules-2026-09-21` in `src/lib/state-rules.ts`. Six rows cite a statute or insurance-department page opened on 21 September 2026: California, Texas, Florida, New York, Pennsylvania, and Illinois. The other 45 rows have no source URL and no dollar minimum. The State minimum control shows a liability figure only when that row has a source. Credit is unreviewed and the factor is 1.00 on every row. The reviewer field is unsigned. Research notes are in `data/state-rules/assumptions.md`. This is source research, not a legal conclusion.
+
+Displayed dollars remain a sample range. The baseline is not cleared. There is no account and no document upload.
 
 Search engines are asked not to index the site (`noindex, nofollow`).

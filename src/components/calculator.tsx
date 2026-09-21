@@ -14,11 +14,19 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import {
+  STATE_MINIMUM_COUNSEL_LABEL,
+  STATE_MINIMUM_COUNSEL_NOTICE,
+} from "@/lib/copy"
+import {
   buildSampleRange,
   parseAnnualPremium,
   sampleWeight,
   type Anchor,
 } from "@/lib/sample-range"
+import {
+  formatVerifiedDate,
+  stateRule,
+} from "@/lib/state-rules"
 import { VehicleFieldset } from "@/components/vehicle-fieldset"
 import {
   isCatalogStale,
@@ -46,8 +54,10 @@ import {
   STATES,
   YEARS_LICENSED,
   hasPhysicalDamage,
+  stateName,
   type PersonaId,
   type Scenario,
+  type StateCode,
 } from "@/lib/scenario"
 import { useCatalog } from "@/lib/use-catalog"
 import { runVinLookup, selectionAfterVin } from "@/lib/vin-lookup"
@@ -368,8 +378,11 @@ export function Calculator() {
             />
           </div>
           <p id="coverage-assumption" className="text-sm leading-snug">
-            {coverageAssumption(scenario.coverage)}
+            {coverageAssumption(scenario.coverage, scenario.state)}
           </p>
+          {scenario.coverage === "state-minimum" ? (
+            <StateMinimumSource state={scenario.state} />
+          ) : null}
           {hasPhysicalDamage(scenario.coverage) ? (
             <p id="deductible-note" className="text-muted-foreground text-xs leading-snug">
               The deductible assumption applies to comprehensive and collision.
@@ -451,6 +464,47 @@ function LabeledSelect({
           ))}
         </SelectContent>
       </Select>
+    </div>
+  )
+}
+
+function StateMinimumSource({ state }: { state: StateCode }) {
+  const rule = stateRule(state)
+  return (
+    <div className="grid gap-2">
+      {rule?.sourceUrl && rule.lastVerified ? (
+        <p className="text-sm leading-snug">
+          <a
+            href={rule.sourceUrl}
+            className="underline underline-offset-4"
+            rel="noreferrer"
+            data-testid="state-rule-source"
+          >
+            Opened page for {stateName(state)}
+          </a>
+          {", checked "}
+          {formatVerifiedDate(rule.lastVerified)}
+          {". "}
+          <a
+            href={`/sources#state-note-${state}`}
+            className="underline underline-offset-4"
+          >
+            Row notes
+          </a>
+          .
+        </p>
+      ) : (
+        <p className="text-sm leading-snug">
+          <a href={`/sources#state-rule-${state}`} className="underline underline-offset-4">
+            {stateName(state)} has no source URL in the table
+          </a>
+          .
+        </p>
+      )}
+      <p className="text-sm leading-snug" data-testid="state-minimum-counsel">
+        <span className="font-medium">{STATE_MINIMUM_COUNSEL_LABEL}</span>{" "}
+        {STATE_MINIMUM_COUNSEL_NOTICE}
+      </p>
     </div>
   )
 }

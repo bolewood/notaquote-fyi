@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { TrustArticle } from "@/components/trust-article"
 import { BUNDLE_VERSION, MODEL_VERSION } from "@/lib/copy"
+import { STATE_RULES_VERSION } from "@/lib/state-rules"
 import {
   AGE_WEIGHT,
   COVERAGE_WEIGHT,
@@ -109,7 +110,8 @@ export default function MethodologyPage() {
         </li>
         <li>
           State-minimum package: add {SPREAD_STATE_MINIMUM_HIGH} to the high
-          ratio, because the statutory dollars are not loaded.
+          ratio. The sample weights do not use a statutory dollar amount. A
+          sourced minimum changes the coverage line, not this sample range.
         </li>
         <li>
           Tesla Model Y: add {SPREAD_MODEL_Y_HIGH} to the high ratio as a sample
@@ -207,9 +209,12 @@ export default function MethodologyPage() {
       <h2 className="text-base font-semibold">Coverage assumptions</h2>
       <ul className="list-disc space-y-1 pl-5">
         <li>
-          State minimum: this state’s required liability. Dollar minimums load
-          with the sourced state-rules table, which is not in this version. No
-          comprehensive or collision.
+          State minimum: the liability amounts in that state’s sourced row,
+          plus required personal injury protection, uninsured motorist, or
+          underinsured motorist coverage only where that row says they are
+          required. A row with no source URL does not show a dollar minimum.
+          The page says the sourced table has no figure yet. No comprehensive
+          or collision. This is not coverage advice.
         </li>
         <li>
           Standard liability: 100/300/100. No comprehensive or collision.
@@ -262,8 +267,8 @@ export default function MethodologyPage() {
       </p>
       <h2 className="text-base font-semibold">Version</h2>
       <p>
-        Model {MODEL_VERSION}. Data bundle {BUNDLE_VERSION}. The model version
-        page is the changelog.
+        Model {MODEL_VERSION}. Data bundle {BUNDLE_VERSION}. State rules{" "}
+        {STATE_RULES_VERSION}. The model version page is the changelog.
       </p>
     </TrustArticle>
   )

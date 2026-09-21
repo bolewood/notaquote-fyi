@@ -1,4 +1,5 @@
 import { CATALOG_DEFAULTS } from "./catalog-defaults"
+import { stateMinimumAssumption } from "./state-rules"
 
 export const AGE_BANDS = [
   { id: "16-18", label: "16–18" },
@@ -231,10 +232,10 @@ export function hasPhysicalDamage(coverage: CoverageId): boolean {
   return coverage === "full" || coverage === "high"
 }
 
-export function coverageAssumption(coverage: CoverageId): string {
+export function coverageAssumption(coverage: CoverageId, state: StateCode): string {
   switch (coverage) {
     case "state-minimum":
-      return "State minimum. Assumption: this state’s required liability. Dollar minimums load with the sourced state-rules table, which is not in this version. No comprehensive or collision."
+      return stateMinimumAssumption(state)
     case "standard":
       return "Standard liability. Assumption: 100/300/100. No comprehensive or collision."
     case "full":
@@ -255,7 +256,7 @@ export function scenarioIdentity(
       ? "Illinois, urban stand-in for Springfield"
       : `${stateName(scenario.state)}, ${regionLabel(scenario.region).toLowerCase()}`
   const vehicle = vehicleLabel(scenario)
-  const coverage = coverageAssumption(scenario.coverage)
+  const coverage = coverageAssumption(scenario.coverage, scenario.state)
   const deductible = hasPhysicalDamage(scenario.coverage)
     ? `$${scenario.deductible.toLocaleString("en-US")} deductible`
     : "Deductible not applied"

@@ -6,6 +6,11 @@ import {
   NHTSA_CATALOG_URL,
 } from "./catalog-meta"
 import { formatCatalogDate } from "./catalog"
+import {
+  sourcedStateRules,
+  STATE_RULES_VERSION,
+  unsourcedStateRules,
+} from "./state-rules"
 
 export type SourceRow = {
   name: string
@@ -39,8 +44,7 @@ export const SOURCE_ROWS: SourceRow[] = [
     name: "State statutes and insurance departments",
     use: "Required liability, PIP, uninsured-motorist rules, and credit rules.",
     url: null,
-    status:
-      "Not researched. Dollar minimums load with the sourced state-rules table, which is not in this version. No statutory dollar amounts are shown.",
+    status: `${STATE_RULES_VERSION}. ${sourcedStateRules().length} rows cite a page opened on 21 September 2026. ${unsourcedStateRules().length} rows have no source URL and no dollar minimum. Credit is unreviewed and the factor is 1.00 on every row. The reviewer field is unsigned. No premium figures are included.`,
   },
   {
     name: "NAIC Auto Insurance Database",

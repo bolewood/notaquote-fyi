@@ -3,6 +3,11 @@ import { TrustArticle } from "@/components/trust-article"
 import { BUNDLE_VERSION, MODEL_VERSION } from "@/lib/copy"
 import { formatCatalogDate } from "@/lib/catalog"
 import { CATALOG_RETRIEVED_ON, CATALOG_YEAR_MAX, CATALOG_YEAR_MIN } from "@/lib/catalog-meta"
+import {
+  sourcedStateRules,
+  STATE_RULES_VERSION,
+  unsourcedStateRules,
+} from "@/lib/state-rules"
 
 export const metadata: Metadata = {
   title: "Model version",
@@ -22,6 +27,21 @@ export default function ModelVersionPage() {
         </div>
       </dl>
       <h2 className="text-base font-semibold">Changelog</h2>
+      <section aria-labelledby="changelog-state-rules" className="grid gap-2">
+        <h3 id="changelog-state-rules" className="font-medium">
+          State rules {STATE_RULES_VERSION}
+        </h3>
+        <p>
+          Adds a state_rules table for 50 states and the District of Columbia.{" "}
+          {sourcedStateRules().length} rows cite a statute or
+          insurance-department page opened on 21 September 2026.{" "}
+          {unsourcedStateRules().length} rows have no source URL and no dollar
+          minimum. Credit is unreviewed and the factor is 1.00 on every row.
+          The reviewer field is unsigned. The sample model is still{" "}
+          {MODEL_VERSION}. No premium baseline was added. Standard liability,
+          full coverage, and high limits stay 100/300/100 and 250/500/250.
+        </p>
+      </section>
       <section aria-labelledby="changelog-catalog" className="grid gap-2">
         <h3 id="changelog-catalog" className="font-medium">
           Data bundle {BUNDLE_VERSION}

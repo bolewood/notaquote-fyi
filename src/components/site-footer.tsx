@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { BUNDLE_VERSION, MODEL_VERSION, PUBLISHER } from "@/lib/copy"
+import { STATE_RULES_VERSION } from "@/lib/state-rules"
 
 export function SiteFooter() {
   return (
@@ -24,8 +25,8 @@ export function SiteFooter() {
         </nav>
         <p>{PUBLISHER}</p>
         <p className="text-muted-foreground">
-          Displayed dollars are a sample range. Data bundle {BUNDLE_VERSION}. The
-          baseline is not cleared.
+          Displayed dollars are a sample range. Data bundle {BUNDLE_VERSION}. State
+          rules {STATE_RULES_VERSION}. The baseline is not cleared.
         </p>
       </div>
     </footer>

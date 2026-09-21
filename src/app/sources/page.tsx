@@ -1,6 +1,12 @@
 import type { Metadata } from "next"
+import { StateRulesTable } from "@/components/state-rules-table"
 import { TrustArticle } from "@/components/trust-article"
 import { SOURCE_ROWS } from "@/lib/sources"
+import {
+  sourcedStateRules,
+  STATE_RULES_VERSION,
+  unsourcedStateRules,
+} from "@/lib/state-rules"
 
 export const metadata: Metadata = {
   title: "Sources",
@@ -61,6 +67,19 @@ export default function SourcesPage() {
         Listing a URL is not a claim that the page was reviewed, and it is not
         permission to copy a table.
       </p>
+      <h2 id="state-rules" className="text-base font-semibold">
+        State rules {STATE_RULES_VERSION}
+      </h2>
+      <p>
+        {sourcedStateRules().length} rows cite a statute or insurance-department
+        page opened on 21 September 2026. {unsourcedStateRules().length} rows
+        have no source URL. A row with no source URL does not show a dollar
+        minimum. The words in a sourced cell are the amounts on the page that
+        was opened. They are not a premium, and they are not coverage advice.
+        Credit is unreviewed on every row, and the factor is locked at 1.00.
+        The reviewer column is unsigned.
+      </p>
+      <StateRulesTable />
     </TrustArticle>
   )
 }
