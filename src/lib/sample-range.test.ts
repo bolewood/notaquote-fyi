@@ -1,7 +1,7 @@
 import assert from "node:assert/strict"
 import test from "node:test"
 import { DISCLAIMER } from "./copy"
-import { AVA, JAYDEN, MOLLY } from "./scenario"
+import { AVA, JAYDEN, MOLLY, vehicleParts } from "./scenario"
 import {
   buildSampleRange,
   CREDIT_FACTOR,
@@ -87,6 +87,64 @@ test("credit factor stays locked", () => {
   const california = sampleWeight(AVA)
   const sameDriverElsewhere = sampleWeight({ ...AVA, state: "IL", region: "urban" })
   assert.notEqual(california, sameDriverElsewhere)
+})
+
+test("an allowed premium never prints zero or a negative sample dollar", () => {
+  const weight = sampleWeight(MOLLY)
+  const amounts = [1, 2, 5, 9, 10, 15, 1800]
+  const scenarios = [
+    MOLLY,
+    { ...MOLLY, age: "65+" as const },
+    { ...MOLLY, age: "65+" as const, coverage: "state-minimum" as const },
+    { ...MOLLY, coverage: "high" as const, incidents: "two-or-more" as const },
+  ]
+
+  for (const amount of amounts) {
+    for (const scenario of scenarios) {
+      const range = buildSampleRange(scenario, { amount, weight })
+      assert.ok(range.low >= 1, `low ${range.low} for ${amount}`)
+      assert.ok(range.likely >= 1, `likely ${range.likely} for ${amount}`)
+      assert.ok(range.high >= 1, `high ${range.high} for ${amount}`)
+      assert.ok(range.monthly >= 1, `monthly ${range.monthly} for ${amount}`)
+      assert.ok(range.low < range.likely && range.likely < range.high)
+    }
+  }
+
+  const typed = buildSampleRange(MOLLY, { amount: 2, weight })
+  assert.equal(typed.displayFloor, true)
+  assert.equal(typed.likely, 2)
+
+  const aged = buildSampleRange({ ...MOLLY, age: "65+" }, { amount: 2, weight })
+  assert.equal(aged.displayFloor, true)
+  assert.ok(aged.low > 0 && aged.likely > 0)
+
+  const sane = buildSampleRange(MOLLY, { amount: 1800, weight })
+  assert.equal(sane.likely, 1800)
+  assert.equal(sane.displayFloor, false)
+  assert.equal(buildSampleRange(MOLLY, null).displayFloor, false)
+})
+
+test("Jayden uses the same mileage band as Molly", () => {
+  assert.equal(JAYDEN.mileage, MOLLY.mileage)
+  assert.equal(JAYDEN.mileage, "7500-15000")
+})
+
+test("vehicle controls decompose only the three stand-ins", () => {
+  const ford = vehicleParts("f150")
+  const toyota = vehicleParts("rav4")
+  const tesla = vehicleParts("model-y-lr")
+
+  assert.equal(ford.makeLabel, "Ford")
+  assert.equal(ford.modelLabel, "F-150")
+  assert.equal(ford.trimLabel, "Trim confidence unavailable")
+  assert.equal(toyota.makeLabel, "Toyota")
+  assert.equal(toyota.modelLabel, "RAV4")
+  assert.equal(tesla.makeLabel, "Tesla")
+  assert.equal(tesla.modelLabel, "Model Y")
+  assert.equal(tesla.trimLabel, "Long Range")
+  assert.equal(ford.trimConfidence, "unavailable")
+  assert.equal(toyota.trimConfidence, "unavailable")
+  assert.equal(tesla.trimConfidence, "unavailable")
 })
 
 test("annual premium parser accepts dollars and rejects empty or zero", () => {

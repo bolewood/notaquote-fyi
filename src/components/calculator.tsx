@@ -33,17 +33,21 @@ import {
   isModelYear,
   isRegion,
   isStateCode,
-  isVehicleId,
   isYearsLicensed,
+  MAKES,
   MILEAGE_BANDS,
+  MODELS,
   MODEL_YEARS,
   PERSONA_DETAILS,
   PRESETS,
   REGIONS,
   STATES,
-  VEHICLES,
+  TRIMS,
   YEARS_LICENSED,
   hasPhysicalDamage,
+  vehicleIdForMake,
+  vehicleIdForModel,
+  vehicleParts,
   type PersonaId,
   type Scenario,
 } from "@/lib/scenario"
@@ -116,7 +120,7 @@ export function Calculator() {
                 variant={active ? "default" : "outline"}
                 aria-pressed={active}
                 onClick={() => applyPersona(id)}
-                className="h-auto items-start justify-start gap-2 px-3 py-2 text-left whitespace-normal"
+                className="preset-button h-auto items-start justify-start gap-2 px-3 py-2 text-left whitespace-normal"
               >
                 <PersonaMark />
                 <span className="grid gap-0.5">
@@ -137,7 +141,7 @@ export function Calculator() {
       </div>
 
       <form
-        className="grid gap-4"
+        className="grid gap-2"
         onSubmit={(event) => event.preventDefault()}
       >
         <fieldset className="grid gap-3">
@@ -308,6 +312,8 @@ export function Calculator() {
               id="deductible"
               label="Deductible assumption"
               value={String(scenario.deductible)}
+              disabled={!hasPhysicalDamage(scenario.coverage)}
+              describedBy="deductible-note"
               options={DEDUCTIBLES.map((amount) => ({
                 value: String(amount),
                 label: `$${amount.toLocaleString("en-US")}`,
@@ -322,54 +328,107 @@ export function Calculator() {
             {coverageAssumption(scenario.coverage)}
           </p>
           {hasPhysicalDamage(scenario.coverage) ? (
-            <p className="text-muted-foreground text-xs leading-snug">
+            <p id="deductible-note" className="text-muted-foreground text-xs leading-snug">
               The deductible assumption applies to comprehensive and collision.
             </p>
           ) : (
-            <p className="text-muted-foreground text-xs leading-snug">
+            <p id="deductible-note" className="text-muted-foreground text-xs leading-snug">
               The deductible is not applied. This package has no comprehensive or
               collision.
             </p>
           )}
         </fieldset>
 
-        <fieldset className="grid gap-3">
-          <legend className="text-sm font-medium">Vehicle</legend>
-          <div className="grid gap-3 sm:grid-cols-2">
-            <LabeledSelect
-              id="model-year"
-              label="Model year stand-in"
-              value={String(scenario.year)}
-              options={MODEL_YEARS.map((year) => ({
-                value: String(year),
-                label: String(year),
-              }))}
-              onChange={(value) => {
-                const year = Number(value)
-                if (isModelYear(year)) patch({ year })
-              }}
-            />
-            <LabeledSelect
-              id="vehicle"
-              label="Vehicle stand-in"
-              value={scenario.vehicle}
-              options={VEHICLES.map((vehicle) => ({
-                value: vehicle.id,
-                label: vehicle.label,
-              }))}
-              onChange={(value) => {
-                if (isVehicleId(value)) patch({ vehicle: value })
-              }}
-            />
-          </div>
-          <p className="text-xs leading-snug">
-            The NHTSA catalog is not loaded. These three stand-ins are the only
-            vehicles in this version. Honda Civic and Hyundai Ioniq 5 N are not
-            included. Trim confidence is not available.
-          </p>
-        </fieldset>
+        <VehicleFieldset
+          year={scenario.year}
+          vehicle={scenario.vehicle}
+          onYear={(year) => patch({ year })}
+          onVehicle={(vehicle) => patch({ vehicle })}
+        />
       </form>
     </div>
+  )
+}
+
+function VehicleFieldset({
+  year,
+  vehicle,
+  onYear,
+  onVehicle,
+}: {
+  year: number
+  vehicle: Scenario["vehicle"]
+  onYear: (year: number) => void
+  onVehicle: (vehicle: Scenario["vehicle"]) => void
+}) {
+  const parts = vehicleParts(vehicle)
+  const models = MODELS.filter((model) => model.makeId === parts.makeId)
+  const trims = TRIMS.filter((trim) => trim.modelId === parts.modelId)
+
+  return (
+    <fieldset className="grid gap-3">
+      <legend className="text-sm font-medium">Vehicle</legend>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <LabeledSelect
+          id="model-year"
+          label="Model year"
+          value={String(year)}
+          options={MODEL_YEARS.map((modelYear) => ({
+            value: String(modelYear),
+            label: String(modelYear),
+          }))}
+          onChange={(value) => {
+            const next = Number(value)
+            if (isModelYear(next)) onYear(next)
+          }}
+        />
+        <LabeledSelect
+          id="make"
+          label="Make"
+          value={parts.makeId}
+          options={MAKES.map((make) => ({
+            value: make.id,
+            label: make.label,
+          }))}
+          onChange={(value) => {
+            const make = MAKES.find((item) => item.id === value)
+            if (make) onVehicle(vehicleIdForMake(make.id))
+          }}
+        />
+        <LabeledSelect
+          id="model"
+          label="Model"
+          value={parts.modelId}
+          options={models.map((model) => ({
+            value: model.id,
+            label: model.label,
+          }))}
+          onChange={(value) => {
+            const model = MODELS.find((item) => item.id === value)
+            if (model) onVehicle(vehicleIdForModel(model.id))
+          }}
+        />
+        <LabeledSelect
+          id="trim"
+          label="Trim"
+          describedBy="trim-note"
+          value={parts.trimId}
+          options={trims.map((trim) => ({
+            value: trim.id,
+            label: trim.label,
+          }))}
+          onChange={(value) => {
+            const trim = TRIMS.find((item) => item.id === value)
+            const model = MODELS.find((item) => item.id === trim?.modelId)
+            if (model) onVehicle(model.vehicle)
+          }}
+        />
+      </div>
+      <p id="trim-note" className="text-xs leading-snug">
+        Trim confidence is unavailable. No NHTSA catalog. Civic and Ioniq 5 N are
+        not included.
+      </p>
+    </fieldset>
   )
 }
 
@@ -379,18 +438,29 @@ function LabeledSelect({
   value,
   options,
   onChange,
+  disabled = false,
+  describedBy,
 }: {
   id: string
   label: string
   value: string
   options: { value: string; label: string }[]
   onChange: (value: string) => void
+  disabled?: boolean
+  describedBy?: string
 }) {
   return (
-    <div className="grid gap-1.5">
-      <Label htmlFor={id}>{label}</Label>
-      <Select value={value} onValueChange={onChange}>
-        <SelectTrigger id={id} className="w-full">
+    <div className="grid gap-1.5" data-disabled={disabled ? "true" : undefined}>
+      <Label htmlFor={id} className={disabled ? "text-muted-foreground font-normal" : undefined}>
+        {label}
+      </Label>
+      <Select value={value} onValueChange={onChange} disabled={disabled}>
+        <SelectTrigger
+          id={id}
+          disabled={disabled}
+          aria-describedby={describedBy}
+          className="w-full disabled:bg-muted disabled:text-muted-foreground disabled:opacity-70"
+        >
           <SelectValue />
         </SelectTrigger>
         <SelectContent position="popper" className="max-h-72">

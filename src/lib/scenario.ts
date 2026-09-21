@@ -47,6 +47,40 @@ export const VEHICLES = [
   { id: "model-y-lr", label: "Tesla Model Y Long Range" },
 ] as const
 
+/** The three stand-ins, split into controls. Not a catalog snapshot. */
+export const MAKES = [
+  { id: "ford", label: "Ford" },
+  { id: "toyota", label: "Toyota" },
+  { id: "tesla", label: "Tesla" },
+] as const
+
+export const MODELS = [
+  { id: "f-150", makeId: "ford", label: "F-150", vehicle: "f150" },
+  { id: "rav4", makeId: "toyota", label: "RAV4", vehicle: "rav4" },
+  { id: "model-y", makeId: "tesla", label: "Model Y", vehicle: "model-y-lr" },
+] as const
+
+export const TRIMS = [
+  {
+    id: "f150-trim-unavailable",
+    modelId: "f-150",
+    label: "Trim confidence unavailable",
+    confidence: "unavailable",
+  },
+  {
+    id: "rav4-trim-unavailable",
+    modelId: "rav4",
+    label: "Trim confidence unavailable",
+    confidence: "unavailable",
+  },
+  {
+    id: "model-y-long-range",
+    modelId: "model-y",
+    label: "Long Range",
+    confidence: "unavailable",
+  },
+] as const
+
 export const MODEL_YEARS = [
   2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026,
 ] as const
@@ -113,6 +147,9 @@ export type Region = (typeof REGIONS)[number]["id"]
 export type CoverageId = (typeof COVERAGE_PACKAGES)[number]["id"]
 export type Deductible = (typeof DEDUCTIBLES)[number]
 export type VehicleId = (typeof VEHICLES)[number]["id"]
+export type MakeId = (typeof MAKES)[number]["id"]
+export type ModelId = (typeof MODELS)[number]["id"]
+export type TrimId = (typeof TRIMS)[number]["id"]
 export type ModelYear = (typeof MODEL_YEARS)[number]
 export type StateCode = (typeof STATES)[number]["code"]
 export type PersonaId = "molly" | "jayden" | "ava"
@@ -157,7 +194,7 @@ export const JAYDEN: Scenario = {
   age: "16-18",
   yearsLicensed: "under-1",
   incidents: "clean",
-  mileage: "under-7500",
+  mileage: "7500-15000",
   teen: true,
   goodStudent: true,
   driverTraining: true,
@@ -209,7 +246,7 @@ export const PERSONA_DETAILS: Record<
   },
   ava: {
     name: "Ava",
-    summary: "26–39 · California urban · Model Y · credit locked",
+    summary: "26–39 · California urban · Model Y · credit unreviewed",
   },
 }
 
@@ -221,6 +258,37 @@ export function stateName(code: StateCode): string {
 
 export function vehicleLabel(id: VehicleId): string {
   return VEHICLES.find((vehicle) => vehicle.id === id)?.label ?? id
+}
+
+export function vehicleParts(id: VehicleId): {
+  makeId: MakeId
+  modelId: ModelId
+  trimId: TrimId
+  makeLabel: string
+  modelLabel: string
+  trimLabel: string
+  trimConfidence: "unavailable"
+} {
+  const model = MODELS.find((item) => item.vehicle === id) ?? MODELS[0]
+  const make = MAKES.find((item) => item.id === model.makeId) ?? MAKES[0]
+  const trim = TRIMS.find((item) => item.modelId === model.id) ?? TRIMS[0]
+  return {
+    makeId: make.id,
+    modelId: model.id,
+    trimId: trim.id,
+    makeLabel: make.label,
+    modelLabel: model.label,
+    trimLabel: trim.label,
+    trimConfidence: "unavailable",
+  }
+}
+
+export function vehicleIdForMake(makeId: MakeId): VehicleId {
+  return MODELS.find((model) => model.makeId === makeId)?.vehicle ?? "f150"
+}
+
+export function vehicleIdForModel(modelId: ModelId): VehicleId {
+  return MODELS.find((model) => model.id === modelId)?.vehicle ?? "f150"
 }
 
 export function regionLabel(id: Region): string {

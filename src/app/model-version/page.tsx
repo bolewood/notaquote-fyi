@@ -32,7 +32,10 @@ export default function ModelVersionPage() {
         </p>
         <p>
           An optional current annual premium can replace the sample baseline for
-          the open page. That amount is not stored.
+          the open page. That amount is not stored. A sample display floor holds
+          the range above zero when the arithmetic would print zero or a negative
+          dollar. That floor is not a premium. Jayden uses the same 7,500–15,000
+          mileage band as Molly.
         </p>
       </section>
       <p>

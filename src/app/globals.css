@@ -130,6 +130,11 @@
   }
 }
 
+.preset-button:focus-visible {
+  outline: 2px solid var(--foreground) !important;
+  outline-offset: 2px !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

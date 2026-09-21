@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { TrustArticle } from "@/components/trust-article"
 import { BUNDLE_VERSION, MODEL_VERSION } from "@/lib/copy"
+import { vehicleLabel, type VehicleId } from "@/lib/scenario"
 import {
   AGE_WEIGHT,
   COVERAGE_WEIGHT,
@@ -195,9 +196,11 @@ export default function MethodologyPage() {
         }))}
       />
       <WeightTable
-        caption="Vehicle stand-in sample display weights"
-        rows={Object.entries(VEHICLE_WEIGHT).map(([key, weight]) => ({
-          key,
+        caption="Vehicle sample display weights"
+        rows={(
+          Object.entries(VEHICLE_WEIGHT) as [VehicleId, number][]
+        ).map(([key, weight]) => ({
+          key: vehicleLabel(key),
           weight,
         }))}
       />
@@ -224,25 +227,31 @@ export default function MethodologyPage() {
         Molly opens the page: age 40–64, 10 or more years licensed, clean
         record, 7,500–15,000 miles, household policy, Illinois urban as a
         stand-in for Springfield, 2023 Ford F-150, full coverage, $1,000
-        deductible. Jayden is 16–18, under 1 year licensed, clean, under 7,500
-        miles, teen driver, good student, driver training, household policy,
-        Texas suburban, 2023 Toyota RAV4, full coverage. Ava is 26–39, 4–9
-        years licensed, clean, 7,500–15,000 miles, no driver flags, California
-        urban, 2023 Tesla Model Y Long Range, full coverage, credit factor
-        locked. Those driver bands are planning assumptions for the preset, not
-        a record of a person.
+        deductible. Jayden is 16–18, under 1 year licensed, clean, 7,500–15,000
+        miles, the same mileage band as Molly, teen driver, good student, driver
+        training, household policy, Texas suburban, 2023 Toyota RAV4, full
+        coverage. Ava is 26–39, 4–9 years licensed, clean, 7,500–15,000 miles,
+        no driver flags, California urban, 2023 Tesla Model Y Long Range, full
+        coverage, credit rules unreviewed and the credit factor held at 1.00.
+        Those driver bands are planning assumptions for the preset, not a record
+        of a person.
       </p>
       <p>
-        The vehicle list is three stand-ins. The NHTSA catalog is not loaded.
-        Honda Civic and Hyundai Ioniq 5 N are not in this version. Trim
-        confidence is not available.
+        Year, make, model, and trim are separate controls. They decompose three
+        stand-ins only: Ford F-150, Toyota RAV4, and Tesla Model Y Long Range.
+        Trim confidence is unavailable. Long Range is the name carried by the
+        Model Y stand-in, not a reviewed trim. The NHTSA catalog is not loaded.
+        Honda Civic and Hyundai Ioniq 5 N are not in this version.
       </p>
       <h2 className="text-base font-semibold">Optional current premium</h2>
       <p>
         An empty field uses the sample baseline. An annual amount from 1 to
         100,000 replaces that baseline for the open page. The likely figure
         starts at the amount entered, then moves in proportion if a control
-        changes afterward. Clearing the field returns to the sample baseline.
+        changes afterward. If that arithmetic would show zero or a negative
+        dollar, a sample display floor holds the low, likely, high, and monthly
+        midpoint above zero. That floor is not a premium. Clearing the field
+        returns to the sample baseline.
         Choosing Molly, Jayden, or Ava clears the field. The amount stays in
         the page while it is open. This version does not store it or send it.
       </p>

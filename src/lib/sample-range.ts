@@ -107,6 +107,13 @@ export type Anchor = {
   weight: number
 }
 
+/**
+ * Whole-dollar floor for the sample display. It exists so a planning range
+ * does not print zero or a negative dollar. It is not a premium, a statutory
+ * minimum, or a cleared baseline.
+ */
+export const SAMPLE_DISPLAY_FLOOR = 1
+
 export type SampleRange = {
   low: number
   likely: number
@@ -114,6 +121,8 @@ export type SampleRange = {
   monthly: number
   weight: number
   anchored: boolean
+  /** True when the sample display floor held a figure above zero. */
+  displayFloor: boolean
 }
 
 export function stateDisplayWeight(state: StateCode): number {
@@ -188,6 +197,21 @@ export function roundToTen(value: number): number {
   return Math.round(value / 10) * 10
 }
 
+/**
+ * Prefer the existing ten-dollar sample rounding. When that rounding would
+ * print zero, keep a positive whole dollar and report that the floor held it.
+ */
+function dollarsAboveFloor(value: number): { amount: number; held: boolean } {
+  if (!Number.isFinite(value)) {
+    return { amount: SAMPLE_DISPLAY_FLOOR, held: true }
+  }
+  const tens = roundToTen(value)
+  if (tens >= SAMPLE_DISPLAY_FLOOR) return { amount: tens, held: false }
+  const dollars = Math.round(value)
+  if (dollars >= SAMPLE_DISPLAY_FLOOR) return { amount: dollars, held: true }
+  return { amount: SAMPLE_DISPLAY_FLOOR, held: true }
+}
+
 export function buildSampleRange(
   scenario: Scenario,
   anchor: Anchor | null,
@@ -197,20 +221,51 @@ export function buildSampleRange(
   const anchoredAtEntry = anchor !== null && weight === anchor.weight
   const unrounded =
     anchor === null ? SAMPLE_BASE_ANNUAL * weight : anchor.amount * (weight / anchor.weight)
-  const likely = anchoredAtEntry ? anchor.amount : roundToTen(unrounded)
-  let low = roundToTen(likely * ratios.low)
-  let high = roundToTen(likely * ratios.high)
+  const likelyDraft = anchoredAtEntry
+    ? { amount: anchor.amount, held: false }
+    : dollarsAboveFloor(unrounded)
 
-  if (low >= likely) low = likely - 10
-  if (high <= likely) high = likely + 10
+  let likely = likelyDraft.amount
+  const lowDraft = dollarsAboveFloor(likely * ratios.low)
+  const highDraft = dollarsAboveFloor(likely * ratios.high)
+  let low = lowDraft.amount
+  let high = highDraft.amount
+  let displayFloor = likelyDraft.held || lowDraft.held || highDraft.held
+
+  if (likely < SAMPLE_DISPLAY_FLOOR) {
+    likely = SAMPLE_DISPLAY_FLOOR
+    displayFloor = true
+  }
+
+  if (low >= likely) {
+    displayFloor = true
+    if (likely - 1 >= SAMPLE_DISPLAY_FLOOR) {
+      low = likely - 1
+    } else {
+      likely = SAMPLE_DISPLAY_FLOOR + 1
+      low = SAMPLE_DISPLAY_FLOOR
+    }
+  }
+
+  if (high <= likely) {
+    displayFloor = true
+    high = likely + 1
+  }
+
+  let monthly = Math.round(likely / 12)
+  if (monthly < SAMPLE_DISPLAY_FLOOR) {
+    monthly = SAMPLE_DISPLAY_FLOOR
+    displayFloor = true
+  }
 
   return {
     low,
     likely,
     high,
-    monthly: Math.round(likely / 12),
+    monthly,
     weight,
     anchored: anchor !== null,
+    displayFloor,
   }
 }
 

@@ -62,7 +62,11 @@ export function RangePanel({
             >
               {formatDollars(range.monthly)}
             </p>
-            <p className="text-muted-foreground text-xs">Sample likely divided by 12</p>
+            <p className="text-muted-foreground text-xs">
+              {range.monthly === Math.round(range.likely / 12)
+                ? "Sample likely divided by 12"
+                : "Sample display floor held this midpoint above zero. Not a premium."}
+            </p>
           </div>
         </div>
         <UncertaintyBar low={range.low} likely={range.likely} high={range.high} />
@@ -82,6 +86,12 @@ export function RangePanel({
             premium.
           </p>
         )}
+        {range.displayFloor ? (
+          <p data-testid="display-floor" className="text-sm leading-snug">
+            Sample display floor. This range was held above zero. The floor is not
+            a premium.
+          </p>
+        ) : null}
       </div>
       <DisclaimerText />
       <p className="text-muted-foreground text-xs">
