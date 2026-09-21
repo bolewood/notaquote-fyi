@@ -15,15 +15,27 @@ export const CREDIT_FACTOR = 1
 
 export type CreditBucket = typeof CREDIT_BUCKET
 
+/** The opened page says the policy must include the coverage unless a named insured deletes it in writing. */
+export const REQUIRED_UNLESS_WRITTEN_DELETION = "required-unless-written-deletion" as const
+
+/** The opened page says the insurer may not issue the policy unless the coverage is provided, and a written rejection removes it. */
+export const REQUIRED_UNLESS_WRITTEN_REJECTION = "required-unless-written-rejection" as const
+
+export type RequirementFlag =
+  | boolean
+  | typeof REQUIRED_UNLESS_WRITTEN_DELETION
+  | typeof REQUIRED_UNLESS_WRITTEN_REJECTION
+  | null
+
 export type StateRule = {
   state: string
   biPerPerson: number | null
   biPerAccident: number | null
   pd: number | null
-  pipRequired: boolean | null
+  pipRequired: RequirementFlag
   noFault: boolean | null
-  umRequired: boolean | null
-  uimRequired: boolean | null
+  umRequired: RequirementFlag
+  uimRequired: RequirementFlag
   creditBucket: CreditBucket
   creditFactor: typeof CREDIT_FACTOR
   sourceUrl: string | null
@@ -77,23 +89,23 @@ const SOURCED: Record<string, SourcedRule> = {
     pd: 15000,
     pipRequired: null,
     noFault: null,
-    umRequired: false,
-    uimRequired: false,
+    umRequired: REQUIRED_UNLESS_WRITTEN_DELETION,
+    uimRequired: REQUIRED_UNLESS_WRITTEN_DELETION,
     sourceUrl: CA_STATUTE,
     pagesOpened: [CA_STATUTE, CA_DMV, CA_UM],
-    note: "Checked 21 September 2026. Vehicle Code section 16056(a)(2) states $30,000 because of bodily injury to or death of one person, $60,000 because of bodily injury to or death of two or more persons, and $15,000 because of injury to or destruction of property, for a policy or bond issued or renewed on or after January 1, 2025. Paragraph (a)(1) states $15,000, $30,000, and $5,000. Paragraph (d) states a further increase for a policy or bond issued or renewed on or after January 1, 2035. This row uses paragraph (a)(2) only. The California DMV insurance-requirements page states the same $30,000, $60,000, and $15,000 figures and cites Insurance Code section 11580.1(b). Insurance Code section 11580.2 says a bodily-injury liability policy includes uninsured-motorist coverage unless the insurer and a named insured delete it by written agreement. This row does not mark uninsured or underinsured motorist coverage as required. The pages opened do not state a required personal-injury-protection amount or a no-fault rule. Credit stays unreviewed. This is source research, not a legal conclusion.",
+    note: "Checked 21 September 2026. Vehicle Code section 16056(a)(2) states $30,000 because of bodily injury to or death of one person, $60,000 because of bodily injury to or death of two or more persons, and $15,000 because of injury to or destruction of property, for a policy or bond issued or renewed on or after January 1, 2025. Paragraph (a)(1) states $15,000, $30,000, and $5,000. Paragraph (d) states a further increase for a policy or bond issued or renewed on or after January 1, 2035. This row uses paragraph (a)(2) only. The California DMV insurance-requirements page states the same $30,000, $60,000, and $15,000 figures and cites Insurance Code section 11580.1(b). Insurance Code section 11580.2 says no bodily-injury liability policy shall be issued or delivered unless it contains uninsured-motorist coverage, and that a named insured may delete that coverage by written agreement. The same page says an uninsured motor vehicle includes an underinsured motor vehicle. This row marks both required unless deleted in writing. It does not add a separate dollar limit for that coverage. The pages opened do not state a required personal-injury-protection amount or a no-fault rule. Credit stays unreviewed. This is source research, not a legal conclusion.",
   },
   TX: {
     biPerPerson: 30000,
     biPerAccident: 60000,
     pd: 25000,
-    pipRequired: false,
+    pipRequired: REQUIRED_UNLESS_WRITTEN_REJECTION,
     noFault: null,
-    umRequired: false,
-    uimRequired: false,
+    umRequired: REQUIRED_UNLESS_WRITTEN_REJECTION,
+    uimRequired: REQUIRED_UNLESS_WRITTEN_REJECTION,
     sourceUrl: TX_LIABILITY,
     pagesOpened: [TX_LIABILITY, TX_UM_PIP],
-    note: "Checked 21 September 2026. Transportation Code section 601.072(a-1) states $30,000 for bodily injury to or death of one person in one collision, $60,000 for two or more persons, and $25,000 for property damage, effective January 1, 2011. Subsection (b) says the coverage may exclude the first $250, $500, and $250. Those amounts are not subtracted here. Insurance Code sections 1952.101 and 1952.152, on the chapter page opened the same day, say uninsured or underinsured motorist coverage and personal injury protection do not apply if a named insured rejects the coverage in writing. This row does not mark them required. No no-fault flag was recorded. Credit stays unreviewed. This is source research, not a legal conclusion.",
+    note: "Checked 21 September 2026. Transportation Code section 601.072(a-1) states $30,000 for bodily injury to or death of one person in one collision, $60,000 for two or more persons, and $25,000 for property damage, effective January 1, 2011. Subsection (b) says the coverage may exclude the first $250, $500, and $250. Those amounts are not subtracted here. Insurance Code section 1952.101 says an insurer may not issue an automobile liability policy unless it provides uninsured or underinsured motorist coverage, and that the coverage does not apply if a named insured rejects it in writing. Section 1952.152 says the same for personal injury protection. This row marks those coverages required unless rejected in writing. No no-fault flag was recorded. Credit stays unreviewed. This is source research, not a legal conclusion.",
   },
   FL: {
     biPerPerson: null,
@@ -270,10 +282,23 @@ export function liabilityCell(rule: StateRule, amount: number | null): string {
   return formatLiabilityDollars(amount)
 }
 
-export function flagCell(value: boolean | null): string {
+export function flagCell(value: RequirementFlag): string {
   if (value === true) return "Required"
   if (value === false) return "Not marked required"
+  if (value === REQUIRED_UNLESS_WRITTEN_DELETION) return "Required unless deleted in writing"
+  if (value === REQUIRED_UNLESS_WRITTEN_REJECTION) return "Required unless rejected in writing"
   return "Not recorded"
+}
+
+function requirementClause(value: RequirementFlag, name: string): string | null {
+  if (value === true) return `Required ${name} is included in this assumption.`
+  if (value === REQUIRED_UNLESS_WRITTEN_DELETION) {
+    return `${name.charAt(0).toUpperCase()}${name.slice(1)} is required unless a named insured deletes it in writing.`
+  }
+  if (value === REQUIRED_UNLESS_WRITTEN_REJECTION) {
+    return `${name.charAt(0).toUpperCase()}${name.slice(1)} is required unless a named insured rejects it in writing.`
+  }
+  return null
 }
 
 const NO_PHYSICAL = "No comprehensive or collision. This is not coverage advice."
@@ -317,17 +342,13 @@ export function stateMinimumAssumption(state: string): string {
     }
   }
 
-  if (rule.pipRequired) {
-    parts.push("Required personal injury protection is included in this assumption.")
-  }
-  if (rule.noFault) {
-    parts.push("The sourced row marks no-fault as required.")
-  }
-  if (rule.umRequired) {
-    parts.push("Required uninsured motorist coverage is included in this assumption.")
-  }
-  if (rule.uimRequired) {
-    parts.push("Required underinsured motorist coverage is included in this assumption.")
+  for (const clause of [
+    requirementClause(rule.pipRequired, "personal injury protection"),
+    rule.noFault ? "The sourced row marks no-fault as required." : null,
+    requirementClause(rule.umRequired, "uninsured motorist coverage"),
+    requirementClause(rule.uimRequired, "underinsured motorist coverage"),
+  ]) {
+    if (clause) parts.push(clause)
   }
 
   parts.push(`Checked ${formatVerifiedDate(rule.lastVerified)}.`)

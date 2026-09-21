@@ -5,9 +5,12 @@ import { coverageAssumption, MOLLY, STATES } from "./scenario"
 import {
   CREDIT_BUCKET,
   CREDIT_FACTOR,
+  REQUIRED_UNLESS_WRITTEN_DELETION,
+  REQUIRED_UNLESS_WRITTEN_REJECTION,
   STATE_RULES,
   STATE_RULES_CHECKED_ON,
   STATE_RULES_VERSION,
+  flagCell,
   sourcedStateRules,
   stateMinimumAssumption,
   stateRule,
@@ -93,8 +96,12 @@ test("launch rows record the pages opened on 21 September 2026", () => {
   assert.equal(california.biPerPerson, 30000)
   assert.equal(california.biPerAccident, 60000)
   assert.equal(california.pd, 15000)
-  assert.equal(california.umRequired, false)
-  assert.equal(california.uimRequired, false)
+  assert.notEqual(california.umRequired, false)
+  assert.notEqual(california.uimRequired, false)
+  assert.equal(california.umRequired, REQUIRED_UNLESS_WRITTEN_DELETION)
+  assert.equal(california.uimRequired, REQUIRED_UNLESS_WRITTEN_DELETION)
+  assert.equal(flagCell(california.umRequired), "Required unless deleted in writing")
+  assert.equal(flagCell(california.uimRequired), "Required unless deleted in writing")
   assert.equal(
     california.sourceUrl,
     "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=16056.",
@@ -110,8 +117,13 @@ test("launch rows record the pages opened on 21 September 2026", () => {
   assert.equal(texas.biPerPerson, 30000)
   assert.equal(texas.biPerAccident, 60000)
   assert.equal(texas.pd, 25000)
-  assert.equal(texas.umRequired, false)
-  assert.equal(texas.pipRequired, false)
+  assert.notEqual(texas.umRequired, false)
+  assert.notEqual(texas.uimRequired, false)
+  assert.notEqual(texas.pipRequired, false)
+  assert.equal(texas.umRequired, REQUIRED_UNLESS_WRITTEN_REJECTION)
+  assert.equal(texas.uimRequired, REQUIRED_UNLESS_WRITTEN_REJECTION)
+  assert.equal(texas.pipRequired, REQUIRED_UNLESS_WRITTEN_REJECTION)
+  assert.equal(flagCell(texas.umRequired), "Required unless rejected in writing")
 
   assert.equal(newYork.biPerPerson, 25000)
   assert.equal(newYork.biPerAccident, 50000)
@@ -152,9 +164,17 @@ test("the state-minimum line shows sourced dollars and hides a blank row", () =>
   assert.equal(ohio.includes("$"), false)
 
   const california = stateMinimumAssumption("CA")
-  assert.match(california, /\$30,000 bodily injury per person/)
-  assert.equal(california.includes("Required uninsured"), false)
-  assert.equal(california.includes("Required personal injury protection"), false)
+  assert.equal(
+    california,
+    "State minimum. Assumption: $30,000 bodily injury per person, $60,000 bodily injury per accident, $15,000 property damage. Uninsured motorist coverage is required unless a named insured deletes it in writing. Underinsured motorist coverage is required unless a named insured deletes it in writing. Checked 21 September 2026. No comprehensive or collision. This is not coverage advice.",
+  )
+
+  const texas = stateMinimumAssumption("TX")
+  assert.equal(
+    texas,
+    "State minimum. Assumption: $30,000 bodily injury per person, $60,000 bodily injury per accident, $25,000 property damage. Personal injury protection is required unless a named insured rejects it in writing. Uninsured motorist coverage is required unless a named insured rejects it in writing. Underinsured motorist coverage is required unless a named insured rejects it in writing. Checked 21 September 2026. No comprehensive or collision. This is not coverage advice.",
+  )
+  assert.equal(texas.includes("$2,500"), false)
 
   assert.equal(stateRule("OH")?.sourceUrl, null)
   assert.equal(STATE_MINIMUM_COUNSEL_LABEL, "For counsel, not a legal conclusion.")

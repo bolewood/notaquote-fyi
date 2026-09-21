@@ -37,7 +37,7 @@ export default function ModelVersionPage() {
           insurance-department page opened on 21 September 2026.{" "}
           {unsourcedStateRules().length} rows have no source URL and no dollar
           minimum. Credit is unreviewed and the factor is 1.00 on every row.
-          The reviewer field is unsigned. The sample model is still{" "}
+          The reviewer field is unsigned. California marks uninsured and underinsured motorist coverage required unless a named insured deletes it in writing. Texas marks personal injury protection and uninsured and underinsured motorist coverage required unless a named insured rejects it in writing. The sample model is still{" "}
           {MODEL_VERSION}. No premium baseline was added. Standard liability,
           full coverage, and high limits stay 100/300/100 and 250/500/250.
         </p>
