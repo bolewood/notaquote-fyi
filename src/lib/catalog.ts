@@ -208,13 +208,16 @@ export function rangeConfidenceCopy(input: {
     return `${base} The vehicle catalog did not load.`
   }
   const staleNote = input.stale ? " This snapshot is past its refresh date." : ""
+  if (input.trimConfidence === "high") {
+    return `${base} Trim match is strong.${staleNote}`
+  }
   if (input.trimConfidence === "limited") {
     return `${base} Trim match is limited, so confidence stays low.${staleNote}`
   }
   if (input.trimConfidence === "unresolved") {
     return `${base} Trim is not resolved, so confidence stays low.${staleNote}`
   }
-  return `${base} Trim match is strong.${staleNote}`
+  return `${base} Trim confidence is not available yet.${staleNote}`
 }
 
 export function trimConfidenceCopy(
@@ -222,9 +225,9 @@ export function trimConfidenceCopy(
   version: string,
   retrievedOn: string,
 ): string {
-  const cited = `Snapshot ${version}, retrieved ${formatCatalogDate(retrievedOn)} from NHTSA vPIC and FuelEconomy.gov.`
+  const cited = `Snapshot ${version}, retrieved ${formatCatalogDate(retrievedOn)}.`
   if (confidence === "high") {
-    return `Trim confidence: strong. The FuelEconomy.gov name joined this NHTSA model. ${cited}`
+    return `Trim confidence: strong. ${cited}`
   }
   if (confidence === "limited") {
     return `Trim confidence: limited. The NHTSA and FuelEconomy match is weak. ${cited}`

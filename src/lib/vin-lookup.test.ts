@@ -138,6 +138,49 @@ test("VIN lookup does not write the VIN to storage, cookies, analytics, or logs"
   }
 })
 
+test("an unmatched NHTSA trim stays on the current row and lowers confidence", async () => {
+  const withLightning = {
+    ...catalog,
+    vehicles: {
+      "2023": {
+        Ford: {
+          "F-150": [
+            { name: "F-150 Lightning 4WD", confidence: "limited" },
+            { name: "F150 Pickup 4WD", confidence: "high" },
+          ],
+        },
+      },
+    },
+  } as VehicleCatalog
+  const result = await runVinLookup(VIN, {
+    catalog: withLightning,
+    current: { year: 2023, make: "Ford", model: "F-150", trim: "F150 Pickup 4WD" },
+    fetchImpl: async () =>
+      new Response(
+        JSON.stringify({
+          Results: [
+            {
+              ErrorCode: "0",
+              Make: "FORD",
+              Model: "F-150",
+              ModelYear: "2023",
+              Trim: "SuperCrew",
+              Series: "",
+              VehicleType: "TRUCK",
+            },
+          ],
+        }),
+      ),
+  })
+  assert.equal(result.ok, true)
+  if (result.ok) {
+    assert.equal(result.trim, "F150 Pickup 4WD")
+    assert.equal(result.confidence, "limited")
+    assert.match(result.message, /SuperCrew/)
+    assert.equal(result.message.includes(VIN), false)
+  }
+})
+
 test("a failed decode leaves the picker unchanged and still discards the VIN", async () => {
   const spies = installSpies()
   try {

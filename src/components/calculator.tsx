@@ -105,6 +105,7 @@ export function Calculator() {
       const result = await runVinLookup(submitted, {
         fetchImpl: fetch,
         catalog: catalogLoad.catalog,
+        current: scenario,
       })
       if (result.ok) {
         setPersona(null)
@@ -425,7 +426,15 @@ function LabeledSelect({
       <Label htmlFor={id} className={disabled ? "text-muted-foreground font-normal" : undefined}>
         {label}
       </Label>
-      <Select value={value} onValueChange={onChange} disabled={disabled}>
+      <Select
+        key={value}
+        value={value}
+        onValueChange={(next) => {
+          if (!next || next === value) return
+          onChange(next)
+        }}
+        disabled={disabled}
+      >
         <SelectTrigger
           id={id}
           disabled={disabled}

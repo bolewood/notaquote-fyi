@@ -124,6 +124,7 @@ export async function runVinLookup(
   input: {
     fetchImpl: typeof fetch
     catalog: VehicleCatalog | null
+    current?: VehiclePick
   },
 ): Promise<VinLookupResult> {
   const vin = normalizeVin(rawVin)
@@ -192,7 +193,14 @@ export async function runVinLookup(
           includesQuery(decoded.trimHint, trim.name),
       )
     : undefined
-  const chosen = hinted ?? trims[0]
+  const sameModel =
+    input.current &&
+    input.current.year === pick.year &&
+    input.current.make === pick.make &&
+    input.current.model === pick.model
+      ? trims.find((trim) => trim.name === input.current?.trim)
+      : undefined
+  const chosen = hinted ?? sameModel ?? trims.find((trim) => trim.confidence === "high") ?? trims[0]
   if (!chosen) {
     return {
       ok: false,

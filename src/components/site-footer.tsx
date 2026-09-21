@@ -4,7 +4,7 @@ import { BUNDLE_VERSION, MODEL_VERSION, PUBLISHER } from "@/lib/copy"
 export function SiteFooter() {
   return (
     <footer className="mt-auto border-t border-border">
-      <div className="mx-auto grid w-full max-w-6xl gap-2 px-4 py-4 text-sm lg:px-6">
+      <div className="mx-auto grid w-full max-w-6xl gap-2 px-4 py-3 text-sm lg:px-6">
         <nav aria-label="Footer" className="flex flex-wrap gap-x-4 gap-y-1">
           <Link href="/disclaimer" className="focus-visible:ring-ring rounded-sm focus-visible:ring-3">
             Disclaimer

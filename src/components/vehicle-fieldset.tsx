@@ -78,9 +78,11 @@ export function VehicleFieldset({
       "The vehicle catalog did not load. Year, make, model, and trim stay on the vehicle already shown."
   } else if (empty) {
     status = "Nothing in this snapshot matches that filter."
-  } else if (ready && shownConfidence && catalog) {
+  } else if (ready && catalog && shownConfidence) {
     status = trimConfidenceCopy(shownConfidence, catalog.version, catalog.retrievedOn)
     if (stale) status = `${status} This snapshot is past its refresh date.`
+  } else if (ready && catalog) {
+    status = trimConfidenceCopy("unresolved", catalog.version, catalog.retrievedOn)
   }
 
   function chooseMake(make: string) {
@@ -120,9 +122,9 @@ export function VehicleFieldset({
   }
 
   return (
-    <fieldset className="grid gap-2">
+    <fieldset className="grid gap-1.5">
       <legend className="text-sm font-medium">Vehicle</legend>
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
         <LabeledSelect
           id="model-year"
           label="Model year"
@@ -157,25 +159,28 @@ export function VehicleFieldset({
           onChange={(trim) => onPick({ ...pick, trim })}
         />
       </div>
-      <div className="grid gap-1.5">
-        <Label htmlFor="catalog-filter">Filter this model year</Label>
-        <Input
-          id="catalog-filter"
-          name="catalog-filter"
-          value={filter}
-          disabled={!ready}
-          autoComplete="off"
-          spellCheck={false}
-          placeholder="F-150, Civic, Ioniq"
-          aria-describedby="trim-note"
-          onChange={(event) => onFilter(event.target.value)}
-        />
-      </div>
-      <div className="grid gap-1.5">
-        <Label htmlFor="vin" className="text-muted-foreground font-normal">
-          VIN, optional
-        </Label>
-        <div className="flex gap-2">
+      <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)_auto] sm:items-end">
+        <div className="grid gap-1">
+          <Label htmlFor="catalog-filter" className="text-xs">
+            Filter this model year
+          </Label>
+          <Input
+            id="catalog-filter"
+            name="catalog-filter"
+            value={filter}
+            disabled={!ready}
+            autoComplete="off"
+            spellCheck={false}
+            placeholder="Civic, Ioniq"
+            aria-describedby="trim-note"
+            className="h-8"
+            onChange={(event) => onFilter(event.target.value)}
+          />
+        </div>
+        <div className="grid gap-1">
+          <Label htmlFor="vin" className="text-muted-foreground text-xs font-normal">
+            VIN, optional
+          </Label>
           <Input
             id="vin"
             name="vin"
@@ -186,7 +191,7 @@ export function VehicleFieldset({
             maxLength={20}
             aria-describedby="vin-hint"
             placeholder="17 characters"
-            className="min-w-0 flex-1"
+            className="h-8"
             onChange={(event) => onVinText(event.target.value)}
             onKeyDown={(event) => {
               if (event.key === "Enter") {
@@ -195,15 +200,21 @@ export function VehicleFieldset({
               }
             }}
           />
-          <Button type="button" variant="outline" disabled={vinPending} onClick={onDecode}>
-            {vinPending ? "Decoding" : "Decode"}
-          </Button>
         </div>
-        <p id="vin-hint" className="text-muted-foreground text-xs leading-snug">
-          Optional. Sent to NHTSA from this browser, then discarded.
-          {catalog ? ` Catalog retrieved ${formatCatalogDate(catalog.retrievedOn)}.` : ""}
-        </p>
+        <Button
+          type="button"
+          variant="outline"
+          disabled={vinPending}
+          className="h-8"
+          onClick={onDecode}
+        >
+          {vinPending ? "Decoding" : "Decode"}
+        </Button>
       </div>
+      <p id="vin-hint" className="text-muted-foreground text-xs leading-snug">
+        A VIN is sent to NHTSA from this browser, then discarded.
+        {catalog ? ` Retrieved ${formatCatalogDate(catalog.retrievedOn)}.` : ""}
+      </p>
       <p
         id="trim-note"
         role="status"
@@ -251,7 +262,15 @@ function LabeledSelect({
       <Label htmlFor={id} className={disabled ? "text-muted-foreground font-normal" : undefined}>
         {label}
       </Label>
-      <Select value={value} onValueChange={onChange} disabled={disabled}>
+      <Select
+        key={value}
+        value={value}
+        onValueChange={(next) => {
+          if (!next || next === value) return
+          onChange(next)
+        }}
+        disabled={disabled}
+      >
         <SelectTrigger
           id={id}
           disabled={disabled}
