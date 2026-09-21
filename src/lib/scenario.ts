@@ -1,3 +1,5 @@
+import { CATALOG_DEFAULTS } from "./catalog-defaults"
+
 export const AGE_BANDS = [
   { id: "16-18", label: "16–18" },
   { id: "19-21", label: "19–21" },
@@ -40,50 +42,6 @@ export const COVERAGE_PACKAGES = [
 ] as const
 
 export const DEDUCTIBLES = [500, 1000, 2000] as const
-
-export const VEHICLES = [
-  { id: "f150", label: "Ford F-150" },
-  { id: "rav4", label: "Toyota RAV4" },
-  { id: "model-y-lr", label: "Tesla Model Y Long Range" },
-] as const
-
-/** The three stand-ins, split into controls. Not a catalog snapshot. */
-export const MAKES = [
-  { id: "ford", label: "Ford" },
-  { id: "toyota", label: "Toyota" },
-  { id: "tesla", label: "Tesla" },
-] as const
-
-export const MODELS = [
-  { id: "f-150", makeId: "ford", label: "F-150", vehicle: "f150" },
-  { id: "rav4", makeId: "toyota", label: "RAV4", vehicle: "rav4" },
-  { id: "model-y", makeId: "tesla", label: "Model Y", vehicle: "model-y-lr" },
-] as const
-
-export const TRIMS = [
-  {
-    id: "f150-trim-unavailable",
-    modelId: "f-150",
-    label: "Trim confidence unavailable",
-    confidence: "unavailable",
-  },
-  {
-    id: "rav4-trim-unavailable",
-    modelId: "rav4",
-    label: "Trim confidence unavailable",
-    confidence: "unavailable",
-  },
-  {
-    id: "model-y-long-range",
-    modelId: "model-y",
-    label: "Long Range",
-    confidence: "unavailable",
-  },
-] as const
-
-export const MODEL_YEARS = [
-  2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026,
-] as const
 
 export const STATES = [
   { code: "AL", name: "Alabama" },
@@ -146,11 +104,6 @@ export type MileageBand = (typeof MILEAGE_BANDS)[number]["id"]
 export type Region = (typeof REGIONS)[number]["id"]
 export type CoverageId = (typeof COVERAGE_PACKAGES)[number]["id"]
 export type Deductible = (typeof DEDUCTIBLES)[number]
-export type VehicleId = (typeof VEHICLES)[number]["id"]
-export type MakeId = (typeof MAKES)[number]["id"]
-export type ModelId = (typeof MODELS)[number]["id"]
-export type TrimId = (typeof TRIMS)[number]["id"]
-export type ModelYear = (typeof MODEL_YEARS)[number]
 export type StateCode = (typeof STATES)[number]["code"]
 export type PersonaId = "molly" | "jayden" | "ava"
 
@@ -168,8 +121,10 @@ export type Scenario = {
   region: Region
   coverage: CoverageId
   deductible: Deductible
-  vehicle: VehicleId
-  year: ModelYear
+  year: number
+  make: string
+  model: string
+  trim: string
 }
 
 export const MOLLY: Scenario = {
@@ -186,8 +141,10 @@ export const MOLLY: Scenario = {
   region: "urban",
   coverage: "full",
   deductible: 1000,
-  vehicle: "f150",
-  year: 2023,
+  year: CATALOG_DEFAULTS.molly.year,
+  make: CATALOG_DEFAULTS.molly.make,
+  model: CATALOG_DEFAULTS.molly.model,
+  trim: CATALOG_DEFAULTS.molly.trim,
 }
 
 export const JAYDEN: Scenario = {
@@ -204,8 +161,10 @@ export const JAYDEN: Scenario = {
   region: "suburban",
   coverage: "full",
   deductible: 1000,
-  vehicle: "rav4",
-  year: 2023,
+  year: CATALOG_DEFAULTS.jayden.year,
+  make: CATALOG_DEFAULTS.jayden.make,
+  model: CATALOG_DEFAULTS.jayden.model,
+  trim: CATALOG_DEFAULTS.jayden.trim,
 }
 
 export const AVA: Scenario = {
@@ -222,8 +181,10 @@ export const AVA: Scenario = {
   region: "urban",
   coverage: "full",
   deductible: 1000,
-  vehicle: "model-y-lr",
-  year: 2023,
+  year: CATALOG_DEFAULTS.ava.year,
+  make: CATALOG_DEFAULTS.ava.make,
+  model: CATALOG_DEFAULTS.ava.model,
+  trim: CATALOG_DEFAULTS.ava.trim,
 }
 
 export const PRESETS: Record<PersonaId, Scenario> = {
@@ -256,39 +217,10 @@ export function stateName(code: StateCode): string {
   return STATE_NAMES.get(code) ?? code
 }
 
-export function vehicleLabel(id: VehicleId): string {
-  return VEHICLES.find((vehicle) => vehicle.id === id)?.label ?? id
-}
-
-export function vehicleParts(id: VehicleId): {
-  makeId: MakeId
-  modelId: ModelId
-  trimId: TrimId
-  makeLabel: string
-  modelLabel: string
-  trimLabel: string
-  trimConfidence: "unavailable"
-} {
-  const model = MODELS.find((item) => item.vehicle === id) ?? MODELS[0]
-  const make = MAKES.find((item) => item.id === model.makeId) ?? MAKES[0]
-  const trim = TRIMS.find((item) => item.modelId === model.id) ?? TRIMS[0]
-  return {
-    makeId: make.id,
-    modelId: model.id,
-    trimId: trim.id,
-    makeLabel: make.label,
-    modelLabel: model.label,
-    trimLabel: trim.label,
-    trimConfidence: "unavailable",
-  }
-}
-
-export function vehicleIdForMake(makeId: MakeId): VehicleId {
-  return MODELS.find((model) => model.makeId === makeId)?.vehicle ?? "f150"
-}
-
-export function vehicleIdForModel(modelId: ModelId): VehicleId {
-  return MODELS.find((model) => model.id === modelId)?.vehicle ?? "f150"
+export function vehicleLabel(scenario: Pick<Scenario, "year" | "make" | "model" | "trim">): string {
+  const name = `${scenario.year} ${scenario.make} ${scenario.model}`
+  if (!scenario.trim || scenario.trim === scenario.model) return name
+  return `${name}, ${scenario.trim}`
 }
 
 export function regionLabel(id: Region): string {
@@ -322,7 +254,7 @@ export function scenarioIdentity(
     persona === "molly"
       ? "Illinois, urban stand-in for Springfield"
       : `${stateName(scenario.state)}, ${regionLabel(scenario.region).toLowerCase()}`
-  const vehicle = `${scenario.year} ${vehicleLabel(scenario.vehicle)}`
+  const vehicle = vehicleLabel(scenario)
   const coverage = coverageAssumption(scenario.coverage)
   const deductible = hasPhysicalDamage(scenario.coverage)
     ? `$${scenario.deductible.toLocaleString("en-US")} deductible`
@@ -355,16 +287,8 @@ export function isCoverageId(value: string): value is CoverageId {
   return COVERAGE_PACKAGES.some((item) => item.id === value)
 }
 
-export function isVehicleId(value: string): value is VehicleId {
-  return VEHICLES.some((vehicle) => vehicle.id === value)
-}
-
 export function isStateCode(value: string): value is StateCode {
   return STATE_NAMES.has(value as StateCode)
-}
-
-export function isModelYear(value: number): value is ModelYear {
-  return (MODEL_YEARS as readonly number[]).includes(value)
 }
 
 export function isDeductible(value: number): value is Deductible {

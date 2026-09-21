@@ -1,5 +1,13 @@
 import type { Metadata } from "next"
 import { TrustArticle } from "@/components/trust-article"
+import { formatCatalogDate } from "@/lib/catalog"
+import {
+  CATALOG_RETRIEVED_ON,
+  CATALOG_TERMS,
+  CATALOG_VERSION,
+  FUEL_ECONOMY_CATALOG_URL,
+  NHTSA_CATALOG_URL,
+} from "@/lib/catalog-meta"
 
 export const metadata: Metadata = {
   title: "Data licenses",
@@ -9,9 +17,21 @@ export default function DataLicensesPage() {
   return (
     <TrustArticle title="Data licenses">
       <p>
-        This version does not ship a vehicle catalog, a state-rules table, or a
-        premium baseline. There is no data bundle to license yet. The model
-        version page names the bundle as “none”.
+        The vehicle catalog bundle is {CATALOG_VERSION}, retrieved{" "}
+        {formatCatalogDate(CATALOG_RETRIEVED_ON)}. It is not a premium baseline.
+        There is still no state-rules table and no cleared dollar baseline.
+      </p>
+      <p>{CATALOG_TERMS}</p>
+      <p>
+        Source URLs:{" "}
+        <a href={NHTSA_CATALOG_URL} className="underline underline-offset-4">
+          NHTSA vPIC
+        </a>{" "}
+        and{" "}
+        <a href={FUEL_ECONOMY_CATALOG_URL} className="underline underline-offset-4">
+          FuelEconomy.gov vehicles.csv
+        </a>
+        .
       </p>
       <p>
         Sample display weights in the calculator are original illustrative
@@ -20,9 +40,7 @@ export default function DataLicensesPage() {
       </p>
       <p>
         NAIC, HLDI, SERFF, and publisher premium tables are not in this
-        repository. A later snapshot of NHTSA or FuelEconomy.gov data would be
-        stored with its own license note, source URL, and version. That snapshot
-        is not here.
+        repository.
       </p>
       <p>
         IIHS/HLDI material is not copied. Nothing on this site is a

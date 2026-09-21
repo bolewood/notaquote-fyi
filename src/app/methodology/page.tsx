@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 import { TrustArticle } from "@/components/trust-article"
 import { BUNDLE_VERSION, MODEL_VERSION } from "@/lib/copy"
-import { vehicleLabel, type VehicleId } from "@/lib/scenario"
 import {
   AGE_WEIGHT,
   COVERAGE_WEIGHT,
@@ -12,6 +11,7 @@ import {
   INCIDENT_WEIGHT,
   MILEAGE_WEIGHT,
   OTHER_STATE_WEIGHT,
+  OTHER_VEHICLE_WEIGHT,
   PRESET_STATE_WEIGHT,
   REGION_WEIGHT,
   SAMPLE_BASE_ANNUAL,
@@ -112,9 +112,8 @@ export default function MethodologyPage() {
           ratio, because the statutory dollars are not loaded.
         </li>
         <li>
-          Tesla Model Y Long Range stand-in: add {SPREAD_MODEL_Y_HIGH} to the
-          high ratio as a sample for repair-cost uncertainty. This is not a loss
-          table.
+          Tesla Model Y: add {SPREAD_MODEL_Y_HIGH} to the high ratio as a sample
+          for repair-cost uncertainty. This is not a loss table.
         </li>
       </ul>
       <p>
@@ -125,9 +124,9 @@ export default function MethodologyPage() {
       <h2 className="text-base font-semibold">Sample display weights</h2>
       <p>
         An unchecked flag contributes 1. A deductible contributes 1 when the
-        package has no comprehensive or collision. Model years 2022 through 2026
+        package has no comprehensive or collision. Model years 2022 and newer
         use {YEAR_WEIGHT_RECENT.toFixed(2)}. Years 2019 through 2021 use{" "}
-        {YEAR_WEIGHT_MID.toFixed(2)}. Years 2018 and earlier in this list use{" "}
+        {YEAR_WEIGHT_MID.toFixed(2)}. Years 2018 and earlier use{" "}
         {YEAR_WEIGHT_OLDER.toFixed(2)}.
       </p>
       <WeightTable
@@ -197,12 +196,13 @@ export default function MethodologyPage() {
       />
       <WeightTable
         caption="Vehicle sample display weights"
-        rows={(
-          Object.entries(VEHICLE_WEIGHT) as [VehicleId, number][]
-        ).map(([key, weight]) => ({
-          key: vehicleLabel(key),
-          weight,
-        }))}
+        rows={[
+          ...Object.entries(VEHICLE_WEIGHT).map(([key, weight]) => ({
+            key,
+            weight,
+          })),
+          { key: "Any other catalog vehicle", weight: OTHER_VEHICLE_WEIGHT },
+        ]}
       />
       <h2 className="text-base font-semibold">Coverage assumptions</h2>
       <ul className="list-disc space-y-1 pl-5">
@@ -237,11 +237,16 @@ export default function MethodologyPage() {
         of a person.
       </p>
       <p>
-        Year, make, model, and trim are separate controls. They decompose three
-        stand-ins only: Ford F-150, Toyota RAV4, and Tesla Model Y Long Range.
-        Trim confidence is unavailable. Long Range is the name carried by the
-        Model Y stand-in, not a reviewed trim. The NHTSA catalog is not loaded.
-        Honda Civic and Hyundai Ioniq 5 N are not in this version.
+        Year, make, model, and trim read a snapshot of NHTSA vPIC and
+        FuelEconomy.gov. The trim name is the FuelEconomy.gov model string.
+        When that string joins the NHTSA model cleanly, trim confidence is
+        strong. When the names only partly agree, trim confidence is limited
+        and the confidence line stays low. When no FuelEconomy.gov trim joined
+        the NHTSA model, the trim says it is not resolved. No trim name was
+        added by hand. Honda Civic and Hyundai Ioniq 5 N are in the snapshot.
+        An optional VIN is sent from the browser to NHTSA and then discarded.
+        The sample weights above are not a vehicle rating. A weak trim does not
+        change the dollar weights.
       </p>
       <h2 className="text-base font-semibold">Optional current premium</h2>
       <p>

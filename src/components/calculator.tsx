@@ -19,6 +19,12 @@ import {
   sampleWeight,
   type Anchor,
 } from "@/lib/sample-range"
+import { VehicleFieldset } from "@/components/vehicle-fieldset"
+import {
+  isCatalogStale,
+  trimRecord,
+  type TrimConfidence,
+} from "@/lib/catalog"
 import {
   AGE_BANDS,
   COVERAGE_PACKAGES,
@@ -30,27 +36,21 @@ import {
   isDeductible,
   isIncidents,
   isMileageBand,
-  isModelYear,
   isRegion,
   isStateCode,
   isYearsLicensed,
-  MAKES,
   MILEAGE_BANDS,
-  MODELS,
-  MODEL_YEARS,
   PERSONA_DETAILS,
   PRESETS,
   REGIONS,
   STATES,
-  TRIMS,
   YEARS_LICENSED,
   hasPhysicalDamage,
-  vehicleIdForMake,
-  vehicleIdForModel,
-  vehicleParts,
   type PersonaId,
   type Scenario,
 } from "@/lib/scenario"
+import { useCatalog } from "@/lib/use-catalog"
+import { runVinLookup, selectionAfterVin } from "@/lib/vin-lookup"
 import { cn } from "cn"
 import { useState } from "react"
 
@@ -62,9 +62,20 @@ export function Calculator() {
   const [premiumText, setPremiumText] = useState("")
   const [premiumError, setPremiumError] = useState<string | null>(null)
   const [anchor, setAnchor] = useState<Anchor | null>(null)
+  const [filter, setFilter] = useState("")
+  const [vinText, setVinText] = useState("")
+  const [vinMessage, setVinMessage] = useState<string | null>(null)
+  const [vinPending, setVinPending] = useState(false)
+  const [confidenceOverride, setConfidenceOverride] = useState<TrimConfidence | null>(null)
+  const catalogLoad = useCatalog()
 
   const range = buildSampleRange(scenario, anchor)
   const weight = sampleWeight(scenario)
+  const catalogTrim = catalogLoad.catalog ? trimRecord(catalogLoad.catalog, scenario) : null
+  const trimConfidence = confidenceOverride ?? catalogTrim?.confidence ?? null
+  const stale = catalogLoad.catalog
+    ? isCatalogStale(catalogLoad.catalog, new Date())
+    : false
 
   function applyPersona(next: PersonaId) {
     setPersona(next)
@@ -72,6 +83,10 @@ export function Calculator() {
     setPremiumText("")
     setPremiumError(null)
     setAnchor(null)
+    setFilter("")
+    setVinText("")
+    setVinMessage(null)
+    setConfidenceOverride(null)
   }
 
   function patch(partial: Partial<Scenario>) {
@@ -81,6 +96,26 @@ export function Calculator() {
     if (!changed) return
     setPersona(null)
     setScenario((current) => ({ ...current, ...partial }))
+  }
+
+  async function decodeVin() {
+    const submitted = vinText
+    setVinPending(true)
+    try {
+      const result = await runVinLookup(submitted, {
+        fetchImpl: fetch,
+        catalog: catalogLoad.catalog,
+      })
+      if (result.ok) {
+        setPersona(null)
+        setScenario((current) => ({ ...current, ...selectionAfterVin(current, result) }))
+        setConfidenceOverride(result.confidence)
+      }
+      setVinMessage(result.message)
+    } finally {
+      setVinText("")
+      setVinPending(false)
+    }
   }
 
   function onPremiumChange(value: string) {
@@ -105,7 +140,14 @@ export function Calculator() {
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] lg:items-start lg:gap-8">
       <div className="grid gap-4">
-        <RangePanel scenario={scenario} persona={persona} range={range} />
+        <RangePanel
+          scenario={scenario}
+          persona={persona}
+          range={range}
+          catalogStatus={catalogLoad.status}
+          trimConfidence={trimConfidence}
+          stale={stale}
+        />
         <div
           role="group"
           aria-label="Scenario presets"
@@ -340,95 +382,24 @@ export function Calculator() {
         </fieldset>
 
         <VehicleFieldset
-          year={scenario.year}
-          vehicle={scenario.vehicle}
-          onYear={(year) => patch({ year })}
-          onVehicle={(vehicle) => patch({ vehicle })}
+          pick={scenario}
+          catalogStatus={catalogLoad.status}
+          catalog={catalogLoad.catalog}
+          filter={filter}
+          vinText={vinText}
+          vinMessage={vinMessage}
+          vinPending={vinPending}
+          confidence={trimConfidence}
+          onFilter={setFilter}
+          onVinText={setVinText}
+          onDecode={() => void decodeVin()}
+          onPick={(pick) => {
+            setConfidenceOverride(null)
+            patch(pick)
+          }}
         />
       </form>
     </div>
-  )
-}
-
-function VehicleFieldset({
-  year,
-  vehicle,
-  onYear,
-  onVehicle,
-}: {
-  year: number
-  vehicle: Scenario["vehicle"]
-  onYear: (year: number) => void
-  onVehicle: (vehicle: Scenario["vehicle"]) => void
-}) {
-  const parts = vehicleParts(vehicle)
-  const models = MODELS.filter((model) => model.makeId === parts.makeId)
-  const trims = TRIMS.filter((trim) => trim.modelId === parts.modelId)
-
-  return (
-    <fieldset className="grid gap-3">
-      <legend className="text-sm font-medium">Vehicle</legend>
-      <div className="grid gap-3 sm:grid-cols-2">
-        <LabeledSelect
-          id="model-year"
-          label="Model year"
-          value={String(year)}
-          options={MODEL_YEARS.map((modelYear) => ({
-            value: String(modelYear),
-            label: String(modelYear),
-          }))}
-          onChange={(value) => {
-            const next = Number(value)
-            if (isModelYear(next)) onYear(next)
-          }}
-        />
-        <LabeledSelect
-          id="make"
-          label="Make"
-          value={parts.makeId}
-          options={MAKES.map((make) => ({
-            value: make.id,
-            label: make.label,
-          }))}
-          onChange={(value) => {
-            const make = MAKES.find((item) => item.id === value)
-            if (make) onVehicle(vehicleIdForMake(make.id))
-          }}
-        />
-        <LabeledSelect
-          id="model"
-          label="Model"
-          value={parts.modelId}
-          options={models.map((model) => ({
-            value: model.id,
-            label: model.label,
-          }))}
-          onChange={(value) => {
-            const model = MODELS.find((item) => item.id === value)
-            if (model) onVehicle(vehicleIdForModel(model.id))
-          }}
-        />
-        <LabeledSelect
-          id="trim"
-          label="Trim"
-          describedBy="trim-note"
-          value={parts.trimId}
-          options={trims.map((trim) => ({
-            value: trim.id,
-            label: trim.label,
-          }))}
-          onChange={(value) => {
-            const trim = TRIMS.find((item) => item.id === value)
-            const model = MODELS.find((item) => item.id === trim?.modelId)
-            if (model) onVehicle(model.vehicle)
-          }}
-        />
-      </div>
-      <p id="trim-note" className="text-xs leading-snug">
-        Trim confidence is unavailable. No NHTSA catalog. Civic and Ioniq 5 N are
-        not included.
-      </p>
-    </fieldset>
   )
 }
 

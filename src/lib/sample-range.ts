@@ -1,3 +1,4 @@
+import { compactName } from "./catalog-match"
 import {
   hasPhysicalDamage,
   type CoverageId,
@@ -80,10 +81,20 @@ export const DEDUCTIBLE_WEIGHT = {
 } as const
 
 export const VEHICLE_WEIGHT = {
-  f150: 1.18,
-  rav4: 1,
-  "model-y-lr": 1.24,
+  "Ford F-150": 1.18,
+  "Toyota RAV4": 1,
+  "Tesla Model Y": 1.24,
 } as const
+
+export const OTHER_VEHICLE_WEIGHT = 1
+
+export function vehicleDisplayWeight(make: string, model: string): number {
+  const key = `${compactName(make)}:${compactName(model)}`
+  if (key === "ford:f150") return VEHICLE_WEIGHT["Ford F-150"]
+  if (key === "toyota:rav4") return VEHICLE_WEIGHT["Toyota RAV4"]
+  if (key === "tesla:modely") return VEHICLE_WEIGHT["Tesla Model Y"]
+  return OTHER_VEHICLE_WEIGHT
+}
 
 export const YEAR_WEIGHT_RECENT = 1
 export const YEAR_WEIGHT_MID = 0.96
@@ -154,7 +165,7 @@ export function sampleWeight(scenario: Scenario): number {
     REGION_WEIGHT[scenario.region] *
     COVERAGE_WEIGHT[scenario.coverage] *
     deductibleWeight *
-    VEHICLE_WEIGHT[scenario.vehicle] *
+    vehicleDisplayWeight(scenario.make, scenario.model) *
     yearDisplayWeight(scenario.year) *
     CREDIT_FACTOR
   )
@@ -186,7 +197,10 @@ export function spreadRatios(scenario: Scenario): { low: number; high: number } 
     high += SPREAD_STATE_MINIMUM_HIGH
   }
 
-  if (scenario.vehicle === "model-y-lr") {
+  if (
+    compactName(scenario.make) === "tesla" &&
+    compactName(scenario.model) === "modely"
+  ) {
     high += SPREAD_MODEL_Y_HIGH
   }
 

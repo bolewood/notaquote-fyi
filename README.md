@@ -25,8 +25,20 @@ Open [http://127.0.0.1:41731](http://127.0.0.1:41731).
 - `npm run lint` — ESLint
 - `npm test` — checks that the sample range moves and that the disclaimer text is intact
 
+## Vehicle catalog
+
+The committed snapshot is `public/catalog/vehicle-catalog.json`. It was retrieved on 21 September 2026.
+
+- NHTSA vPIC: https://vpic.nhtsa.dot.gov/api/vehicles/GetModelsForMakeIdYear/
+- FuelEconomy.gov file: https://www.fueleconomy.gov/feg/epadata/vehicles.csv
+- FuelEconomy.gov description: https://www.fueleconomy.gov/feg/ws/index.shtml
+
+Rebuild it with `npm run catalog:build`. The script writes the snapshot, `src/lib/catalog-meta.ts`, `src/lib/catalog-defaults.ts`, and `data/catalog/source-diff.md`. Raw downloads stay in `.catalog-cache` and are not committed. Assumptions for this join are in `data/catalog/assumptions.md`.
+
+Year, make, model, and trim read that file in the browser. An optional VIN is sent from the browser to NHTSA and then discarded.
+
 ## This version
 
-Molly, Jayden, and Ava are one-click presets. Coverage packages are assumptions with their limits written on the page. State-minimum dollar amounts are not invented here; they wait for a sourced state-rules table. There is no account, no visitor storage, no catalog snapshot, and no document upload.
+Molly, Jayden, and Ava are one-click presets. Their default vehicles resolve in the catalog snapshot. Coverage packages are assumptions with their limits written on the page. State-minimum dollar amounts are not invented here; they wait for a sourced state-rules table. Displayed dollars remain a sample range. The baseline is not cleared. There is no account and no document upload.
 
 Search engines are asked not to index the site (`noindex, nofollow`).

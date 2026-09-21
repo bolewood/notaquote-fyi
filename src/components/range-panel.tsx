@@ -1,5 +1,10 @@
 import { DisclaimerText } from "@/components/disclaimer-text"
 import { UncertaintyBar } from "@/components/uncertainty-bar"
+import {
+  rangeConfidenceCopy,
+  type CatalogStatus,
+  type TrimConfidence,
+} from "@/lib/catalog"
 import { BUNDLE_VERSION, MODEL_VERSION, SAMPLE_RANGE_HEADING } from "@/lib/copy"
 import { scenarioIdentity, type PersonaId, type Scenario } from "@/lib/scenario"
 import { formatDollars, type SampleRange } from "@/lib/sample-range"
@@ -8,10 +13,16 @@ export function RangePanel({
   scenario,
   persona,
   range,
+  catalogStatus,
+  trimConfidence,
+  stale,
 }: {
   scenario: Scenario
   persona: PersonaId | null
   range: SampleRange
+  catalogStatus: CatalogStatus
+  trimConfidence: TrimConfidence | null
+  stale: boolean
 }) {
   return (
     <section aria-labelledby="sample-range-heading" className="grid gap-3">
@@ -72,8 +83,7 @@ export function RangePanel({
         <UncertaintyBar low={range.low} likely={range.likely} high={range.high} />
         <p data-testid="confidence">
           <span className="font-medium">Confidence. </span>
-          Low. Sample display. Baseline not cleared. The vehicle catalog is not
-          loaded.
+          {rangeConfidenceCopy({ catalogStatus, trimConfidence, stale })}
         </p>
         {range.anchored ? (
           <p data-testid="anchor-note" className="text-sm leading-snug">

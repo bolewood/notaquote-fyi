@@ -1,7 +1,8 @@
 import assert from "node:assert/strict"
 import test from "node:test"
 import { DISCLAIMER } from "./copy"
-import { AVA, JAYDEN, MOLLY, vehicleParts } from "./scenario"
+import { AVA, JAYDEN, MOLLY } from "./scenario"
+import { SAMPLE_RANGE_HEADING } from "./copy"
 import {
   buildSampleRange,
   CREDIT_FACTOR,
@@ -60,12 +61,24 @@ test("deductible is ignored when the package has no physical damage", () => {
   assert.ok(fullLow > fullHigh)
 })
 
-test("year and vehicle stand-ins move the sample", () => {
+test("year and vehicle choices move the sample", () => {
   const recent = buildSampleRange(MOLLY, null).likely
   const older = buildSampleRange({ ...MOLLY, year: 2018 }, null).likely
-  const rav4 = buildSampleRange({ ...MOLLY, vehicle: "rav4" }, null).likely
+  const rav4 = buildSampleRange(
+    { ...MOLLY, make: "Toyota", model: "RAV4", trim: "RAV4" },
+    null,
+  ).likely
   assert.notEqual(recent, older)
   assert.notEqual(recent, rav4)
+})
+
+test("Molly’s sample dollars stay the signed sample", () => {
+  const molly = buildSampleRange(MOLLY, null)
+  assert.equal(molly.likely, 2530)
+  assert.equal(molly.low, 1620)
+  assert.equal(molly.high, 3850)
+  assert.equal(molly.monthly, 211)
+  assert.equal(SAMPLE_RANGE_HEADING, "Sample range. Baseline not cleared.")
 })
 
 test("entered premium re-anchors and later controls move from that amount", () => {
@@ -129,22 +142,16 @@ test("Jayden uses the same mileage band as Molly", () => {
   assert.equal(JAYDEN.mileage, "7500-15000")
 })
 
-test("vehicle controls decompose only the three stand-ins", () => {
-  const ford = vehicleParts("f150")
-  const toyota = vehicleParts("rav4")
-  const tesla = vehicleParts("model-y-lr")
-
-  assert.equal(ford.makeLabel, "Ford")
-  assert.equal(ford.modelLabel, "F-150")
-  assert.equal(ford.trimLabel, "Trim confidence unavailable")
-  assert.equal(toyota.makeLabel, "Toyota")
-  assert.equal(toyota.modelLabel, "RAV4")
-  assert.equal(tesla.makeLabel, "Tesla")
-  assert.equal(tesla.modelLabel, "Model Y")
-  assert.equal(tesla.trimLabel, "Long Range")
-  assert.equal(ford.trimConfidence, "unavailable")
-  assert.equal(toyota.trimConfidence, "unavailable")
-  assert.equal(tesla.trimConfidence, "unavailable")
+test("persona vehicles stay the locked makes and models", () => {
+  assert.equal(MOLLY.make, "Ford")
+  assert.equal(MOLLY.model, "F-150")
+  assert.equal(MOLLY.year, 2023)
+  assert.equal(JAYDEN.make, "Toyota")
+  assert.equal(JAYDEN.model, "RAV4")
+  assert.equal(AVA.make, "Tesla")
+  assert.equal(AVA.model, "Model Y")
+  assert.match(AVA.trim, /Long Range/i)
+  assert.doesNotMatch(AVA.trim, /Performance/i)
 })
 
 test("annual premium parser accepts dollars and rejects empty or zero", () => {

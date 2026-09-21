@@ -10,10 +10,10 @@ export default function SourcesPage() {
   return (
     <TrustArticle title="Sources">
       <p>
-        No source below has been snapshotted for this version. Nothing on the
-        calculator is a figure from these sources. The sample range uses
-        arbitrary display weights, documented on the methodology page. Last
-        checked: not checked.
+        The vehicle catalog is a snapshot of NHTSA vPIC and FuelEconomy.gov.
+        The sample range still uses arbitrary display weights, documented on
+        the methodology page. Those weights are not figures from the sources
+        below. A source that is not snapshotted has no figures on the page.
       </p>
       <div className="overflow-x-auto">
         <table className="w-full border-collapse text-left">

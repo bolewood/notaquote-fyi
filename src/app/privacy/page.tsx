@@ -12,12 +12,21 @@ export default function PrivacyPage() {
       <p>
         {PUBLISHER} publishes NotAQuote.FYI. This version does not collect a
         name, email address, phone number, date of birth, driver license number,
-        street address, ZIP code, VIN, policy number, or carrier name. There is
-        no field for those items.
+        street address, ZIP code, policy number, or carrier name. There is no
+        field for those items.
       </p>
       <p>
         The sample range is calculated in the browser. Changing a control does
-        not send the scenario to a server.
+        not send the scenario to a server. The vehicle catalog is a static file
+        on this site. Choosing a year, make, model, or trim does not create a
+        profile on a server.
+      </p>
+      <p>
+        An optional VIN can be decoded. This browser sends that VIN to the NHTSA
+        vPIC decode service and then clears the field. The VIN is not written to
+        storage on this site, a cookie, or a log this site keeps. Reloading the
+        page clears it. A decode that does not resolve leaves the year, make,
+        model, and trim controls as they were.
       </p>
       <p>
         The optional current annual premium stays on the open page. This version

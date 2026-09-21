@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
 import { TrustArticle } from "@/components/trust-article"
 import { BUNDLE_VERSION, MODEL_VERSION } from "@/lib/copy"
+import { formatCatalogDate } from "@/lib/catalog"
+import { CATALOG_RETRIEVED_ON, CATALOG_YEAR_MAX, CATALOG_YEAR_MIN } from "@/lib/catalog-meta"
 
 export const metadata: Metadata = {
   title: "Model version",
@@ -20,15 +22,30 @@ export default function ModelVersionPage() {
         </div>
       </dl>
       <h2 className="text-base font-semibold">Changelog</h2>
+      <section aria-labelledby="changelog-catalog" className="grid gap-2">
+        <h3 id="changelog-catalog" className="font-medium">
+          Data bundle {BUNDLE_VERSION}
+        </h3>
+        <p>
+          Adds the vehicle catalog snapshot retrieved{" "}
+          {formatCatalogDate(CATALOG_RETRIEVED_ON)}, covering model years{" "}
+          {CATALOG_YEAR_MIN} through {CATALOG_YEAR_MAX}. Year, make, model, and
+          trim read that snapshot in the browser. Trim confidence is limited or
+          unresolved when the NHTSA and FuelEconomy.gov names do not join
+          cleanly. An optional VIN is decoded in the browser against NHTSA and
+          discarded. The sample model is still {MODEL_VERSION}. No premium
+          baseline was added.
+        </p>
+      </section>
       <section aria-labelledby="changelog-010" className="grid gap-2">
         <h3 id="changelog-010" className="font-medium">
           0.1.0-sample
         </h3>
         <p>
           Adds sample display weights so Molly, Jayden, and Ava move a labeled
-          sample range. The baseline is not cleared. There is no rating engine,
-          no vehicle catalog, and no statutory dollar minimum. The credit factor
-          is locked at 1.00. Trend is not applied.
+          sample range. The baseline is not cleared. There is no rating engine
+          and no statutory dollar minimum. The vehicle catalog was not in this
+          model entry. The credit factor is locked at 1.00. Trend is not applied.
         </p>
         <p>
           An optional current annual premium can replace the sample baseline for

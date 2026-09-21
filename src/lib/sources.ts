@@ -1,3 +1,12 @@
+import {
+  CATALOG_RETRIEVED_ON,
+  CATALOG_VERSION,
+  FUEL_ECONOMY_CATALOG_URL,
+  FUEL_ECONOMY_DOCS_URL,
+  NHTSA_CATALOG_URL,
+} from "./catalog-meta"
+import { formatCatalogDate } from "./catalog"
+
 export type SourceRow = {
   name: string
   use: string
@@ -5,18 +14,20 @@ export type SourceRow = {
   status: string
 }
 
+const retrieved = formatCatalogDate(CATALOG_RETRIEVED_ON)
+
 export const SOURCE_ROWS: SourceRow[] = [
   {
     name: "NHTSA vPIC",
-    use: "Year, make, and model metadata for a later vehicle catalog.",
-    url: "https://api.nhtsa.gov/",
-    status: "Not snapshotted. No catalog is loaded. No figures are taken from this source.",
+    use: "Year, make, and model for the vehicle catalog snapshot.",
+    url: NHTSA_CATALOG_URL,
+    status: `Snapshotted ${retrieved} as ${CATALOG_VERSION}. Passenger car, truck, and multipurpose passenger vehicle models. No VINs and no premium figures.`,
   },
   {
     name: "FuelEconomy.gov",
-    use: "Fuel type and vehicle-menu fields for a later catalog snapshot.",
-    url: "https://www.fueleconomy.gov/feg/ws/index.shtml",
-    status: "Not snapshotted. Not used in the sample display.",
+    use: "Model names used as trims in the vehicle catalog snapshot.",
+    url: FUEL_ECONOMY_CATALOG_URL,
+    status: `Snapshotted ${retrieved} as ${CATALOG_VERSION}. Year, make, and model name only. Description: ${FUEL_ECONOMY_DOCS_URL}. Fuel-cost figures are not stored.`,
   },
   {
     name: "BLS CPI, motor vehicle insurance",
