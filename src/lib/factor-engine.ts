@@ -318,6 +318,11 @@ export function matchVehicleRows(facts: VehicleFacts): VehicleLossRow[] {
     return extra.length >= 2 && trimWords.includes(extra)
   })
   let pool = specific.length > 0 ? specific : sameMake.filter((row) => row.family === model)
+  // Powertrain unknown (no catalog): a family HLDI lists only as electric,
+  // like Tesla's, is electric; otherwise assume the gas version.
+  if (facts.powertrain === null && pool.every((row) => row.powertrain === pool[0].powertrain)) {
+    return narrowByDrive(pool, facts)
+  }
   const powertrain = rowPowertrain(facts)
   const samePowertrain = pool.filter((row) => row.powertrain === powertrain)
   // HLDI lists a hybrid as its own series when there are enough of them. When
@@ -329,12 +334,15 @@ export function matchVehicleRows(facts: VehicleFacts): VehicleLossRow[] {
       ? samePowertrain
       : pool.filter((row) => row.powertrain === "combustion")
   if (pool.length === 0) return []
+  return narrowByDrive(pool, facts)
+}
+
+function narrowByDrive(pool: VehicleLossRow[], facts: VehicleFacts): VehicleLossRow[] {
+  if (pool.length === 0) return pool
   const drive = factsDrive(facts)
-  if (drive) {
-    const sameDrive = pool.filter((row) => row.drive === drive)
-    if (sameDrive.length > 0) pool = sameDrive
-  }
-  return pool
+  if (!drive) return pool
+  const sameDrive = pool.filter((row) => row.drive === drive)
+  return sameDrive.length > 0 ? sameDrive : pool
 }
 
 function classRow(facts: VehicleFacts): VehicleClassRow | null {

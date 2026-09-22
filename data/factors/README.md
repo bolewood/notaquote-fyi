@@ -7,7 +7,7 @@ We'd rather show you a wide range than pretend to know something we don't. So ev
 | Kind | What it means | What it does to the range |
 | --- | --- | --- |
 | **Starting point** | The thing everything else is compared with. Always 1.00. | Nothing. |
-| **From public prices or rules** | Worked out from real prices that insurers filed with a state, comparing two profiles that differ in just that one thing. Or copied from an official state rule. | Adds how differently companies price the same thing (the middle half of companies). |
+| **From public prices or rules** | Worked out from real prices that insurers reported to a state insurance department, comparing two profiles that differ in just that one thing. Or copied from an official state rule. | Adds how differently companies price the same thing (the middle half of companies). |
 | **From public data, roughly** | Worked out from public data, but the profiles also differ in something else, or the data is about claims rather than prices. We say what else differs. | The same, and we say it's rough. |
 | **Our estimate (help wanted)** | We couldn't find a public source yet. It's our best guess, and it says so. | A deliberately wide spread, so the range grows. |
 
@@ -57,7 +57,7 @@ The exact numbers, counts, and percentiles are in `src/data/model-factors.json` 
 - **22–25**: DC, age 25 ÷ age 39 (same company, same household type), times the 26–39 factor, because 39 falls in that band. *From public prices.* DC's profiles are minimum coverage only.
 - **65+**: DC, age 66 ÷ age 39, times the 26–39 factor. *From public prices.* Also minimum coverage only.
 - **19–21**: Oklahoma, age 21 (single) ÷ age 55 (married). *Rough*: marital status differs too.
-- **16–18**: Oklahoma, age 16 ÷ age 55. *Rough*: the 16-year-old is single, drives to school, and drives under 7,500 miles; the 55-year-old is married and commutes 12,000 miles. It's also a teen who is **the only driver on their own policy**. Adding a teen to a parent's policy is priced differently, and usually costs less than this. We don't have a public source for that yet. Help wanted.
+- **16–18**: Oklahoma, age 16 ÷ age 55. *Rough*: the 16-year-old is single, drives to school, and drives under 7,500 miles; the 55-year-old is married and commutes 12,000 miles. It's also a teen who is **the only driver on their own policy**. Adding a teen to a parent's policy is priced differently, and we don't have a public source for that yet. Help wanted.
 
 There's no separate "teen" switch. The 16–18 band is the teen factor, so nothing is counted twice. Good-student and driver-training discounts only apply to young drivers (under 26 and under 22), so switching them on for a 65-year-old does nothing.
 
@@ -77,7 +77,7 @@ All *our estimates* for now. We know the direction (lower mileage and these disc
 ### Area
 
 - **Rural** is the starting point.
-- **Urban**: the same company and driver in a city versus a rural area. Oklahoma City and Tulsa versus Woodward and McAlester (800 comparisons), and Fargo versus "Remainder of State" in North Dakota (228 comparisons). *From public prices.* The two states disagree: Oklahoma's cities cost about 16% more, North Dakota's Fargo about the same as the rest of the state. We take the middle and the range shows the disagreement. Big metro areas, which these surveys don't cover, probably differ more.
+- **Urban**: the same company and driver in a city versus a rural area. Oklahoma City and Tulsa versus Woodward and McAlester (800 comparisons), and Fargo versus "Remainder of State" in North Dakota (228 comparisons). *From public prices.* The two states disagree: Oklahoma's cities cost about 16% more, North Dakota's Fargo about the same as the rest of the state. We take the middle and the range shows the disagreement. Big metro areas, which these surveys don't cover, may differ more.
 - **Suburban**: *our estimate*, halfway between rural and urban.
 
 ### How a full-coverage premium splits (liability versus damage)
@@ -111,7 +111,7 @@ We use them like this:
 
 How closely an insurer's own vehicle rating follows HLDI losses is *our estimate* (about ±8%). Losses are for 2022–24 models; for other years we widen the range.
 
-We keep HLDI rows for about 130 popular and teen-friendly models (300 rows), listed in `vehicle-families.json`.
+We keep HLDI rows for 155 popular and teen-friendly model families (328 of the 685 rows HLDI publishes), listed in `vehicle-families.json`. For the biggest brands, about 4 in 5 of the 2024 trims in our catalog match an exact HLDI model.
 
 ### The range
 

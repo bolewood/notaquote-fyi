@@ -42,7 +42,7 @@ HLDI's insurance losses by make and model for 2022–24 models, from the table a
 - Values are HLDI's index: 100 = the average for all passenger vehicles. The web page shows the same numbers as a percentage above or below average, so 124 appears on the page as "24%".
 - Blank means HLDI shows "Insufficient data".
 - Collision, property damage, and comprehensive are overall losses (how often × how much). Personal injury protection, medical payments, and bodily injury are how often claims happen only.
-- We keep only the families listed in `../vehicle-families.json`: 300 of the 685 rows HLDI publishes. To re-pick from a full download: `npm run factors:build -- --hldi-full path/to/losses.csv`.
+- We keep only the families listed in `../vehicle-families.json`: 328 of the 685 rows HLDI publishes. To re-pick from a full download: `npm run factors:build -- --hldi-full path/to/losses.csv`.
 - `all_coverages` in the subtotal file is a field the API returns but the page never shows. We don't use it.
 
 Source: www.iihs.org. See the terms note in `../README.md`.

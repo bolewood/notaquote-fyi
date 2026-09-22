@@ -175,6 +175,15 @@ test("vehicle rows: Lightning, hybrids, Range Rover, and Civic match the right H
   assert.ok(rangeRover.length > 0 && rangeRover.every((row) => row.family === "rangerover" && /Luxury SUVs/.test(row.hldiClass)))
   const civic = matchVehicleRows(CIVIC)
   assert.ok(civic.length > 0 && civic.every((row) => row.family === "civic"))
+
+  // Without the catalog (names only), a Tesla still finds its electric rows,
+  // and an F-150 finds the gas rows rather than the Lightning.
+  const namedTesla = vehicleFacts(null, { year: 2025, make: "Tesla", model: "Model Y", trim: "Model Y Long Range AWD" })
+  assert.equal(namedTesla.powertrain, null)
+  assert.ok(matchVehicleRows(namedTesla).every((row) => row.family === "modely" && row.drive === "4wd"))
+  assert.ok(matchVehicleRows(namedTesla).length > 0)
+  const namedFord = vehicleFacts(null, { year: 2023, make: "Ford", model: "F-150", trim: "F150 Pickup 4WD" })
+  assert.ok(matchVehicleRows(namedFord).every((row) => row.powertrain === "combustion"))
 })
 
 test("vehicle factors move only their own share of the premium", () => {
