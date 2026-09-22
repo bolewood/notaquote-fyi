@@ -1,0 +1,165 @@
+# Contributing to NotAQuote.FYI
+
+Thanks for helping. This project only works if the numbers are right and anyone can check them, so every fix, source, and sharp question makes it better.
+
+There are three ways to help, from easiest to most involved:
+
+1. **Tell us something's wrong.** Use one of the [issue forms](https://github.com/bolewood/notaquote-fyi/issues/new/choose). No code needed.
+2. **Find a source.** Many numbers still need a public source. A good link, plus the date you checked it, is one of the most useful things you can give us.
+3. **Send a pull request.** Fix a number, add a state rule, or improve the code. The rest of this page is for you.
+
+Please read the [Code of Conduct](CODE_OF_CONDUCT.md) first. The short version: be kind, and assume good intent.
+
+## Get it running (about 5 minutes)
+
+You'll need [Node.js](https://nodejs.org/) 20.9 or newer (CI uses Node 24) and npm, which comes with Node.
+
+```bash
+git clone https://github.com/bolewood/notaquote-fyi.git
+cd notaquote-fyi
+npm install
+npm run dev
+```
+
+Then open [http://127.0.0.1:41731](http://127.0.0.1:41731). The page reloads as you edit.
+
+There are no environment variables, API keys, or databases to set up.
+
+## Scripts
+
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Starts the site at http://127.0.0.1:41731 and reloads on changes. |
+| `npm test` | Runs the unit tests. |
+| `npm run lint` | Checks code style with ESLint. |
+| `npm run typecheck` | Generates Next.js route types, then checks types with TypeScript. Works on a fresh clone. |
+| `npm run build` | Makes a production build, the same way the live site is built. |
+| `npm run start` | Serves that production build locally. |
+| `npm run catalog:build` | Rebuilds the vehicle catalog from NHTSA and FuelEconomy.gov. Downloads large files; you rarely need it. |
+
+Before you open a pull request, run these four. CI runs the same ones:
+
+```bash
+npm run lint && npm run typecheck && npm test && npm run build
+```
+
+### Tests
+
+Tests sit next to the code they check, as `*.test.ts` files in `src/lib/`, and use Node's built-in test runner through `tsx`. To run one file:
+
+```bash
+npx tsx --test src/lib/suggest-fix.test.ts
+```
+
+If you add a new test file, add its path to the `test` script in `package.json`. Tests aren't discovered automatically.
+
+## The golden rule: every number needs a source
+
+If a number changes what someone sees, it needs a public source that anyone can open, plus the date someone checked it. If we can't source a number yet, we say so plainly, label it as an assumption, and let the range get wider. We don't hide a guess behind a precise-looking figure.
+
+### What makes a good source
+
+Best, in roughly this order:
+
+- **State insurance department pages**, especially consumer guides and rate-comparison guides that show sample premiums for standard drivers.
+- **Statutes and regulations** on the state's official legislature or code website.
+- **Public government datasets**, like NHTSA's vPIC or FuelEconomy.gov.
+- **Other official public reports** that anyone can read for free.
+
+Not good enough on their own:
+
+- Insurance company marketing pages and blog posts.
+- "Average rates" from comparison or lead-generation sites that don't show their method.
+- Anything behind a paywall or a license that stops us from citing it openly. We can link to restricted reports, but we don't copy from them.
+- Answers from a chatbot or search summary. Find the page it came from and cite that.
+
+### How to record a source
+
+With every sourced value, record:
+
+- **The link** to the exact page, not just the site's home page.
+- **The date you checked it**, as `YYYY-MM-DD`.
+- **What it says**, in a sentence of your own words. Short quotes are fine; long copied passages aren't.
+- **How you got the number**, if you worked it out from the source rather than copying it (for example, "ratio of the 17-year-old sample premium to the 40-year-old one, averaged across the six carriers listed").
+
+Longer research notes belong in the matching `data/*/assumptions.md` file.
+
+## Changing the data
+
+### A factor (a number that moves the estimate up or down)
+
+1. If you're not sure the change is right, open a ["A number looks wrong"](https://github.com/bolewood/notaquote-fyi/issues/new?template=1-number.yml) issue first so we can talk it through.
+2. Edit the factor in `src/data/model-factors.json`, with its source as described above.
+3. Bump the file's version string (see [Versions](#versions) below).
+4. Run `npm test`. If a test expects the old number, update the test, and say why in your pull request.
+5. Add a line to `data/factors/assumptions.md` about what changed and why.
+
+### A state rule (minimum coverage and required coverages)
+
+1. Find the rule on the state's own insurance department site or in the statute.
+2. Edit that state's row in `src/lib/state-rules.ts`. Each row carries its own source link and the date it was checked. Fill those in, not just the numbers.
+3. Bump the state-rules version string.
+4. Add your notes to `data/state-rules/assumptions.md`, especially anything unusual (a coverage that's required unless you turn it down in writing, a change taking effect on a future date, and so on).
+
+### A vehicle
+
+The vehicle catalog is generated from NHTSA vPIC and FuelEconomy.gov by `scripts/build-vehicle-catalog.ts`. Please don't hand-edit `public/catalog/vehicle-catalog.json`, `src/lib/catalog-meta.ts`, or `src/lib/catalog-defaults.ts`. If a car is missing or classified wrong, the fix usually belongs in the build script, followed by `npm run catalog:build`. If that's more than you want to take on, a ["Vehicle"](https://github.com/bolewood/notaquote-fyi/issues/new?template=3-vehicle.yml) issue is just as welcome.
+
+### Versions
+
+Every data file carries a version string, and share links record which versions produced a result. That's how someone can tell when the numbers behind a link have changed. So when you change data, bump its version to include today's date:
+
+| What you changed | Where the version lives |
+| --- | --- |
+| Factors | `"version"` in `src/data/model-factors.json` |
+| Source list | `"version"` in `src/data/source-manifest.json` |
+| State rules | `STATE_RULES_VERSION` in `src/lib/state-rules.ts` |
+| Vehicle catalog | Written for you by `npm run catalog:build` |
+| How the engine does its math | `MODEL_VERSION` in `src/lib/copy.ts` |
+
+Follow the pattern already in the file (for example `factors-2026-09-21` becomes `factors-2026-10-02`). If you're unsure, say so in the pull request and a maintainer will help.
+
+## Privacy rules for code
+
+These are promises the site makes, so they're rules for every change:
+
+- A visitor's inputs stay in their browser. The only exception is the optional VIN decode, which goes straight from the browser to NHTSA.
+- No analytics scripts, tracking pixels, cookies, or third-party scripts.
+- Never put a premium, a VIN, or anything personal in a URL that leaves the site.
+
+To add a "Suggest a fix" link beside a number, use the helper in `src/lib/suggest-fix.ts`. It opens a prefilled GitHub issue and drops anything that looks personal:
+
+```tsx
+import { suggestFixUrl } from "@/lib/suggest-fix"
+
+<a
+  href={suggestFixUrl({
+    kind: "state-rule",
+    title: "Ohio minimum liability",
+    fields: { state: "Ohio", rule: "Minimum liability limits", shown: "25/50/25" },
+  })}
+  rel="noreferrer"
+>
+  Spot something wrong? Tell us
+</a>
+```
+
+Pass descriptive labels, never the visitor's own numbers. If you add a field to an issue form, add its `id` to `FIX_TEMPLATES` too. The tests check that the two match.
+
+## Words on the site
+
+Anything a visitor reads should follow [docs/VOICE.md](docs/VOICE.md): plain words, short sentences, honest about what we don't know, and never salesy or scary. Picture explaining it to a friend at the kitchen table.
+
+## Pull requests
+
+- **Keep them small.** One fix or one feature per pull request. Three small ones get reviewed faster than one big one.
+- **Link the issue** it fixes, if there is one ("Fixes #12").
+- **Show your sources** for any data change.
+- **Fill in the checklist** in the pull request template.
+- **Expect questions.** Review is about getting the numbers right, not about you. If a reviewer asks for a source, that's the project working as intended.
+
+Not sure where to start? Look for issues labeled [`good first issue`](https://github.com/bolewood/notaquote-fyi/labels/good%20first%20issue) or [`help wanted`](https://github.com/bolewood/notaquote-fyi/labels/help%20wanted), or open an issue and ask.
+
+## Licensing your contribution
+
+By contributing, you agree that your code is released under the [MIT license](LICENSE) and your data contributions under [CC BY 4.0](DATA-LICENSE.md), the same terms as the rest of the project.
