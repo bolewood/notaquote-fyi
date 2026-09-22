@@ -1,0 +1,49 @@
+name: A vehicle is missing or classified wrong
+description: A car isn't in the list, or it's labeled as the wrong type (for example, an SUV marked as a sedan).
+title: "Vehicle: "
+labels: ["data", "vehicles"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Our vehicle list comes from NHTSA and FuelEconomy.gov. If a car is missing or looks misclassified, tell us which one and, if you can, where the official listing is.
+
+        **This issue is public.** Please don't include your VIN, your premium, a policy number, your name, or your address. Year, make, model, and trim are all we need.
+  - type: input
+    id: vehicle
+    attributes:
+      label: Which vehicle?
+      placeholder: "e.g. 2025 Tesla Model Y Long Range AWD"
+    validations:
+      required: true
+  - type: dropdown
+    id: problem
+    attributes:
+      label: What's wrong?
+      options:
+        - It's missing from the list
+        - It's classified as the wrong type
+        - The trim or details are wrong
+        - Something else
+    validations:
+      required: true
+  - type: input
+    id: shown
+    attributes:
+      label: What the site says
+      placeholder: "e.g. listed as a small car"
+  - type: input
+    id: suggested
+    attributes:
+      label: What it should be
+      placeholder: "e.g. small SUV"
+  - type: input
+    id: source_url
+    attributes:
+      label: Source link
+      description: A FuelEconomy.gov or NHTSA page for this vehicle is ideal. The maker's own spec page is fine too.
+      placeholder: "https://"
+  - type: textarea
+    id: details
+    attributes:
+      label: Anything else?

@@ -1,0 +1,40 @@
+name: Something's broken
+description: A page doesn't load, a button doesn't work, or something looks wrong on screen.
+title: "Bug: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Sorry about that. A few details will help us find it.
+
+        **This issue is public.** Please don't include your own premium, your VIN, a policy number, your name, or your address. If you paste a share link, remove anything after the `?` first, because it can hold your inputs.
+  - type: input
+    id: page
+    attributes:
+      label: Which page?
+      placeholder: "e.g. / (the calculator) or /methodology"
+  - type: textarea
+    id: what_happened
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+  - type: textarea
+    id: steps
+    attributes:
+      label: How can we see it too?
+      description: The steps you took, one per line.
+      placeholder: |
+        1. Open the calculator
+        2. Pick Jayden
+        3. Change the deductible
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and device
+      placeholder: "e.g. Safari on iPhone, Chrome on Windows"

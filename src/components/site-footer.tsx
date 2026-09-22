@@ -2,6 +2,7 @@ import Link from "next/link"
 import { CATALOG_VERSION } from "@/lib/catalog-meta"
 import { DATA_BUNDLE_VERSION, MODEL_VERSION, PUBLISHER } from "@/lib/copy"
 import { STATE_RULES_VERSION } from "@/lib/state-rules"
+import { GITHUB_REPO_URL } from "@/lib/suggest-fix"
 
 export function SiteFooter() {
   return (
@@ -27,8 +28,15 @@ export function SiteFooter() {
             href="/corrections"
             className="focus-visible:ring-ring rounded-sm focus-visible:ring-3"
           >
-            Corrections
+            Spot something wrong? Tell us
           </Link>
+          <a
+            href={GITHUB_REPO_URL}
+            rel="noreferrer"
+            className="focus-visible:ring-ring rounded-sm focus-visible:ring-3"
+          >
+            Source code on GitHub
+          </a>
         </nav>
         <p>{PUBLISHER}</p>
         <p className="text-muted-foreground">

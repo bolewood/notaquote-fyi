@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: How to contribute
+    url: https://github.com/bolewood/notaquote-fyi/blob/main/CONTRIBUTING.md
+    about: Setup, the "every number needs a source" rule, and how to send a fix yourself.
+  - name: Report a security problem privately
+    url: https://github.com/bolewood/notaquote-fyi/security/advisories/new
+    about: Please don't open a public issue for security problems. Use a private report instead.
