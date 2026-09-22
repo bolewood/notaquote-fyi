@@ -18,7 +18,7 @@ It is not an insurance company, agent, or broker, and it doesn't sell anything o
 - **Your inputs stay in your browser.** The math runs on your device. We don't collect or store your answers.
 - **One exception, and only if you use it:** if you type in a VIN, your browser sends it straight to NHTSA's free vehicle decoder to look up the car. We don't keep it.
 - **No cookies, ad trackers, or analytics scripts.**
-- **Saved comparisons stay on your device.** Share links do include the inputs for that scenario (including your current premium, if you entered one), so share them the way you'd share any personal note.
+- **Your choices stay on your device.** Share links carry your choices after the `#` in the address, which browsers don't send to any server. They never include prices, and they include what you pay only if you tick the box for it.
 
 ## Quickstart
 
@@ -39,7 +39,7 @@ Other scripts: `npm test`, `npm run lint`, `npm run typecheck`, and `npm run bui
 
 The idea is simple, and the goal is that every piece of it can be checked:
 
-1. **A starting point.** If you tell us what you pay now, we start from your real number. If you don't, we start from a typical premium for your state: roughly what drivers there pay in a year, taken from a public source. (We now have one for every state and DC: NAIC's 2023 average for liability plus collision and comprehensive, listed on the Sources page. The calculator doesn't start from it yet; until it does, the site tells you plainly what it's starting from.)
+1. **A starting point.** If you tell us what you pay now, we start from your real number. If you don't, we start from a typical premium for your state: roughly what drivers there pay in a year, taken from a public source. We have one for every state and DC: NAIC's 2023 average for liability plus collision and comprehensive, used with credit and moved forward to today with the government's price index for car insurance. The site says which one it started from.
 2. **Factors.** Each thing that changes the price, like the driver's age, the car, the deductible (the part of a claim you pay yourself), or the coverage level, is a multiplier. Each multiplier should cite a public source and the date it was checked.
 3. **A range, not a price.** Where we're less sure, the range gets wider. Real quotes can land above or below it.
 

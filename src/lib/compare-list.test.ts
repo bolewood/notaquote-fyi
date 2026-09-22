@@ -1,8 +1,13 @@
 import assert from "node:assert/strict"
 import test from "node:test"
 import { carKey } from "./car-search"
+import { DEFAULT_SCENARIO } from "./scenario"
+import { DEFAULT_SITUATION } from "./situation"
 import {
   addCars,
+  addSharedCars,
+  carryFromWhatIf,
+  defaultCompareFor,
   clearCars,
   COMPARE_LIMIT,
   COMPARE_STORAGE_KEY,
@@ -13,7 +18,7 @@ import {
   replaceCar,
   toggleStar,
   writeCompare,
-} from "./comparison-tray"
+} from "./compare-list"
 
 function memoryStorage() {
   const data = new Map<string, string>()
@@ -97,4 +102,31 @@ test("a stored price or stray field is dropped on read, and junk reads as nothin
   assert.equal(readCompare(storage), null)
   storage.setItem(COMPARE_STORAGE_KEY, JSON.stringify({ version: 9, list: {} }))
   assert.equal(readCompare(storage), null)
+})
+
+test("a saved situation sets the starting driver, place, and coverage", () => {
+  const situation = { ...DEFAULT_SITUATION, scenario: { ...DEFAULT_SCENARIO, age: "26-39" as const, state: "TX" as const } }
+  const list = defaultCompareFor(situation)
+  assert.equal(list.driver.age, "26-39")
+  assert.equal(list.driver.state, "TX")
+  assert.equal(list.cars.length, 0)
+  assert.deepEqual(defaultCompareFor(null), DEFAULT_COMPARE, "no saved situation: the teen question")
+})
+
+test("Compare more cars carries the what-if's driver and both cars into your own list", () => {
+  const own = addCars(DEFAULT_COMPARE, [COROLLA]).list
+  const driver = { ...DEFAULT_SCENARIO, state: "CO" as const }
+  const carried = carryFromWhatIf(own, driver, false, [CIVIC, COROLLA])
+  assert.equal(carried.driver.state, "CO")
+  assert.equal(carried.teenOnParentPolicy, false)
+  assert.deepEqual(carried.cars.map((car) => car.model), ["Corolla", "Civic"], "keeps your cars, adds new ones once")
+  assert.equal(carryFromWhatIf(null, driver, false, [CIVIC]).cars.length, 1)
+})
+
+test("adding a shared list keeps your own cars and driver, and brings the sender's stars", () => {
+  const own = addCars(DEFAULT_COMPARE, [COROLLA]).list
+  const shared = toggleStar(addCars({ ...DEFAULT_COMPARE, driver: { ...DEFAULT_SCENARIO, state: "CA" } }, [CIVIC, COROLLA]).list, carKey(CIVIC))
+  const merged = addSharedCars(own, shared)
+  assert.equal(merged.driver.state, own.driver.state)
+  assert.deepEqual(merged.cars.map((car) => `${car.model}:${car.starred}`), ["Corolla:false", "Civic:true"])
 })

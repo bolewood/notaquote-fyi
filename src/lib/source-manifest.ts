@@ -3,7 +3,7 @@ import manifestFile from "@/data/source-manifest.json"
 export const MANIFEST_VERSION = manifestFile.version
 
 export const NAIC_PARAPHRASE =
-  "NAIC’s 2022/2023 Auto Insurance Database Report (December 2025) describes statewide written-premium statistics. Average expenditure divides liability, collision, and comprehensive premium by liability car-years. The combined average premium adds the three coverage-level averages and describes a policy that carries all three. NAIC says the figures leave out the driver, the vehicle, the limits, the deductible, and the state’s tort and traffic setting, so they are not a price for one person and one car. We store the 2023 per-state figures, with credit, as a typical starting point for each state. The planning range doesn’t use them yet."
+  "NAIC’s 2022/2023 Auto Insurance Database Report (December 2025) describes statewide written-premium statistics. Average expenditure divides liability, collision, and comprehensive premium by liability car-years. The combined average premium adds the three coverage-level averages and describes a policy that carries all three. NAIC says the figures leave out the driver, the vehicle, the limits, the deductible, and the state’s tort and traffic setting, so they are not a price for one person and one car. We use the 2023 per-state figures, with credit, as the typical starting point for each state when you don’t enter what you pay."
 
 export type ManifestRow = {
   id: string
@@ -104,11 +104,8 @@ export function assertManifestSafe(): void {
   }
 
   const trend = manifestRow("bls-cpi-mv-insurance")
-  if (!trend || trend.derivedFields.length !== 0) {
-    throw new Error("BLS row must not feed a derived figure")
-  }
-  if (!/not applied/i.test(trend.licenseNote)) {
-    throw new Error("BLS row must say the series is not applied")
+  if (!trend || !/typical start/i.test(trend.licenseNote) || !/never applied to a premium you enter/i.test(trend.licenseNote)) {
+    throw new Error("BLS row must say it only moves typical starts, never a premium you enter")
   }
 
   if (/\$\s?\d/.test(NAIC_PARAPHRASE) || /naic estimate/i.test(NAIC_PARAPHRASE)) {

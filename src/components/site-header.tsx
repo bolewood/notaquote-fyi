@@ -22,12 +22,12 @@ export function SiteHeader() {
     <header className="border-b border-border bg-background/85">
       <a
         href="#content"
-        className="bg-background text-foreground border-border focus-visible:ring-ring absolute top-3 left-3 z-50 -translate-y-24 rounded-md border px-3 py-2 text-sm focus-visible:translate-y-0 focus-visible:ring-3"
+        className="bg-background text-foreground border-border focus-visible:ring-ring absolute top-3 left-3 z-50 -translate-y-24 rounded-md border px-3 py-2 text-sm focus-visible:translate-y-0"
       >
         Skip to content
       </a>
       <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center gap-x-5 gap-y-1 px-4 py-2.5 lg:px-6">
-        <Link href="/" aria-label="NotAQuote.FYI home" className="flex items-center gap-2 rounded-sm py-1 text-base font-semibold tracking-tight focus-visible:ring-3 focus-visible:ring-ring">
+        <Link href="/" aria-label="NotAQuote.FYI home" className="flex items-center gap-2 rounded-sm py-1 text-base font-semibold tracking-tight">
           <span aria-hidden="true" className="grid size-7 place-items-center rounded-lg bg-foreground text-sm font-bold text-background">
             N
           </span>
@@ -42,7 +42,7 @@ export function SiteHeader() {
                 href={link.href}
                 aria-current={current ? "page" : undefined}
                 className={cn(
-                  "rounded-full px-3 py-1.5 text-sm font-medium focus-visible:ring-3 focus-visible:ring-ring",
+                  "rounded-full px-3 py-1.5 text-sm font-medium",
                   current ? "bg-foreground text-background" : "text-foreground hover:bg-muted",
                 )}
               >
@@ -60,7 +60,7 @@ export function SiteHeader() {
                 href={link.href}
                 aria-current={current ? "page" : undefined}
                 className={cn(
-                  "rounded-sm text-sm focus-visible:ring-3 focus-visible:ring-ring",
+                  "rounded-sm text-sm",
                   current ? "font-medium text-foreground" : "text-muted-foreground hover:text-foreground",
                 )}
               >

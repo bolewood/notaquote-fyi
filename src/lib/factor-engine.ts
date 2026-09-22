@@ -1151,10 +1151,15 @@ function weakerBasis(left: FactorBasis, right: FactorBasis): FactorBasis {
   return BASIS_ORDER.indexOf(left) >= BASIS_ORDER.indexOf(right) ? left : right
 }
 
+/** Sentences round to the nearest $10; the big figures on the page stay exact. */
+function roundTen(amount: number): number {
+  return Math.round(amount / 10) * 10
+}
+
 function startWords(start: StartingPoint): string {
   if (start.kind === "yours") return `the ${formatDollars(Math.round(start.annual))} a year you pay now`
   return start.label
-    ? `${start.label} (${formatDollars(Math.round(start.annual))} a year)`
+    ? `${start.label} (about ${formatDollars(roundTen(start.annual))} a year)`
     : `a typical price of ${formatDollars(Math.round(start.annual))} a year`
 }
 
@@ -1165,7 +1170,15 @@ function summarySentence(start: StartingPoint, steps: ChangeStep[], likely: numb
       : `We started from ${startWords(start)}. Nothing here differs from that starting point.`
   }
   const changed = joinWords(steps.map((step) => lowerFirst(step.title)))
-  return `We started from ${startWords(start)} and adjusted for the ${changed}. That comes to about ${formatDollars(likely)} a year (about ${formatDollars(Math.max(1, Math.round(likely / 12)))} a month).`
+  return `We started from ${startWords(start)} and adjusted for the ${changed}. That comes to about ${formatDollars(roundTen(likely))} a year (about ${formatDollars(Math.max(1, Math.round(likely / 12)))} a month).`
+}
+
+/** Our HLDI loss data covers these model years (from the bundle). */
+function outsideYearsSentence(modelYear: number): string {
+  const first = bundle.vehicle.yearMin
+  const last = bundle.vehicle.yearMax
+  const nearest = modelYear > last ? last : first
+  return `Our loss data covers ${first}–${last} models, so for a ${modelYear} we use the closest year (${nearest}) and widen the range.`
 }
 
 function rangeSentence(
@@ -1191,7 +1204,10 @@ function rangeSentence(
   }
   const vehicleChanged = steps.some((step) => step.group === "vehicle")
   if (vehicleChanged) {
-    for (const relativity of [origin, target]) {
+    for (const [relativity, modelYear] of [
+      [origin, start.scenario.year],
+      [target, scenario.year],
+    ] as const) {
       if (relativity.level === "class") {
         parts.push(`We don't have loss data for that exact model, so we used the average for its class (${lowerFirst(relativity.label)}).`)
       }
@@ -1199,7 +1215,7 @@ function rangeSentence(
         parts.push("We couldn't tell what kind of vehicle that is, so we treated it as an average one and widened the range.")
       }
       if (relativity.level === "model" && relativity.outsideYears) {
-        parts.push("Our loss data is for newer model years, so the range is wider for this one.")
+        parts.push(outsideYearsSentence(modelYear))
       }
     }
   }

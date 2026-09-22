@@ -44,10 +44,15 @@ export default function PrivacyPage() {
 
       <h2 className="text-base font-semibold">Share links</h2>
       <p>
-        A share link puts your choices in the web address, so whoever opens it sees the same thing. It never includes
-        prices: the numbers are worked out fresh when the link is opened. On the What-if page, what you pay now goes into the
-        link only if you tick &ldquo;Include what I pay now&rdquo;. Compare links never include it. Share a link the way
-        you&apos;d share any personal note. Copying a link doesn&apos;t send it anywhere.
+        A share link puts your choices after the &ldquo;#&rdquo; in the web
+        address. Browsers never send that part to any server, so it doesn&apos;t
+        reach us, our host, or any log. When you open a link, the page reads it,
+        then removes it from the address bar. A link never includes prices: the
+        numbers are worked out fresh when it&apos;s opened. On the What-if page,
+        what you pay goes into the link only if you tick &ldquo;Include what I
+        pay now&rdquo;, and it&apos;s never saved on the other person&apos;s
+        device. Compare links never include it. Opening a shared list never
+        replaces your own list unless you choose to.
       </p>
 
       <h2 className="text-base font-semibold">Printing and spreadsheets</h2>

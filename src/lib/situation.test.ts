@@ -2,7 +2,9 @@ import assert from "node:assert/strict"
 import test from "node:test"
 import { DEFAULT_SCENARIO } from "./scenario"
 import {
+  adoptSharedSituation,
   DEFAULT_SITUATION,
+  premiumStatus,
   normalizePremium,
   parsePremium,
   readSituation,
@@ -54,4 +56,19 @@ test("the situation survives a reload in this browser, and junk reads as nothing
 test("only known fields are stored: never an estimate", () => {
   const raw = situationSnapshot({ ...DEFAULT_SITUATION, likely: 2000, low: 1 } as typeof DEFAULT_SITUATION)
   assert.doesNotMatch(raw, /likely|"low"/)
+})
+
+test("a shared situation never brings the sender's premium into your saved choices", () => {
+  const shared = { ...DEFAULT_SITUATION, premium: 2600 }
+  assert.equal(adoptSharedSituation(shared, null).premium, null)
+  assert.equal(adoptSharedSituation(shared, { ...DEFAULT_SITUATION, premium: 1500 }).premium, 1500)
+  assert.deepEqual(adoptSharedSituation(shared, null).scenario, shared.scenario)
+})
+
+test("the premium field: empty, unreadable, fine, or suspiciously low for a year", () => {
+  assert.deepEqual(premiumStatus("", "year"), { kind: "empty", annual: null })
+  assert.deepEqual(premiumStatus("18oo", "year"), { kind: "invalid", annual: null })
+  assert.deepEqual(premiumStatus("1,800", "year"), { kind: "ok", annual: 1800 })
+  assert.deepEqual(premiumStatus("150", "year"), { kind: "maybe-monthly", annual: 150 })
+  assert.deepEqual(premiumStatus("150", "month"), { kind: "ok", annual: 1800 })
 })

@@ -35,11 +35,13 @@
       "name": "BLS CPI, motor vehicle insurance",
       "url": "https://data.bls.gov/timeseries/CUUR0000SETE",
       "owner": "U.S. Bureau of Labor Statistics",
-      "licenseNote": "BLS publications are in the public domain, except previously copyrighted images. Do not use the BLS emblem. We record the 2023 average and the latest monthly value next to the state baselines as optional price-trend inputs. The series is not applied to any figure.",
+      "licenseNote": "BLS publications are in the public domain, except previously copyrighted images. Do not use the BLS emblem. We use the 2023 average and the latest monthly value to move a state's typical 2023 price forward to today when the calculator starts from it (a typical start). It's never applied to a premium you enter.",
       "accessMethod": "Public series CUUR0000SETE, fetched through the BLS public API on 22 September 2026.",
       "refreshCadence": "Refresh the recorded values when the state baselines are refreshed.",
       "lastChecked": "2026-09-22",
-      "derivedFields": []
+      "derivedFields": [
+        "price change since 2023, applied to typical state starting prices"
+      ]
     },
     {
       "id": "state-statutes",
@@ -109,7 +111,7 @@
       "name": "SERFF and state filing portals",
       "url": null,
       "owner": "National Association of Insurance Commissioners, for SERFF. State departments, for filing portals.",
-      "licenseNote": "Not used. No filing data is included. Not cleared for a factor.",
+      "licenseNote": "Not used. No filing data is included.",
       "accessMethod": "Not accessed.",
       "refreshCadence": "None. This bundle does not refresh filing data.",
       "lastChecked": "2026-09-21",
@@ -120,10 +122,10 @@
       "name": "IIHS/HLDI insurance losses by make and model",
       "url": "https://www.iihs.org/research-areas/auto-insurance/insurance-losses-by-make-and-model",
       "owner": "Insurance Institute for Highway Safety and Highway Loss Data Institute",
-      "licenseNote": "Citation link only. Loss tables are not copied. Not cleared for a vehicle factor.",
-      "accessMethod": "Link only. No table is downloaded.",
-      "refreshCadence": "None. This bundle does not refresh loss tables.",
-      "lastChecked": "2026-09-21",
+      "licenseNote": "Used with credit and a link. We keep HLDI's published loss results for the car models we price (data/factors/sources/hldi-2022-24.csv) and the class averages. IIHS allows limited noncommercial, educational use; the project is confirming with IIHS that this use is fine, and HLDI can be switched off in one place.",
+      "accessMethod": "Published results, copied by hand from the IIHS website with the page and row noted.",
+      "refreshCadence": "When HLDI publishes a new model-year table.",
+      "lastChecked": "2026-09-22",
       "derivedFields": []
     },
     {
@@ -131,10 +133,10 @@
       "name": "NotAQuote factor bundle",
       "url": null,
       "owner": "Bolewood Group, LLC",
-      "licenseNote": "Original planning factors. Not a rate filing and not computed from a premium, expenditure, exposure, or loss figure.",
+      "licenseNote": "Factors worked out from the public sources in this list (state insurance-department price surveys, NAIC, ISO, HLDI, and state rules). Anything we couldn't source is labeled as our estimate. Not a rate filing.",
       "accessMethod": "Committed with the app as model-factors.json and run in the browser.",
       "refreshCadence": "A factor change ships as a new bundle version and a changelog row.",
-      "lastChecked": "2026-09-21",
+      "lastChecked": "2026-09-22",
       "derivedFields": [
         "factor family",
         "key",

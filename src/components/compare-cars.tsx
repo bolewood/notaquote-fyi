@@ -38,19 +38,32 @@ import {
 } from "@/lib/compare-table"
 import {
   addCars,
+  addSharedCars,
+  carryFromWhatIf,
   clearCars,
   COMPARE_LIMIT,
-  DEFAULT_COMPARE,
+  defaultCompareFor,
   removeCar,
   toggleStar,
   type CompareList,
-} from "@/lib/comparison-tray"
+} from "@/lib/compare-list"
 import { DATA_BUNDLE_VERSION, DISCLAIMER, MODEL_VERSION } from "@/lib/copy"
 import { recordCount, recordMountedCount } from "@/lib/counts"
 import { typicalStart } from "@/lib/factor-engine"
-import { driverOnlyEstimate, parentFor, priceCars, priceCarsTeenAdded, reasonFor, startingPoint, startLine } from "@/lib/pricing"
+import {
+  distinctReasons,
+  driverOnlyEstimate,
+  parentFor,
+  priceCars,
+  priceCarsTeenAdded,
+  reasonParts,
+  startingPoint,
+  startLine,
+} from "@/lib/pricing"
 import { situationSentence, shortVehicleLabel, withTeenFlag, type Scenario } from "@/lib/scenario"
-import { decodeShareSearch, encodeSharePath, SHARE_INVALID_NOTE, shareArrivalNotes } from "@/lib/share-link"
+import { encodeSharePath, SHARE_INVALID_NOTE, shareArrivalNotes } from "@/lib/share-link"
+import { PageSkeleton } from "@/components/page-skeleton"
+import { readShareArrival, useClearShareFromAddress, useMounted } from "@/lib/use-share-arrival"
 import { DEFAULT_SITUATION } from "@/lib/situation"
 import { useCatalog } from "@/lib/use-catalog"
 import { useCompareList, useSituation } from "@/lib/use-stored"
@@ -70,38 +83,73 @@ const SORT_LABELS: Record<SortKey, string> = {
   car: "Car name",
   yearly: "Yearly estimate",
   monthly: "Monthly",
+  policy: "Whole policy",
   range: "How sure we are (narrowest range)",
   reason: "Why",
 }
 
-function readInitial(search: string) {
-  const decoded = decodeShareSearch(search)
-  if (decoded.status === "ok" && decoded.cars) {
-    const list: CompareList = {
-      driver: decoded.scenario,
-      teenOnParentPolicy: decoded.teenOnParentPolicy,
-      useMyPremium: false,
-      cars: decoded.cars,
-    }
-    return { list, notes: shareArrivalNotes(decoded) }
-  }
-  return {
-    list: null as CompareList | null,
-    notes: decoded.status === "absent" ? [] : [SHARE_INVALID_NOTE],
-  }
+type Arrival = {
+  /** A list someone shared, shown until the visitor decides what to do with it. */
+  shared: CompareList | null
+  /** Cars handed over from the What-if page, added to the visitor's own list. */
+  carry: { driver: Scenario; teenOnParentPolicy: boolean; cars: CompareList["cars"] } | null
+  notes: string[]
+  present: boolean
 }
 
-export function CompareCars({ initialSearch = "" }: { initialSearch?: string }) {
-  const [initial] = useState(() => readInitial(initialSearch))
+function readArrival(): Arrival {
+  const decoded = readShareArrival()
+  if (decoded.status === "absent") return { shared: null, carry: null, notes: [], present: false }
+  if (decoded.status === "invalid" || !decoded.cars) return { shared: null, carry: null, notes: [SHARE_INVALID_NOTE], present: true }
+  if (decoded.via === "whatif") {
+    return {
+      shared: null,
+      carry: { driver: decoded.scenario, teenOnParentPolicy: decoded.teenOnParentPolicy, cars: decoded.cars },
+      notes: [],
+      present: true,
+    }
+  }
+  const shared: CompareList = {
+    driver: decoded.scenario,
+    teenOnParentPolicy: decoded.teenOnParentPolicy,
+    useMyPremium: false,
+    cars: decoded.cars,
+  }
+  return { shared, carry: null, notes: shareArrivalNotes(decoded), present: true }
+}
+
+/** Waits for the browser (saved choices, share link) before drawing, so nothing flashes. */
+export function CompareCars() {
+  const mounted = useMounted()
+  if (!mounted) return <PageSkeleton label="Loading your list" />
+  return <CompareCarsReady />
+}
+
+function CompareCarsReady() {
+  const [initial] = useState(readArrival)
+  useClearShareFromAddress(initial.present)
   const stored = useCompareList()
   const situationStore = useSituation()
   const catalogLoad = useCatalog()
   const catalog = catalogLoad.catalog
 
-  const [linked, setLinked] = useState<CompareList | null>(initial.list)
-  const list = linked ?? stored.value ?? DEFAULT_COMPARE
+  const [linked, setLinked] = useState<CompareList | null>(initial.shared)
+  const [carried] = useState(() =>
+    initial.carry
+      ? carryFromWhatIf(stored.value ?? defaultCompareFor(situationStore.value), initial.carry.driver, initial.carry.teenOnParentPolicy, initial.carry.cars)
+      : null,
+  )
+  const write = stored.write
+  useEffect(() => {
+    // The What-if page handed over its cars: they're the visitor's own, so keep them.
+    if (carried) write(carried)
+  }, [carried, write])
+  const own = stored.value ?? carried ?? defaultCompareFor(situationStore.value)
+  const list = linked ?? own
   const situation = situationStore.value ?? DEFAULT_SITUATION
   const driver = list.driver
+  const askToMerge = linked !== null && (stored.value?.cars.length ?? 0) > 0
+  const [driverOpen, setDriverOpen] = useState(false)
 
   const [notes, setNotes] = useState(initial.notes)
   const [sort, setSort] = useState<SortState>(DEFAULT_SORT)
@@ -162,7 +210,8 @@ export function CompareCars({ initialSearch = "" }: { initialSearch?: string }) 
       mode === "added"
         ? priceCarsTeenAdded(start, parent, facts).map((item) => ({ estimate: item.after, extra: item.increase }))
         : priceCars(start, driver, facts).map((item) => ({ estimate: item.estimate, extra: null }))
-    return buildRows(priced, list.cars, (estimate, car) => reasonFor(estimate, car.year, driver))
+    const reasons = distinctReasons(priced.map((item, index) => reasonParts(item.estimate, list.cars[index].year, driver)))
+    return buildRows(priced, list.cars, reasons)
   }, [start, list, catalog, driver, parent, mode])
   const driverNote = start ? driverOnlyEstimate(start, driver, mode === "added" ? parent : null).rangeNote : null
 
@@ -229,17 +278,50 @@ export function CompareCars({ initialSearch = "" }: { initialSearch?: string }) 
             </button>
           </div>
         ) : null}
+        {askToMerge && linked ? (
+          <div className="mt-3 grid gap-3 rounded-xl border border-sun bg-sun-soft px-4 py-3 text-sm" data-testid="merge-choice">
+            <p>
+              You&apos;re looking at a shared list of {linked.cars.length} {linked.cars.length === 1 ? "car" : "cars"}. You also
+              have your own list of {stored.value?.cars.length}. What would you like to do?
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <button type="button" className="btn btn-primary" onClick={() => save(linked)}>
+                Replace my list with these
+              </button>
+              <button type="button" className="btn" onClick={() => stored.value && save(addSharedCars(stored.value, linked))}>
+                Add these cars to my list
+              </button>
+              <button type="button" className="btn btn-quiet" onClick={() => setLinked(null)}>
+                Keep my list
+              </button>
+            </div>
+          </div>
+        ) : null}
         {stored.error ? <p className="mt-4 text-sm">{stored.error}</p> : null}
       </div>
 
       <div className="mt-6 grid items-start gap-5 lg:mt-8 lg:grid-cols-[minmax(0,4fr)_minmax(0,9fr)] lg:gap-6 print:mt-0 print:block">
         {/* Driver */}
         <section aria-labelledby="driver-heading" className="card no-print p-5 lg:sticky lg:top-4">
-          <h2 id="driver-heading" className="text-lg font-semibold">
-            Who&apos;s driving?
-          </h2>
-          <p className="mt-1 text-sm text-muted-foreground">Every car in the list is priced for this driver.</p>
-          <div className="mt-4 grid gap-3">
+          <div className="flex items-start justify-between gap-3">
+            <h2 id="driver-heading" className="text-lg font-semibold">
+              Who&apos;s driving?
+            </h2>
+            <button
+              type="button"
+              className="btn btn-quiet -my-1 lg:hidden"
+              aria-expanded={driverOpen}
+              aria-controls="driver-form"
+              onClick={() => setDriverOpen((open) => !open)}
+            >
+              {driverOpen ? "Done" : "Edit"}
+            </button>
+          </div>
+          <p className="mt-1 text-sm text-muted-foreground lg:hidden" data-testid="driver-summary">
+            {situationSentence(driver, list.teenOnParentPolicy, false)}
+          </p>
+          <p className="mt-1 hidden text-sm text-muted-foreground lg:block">Every car in the list is priced for this driver.</p>
+          <div id="driver-form" className={cn("mt-4 gap-3 lg:grid", driverOpen ? "grid" : "hidden")}>
             <div className="grid grid-cols-2 gap-3 lg:grid-cols-1 xl:grid-cols-2">
               <AgeField scenario={driver} onChange={patchDriver} idPrefix="driver" />
               <StateField scenario={driver} onChange={patchDriver} idPrefix="driver" />
@@ -418,7 +500,7 @@ export function CompareCars({ initialSearch = "" }: { initialSearch?: string }) 
               <div className="no-print flex flex-wrap items-end gap-x-5 gap-y-3 border-b border-border px-5 py-3 sm:px-6">
                 <div className="grid gap-1">
                   <label htmlFor="max-yearly" className="field-label">
-                    Only show under
+                    {added ? "Only show extra under" : "Only show under"}
                   </label>
                   <div className="relative">
                     <span className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-muted-foreground">$</span>
@@ -426,7 +508,7 @@ export function CompareCars({ initialSearch = "" }: { initialSearch?: string }) 
                       id="max-yearly"
                       className="field-input min-h-10 w-40 pr-16 pl-7"
                       inputMode="numeric"
-                      placeholder="3,000"
+                      placeholder={added ? "1,000" : "3,000"}
                       value={maxText}
                       onChange={(event) => setMaxText(event.target.value)}
                     />
@@ -504,8 +586,20 @@ export function CompareCars({ initialSearch = "" }: { initialSearch?: string }) 
                       <SortHeader label="Car" sortKey="car" sort={sort} onSort={setSort} className="min-w-44" />
                       <SortHeader label={added ? "Extra for your teen" : "Yearly"} sortKey="yearly" sort={sort} onSort={setSort} align="right" />
                       <SortHeader label={added ? "A month" : "Monthly"} sortKey="monthly" sort={sort} onSort={setSort} align="right" className="hidden md:table-cell print:table-cell" />
-                      <SortHeader label={added ? "Whole policy, a year" : "Range"} sortKey="range" sort={sort} onSort={setSort} className="min-w-44" />
-                      <SortHeader label="Why" sortKey="reason" sort={sort} onSort={setSort} className="hidden lg:table-cell print:table-cell" />
+                      <SortHeader
+                        label={added ? "Whole policy, a year" : "Range"}
+                        sortKey={added ? "policy" : "range"}
+                        sort={sort}
+                        onSort={setSort}
+                        className="min-w-44"
+                      />
+                      <SortHeader
+                        label="Why (vs. an average car)"
+                        sortKey="reason"
+                        sort={sort}
+                        onSort={setSort}
+                        className="hidden lg:table-cell print:table-cell"
+                      />
                       <th scope="col" className="no-print w-12 py-2.5 pr-4">
                         <span className="sr-only">Remove</span>
                       </th>

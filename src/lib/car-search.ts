@@ -4,7 +4,7 @@
  * and short lists of popular cars for one-click adding.
  */
 import { normalizeName } from "./catalog-match"
-import { catalogYears, type CatalogTrim, type VehicleCatalog, type VehiclePick } from "./catalog"
+import type { CatalogTrim, VehicleCatalog, VehiclePick } from "./catalog"
 
 export type ModelHit = {
   year: number
@@ -99,12 +99,16 @@ export function resolveCar(catalog: VehicleCatalog, year: number, car: QuickCar)
   return { year, make: car.make, model: car.model, trim: chosen.name }
 }
 
-/** The nearest model year the catalog lists this model in, preferring newer on a tie. */
-export function nearestYear(catalog: VehicleCatalog, year: number, make: string, model: string): number | null {
-  const years = catalogYears(catalog)
-    .filter((candidate) => modelTrims(catalog, candidate, make, model).length > 0)
-    .sort((left, right) => Math.abs(left - year) - Math.abs(right - year) || right - left)
-  return years[0] ?? null
+/**
+ * Split a typed search into a model year and the rest: "2015 civic" gives
+ * 2015 and "civic". Only a whole four-digit word from 1980 to 2099 counts.
+ */
+export function parseCarQuery(query: string): { year: number | null; text: string } {
+  const words = query.trim().split(/\s+/).filter(Boolean)
+  const index = words.findIndex((word) => /^(19[89]\d|20\d\d)$/.test(word))
+  if (index === -1) return { year: null, text: words.join(" ") }
+  const year = Number(words[index])
+  return { year, text: [...words.slice(0, index), ...words.slice(index + 1)].join(" ") }
 }
 
 /**

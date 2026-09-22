@@ -5,6 +5,7 @@
  */
 import { carKey } from "./car-search"
 import { DEFAULT_SCENARIO, withTeenFlag, type Scenario } from "./scenario"
+import type { Situation } from "./situation"
 import { scenarioFromRecord, vehiclePickFromRecord } from "./share-link"
 
 export const COMPARE_STORAGE_KEY = "notaquote.compare.v1"
@@ -34,6 +35,54 @@ export const DEFAULT_COMPARE: CompareList = {
   teenOnParentPolicy: true,
   useMyPremium: false,
   cars: [],
+}
+
+/**
+ * The list someone starts with. With a saved situation, the driver is theirs
+ * (age, record, place, coverage), so an adult shopping for their own car sees
+ * their own prices. Without one, it's the common kitchen-table question: a
+ * new 16–18-year-old on a parent's policy.
+ */
+export function defaultCompareFor(situation: Situation | null): CompareList {
+  if (!situation) return DEFAULT_COMPARE
+  return {
+    driver: withTeenFlag({ ...situation.scenario }),
+    teenOnParentPolicy: situation.teenOnParentPolicy,
+    useMyPremium: false,
+    cars: [],
+  }
+}
+
+/**
+ * Arriving from a what-if ("Compare more cars"): price the what-if's driver,
+ * and add the car you have now and the car you were trying to the list you
+ * already had (or a fresh one).
+ */
+export function carryFromWhatIf(
+  own: CompareList | null,
+  driver: Scenario,
+  teenOnParentPolicy: boolean,
+  cars: readonly Omit<ComparedCar, "starred">[],
+): CompareList {
+  const base: CompareList = own ?? { ...DEFAULT_COMPARE, cars: [] }
+  const withDriver: CompareList = { ...base, driver: withTeenFlag({ ...driver }), teenOnParentPolicy }
+  return addCars(withDriver, cars).list
+}
+
+/**
+ * Someone opened a shared list and chose "Add these cars": keep their own
+ * driver and cars, and add the shared ones (with the sender's stars) after.
+ */
+export function addSharedCars(own: CompareList, shared: CompareList): CompareList {
+  const result = addCars(own, shared.cars)
+  const starred = new Set(shared.cars.filter((car) => car.starred).map((car) => carKey(car)))
+  const ownKeys = new Set(own.cars.map((car) => carKey(car)))
+  return {
+    ...result.list,
+    cars: result.list.cars.map((car) =>
+      !ownKeys.has(carKey(car)) && starred.has(carKey(car)) ? { ...car, starred: true } : car,
+    ),
+  }
 }
 
 export type AddResult = { list: CompareList; added: number; skipped: "full" | "duplicate" | null }

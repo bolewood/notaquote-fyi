@@ -99,6 +99,31 @@ export function writeSituation(storage: Pick<Storage, "setItem">, situation: Sit
   storage.setItem(SITUATION_STORAGE_KEY, situationSnapshot(situation))
 }
 
+/**
+ * Someone opened a shared link and then changed something, so the shared
+ * situation becomes theirs. What the sender pays never gets saved: keep the
+ * visitor's own premium (or none).
+ */
+export function adoptSharedSituation(shared: Situation, own: Situation | null): Situation {
+  return { ...shared, premium: own?.premium ?? null }
+}
+
+export type PremiumStatus =
+  | { kind: "empty"; annual: null }
+  | { kind: "invalid"; annual: null }
+  | { kind: "ok"; annual: number }
+  /** Under $200 a year: probably a monthly amount typed as yearly. */
+  | { kind: "maybe-monthly"; annual: number }
+
+/** Read the premium field for the page: empty, unreadable, fine, or suspiciously low. */
+export function premiumStatus(text: string, period: PremiumPeriod): PremiumStatus {
+  if (text.trim() === "") return { kind: "empty", annual: null }
+  const annual = parsePremium(text, period)
+  if (annual === null) return { kind: "invalid", annual: null }
+  if (period === "year" && annual < 200) return { kind: "maybe-monthly", annual }
+  return { kind: "ok", annual }
+}
+
 /** A premium belongs to one situation. Changing the "now" car or driver keeps it; the visitor decides. */
 export function withScenario(situation: Situation, scenario: Scenario): Situation {
   return { ...situation, scenario: withTeenFlag(scenario) }

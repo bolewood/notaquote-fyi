@@ -5,7 +5,7 @@ import type { VehicleCatalog } from "./catalog"
 import {
   defaultTrim,
   FIRST_CARS,
-  nearestYear,
+  parseCarQuery,
   POPULAR_SUVS,
   resolveCar,
   searchModels,
@@ -48,8 +48,12 @@ test("every quick-add car and every What-if chip is in the catalog", () => {
   assert.equal(FIRST_CARS.length, 15, "one tap fills a 15-car list")
 })
 
-test("a missing model year finds the nearest one", () => {
-  assert.equal(resolveCar(catalog, 2025, { make: "Kia", model: "Forte" }), null)
-  assert.equal(nearestYear(catalog, 2025, "Kia", "Forte"), 2024)
-  assert.equal(nearestYear(catalog, 2025, "Nobody", "Nothing"), null)
+test("a year typed into the search picks the model year", () => {
+  assert.deepEqual(parseCarQuery("2015 civic"), { year: 2015, text: "civic" })
+  assert.deepEqual(parseCarQuery("civic 2015"), { year: 2015, text: "civic" })
+  assert.deepEqual(parseCarQuery("  model y  "), { year: null, text: "model y" })
+  assert.deepEqual(parseCarQuery("f-150 3500"), { year: null, text: "f-150 3500" })
+  const { year, text } = parseCarQuery("2015 civic")
+  assert.equal(searchModels(catalog, year ?? 2024, text)[0]?.model, "Civic")
+  assert.equal(resolveCar(catalog, 2025, { make: "Kia", model: "Forte" }), null, "a model the year doesn't list gives nothing")
 })

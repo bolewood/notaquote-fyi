@@ -33,6 +33,8 @@ import {
   startLine,
   vehicleMatchWords,
   type ChangeKey,
+  type ChangePart,
+  type WhatIfMode,
 } from "@/lib/pricing"
 import {
   situationSentence,
@@ -43,8 +45,17 @@ import {
   type Starter,
   type StarterTab,
 } from "@/lib/scenario"
-import { decodeShareSearch, encodeSharePath, SHARE_INVALID_NOTE, shareArrivalNotes } from "@/lib/share-link"
-import { DEFAULT_SITUATION, parsePremium, PREMIUM_PERIODS, type PremiumPeriod, type Situation } from "@/lib/situation"
+import { encodeSharePath, SHARE_INVALID_NOTE, shareArrivalNotes } from "@/lib/share-link"
+import { PageSkeleton } from "@/components/page-skeleton"
+import { readShareArrival, useClearShareFromAddress, useMounted } from "@/lib/use-share-arrival"
+import {
+  adoptSharedSituation,
+  DEFAULT_SITUATION,
+  PREMIUM_PERIODS,
+  premiumStatus,
+  type PremiumPeriod,
+  type Situation,
+} from "@/lib/situation"
 import { useCatalog } from "@/lib/use-catalog"
 import { useSituation } from "@/lib/use-stored"
 import { cn } from "cn"
@@ -62,8 +73,8 @@ const TABS: { id: Tab; label: string; icon: typeof Car }[] = [
   { id: "more", label: "Miles and record", icon: Sparkles },
 ]
 
-function readInitial(search: string) {
-  const decoded = decodeShareSearch(search)
+function readInitial() {
+  const decoded = readShareArrival()
   if (decoded.status === "ok") {
     const situation: Situation = {
       scenario: decoded.scenario,
@@ -74,13 +85,35 @@ function readInitial(search: string) {
       situation,
       next: decoded.next,
       notes: shareArrivalNotes(decoded),
+      present: true,
     }
   }
   return {
     situation: null as Situation | null,
     next: null as Scenario | null,
     notes: decoded.status === "invalid" ? [SHARE_INVALID_NOTE] : [],
+    present: decoded.status === "invalid",
   }
+}
+
+/** Left and right arrows, Home, and End move between tabs (the ARIA tablist pattern). */
+function tabKey(event: React.KeyboardEvent<HTMLButtonElement>, current: Tab, choose: (tab: Tab) => void) {
+  const ids = TABS.map((item) => item.id)
+  const index = ids.indexOf(current)
+  const target =
+    event.key === "ArrowRight"
+      ? ids[(index + 1) % ids.length]
+      : event.key === "ArrowLeft"
+        ? ids[(index - 1 + ids.length) % ids.length]
+        : event.key === "Home"
+          ? ids[0]
+          : event.key === "End"
+            ? ids[ids.length - 1]
+            : null
+  if (!target) return
+  event.preventDefault()
+  choose(target)
+  document.getElementById(`tab-${target}`)?.focus()
 }
 
 /** Only the inputs that differ from now, so a what-if follows later changes to "now". */
@@ -93,8 +126,16 @@ function diffFrom(now: Scenario, next: Scenario): Partial<Scenario> {
   return changes
 }
 
-export function Calculator({ initialSearch = "" }: { initialSearch?: string }) {
-  const [initial] = useState(() => readInitial(initialSearch))
+/** Waits for the browser (saved choices, share link) before drawing, so nothing flashes. */
+export function Calculator() {
+  const mounted = useMounted()
+  if (!mounted) return <PageSkeleton label="Loading your situation" />
+  return <CalculatorReady />
+}
+
+function CalculatorReady() {
+  const [initial] = useState(readInitial)
+  useClearShareFromAddress(initial.present)
   const stored = useSituation()
   const catalogLoad = useCatalog()
   const catalog = catalogLoad.catalog
@@ -113,6 +154,9 @@ export function Calculator({ initialSearch = "" }: { initialSearch?: string }) {
   const [picker, setPicker] = useState<null | "now" | "next">(null)
   const [premiumDraft, setPremiumDraft] = useState<string | null>(null)
   const [period, setPeriod] = useState<PremiumPeriod>("year")
+  const premiumText = premiumDraft ?? (situation.premium === null ? "" : String(situation.premium))
+  const premium = premiumStatus(premiumText, period)
+  const premiumInvalid = premium.kind === "invalid"
   const whatIfRef = useRef<HTMLElement>(null)
   const resultRef = useRef<HTMLDivElement>(null)
 
@@ -140,8 +184,15 @@ export function Calculator({ initialSearch = "" }: { initialSearch?: string }) {
   const start = startingPoint(situation, nowFacts)
   const startNote = start ? startLine(start) : undefined
 
-  function saveSituation(nextSituation: Situation) {
-    stored.write({ ...nextSituation, scenario: withTeenFlag(nextSituation.scenario) })
+  /**
+   * Save the situation in this browser. A shared situation becomes the
+   * visitor's own once they change something, but never with the sender's
+   * premium: that's kept only if the visitor typed it themselves.
+   */
+  function saveSituation(nextSituation: Situation, premiumTyped = false) {
+    const own = linked && !premiumTyped ? adoptSharedSituation(nextSituation, stored.value) : nextSituation
+    stored.write({ ...own, scenario: withTeenFlag(own.scenario) })
+    if (linked && !premiumTyped) setPremiumDraft(null)
     setLinked(null)
   }
 
@@ -184,17 +235,12 @@ export function Calculator({ initialSearch = "" }: { initialSearch?: string }) {
 
   function onPremium(text: string, nextPeriod: PremiumPeriod = period) {
     setPremiumDraft(text)
-    const parsed = parsePremium(text, nextPeriod)
-    if (text.trim() === "" || parsed !== null) {
-      if (parsed !== situation.premium) {
-        recordCount("adjustment")
-        saveSituation({ ...situation, premium: parsed })
-      }
+    const status = premiumStatus(text, nextPeriod)
+    if (status.kind !== "invalid" && status.annual !== situation.premium) {
+      recordCount("adjustment")
+      saveSituation({ ...situation, premium: status.annual }, true)
     }
   }
-
-  const premiumText = premiumDraft ?? (situation.premium === null ? "" : String(situation.premium))
-  const premiumInvalid = premiumText.trim() !== "" && parsePremium(premiumText, period) === null
 
   const nowCar: VehiclePick = { year: now.year, make: now.make, model: now.model, trim: now.trim }
   const nextCar: VehiclePick = { year: next.year, make: next.make, model: next.model, trim: next.trim }
@@ -227,13 +273,32 @@ export function Calculator({ initialSearch = "" }: { initialSearch?: string }) {
         ) : null}
         {stored.error ? <p className="mt-4 text-sm">{stored.error}</p> : null}
 
-        <div className="mt-5 grid items-start gap-5 lg:mt-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-6">
+        {linked ? (
+          <div className="mt-3 flex flex-wrap items-center gap-3 rounded-xl border border-sun bg-sun-soft px-4 py-3 text-sm">
+            <p className="flex-1">
+              You&apos;re looking at someone else&apos;s situation. If you change anything, it becomes yours
+              {linked.premium !== null ? ", without what they pay" : ""}.
+            </p>
+            <button
+              type="button"
+              className="btn"
+              onClick={() => {
+                setLinked(null)
+                setChanges({})
+                setNotes([])
+              }}
+            >
+              Go back to mine
+            </button>
+          </div>
+        ) : null}
+        <div className="mt-5 grid items-start gap-5 lg:mt-6 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-6">
           {/* What if */}
           <section
             ref={whatIfRef}
             id="what-if"
             aria-labelledby="what-if-heading"
-            className="card order-1 scroll-mt-4 overflow-hidden lg:order-2"
+            className="card scroll-mt-4 overflow-hidden"
           >
             <div className="border-b border-border bg-sun-soft px-5 pt-5 pb-4 sm:px-6">
               <h2 id="what-if-heading" className="text-xl font-semibold tracking-tight">
@@ -262,8 +327,10 @@ export function Calculator({ initialSearch = "" }: { initialSearch?: string }) {
                     id={`tab-${item.id}`}
                     aria-selected={tab === item.id}
                     aria-controls={`panel-${item.id}`}
+                    tabIndex={tab === item.id ? 0 : -1}
                     className="tab"
                     onClick={() => setTab(item.id)}
+                    onKeyDown={(event) => tabKey(event, tab, setTab)}
                   >
                     <Icon className="size-4" aria-hidden="true" />
                     {item.label}
@@ -272,7 +339,7 @@ export function Calculator({ initialSearch = "" }: { initialSearch?: string }) {
               })}
             </div>
 
-            <div role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`} className="px-5 py-5 sm:px-6">
+            <div role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`} tabIndex={0} className="px-5 py-5 sm:px-6">
               {tab === "car" ? (
                 <div className="grid gap-4">
                   <p className="text-sm font-medium">Try another car:</p>
@@ -361,8 +428,14 @@ export function Calculator({ initialSearch = "" }: { initialSearch?: string }) {
             </div>
 
             <div ref={resultRef} className="scroll-mb-4 border-t border-border bg-background/60 px-5 py-5 sm:px-6" aria-live="polite">
-              {result ? (
+              {result && premiumInvalid ? (
+                <p className="py-2 text-center text-sm text-muted-foreground" data-testid="what-if-waiting">
+                  Finish typing what you pay now (or clear it), and the difference shows here.
+                </p>
+              ) : result ? (
                 <WhatIfResult
+                  mode={result.mode}
+                  parts={result.parts}
                   headline={result.headline}
                   delta={result.deltaRounded}
                   current={result.current}
@@ -375,6 +448,13 @@ export function Calculator({ initialSearch = "" }: { initialSearch?: string }) {
                   onKeep={keepWhatIf}
                   vehicleChanged={changed.includes("vehicle")}
                   nextCarName={carName(nextCar)}
+                  compareHref={encodeSharePath({
+                    page: "/compare",
+                    scenario: next,
+                    teenOnParentPolicy: situation.teenOnParentPolicy,
+                    cars: [nowCar, nextCar].map((car) => ({ ...car, starred: false })),
+                    via: "whatif",
+                  })}
                   versionPicker={
                     changed.includes("vehicle") ? (
                       <VersionPicker idPrefix="next-car" pick={nextCar} catalog={catalog} onChange={(pick) => patchNext(pick)} compact />
@@ -391,13 +471,15 @@ export function Calculator({ initialSearch = "" }: { initialSearch?: string }) {
           </section>
 
           {/* Now */}
-          <section id="now" aria-labelledby="now-heading" className="card order-2 scroll-mt-4 p-5 sm:p-6 lg:order-1">
+          <section id="now" aria-labelledby="now-heading" className="card scroll-mt-4 p-5 sm:p-6">
             <h2 id="now-heading" className="text-xl font-semibold tracking-tight">
               Your situation now
             </h2>
             <p className="mt-1 text-sm text-muted-foreground">{situationSentence(now, false)}</p>
 
-            {nowEstimate ? <NowFigure estimate={nowEstimate} startKind={startKind} startNote={startNote} /> : null}
+            {nowEstimate ? (
+              <NowFigure estimate={nowEstimate} startKind={startKind} startNote={startNote} waiting={premiumInvalid} />
+            ) : null}
 
             <div className="mt-5 grid gap-4">
               <div className="grid gap-1.5">
@@ -441,6 +523,7 @@ export function Calculator({ initialSearch = "" }: { initialSearch?: string }) {
                       placeholder="1,800"
                       value={premiumText}
                       aria-invalid={premiumInvalid || undefined}
+                      aria-errormessage={premiumInvalid ? "premium-hint" : undefined}
                       aria-describedby="premium-hint"
                       onChange={(event) => onPremium(event.target.value)}
                     />
@@ -464,10 +547,23 @@ export function Calculator({ initialSearch = "" }: { initialSearch?: string }) {
                 </div>
                 <p id="premium-hint" className={cn("text-xs leading-snug", premiumInvalid ? "text-destructive" : "text-muted-foreground")}>
                   {premiumInvalid ? "Enter a dollar amount, like 1,800. Or leave it empty." : PREMIUM_HINT}
-                  {situation.premium !== null && period !== "year" && !premiumInvalid
-                    ? ` That's ${formatDollars(situation.premium)} a year.`
-                    : ""}
+                  {premium.annual !== null && period !== "year" ? ` That's ${formatDollars(premium.annual)} a year.` : ""}
                 </p>
+                {premium.kind === "maybe-monthly" ? (
+                  <p className="flex flex-wrap items-center gap-x-2 text-xs leading-snug" data-testid="premium-monthly-hint">
+                    That&apos;s low for a year. Is it what you pay each month?
+                    <button
+                      type="button"
+                      className="link"
+                      onClick={() => {
+                        setPeriod("month")
+                        onPremium(premiumText, "month")
+                      }}
+                    >
+                      Yes, it&apos;s monthly
+                    </button>
+                  </p>
+                ) : null}
               </div>
 
               <details className="group rounded-xl border border-border">
@@ -539,7 +635,7 @@ export function Calculator({ initialSearch = "" }: { initialSearch?: string }) {
         <section className="mt-8 grid gap-4 border-t border-border pt-6 sm:grid-cols-[1fr_auto] sm:items-start">
           <ShareBox
             what="this what-if"
-            premiumAvailable={situation.premium !== null}
+            premiumAvailable={situation.premium !== null && linked === null}
             buildPath={(includePremium) =>
               encodeSharePath({
                 page: "/",
@@ -588,10 +684,25 @@ export function Calculator({ initialSearch = "" }: { initialSearch?: string }) {
   )
 }
 
-function NowFigure({ estimate, startKind, startNote }: { estimate: Estimate; startKind: StartKind; startNote?: string }) {
+function NowFigure({
+  estimate,
+  startKind,
+  startNote,
+  waiting,
+}: {
+  estimate: Estimate
+  startKind: StartKind
+  startNote?: string
+  /** The premium field has text we can't read yet: dim the old figures. */
+  waiting: boolean
+}) {
   const ownNumber = startKind === "yours" && estimate.steps.length === 0
   return (
-    <div className="mt-4 rounded-xl bg-primary/[0.06] px-4 py-4" data-testid="now-figure">
+    <div
+      className={cn("mt-4 rounded-xl bg-primary/[0.06] px-4 py-4 transition-opacity", waiting && "opacity-35")}
+      data-testid="now-figure"
+      aria-hidden={waiting || undefined}
+    >
       <p className="flex flex-wrap items-baseline gap-x-2">
         <span className="money text-4xl font-semibold tracking-tight" data-testid="now-yearly">
           {formatDollars(estimate.likely)}
@@ -623,6 +734,9 @@ function NowFigure({ estimate, startKind, startNote }: { estimate: Estimate; sta
 }
 
 function WhatIfResult({
+  mode,
+  parts,
+  compareHref,
   headline,
   delta,
   current,
@@ -637,6 +751,9 @@ function WhatIfResult({
   nextCarName,
   versionPicker,
 }: {
+  mode: WhatIfMode
+  parts: ChangePart[]
+  compareHref: string
   headline: string
   delta: number
   current: Estimate
@@ -661,15 +778,34 @@ function WhatIfResult({
         <p className="text-2xl leading-snug font-semibold tracking-tight text-balance" data-testid="what-if-headline">
           {headline}
         </p>
-        <div>
-          <DeltaBadge amount={delta} />
-        </div>
+        {mode === "teen-own" ? null : (
+          <div>
+            <DeltaBadge amount={delta} />
+          </div>
+        )}
       </div>
+
+      {parts.length > 0 ? (
+        <div className="grid gap-1.5" data-testid="what-if-parts">
+          <p className="text-sm font-medium">What makes the difference</p>
+          <ul className="grid gap-1 text-sm">
+            {parts.map((part) => (
+              <li key={part.label} className="flex items-baseline justify-between gap-4 border-b border-dashed border-border pb-1">
+                <span>{part.label}</span>
+                <span className={cn("money font-medium whitespace-nowrap", part.amount > 0 ? "text-up" : part.amount < 0 ? "text-down" : "text-muted-foreground")}>
+                  {signedTen(part.amount)}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="text-xs text-muted-foreground">Each piece is rounded to the nearest $10, so they may not add up exactly.</p>
+        </div>
+      ) : null}
 
       <dl className="grid gap-3">
         <div className="grid gap-1.5">
           <div className="flex items-baseline justify-between gap-3">
-            <dt className="text-sm text-muted-foreground">Now</dt>
+            <dt className="text-sm text-muted-foreground">{mode === "teen-own" ? "Your policy" : "Now"}</dt>
             <dd className="money text-sm">
               <span className="text-base font-semibold">{formatDollars(current.likely)}</span> a year
               {ownNumber ? null : <span className="text-muted-foreground"> · {rangeWords(current.low, current.high)}</span>}
@@ -679,7 +815,7 @@ function WhatIfResult({
         </div>
         <div className="grid gap-1.5">
           <div className="flex items-baseline justify-between gap-3">
-            <dt className="text-sm font-medium">What if</dt>
+            <dt className="text-sm font-medium">{mode === "teen-own" ? "Their own policy" : mode === "teen-added" ? "With your teen" : "What if"}</dt>
             <dd className="money text-sm" data-testid="what-if-yearly">
               <span className="text-lg font-semibold">{formatDollars(next.likely)}</span> a year
               <span className="text-muted-foreground"> · {rangeWords(next.low, next.high)}</span>
@@ -711,15 +847,16 @@ function WhatIfResult({
           Make this my situation now
         </button>
         {vehicleChanged ? (
-          <Link href="/compare" className="btn btn-quiet">
+          // A full page load, so the Compare page reads the cars from the address before anything else.
+          <a href={compareHref} className="btn btn-quiet">
             Compare more cars <ArrowRight className="size-4" aria-hidden="true" />
-          </Link>
+          </a>
         ) : null}
       </div>
 
       <details className="group rounded-xl border border-border bg-card">
         <summary className="flex cursor-pointer list-none items-center justify-between gap-2 px-3.5 py-3 text-sm font-medium">
-          Here&apos;s how we got this
+          {mode === "teen-own" ? "Here's how we got their price" : "More about the new number"}
           <ChevronDown className="size-4 transition-transform group-open:rotate-180" aria-hidden="true" />
         </summary>
         <div className="border-t border-border px-3.5 py-3.5">
@@ -733,6 +870,13 @@ function WhatIfResult({
       ) : null}
     </div>
   )
+}
+
+/** "+$120" or "−$90", rounded to the nearest $10 like every sentence on the page. */
+function signedTen(amount: number): string {
+  const rounded = Math.round(amount / 10) * 10
+  if (rounded === 0) return "about the same"
+  return `${rounded > 0 ? "+" : "−"}${formatDollars(Math.abs(rounded))}`
 }
 
 /** Version (trim) and model year for a picked car, as small selects. */

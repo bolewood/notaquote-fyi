@@ -91,7 +91,12 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
+  }
+  /* One visible focus ring for everything you can click or type in. */
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
   }
   html {
     @apply font-sans;
@@ -206,16 +211,7 @@
     pointer-events: none;
   }
 
-  .btn:focus-visible,
-  .chip:focus-visible,
-  .field-select:focus-visible,
-  .field-input:focus-visible,
-  .tab:focus-visible,
-  .icon-btn:focus-visible,
-  .link:focus-visible {
-    outline: 2px solid var(--ring);
-    outline-offset: 2px;
-  }
+
 
   .field-label {
     font-size: 0.8rem;

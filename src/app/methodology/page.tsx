@@ -111,7 +111,8 @@ export default function MethodologyPage() {
       <h2 className="text-base font-semibold">Saving and sharing</h2>
       <p>
         Your choices are kept in this browser so the What-if and Compare pages remember them. Nothing is sent to us. A
-        share link holds the choices (and what you pay, only if you tick the box for it), never the prices. Whoever opens
+        share link holds the choices after the &ldquo;#&rdquo; in the address, which never reaches a server (and what you
+        pay, only if you tick the box for it), never the prices. Whoever opens
         it gets the numbers worked out fresh with today&apos;s math, and if the math has changed since, the page says so.{" "}
         <Link href="/privacy" className="link">
           More about privacy

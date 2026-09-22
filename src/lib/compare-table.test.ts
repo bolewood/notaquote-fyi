@@ -18,7 +18,7 @@ import {
   type CompareRow,
 } from "./compare-table"
 import { typicalStart } from "./factor-engine"
-import { priceCars, priceCarsTeenAdded, reasonFor } from "./pricing"
+import { distinctReasons, priceCars, priceCarsTeenAdded, reasonParts } from "./pricing"
 import { DEFAULT_SCENARIO, type Scenario } from "./scenario"
 
 const catalog = JSON.parse(readFileSync("public/catalog/vehicle-catalog.json", "utf8")) as VehicleCatalog
@@ -37,7 +37,8 @@ function ownRows(): CompareRow[] {
   assert.ok(start)
   const facts = CARS.map((car) => vehicleFacts(catalog, car))
   const priced = priceCars(start, TEEN, facts).map((row) => ({ estimate: row.estimate, extra: null }))
-  return buildRows(priced, CARS, (estimate, car) => reasonFor(estimate, car.year, TEEN))
+  const reasons = distinctReasons(priced.map((row, index) => reasonParts(row.estimate, CARS[index].year, TEEN)))
+  return buildRows(priced, CARS, reasons)
 }
 
 function addedRows(): CompareRow[] {
@@ -46,7 +47,8 @@ function addedRows(): CompareRow[] {
   assert.ok(start)
   const facts = CARS.map((car) => vehicleFacts(catalog, car))
   const priced = priceCarsTeenAdded(start, parent, facts).map((row) => ({ estimate: row.after, extra: row.increase }))
-  return buildRows(priced, CARS, (estimate, car) => reasonFor(estimate, car.year, TEEN))
+  const reasons = distinctReasons(priced.map((row, index) => reasonParts(row.estimate, CARS[index].year, TEEN)))
+  return buildRows(priced, CARS, reasons)
 }
 
 test("rows carry the engine's numbers and words, in the order the cars were added", () => {
@@ -62,6 +64,7 @@ test("rows carry the engine's numbers and words, in the order the cars were adde
     assert.ok(row.rangeNote.length > 0)
     assert.ok(row.reason.length > 0)
     assert.doesNotMatch(row.reason, /relativity|baseline|factor/i)
+    assert.doesNotMatch(row.reason, /newer car/, "every car here is a 2022, so the shared age phrase is dropped")
   }
   assert.deepEqual(
     rows.map((row) => row.starred),
@@ -100,6 +103,16 @@ test("sorting: price by default, any column both ways, ties keep the added order
     [0, 1, 2, 3],
   )
   assert.deepEqual(rows.map((row) => row.order), [0, 1, 2, 3], "sorting doesn't change the input")
+
+  const byPolicy = sortRows(addedRows(), { key: "policy", direction: "asc" })
+  for (let index = 1; index < byPolicy.length; index += 1) {
+    assert.ok(byPolicy[index - 1].likely <= byPolicy[index].likely, "the whole-policy column sorts by the whole policy")
+  }
+  const byRange = sortRows(addedRows(), { key: "range", direction: "asc" })
+  for (let index = 1; index < byRange.length; index += 1) {
+    const width = (row: CompareRow) => row.high - row.low
+    assert.ok(width(byRange[index - 1]) <= width(byRange[index]))
+  }
 
   assert.deepEqual(nextSort(DEFAULT_SORT, "yearly"), { key: "yearly", direction: "desc" })
   assert.deepEqual(nextSort(DEFAULT_SORT, "car"), { key: "car", direction: "asc" })
@@ -148,7 +161,8 @@ test("the CSV has one line per row in the shown order, then plain notes, and no 
     versions: "Model 0.2.0",
   }
   const csv = toCsv(rows, notes)
-  const lines = csv.trimEnd().split("\r\n")
+  assert.equal(csv.charCodeAt(0), 0xfeff, "starts with a byte-order mark so Excel reads UTF-8")
+  const lines = csv.slice(1).trimEnd().split("\r\n")
   assert.equal(lines[0], "Car,Version,Starred,Yearly estimate ($),Monthly ($),Low ($),High ($),Why")
   for (const [index, row] of rows.entries()) {
     assert.ok(lines[index + 1].startsWith(`${row.name},${row.trim},${row.starred ? "Yes" : ""},${row.likely},${row.monthly},${row.low},${row.high},`))
@@ -159,7 +173,7 @@ test("the CSV has one line per row in the shown order, then plain notes, and no 
   assert.doesNotMatch(csv, /\bnull\b|undefined/)
 
   const added = toCsv(sortRows(addedRows(), DEFAULT_SORT), notes, "added")
-  assert.match(added.split("\r\n")[0], /^Car,Version,Starred,Extra a year for the teen \(\$\),"Whole policy a year, with the teen \(\$\)"/)
+  assert.match(added.slice(1).split("\r\n")[0], /^Car,Version,Starred,Extra a year for the teen \(\$\),"Whole policy a year, with the teen \(\$\)"/)
 
   assert.equal(csvCell("=HYPERLINK(1)"), "'=HYPERLINK(1)")
   assert.equal(csvCell("+1"), "'+1")

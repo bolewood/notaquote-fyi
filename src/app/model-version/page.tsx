@@ -69,8 +69,7 @@ export default function ModelVersionPage() {
         </p>
         <p>
           Adds a typical yearly premium for each state: NAIC&rsquo;s 2023 combined
-          average premium (liability, collision, and comprehensive). The project
-          owner approved using these per-state figures, with credit.{" "}
+          average premium (liability, collision, and comprehensive), used with credit.{" "}
           {STATE_BASELINE_ATTRIBUTION}. The calculator now starts from them when
           you don&rsquo;t enter what you pay. Source manifest{" "}
           {MANIFEST_VERSION} records the change.

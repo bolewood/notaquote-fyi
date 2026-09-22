@@ -1,9 +1,11 @@
 import assert from "node:assert/strict"
 import test from "node:test"
 import { DATA_BUNDLE_VERSION, MODEL_VERSION } from "./copy"
-import { DEFAULT_SCENARIO, JAYDEN, MOLLY, type Scenario } from "./scenario"
+import { DEFAULT_SCENARIO, type Scenario } from "./scenario"
+import { JAYDEN, MOLLY } from "./test-fixtures"
 import {
   decodeShareSearch,
+  shareFromLocation,
   encodeSharePath,
   FROZEN_RESULT_KEYS,
   SHARE_CAR_LIMIT,
@@ -25,13 +27,13 @@ const CARS: SharedCar[] = [
 ]
 
 function params(path: string): URLSearchParams {
-  return new URLSearchParams(path.slice(path.indexOf("?") + 1))
+  return new URLSearchParams(path.slice(path.search(/[?#]/) + 1))
 }
 
 test("a What-if link round-trips the situation and never holds a dollar result", () => {
   for (const scenario of [MOLLY, JAYDEN]) {
     const path = encodeSharePath({ page: "/", scenario, teenOnParentPolicy: true })
-    assert.match(path, /^\/\?/)
+    assert.match(path, /^\/#share=1&/, "share data lives in the fragment, which never reaches a server")
     const query = params(path)
     assert.equal(query.get("share"), "1")
     assert.equal(query.get("mv"), MODEL_VERSION)
@@ -96,7 +98,7 @@ test("a compare link holds the cars and stars, never a premium or a price", () =
     premium: 1800,
     includePremium: true,
   })
-  assert.match(path, /^\/compare\?/)
+  assert.match(path, /^\/compare#share=1&/)
   const query = params(path)
   assert.equal(query.has("anchor"), false)
   assert.equal(query.has("make"), false)
@@ -160,4 +162,35 @@ test("older links with a teen flag still open, and the flag follows the age", ()
   assert.equal(decoded.status, "ok")
   if (decoded.status !== "ok") return
   assert.equal(decoded.scenario.teen, false)
+})
+
+test("the page finds share data in the fragment, or in an older ?share= link", () => {
+  const path = encodeSharePath({ page: "/", scenario: MOLLY, teenOnParentPolicy: false })
+  const hash = path.slice(path.indexOf("#"))
+  const found = shareFromLocation(hash, "")
+  assert.equal(found?.legacy, false)
+  assert.equal(decodeShareSearch(found!.text).status, "ok")
+
+  const legacy = shareFromLocation("", `?${hash.slice(1)}`)
+  assert.equal(legacy?.legacy, true)
+  assert.equal(decodeShareSearch(legacy!.text).status, "ok")
+
+  assert.equal(shareFromLocation("#now", ""), null, "an ordinary anchor isn't a share link")
+  assert.equal(shareFromLocation("", "?utm=1"), null)
+})
+
+test("the What-if page's hand-off to Compare is marked, so it isn't treated as someone else's list", () => {
+  const path = encodeSharePath({
+    page: "/compare",
+    scenario: MOLLY,
+    teenOnParentPolicy: false,
+    cars: [CARS[0]],
+    via: "whatif",
+  })
+  const decoded = decodeShareSearch(path)
+  assert.equal(decoded.status, "ok")
+  if (decoded.status !== "ok") return
+  assert.equal(decoded.via, "whatif")
+  const shared = decodeShareSearch(encodeSharePath({ page: "/compare", scenario: MOLLY, teenOnParentPolicy: false, cars: [CARS[0]] }))
+  assert.equal(shared.status === "ok" && shared.via, null)
 })

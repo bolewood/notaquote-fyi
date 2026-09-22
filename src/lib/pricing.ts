@@ -84,10 +84,35 @@ function amountWords(deltaRounded: number): string {
     : `about ${deltaRounded > 0 ? "+" : "−"}${formatDollars(Math.abs(deltaRounded))} a year`
 }
 
+/** One piece of a what-if's difference: "Newer car: +$120". */
+export type ChangePart = { label: string; amount: number }
+
+export type WhatIfMode =
+  /** An ordinary change to the situation now. */
+  | "change"
+  /** A teen added to the policyholder's policy: both figures are the whole household's policy. */
+  | "teen-added"
+  /** A teen on their own policy: a separate bill, on top of the policyholder's. */
+  | "teen-own"
+
+export type WhatIfResult = WhatIf & {
+  mode: WhatIfMode
+  /** What made the difference, one piece at a time. Sums to `delta`. */
+  parts: ChangePart[]
+}
+
+const TEEN_KEYS: readonly ChangeKey[] = ["age", "yearsLicensed", "goodStudent", "driverTraining"]
+
+function roundTen(amount: number): number {
+  return Math.round(amount / 10) * 10
+}
+
 /**
- * The situation now against one what-if, with the engine's headline. Adding
- * a teen to the policyholder's policy goes through the engine's
- * teenAddedToPolicy, so both figures are the whole household's policy.
+ * The situation now against one what-if, with the engine's headline.
+ * - Adding a teen to the policyholder's policy goes through the engine's
+ *   teenAddedToPolicy, so both figures are the whole household's policy.
+ * - A teen on their own policy is a separate bill, so it's shown as that,
+ *   not as if it replaced the policyholder's.
  */
 export function priceWhatIf(
   situation: Situation,
@@ -95,17 +120,28 @@ export function priceWhatIf(
   next: Scenario,
   nextVehicle: VehicleFacts,
   trimConfidence: TrimConfidence | null = null,
-): WhatIf | null {
+): WhatIfResult | null {
   const start = startingPoint(situation, nowVehicle)
   if (!start) return null
   const now = situation.scenario
-  if (!addsTeen(now, next, situation.teenOnParentPolicy)) {
-    return whatIf(start, now, next, {
+  const newTeen = next.age === "16-18" && now.age !== "16-18"
+  if (newTeen && !situation.teenOnParentPolicy) {
+    const result = whatIf(start, now, next, { currentVehicle: nowVehicle, nextVehicle, trimConfidence })
+    return {
+      ...result,
+      mode: "teen-own",
+      parts: [],
+      headline: `Their own policy: about ${formatDollars(roundTen(result.next.likely))} a year, on top of your ${formatDollars(roundTen(result.current.likely))}.`,
+    }
+  }
+  if (!newTeen) {
+    const result = whatIf(start, now, next, {
       currentVehicle: nowVehicle,
       nextVehicle,
       trimConfidence,
       label: whatIfLabel(now, next, false),
     })
+    return { ...result, mode: "change", parts: explainChange(start, now, nowVehicle, next, nextVehicle).parts }
   }
   // The same household, with anything else the visitor changed, before and
   // after adding the teen.
@@ -113,10 +149,76 @@ export function priceWhatIf(
   const current = estimate(start, now, { vehicle: nowVehicle, trimConfidence })
   const added = teenAddedToPolicy(start, parent, { vehicle: nextVehicle, trimConfidence })
   const delta = added.after.likely - current.likely
-  const deltaRounded = Math.round(delta / 10) * 10
+  const deltaRounded = roundTen(delta)
   const onlyTheTeen = changedKeys(now, parent).every((key) => key === "goodStudent" || key === "driverTraining")
   const headline = onlyTheTeen ? added.headline : `With those changes and your teen: ${amountWords(deltaRounded)}.`
-  return { current, next: added.after, delta, deltaRounded, headline }
+  const others = explainChange(start, now, nowVehicle, parent, nextVehicle)
+  const parts = [...others.parts, { label: "Adding your teen", amount: added.after.likely - others.last }]
+  return { current, next: added.after, delta, deltaRounded, headline, mode: "teen-added", parts }
+}
+
+function carWords(scenario: Pick<Scenario, "make" | "model">): string {
+  return `${scenario.make} ${scenario.model}`
+}
+
+/** How one car compares with another, in the same words as the compare table. */
+export function carDifference(from: VehicleRelativity, to: VehicleRelativity, hasDamageCover: boolean): string {
+  const words: string[] = []
+  const damage = hasDamageCover ? to.physicalHundredths - from.physicalHundredths : 0
+  const liability = to.liabilityHundredths - from.liabilityHundredths
+  if (damage >= 8) words.push("higher repair costs")
+  if (damage <= -8) words.push("lower repair costs")
+  if (liability >= 6) words.push("more at-fault crash claims")
+  if (liability <= -6) words.push("fewer at-fault crash claims")
+  return words.length > 0 ? words.join(", ") : "similar claims"
+}
+
+/**
+ * Explain a what-if as the difference, one change at a time: each piece is
+ * the engine's estimate after that change minus the one before, so the pieces
+ * always add up to the whole difference. A different car is split into its
+ * model year (newer or older) and the car itself.
+ */
+export function explainChange(
+  start: StartingPoint,
+  now: Scenario,
+  nowVehicle: VehicleFacts,
+  next: Scenario,
+  nextVehicle: VehicleFacts,
+): { parts: ChangePart[]; last: number } {
+  let current: Scenario = now
+  let facts: VehicleFacts = nowVehicle
+  let before = estimate(start, current, { vehicle: facts })
+  const parts: ChangePart[] = []
+  const step = (label: string, scenario: Scenario, vehicle: VehicleFacts) => {
+    const after = estimate(start, scenario, { vehicle })
+    parts.push({ label, amount: after.likely - before.likely })
+    current = scenario
+    facts = vehicle
+    const previous = before
+    before = after
+    return { previous, after }
+  }
+  for (const key of changedKeys(now, next)) {
+    if (TEEN_KEYS.includes(key) && next.age === "16-18" && now.age !== "16-18") continue
+    if (key === "vehicle") {
+      if (now.year !== next.year) {
+        step(next.year > now.year ? `Newer car (${next.year})` : `Older car (${next.year})`, { ...current, year: next.year }, { ...facts, year: next.year })
+      }
+      if (now.make !== next.make || now.model !== next.model || now.trim !== next.trim) {
+        const scenario = { ...current, make: next.make, model: next.model, trim: next.trim }
+        const { previous, after } = step("", scenario, nextVehicle)
+        const why = carDifference(previous.vehicle, after.vehicle, hasPhysicalDamage(scenario.coverage))
+        parts[parts.length - 1].label =
+          now.make === next.make && now.model === next.model
+            ? `A different version (${why})`
+            : `${carWords(now)} → ${carWords(next)} (${why})`
+      }
+      continue
+    }
+    step(changeChip(key, next), { ...current, [key]: next[key] } as Scenario, facts)
+  }
+  return { parts, last: before.likely }
 }
 
 /** Many cars for one driver on their own policy, in the order given. */
@@ -300,9 +402,16 @@ export function changeChip(key: ChangeKey, next: Scenario): string {
  * `hasDamageCover` is false for liability-only coverage, where repair costs
  * don't matter.
  */
-export function vehicleReason(vehicle: VehicleRelativity, hasDamageCover: boolean, modelYear?: number): string {
-  if (vehicle.level === "unknown") return "we don't know this car, so we used an average one"
-  if (vehicle.level === "average") return "an average car"
+/**
+ * Short phrases for why a car sits where it does, compared with an average
+ * car, biggest first: "higher repair costs", "fewer at-fault crash claims".
+ * `hasDamageCover` is false for liability-only coverage, where repair costs
+ * and the car's age don't matter. A typical start already assumes an
+ * 8–12-year-old car, so newer cars cost more to replace and older ones less.
+ */
+export function vehicleReasonParts(vehicle: VehicleRelativity, hasDamageCover: boolean, modelYear?: number): string[] {
+  if (vehicle.level === "unknown") return ["we don't know this car, so we used an average one"]
+  if (vehicle.level === "average") return []
   const parts: { size: number; words: string }[] = []
   const damage = hasDamageCover ? vehicle.physicalHundredths - 100 : 0
   const liability = vehicle.liabilityHundredths - 100
@@ -313,12 +422,29 @@ export function vehicleReason(vehicle: VehicleRelativity, hasDamageCover: boolea
   parts.sort((left, right) => right.size - left.size)
   const words = parts.map((part) => part.words)
   const age = modelYear === undefined ? null : vehicleAgeKey(modelYear)
-  if (hasDamageCover && (age === "8-12" || age === "13-plus")) {
-    words.push("an older car, so cheaper to replace")
-  }
-  const reason = words.length > 0 ? words.join(", ") : "about average claims"
-  if (vehicle.level === "class") return `${reason} (no data for this exact model, so we used the ${vehicle.label} average)`
-  return reason
+  if (hasDamageCover && (age === "0-3" || age === "4-7")) words.push("newer car, costs more to replace")
+  if (hasDamageCover && age === "13-plus") words.push("older car, cheaper to replace")
+  if (vehicle.level === "class") words.push(`no data for this exact model, so we used the ${vehicle.label} average`)
+  return words
+}
+
+export function vehicleReason(vehicle: VehicleRelativity, hasDamageCover: boolean, modelYear?: number): string {
+  const words = vehicleReasonParts(vehicle, hasDamageCover, modelYear)
+  return words.length > 0 ? words.join(", ") : "about average claims"
+}
+
+/**
+ * Drop the phrases every car in a list shares (they don't help choose), and
+ * join the rest. With one car, nothing is dropped.
+ */
+export function distinctReasons(lists: readonly string[][]): string[] {
+  const shared =
+    lists.length > 1 ? new Set(lists[0].filter((phrase) => lists.every((list) => list.includes(phrase)))) : new Set<string>()
+  return lists.map((list) => {
+    const kept = list.filter((phrase) => !shared.has(phrase))
+    if (kept.length > 0) return kept.join(", ")
+    return "about average claims"
+  })
 }
 
 /** What we matched a car to, in the site's own words, for a "Tell us" link. */
@@ -330,8 +456,8 @@ export function vehicleMatchWords(vehicle: VehicleRelativity): string {
   return "Not recognized. Treated as an average vehicle."
 }
 
-export function reasonFor(estimate: Estimate, modelYear: number, driver: Scenario): string {
-  return vehicleReason(estimate.vehicle, hasPhysicalDamage(driver.coverage), modelYear)
+export function reasonParts(estimate: Estimate, modelYear: number, driver: Scenario): string[] {
+  return vehicleReasonParts(estimate.vehicle, hasPhysicalDamage(driver.coverage), modelYear)
 }
 
 // ---------------------------------------------------------------------------

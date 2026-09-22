@@ -14,7 +14,8 @@ import path from "node:path"
 import type { VehicleCatalog } from "../src/lib/catalog"
 import { vehicleFacts } from "../src/lib/catalog-class"
 import { compareVehicles, formatDollars, teenAddedToPolicy, typicalStart } from "../src/lib/factor-engine"
-import { MOLLY, type Scenario } from "../src/lib/scenario"
+import type { Scenario } from "../src/lib/scenario"
+import { MOLLY } from "../src/lib/test-fixtures"
 
 export const EXAMPLE_CARS: [string, string, string][] = [
   ["Tesla", "Model Y", "Model Y Long Range AWD"],

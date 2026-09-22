@@ -178,9 +178,10 @@ export function countrywideBaseline(): StateBaseline {
 }
 
 /**
- * Optional price-trend inputs (BLS CPI, motor vehicle insurance). Recorded,
- * not applied anywhere. latest / dataYearAverage is a rough multiplier for
- * how much insurance prices moved since the data year.
+ * Price-trend inputs (BLS CPI, motor vehicle insurance). The figures in this
+ * file stay as NAIC printed them (`applied: false` here means this file isn't
+ * trended); the factor engine uses latest / dataYearAverage to move a typical
+ * start forward to today. It never adjusts a premium the visitor enters.
  */
 export function baselineTrendInputs(): {
   series: BaselineSource

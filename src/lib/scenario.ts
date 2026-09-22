@@ -1,4 +1,3 @@
-import { CATALOG_DEFAULTS } from "./catalog-defaults"
 import { stateMinimumAssumption } from "./state-rules"
 
 export const AGE_BANDS = [
@@ -126,76 +125,6 @@ export type Scenario = {
   model: string
   trim: string
 }
-
-export const MOLLY: Scenario = {
-  age: "40-64",
-  yearsLicensed: "10+",
-  incidents: "clean",
-  mileage: "7500-15000",
-  teen: false,
-  goodStudent: false,
-  driverTraining: false,
-  householdPolicy: true,
-  loanLease: false,
-  state: "IL",
-  region: "urban",
-  coverage: "full",
-  deductible: 1000,
-  year: CATALOG_DEFAULTS.molly.year,
-  make: CATALOG_DEFAULTS.molly.make,
-  model: CATALOG_DEFAULTS.molly.model,
-  trim: CATALOG_DEFAULTS.molly.trim,
-}
-
-export const JAYDEN: Scenario = {
-  age: "16-18",
-  yearsLicensed: "under-1",
-  incidents: "clean",
-  mileage: "7500-15000",
-  teen: true,
-  goodStudent: true,
-  driverTraining: true,
-  householdPolicy: true,
-  loanLease: false,
-  state: "TX",
-  region: "suburban",
-  coverage: "full",
-  deductible: 1000,
-  year: CATALOG_DEFAULTS.jayden.year,
-  make: CATALOG_DEFAULTS.jayden.make,
-  model: CATALOG_DEFAULTS.jayden.model,
-  trim: CATALOG_DEFAULTS.jayden.trim,
-}
-
-export const AVA: Scenario = {
-  age: "26-39",
-  yearsLicensed: "4-9",
-  incidents: "clean",
-  mileage: "7500-15000",
-  teen: false,
-  goodStudent: false,
-  driverTraining: false,
-  householdPolicy: false,
-  loanLease: false,
-  state: "CA",
-  region: "urban",
-  coverage: "full",
-  deductible: 1000,
-  year: CATALOG_DEFAULTS.ava.year,
-  make: CATALOG_DEFAULTS.ava.make,
-  model: CATALOG_DEFAULTS.ava.model,
-  trim: CATALOG_DEFAULTS.ava.trim,
-}
-
-/**
- * Test fixtures used by the engine's tests and the worked example script.
- * The page doesn't show these names; it offers the starting stories below.
- */
-export const PRESETS = {
-  molly: MOLLY,
-  jayden: JAYDEN,
-  ava: AVA,
-} as const
 
 const STATE_NAMES = new Map(STATES.map((state) => [state.code, state.name]))
 

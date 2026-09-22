@@ -5,6 +5,7 @@ import {
   defaultTrim,
   FIRST_CARS,
   modelTrims,
+  parseCarQuery,
   POPULAR_SUVS,
   searchModels,
   TRUCKS_AND_FUN,
@@ -71,14 +72,20 @@ export function CarPicker({
   }, [open])
 
   const years = useMemo(() => (catalog ? catalogYears(catalog) : [initialYear]), [catalog, initialYear])
-  const hits = useMemo(() => (catalog && query.trim() ? searchModels(catalog, year, query, 30) : []), [catalog, year, query])
+  // "2015 civic" searches 2015, whatever the year box says.
+  const parsed = parseCarQuery(query)
+  const searchYear = parsed.year !== null && years.includes(parsed.year) ? parsed.year : year
+  const hits = useMemo(
+    () => (catalog && parsed.text ? searchModels(catalog, searchYear, parsed.text, 30) : []),
+    [catalog, searchYear, parsed.text],
+  )
   const popular = useMemo(() => {
     if (!catalog) return []
     return POPULAR.flatMap((car) => {
-      const trims = modelTrims(catalog, year, car.make, car.model)
-      return trims.length > 0 ? [{ year, make: car.make, model: car.model, trims }] : []
+      const trims = modelTrims(catalog, searchYear, car.make, car.model)
+      return trims.length > 0 ? [{ year: searchYear, make: car.make, model: car.model, trims }] : []
     })
-  }, [catalog, year])
+  }, [catalog, searchYear])
 
   function reset() {
     setQuery("")
@@ -126,7 +133,7 @@ export function CarPicker({
     }
   }
 
-  const list = query.trim() ? hits : popular
+  const list = parsed.text ? hits : popular
   const suggested = model ? defaultTrim(model.trims) : null
 
   return (
@@ -224,7 +231,7 @@ export function CarPicker({
                     id={`${headingId}-search`}
                     type="search"
                     className="field-input pl-9"
-                    placeholder="Try “Model Y” or “Civic”"
+                    placeholder="Try “Model Y” or “2015 Civic”"
                     autoComplete="off"
                     spellCheck={false}
                     value={query}
@@ -248,11 +255,11 @@ export function CarPicker({
                 </p>
               ) : list.length === 0 ? (
                 <p className="py-6 text-center text-sm text-muted-foreground">
-                  Nothing for {year} matches “{query}”. Try another spelling or model year.
+                  Nothing for {searchYear} matches “{parsed.text}”. Try another spelling or model year.
                 </p>
               ) : (
                 <>
-                  <p className="eyebrow mb-2">{query.trim() ? `${list.length === 30 ? "Top matches" : "Matches"} for ${year}` : `Popular ${year} cars`}</p>
+                  <p className="eyebrow mb-2">{parsed.text ? `${list.length === 30 ? "Top matches" : "Matches"} for ${searchYear}` : `Popular ${searchYear} cars`}</p>
                   <ul className="grid gap-1">
                     {list.map((hit) => (
                       <li key={`${hit.make}|${hit.model}`}>

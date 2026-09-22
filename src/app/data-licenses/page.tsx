@@ -63,20 +63,21 @@ export default function DataLicensesPage() {
         find a source, the factor says it&rsquo;s our estimate.
       </p>
       <p>
-        We use one number per state from NAIC&rsquo;s 2022/2023 Auto Insurance
-        Database Report: the 2023 combined average premium, plus the liability
-        average and average expenditure from the same year. Numbers like these
-        are facts, and the project owner approved using them for this
-        non-commercial project, with credit. Wherever one appears, it&rsquo;s
-        labeled &ldquo;{STATE_BASELINE_ATTRIBUTION}.&rdquo; We don&rsquo;t copy
-        the report&rsquo;s text or tables, and the report itself isn&rsquo;t in
-        this repository. HLDI, SERFF, and publisher premium tables aren&rsquo;t
-        here either. IIHS/HLDI is a citation link. The BLS price index is
-        recorded next to the state figures but not applied.
+        We use three numbers per state from NAIC&rsquo;s 2022/2023 Auto
+        Insurance Database Report (the 2023 combined average premium, the
+        liability average, and average expenditure), used with credit.
+        Wherever one appears, it&rsquo;s labeled &ldquo;{STATE_BASELINE_ATTRIBUTION}.&rdquo;
+        We don&rsquo;t copy the report&rsquo;s text or tables, and the report
+        itself isn&rsquo;t in this repository. When the calculator starts from a
+        state&rsquo;s typical price, it moves that 2023 figure forward to today
+        with the BLS price index for car insurance, which is public domain.
       </p>
       <p>
-        IIHS/HLDI material is not copied. Nothing on this site is a
-        redistribution of a restricted report.
+        HLDI&rsquo;s published loss results for the car models we price are kept
+        in the project&rsquo;s data folder, with credit and a link to IIHS. IIHS
+        allows limited noncommercial, educational use, and we&rsquo;re confirming
+        with IIHS that this project&rsquo;s use is fine. If it isn&rsquo;t, that
+        data can be switched off in one place.
       </p>
     </TrustArticle>
   )

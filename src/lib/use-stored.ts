@@ -6,7 +6,7 @@ import {
   compareFromSnapshot,
   compareSnapshot,
   type CompareList,
-} from "./comparison-tray"
+} from "./compare-list"
 import { useStoredValue } from "./local-store"
 import {
   SITUATION_EVENT,

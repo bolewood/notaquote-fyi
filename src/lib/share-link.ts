@@ -4,6 +4,11 @@
  * the numbers recalculated with today's engine. What someone pays now goes
  * into a link only when they tick the box for it, and never into a
  * compare-cars link.
+ *
+ * Everything goes after the "#" (the fragment), which browsers never send to
+ * a server, so no server or CDN log ever sees it. The page reads it in the
+ * browser and then removes it from the address bar. Older links that used
+ * "?share=" are still read, and are removed from the address the same way.
  */
 import { CATALOG_YEAR_MAX, CATALOG_YEAR_MIN } from "./catalog-meta"
 import { DATA_BUNDLE_VERSION, MODEL_VERSION } from "./copy"
@@ -39,6 +44,8 @@ export type SharedCar = { year: number; make: string; model: string; trim: strin
 
 export type ShareLinkOk = {
   status: "ok"
+  /** Set when the What-if page handed its cars to Compare. */
+  via: "whatif" | null
   scenario: Scenario
   teenOnParentPolicy: boolean
   /** What the sender pays now, only if they chose to include it. */
@@ -159,6 +166,8 @@ export type ShareInput = {
   cars?: readonly SharedCar[]
   modelVersion?: string
   bundleVersion?: string
+  /** "whatif": the What-if page handing its cars to Compare, not a link from someone else. */
+  via?: "whatif"
 }
 
 export function encodeSharePath(input: ShareInput): string {
@@ -171,6 +180,7 @@ export function encodeSharePath(input: ShareInput): string {
   params.set("bv", input.bundleVersion ?? DATA_BUNDLE_VERSION)
   for (const [key, field] of DRIVER_PARAMS) params.set(key, paramValue(scenario[field]))
   params.set("policy", input.teenOnParentPolicy ? "added" : "own")
+  if (input.via) params.set("via", input.via)
 
   if (input.page === "/compare") {
     const cars = (input.cars ?? []).slice(0, SHARE_CAR_LIMIT)
@@ -201,7 +211,19 @@ export function encodeSharePath(input: ShareInput): string {
   for (const key of FROZEN_RESULT_KEYS) {
     if (params.has(key)) throw new Error(`Share link must not freeze ${key}`)
   }
-  return `${input.page}?${params.toString()}`
+  return `${input.page}#${params.toString()}`
+}
+
+/**
+ * The share text in an address: the fragment if it's a share link, or (for
+ * older links) the query string. `legacy` is true for the query-string kind.
+ */
+export function shareFromLocation(hash: string, search: string): { text: string; legacy: boolean } | null {
+  const fragment = hash.startsWith("#") ? hash.slice(1) : hash
+  if (new URLSearchParams(fragment).has("share")) return { text: fragment, legacy: false }
+  const query = search.startsWith("?") ? search.slice(1) : search
+  if (new URLSearchParams(query).has("share")) return { text: query, legacy: true }
+  return null
 }
 
 // ---------------------------------------------------------------------------
@@ -245,7 +267,8 @@ export function decodeShareSearch(
   search: string,
   current: ShareCurrent = { modelVersion: MODEL_VERSION, bundleVersion: DATA_BUNDLE_VERSION },
 ): ShareDecode {
-  const query = search.includes("?") ? search.slice(search.indexOf("?") + 1) : search
+  const cut = search.search(/[?#]/)
+  const query = cut === -1 ? search : search.slice(cut + 1)
   const params = new URLSearchParams(query)
   if (!params.has("share")) return { status: "absent" }
   if (params.get("share") !== "1") return { status: "invalid" }
@@ -316,6 +339,7 @@ export function decodeShareSearch(
 
   return {
     status: "ok",
+    via: params.get("via") === "whatif" ? "whatif" : null,
     scenario,
     teenOnParentPolicy,
     anchorAmount,

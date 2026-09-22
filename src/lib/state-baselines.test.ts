@@ -75,7 +75,7 @@ test("an unknown code returns null", () => {
   assert.equal(stateBaseline(""), null)
 })
 
-test("the price trend is recorded but not applied", () => {
+test("the file keeps NAIC's figures as printed; the engine trends typical starts", () => {
   const trend = baselineTrendInputs()
   assert.equal(trend.applied, false)
   assert.equal(baselineFile.trend.applied, false)

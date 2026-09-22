@@ -46,7 +46,8 @@ export type PricedCar = { estimate: Estimate; extra: number | null }
 export function buildRows(
   priced: readonly PricedCar[],
   cars: readonly (VehiclePick & { starred: boolean })[],
-  reason: (estimate: Estimate, car: VehiclePick) => string,
+  /** One reason per car, in the same order. */
+  reasons: readonly string[],
 ): CompareRow[] {
   return priced.map((row, order) => {
     const car = cars[order]
@@ -62,7 +63,7 @@ export function buildRows(
       high: row.estimate.high,
       monthly: row.estimate.monthly,
       extra: row.extra,
-      reason: reason(row.estimate, car),
+      reason: reasons[order] ?? "",
       summary: row.estimate.summary,
       rangeNote: row.estimate.rangeNote,
       vehicleShown: vehicleMatchWords(row.estimate.vehicle),
@@ -75,7 +76,7 @@ export function headlineAmount(row: Pick<CompareRow, "extra" | "likely">): numbe
   return row.extra ?? row.likely
 }
 
-export const SORT_KEYS = ["order", "car", "yearly", "monthly", "range", "reason"] as const
+export const SORT_KEYS = ["order", "car", "yearly", "monthly", "policy", "range", "reason"] as const
 export type SortKey = (typeof SORT_KEYS)[number]
 export type SortDirection = "asc" | "desc"
 export type SortState = { key: SortKey; direction: SortDirection }
@@ -91,6 +92,8 @@ function compareBy(key: SortKey, left: CompareRow, right: CompareRow): number {
     case "yearly":
     case "monthly":
       return headlineAmount(left) - headlineAmount(right) || left.likely - right.likely
+    case "policy":
+      return left.likely - right.likely
     case "range":
       return left.high - left.low - (right.high - right.low)
     case "reason":
@@ -195,7 +198,8 @@ export function toCsv(rows: readonly CompareRow[], notes: CsvNotes, mode: Compar
   lines.push([csvCell("Starting point"), csvCell(notes.start)].join(","))
   lines.push([csvCell("Please note"), csvCell(notes.disclaimer)].join(","))
   lines.push([csvCell("Versions"), csvCell(notes.versions)].join(","))
-  return `${lines.join("\r\n")}\r\n`
+  // The byte-order mark tells Excel the file is UTF-8, so "16–18" and "→" read right.
+  return `\uFEFF${lines.join("\r\n")}\r\n`
 }
 
 export function csvFilename(today: Date = new Date()): string {
