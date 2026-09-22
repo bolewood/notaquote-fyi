@@ -15,11 +15,16 @@ import {
   publishedFactorGroups,
   runFactorEngine,
   selectionKeys,
+  typicalScenario,
+  typicalStart,
+  TYPICAL_START_ATTRIBUTION,
   vehicleRelativity,
   whatIf,
   type PremiumAnchor,
   type StartingPoint,
 } from "./factor-engine"
+import { deriveFactors, type FactorFiles } from "./factor-derivation"
+import { stateBaseline } from "./state-baselines"
 import type { FactorBundle } from "./factor-types"
 import { DATA_BUNDLE_VERSION, MODEL_VERSION } from "./copy"
 import { JAYDEN, MOLLY, type Scenario } from "./scenario"
@@ -237,10 +242,136 @@ test("changing state uses typical state prices when given, and widens a lot when
   const texas = { ...MOLLY_F150, state: "TX" as const }
   const withPrices = estimate(YOURS, texas, { vehicle: F150, stateAnnual: { IL: 1500, TX: 1800 } })
   assert.equal(withPrices.likely, 2160)
-  const without = estimate(YOURS, texas, { vehicle: F150 })
+  const without = estimate(YOURS, texas, { vehicle: F150, stateAnnual: {} })
   assert.equal(without.likely, 1800)
   assert.ok(without.spread.up > withPrices.spread.up)
-  assert.match(without.rangeNote, /don't have a typical price for the new state/)
+  assert.match(without.rangeNote, /don't have a typical price for Texas yet/)
+  // By default the NAIC state figures are used.
+  const illinois = stateBaseline("IL")?.annual ?? 0
+  const texasTypical = stateBaseline("TX")?.annual ?? 0
+  const byDefault = estimate(YOURS, texas, { vehicle: F150 })
+  assert.equal(byDefault.likely, Math.floor((1800 * texasTypical * 2 + illinois) / (2 * illinois)))
+  assert.ok(byDefault.steps.some((step) => step.group === "state" && step.sources.includes("naic-auto-db-2022-2023")))
+})
+
+test("what-if headlines for a move", () => {
+  const texas = { ...MOLLY_F150, state: "TX" as const }
+  const move = whatIf(YOURS, MOLLY_F150, texas, { currentVehicle: F150, nextVehicle: F150 })
+  assert.match(move.headline, /^Moving to Texas: about [+−]\$[\d,]+ a year\.$/)
+  const unknown = whatIf(YOURS, MOLLY_F150, texas, { currentVehicle: F150, nextVehicle: F150, stateAnnual: { IL: 1257 } })
+  assert.equal(unknown.headline, "We don't have a typical price for Texas yet, so we can't say how moving changes your price.")
+  assert.doesNotMatch(unknown.headline, /about the same/)
+  const both = whatIf(YOURS, MOLLY_F150, on(texas, MODEL_Y), { currentVehicle: F150, nextVehicle: MODEL_Y })
+  assert.match(both.headline, /^With those changes/)
+  const trim = whatIf(YOURS, MOLLY_F150, { ...MOLLY_F150, age: "26-39" }, { currentVehicle: F150, nextVehicle: F150, trimConfidence: "unresolved" })
+  assert.match(trim.next.rangeNote, /exact version of the car/)
+})
+
+test("a typical start comes from the state's NAIC figure", () => {
+  const target: Scenario = { ...MOLLY_F150, state: "OH" }
+  const start = typicalStart(target)
+  assert.ok(start)
+  assert.equal(start.annual, stateBaseline("OH")?.annual)
+  assert.equal(start.kind, "typical")
+  assert.equal(start.vehicle, "average")
+  assert.equal(start.scenario.age, "40-64")
+  assert.equal(start.scenario.region, "suburban")
+  assert.equal(start.scenario.year, target.year)
+  assert.match(start.label ?? "", /Ohio/)
+  assert.equal(TYPICAL_START_ATTRIBUTION, "Source: NAIC, 2022/2023 Auto Insurance Database Report, 2023 data")
+  assert.deepEqual(typicalScenario(target), start.scenario)
+})
+
+test("a trim name sold as gas and hybrid is priced as gas and widens the range", () => {
+  const crv = car(2024, "Honda", "CR-V", "CR-V FWD")
+  assert.equal(crv.powertrain, "combustion")
+  assert.equal(crv.powertrainMixed, true)
+  const rows = matchVehicleRows(crv)
+  assert.ok(rows.length > 0 && rows.every((row) => row.family === "crv" && row.powertrain === "combustion" && row.drive === "2wd"))
+  const plain = estimate(YOURS, on(MOLLY_F150, RAV4), { vehicle: RAV4 })
+  const mixed = estimate(YOURS, on(MOLLY_F150, crv), { vehicle: crv })
+  assert.match(mixed.rangeNote, /both a gas and a hybrid/)
+  assert.doesNotMatch(plain.rangeNote, /both a gas and a hybrid/)
+})
+
+test("body style: plain rows unless the trim names a body", () => {
+  const series = (facts: VehicleFacts) => matchVehicleRows(facts).map((row) => row.series)
+  assert.deepEqual(series(car(2024, "Ford", "Mustang", "Mustang")), ["Ford Mustang 2dr"])
+  assert.deepEqual(series(car(2024, "Honda", "Civic", "Civic 4Dr")), ["Honda Civic"])
+  assert.deepEqual(series(car(2024, "Honda", "Civic", "Civic 5Dr")), ["Honda Civic hatchback"])
+  assert.deepEqual(series(car(2024, "Toyota", "Corolla", "Corolla")), ["Toyota Corolla"])
+  assert.deepEqual(series(car(2024, "Toyota", "Corolla", "Corolla Hatchback")), ["Toyota Corolla hatchback"])
+  assert.deepEqual(series(car(2024, "Jeep", "Wrangler", "Wrangler 2dr 4WD")), ["Jeep Wrangler 2dr convertible 4WD"])
+  assert.deepEqual(series(car(2024, "Jeep", "Wrangler", "Wrangler 4dr 4WD")), ["Jeep Wrangler 4dr convertible 4WD"])
+  const mustang = estimate(YOURS, on(MOLLY_F150, car(2024, "Ford", "Mustang", "Mustang")), { vehicle: car(2024, "Ford", "Mustang", "Mustang") })
+  const civic = estimate(YOURS, on(MOLLY_F150, CIVIC), { vehicle: CIVIC })
+  assert.ok(mustang.likely > civic.likely, "a Mustang coupe costs more than a Civic sedan")
+})
+
+test("luxury makes without their own HLDI row use luxury class averages", () => {
+  const m4 = car(2024, "BMW", "M", "M4 Coupe")
+  const relativity = vehicleRelativity(m4)
+  assert.equal(relativity.level, "class")
+  assert.match(relativity.label, /^luxury /)
+  assert.equal(relativity.spreadKey, "vehicle-luxury-class")
+  assert.ok(relativity.physicalHundredths >= 140, `${relativity.physicalHundredths}`)
+  const note = estimate(YOURS, on(MOLLY_F150, m4), { vehicle: m4 }).rangeNote
+  assert.match(note, /average for its class \(luxury /)
+  assert.doesNotMatch(note, /smallcar|liability share|4-door/i)
+  // A luxury make we can't classify at all gets the wider luxury spread.
+  const unresolved = car(2024, "BMW", "M4", "Trim not resolved")
+  assert.equal(vehicleRelativity(unresolved).spreadKey, "vehicle-unknown-luxury")
+  const plainUnknown = vehicleFacts(null, { year: 2024, make: "Nobody", model: "Mystery", trim: "" })
+  const luxurySpread = estimate(YOURS, on(MOLLY_F150, unresolved), { vehicle: unresolved }).spread.up
+  const plainSpread = estimate(YOURS, { ...MOLLY_F150, make: "Nobody", model: "Mystery", trim: "" }, { vehicle: plainUnknown }).spread.up
+  assert.ok(luxurySpread > plainSpread)
+})
+
+test("liability losses are passed on only partly, inside the ISO band", () => {
+  const data = FACTOR_BUNDLE.vehicle
+  assert.equal(data.liabilityWeight.basis, "assumed")
+  assert.ok(data.liabilityWeight.value >= 40 && data.liabilityWeight.value <= 60)
+  assert.equal(data.liabilityFloor, 80)
+  assert.equal(data.liabilityCap, 125)
+  for (const facts of [F150, MODEL_Y, RAV4, CIVIC, RANGE_ROVER, LIGHTNING]) {
+    const relativity = vehicleRelativity(facts)
+    assert.ok(relativity.liabilityHundredths >= 80 && relativity.liabilityHundredths <= 125, facts.model)
+  }
+  // Damage results are passed on in full: the Range Rover's damage factor is well above 2.
+  assert.ok(vehicleRelativity(RANGE_ROVER).physicalHundredths > 200)
+})
+
+test("without HLDI's model rows, vehicles use their class averages", () => {
+  const files: FactorFiles = {}
+  for (const name of ["assumptions.json", "vehicle-families.json"]) files[name] = readFileSync(`data/factors/${name}`, "utf8")
+  files["state-baselines.json"] = readFileSync("data/state-baselines/state-baselines.json", "utf8")
+  for (const name of readdirSync("data/factors/sources")) {
+    if (name !== "hldi-2022-24.csv") files[`sources/${name}`] = readFileSync(`data/factors/sources/${name}`, "utf8")
+  }
+  const without = deriveFactors(files)
+  for (const facts of [RAV4, F150, CIVIC, LIGHTNING]) {
+    assert.deepEqual(matchVehicleRows(facts, without.vehicle), [])
+    const relativity = vehicleRelativity(facts, without.vehicle)
+    assert.equal(relativity.level, "class", facts.model)
+    assert.equal(relativity.spreadKey, "vehicle-class")
+  }
+  // HLDI files Teslas as luxury vehicles, so a Model Y uses the luxury small SUV average.
+  assert.equal(vehicleRelativity(MODEL_Y, without.vehicle).label, "luxury small SUV")
+  assert.equal(vehicleRelativity(LIGHTNING, without.vehicle).label, "full-size pickup")
+})
+
+test("teens: own policy by default, and a rough figure for adding them to a parent's policy", () => {
+  const teen = { ...MOLLY_F150, age: "16-18" as const, yearsLicensed: "under-1" as const }
+  const own = estimate(YOURS, teen, { vehicle: F150 })
+  const added = estimate(YOURS, teen, { vehicle: F150, teenOnParentPolicy: true })
+  assert.match(own.rangeNote, /only driver on their own policy\. Adding a teen to a parent's policy usually costs less than this\./)
+  assert.match(added.rangeNote, /adds your teen to your own policy/)
+  assert.ok(added.likely < own.likely)
+  assert.equal(added.steps.find((step) => step.group === "driver-age")?.basis, "indicative")
+  const young = estimate(YOURS, { ...MOLLY_F150, age: "19-21" as const }, { vehicle: F150, teenOnParentPolicy: true })
+  assert.match(young.rangeNote, /only driver on their own policy/)
+  const adult = estimate(YOURS, { ...MOLLY_F150, age: "26-39" as const }, { vehicle: F150 })
+  assert.doesNotMatch(adult.rangeNote, /own policy/)
 })
 
 test("the engine never prints zero or a negative dollar", () => {

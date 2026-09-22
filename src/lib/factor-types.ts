@@ -65,6 +65,11 @@ export type VehicleLossRow = {
   family: string
   powertrain: "combustion" | "hybrid" | "plug-in-hybrid" | "electric"
   drive: "2wd" | "4wd"
+  /**
+   * Body words from the HLDI name: "convertible", "hatchback", "wagon", and
+   * "2dr" (two doors). Empty for the plain version of the model.
+   */
+  body: string[]
   hldiClass: string
   modelYears: string
   yearMin: number
@@ -84,6 +89,8 @@ export type VehicleClassRow = {
 }
 
 export type VehicleData = {
+  /** False when the per-model HLDI file is switched off or missing; the engine then uses class averages. */
+  modelsEnabled: boolean
   sourceId: string
   modelYears: string
   yearMin: number
@@ -98,6 +105,18 @@ export type VehicleData = {
   classes: Record<string, VehicleClassRow>
   /** Class fallback for electric vehicles: median of HLDI electric rows in the mapped HLDI class, when there are enough rows. */
   electricClasses: Record<string, VehicleClassRow>
+  /** Class fallback for luxury makes (see luxuryMakes), from HLDI's luxury and sports-car class averages. */
+  luxuryClasses: Record<string, VehicleClassRow>
+  /** Compact make names treated as luxury for the class fallback. */
+  luxuryMakes: string[]
+  /**
+   * How much of HLDI's liability result we pass on to the liability share
+   * (hundredths): relativity = 1 + weight × (HLDI − 1), then kept between
+   * liabilityFloor and liabilityCap.
+   */
+  liabilityWeight: FactorCell
+  liabilityFloor: number
+  liabilityCap: number
 }
 
 export type FactorBundle = {

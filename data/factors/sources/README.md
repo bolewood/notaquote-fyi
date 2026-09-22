@@ -41,7 +41,8 @@ Columns: `source_id, state, data_year, url, locator, territory, carrier, profile
 - Read from the survey tool at https://interactive.web.insurance.ca.gov/apex_extprd/f?p=111:11 by choosing the type, location, years licensed, mileage, record, and vehicle, as a visitor would (198 submissions, two seconds apart). Profile definitions are in CDI's exhibit, `APS2026ProfilesExhibit-2.xlsx`. Figures are yearly, effective 1 January 2026.
 - Profile ids follow CDI's: the first three digits are years licensed and coverage (110–114 Basic liability-only Camry at 2, 4, 7, 13, 25 years; 251–254 Standard full-coverage Accord at 4, 7, 13, 25 years), the fourth is mileage (1: 5,000–7,500; 2: 7,600–10,000; 3: 12,500–16,000), and the letter is the record (A clean, B ticket, C at-fault accident, D both). Married households: 1152, 1192, 2555, 2565, 2592, with M meaning "No Violations (With Multi-Policy Discount)".
 - **Companies left out of every comparison**, because CDI's footnotes say they priced different coverage from the profile: Nations Ins Co, KnightBrook Ins Co, Qualitas Ins Co, Anchor General Ins Co, Federal Ins Co (CHUBB), First Acceptance Ins Co, Inc., and Incline Natl Ins Co. They're still in the file, as published.
-- California requires a Good Driver discount for clean drivers, and several footnotes say the clean profiles include it. So California's accident factor includes losing that discount.
+- CDI says the survey premiums are "before any applicable discounts are applied". Company footnotes list California's Good Driver discount among those discounts ("California Good Driver Discount 30%", "20% Good Driver Discount"), so the clean profiles leave it out. A California driver who loses it after an accident probably sees a bigger jump than the survey shows.
+- Profiles 2565 (a couple with a 17-year-old) and 2555 (a younger couple without one) give the rough "teen added to a parent's policy" factor.
 - Mileage variants were only fetched for Los Angeles.
 
 ### co-2023: Colorado Division of Insurance
@@ -56,6 +57,10 @@ Columns: `source_id, state, data_year, url, locator, territory, carrier, profile
 
 The North Carolina Department of Insurance's "Safe Driver Incentive Plan (Insurance Points)" table: points, the "% of Rate Increase", and what earns them, in the page's words.
 
+## iso-liability-symbols-2004.csv
+
+Two numbers from Insurance Journal's 1 April 2004 report on ISO's liability symbols: surcharges "of up to 25 percent and discounts of up to 20 percent". We use them to decide how much of HLDI's liability result to pass on.
+
 ## iso-loss-costs-2024.csv
 
 The 2024 row of the Insurance Information Institute's table "Private Passenger Auto Insurance Losses, 2015-2024" (source line: ISO, a Verisk Analytics business). Frequency is claims per 100 car-years; severity is the average claim in dollars. The footnotes about which states are left out are in the locator.
@@ -69,5 +74,7 @@ HLDI's insurance losses by make and model for 2022–24 models, from the table a
 - Collision, property damage, and comprehensive are overall losses (how often × how much). Personal injury protection, medical payments, and bodily injury are how often claims happen only.
 - We keep only the families listed in `../vehicle-families.json`: 328 of the 685 rows HLDI publishes. To re-pick from a full download: `npm run factors:build -- --hldi-full path/to/losses.csv`.
 - `all_coverages` in the subtotal file is a field the API returns but the page never shows. We don't use it.
+
+- The per-model file is behind one switch, `useHldiModels` in `../vehicle-families.json`. Turning it off or deleting the file makes every vehicle use its class average.
 
 Source: www.iihs.org. See the terms note in `../README.md`.

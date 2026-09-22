@@ -4,7 +4,7 @@
   "checkedOn": "2026-09-22",
   "scale": 100,
   "formula": "estimate = starting premium × index(new) ÷ index(start), where index = driver and area factors × (liability share × limits × vehicle liability + damage share × deductible × loan or lease × vehicle age × vehicle damage)",
-  "changelogNote": "Factors now come from public sources where we could find them: state insurance-department price surveys (Oklahoma, North Dakota, District of Columbia), North Carolina's accident surcharge rule, ISO loss costs, and HLDI losses by make and model. Everything else is labeled as our estimate and widens the range. The separate teen switch is gone; the 16–18 age band is the teen factor.",
+  "changelogNote": "Factors now come from public sources where we could find them: state insurance-department price surveys from Oklahoma, North Dakota, the District of Columbia, Texas, California, and Colorado; North Carolina's accident surcharge rule; NAIC and ISO premium and claim figures; and HLDI insurance losses by make and model. Everything else is labeled as our estimate and widens the range. The separate teen switch is gone; the 16–18 age band is the teen factor. Vehicle liability results are passed on only partly, the way insurers' vehicle ratings do.",
   "sources": [
     {
       "id": "ok-2026",
@@ -13,7 +13,7 @@
       "url": "https://www.oid.ok.gov/wp-content/uploads/2026/09/PPA-Rate-Comparisons-9-1-2026.pdf",
       "dataYear": "2026 (PDF dated 1 September 2026)",
       "checkedOn": "2026-09-22",
-      "terms": "No copyright or terms-of-use statement on the page or PDF. State government consumer publication. Landing page: https://www.oid.ok.gov/consumers/insurance-basics/auto-insurance-rate-comparison/"
+      "terms": "The page footer reads '© 2026 The State of Oklahoma'. No terms of use specific to the rate comparison were found on the page or in the PDF. Landing page: https://www.oid.ok.gov/consumers/insurance-basics/auto-insurance-rate-comparison/"
     },
     {
       "id": "nd-2026",
@@ -22,7 +22,7 @@
       "url": "https://www.insurance.nd.gov/sites/default/files/documents/Consumers/Auto/2026%20Auto%20Insurance%20Cost%20Survey.pdf",
       "dataYear": "2026 (rates from 1 January 2026)",
       "checkedOn": "2026-09-22",
-      "terms": "No copyright or terms-of-use statement found. State government consumer publication. Example #4 is left out because its company labels do not match the figures (see data/factors/sources/README.md)."
+      "terms": "Site footer: 'Copyright © 2025 North Dakota Insurance & Securities Department'. The Department's disclaimer (https://www.insurance.nd.gov/disclaimer) says: 'Unless otherwise noted on an individual document, file, web page or other website items, the Department grants permission to copy and distribute the information for non-commercial use, as long as the content remains unaltered.' It also says the Department 'does not warrant or represent that this information is current, complete and accurate.' We copy the figures unaltered (six-month figures are also kept as printed in each locator). Example #4 is left out because its company labels do not match the figures (see data/factors/sources/README.md)."
     },
     {
       "id": "dc-2024",
@@ -85,7 +85,25 @@
       "url": "https://www.iihs.org/research-areas/auto-insurance/insurance-losses-by-make-and-model",
       "dataYear": "2022–24 models, claims through early 2025",
       "checkedOn": "2026-09-22",
-      "terms": "Source: www.iihs.org. IIHS allows limited noncommercial, educational, and personal use with citation, and asks for written permission (legal@iihs.org) for repetitive use or redistribution. We keep only a subset for popular vehicles. The owner should decide whether to ask for permission; see data/factors/README.md."
+      "terms": "Source: www.iihs.org. The IIHS copyright page (https://www.iihs.org/copyright-information-and-privacy-policy) says: 'The content on this website is made available for limited noncommercial, educational and personal use only; a user may download content to share with others for limited noncommercial and educational purposes without requesting specific permission.' and 'Repetitive noncommercial, educational, or personal use and copying or redistribution in any manner for commercial use is not permitted without written permission from the Institute.' Requests go to legal@iihs.org. Permission has not been requested; the owner decides. The per-model rows are one file (sources/hldi-2022-24.csv) with one switch (useHldiModels in vehicle-families.json)."
+    },
+    {
+      "id": "naic-auto-db-2022-2023",
+      "title": "2022/2023 Auto Insurance Database Report, Table 1C (liability average premium) and Table 5 (combined average premium), countrywide, 2023",
+      "publisher": "National Association of Insurance Commissioners",
+      "url": "https://content.naic.org/sites/default/files/publication-aut-pb-auto-insurance-database.pdf",
+      "dataYear": "2023",
+      "checkedOn": "2026-09-22",
+      "terms": "Source: NAIC, 2022/2023 Auto Insurance Database Report, 2023 data. Read from data/state-baselines/state-baselines.json (countrywide row), which records the report's terms: copyrighted by NAIC; only per-state and countrywide figures are stored, with credit."
+    },
+    {
+      "id": "iso-symbols-2004",
+      "title": "New ISO Symbols Rate Cars By Make and Model for Liability, No-Fault/Medical Payments Insurance",
+      "publisher": "Insurance Journal (reporting an Insurance Services Office announcement)",
+      "url": "https://www.insurancejournal.com/news/national/2004/04/01/40773.htm",
+      "dataYear": "2004",
+      "checkedOn": "2026-09-22",
+      "terms": "News article. We keep two numbers (25 and 20 percent) and one quoted sentence, with a link."
     }
   ],
   "groups": {
@@ -104,8 +122,20 @@
             "tx-2025",
             "ok-2026"
           ],
-          "derivation": "Texas 2025 (HelpInsure sample rates, liability only), age 18 ÷ age 30, single, same company, ZIP, car, use, and credit; male and female; median 2.591 (middle half of companies 2.347–3.406; 159%) over 360 comparisons. Times the 26–39 factor above, because 30 is in that band. The site shows ages as bands (16–24, 25–64, 65+); TDI's data call rates them at 18, 30, and 65. The teen is the only driver on their own policy; adding a teen to a parent's policy is priced differently. For comparison, Oklahoma 2026's 16-year-old ÷ 55-year-old (who also differ in marital status, use, and mileage) is median 4.507 (middle half of companies 3.210–5.409; 351%) over 200 comparisons.",
+          "derivation": "Texas 2025 (HelpInsure sample rates, liability only), age 18 ÷ age 30, single, same company, ZIP, car, use, and credit; male and female; +159% (median ratio 2.591; middle half of companies +135% to +241%) over 360 comparisons. Times the 26–39 factor above, because 30 is in that band. The site shows ages as bands (16–24, 25–64, 65+); TDI's data call rates them at 18, 30, and 65. The teen is the only driver on their own policy; adding a teen to a parent's policy is priced differently. For comparison, Oklahoma 2026's 16-year-old ÷ 55-year-old (who also differ in marital status, use, and mileage) is +351% (median ratio 4.507; middle half of companies +221% to +441%) over 200 comparisons.",
           "n": 560
+        },
+        "16-18-added": {
+          "label": "16–18, added to a parent's policy",
+          "value": 151,
+          "low": 130,
+          "high": 177,
+          "basis": "indicative",
+          "sources": [
+            "ca-2026"
+          ],
+          "derivation": "The whole household's premium after adding a teen, compared with before. California 2026, profile 2565 (married couple licensed 28 and 25 years, plus a 17-year-old licensed 1 year who \"drives pleasure use only\"; Camry 20,000 miles and Highlander 12,000 miles) ÷ profile 2555 (married couple licensed 13 and 10 years; Camry and Sienna, 15,000 miles each), with and without a multi-policy discount, same company and place: +51% (median ratio 1.511; middle half of companies +30% to +77%), 235 comparisons. Rough, because the two households also differ in the parents' experience, the second car, and mileage, and because both are two-car households. California rates by years licensed, not age. Used only when you ask for a teen added to your own policy.",
+          "n": 235
         },
         "19-21": {
           "label": "19–21",
@@ -116,7 +146,7 @@
           "sources": [
             "ok-2026"
           ],
-          "derivation": "Oklahoma 2026, Scenario B (age 21, single) ÷ Scenario D (age 55, married); same commute, mileage, car, and coverage. Same company, city, and sex; median 1.918 (middle half of companies 1.687–2.058; 92%) over 200 comparisons. Rough because marital status also differs.",
+          "derivation": "Oklahoma 2026, Scenario B (age 21, single) ÷ Scenario D (age 55, married); same commute, mileage, car, and coverage. Same company, city, and sex; +92% (median ratio 1.918; middle half of companies +69% to +106%) over 200 comparisons. Rough because marital status also differs.",
           "n": 200
         },
         "22-25": {
@@ -129,7 +159,7 @@
             "dc-2024",
             "ok-2026"
           ],
-          "derivation": "District of Columbia 2024, age 25 ÷ age 39 (same company, same group: married, single female, single male; state-minimum coverage), median 1.170 (middle half of companies 1.097–1.313; 17%) over 87 comparisons, times the 26–39 factor above (age 39 is in that band).",
+          "derivation": "District of Columbia 2024, age 25 ÷ age 39 (same company, same group: married, single female, single male; state-minimum coverage), +17% (median ratio 1.170; middle half of companies +10% to +31%) over 87 comparisons, times the 26–39 factor above (age 39 is in that band).",
           "n": 287
         },
         "26-39": {
@@ -141,7 +171,7 @@
           "sources": [
             "ok-2026"
           ],
-          "derivation": "Oklahoma 2026, Scenario C (age 36) ÷ Scenario D (age 55): both married, 18-mile round-trip commute, 12,000 miles, same car and coverage. Same company, city, and sex; median 1.109 (middle half of companies 1.059–1.196; 11%) over 200 comparisons.",
+          "derivation": "Oklahoma 2026, Scenario C (age 36) ÷ Scenario D (age 55): both married, 18-mile round-trip commute, 12,000 miles, same car and coverage. Same company, city, and sex; +11% (median ratio 1.109; middle half of companies +6% to +20%) over 200 comparisons.",
           "n": 200
         },
         "40-64": {
@@ -165,7 +195,7 @@
             "tx-2025",
             "ok-2026"
           ],
-          "derivation": "Median of two senior-versus-adult comparisons, times the 26–39 factor above (both adult ages are in that band). District of Columbia 2024, age 66 ÷ age 39 (same company and group; state-minimum coverage): median 0.939 (middle half of companies 0.839–1.028; -6%), 87 comparisons. Texas 2025, age 65 ÷ age 30 (single male, and married): median 0.950 (middle half of companies 0.900–1.000; -5%), 360 comparisons.",
+          "derivation": "Median of two senior-versus-adult comparisons, times the 26–39 factor above (both adult ages are in that band). District of Columbia 2024, age 66 ÷ age 39 (same company and group; state-minimum coverage): 6% less (median ratio 0.939; middle half of companies 16% less to +3%), 87 comparisons. Texas 2025, age 65 ÷ age 30 (single male, and married): 5% less (median ratio 0.950; middle half of companies 10% less to no change), 360 comparisons.",
           "n": 647
         }
       }
@@ -187,36 +217,32 @@
         },
         "1-3": {
           "label": "Licensed 1–3 years (age 26 and up)",
-          "value": 227,
-          "low": 184,
-          "high": 273,
-          "basis": "indicative",
-          "sources": [
-            "ca-2026"
-          ],
-          "derivation": "Licensed 2 years ÷ 13 years (Basic, liability only): median 2.271 (middle half of companies 1.842–2.735; 127%), 103 comparisons. California 2026, same company, place, car, record, and mileage; California profiles give years licensed but no age (its rules make years licensed a main rating factor), so a newly licensed California driver may also be younger. Rough for that reason. We only use this factor from age 26, so it doesn't pile on top of the young-driver age factors.",
-          "n": 103
+          "value": 132,
+          "low": 100,
+          "high": 173,
+          "basis": "assumed",
+          "sources": [],
+          "derivation": "Our estimate. No public source yet; help wanted. California 2026 (licensed 2 years ÷ 13 years, liability only): +127% (median ratio 2.271; middle half of companies +84% to +173%), 103 comparisons. But California does not allow age as a rating factor (10 CCR §2632.5), so its newly licensed drivers are mostly young, and its years-licensed figure includes the youth effect our age factor already counts. We treat it as an upper bound, capped at the 19–21 age factor ÷ the 26–39 age factor (1.73), so an experienced-age driver never costs more than a young one. We don't know how much of the gap is experience and how much is age, so we take the middle of 1.00 and that upper bound on a multiplying scale (the square root). The range runs from 1.00 to the upper bound.",
+          "n": null
         },
         "4-9": {
           "label": "Licensed 4–9 years (age 26 and up)",
-          "value": 134,
-          "low": 124,
-          "high": 155,
-          "basis": "indicative",
-          "sources": [
-            "ca-2026"
-          ],
-          "derivation": "Licensed 4 and 7 years ÷ 13 years (Basic liability-only and Standard full-coverage profiles): median 1.340 (middle half of companies 1.236–1.551; 34%), 494 comparisons. California 2026, same company, place, car, record, and mileage; California profiles give years licensed but no age (its rules make years licensed a main rating factor), so a newly licensed California driver may also be younger. Rough for that reason. We only use this factor from age 26, so it doesn't pile on top of the young-driver age factors.",
-          "n": 494
+          "value": 116,
+          "low": 100,
+          "high": 134,
+          "basis": "assumed",
+          "sources": [],
+          "derivation": "Our estimate. No public source yet; help wanted. California 2026 (licensed 4 and 7 years ÷ 13 years, liability-only and full-coverage profiles): +34% (median ratio 1.340; middle half of companies +24% to +55%), 494 comparisons. But California does not allow age as a rating factor (10 CCR §2632.5), so its newly licensed drivers are mostly young, and its years-licensed figure includes the youth effect our age factor already counts. We treat it as an upper bound, capped at the 19–21 age factor ÷ the 26–39 age factor (1.73), so an experienced-age driver never costs more than a young one. We don't know how much of the gap is experience and how much is age, so we take the middle of 1.00 and that upper bound on a multiplying scale (the square root). The range runs from 1.00 to the upper bound.",
+          "n": null
         },
         "under-1": {
           "label": "Licensed under 1 year (age 26 and up)",
-          "value": 227,
-          "low": 184,
-          "high": 328,
+          "value": 132,
+          "low": 100,
+          "high": 208,
           "basis": "assumed",
           "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. No survey we found prices a driver licensed under a year. It should cost at least as much as 1–3 years, so we use the 1–3 year factor and widen the top by a fifth.",
+          "derivation": "Our estimate. No public source yet; help wanted. No survey we found prices a driver licensed under a year, and California, which does not allow age as a rating factor (10 CCR §2632.5), only goes down to 2 years. We use the 1–3 year estimate and raise the top of the range by a fifth, capped at the 16–18 age factor ÷ the 26–39 age factor (2.59).",
           "n": null
         },
         "not-used": {
@@ -257,7 +283,7 @@
             "tx-2025",
             "nc-sdip-2026"
           ],
-          "derivation": "Median of three states. California 2026, one at-fault accident ÷ clean, same company, place, car, and years licensed (single-driver profiles, liability-only and full coverage): median 1.411 (middle half of companies 1.268–1.542; 41%), 1091 comparisons; California's clean profiles include its required Good Driver discount, so this includes losing it. Texas 2025, one at-fault accident ÷ clean (liability only): median 1.521 (middle half of companies 1.379–1.658; 52%), 180 comparisons. North Carolina's Safe Driver Incentive Plan, set by state law: 40% for a small accident, 55% for a medium one, and 70% for $3,850 or more of damage or an injury; we count it as a median of 70% (typical claims are above $3,850) with 40% as the low edge.",
+          "derivation": "Median of three states. California 2026, one at-fault accident ÷ clean, same company, place, car, and years licensed (single-driver profiles, liability-only and full coverage): +41% (median ratio 1.411; middle half of companies +27% to +54%), 1091 comparisons; CDI says its survey premiums are \"before any applicable discounts are applied\", and company footnotes list California's Good Driver discount as one of those discounts (for example \"California Good Driver Discount 30%\" and \"20% Good Driver Discount\"). So the clean figures leave that discount out, and a California driver who loses it after an accident probably sees a bigger jump than this. Texas 2025, one at-fault accident ÷ clean (liability only): +52% (median ratio 1.521; middle half of companies +38% to +66%), 180 comparisons. North Carolina's Safe Driver Incentive Plan, set by state law: 40% for a small accident, 55% for a medium one, and 70% for $3,850 or more of damage or an injury; we count it as a median of 70% (typical claims are above $3,850) with 40% as the low edge.",
           "n": 1274
         },
         "two-or-more": {
@@ -296,7 +322,7 @@
           "sources": [
             "ca-2026"
           ],
-          "derivation": "California 2026, 5,000–7,500 miles ÷ 7,600–10,000 miles, same company, car, record, and years licensed, Los Angeles: median 0.924 (middle half of companies 0.884–0.941; -8%), 360 comparisons.",
+          "derivation": "California 2026, 5,000–7,500 miles ÷ 7,600–10,000 miles, same company, car, record, and years licensed, Los Angeles: 8% less (median ratio 0.924; middle half of companies 12% less to 6% less), 360 comparisons.",
           "n": 360
         },
         "over-15000": {
@@ -309,7 +335,7 @@
             "ca-2026",
             "tx-2025"
           ],
-          "derivation": "Median of two rough comparisons. California 2026, 12,500–16,000 miles ÷ 7,600–10,000 miles, Los Angeles: median 1.168 (middle half of companies 1.089–1.213; 17%), 360 comparisons (only part of that band is over 15,000). Texas 2025, commuting 18,000 miles ÷ pleasure use 10,000 miles: median 1.000 (middle half of companies 1.000–1.084; 0%), 180 comparisons (use changes too).",
+          "derivation": "Median of two rough comparisons. California 2026, 12,500–16,000 miles ÷ 7,600–10,000 miles, Los Angeles: +17% (median ratio 1.168; middle half of companies +9% to +21%), 360 comparisons (only part of that band is over 15,000). Texas 2025, commuting 18,000 miles ÷ pleasure use 10,000 miles: no change (median ratio 1.000; middle half of companies no change to +8%), 180 comparisons (use changes too).",
           "n": 540
         }
       }
@@ -392,7 +418,7 @@
           "sources": [
             "ca-2026"
           ],
-          "derivation": "California 2026, the same married household with and without a multi-policy discount (profiles 2555, 2565, 2592; full coverage), same company and place: median 0.900 (middle half of companies 0.854–1.000; -10%), 353 comparisons.",
+          "derivation": "California 2026, the same married household with and without a multi-policy discount (profiles 2555, 2565, 2592; full coverage), same company and place: 10% less (median ratio 0.900; middle half of companies 15% less to no change), 353 comparisons.",
           "n": 353
         }
       }
@@ -405,8 +431,8 @@
         "urban": {
           "label": "Urban",
           "value": 129,
-          "low": 112,
-          "high": 144,
+          "low": 99,
+          "high": 201,
           "basis": "sourced",
           "sources": [
             "ok-2026",
@@ -415,15 +441,15 @@
             "ca-2026",
             "co-2023"
           ],
-          "derivation": "Same company and driver, city versus rural area, in five states; value is the median of the five state medians. Oklahoma 2026, Oklahoma City and Tulsa ÷ Woodward and McAlester: median 1.163 (middle half of companies 1.079–1.272; 16%), 800 comparisons. North Dakota 2026, Fargo ÷ \"Remainder of State\" (Examples 1–3, 5–12): median 0.987 (middle half of companies 0.886–1.070; -1%), 228. Texas 2025, Houston and Dallas ÷ Plainview and Alpine: median 2.014 (middle half of companies 1.750–2.379; 101%), 2132. California 2026, Los Angeles Central ÷ Alturas: median 1.704 (middle half of companies 1.500–1.948; 70%), 2103. Colorado 2023, Denver and Colorado Springs ÷ Sterling, Alamosa, and Craig: median 1.286 (middle half of companies 1.122–1.436; 29%), 4344.",
+          "derivation": "Same company and driver, city versus rural area, in five states. Oklahoma 2026, Oklahoma City and Tulsa ÷ Woodward and McAlester: +16% (median ratio 1.163; middle half of companies +8% to +27%), 800 comparisons. North Dakota 2026, Fargo ÷ \"Remainder of State\" (Examples 1–3, 5–12): 1% less (median ratio 0.987; middle half of companies 11% less to +7%), 228. Texas 2025, Houston and Dallas ÷ Plainview and Alpine: +101% (median ratio 2.014; middle half of companies +75% to +138%), 2132. California 2026, Los Angeles Central ÷ Alturas: +70% (median ratio 1.704; middle half of companies +50% to +95%), 2103. Colorado 2023, Denver and Colorado Springs ÷ Sterling, Alamosa, and Craig: +29% (median ratio 1.286; middle half of companies +12% to +44%), 4344. The value is the middle of the five state medians. The states disagree a lot, so the low and high edges are the lowest and highest state medians (1% less to +101%), not the spread between companies.",
           "n": 9607
         },
         "suburban": {
           "label": "Suburban",
-          "value": 107,
-          "low": 91,
-          "high": 122,
-          "basis": "sourced",
+          "value": 114,
+          "low": 107,
+          "high": 165,
+          "basis": "indicative",
           "sources": [
             "tx-2025",
             "ca-2026",
@@ -431,8 +457,8 @@
             "ok-2026",
             "nd-2026"
           ],
-          "derivation": "Same company and driver, suburb versus city in the same state, in the three states that publish both (median of the three state medians), times the urban factor above. Texas 2025, Plano ÷ Houston and Dallas: median 0.829 (middle half of companies 0.762–0.893; -17%), 1066 comparisons. California 2026, Irvine ÷ Los Angeles Central: median 0.804 (middle half of companies 0.732–0.893; -20%), 2101. Colorado 2023, Highlands Ranch ÷ Denver and Colorado Springs: median 0.860 (middle half of companies 0.796–0.903; -14%), 1448.",
-          "n": 14222
+          "derivation": "Rough. Only Texas, California, and Colorado publish a suburb, a city, and a rural area. Direct suburb ÷ rural, same company and driver: Texas 2025, Plano ÷ Plainview and Alpine: +65% (median ratio 1.653; middle half of companies +46% to +92%), 1066 comparisons. California 2026, Irvine ÷ Alturas: +32% (median ratio 1.324; middle half of companies +21% to +55%), 2102. Colorado 2023, Highlands Ranch ÷ Sterling, Alamosa, and Craig: +7% (median ratio 1.071; middle half of companies 3% less to +20%), 2172. The middle of those three is +32%, which is above our five-state urban factor (+29%), because these three states have bigger city-versus-rural gaps than the others. Multiplying suburb ÷ city in the same three states (17% less) by the urban factor gives +7%. We use neither. We measure where each state's suburb sits between its rural area and its city on a multiplying scale (Texas 0.72, California 0.53, Colorado 0.27 of the way), take the middle (0.53), and apply it to the urban factor: +14%. The low and high edges are the lowest and highest direct suburb ÷ rural figures.",
+          "n": 5340
         },
         "rural": {
           "label": "Rural",
@@ -470,7 +496,7 @@
           "sources": [
             "tx-2025"
           ],
-          "derivation": "Texas 2025, 30/60/25 (the Texas minimum) ÷ 100/300/100, liability only, same company, ZIP, and driver: median 0.870 (middle half of companies 0.792–0.902; -13%), 165 comparisons. Minimums differ by state, so the real difference in your state may be bigger or smaller.",
+          "derivation": "Texas 2025, 30/60/25 (the Texas minimum) ÷ 100/300/100, liability only, same company, ZIP, and driver: 13% less (median ratio 0.870; middle half of companies 21% less to 10% less), 165 comparisons. Minimums differ by state, so the real difference in your state may be bigger or smaller.",
           "n": 165
         },
         "250-500-250": {
@@ -603,15 +629,16 @@
       "cells": {
         "liability": {
           "label": "Liability share of a full-coverage premium",
-          "value": 55,
+          "value": 51,
           "low": 45,
           "high": 65,
           "basis": "indicative",
           "sources": [
+            "naic-auto-db-2022-2023",
             "iso-via-iii-2024"
           ],
-          "derivation": "ISO 2024 paid-claim frequency × severity, as published by the Insurance Information Institute: bodily injury 226.22, property damage 169.25, collision 228.34, comprehensive 91.09 dollars per car-year. Liability (bodily injury + property damage) is 55.3% of the four. Rough because these are loss costs, not prices, and leave out uninsured-motorist, medical, and PIP coverage. The low and high edges are our estimate; help wanted.",
-          "n": 4
+          "derivation": "NAIC 2023 countrywide average liability premium $736.65 ÷ combined average premium (liability + collision + comprehensive) $1438.60 = 51.2%. Source: NAIC, 2022/2023 Auto Insurance Database Report, 2023 data (the same figures as data/state-baselines). For comparison, ISO's 2024 claim costs give 55.3%. Rough because it's an average across all insured cars and states. The low and high edges are our estimate; help wanted.",
+          "n": 2
         },
         "collision-in-physical": {
           "label": "Collision share of collision + comprehensive",
@@ -680,10 +707,32 @@
           "derivation": "Our estimate. No public source yet; help wanted. HLDI's results are for 2022–24 models; an older or newer design may differ.",
           "n": null
         },
+        "vehicle-mixed-powertrain": {
+          "label": "One trim name sold as gas and as hybrid",
+          "value": 100,
+          "low": 92,
+          "high": 110,
+          "basis": "assumed",
+          "sources": [],
+          "derivation": "Our estimate. No public source yet; help wanted. FuelEconomy.gov lists some trim names (for example the 2024 Honda CR-V FWD) with both gas and hybrid versions. We price the gas one unless the name says hybrid, and widen the range because yours could be either.",
+          "n": null
+        },
+        "vehicle-luxury-class": {
+          "label": "Using a luxury class average instead of the exact model",
+          "value": 100,
+          "low": 89,
+          "high": 108,
+          "basis": "indicative",
+          "sources": [
+            "hldi-2022-24"
+          ],
+          "derivation": "How far the HLDI luxury and sports-car series we keep sit from their class average, full-coverage weighting: 25th and 75th percentiles over 113 series.",
+          "n": 113
+        },
         "vehicle-class": {
           "label": "Using a class average instead of the exact model",
           "value": 100,
-          "low": 91,
+          "low": 92,
           "high": 109,
           "basis": "indicative",
           "sources": [
@@ -703,6 +752,18 @@
           ],
           "derivation": "How far the HLDI series we keep sit from the all-vehicle average (100), full-coverage weighting: 25th and 75th percentiles over 314 series.",
           "n": 314
+        },
+        "vehicle-unknown-luxury": {
+          "label": "Luxury or sports vehicle not recognized",
+          "value": 100,
+          "low": 87,
+          "high": 112,
+          "basis": "indicative",
+          "sources": [
+            "hldi-2022-24"
+          ],
+          "derivation": "How far the HLDI luxury and sports-car series we keep sit from the all-vehicle average (100), full-coverage weighting: 25th and 75th percentiles over 64 series. Used for a luxury make when we can't tell what kind of vehicle it is.",
+          "n": 64
         },
         "trim-limited": {
           "label": "Car version only partly matched",
@@ -748,11 +809,12 @@
     }
   },
   "vehicle": {
+    "modelsEnabled": true,
     "sourceId": "hldi-2022-24",
     "modelYears": "2022-24",
     "yearMin": 2022,
     "yearMax": 2024,
-    "note": "HLDI insurance losses for 2022–24 models, 100 = the average vehicle. Collision and comprehensive move only the damage share of the premium; property-damage and bodily-injury liability move only the liability share. When we don't have the exact model, we use the class average.",
+    "note": "HLDI insurance losses for 2022–24 models, 100 = the average vehicle. Collision and comprehensive move only the damage share of the premium, in full. Property-damage and bodily-injury liability move only the liability share, and only partly (see the liability weight). When we don't have the exact model, we use the class average.",
     "models": [
       {
         "series": "Acura Integra 4dr",
@@ -760,6 +822,7 @@
         "family": "integra",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Four-door cars / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -775,6 +838,7 @@
         "family": "mdx",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -790,6 +854,7 @@
         "family": "mdx",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -805,6 +870,7 @@
         "family": "rdx",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -820,6 +886,7 @@
         "family": "a4",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -835,6 +902,7 @@
         "family": "q3",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -850,6 +918,7 @@
         "family": "q5",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -865,6 +934,7 @@
         "family": "q5",
         "powertrain": "plug-in-hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -880,6 +950,7 @@
         "family": "q5",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -895,6 +966,7 @@
         "family": "3series",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Luxury cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -910,6 +982,7 @@
         "family": "3series",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -925,6 +998,7 @@
         "family": "3series",
         "powertrain": "plug-in-hybrid",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Luxury cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -940,6 +1014,7 @@
         "family": "3series",
         "powertrain": "plug-in-hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -955,6 +1030,7 @@
         "family": "5series",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Luxury cars / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -970,6 +1046,7 @@
         "family": "5series",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury cars / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -985,6 +1062,7 @@
         "family": "x1",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1000,6 +1078,7 @@
         "family": "x3",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1015,6 +1094,7 @@
         "family": "x3",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1030,6 +1110,7 @@
         "family": "x5",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1045,6 +1126,7 @@
         "family": "x5",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1060,6 +1142,7 @@
         "family": "x5",
         "powertrain": "plug-in-hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1075,6 +1158,7 @@
         "family": "enclave",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1090,6 +1174,7 @@
         "family": "enclave",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1105,6 +1190,7 @@
         "family": "encoregx",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1120,6 +1206,7 @@
         "family": "encoregx",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1135,6 +1222,7 @@
         "family": "envision",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1150,6 +1238,7 @@
         "family": "envision",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1165,6 +1254,7 @@
         "family": "envista",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1180,6 +1270,7 @@
         "family": "escalade",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1195,6 +1286,7 @@
         "family": "escalade",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1210,6 +1302,7 @@
         "family": "xt5",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1225,6 +1318,7 @@
         "family": "xt5",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1240,6 +1334,7 @@
         "family": "blazer",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1255,6 +1350,7 @@
         "family": "blazer",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1270,6 +1366,7 @@
         "family": "blazer",
         "powertrain": "electric",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1285,6 +1382,9 @@
         "family": "camaro",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [
+          "2dr"
+        ],
         "hldiClass": "Sports cars / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1300,6 +1400,9 @@
         "family": "camaro",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [
+          "convertible"
+        ],
         "hldiClass": "Sports cars / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1315,6 +1418,7 @@
         "family": "colorado",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Pickups / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1330,6 +1434,7 @@
         "family": "colorado",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1345,6 +1450,9 @@
         "family": "corvette",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [
+          "2dr"
+        ],
         "hldiClass": "Sports cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1360,6 +1468,9 @@
         "family": "corvette",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [
+          "convertible"
+        ],
         "hldiClass": "Sports cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1375,6 +1486,7 @@
         "family": "equinox",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1390,6 +1502,7 @@
         "family": "equinox",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1405,6 +1518,7 @@
         "family": "equinox",
         "powertrain": "electric",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1420,6 +1534,7 @@
         "family": "malibu",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Four-door cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1435,6 +1550,7 @@
         "family": "silverado1500",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1450,6 +1566,7 @@
         "family": "silverado1500",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1465,6 +1582,7 @@
         "family": "silverado1500",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1480,6 +1598,7 @@
         "family": "silverado1500",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1495,6 +1614,7 @@
         "family": "silverado1500",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1510,6 +1630,7 @@
         "family": "silverado1500",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1525,6 +1646,7 @@
         "family": "suburban1500",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Very large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1540,6 +1662,7 @@
         "family": "suburban1500",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Very large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1555,6 +1678,7 @@
         "family": "tahoe",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1570,6 +1694,7 @@
         "family": "tahoe",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1585,6 +1710,7 @@
         "family": "trailblazer",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1600,6 +1726,7 @@
         "family": "trailblazer",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1615,6 +1742,7 @@
         "family": "traverse",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1630,6 +1758,7 @@
         "family": "traverse",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1645,6 +1774,7 @@
         "family": "trax",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1660,6 +1790,7 @@
         "family": "pacifica",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Minivans / Very large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1675,6 +1806,7 @@
         "family": "pacifica",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Minivans / Very large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1690,6 +1822,7 @@
         "family": "pacifica",
         "powertrain": "plug-in-hybrid",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Minivans / Very large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1705,6 +1838,7 @@
         "family": "durango",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1720,6 +1854,7 @@
         "family": "durango",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1735,6 +1870,7 @@
         "family": "hornet",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1750,6 +1886,7 @@
         "family": "hornet",
         "powertrain": "plug-in-hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1765,6 +1902,10 @@
         "family": "bronco",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [
+          "convertible",
+          "2dr"
+        ],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1780,6 +1921,9 @@
         "family": "bronco",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [
+          "convertible"
+        ],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1795,6 +1939,7 @@
         "family": "broncosport",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1810,6 +1955,7 @@
         "family": "edge",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1825,6 +1971,7 @@
         "family": "escape",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1840,6 +1987,7 @@
         "family": "escape",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1855,6 +2003,7 @@
         "family": "escape",
         "powertrain": "hybrid",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1870,6 +2019,7 @@
         "family": "escape",
         "powertrain": "hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1885,6 +2035,7 @@
         "family": "escape",
         "powertrain": "plug-in-hybrid",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1900,6 +2051,7 @@
         "family": "expedition",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1915,6 +2067,7 @@
         "family": "expedition",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1930,6 +2083,7 @@
         "family": "explorer",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1945,6 +2099,7 @@
         "family": "explorer",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1960,6 +2115,7 @@
         "family": "f150",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1975,6 +2131,7 @@
         "family": "f150",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -1990,6 +2147,7 @@
         "family": "f150",
         "powertrain": "hybrid",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2005,6 +2163,7 @@
         "family": "f150",
         "powertrain": "hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2020,6 +2179,7 @@
         "family": "f150lightning",
         "powertrain": "electric",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2035,6 +2195,7 @@
         "family": "f150",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2050,6 +2211,7 @@
         "family": "f150",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2065,6 +2227,7 @@
         "family": "f150",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2080,6 +2243,7 @@
         "family": "f150",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2095,6 +2259,7 @@
         "family": "maverick",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Pickups / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2110,6 +2275,7 @@
         "family": "maverick",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2125,6 +2291,7 @@
         "family": "maverick",
         "powertrain": "hybrid",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Pickups / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2140,6 +2307,9 @@
         "family": "mustang",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [
+          "2dr"
+        ],
         "hldiClass": "Sports cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2155,6 +2325,9 @@
         "family": "mustang",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [
+          "convertible"
+        ],
         "hldiClass": "Sports cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2170,6 +2343,7 @@
         "family": "mustangmache",
         "powertrain": "electric",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2185,6 +2359,7 @@
         "family": "mustangmache",
         "powertrain": "electric",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2200,6 +2375,7 @@
         "family": "ranger",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Pickups / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2215,6 +2391,7 @@
         "family": "ranger",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2230,6 +2407,7 @@
         "family": "acadia",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2245,6 +2423,7 @@
         "family": "acadia",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2260,6 +2439,7 @@
         "family": "canyon",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Pickups / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2275,6 +2455,7 @@
         "family": "canyon",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2290,6 +2471,7 @@
         "family": "sierra1500",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2305,6 +2487,7 @@
         "family": "sierra1500",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2320,6 +2503,7 @@
         "family": "sierra1500",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2335,6 +2519,7 @@
         "family": "sierra1500",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2350,6 +2535,7 @@
         "family": "sierra1500",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2365,6 +2551,7 @@
         "family": "sierra1500",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2380,6 +2567,7 @@
         "family": "terrain",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2395,6 +2583,7 @@
         "family": "terrain",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2410,6 +2599,7 @@
         "family": "yukon",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2425,6 +2615,7 @@
         "family": "yukon",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2440,6 +2631,7 @@
         "family": "accord",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Four-door cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2455,6 +2647,7 @@
         "family": "accord",
         "powertrain": "hybrid",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Four-door cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2470,6 +2663,7 @@
         "family": "civic",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Four-door cars / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2485,6 +2679,9 @@
         "family": "civic",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [
+          "hatchback"
+        ],
         "hldiClass": "Four-door cars / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2500,6 +2697,7 @@
         "family": "civicsi",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Four-door cars / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2515,6 +2713,7 @@
         "family": "crv",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2530,6 +2729,7 @@
         "family": "crv",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2545,6 +2745,7 @@
         "family": "crv",
         "powertrain": "hybrid",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2560,6 +2761,7 @@
         "family": "crv",
         "powertrain": "hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2575,6 +2777,7 @@
         "family": "hrv",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Mini",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2590,6 +2793,7 @@
         "family": "hrv",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Mini",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2605,6 +2809,7 @@
         "family": "odyssey",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Minivans / Very large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2620,6 +2825,7 @@
         "family": "passport",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2635,6 +2841,7 @@
         "family": "pilot",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2650,6 +2857,7 @@
         "family": "pilot",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2665,6 +2873,7 @@
         "family": "ridgeline",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2680,6 +2889,7 @@
         "family": "elantra",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Four-door cars / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2695,6 +2905,7 @@
         "family": "elantra",
         "powertrain": "hybrid",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Four-door cars / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2710,6 +2921,7 @@
         "family": "ioniq5",
         "powertrain": "electric",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2725,6 +2937,7 @@
         "family": "ioniq5",
         "powertrain": "electric",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2740,6 +2953,7 @@
         "family": "ioniq6",
         "powertrain": "electric",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Four-door cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2755,6 +2969,7 @@
         "family": "ioniq6",
         "powertrain": "electric",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Four-door cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2770,6 +2985,7 @@
         "family": "kona",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2785,6 +3001,7 @@
         "family": "kona",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2800,6 +3017,7 @@
         "family": "kona",
         "powertrain": "electric",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2815,6 +3033,7 @@
         "family": "palisade",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2830,6 +3049,7 @@
         "family": "palisade",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2845,6 +3065,7 @@
         "family": "santacruz",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Pickups / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2860,6 +3081,7 @@
         "family": "santacruz",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2875,6 +3097,7 @@
         "family": "santafe",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2890,6 +3113,7 @@
         "family": "santafe",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2905,6 +3129,7 @@
         "family": "santafe",
         "powertrain": "hybrid",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2920,6 +3145,7 @@
         "family": "santafe",
         "powertrain": "hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2935,6 +3161,7 @@
         "family": "sonata",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Four-door cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2950,6 +3177,7 @@
         "family": "sonata",
         "powertrain": "hybrid",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Four-door cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2965,6 +3193,7 @@
         "family": "tucson",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2980,6 +3209,7 @@
         "family": "tucson",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -2995,6 +3225,7 @@
         "family": "tucson",
         "powertrain": "hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3010,6 +3241,7 @@
         "family": "tucson",
         "powertrain": "plug-in-hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3025,6 +3257,7 @@
         "family": "venue",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Mini",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3040,6 +3273,7 @@
         "family": "compass",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3055,6 +3289,9 @@
         "family": "gladiator",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [
+          "convertible"
+        ],
         "hldiClass": "Pickups / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3070,6 +3307,7 @@
         "family": "grandcherokee",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3085,6 +3323,7 @@
         "family": "grandcherokee",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3100,6 +3339,7 @@
         "family": "grandcherokeel",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3115,6 +3355,7 @@
         "family": "grandcherokeel",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3130,6 +3371,7 @@
         "family": "grandcherokee",
         "powertrain": "plug-in-hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3145,6 +3387,10 @@
         "family": "wrangler",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [
+          "convertible",
+          "2dr"
+        ],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3160,6 +3406,9 @@
         "family": "wrangler",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [
+          "convertible"
+        ],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3175,6 +3424,9 @@
         "family": "wrangler",
         "powertrain": "plug-in-hybrid",
         "drive": "4wd",
+        "body": [
+          "convertible"
+        ],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3190,6 +3442,7 @@
         "family": "carnival",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Minivans / Very large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3205,6 +3458,7 @@
         "family": "ev6",
         "powertrain": "electric",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3220,6 +3474,7 @@
         "family": "ev6",
         "powertrain": "electric",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3235,6 +3490,7 @@
         "family": "forte",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Four-door cars / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3250,6 +3506,7 @@
         "family": "k5",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Four-door cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3265,6 +3522,7 @@
         "family": "niro",
         "powertrain": "electric",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Mini",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3280,6 +3538,7 @@
         "family": "niro",
         "powertrain": "hybrid",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Mini",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3295,6 +3554,7 @@
         "family": "niro",
         "powertrain": "plug-in-hybrid",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Mini",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3310,6 +3570,7 @@
         "family": "seltos",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3325,6 +3586,7 @@
         "family": "seltos",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3340,6 +3602,7 @@
         "family": "sorento",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3355,6 +3618,7 @@
         "family": "sorento",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3370,6 +3634,7 @@
         "family": "sorento",
         "powertrain": "hybrid",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3385,6 +3650,7 @@
         "family": "sorento",
         "powertrain": "hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3400,6 +3666,7 @@
         "family": "sorento",
         "powertrain": "plug-in-hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3415,6 +3682,7 @@
         "family": "soul",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Station wagons / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3430,6 +3698,7 @@
         "family": "sportage",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3445,6 +3714,7 @@
         "family": "sportage",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3460,6 +3730,7 @@
         "family": "sportage",
         "powertrain": "hybrid",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3475,6 +3746,7 @@
         "family": "sportage",
         "powertrain": "hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3490,6 +3762,7 @@
         "family": "sportage",
         "powertrain": "plug-in-hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3505,6 +3778,7 @@
         "family": "telluride",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3520,6 +3794,7 @@
         "family": "telluride",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3535,6 +3810,7 @@
         "family": "defender110",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3550,6 +3826,7 @@
         "family": "defender130",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3565,6 +3842,9 @@
         "family": "defender90",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [
+          "2dr"
+        ],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3580,6 +3860,7 @@
         "family": "rangerover",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3595,6 +3876,7 @@
         "family": "rangerover",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3610,6 +3892,7 @@
         "family": "rangeroverevoque",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3625,6 +3908,7 @@
         "family": "rangeroversport",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3640,6 +3924,7 @@
         "family": "rangerovervelar",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3655,6 +3940,7 @@
         "family": "es250",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3670,6 +3956,7 @@
         "family": "es300h",
         "powertrain": "hybrid",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Luxury cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3685,6 +3972,7 @@
         "family": "es350",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Luxury cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3700,6 +3988,7 @@
         "family": "nx250",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3715,6 +4004,7 @@
         "family": "nx250",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3730,6 +4020,7 @@
         "family": "nx350",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3745,6 +4036,7 @@
         "family": "nx350",
         "powertrain": "hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3760,6 +4052,7 @@
         "family": "nx450",
         "powertrain": "plug-in-hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3775,6 +4068,7 @@
         "family": "rx350",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3790,6 +4084,7 @@
         "family": "rx350",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3805,6 +4100,7 @@
         "family": "rx350h",
         "powertrain": "hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3820,6 +4116,7 @@
         "family": "rx450h",
         "powertrain": "plug-in-hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3835,6 +4132,7 @@
         "family": "rx500h",
         "powertrain": "hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3850,6 +4148,7 @@
         "family": "tx350",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3865,6 +4164,7 @@
         "family": "tx350",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3880,6 +4180,7 @@
         "family": "tx500h",
         "powertrain": "hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3895,6 +4196,7 @@
         "family": "3",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Four-door cars / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3910,6 +4212,7 @@
         "family": "3",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Four-door cars / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3925,6 +4228,9 @@
         "family": "3",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [
+          "hatchback"
+        ],
         "hldiClass": "Four-door cars / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3940,6 +4246,9 @@
         "family": "3",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [
+          "hatchback"
+        ],
         "hldiClass": "Four-door cars / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3955,6 +4264,7 @@
         "family": "cx30",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3970,6 +4280,7 @@
         "family": "cx5",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -3985,6 +4296,7 @@
         "family": "cx50",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4000,6 +4312,7 @@
         "family": "cx90",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4015,6 +4328,7 @@
         "family": "cx90",
         "powertrain": "plug-in-hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4030,6 +4344,7 @@
         "family": "cclass",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Luxury cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4045,6 +4360,7 @@
         "family": "cclass",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4060,6 +4376,7 @@
         "family": "glcclass",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4075,6 +4392,7 @@
         "family": "glcclass",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4090,6 +4408,7 @@
         "family": "glcclass",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4105,6 +4424,7 @@
         "family": "gleclass",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4120,6 +4440,7 @@
         "family": "gleclass",
         "powertrain": "plug-in-hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4135,6 +4456,7 @@
         "family": "cooper",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Two-door cars / Mini",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4150,6 +4472,7 @@
         "family": "cooper",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Four-door cars / Mini",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4165,6 +4488,9 @@
         "family": "cooper",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [
+          "convertible"
+        ],
         "hldiClass": "Two-door cars / Mini",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4180,6 +4506,9 @@
         "family": "cooper",
         "powertrain": "electric",
         "drive": "2wd",
+        "body": [
+          "2dr"
+        ],
         "hldiClass": "Two-door cars / Mini",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4195,6 +4524,7 @@
         "family": "outlander",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4210,6 +4540,7 @@
         "family": "outlander",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4225,6 +4556,7 @@
         "family": "outlander",
         "powertrain": "plug-in-hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4240,6 +4572,7 @@
         "family": "altima",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Four-door cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4255,6 +4588,7 @@
         "family": "altima",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Four-door cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4270,6 +4604,7 @@
         "family": "frontier",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Pickups / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4285,6 +4620,7 @@
         "family": "frontier",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4300,6 +4636,7 @@
         "family": "frontier",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Pickups / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4315,6 +4652,7 @@
         "family": "frontier",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4330,6 +4668,7 @@
         "family": "frontier",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Pickups / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4345,6 +4684,7 @@
         "family": "frontier",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4360,6 +4700,7 @@
         "family": "kicks",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Four-door cars / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4375,6 +4716,7 @@
         "family": "leaf",
         "powertrain": "electric",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Four-door cars / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4390,6 +4732,7 @@
         "family": "murano",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4405,6 +4748,7 @@
         "family": "murano",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4420,6 +4764,7 @@
         "family": "pathfinder",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4435,6 +4780,7 @@
         "family": "pathfinder",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4450,6 +4796,7 @@
         "family": "rogue",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4465,6 +4812,7 @@
         "family": "rogue",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4480,6 +4828,7 @@
         "family": "sentra",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Four-door cars / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4495,6 +4844,7 @@
         "family": "versa",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Four-door cars / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4510,6 +4860,7 @@
         "family": "1500classic",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4525,6 +4876,7 @@
         "family": "1500classic",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4540,6 +4892,7 @@
         "family": "1500classic",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4555,6 +4908,7 @@
         "family": "1500classic",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4570,6 +4924,7 @@
         "family": "1500",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4585,6 +4940,7 @@
         "family": "1500",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4600,6 +4956,7 @@
         "family": "1500",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4615,6 +4972,7 @@
         "family": "1500",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4630,6 +4988,7 @@
         "family": "1500",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4645,6 +5004,7 @@
         "family": "1500",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4660,6 +5020,7 @@
         "family": "ascent",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4675,6 +5036,9 @@
         "family": "crosstrek",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [
+          "wagon"
+        ],
         "hldiClass": "Station wagons / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4690,6 +5054,7 @@
         "family": "forester",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4705,6 +5070,7 @@
         "family": "impreza",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Station wagons / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4720,6 +5086,7 @@
         "family": "legacy",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Four-door cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4735,6 +5102,7 @@
         "family": "outback",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Station wagons / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4750,6 +5118,7 @@
         "family": "cybertruck",
         "powertrain": "electric",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Very large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4765,6 +5134,7 @@
         "family": "model3",
         "powertrain": "electric",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Luxury cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4780,6 +5150,7 @@
         "family": "model3",
         "powertrain": "electric",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4795,6 +5166,7 @@
         "family": "models",
         "powertrain": "electric",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury cars / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4810,6 +5182,7 @@
         "family": "modelx",
         "powertrain": "electric",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4825,6 +5198,7 @@
         "family": "modely",
         "powertrain": "electric",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4840,6 +5214,7 @@
         "family": "modely",
         "powertrain": "electric",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Luxury SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4855,6 +5230,7 @@
         "family": "4runner",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4870,6 +5246,7 @@
         "family": "4runner",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4885,6 +5262,7 @@
         "family": "bz4x",
         "powertrain": "electric",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4900,6 +5278,7 @@
         "family": "bz4x",
         "powertrain": "electric",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4915,6 +5294,7 @@
         "family": "camry",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Four-door cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4930,6 +5310,7 @@
         "family": "camry",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Four-door cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4945,6 +5326,7 @@
         "family": "camry",
         "powertrain": "hybrid",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Four-door cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4960,6 +5342,7 @@
         "family": "corolla",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Four-door cars / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4975,6 +5358,7 @@
         "family": "corollacross",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -4990,6 +5374,7 @@
         "family": "corollacross",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5005,6 +5390,7 @@
         "family": "corollacross",
         "powertrain": "hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5020,6 +5406,9 @@
         "family": "corolla",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [
+          "hatchback"
+        ],
         "hldiClass": "Four-door cars / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5035,6 +5424,7 @@
         "family": "corolla",
         "powertrain": "hybrid",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Four-door cars / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5050,6 +5440,7 @@
         "family": "corolla",
         "powertrain": "hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Four-door cars / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5065,6 +5456,7 @@
         "family": "grandhighlander",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5080,6 +5472,7 @@
         "family": "grandhighlander",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5095,6 +5488,7 @@
         "family": "grandhighlander",
         "powertrain": "hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5110,6 +5504,7 @@
         "family": "highlander",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5125,6 +5520,7 @@
         "family": "highlander",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5140,6 +5536,7 @@
         "family": "highlander",
         "powertrain": "hybrid",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5155,6 +5552,7 @@
         "family": "highlander",
         "powertrain": "hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5170,6 +5568,7 @@
         "family": "prius",
         "powertrain": "hybrid",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Four-door cars / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5185,6 +5584,7 @@
         "family": "prius",
         "powertrain": "hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Four-door cars / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5200,6 +5600,7 @@
         "family": "priusprime",
         "powertrain": "plug-in-hybrid",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Four-door cars / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5215,6 +5616,7 @@
         "family": "rav4",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5230,6 +5632,7 @@
         "family": "rav4",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5245,6 +5648,7 @@
         "family": "rav4",
         "powertrain": "hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5260,6 +5664,7 @@
         "family": "rav4prime",
         "powertrain": "plug-in-hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5275,6 +5680,7 @@
         "family": "sienna",
         "powertrain": "hybrid",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Minivans / Very large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5290,6 +5696,7 @@
         "family": "sienna",
         "powertrain": "hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Minivans / Very large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5305,6 +5712,7 @@
         "family": "tacoma",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Pickups / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5320,6 +5728,7 @@
         "family": "tacoma",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5335,6 +5744,7 @@
         "family": "tacoma",
         "powertrain": "hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5350,6 +5760,7 @@
         "family": "tundra",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5365,6 +5776,7 @@
         "family": "tundra",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5380,6 +5792,7 @@
         "family": "tundra",
         "powertrain": "hybrid",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5395,6 +5808,7 @@
         "family": "tundra",
         "powertrain": "hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5410,6 +5824,7 @@
         "family": "tundra",
         "powertrain": "hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5425,6 +5840,7 @@
         "family": "tundra",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5440,6 +5856,7 @@
         "family": "tundra",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5455,6 +5872,7 @@
         "family": "tundra",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5470,6 +5888,7 @@
         "family": "tundra",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5485,6 +5904,7 @@
         "family": "tundra",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "Pickups / Large",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5500,6 +5920,7 @@
         "family": "venza",
         "powertrain": "hybrid",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5515,6 +5936,7 @@
         "family": "atlas",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5530,6 +5952,7 @@
         "family": "atlas",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5545,6 +5968,7 @@
         "family": "atlascrosssport",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5560,6 +5984,7 @@
         "family": "atlascrosssport",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5575,6 +6000,7 @@
         "family": "id4",
         "powertrain": "electric",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5590,6 +6016,7 @@
         "family": "id4",
         "powertrain": "electric",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5605,6 +6032,7 @@
         "family": "jetta",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "Four-door cars / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5620,6 +6048,7 @@
         "family": "taos",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5635,6 +6064,7 @@
         "family": "taos",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Small",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5650,6 +6080,7 @@
         "family": "tiguan",
         "powertrain": "combustion",
         "drive": "2wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5665,6 +6096,7 @@
         "family": "tiguan",
         "powertrain": "combustion",
         "drive": "4wd",
+        "body": [],
         "hldiClass": "SUVs / Midsize",
         "modelYears": "2022-24",
         "yearMin": 2022,
@@ -5697,7 +6129,7 @@
       "small-car": {
         "hldiSubtotal": "Smallcar 4-door",
         "liability": {
-          "label": "Smallcar 4-door, liability share",
+          "label": "Small car: damage and injuries you cause",
           "value": 130,
           "low": 130,
           "high": 130,
@@ -5705,11 +6137,11 @@
           "sources": [
             "hldi-2022-24"
           ],
-          "derivation": "HLDI 2022–24 class average \"Smallcar 4-door\" (Four-door cars, Small), used for EPA class small-car. The mapping from EPA class to HLDI class is our judgment. Bodily injury 139 and property damage 117, weighted 57/43.",
+          "derivation": "HLDI 2022–24 class average \"Smallcar 4-door\", used for the EPA-based class \"Small car\". Which HLDI class stands in for which EPA class is our judgment. Bodily injury 139 and property damage 117, weighted 57/43, before the liability weight.",
           "n": 1
         },
         "physical": {
-          "label": "Smallcar 4-door, damage share",
+          "label": "Small car: damage to your own car",
           "value": 109,
           "low": 109,
           "high": 109,
@@ -5717,14 +6149,14 @@
           "sources": [
             "hldi-2022-24"
           ],
-          "derivation": "HLDI 2022–24 class average \"Smallcar 4-door\" (Four-door cars, Small), used for EPA class small-car. The mapping from EPA class to HLDI class is our judgment. Collision 116 and comprehensive 93, weighted 71/29.",
+          "derivation": "HLDI 2022–24 class average \"Smallcar 4-door\", used for the EPA-based class \"Small car\". Which HLDI class stands in for which EPA class is our judgment. Collision 116 and comprehensive 93, weighted 71/29.",
           "n": 1
         }
       },
       "midsize-car": {
         "hldiSubtotal": "Midsizecar 4-door",
         "liability": {
-          "label": "Midsizecar 4-door, liability share",
+          "label": "Midsize car: damage and injuries you cause",
           "value": 128,
           "low": 128,
           "high": 128,
@@ -5732,11 +6164,11 @@
           "sources": [
             "hldi-2022-24"
           ],
-          "derivation": "HLDI 2022–24 class average \"Midsizecar 4-door\" (Four-door cars, Midsize), used for EPA class midsize-car. The mapping from EPA class to HLDI class is our judgment. Bodily injury 138 and property damage 114, weighted 57/43.",
+          "derivation": "HLDI 2022–24 class average \"Midsizecar 4-door\", used for the EPA-based class \"Midsize car\". Which HLDI class stands in for which EPA class is our judgment. Bodily injury 138 and property damage 114, weighted 57/43, before the liability weight.",
           "n": 1
         },
         "physical": {
-          "label": "Midsizecar 4-door, damage share",
+          "label": "Midsize car: damage to your own car",
           "value": 120,
           "low": 120,
           "high": 120,
@@ -5744,14 +6176,14 @@
           "sources": [
             "hldi-2022-24"
           ],
-          "derivation": "HLDI 2022–24 class average \"Midsizecar 4-door\" (Four-door cars, Midsize), used for EPA class midsize-car. The mapping from EPA class to HLDI class is our judgment. Collision 124 and comprehensive 109, weighted 71/29.",
+          "derivation": "HLDI 2022–24 class average \"Midsizecar 4-door\", used for the EPA-based class \"Midsize car\". Which HLDI class stands in for which EPA class is our judgment. Collision 124 and comprehensive 109, weighted 71/29.",
           "n": 1
         }
       },
       "large-car": {
         "hldiSubtotal": "Midsizecar 4-door",
         "liability": {
-          "label": "Midsizecar 4-door, liability share",
+          "label": "Large car: damage and injuries you cause",
           "value": 128,
           "low": 128,
           "high": 128,
@@ -5759,11 +6191,11 @@
           "sources": [
             "hldi-2022-24"
           ],
-          "derivation": "HLDI 2022–24 class average \"Midsizecar 4-door\" (Four-door cars, Midsize), used for EPA class large-car. The mapping from EPA class to HLDI class is our judgment. EPA sizes cars by interior room, so its large class includes hatchbacks such as the Hyundai Ioniq; HLDI sizes by footprint and weight, so we use HLDI's midsize average. Bodily injury 138 and property damage 114, weighted 57/43.",
+          "derivation": "HLDI 2022–24 class average \"Midsizecar 4-door\", used for the EPA-based class \"Large car\". Which HLDI class stands in for which EPA class is our judgment. EPA sizes cars by interior room, so its large class includes hatchbacks such as the Hyundai Ioniq; HLDI sizes by footprint and weight, so we use HLDI's midsize average. Bodily injury 138 and property damage 114, weighted 57/43, before the liability weight.",
           "n": 1
         },
         "physical": {
-          "label": "Midsizecar 4-door, damage share",
+          "label": "Large car: damage to your own car",
           "value": 120,
           "low": 120,
           "high": 120,
@@ -5771,14 +6203,14 @@
           "sources": [
             "hldi-2022-24"
           ],
-          "derivation": "HLDI 2022–24 class average \"Midsizecar 4-door\" (Four-door cars, Midsize), used for EPA class large-car. The mapping from EPA class to HLDI class is our judgment. EPA sizes cars by interior room, so its large class includes hatchbacks such as the Hyundai Ioniq; HLDI sizes by footprint and weight, so we use HLDI's midsize average. Collision 124 and comprehensive 109, weighted 71/29.",
+          "derivation": "HLDI 2022–24 class average \"Midsizecar 4-door\", used for the EPA-based class \"Large car\". Which HLDI class stands in for which EPA class is our judgment. EPA sizes cars by interior room, so its large class includes hatchbacks such as the Hyundai Ioniq; HLDI sizes by footprint and weight, so we use HLDI's midsize average. Collision 124 and comprehensive 109, weighted 71/29.",
           "n": 1
         }
       },
       "two-seater": {
         "hldiSubtotal": "Midsize sports car",
         "liability": {
-          "label": "Midsize sports car, liability share",
+          "label": "Two-seater: damage and injuries you cause",
           "value": 74,
           "low": 74,
           "high": 74,
@@ -5786,11 +6218,11 @@
           "sources": [
             "hldi-2022-24"
           ],
-          "derivation": "HLDI 2022–24 class average \"Midsize sports car\" (Sports cars, Midsize), used for EPA class two-seater. The mapping from EPA class to HLDI class is our judgment. Bodily injury 79 and property damage 67, weighted 57/43.",
+          "derivation": "HLDI 2022–24 class average \"Midsize sports car\", used for the EPA-based class \"Two-seater\". Which HLDI class stands in for which EPA class is our judgment. Bodily injury 79 and property damage 67, weighted 57/43, before the liability weight.",
           "n": 1
         },
         "physical": {
-          "label": "Midsize sports car, damage share",
+          "label": "Two-seater: damage to your own car",
           "value": 153,
           "low": 153,
           "high": 153,
@@ -5798,14 +6230,14 @@
           "sources": [
             "hldi-2022-24"
           ],
-          "derivation": "HLDI 2022–24 class average \"Midsize sports car\" (Sports cars, Midsize), used for EPA class two-seater. The mapping from EPA class to HLDI class is our judgment. Collision 164 and comprehensive 125, weighted 71/29.",
+          "derivation": "HLDI 2022–24 class average \"Midsize sports car\", used for the EPA-based class \"Two-seater\". Which HLDI class stands in for which EPA class is our judgment. Collision 164 and comprehensive 125, weighted 71/29.",
           "n": 1
         }
       },
       "small-suv": {
         "hldiSubtotal": "Small SUV",
         "liability": {
-          "label": "Small SUV, liability share",
+          "label": "Small SUV: damage and injuries you cause",
           "value": 96,
           "low": 96,
           "high": 96,
@@ -5813,11 +6245,11 @@
           "sources": [
             "hldi-2022-24"
           ],
-          "derivation": "HLDI 2022–24 class average \"Small SUV\" (SUVs, Small), used for EPA class small-suv. The mapping from EPA class to HLDI class is our judgment. Bodily injury 97 and property damage 94, weighted 57/43.",
+          "derivation": "HLDI 2022–24 class average \"Small SUV\", used for the EPA-based class \"Small SUV\". Which HLDI class stands in for which EPA class is our judgment. Bodily injury 97 and property damage 94, weighted 57/43, before the liability weight.",
           "n": 1
         },
         "physical": {
-          "label": "Small SUV, damage share",
+          "label": "Small SUV: damage to your own car",
           "value": 83,
           "low": 83,
           "high": 83,
@@ -5825,14 +6257,14 @@
           "sources": [
             "hldi-2022-24"
           ],
-          "derivation": "HLDI 2022–24 class average \"Small SUV\" (SUVs, Small), used for EPA class small-suv. The mapping from EPA class to HLDI class is our judgment. Collision 84 and comprehensive 81, weighted 71/29.",
+          "derivation": "HLDI 2022–24 class average \"Small SUV\", used for the EPA-based class \"Small SUV\". Which HLDI class stands in for which EPA class is our judgment. Collision 84 and comprehensive 81, weighted 71/29.",
           "n": 1
         }
       },
       "large-suv": {
         "hldiSubtotal": "Large SUV",
         "liability": {
-          "label": "Large SUV, liability share",
+          "label": "Standard SUV: damage and injuries you cause",
           "value": 89,
           "low": 89,
           "high": 89,
@@ -5840,11 +6272,11 @@
           "sources": [
             "hldi-2022-24"
           ],
-          "derivation": "HLDI 2022–24 class average \"Large SUV\" (SUVs, Large), used for EPA class large-suv. The mapping from EPA class to HLDI class is our judgment. Bodily injury 84 and property damage 95, weighted 57/43.",
+          "derivation": "HLDI 2022–24 class average \"Large SUV\", used for the EPA-based class \"Standard SUV\". Which HLDI class stands in for which EPA class is our judgment. Bodily injury 84 and property damage 95, weighted 57/43, before the liability weight.",
           "n": 1
         },
         "physical": {
-          "label": "Large SUV, damage share",
+          "label": "Standard SUV: damage to your own car",
           "value": 92,
           "low": 92,
           "high": 92,
@@ -5852,14 +6284,14 @@
           "sources": [
             "hldi-2022-24"
           ],
-          "derivation": "HLDI 2022–24 class average \"Large SUV\" (SUVs, Large), used for EPA class large-suv. The mapping from EPA class to HLDI class is our judgment. Collision 86 and comprehensive 105, weighted 71/29.",
+          "derivation": "HLDI 2022–24 class average \"Large SUV\", used for the EPA-based class \"Standard SUV\". Which HLDI class stands in for which EPA class is our judgment. Collision 86 and comprehensive 105, weighted 71/29.",
           "n": 1
         }
       },
       "suv": {
         "hldiSubtotal": "Midsize SUV",
         "liability": {
-          "label": "Midsize SUV, liability share",
+          "label": "SUV: damage and injuries you cause",
           "value": 90,
           "low": 90,
           "high": 90,
@@ -5867,11 +6299,11 @@
           "sources": [
             "hldi-2022-24"
           ],
-          "derivation": "HLDI 2022–24 class average \"Midsize SUV\" (SUVs, Midsize), used for EPA class suv. The mapping from EPA class to HLDI class is our judgment. Bodily injury 87 and property damage 94, weighted 57/43.",
+          "derivation": "HLDI 2022–24 class average \"Midsize SUV\", used for the EPA-based class \"SUV\". Which HLDI class stands in for which EPA class is our judgment. Bodily injury 87 and property damage 94, weighted 57/43, before the liability weight.",
           "n": 1
         },
         "physical": {
-          "label": "Midsize SUV, damage share",
+          "label": "SUV: damage to your own car",
           "value": 85,
           "low": 85,
           "high": 85,
@@ -5879,14 +6311,14 @@
           "sources": [
             "hldi-2022-24"
           ],
-          "derivation": "HLDI 2022–24 class average \"Midsize SUV\" (SUVs, Midsize), used for EPA class suv. The mapping from EPA class to HLDI class is our judgment. Collision 84 and comprehensive 89, weighted 71/29.",
+          "derivation": "HLDI 2022–24 class average \"Midsize SUV\", used for the EPA-based class \"SUV\". Which HLDI class stands in for which EPA class is our judgment. Collision 84 and comprehensive 89, weighted 71/29.",
           "n": 1
         }
       },
       "small-pickup": {
         "hldiSubtotal": "All small pickups",
         "liability": {
-          "label": "All small pickups, liability share",
+          "label": "Small pickup: damage and injuries you cause",
           "value": 101,
           "low": 101,
           "high": 101,
@@ -5894,11 +6326,11 @@
           "sources": [
             "hldi-2022-24"
           ],
-          "derivation": "HLDI 2022–24 class average \"All small pickups\" (Pickups, Small), used for EPA class small-pickup. The mapping from EPA class to HLDI class is our judgment. Bodily injury 96 and property damage 108, weighted 57/43.",
+          "derivation": "HLDI 2022–24 class average \"All small pickups\", used for the EPA-based class \"Small pickup\". Which HLDI class stands in for which EPA class is our judgment. Bodily injury 96 and property damage 108, weighted 57/43, before the liability weight.",
           "n": 1
         },
         "physical": {
-          "label": "All small pickups, damage share",
+          "label": "Small pickup: damage to your own car",
           "value": 80,
           "low": 80,
           "high": 80,
@@ -5906,14 +6338,14 @@
           "sources": [
             "hldi-2022-24"
           ],
-          "derivation": "HLDI 2022–24 class average \"All small pickups\" (Pickups, Small), used for EPA class small-pickup. The mapping from EPA class to HLDI class is our judgment. Collision 81 and comprehensive 77, weighted 71/29.",
+          "derivation": "HLDI 2022–24 class average \"All small pickups\", used for the EPA-based class \"Small pickup\". Which HLDI class stands in for which EPA class is our judgment. Collision 81 and comprehensive 77, weighted 71/29.",
           "n": 1
         }
       },
       "large-pickup": {
         "hldiSubtotal": "All large pickups",
         "liability": {
-          "label": "All large pickups, liability share",
+          "label": "Full-size pickup: damage and injuries you cause",
           "value": 105,
           "low": 105,
           "high": 105,
@@ -5921,11 +6353,11 @@
           "sources": [
             "hldi-2022-24"
           ],
-          "derivation": "HLDI 2022–24 class average \"All large pickups\" (Pickups, Large), used for EPA class large-pickup. The mapping from EPA class to HLDI class is our judgment. Bodily injury 100 and property damage 111, weighted 57/43.",
+          "derivation": "HLDI 2022–24 class average \"All large pickups\", used for the EPA-based class \"Full-size pickup\". Which HLDI class stands in for which EPA class is our judgment. Bodily injury 100 and property damage 111, weighted 57/43, before the liability weight.",
           "n": 1
         },
         "physical": {
-          "label": "All large pickups, damage share",
+          "label": "Full-size pickup: damage to your own car",
           "value": 99,
           "low": 99,
           "high": 99,
@@ -5933,14 +6365,14 @@
           "sources": [
             "hldi-2022-24"
           ],
-          "derivation": "HLDI 2022–24 class average \"All large pickups\" (Pickups, Large), used for EPA class large-pickup. The mapping from EPA class to HLDI class is our judgment. Collision 93 and comprehensive 114, weighted 71/29.",
+          "derivation": "HLDI 2022–24 class average \"All large pickups\", used for the EPA-based class \"Full-size pickup\". Which HLDI class stands in for which EPA class is our judgment. Collision 93 and comprehensive 114, weighted 71/29.",
           "n": 1
         }
       },
       "minivan": {
         "hldiSubtotal": "Very large Minivan",
         "liability": {
-          "label": "Very large Minivan, liability share",
+          "label": "Minivan: damage and injuries you cause",
           "value": 88,
           "low": 88,
           "high": 88,
@@ -5948,11 +6380,11 @@
           "sources": [
             "hldi-2022-24"
           ],
-          "derivation": "HLDI 2022–24 class average \"Very large Minivan\" (Minivans, Very large), used for EPA class minivan. The mapping from EPA class to HLDI class is our judgment. Bodily injury 89 and property damage 87, weighted 57/43.",
+          "derivation": "HLDI 2022–24 class average \"Very large Minivan\", used for the EPA-based class \"Minivan\". Which HLDI class stands in for which EPA class is our judgment. Bodily injury 89 and property damage 87, weighted 57/43, before the liability weight.",
           "n": 1
         },
         "physical": {
-          "label": "Very large Minivan, damage share",
+          "label": "Minivan: damage to your own car",
           "value": 89,
           "low": 89,
           "high": 89,
@@ -5960,14 +6392,14 @@
           "sources": [
             "hldi-2022-24"
           ],
-          "derivation": "HLDI 2022–24 class average \"Very large Minivan\" (Minivans, Very large), used for EPA class minivan. The mapping from EPA class to HLDI class is our judgment. Collision 91 and comprehensive 85, weighted 71/29.",
+          "derivation": "HLDI 2022–24 class average \"Very large Minivan\", used for the EPA-based class \"Minivan\". Which HLDI class stands in for which EPA class is our judgment. Collision 91 and comprehensive 85, weighted 71/29.",
           "n": 1
         }
       },
       "van": {
         "hldiSubtotal": "Very large van",
         "liability": {
-          "label": "Very large van, liability share",
+          "label": "Van: damage and injuries you cause",
           "value": 93,
           "low": 93,
           "high": 93,
@@ -5975,11 +6407,11 @@
           "sources": [
             "hldi-2022-24"
           ],
-          "derivation": "HLDI 2022–24 class average \"Very large van\" (Vans, Very large), used for EPA class van. The mapping from EPA class to HLDI class is our judgment. Bodily injury 94 and property damage 91, weighted 57/43.",
+          "derivation": "HLDI 2022–24 class average \"Very large van\", used for the EPA-based class \"Van\". Which HLDI class stands in for which EPA class is our judgment. Bodily injury 94 and property damage 91, weighted 57/43, before the liability weight.",
           "n": 1
         },
         "physical": {
-          "label": "Very large van, damage share",
+          "label": "Van: damage to your own car",
           "value": 82,
           "low": 82,
           "high": 82,
@@ -5987,14 +6419,14 @@
           "sources": [
             "hldi-2022-24"
           ],
-          "derivation": "HLDI 2022–24 class average \"Very large van\" (Vans, Very large), used for EPA class van. The mapping from EPA class to HLDI class is our judgment. Collision 77 and comprehensive 95, weighted 71/29.",
+          "derivation": "HLDI 2022–24 class average \"Very large van\", used for the EPA-based class \"Van\". Which HLDI class stands in for which EPA class is our judgment. Collision 77 and comprehensive 95, weighted 71/29.",
           "n": 1
         }
       },
       "special-purpose": {
         "hldiSubtotal": "Midsize SUV",
         "liability": {
-          "label": "Midsize SUV, liability share",
+          "label": "Special purpose vehicle: damage and injuries you cause",
           "value": 90,
           "low": 90,
           "high": 90,
@@ -6002,11 +6434,11 @@
           "sources": [
             "hldi-2022-24"
           ],
-          "derivation": "HLDI 2022–24 class average \"Midsize SUV\" (SUVs, Midsize), used for EPA class special-purpose. The mapping from EPA class to HLDI class is our judgment. Bodily injury 87 and property damage 94, weighted 57/43.",
+          "derivation": "HLDI 2022–24 class average \"Midsize SUV\", used for the EPA-based class \"Special purpose vehicle\". Which HLDI class stands in for which EPA class is our judgment. Bodily injury 87 and property damage 94, weighted 57/43, before the liability weight.",
           "n": 1
         },
         "physical": {
-          "label": "Midsize SUV, damage share",
+          "label": "Special purpose vehicle: damage to your own car",
           "value": 85,
           "low": 85,
           "high": 85,
@@ -6014,7 +6446,7 @@
           "sources": [
             "hldi-2022-24"
           ],
-          "derivation": "HLDI 2022–24 class average \"Midsize SUV\" (SUVs, Midsize), used for EPA class special-purpose. The mapping from EPA class to HLDI class is our judgment. Collision 84 and comprehensive 89, weighted 71/29.",
+          "derivation": "HLDI 2022–24 class average \"Midsize SUV\", used for the EPA-based class \"Special purpose vehicle\". Which HLDI class stands in for which EPA class is our judgment. Collision 84 and comprehensive 89, weighted 71/29.",
           "n": 1
         }
       }
@@ -6023,7 +6455,7 @@
       "small-suv": {
         "hldiSubtotal": "Electric SUVs / Small",
         "liability": {
-          "label": "Electric suvs (small), liability share",
+          "label": "Electric small SUV: damage and injuries you cause",
           "value": 84,
           "low": 75,
           "high": 91,
@@ -6031,11 +6463,11 @@
           "sources": [
             "hldi-2022-24"
           ],
-          "derivation": "Median of the 8 electric HLDI 2022–24 series we keep in SUVs / Small (Chevrolet Equinox electric 4dr; Hyundai IONIQ 5 electric 4dr; Hyundai IONIQ 5 electric 4dr 4WD; Hyundai Kona electric 4dr; Kia EV6 electric 4dr; Kia EV6 electric 4dr 4WD; Toyota BZ4X electric 4dr; Toyota BZ4X electric 4dr 4WD). Liability relativity per series, weighted as above.",
+          "derivation": "Middle of the 8 electric HLDI 2022–24 series we keep in HLDI's SUVs / Small class (Chevrolet Equinox electric 4dr; Hyundai IONIQ 5 electric 4dr; Hyundai IONIQ 5 electric 4dr 4WD; Hyundai Kona electric 4dr; Kia EV6 electric 4dr; Kia EV6 electric 4dr 4WD; Toyota BZ4X electric 4dr; Toyota BZ4X electric 4dr 4WD). Liability result per series, weighted as above, before the liability weight.",
           "n": 6
         },
         "physical": {
-          "label": "Electric suvs (small), damage share",
+          "label": "Electric small SUV: damage to your own car",
           "value": 118,
           "low": 108,
           "high": 124,
@@ -6043,14 +6475,14 @@
           "sources": [
             "hldi-2022-24"
           ],
-          "derivation": "Median of the 8 electric HLDI 2022–24 series we keep in SUVs / Small (Chevrolet Equinox electric 4dr; Hyundai IONIQ 5 electric 4dr; Hyundai IONIQ 5 electric 4dr 4WD; Hyundai Kona electric 4dr; Kia EV6 electric 4dr; Kia EV6 electric 4dr 4WD; Toyota BZ4X electric 4dr; Toyota BZ4X electric 4dr 4WD). Damage relativity per series, weighted as above.",
+          "derivation": "Middle of the 8 electric HLDI 2022–24 series we keep in HLDI's SUVs / Small class (Chevrolet Equinox electric 4dr; Hyundai IONIQ 5 electric 4dr; Hyundai IONIQ 5 electric 4dr 4WD; Hyundai Kona electric 4dr; Kia EV6 electric 4dr; Kia EV6 electric 4dr 4WD; Toyota BZ4X electric 4dr; Toyota BZ4X electric 4dr 4WD). Damage result per series, weighted as above.",
           "n": 8
         }
       },
       "suv": {
         "hldiSubtotal": "Electric SUVs / Midsize",
         "liability": {
-          "label": "Electric suvs (midsize), liability share",
+          "label": "Electric SUV: damage and injuries you cause",
           "value": 82,
           "low": 82,
           "high": 91,
@@ -6058,11 +6490,11 @@
           "sources": [
             "hldi-2022-24"
           ],
-          "derivation": "Median of the 5 electric HLDI 2022–24 series we keep in SUVs / Midsize (Chevrolet Blazer electric 4dr 4WD; Ford Mustang Mach-E electric 4dr; Ford Mustang Mach-E electric 4dr 4WD; Volkswagen ID.4 electric 4dr; Volkswagen ID.4 electric 4dr 4WD). Liability relativity per series, weighted as above.",
+          "derivation": "Middle of the 5 electric HLDI 2022–24 series we keep in HLDI's SUVs / Midsize class (Chevrolet Blazer electric 4dr 4WD; Ford Mustang Mach-E electric 4dr; Ford Mustang Mach-E electric 4dr 4WD; Volkswagen ID.4 electric 4dr; Volkswagen ID.4 electric 4dr 4WD). Liability result per series, weighted as above, before the liability weight.",
           "n": 5
         },
         "physical": {
-          "label": "Electric suvs (midsize), damage share",
+          "label": "Electric SUV: damage to your own car",
           "value": 95,
           "low": 95,
           "high": 99,
@@ -6070,10 +6502,266 @@
           "sources": [
             "hldi-2022-24"
           ],
-          "derivation": "Median of the 5 electric HLDI 2022–24 series we keep in SUVs / Midsize (Chevrolet Blazer electric 4dr 4WD; Ford Mustang Mach-E electric 4dr; Ford Mustang Mach-E electric 4dr 4WD; Volkswagen ID.4 electric 4dr; Volkswagen ID.4 electric 4dr 4WD). Damage relativity per series, weighted as above.",
+          "derivation": "Middle of the 5 electric HLDI 2022–24 series we keep in HLDI's SUVs / Midsize class (Chevrolet Blazer electric 4dr 4WD; Ford Mustang Mach-E electric 4dr; Ford Mustang Mach-E electric 4dr 4WD; Volkswagen ID.4 electric 4dr; Volkswagen ID.4 electric 4dr 4WD). Damage result per series, weighted as above.",
           "n": 5
         }
       }
-    }
+    },
+    "luxuryClasses": {
+      "small-car": {
+        "hldiSubtotal": "Midsize luxury car",
+        "liability": {
+          "label": "Luxury small car: damage and injuries you cause",
+          "value": 95,
+          "low": 95,
+          "high": 95,
+          "basis": "indicative",
+          "sources": [
+            "hldi-2022-24"
+          ],
+          "derivation": "HLDI 2022–24 class average \"Midsize luxury car\", used for the class \"Small car\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. Bodily injury 95 and property damage 94, weighted 57/43, before the liability weight.",
+          "n": 1
+        },
+        "physical": {
+          "label": "Luxury small car: damage to your own car",
+          "value": 143,
+          "low": 143,
+          "high": 143,
+          "basis": "indicative",
+          "sources": [
+            "hldi-2022-24"
+          ],
+          "derivation": "HLDI 2022–24 class average \"Midsize luxury car\", used for the class \"Small car\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. Collision 153 and comprehensive 120, weighted 71/29.",
+          "n": 1
+        }
+      },
+      "midsize-car": {
+        "hldiSubtotal": "Midsize luxury car",
+        "liability": {
+          "label": "Luxury midsize car: damage and injuries you cause",
+          "value": 95,
+          "low": 95,
+          "high": 95,
+          "basis": "indicative",
+          "sources": [
+            "hldi-2022-24"
+          ],
+          "derivation": "HLDI 2022–24 class average \"Midsize luxury car\", used for the class \"Midsize car\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. Bodily injury 95 and property damage 94, weighted 57/43, before the liability weight.",
+          "n": 1
+        },
+        "physical": {
+          "label": "Luxury midsize car: damage to your own car",
+          "value": 143,
+          "low": 143,
+          "high": 143,
+          "basis": "indicative",
+          "sources": [
+            "hldi-2022-24"
+          ],
+          "derivation": "HLDI 2022–24 class average \"Midsize luxury car\", used for the class \"Midsize car\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. Collision 153 and comprehensive 120, weighted 71/29.",
+          "n": 1
+        }
+      },
+      "large-car": {
+        "hldiSubtotal": "Large luxury car",
+        "liability": {
+          "label": "Luxury large car: damage and injuries you cause",
+          "value": 91,
+          "low": 91,
+          "high": 91,
+          "basis": "indicative",
+          "sources": [
+            "hldi-2022-24"
+          ],
+          "derivation": "HLDI 2022–24 class average \"Large luxury car\", used for the class \"Large car\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. Bodily injury 90 and property damage 93, weighted 57/43, before the liability weight.",
+          "n": 1
+        },
+        "physical": {
+          "label": "Luxury large car: damage to your own car",
+          "value": 187,
+          "low": 187,
+          "high": 187,
+          "basis": "indicative",
+          "sources": [
+            "hldi-2022-24"
+          ],
+          "derivation": "HLDI 2022–24 class average \"Large luxury car\", used for the class \"Large car\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. Collision 188 and comprehensive 184, weighted 71/29.",
+          "n": 1
+        }
+      },
+      "two-seater": {
+        "hldiSubtotal": "Large sports car",
+        "liability": {
+          "label": "Luxury two-seater: damage and injuries you cause",
+          "value": 116,
+          "low": 116,
+          "high": 116,
+          "basis": "indicative",
+          "sources": [
+            "hldi-2022-24"
+          ],
+          "derivation": "HLDI 2022–24 class average \"Large sports car\", used for the class \"Two-seater\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. Bodily injury 126 and property damage 103, weighted 57/43, before the liability weight.",
+          "n": 1
+        },
+        "physical": {
+          "label": "Luxury two-seater: damage to your own car",
+          "value": 213,
+          "low": 213,
+          "high": 213,
+          "basis": "indicative",
+          "sources": [
+            "hldi-2022-24"
+          ],
+          "derivation": "HLDI 2022–24 class average \"Large sports car\", used for the class \"Two-seater\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. Collision 192 and comprehensive 263, weighted 71/29.",
+          "n": 1
+        }
+      },
+      "small-suv": {
+        "hldiSubtotal": "Small luxury SUV",
+        "liability": {
+          "label": "Luxury small SUV: damage and injuries you cause",
+          "value": 94,
+          "low": 94,
+          "high": 94,
+          "basis": "indicative",
+          "sources": [
+            "hldi-2022-24"
+          ],
+          "derivation": "HLDI 2022–24 class average \"Small luxury SUV\", used for the class \"Small SUV\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. Bodily injury 96 and property damage 92, weighted 57/43, before the liability weight.",
+          "n": 1
+        },
+        "physical": {
+          "label": "Luxury small SUV: damage to your own car",
+          "value": 89,
+          "low": 89,
+          "high": 89,
+          "basis": "indicative",
+          "sources": [
+            "hldi-2022-24"
+          ],
+          "derivation": "HLDI 2022–24 class average \"Small luxury SUV\", used for the class \"Small SUV\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. Collision 93 and comprehensive 80, weighted 71/29.",
+          "n": 1
+        }
+      },
+      "suv": {
+        "hldiSubtotal": "Midsize luxury SUV",
+        "liability": {
+          "label": "Luxury SUV: damage and injuries you cause",
+          "value": 78,
+          "low": 78,
+          "high": 78,
+          "basis": "indicative",
+          "sources": [
+            "hldi-2022-24"
+          ],
+          "derivation": "HLDI 2022–24 class average \"Midsize luxury SUV\", used for the class \"SUV\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. Bodily injury 74 and property damage 83, weighted 57/43, before the liability weight.",
+          "n": 1
+        },
+        "physical": {
+          "label": "Luxury SUV: damage to your own car",
+          "value": 114,
+          "low": 114,
+          "high": 114,
+          "basis": "indicative",
+          "sources": [
+            "hldi-2022-24"
+          ],
+          "derivation": "HLDI 2022–24 class average \"Midsize luxury SUV\", used for the class \"SUV\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. Collision 116 and comprehensive 110, weighted 71/29.",
+          "n": 1
+        }
+      },
+      "large-suv": {
+        "hldiSubtotal": "Large luxury SUV",
+        "liability": {
+          "label": "Luxury standard SUV: damage and injuries you cause",
+          "value": 84,
+          "low": 84,
+          "high": 84,
+          "basis": "indicative",
+          "sources": [
+            "hldi-2022-24"
+          ],
+          "derivation": "HLDI 2022–24 class average \"Large luxury SUV\", used for the class \"Standard SUV\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. Bodily injury 77 and property damage 93, weighted 57/43, before the liability weight.",
+          "n": 1
+        },
+        "physical": {
+          "label": "Luxury standard SUV: damage to your own car",
+          "value": 161,
+          "low": 161,
+          "high": 161,
+          "basis": "indicative",
+          "sources": [
+            "hldi-2022-24"
+          ],
+          "derivation": "HLDI 2022–24 class average \"Large luxury SUV\", used for the class \"Standard SUV\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. Collision 153 and comprehensive 180, weighted 71/29.",
+          "n": 1
+        }
+      },
+      "special-purpose": {
+        "hldiSubtotal": "Midsize luxury SUV",
+        "liability": {
+          "label": "Luxury special purpose vehicle: damage and injuries you cause",
+          "value": 78,
+          "low": 78,
+          "high": 78,
+          "basis": "indicative",
+          "sources": [
+            "hldi-2022-24"
+          ],
+          "derivation": "HLDI 2022–24 class average \"Midsize luxury SUV\", used for the class \"Special purpose vehicle\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. Bodily injury 74 and property damage 83, weighted 57/43, before the liability weight.",
+          "n": 1
+        },
+        "physical": {
+          "label": "Luxury special purpose vehicle: damage to your own car",
+          "value": 114,
+          "low": 114,
+          "high": 114,
+          "basis": "indicative",
+          "sources": [
+            "hldi-2022-24"
+          ],
+          "derivation": "HLDI 2022–24 class average \"Midsize luxury SUV\", used for the class \"Special purpose vehicle\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. Collision 116 and comprehensive 110, weighted 71/29.",
+          "n": 1
+        }
+      }
+    },
+    "luxuryMakes": [
+      "acura",
+      "alfaromeo",
+      "astonmartin",
+      "audi",
+      "bmw",
+      "bentley",
+      "buick",
+      "cadillac",
+      "ferrari",
+      "genesis",
+      "infiniti",
+      "jaguar",
+      "lamborghini",
+      "landrover",
+      "lexus",
+      "lincoln",
+      "lucid",
+      "maserati",
+      "mercedesbenz",
+      "polestar",
+      "porsche",
+      "rollsroyce",
+      "tesla",
+      "volvo"
+    ],
+    "liabilityWeight": {
+      "label": "How much of a vehicle's liability losses we pass on",
+      "value": 52,
+      "low": 26,
+      "high": 79,
+      "basis": "assumed",
+      "sources": [],
+      "derivation": "Our estimate, and our judgment; help wanted. HLDI's liability results by vehicle spread widely (the middle 90% of the 314 series we keep run from 38% less to +40%), but insurers move liability prices by vehicle much less: ISO's liability symbol plan, as reported by Insurance Journal in 2004, allows surcharges \"of up to 25 percent and discounts of up to 20 percent\". We pass on the largest share of HLDI's liability result that keeps that middle 90% inside +25% and 20% less, and keep every vehicle inside that band: liability factor = 1 + 0.52 × (HLDI − 1). Collision and comprehensive results are passed on in full. The range allows half to one and a half times this weight.",
+      "n": null
+    },
+    "liabilityFloor": 80,
+    "liabilityCap": 125
   }
 }

@@ -31,7 +31,7 @@ import bundleFile from "@/data/model-factors.json"
 import { compactName, normalizeName } from "@/lib/catalog-match"
 import type { TrimConfidence } from "@/lib/catalog-match"
 import type { CatalogStatus } from "@/lib/catalog"
-import { vehicleFacts, type VehicleFacts } from "@/lib/catalog-class"
+import { VEHICLE_CLASS_LABELS, vehicleFacts, type VehicleFacts } from "@/lib/catalog-class"
 import type {
   AppliesTo,
   FactorBasis,
@@ -39,9 +39,11 @@ import type {
   FactorCell,
   FactorGroup,
   VehicleClassRow,
+  VehicleData,
   VehicleLossRow,
 } from "@/lib/factor-types"
 import { MODEL_VERSION } from "@/lib/copy"
+import { BASELINE_STATE_CODES, stateBaseline, STATE_BASELINE_ATTRIBUTION } from "@/lib/state-baselines"
 import {
   hasPhysicalDamage,
   stateName,
@@ -180,10 +182,19 @@ export type Selection = { group: GroupId; key: string; appliesTo: AppliesTo; cel
  * There is no teen checkbox in the model: the 16–18 age band is the teen
  * factor.
  */
-export function selectionKeys(scenario: Scenario): Record<GroupId, string> {
+export type DriverOptions = {
+  /**
+   * Price a 16–18-year-old as added to a parent's policy (the whole
+   * household's premium goes up by a rough factor from California's survey)
+   * instead of as the only driver on their own policy. Off by default.
+   */
+  teenOnParentPolicy?: boolean
+}
+
+export function selectionKeys(scenario: Scenario, options: DriverOptions = {}): Record<GroupId, string> {
   const damage = hasPhysicalDamage(scenario.coverage)
   return {
-    "driver-age": scenario.age,
+    "driver-age": options.teenOnParentPolicy && scenario.age === "16-18" ? "16-18-added" : scenario.age,
     "driving-experience": UNDER_26.includes(scenario.age) ? "not-used" : scenario.yearsLicensed,
     "driving-record": scenario.incidents,
     "annual-mileage": scenario.mileage,
@@ -211,8 +222,8 @@ export function vehicleAgeKey(modelYear: number): string {
   return "13-plus"
 }
 
-export function selections(scenario: Scenario): Selection[] {
-  const keys = selectionKeys(scenario)
+export function selections(scenario: Scenario, options: DriverOptions = {}): Selection[] {
+  const keys = selectionKeys(scenario, options)
   return GROUP_IDS.map((id) => ({
     group: id,
     key: keys[id],
@@ -246,6 +257,10 @@ export type VehicleRelativity = {
   /** A stable key: two vehicles with the same key have the same factors. */
   key: string
   basis: FactorBasis
+  /** True when the trim name is sold as gas and as hybrid, so we can't be sure which. */
+  mixedPowertrain: boolean
+  /** Basis points the liability factor could move with the liability weight at the edge of its range. */
+  liabilityWeightSpread: number
 }
 
 function rowPowertrain(facts: VehicleFacts): VehicleLossRow["powertrain"] {
@@ -302,14 +317,51 @@ function splitShare(key: "collision-in-physical" | "bodily-injury-in-liability")
   return cellOf("premium-split", key).value
 }
 
-/** The HLDI rows for a vehicle, or an empty list. */
-export function matchVehicleRows(facts: VehicleFacts): VehicleLossRow[] {
+const SPECIAL_BODIES = ["convertible", "hatchback", "wagon"] as const
+
+/** Body words in a catalog trim name, in HLDI's terms. */
+export function trimBody(facts: Pick<VehicleFacts, "model" | "trim">): { special: string[]; doors: "2dr" | "4dr" | null } {
+  const words = normalizeName(`${facts.model} ${facts.trim}`)
+  const special: string[] = []
+  if (/\b(convertible|cabriolet|cabrio|roadster|spyder|spider)\b/.test(words)) special.push("convertible")
+  if (/\b(hatchback|5dr|5 door)\b/.test(words)) special.push("hatchback")
+  if (/\b(wagon|sportwagen)\b/.test(words)) special.push("wagon")
+  const doors = /\b(2dr|2 door|coupe)\b/.test(words) ? "2dr" : /\b(4dr|4 door|sedan)\b/.test(words) ? "4dr" : null
+  return { special, doors }
+}
+
+/**
+ * Keep the HLDI rows whose body matches the trim. A trim that names a body
+ * (convertible, hatchback, wagon, two doors) gets rows with that body; a trim
+ * that doesn't gets the plain rows (no special body, and four doors when HLDI
+ * lists both). Each step only narrows when something is left.
+ */
+function narrowByBody(pool: VehicleLossRow[], facts: VehicleFacts): VehicleLossRow[] {
+  const body = trimBody(facts)
+  let rows = pool
+  for (const special of SPECIAL_BODIES) {
+    const wanted = body.special.includes(special)
+    const next = rows.filter((row) => (row.body ?? []).includes(special) === wanted)
+    if (next.length > 0) rows = next
+  }
+  const twoDoor = body.doors === "2dr"
+  const next = rows.filter((row) => (row.body ?? []).includes("2dr") === twoDoor)
+  if (next.length > 0) rows = next
+  return rows
+}
+
+/**
+ * The HLDI rows for a vehicle, or an empty list. `data` defaults to the
+ * committed bundle; tests pass a bundle built without HLDI's model rows.
+ */
+export function matchVehicleRows(facts: VehicleFacts, data: VehicleData = bundle.vehicle): VehicleLossRow[] {
+  if (!data.modelsEnabled) return []
   const make = compactName(facts.make)
   const catalogModel = compactName(facts.model)
   if (!make || !catalogModel) return []
-  const model = bundle.vehicle.aliases[`${make}|${catalogModel}`] ?? catalogModel
+  const model = data.aliases[`${make}|${catalogModel}`] ?? catalogModel
   const trimWords = compactName(facts.trim)
-  const sameMake = bundle.vehicle.models.filter((row) => compactName(row.make) === make)
+  const sameMake = data.models.filter((row) => compactName(row.make) === make)
   // A more specific HLDI series whose extra words are in the trim name, for
   // example "F-150 Lightning" for the trim "F-150 Lightning 4WD".
   const specific = sameMake.filter((row) => {
@@ -320,8 +372,8 @@ export function matchVehicleRows(facts: VehicleFacts): VehicleLossRow[] {
   let pool = specific.length > 0 ? specific : sameMake.filter((row) => row.family === model)
   // Powertrain unknown (no catalog): a family HLDI lists only as electric,
   // like Tesla's, is electric; otherwise assume the gas version.
-  if (facts.powertrain === null && pool.every((row) => row.powertrain === pool[0].powertrain)) {
-    return narrowByDrive(pool, facts)
+  if (facts.powertrain === null && pool.length > 0 && pool.every((row) => row.powertrain === pool[0].powertrain)) {
+    return narrowByDrive(narrowByBody(pool, facts), facts)
   }
   const powertrain = rowPowertrain(facts)
   const samePowertrain = pool.filter((row) => row.powertrain === powertrain)
@@ -334,7 +386,7 @@ export function matchVehicleRows(facts: VehicleFacts): VehicleLossRow[] {
       ? samePowertrain
       : pool.filter((row) => row.powertrain === "combustion")
   if (pool.length === 0) return []
-  return narrowByDrive(pool, facts)
+  return narrowByDrive(narrowByBody(pool, facts), facts)
 }
 
 function narrowByDrive(pool: VehicleLossRow[], facts: VehicleFacts): VehicleLossRow[] {
@@ -345,13 +397,55 @@ function narrowByDrive(pool: VehicleLossRow[], facts: VehicleFacts): VehicleLoss
   return sameDrive.length > 0 ? sameDrive : pool
 }
 
-function classRow(facts: VehicleFacts): VehicleClassRow | null {
+function isLuxuryMake(make: string, data: VehicleData): boolean {
+  return data.luxuryMakes.includes(compactName(make))
+}
+
+type ClassKind = "luxury" | "electric" | "plain"
+
+function classRow(facts: VehicleFacts, data: VehicleData): { row: VehicleClassRow; kind: ClassKind } | null {
   if (!facts.classId) return null
-  if (facts.powertrain === "electric") {
-    const electric = bundle.vehicle.electricClasses[facts.classId]
-    if (electric) return electric
+  if (isLuxuryMake(facts.make, data)) {
+    const luxury = data.luxuryClasses[facts.classId]
+    if (luxury) return { row: luxury, kind: "luxury" }
   }
-  return bundle.vehicle.classes[facts.classId] ?? null
+  if (facts.powertrain === "electric") {
+    const electric = data.electricClasses[facts.classId]
+    if (electric) return { row: electric, kind: "electric" }
+  }
+  const plain = data.classes[facts.classId]
+  return plain ? { row: plain, kind: "plain" } : null
+}
+
+/**
+ * Pass on only part of HLDI's liability result, and keep it inside the band
+ * insurers use (see the liability weight in the bundle).
+ */
+function creditedLiability(hldi: Rational, data: VehicleData, weightHundredths = data.liabilityWeight.value): Rational {
+  const credited = add(rat(1), mul(rat(weightHundredths, 100), sub(hldi, rat(1))))
+  const floor = rat(data.liabilityFloor, 100)
+  const cap = rat(data.liabilityCap, 100)
+  if (compare(credited, floor) < 0) return floor
+  if (compare(credited, cap) > 0) return cap
+  return credited
+}
+
+function compare(left: Rational, right: Rational): number {
+  const difference = left.num * right.den - right.num * left.den
+  return difference < ZERO ? -1 : difference > ZERO ? 1 : 0
+}
+
+/** Basis points the liability factor could move if the weight were at the edge of its range. */
+function weightSpread(hldi: Rational, data: VehicleData): number {
+  const base = creditedLiability(hldi, data)
+  const high = creditedLiability(hldi, data, data.liabilityWeight.high)
+  const low = creditedLiability(hldi, data, data.liabilityWeight.low)
+  const spread = (value: Rational) => {
+    const difference = sub(value, base)
+    const absolute = difference.num < ZERO ? { num: -difference.num, den: difference.den } : difference
+    return roundHalfUp(mul(div(absolute, base), rat(10000)))
+  }
+  return Math.max(spread(high), spread(low))
 }
 
 const AVERAGE: Pick<VehicleRelativity, "liability" | "physical" | "liabilityHundredths" | "physicalHundredths"> = {
@@ -361,11 +455,21 @@ const AVERAGE: Pick<VehicleRelativity, "liability" | "physical" | "liabilityHund
   physicalHundredths: 100,
 }
 
+function classWords(facts: VehicleFacts, kind: ClassKind): string {
+  const base = facts.classId ? VEHICLE_CLASS_LABELS[facts.classId] : "vehicle"
+  const plain = /^[A-Z]{2}/.test(base) ? base : base.charAt(0).toLowerCase() + base.slice(1)
+  return kind === "plain" ? plain : `${kind} ${plain}`
+}
+
 /**
  * How a vehicle moves each share of the premium. `"average"` is the average
- * vehicle (HLDI's 100), used with a typical starting premium.
+ * vehicle (HLDI's 100), used with a typical starting premium. `data` defaults
+ * to the committed bundle.
  */
-export function vehicleRelativity(vehicle: VehicleFacts | "average"): VehicleRelativity {
+export function vehicleRelativity(
+  vehicle: VehicleFacts | "average",
+  data: VehicleData = bundle.vehicle,
+): VehicleRelativity {
   if (vehicle === "average") {
     return {
       level: "average",
@@ -376,28 +480,31 @@ export function vehicleRelativity(vehicle: VehicleFacts | "average"): VehicleRel
       outsideYears: false,
       key: "average",
       basis: "reference",
+      mixedPowertrain: false,
+      liabilityWeightSpread: 0,
     }
   }
-  const outsideYears =
-    vehicle.year < bundle.vehicle.yearMin || vehicle.year > bundle.vehicle.yearMax
-  const rows = matchVehicleRows(vehicle)
-  const klass = classRow(vehicle)
+  const outsideYears = vehicle.year < data.yearMin || vehicle.year > data.yearMax
+  const rows = matchVehicleRows(vehicle, data)
+  const klass = classRow(vehicle, data)
   const bi = splitShare("bodily-injury-in-liability")
   const collision = splitShare("collision-in-physical")
+  const mixedPowertrain = vehicle.powertrainMixed
 
   if (rows.length > 0) {
-    const liability =
+    const hldiLiability =
       weighted(
         medianOf(rows, (row) => row.bodilyInjury),
         medianOf(rows, (row) => row.propertyDamage),
         bi,
-      ) ?? (klass ? hundredths(klass.liability.value) : rat(1))
+      ) ?? (klass ? hundredths(klass.row.liability.value) : rat(1))
     const physical =
       weighted(
         medianOf(rows, (row) => row.collision),
         medianOf(rows, (row) => row.comprehensive),
         collision,
-      ) ?? (klass ? hundredths(klass.physical.value) : rat(1))
+      ) ?? (klass ? hundredths(klass.row.physical.value) : rat(1))
+    const liability = creditedLiability(hldiLiability, data)
     return {
       level: "model",
       label: `${vehicle.make} ${vehicle.model}`,
@@ -410,22 +517,28 @@ export function vehicleRelativity(vehicle: VehicleFacts | "average"): VehicleRel
       outsideYears,
       key: `model:${rows.map((row) => row.series).join("+")}`,
       basis: "sourced",
+      mixedPowertrain,
+      liabilityWeightSpread: weightSpread(hldiLiability, data),
     }
   }
 
   if (klass) {
+    const hldiLiability = hundredths(klass.row.liability.value)
+    const liability = creditedLiability(hldiLiability, data)
     return {
       level: "class",
-      label: klass.liability.label,
+      label: classWords(vehicle, klass.kind),
       rows: [],
-      liability: hundredths(klass.liability.value),
-      physical: hundredths(klass.physical.value),
-      liabilityHundredths: klass.liability.value,
-      physicalHundredths: klass.physical.value,
-      spreadKey: "vehicle-class",
+      liability,
+      physical: hundredths(klass.row.physical.value),
+      liabilityHundredths: toHundredths(liability),
+      physicalHundredths: klass.row.physical.value,
+      spreadKey: klass.kind === "luxury" ? "vehicle-luxury-class" : "vehicle-class",
       outsideYears,
-      key: `class:${vehicle.classId}:${vehicle.powertrain === "electric" ? "electric" : "any"}`,
+      key: `class:${klass.row.hldiSubtotal}`,
       basis: "indicative",
+      mixedPowertrain,
+      liabilityWeightSpread: weightSpread(hldiLiability, data),
     }
   }
 
@@ -434,10 +547,12 @@ export function vehicleRelativity(vehicle: VehicleFacts | "average"): VehicleRel
     label: "an average vehicle",
     rows: [],
     ...AVERAGE,
-    spreadKey: "vehicle-unknown",
+    spreadKey: isLuxuryMake(vehicle.make, data) ? "vehicle-unknown-luxury" : "vehicle-unknown",
     outsideYears: false,
     key: `unknown:${compactName(vehicle.make)}|${compactName(vehicle.model)}`,
     basis: "assumed",
+    mixedPowertrain: false,
+    liabilityWeightSpread: 0,
   }
 }
 
@@ -460,8 +575,8 @@ type IndexParts = {
   vehicle: VehicleRelativity
 }
 
-function indexParts(scenario: Scenario, vehicle: VehicleInput): IndexParts {
-  const picks = selections(scenario)
+function indexParts(scenario: Scenario, vehicle: VehicleInput, options: DriverOptions = {}): IndexParts {
+  const picks = selections(scenario, options)
   const relativity = vehicleRelativity(resolveVehicle(scenario, vehicle))
   let whole = rat(1)
   let liability = hundredths(cellOf("premium-split", "liability").value)
@@ -506,16 +621,65 @@ export type StartingPoint = {
   label?: string
 }
 
-export type EstimateOptions = {
+export type EstimateOptions = DriverOptions & {
   /** The target vehicle. Leave out to use the scenario's names. */
   vehicle?: VehicleInput
   /**
    * Typical yearly premiums by state on one coverage basis. When the target
    * state differs from the start, the ratio of these moves the estimate.
+   * Defaults to the NAIC state figures in data/state-baselines; pass {} to
+   * use none.
    */
   stateAnnual?: Partial<Record<StateCode, number>>
   trimConfidence?: TrimConfidence | null
 }
+
+/** Typical yearly premium by state (NAIC combined average premium, 2023). */
+export const STATE_TYPICAL_ANNUAL: Partial<Record<StateCode, number>> = Object.fromEntries(
+  BASELINE_STATE_CODES.map((code) => [code, stateBaseline(code)?.annual ?? 0]).filter(([, annual]) => Number(annual) > 0),
+) as Partial<Record<StateCode, number>>
+
+/**
+ * The scenario a state's typical premium stands for: a 40–64-year-old,
+ * licensed 10+ years, clean record, 7,500–15,000 miles, no discounts, in a
+ * suburb, full coverage with a $1,000 deductible, on an average vehicle of
+ * the same model year as `target`. NAIC's average mixes every kind of driver,
+ * car, and deductible; this is our stand-in for "typical", and starting from
+ * it adds the company-to-company spread to the range.
+ */
+export function typicalScenario(target: Scenario): Scenario {
+  return {
+    ...target,
+    age: "40-64",
+    yearsLicensed: "10+",
+    incidents: "clean",
+    mileage: "7500-15000",
+    teen: false,
+    goodStudent: false,
+    driverTraining: false,
+    householdPolicy: false,
+    loanLease: false,
+    region: "suburban",
+    coverage: "full",
+    deductible: 1000,
+  }
+}
+
+/** A starting point from the target state's typical premium, or null when we have none. */
+export function typicalStart(target: Scenario): StartingPoint | null {
+  const baseline = stateBaseline(target.state)
+  if (!baseline) return null
+  return {
+    annual: baseline.annual,
+    scenario: typicalScenario(target),
+    vehicle: "average",
+    kind: "typical",
+    label: `a typical yearly price in ${stateName(target.state)}`,
+  }
+}
+
+/** Show this wherever a typical state premium is used. */
+export const TYPICAL_START_ATTRIBUTION = STATE_BASELINE_ATTRIBUTION
 
 export type ChangeStep = {
   group: GroupId | "vehicle" | "state"
@@ -638,8 +802,10 @@ export function estimate(start: StartingPoint, target: Scenario, options: Estima
   }
   const startVehicle = resolveVehicle(start.scenario, start.vehicle)
   const targetVehicle = resolveVehicle(target, options.vehicle)
-  const from = indexParts(start.scenario, startVehicle)
-  const to = indexParts(target, targetVehicle)
+  const driverOptions: DriverOptions = { teenOnParentPolicy: options.teenOnParentPolicy }
+  const from = indexParts(start.scenario, startVehicle, driverOptions)
+  const to = indexParts(target, targetVehicle, driverOptions)
+  const stateAnnual = options.stateAnnual ?? STATE_TYPICAL_ANNUAL
 
   let ratio = div(to.total, from.total)
   const steps: ChangeStep[] = []
@@ -699,6 +865,14 @@ export function estimate(start: StartingPoint, target: Scenario, options: Estima
         const extra = cellSpread(rangeCell("vehicle-model-years"))
         spreads.push({ down: extra.down, up: extra.up, weight: share(to.physicalPart, to.total) })
       }
+      if (relativity.mixedPowertrain) {
+        const extra = cellSpread(rangeCell("vehicle-mixed-powertrain"))
+        spreads.push({ down: extra.down, up: extra.up, weight: rat(1) })
+      }
+      if (relativity.liabilityWeightSpread > 0) {
+        const extra = BigInt(relativity.liabilityWeightSpread)
+        spreads.push({ down: extra, up: extra, weight: share(to.liabilityPart, to.total) })
+      }
     }
     steps.push({
       group: "vehicle",
@@ -712,8 +886,8 @@ export function estimate(start: StartingPoint, target: Scenario, options: Estima
 
   // State.
   if (start.scenario.state !== target.state) {
-    const startTypical = options.stateAnnual?.[start.scenario.state]
-    const targetTypical = options.stateAnnual?.[target.state]
+    const startTypical = stateAnnual[start.scenario.state]
+    const targetTypical = stateAnnual[target.state]
     if (startTypical && targetTypical && startTypical > 0 && targetTypical > 0) {
       ratio = mul(ratio, rat(Math.round(targetTypical)), rat(1, Math.round(startTypical)))
       const spread = cellSpread(rangeCell("state-typical"))
@@ -723,8 +897,8 @@ export function estimate(start: StartingPoint, target: Scenario, options: Estima
         title: "State",
         from: stateName(start.scenario.state),
         to: stateName(target.state),
-        basis: rangeCell("state-typical").basis,
-        sources: [],
+        basis: "indicative",
+        sources: ["naic-auto-db-2022-2023"],
       })
     } else {
       const spread = cellSpread(rangeCell("state-unknown"))
@@ -785,7 +959,7 @@ export function estimate(start: StartingPoint, target: Scenario, options: Estima
     basisCount,
     spread: { down: Number(down), up: Number(up) },
     summary: summarySentence(start, steps, kept.likely),
-    rangeNote: rangeSentence(start, steps, to.vehicle, from.vehicle, options.trimConfidence ?? null),
+    rangeNote: rangeSentence(start, target, steps, to.vehicle, from.vehicle, options),
   }
 }
 
@@ -814,11 +988,13 @@ function summarySentence(start: StartingPoint, steps: ChangeStep[], likely: numb
 
 function rangeSentence(
   start: StartingPoint,
+  scenario: Scenario,
   steps: ChangeStep[],
   target: VehicleRelativity,
   origin: VehicleRelativity,
-  trim: TrimConfidence | null,
+  options: EstimateOptions,
 ): string {
+  const trim = options.trimConfidence ?? null
   const parts: string[] = []
   if (start.kind === "typical") {
     parts.push("Even for the same driver and car, companies' prices differ a lot, so real quotes can land well above or below this.")
@@ -846,7 +1022,23 @@ function rangeSentence(
     }
   }
   if (steps.some((step) => step.group === "state" && step.basis === "assumed")) {
-    parts.push("We don't have a typical price for the new state yet, so the range is much wider.")
+    parts.push(`We don't have a typical price for ${stateName(scenario.state)} yet, so the range is much wider.`)
+  }
+  if (vehicleChanged && target.mixedPowertrain) {
+    parts.push("That name is sold as both a gas and a hybrid model. We priced the gas one, so the range is a little wider.")
+  }
+  if (scenario.age === "16-18" && options.teenOnParentPolicy) {
+    parts.push(
+      "This adds your teen to your own policy. It's a rough figure from one California comparison of two families, so the range is wide.",
+    )
+  } else if (scenario.age === "16-18") {
+    parts.push(
+      "This prices your teen as the only driver on their own policy. Adding a teen to a parent's policy usually costs less than this.",
+    )
+  } else if (scenario.age === "19-21") {
+    parts.push(
+      "This prices a young driver as the only driver on their own policy. Staying on a parent's policy usually costs less than this.",
+    )
   }
   if (trim === "limited" || trim === "unresolved") {
     parts.push("We couldn't pin down the exact version of the car, which widens the range a little.")
@@ -897,17 +1089,34 @@ export function whatIf(
   start: StartingPoint,
   current: Scenario,
   next: Scenario,
-  options: {
+  options: DriverOptions & {
     currentVehicle?: VehicleInput
     nextVehicle?: VehicleInput
     stateAnnual?: Partial<Record<StateCode, number>>
+    trimConfidence?: TrimConfidence | null
     label?: string
   } = {},
 ): WhatIf {
-  const now = estimate(start, current, { vehicle: options.currentVehicle, stateAnnual: options.stateAnnual })
-  const then = estimate(start, next, { vehicle: options.nextVehicle, stateAnnual: options.stateAnnual })
+  const shared = {
+    stateAnnual: options.stateAnnual,
+    trimConfidence: options.trimConfidence,
+    teenOnParentPolicy: options.teenOnParentPolicy,
+  }
+  const now = estimate(start, current, { ...shared, vehicle: options.currentVehicle })
+  const then = estimate(start, next, { ...shared, vehicle: options.nextVehicle })
   const delta = then.likely - now.likely
   const deltaRounded = Math.round(delta / 10) * 10
+  const stateAnnual = options.stateAnnual ?? STATE_TYPICAL_ANNUAL
+  const moved = current.state !== next.state
+  if (moved && !(stateAnnual[next.state] && stateAnnual[current.state])) {
+    return {
+      current: now,
+      next: then,
+      delta,
+      deltaRounded,
+      headline: `We don't have a typical price for ${stateName(stateAnnual[next.state] ? current.state : next.state)} yet, so we can't say how moving changes your price.`,
+    }
+  }
   const label = options.label ?? whatIfLabel(current, next)
   const amount =
     deltaRounded === 0
@@ -917,15 +1126,19 @@ export function whatIf(
 }
 
 function whatIfLabel(current: Scenario, next: Scenario): string {
-  if (
+  const vehicleChanged =
     current.make !== next.make ||
     current.model !== next.model ||
     current.year !== next.year ||
     current.trim !== next.trim
-  ) {
-    return `Switching to a ${next.year} ${next.make} ${next.model}`
-  }
-  return "With that change"
+  const moved = current.state !== next.state
+  const others =
+    GROUP_IDS.some((id) => id !== "vehicle-age" && selectionKeys(current)[id] !== selectionKeys(next)[id]) ||
+    current.coverage !== next.coverage
+  if (moved && !vehicleChanged && !others) return `Moving to ${stateName(next.state)}`
+  if (vehicleChanged && !moved && !others) return `Switching to a ${next.year} ${next.make} ${next.model}`
+  if (!vehicleChanged && !moved) return "With that change"
+  return "With those changes"
 }
 
 // ---------------------------------------------------------------------------
@@ -1084,6 +1297,8 @@ export function runFactorEngine(input: {
 export type PublishedFactorRow = {
   key: string
   value: string
+  /** The value as a plain change: "+29%", "8% less", or "no change". */
+  change: string
   /** Plain words for the basis. Kept under this name for the current table component. */
   confidence: string
   range: string
@@ -1105,6 +1320,13 @@ export const BASIS_WORDS: Record<FactorBasis, string> = {
   assumed: "Our estimate (help wanted)",
 }
 
+/** Hundredths as a plain change: "+29%", "8% less", or "no change". */
+export function changeWords(hundredthsValue: number): string {
+  const percent = hundredthsValue - 100
+  if (percent === 0) return "no change"
+  return percent > 0 ? `+${percent}%` : `${-percent}% less`
+}
+
 export function formatHundredths(value: number): string {
   return (value / bundle.scale).toFixed(2)
 }
@@ -1113,6 +1335,7 @@ function publishedRow(cell: FactorCell): PublishedFactorRow {
   return {
     key: cell.label,
     value: formatHundredths(cell.value),
+    change: changeWords(cell.value),
     confidence: BASIS_WORDS[cell.basis],
     range:
       cell.low === cell.high
@@ -1131,13 +1354,17 @@ export function publishedFactorGroups(): PublishedFactorGroup[] {
     const item = group(id)
     return { family: item.title, note: item.note, rows: Object.values(item.cells).map(publishedRow) }
   })
+  const classRows = (rows: Record<string, VehicleClassRow>) =>
+    Object.values(rows).flatMap((row) => [publishedRow(row.liability), publishedRow(row.physical)])
   groups.push({
     family: "Vehicle class averages",
     note: bundle.vehicle.note,
-    rows: Object.values(bundle.vehicle.classes).flatMap((row) => [
-      publishedRow(row.liability),
-      publishedRow(row.physical),
-    ]),
+    rows: [
+      ...classRows(bundle.vehicle.classes),
+      ...classRows(bundle.vehicle.luxuryClasses),
+      ...classRows(bundle.vehicle.electricClasses),
+      publishedRow(bundle.vehicle.liabilityWeight),
+    ],
   })
   groups.push({
     family: "Credit",
@@ -1213,9 +1440,14 @@ export function assertFactorBundleSafe(candidate: FactorBundle = bundle): void {
     }
     if (row.yearMin > row.yearMax) throw new Error(`${row.series}: model years`)
   }
+  checkCell("vehicle.liabilityWeight", candidate.vehicle.liabilityWeight)
+  if (!(candidate.vehicle.liabilityFloor < 100 && candidate.vehicle.liabilityCap > 100)) {
+    throw new Error("The vehicle liability band must include 1.00")
+  }
   for (const [id, row] of [
     ...Object.entries(candidate.vehicle.classes),
     ...Object.entries(candidate.vehicle.electricClasses),
+    ...Object.entries(candidate.vehicle.luxuryClasses),
   ]) {
     checkCell(`vehicle.${id}.liability`, row.liability)
     checkCell(`vehicle.${id}.physical`, row.physical)

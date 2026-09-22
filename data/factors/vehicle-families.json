@@ -1,5 +1,6 @@
 {
-  "_readme": "Which HLDI vehicle families we keep (popular US vehicles and common teen cars), how catalog model names map to HLDI names, and which HLDI class average stands in for each EPA-based class. Families are HLDI model names, compacted, with body, cab, drive, and powertrain words removed. Run `npm run factors:build -- --hldi-full <losses.csv>` to re-pick the subset from a full HLDI download.",
+  "_readme": "Which HLDI vehicle families we keep (popular US vehicles and common teen cars), how catalog model names map to HLDI names, and which HLDI class average stands in for each EPA-based class. Families are HLDI model names, compacted, with body, cab, drive, and powertrain words removed. Run `npm run factors:build -- --hldi-full <losses.csv>` to re-pick the subset from a full HLDI download. Set useHldiModels to false (or delete sources/hldi-2022-24.csv) to stop using per-model HLDI rows; every vehicle then uses its class average.",
+  "useHldiModels": true,
   "families": {
     "Acura": [
       "mdx",
@@ -266,5 +267,43 @@
       "Pickups",
       "Large"
     ]
-  }
+  },
+  "_luxuryMakes": "Makes with more than half of their rows in HLDI's 2022-24 table filed under HLDI's own Luxury cars, Luxury SUVs, or Sports cars classes. Row counts (luxury or sports rows / all rows): Acura 5/7, Alfa Romeo 6/6, Aston Martin 1/1, Audi 42/42, BMW 67/67, Bentley 4/4, Buick 4/7, Cadillac 20/20, Ferrari 1/1, Genesis 7/7, Infiniti 9/9, Jaguar 6/6, Lamborghini 2/2, Land Rover 10/10, Lexus 34/34, Lincoln 9/9, Lucid 2/2, Maserati 3/3, Mercedes-Benz 39/44, Polestar 2/2, Porsche 14/14, Rolls Royce 2/2, Tesla 6/7, Volvo 13/15. Makes HLDI does not list (for example McLaren or Lotus) are not included.",
+  "luxuryMakes": [
+    "Acura",
+    "Alfa Romeo",
+    "Aston Martin",
+    "Audi",
+    "BMW",
+    "Bentley",
+    "Buick",
+    "Cadillac",
+    "Ferrari",
+    "Genesis",
+    "Infiniti",
+    "Jaguar",
+    "Lamborghini",
+    "Land Rover",
+    "Lexus",
+    "Lincoln",
+    "Lucid",
+    "Maserati",
+    "Mercedes-Benz",
+    "Polestar",
+    "Porsche",
+    "Rolls Royce",
+    "Tesla",
+    "Volvo"
+  ],
+  "luxuryClasses": {
+    "small-car": "Midsize luxury car",
+    "midsize-car": "Midsize luxury car",
+    "large-car": "Large luxury car",
+    "two-seater": "Large sports car",
+    "small-suv": "Small luxury SUV",
+    "suv": "Midsize luxury SUV",
+    "large-suv": "Large luxury SUV",
+    "special-purpose": "Midsize luxury SUV"
+  },
+  "_luxuryClasses": "HLDI publishes no small luxury car average, so small luxury cars use the midsize one. Luxury two-seaters use HLDI's large sports car average. Pickups, minivans, and vans from luxury makes use the regular class averages."
 }

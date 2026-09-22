@@ -13,6 +13,7 @@ function readFiles(): FactorFiles {
   for (const name of ["assumptions.json", "vehicle-families.json"]) {
     files[name] = readFileSync(path.join(DATA, name), "utf8")
   }
+  files["state-baselines.json"] = readFileSync("data/state-baselines/state-baselines.json", "utf8")
   for (const name of readdirSync(path.join(DATA, "sources"))) {
     if (name.endsWith(".csv") || name.endsWith(".json")) {
       files[`sources/${name}`] = readFileSync(path.join(DATA, "sources", name), "utf8")
@@ -122,15 +123,102 @@ test("spot check: one at-fault accident from three states, recomputed by hand", 
   assert.equal(committed.groups["driving-record"].cells.one.value, Math.round(median(medians) * 100))
 })
 
-test("spot check: the premium split from ISO", () => {
+test("spot check: the premium split from NAIC and ISO", () => {
+  const naic = JSON.parse(readFileSync("data/state-baselines/state-baselines.json", "utf8")).countrywide
+  assert.equal(
+    committed.groups["premium-split"].cells.liability.value,
+    Math.round((naic.liabilityAveragePremium / naic.combinedAveragePremium) * 100),
+  )
   const iso = rows("iso-loss-costs-2024.csv")
   const cost = (coverage: string) => {
     const row = iso.find((item) => item.coverage === coverage)
     return (Number(row?.claim_frequency_per_100) * Number(row?.claim_severity)) / 100
   }
-  const liability = cost("bodily injury liability") + cost("property damage liability")
-  const damage = cost("collision") + cost("comprehensive")
-  assert.equal(committed.groups["premium-split"].cells.liability.value, Math.round((liability / (liability + damage)) * 100))
+  assert.equal(
+    committed.groups["premium-split"].cells["collision-in-physical"].value,
+    Math.round((cost("collision") / (cost("collision") + cost("comprehensive"))) * 100),
+  )
+})
+
+test("spot check: a teen added to a parent's policy, from California's two families", () => {
+  const ca = rows("ca-2026-premiums.csv").filter((row) => !CA_FOOTNOTED.has(row.carrier))
+  const ratios = profileRatios(ca, [
+    ["ca-2565A", "ca-2555A"],
+    ["ca-2565M", "ca-2555M"],
+  ])
+  assert.ok(ratios.length > 200)
+  assert.equal(committed.groups["driver-age"].cells["16-18-added"].value, Math.round(median(ratios) * 100))
+  assert.equal(committed.groups["driver-age"].cells["16-18-added"].basis, "indicative")
+})
+
+test("years licensed is an estimate, capped so a 26+ driver never costs more than a young one", () => {
+  const cells = committed.groups["driving-experience"].cells
+  const age = committed.groups["driver-age"].cells
+  const cap = age["19-21"].value / age["26-39"].value
+  for (const key of ["under-1", "1-3", "4-9"]) {
+    assert.equal(cells[key].basis, "assumed", key)
+    assert.deepEqual(cells[key].sources, [])
+    assert.match(cells[key].derivation, /does not allow age as a rating factor/)
+  }
+  assert.ok(cells["1-3"].value / 100 <= cap)
+  assert.ok(cells["1-3"].high / 100 <= cap + 0.005)
+  assert.ok(cells["4-9"].value < cells["1-3"].value)
+  // A 30-year-old licensed 1–3 years costs far less than a 16-year-old.
+  assert.ok((age["26-39"].value * cells["1-3"].value) / 100 < age["16-18"].value * 0.6)
+})
+
+test("urban and suburban say how much the states disagree", () => {
+  const { urban, suburban } = committed.groups.area.cells
+  assert.equal(urban.basis, "sourced")
+  assert.ok(urban.low <= 100 && urban.high >= 200, `${urban.low}-${urban.high}`)
+  assert.equal(suburban.basis, "indicative")
+  assert.match(suburban.derivation, /Rough/)
+  assert.match(suburban.derivation, /\+32%/)
+  assert.ok(suburban.value > 100 && suburban.value < urban.value)
+})
+
+test("the HLDI model rows switch off cleanly", () => {
+  const files = readFiles()
+  const families = JSON.parse(files["vehicle-families.json"])
+  const off = deriveFactors({ ...files, "vehicle-families.json": JSON.stringify({ ...families, useHldiModels: false }) })
+  assert.equal(off.vehicle.modelsEnabled, false)
+  assert.deepEqual(off.vehicle.models, [])
+  assert.ok(Object.keys(off.vehicle.classes).length > 5)
+  assertFactorBundleSafe(off)
+  const removed = { ...files }
+  delete removed["sources/hldi-2022-24.csv"]
+  const gone = deriveFactors(removed)
+  assert.equal(gone.vehicle.modelsEnabled, false)
+  assertFactorBundleSafe(gone)
+  // Everything about drivers and coverage is unchanged.
+  assert.deepEqual(gone.groups["driver-age"], committed.groups["driver-age"])
+})
+
+test("every source file is listed in sources.json and used by a factor", () => {
+  const ids = new Set(committed.sources.map((source) => source.id))
+  const used = new Set<string>()
+  const visit = (value: unknown) => {
+    if (!value || typeof value !== "object") return
+    const record = value as Record<string, unknown>
+    if (Array.isArray(record.sources)) for (const id of record.sources) if (typeof id === "string") used.add(id)
+    for (const nested of Object.values(record)) visit(nested)
+  }
+  visit(committed.groups)
+  visit(committed.vehicle)
+  used.add(committed.vehicle.sourceId)
+  for (const name of readdirSync(path.join(DATA, "sources"))) {
+    if (!name.endsWith(".csv")) continue
+    const id = name
+      .replace(/-(premiums|profiles)\.csv$/, "")
+      .replace(/^iso-loss-costs-2024\.csv$/, "iso-via-iii-2024")
+      .replace(/^iso-liability-symbols-2004\.csv$/, "iso-symbols-2004")
+      .replace(/^hldi-class-subtotals-2022-24\.csv$/, "hldi-2022-24")
+      .replace(/\.csv$/, "")
+    assert.ok(ids.has(id), `${name} is not listed in sources.json`)
+    if (id !== "iso-symbols-2004") assert.ok(used.has(id), `${name} is not used by any factor`)
+  }
+  for (const id of ids) assert.ok(used.has(id) || id === "iso-symbols-2004", `${id} is listed but not used`)
+  assert.match(committed.vehicle.liabilityWeight.derivation, /25 percent and discounts of up to 20 percent/)
 })
 
 test("HLDI rows are copied faithfully and named consistently", () => {

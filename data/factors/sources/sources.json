@@ -7,7 +7,7 @@
       "url": "https://www.oid.ok.gov/wp-content/uploads/2026/09/PPA-Rate-Comparisons-9-1-2026.pdf",
       "dataYear": "2026 (PDF dated 1 September 2026)",
       "checkedOn": "2026-09-22",
-      "terms": "No copyright or terms-of-use statement on the page or PDF. State government consumer publication. Landing page: https://www.oid.ok.gov/consumers/insurance-basics/auto-insurance-rate-comparison/"
+      "terms": "The page footer reads '© 2026 The State of Oklahoma'. No terms of use specific to the rate comparison were found on the page or in the PDF. Landing page: https://www.oid.ok.gov/consumers/insurance-basics/auto-insurance-rate-comparison/"
     },
     {
       "id": "nd-2026",
@@ -16,7 +16,7 @@
       "url": "https://www.insurance.nd.gov/sites/default/files/documents/Consumers/Auto/2026%20Auto%20Insurance%20Cost%20Survey.pdf",
       "dataYear": "2026 (rates from 1 January 2026)",
       "checkedOn": "2026-09-22",
-      "terms": "No copyright or terms-of-use statement found. State government consumer publication. Example #4 is left out because its company labels do not match the figures (see data/factors/sources/README.md)."
+      "terms": "Site footer: 'Copyright © 2025 North Dakota Insurance & Securities Department'. The Department's disclaimer (https://www.insurance.nd.gov/disclaimer) says: 'Unless otherwise noted on an individual document, file, web page or other website items, the Department grants permission to copy and distribute the information for non-commercial use, as long as the content remains unaltered.' It also says the Department 'does not warrant or represent that this information is current, complete and accurate.' We copy the figures unaltered (six-month figures are also kept as printed in each locator). Example #4 is left out because its company labels do not match the figures (see data/factors/sources/README.md)."
     },
     {
       "id": "dc-2024",
@@ -79,7 +79,25 @@
       "url": "https://www.iihs.org/research-areas/auto-insurance/insurance-losses-by-make-and-model",
       "dataYear": "2022–24 models, claims through early 2025",
       "checkedOn": "2026-09-22",
-      "terms": "Source: www.iihs.org. IIHS allows limited noncommercial, educational, and personal use with citation, and asks for written permission (legal@iihs.org) for repetitive use or redistribution. We keep only a subset for popular vehicles. The owner should decide whether to ask for permission; see data/factors/README.md."
+      "terms": "Source: www.iihs.org. The IIHS copyright page (https://www.iihs.org/copyright-information-and-privacy-policy) says: 'The content on this website is made available for limited noncommercial, educational and personal use only; a user may download content to share with others for limited noncommercial and educational purposes without requesting specific permission.' and 'Repetitive noncommercial, educational, or personal use and copying or redistribution in any manner for commercial use is not permitted without written permission from the Institute.' Requests go to legal@iihs.org. Permission has not been requested; the owner decides. The per-model rows are one file (sources/hldi-2022-24.csv) with one switch (useHldiModels in vehicle-families.json)."
+    },
+    {
+      "id": "naic-auto-db-2022-2023",
+      "title": "2022/2023 Auto Insurance Database Report, Table 1C (liability average premium) and Table 5 (combined average premium), countrywide, 2023",
+      "publisher": "National Association of Insurance Commissioners",
+      "url": "https://content.naic.org/sites/default/files/publication-aut-pb-auto-insurance-database.pdf",
+      "dataYear": "2023",
+      "checkedOn": "2026-09-22",
+      "terms": "Source: NAIC, 2022/2023 Auto Insurance Database Report, 2023 data. Read from data/state-baselines/state-baselines.json (countrywide row), which records the report's terms: copyrighted by NAIC; only per-state and countrywide figures are stored, with credit."
+    },
+    {
+      "id": "iso-symbols-2004",
+      "title": "New ISO Symbols Rate Cars By Make and Model for Liability, No-Fault/Medical Payments Insurance",
+      "publisher": "Insurance Journal (reporting an Insurance Services Office announcement)",
+      "url": "https://www.insurancejournal.com/news/national/2004/04/01/40773.htm",
+      "dataYear": "2004",
+      "checkedOn": "2026-09-22",
+      "terms": "News article. We keep two numbers (25 and 20 percent) and one quoted sentence, with a link."
     }
   ]
 }

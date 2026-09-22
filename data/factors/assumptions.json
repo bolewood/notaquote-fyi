@@ -1,14 +1,5 @@
 {
   "_readme": "Factors we could not source yet. Every entry is our own estimate, in hundredths (100 = 1.00), with a deliberately wide low/high so the range widens when it is used. To replace one with a sourced figure, add the source under data/factors/sources/, derive it in src/lib/factor-derivation.ts, and delete the entry here. See data/factors/README.md.",
-  "driving-experience": {
-    "under-1": {
-      "label": "Licensed under 1 year (age 26 and up)",
-      "value": null,
-      "low": null,
-      "high": null,
-      "why": "No survey we found prices a driver licensed under a year. It should cost at least as much as 1–3 years, so we use the 1–3 year factor and widen the top by a fifth."
-    }
-  },
   "driving-record": {
     "two-or-more": {
       "label": "Two or more at-fault accidents",
@@ -143,6 +134,13 @@
       "low": 90,
       "high": 111,
       "why": "A state's typical price moves differently for different drivers."
+    },
+    "vehicle-mixed-powertrain": {
+      "label": "One trim name sold as gas and as hybrid",
+      "value": 100,
+      "low": 92,
+      "high": 110,
+      "why": "FuelEconomy.gov lists some trim names (for example the 2024 Honda CR-V FWD) with both gas and hybrid versions. We price the gas one unless the name says hybrid, and widen the range because yours could be either."
     }
   }
 }

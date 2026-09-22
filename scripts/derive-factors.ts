@@ -26,6 +26,10 @@ export async function readFactorFiles(): Promise<FactorFiles> {
   for (const name of ["assumptions.json", "vehicle-families.json"]) {
     files[name] = await readFile(path.join(DATA, name), "utf8")
   }
+  files["state-baselines.json"] = await readFile(
+    path.join(ROOT, "data", "state-baselines", "state-baselines.json"),
+    "utf8",
+  )
   for (const name of await readdir(path.join(DATA, "sources"))) {
     if (name.endsWith(".csv") || name.endsWith(".json")) {
       files[`sources/${name}`] = await readFile(path.join(DATA, "sources", name), "utf8")

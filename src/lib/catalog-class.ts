@@ -148,16 +148,32 @@ function trimCodes(trim: CatalogTrim | undefined): string | undefined {
   return trim.c !== undefined ? "g" : undefined
 }
 
-function powertrainFromCodes(codes: string | undefined): { value: Powertrain | null; mixed: boolean } {
+function powertrainFromCodes(
+  codes: string | undefined,
+  name = "",
+): { value: Powertrain | null; mixed: boolean } {
   if (!codes) return { value: null, mixed: false }
   const unique = [...new Set(codes.split(""))].filter((code) => code in CODE_TO_POWERTRAIN)
   if (unique.length === 0) return { value: null, mixed: false }
   if (unique.length === 1) return { value: CODE_TO_POWERTRAIN[unique[0]], mixed: false }
-  // A name with gas and hybrid rows (a mild-hybrid option, say) is reported
-  // as the most electrified code present, flagged as mixed.
-  const order = ["e", "f", "p", "h", "g"]
+  // One trim name with rows of two powertrains (for example the 2024 Honda
+  // "CR-V FWD", sold as gas and as hybrid). Believe the name when it says
+  // which one; otherwise assume the gas version, which is the plain name. The
+  // result is flagged as mixed so the engine can widen the range.
+  const named = powertrainFromName(name)
+  if (named && unique.includes(POWERTRAIN_TO_CODE[named])) return { value: named, mixed: true }
+  if (unique.includes("g")) return { value: "combustion", mixed: true }
+  const order = ["e", "f", "p", "h"]
   const first = order.find((code) => unique.includes(code)) ?? unique[0]
   return { value: CODE_TO_POWERTRAIN[first], mixed: true }
+}
+
+const POWERTRAIN_TO_CODE: Record<Powertrain, string> = {
+  combustion: "g",
+  hybrid: "h",
+  "plug-in-hybrid": "p",
+  electric: "e",
+  "fuel-cell": "f",
 }
 
 const NAME_POWERTRAIN: { pattern: RegExp; value: Powertrain }[] = [
@@ -244,7 +260,7 @@ export function vehicleFacts(catalog: VehicleCatalog | null, pick: VehicleName):
       base.classId = classFromEpa(ownClass)
       base.classSource = "epa-trim"
     }
-    const ownPower = powertrainFromCodes(trimCodes(own))
+    const ownPower = powertrainFromCodes(trimCodes(own), `${pick.model} ${pick.trim}`)
     if (ownPower.value) {
       base.powertrain = ownPower.value
       base.powertrainMixed = ownPower.mixed

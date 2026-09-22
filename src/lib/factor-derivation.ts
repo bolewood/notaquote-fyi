@@ -16,6 +16,7 @@
  *    medians (and of their percentiles).
  * 5. Round to hundredths.
  */
+import { VEHICLE_CLASS_LABELS, type VehicleClassId } from "./catalog-class"
 import { compactName } from "./catalog-match"
 import type {
   FactorBasis,
@@ -274,9 +275,15 @@ const ND_PROFILES = ["01", "02", "03", "05", "06", "07", "08", "09", "10", "11",
   (item) => `nd-2026-ex${item}`,
 )
 
+/** A ratio as a plain change: "+16%", "6% less", or "no change". */
+export function change(ratio: number): string {
+  const percent = Math.round(ratio * 100 - 100)
+  if (percent === 0) return "no change"
+  return percent > 0 ? `+${percent}%` : `${-percent}% less`
+}
+
 function pct(summary: Summary): string {
-  const format = (value: number) => (value * 100 - 100).toFixed(0)
-  return `median ${summary.median.toFixed(3)} (middle half of companies ${summary.p25.toFixed(3)}–${summary.p75.toFixed(3)}; ${format(summary.median)}%)`
+  return `${change(summary.median)} (median ratio ${summary.median.toFixed(3)}; middle half of companies ${change(summary.p25)} to ${change(summary.p75)})`
 }
 
 // ---------------------------------------------------------------------------
@@ -353,6 +360,17 @@ function yearRange(label: string): { yearMin: number; yearMax: number } {
   return { yearMin, yearMax: Math.floor(yearMin / 100) * 100 + Number(match[2]) }
 }
 
+/** Body words in an HLDI model name. Empty for the plain version. */
+export function hldiBody(model: string): string[] {
+  const value = model.toLowerCase()
+  const tags: string[] = []
+  if (/\bconvertible\b/.test(value)) tags.push("convertible")
+  if (/\bhatchback\b/.test(value)) tags.push("hatchback")
+  if (/\bwagon\b/.test(value)) tags.push("wagon")
+  if (/\b2dr\b/.test(value)) tags.push("2dr")
+  return tags
+}
+
 function hldiRow(row: HldiRow): VehicleLossRow | null {
   const powertrain = hldiPowertrain(row.model)
   if (!powertrain) return null
@@ -362,6 +380,7 @@ function hldiRow(row: HldiRow): VehicleLossRow | null {
     family: hldiFamily(row.model),
     powertrain,
     drive: /\b4wd\b/i.test(row.model) ? "4wd" : "2wd",
+    body: hldiBody(row.model),
     hldiClass: `${row.body_class} / ${row.size}`,
     modelYears: row.model_years,
     ...yearRange(row.model_years),
@@ -373,6 +392,9 @@ function hldiRow(row: HldiRow): VehicleLossRow | null {
 }
 
 type Families = {
+  useHldiModels: boolean
+  luxuryMakes: string[]
+  luxuryClasses: Record<string, string>
   families: Record<string, string[]>
   aliases: Record<string, string>
   classes: Record<string, string>
@@ -433,32 +455,58 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
   const txArea = summarize(ratios(tx, same(profilesOf(tx)), cross(TX_URBAN, TX_RURAL)))
   const caArea = summarize(ratios(ca, same(profilesOf(ca)), cross(CA_URBAN, CA_RURAL)))
   const coArea = summarize(ratios(co, same(profilesOf(co)), cross(CO_URBAN, CO_RURAL)))
-  // Suburbs are compared with the city in the same state (only Texas,
-  // California, and Colorado publish all three), then scaled by the urban
-  // factor, so suburban and urban come from consistent comparisons.
-  const txSuburb = summarize(ratios(tx, same(profilesOf(tx)), cross(TX_SUBURB, TX_URBAN)))
-  const caSuburb = summarize(ratios(ca, same(profilesOf(ca)), cross(CA_SUBURB, CA_URBAN)))
-  const coSuburb = summarize(ratios(co, same(profilesOf(co)), cross(CO_SUBURB, CO_URBAN)))
   const urbanSummary = combine([okArea, ndArea, txArea, caArea, coArea])
+  const urbanStates = [okArea, ndArea, txArea, caArea, coArea].map((item) => item.median)
+  const urbanCell = cellFrom(
+    "Urban",
+    urbanSummary,
+    "sourced",
+    ["ok-2026", "nd-2026", "tx-2025", "ca-2026", "co-2023"],
+    `Same company and driver, city versus rural area, in five states. Oklahoma 2026, Oklahoma City and Tulsa ÷ Woodward and McAlester: ${pct(okArea)}, ${okArea.n} comparisons. North Dakota 2026, Fargo ÷ "Remainder of State" (Examples 1–3, 5–12): ${pct(ndArea)}, ${ndArea.n}. Texas 2025, Houston and Dallas ÷ Plainview and Alpine: ${pct(txArea)}, ${txArea.n}. California 2026, Los Angeles Central ÷ Alturas: ${pct(caArea)}, ${caArea.n}. Colorado 2023, Denver and Colorado Springs ÷ Sterling, Alamosa, and Craig: ${pct(coArea)}, ${coArea.n}. The value is the middle of the five state medians. The states disagree a lot, so the low and high edges are the lowest and highest state medians (${change(Math.min(...urbanStates))} to ${change(Math.max(...urbanStates))}), not the spread between companies.`,
+  )
+  urbanCell.low = Math.min(urbanCell.value, toHundredths(Math.min(...urbanStates)))
+  urbanCell.high = Math.max(urbanCell.value, toHundredths(Math.max(...urbanStates)))
+
+  // Suburbs: only Texas, California, and Colorado publish a suburb, a city,
+  // and a rural area. Those three states have bigger city-versus-rural gaps
+  // than the five-state middle, so their direct suburb ÷ rural figure would
+  // put suburbs above cities. Instead we take where the suburb sits between
+  // rural and city in each state, on a multiplying scale:
+  // position = ln(suburb ÷ rural) ÷ ln(city ÷ rural), and apply the middle
+  // position to the five-state urban factor.
+  const txSubRural = summarize(ratios(tx, same(profilesOf(tx)), cross(TX_SUBURB, TX_RURAL)))
+  const caSubRural = summarize(ratios(ca, same(profilesOf(ca)), cross(CA_SUBURB, CA_RURAL)))
+  const coSubRural = summarize(ratios(co, same(profilesOf(co)), cross(CO_SUBURB, CO_RURAL)))
+  const txSubCity = summarize(ratios(tx, same(profilesOf(tx)), cross(TX_SUBURB, TX_URBAN)))
+  const caSubCity = summarize(ratios(ca, same(profilesOf(ca)), cross(CA_SUBURB, CA_URBAN)))
+  const coSubCity = summarize(ratios(co, same(profilesOf(co)), cross(CO_SUBURB, CO_URBAN)))
+  const positions = [
+    Math.log(txSubRural.median) / Math.log(txArea.median),
+    Math.log(caSubRural.median) / Math.log(caArea.median),
+    Math.log(coSubRural.median) / Math.log(coArea.median),
+  ]
+  const position = percentile(positions, 0.5)
+  const directSuburb = combine([txSubRural, caSubRural, coSubRural])
+  const chainedSuburb = chain(combine([txSubCity, caSubCity, coSubCity]), urbanSummary)
+  const suburbanValue = Math.pow(urbanSummary.median, position)
+  const suburbStates = [txSubRural, caSubRural, coSubRural].map((item) => item.median)
+  const suburbanCell: FactorCell = {
+    label: "Suburban",
+    value: toHundredths(suburbanValue),
+    low: Math.min(toHundredths(suburbanValue), toHundredths(Math.min(...suburbStates))),
+    high: Math.max(toHundredths(suburbanValue), toHundredths(Math.max(...suburbStates))),
+    basis: "indicative",
+    sources: ["tx-2025", "ca-2026", "co-2023", "ok-2026", "nd-2026"],
+    derivation: `Rough. Only Texas, California, and Colorado publish a suburb, a city, and a rural area. Direct suburb ÷ rural, same company and driver: Texas 2025, Plano ÷ Plainview and Alpine: ${pct(txSubRural)}, ${txSubRural.n} comparisons. California 2026, Irvine ÷ Alturas: ${pct(caSubRural)}, ${caSubRural.n}. Colorado 2023, Highlands Ranch ÷ Sterling, Alamosa, and Craig: ${pct(coSubRural)}, ${coSubRural.n}. The middle of those three is ${change(directSuburb.median)}, which is above our five-state urban factor (${change(urbanSummary.median)}), because these three states have bigger city-versus-rural gaps than the others. Multiplying suburb ÷ city in the same three states (${change(combine([txSubCity, caSubCity, coSubCity]).median)}) by the urban factor gives ${change(chainedSuburb.median)}. We use neither. We measure where each state's suburb sits between its rural area and its city on a multiplying scale (Texas ${positions[0].toFixed(2)}, California ${positions[1].toFixed(2)}, Colorado ${positions[2].toFixed(2)} of the way), take the middle (${position.toFixed(2)}), and apply it to the urban factor: ${change(suburbanValue)}. The low and high edges are the lowest and highest direct suburb ÷ rural figures.`,
+    n: txSubRural.n + caSubRural.n + coSubRural.n,
+  }
   const area: FactorGroup = {
     title: "Area",
     appliesTo: "whole",
     note: "Where the car is kept. Rural is the starting point.",
     cells: {
-      urban: cellFrom(
-        "Urban",
-        urbanSummary,
-        "sourced",
-        ["ok-2026", "nd-2026", "tx-2025", "ca-2026", "co-2023"],
-        `Same company and driver, city versus rural area, in five states; value is the median of the five state medians. Oklahoma 2026, Oklahoma City and Tulsa ÷ Woodward and McAlester: ${pct(okArea)}, ${okArea.n} comparisons. North Dakota 2026, Fargo ÷ "Remainder of State" (Examples 1–3, 5–12): ${pct(ndArea)}, ${ndArea.n}. Texas 2025, Houston and Dallas ÷ Plainview and Alpine: ${pct(txArea)}, ${txArea.n}. California 2026, Los Angeles Central ÷ Alturas: ${pct(caArea)}, ${caArea.n}. Colorado 2023, Denver and Colorado Springs ÷ Sterling, Alamosa, and Craig: ${pct(coArea)}, ${coArea.n}.`,
-      ),
-      suburban: cellFrom(
-        "Suburban",
-        chain(combine([txSuburb, caSuburb, coSuburb]), urbanSummary),
-        "sourced",
-        ["tx-2025", "ca-2026", "co-2023", "ok-2026", "nd-2026"],
-        `Same company and driver, suburb versus city in the same state, in the three states that publish both (median of the three state medians), times the urban factor above. Texas 2025, Plano ÷ Houston and Dallas: ${pct(txSuburb)}, ${txSuburb.n} comparisons. California 2026, Irvine ÷ Los Angeles Central: ${pct(caSuburb)}, ${caSuburb.n}. Colorado 2023, Highlands Ranch ÷ Denver and Colorado Springs: ${pct(coSuburb)}, ${coSuburb.n}.`,
-      ),
+      urban: urbanCell,
+      suburban: suburbanCell,
       rural: reference("Rural", "The starting point for area. Other areas are compared with it."),
     },
   }
@@ -525,12 +573,34 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
     ["dc-2024", "tx-2025", "ok-2026"],
     `Median of two senior-versus-adult comparisons, times the 26–39 factor above (both adult ages are in that band). District of Columbia 2024, age 66 ÷ age 39 (same company and group; state-minimum coverage): ${pct(dc66)}, ${dc66.n} comparisons. Texas 2025, age 65 ÷ age 30 (single male, and married): ${pct(tx65)}, ${tx65.n} comparisons.`,
   )
+  // A teen added to a parent's policy. California 2026 publishes a married
+  // couple with a 17-year-old (2565) and a younger married couple without one
+  // (2555), both full coverage on two family cars.
+  const teenAdded = summarize(
+    ratios(
+      ca,
+      [
+        ["ca-2565A", "ca-2555A"],
+        ["ca-2565M", "ca-2555M"],
+      ],
+      "same",
+    ),
+  )
+  const age1618Added = cellFrom(
+    "16–18, added to a parent's policy",
+    teenAdded,
+    "indicative",
+    ["ca-2026"],
+    `The whole household's premium after adding a teen, compared with before. California 2026, profile 2565 (married couple licensed 28 and 25 years, plus a 17-year-old licensed 1 year who "drives pleasure use only"; Camry 20,000 miles and Highlander 12,000 miles) ÷ profile 2555 (married couple licensed 13 and 10 years; Camry and Sienna, 15,000 miles each), with and without a multi-policy discount, same company and place: ${pct(teenAdded)}, ${teenAdded.n} comparisons. Rough, because the two households also differ in the parents' experience, the second car, and mileage, and because both are two-car households. California rates by years licensed, not age. Used only when you ask for a teen added to your own policy.`,
+  )
+
   const driverAge: FactorGroup = {
     title: "Driver age",
     appliesTo: "whole",
     note: "The main driver's age. 16–18 is the teen factor; there is no separate teen switch.",
     cells: {
       "16-18": age1618,
+      "16-18-added": age1618Added,
       "19-21": age1921,
       "22-25": age2225,
       "26-39": age2539,
@@ -571,7 +641,7 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
         combine([caAccident, txAccident, ncAccident]),
         "sourced",
         ["ca-2026", "tx-2025", "nc-sdip-2026"],
-        `Median of three states. California 2026, one at-fault accident ÷ clean, same company, place, car, and years licensed (single-driver profiles, liability-only and full coverage): ${pct(caAccident)}, ${caAccident.n} comparisons; California's clean profiles include its required Good Driver discount, so this includes losing it. Texas 2025, one at-fault accident ÷ clean (liability only): ${pct(txAccident)}, ${txAccident.n} comparisons. North Carolina's Safe Driver Incentive Plan, set by state law: ${surcharge("1")}% for a small accident, ${surcharge("2")}% for a medium one, and ${surcharge("3")}% for $3,850 or more of damage or an injury; we count it as a median of ${surcharge("3")}% (typical claims are above $3,850) with ${surcharge("1")}% as the low edge.`,
+        `Median of three states. California 2026, one at-fault accident ÷ clean, same company, place, car, and years licensed (single-driver profiles, liability-only and full coverage): ${pct(caAccident)}, ${caAccident.n} comparisons; CDI says its survey premiums are "before any applicable discounts are applied", and company footnotes list California's Good Driver discount as one of those discounts (for example "California Good Driver Discount 30%" and "20% Good Driver Discount"). So the clean figures leave that discount out, and a California driver who loses it after an accident probably sees a bigger jump than this. Texas 2025, one at-fault accident ÷ clean (liability only): ${pct(txAccident)}, ${txAccident.n} comparisons. North Carolina's Safe Driver Incentive Plan, set by state law: ${surcharge("1")}% for a small accident, ${surcharge("2")}% for a medium one, and ${surcharge("3")}% for $3,850 or more of damage or an injury; we count it as a median of ${surcharge("3")}% (typical claims are above $3,850) with ${surcharge("1")}% as the low edge.`,
       ),
       "two-or-more": assumed(guess("driving-record", "two-or-more")),
     },
@@ -580,6 +650,26 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
   // --- Years licensed (California rates by years licensed, not age).
   const caYears = (codes: [string, string][]) =>
     summarize(ratios(ca, codes.map(([top, bottom]) => [caProfile(top, "A"), caProfile(bottom, "A")]), "same"))
+  // California bans age as a rating factor, so its years-licensed factor
+  // also carries the youth of newly licensed drivers. We only use years
+  // licensed from age 26, so California's figure is an upper bound, not the
+  // answer. The cap keeps a 26+ driver with little experience below a young
+  // driver: factor(19–21) ÷ factor(26–39).
+  const experienceCap = age1921.value / age2539.value
+  const experienceEstimate = (label: string, summary: Summary, what: string): FactorCell => {
+    const upper = Math.min(summary.median, experienceCap)
+    const value = Math.sqrt(upper)
+    return {
+      label,
+      value: toHundredths(value),
+      low: 100,
+      high: toHundredths(upper),
+      basis: "assumed",
+      sources: [],
+      derivation: `Our estimate. No public source yet; help wanted. California 2026 (${what}): ${pct(summary)}, ${summary.n} comparisons. But California does not allow age as a rating factor (10 CCR §2632.5), so its newly licensed drivers are mostly young, and its years-licensed figure includes the youth effect our age factor already counts. We treat it as an upper bound, capped at the 19–21 age factor ÷ the 26–39 age factor (${experienceCap.toFixed(2)}), so an experienced-age driver never costs more than a young one. We don't know how much of the gap is experience and how much is age, so we take the middle of 1.00 and that upper bound on a multiplying scale (the square root). The range runs from 1.00 to the upper bound.`,
+      n: null,
+    }
+  }
   const years13 = caYears([["1102", "1132"]])
   const years49 = caYears([
     ["1112", "1132"],
@@ -587,22 +677,21 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
     ["2512", "2532"],
     ["2522", "2532"],
   ])
-  const yearsWords = "California 2026, same company, place, car, record, and mileage; California profiles give years licensed but no age (its rules make years licensed a main rating factor), so a newly licensed California driver may also be younger. Rough for that reason. We only use this factor from age 26, so it doesn't pile on top of the young-driver age factors."
+  const oneToThree = experienceEstimate("Licensed 1–3 years (age 26 and up)", years13, "licensed 2 years ÷ 13 years, liability only")
+  const newDriverCap = age1618.value / age2539.value
   const experienceSourced: Record<string, FactorCell> = {
-    "1-3": cellFrom(
-      "Licensed 1–3 years (age 26 and up)",
-      years13,
-      "indicative",
-      ["ca-2026"],
-      `Licensed 2 years ÷ 13 years (Basic, liability only): ${pct(years13)}, ${years13.n} comparisons. ${yearsWords}`,
-    ),
-    "4-9": cellFrom(
+    "1-3": oneToThree,
+    "4-9": experienceEstimate(
       "Licensed 4–9 years (age 26 and up)",
       years49,
-      "indicative",
-      ["ca-2026"],
-      `Licensed 4 and 7 years ÷ 13 years (Basic liability-only and Standard full-coverage profiles): ${pct(years49)}, ${years49.n} comparisons. ${yearsWords}`,
+      "licensed 4 and 7 years ÷ 13 years, liability-only and full-coverage profiles",
     ),
+    "under-1": {
+      ...oneToThree,
+      label: "Licensed under 1 year (age 26 and up)",
+      high: Math.max(oneToThree.value, Math.min(Math.round(oneToThree.high * 1.2), Math.round(newDriverCap * 100))),
+      derivation: `Our estimate. No public source yet; help wanted. No survey we found prices a driver licensed under a year, and California, which does not allow age as a rating factor (10 CCR §2632.5), only goes down to 2 years. We use the 1–3 year estimate and raise the top of the range by a fifth, capped at the 16–18 age factor ÷ the 26–39 age factor (${newDriverCap.toFixed(2)}).`,
+    },
   }
 
   // --- Mileage (California, Los Angeles only; clean single drivers).
@@ -684,17 +773,7 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
     }
     for (const [key, entry] of Object.entries(assumptions[id] ?? {})) {
       if (key in sourced) throw new Error(`${id}.${key} is sourced; delete its assumption`)
-      // Entries without a value are filled in below from a related factor.
-      if (entry.value !== null) cells[key] = assumed(entry)
-    }
-    if (id === "driving-experience") {
-      // Nobody publishes a price for under a year of experience. It should
-      // cost at least as much as 1–3 years, so we start from that factor and
-      // only widen the top.
-      const oneToThree = cells["1-3"]
-      const entry = assumptions[id]?.["under-1"]
-      if (!oneToThree || !entry) throw new Error("driving-experience needs 1-3 and an under-1 assumption")
-      cells["under-1"] = assumed(entry, oneToThree.value, oneToThree.low, Math.round(oneToThree.high * 1.2))
+      cells[key] = assumed(entry)
     }
     if (id === "driving-experience") {
       cells["not-used"] = reference(
@@ -715,7 +794,13 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
   const pd = lossCost("property damage liability")
   const coll = lossCost("collision")
   const comp = lossCost("comprehensive")
-  const liabilityShare = (bi + pd) / (bi + pd + coll + comp)
+  const isoLiabilityShare = (bi + pd) / (bi + pd + coll + comp)
+  const baselines = JSON.parse(need(files, "state-baselines.json")) as {
+    countrywide: { liabilityAveragePremium: number; combinedAveragePremium: number }
+  }
+  const naicLiability = baselines.countrywide.liabilityAveragePremium
+  const naicCombined = baselines.countrywide.combinedAveragePremium
+  const liabilityShare = naicLiability / naicCombined
   const splitAssumption = guess("premium-split", "liability") as AssumedEntry & { spreadLow: number; spreadHigh: number }
   const isoWords = `ISO 2024 paid-claim frequency × severity, as published by the Insurance Information Institute: bodily injury ${bi.toFixed(2)}, property damage ${pd.toFixed(2)}, collision ${coll.toFixed(2)}, comprehensive ${comp.toFixed(2)} dollars per car-year.`
   const premiumSplit: FactorGroup = {
@@ -729,9 +814,9 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
         low: splitAssumption.spreadLow,
         high: splitAssumption.spreadHigh,
         basis: "indicative",
-        sources: ["iso-via-iii-2024"],
-        derivation: `${isoWords} Liability (bodily injury + property damage) is ${(liabilityShare * 100).toFixed(1)}% of the four. Rough because these are loss costs, not prices, and leave out uninsured-motorist, medical, and PIP coverage. The low and high edges are our estimate; help wanted.`,
-        n: 4,
+        sources: ["naic-auto-db-2022-2023", "iso-via-iii-2024"],
+        derivation: `NAIC 2023 countrywide average liability premium $${naicLiability.toFixed(2)} ÷ combined average premium (liability + collision + comprehensive) $${naicCombined.toFixed(2)} = ${(liabilityShare * 100).toFixed(1)}%. Source: NAIC, 2022/2023 Auto Insurance Database Report, 2023 data (the same figures as data/state-baselines). For comparison, ISO's 2024 claim costs give ${(isoLiabilityShare * 100).toFixed(1)}%. Rough because it's an average across all insured cars and states. The low and high edges are our estimate; help wanted.`,
+        n: 2,
       },
       "collision-in-physical": {
         label: "Collision share of collision + comprehensive",
@@ -760,12 +845,19 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
   const fullLiability = premiumSplit.cells.liability.value
 
   // --- Vehicles (HLDI).
-  const hldiRows = parseCsv(need(files, "sources/hldi-2022-24.csv"))
-  const models = hldiRows
-    .map(hldiRow)
-    .filter((row): row is VehicleLossRow => row !== null)
-    .sort((left, right) => left.series.localeCompare(right.series))
-  const subtotals = parseCsv(need(files, "sources/hldi-class-subtotals-2022-24.csv"))
+  // The per-model rows are one file behind one switch, so they can be removed
+  // cleanly. Without them every vehicle uses its class average (from HLDI's
+  // class subtotals); without those too, every vehicle is "not recognized".
+  const hldiText = files["sources/hldi-2022-24.csv"]
+  const modelsEnabled = families.useHldiModels && hldiText !== undefined
+  const models = modelsEnabled
+    ? parseCsv(hldiText)
+        .map(hldiRow)
+        .filter((row): row is VehicleLossRow => row !== null)
+        .sort((left, right) => left.series.localeCompare(right.series))
+    : []
+  const subtotalText = files["sources/hldi-class-subtotals-2022-24.csv"]
+  const subtotals = subtotalText === undefined ? [] : parseCsv(subtotalText)
   const combined = (liability: number, physical: number) =>
     (fullLiability * liability + (100 - fullLiability) * physical) / 100
   const relativities = (row: {
@@ -778,11 +870,50 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
     physical: weightedRelativity(row.collision, row.comprehensive, collisionShare),
   })
 
-  const classes: Record<string, VehicleClassRow> = {}
-  const classRatios: number[] = []
-  for (const [classId, label] of Object.entries(families.classes)) {
+  // How much of HLDI's liability result to pass on. Insurers rate liability
+  // by vehicle much less than their loss data would suggest: ISO's liability
+  // symbol plan moves liability premiums at most +25% and −20% by vehicle. We
+  // pick the largest weight that keeps the middle 90% of the HLDI liability
+  // results we keep inside that band, and cap every vehicle at the band.
+  const isoSymbols = parseCsv(need(files, "sources/iso-liability-symbols-2004.csv"))
+  const symbolPercent = (measure: string) => {
+    const row = isoSymbols.find((item) => item.measure === measure)
+    if (!row) throw new Error(`ISO symbols row ${measure} missing`)
+    return Number(row.percent)
+  }
+  const surchargeMax = symbolPercent("largest surcharge")
+  const discountMax = symbolPercent("largest discount")
+  const hldiLiabilities = (models.length > 0 ? models : [])
+    .map((row) => relativities(row).liability)
+    .filter((value): value is number => value !== null)
+    .map((value) => value / 100)
+  const p05 = hldiLiabilities.length > 0 ? percentile(hldiLiabilities, 0.05) : 1
+  const p95 = hldiLiabilities.length > 0 ? percentile(hldiLiabilities, 0.95) : 1
+  const weightUp = p95 > 1 ? surchargeMax / 100 / (p95 - 1) : 1
+  const weightDown = p05 < 1 ? discountMax / 100 / (1 - p05) : 1
+  const weight = Math.min(1, weightUp, weightDown)
+  const liabilityWeight: FactorCell = {
+    label: "How much of a vehicle's liability losses we pass on",
+    value: toHundredths(weight),
+    low: toHundredths(weight / 2),
+    high: toHundredths(Math.min(1, weight * 1.5)),
+    basis: "assumed",
+    sources: [],
+    derivation: `Our estimate, and our judgment; help wanted. HLDI's liability results by vehicle spread widely (the middle 90% of the ${hldiLiabilities.length} series we keep run from ${change(p05)} to ${change(p95)}), but insurers move liability prices by vehicle much less: ISO's liability symbol plan, as reported by Insurance Journal in 2004, allows surcharges "of up to 25 percent and discounts of up to 20 percent". We pass on the largest share of HLDI's liability result that keeps that middle 90% inside +${surchargeMax}% and ${discountMax}% less, and keep every vehicle inside that band: liability factor = 1 + ${weight.toFixed(2)} × (HLDI − 1). Collision and comprehensive results are passed on in full. The range allows half to one and a half times this weight.`,
+    n: null,
+  }
+
+  const plainClass = (classId: string) => VEHICLE_CLASS_LABELS[classId as VehicleClassId] ?? classId
+  // Lower-case the first letter, but leave acronyms such as "SUV" alone.
+  const lower = (value: string) => (/^[A-Z]{2}/.test(value) ? value : value.charAt(0).toLowerCase() + value.slice(1))
+  const classRow = (
+    classId: string,
+    label: string,
+    words: string,
+    kind: "" | "Luxury " | "Electric ",
+  ): VehicleClassRow | null => {
     const subtotal = subtotals.find((row) => row.subtotal_label === label)
-    if (!subtotal) throw new Error(`HLDI subtotal ${label} missing`)
+    if (!subtotal) return null
     const rel = relativities({
       bodilyInjury: numberOrNull(subtotal.bodily_injury),
       propertyDamage: numberOrNull(subtotal.property_damage),
@@ -790,32 +921,21 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
       comprehensive: numberOrNull(subtotal.comprehensive),
     })
     if (rel.liability === null || rel.physical === null) throw new Error(`HLDI subtotal ${label} incomplete`)
-    const members = models.filter((row) => row.hldiClass === `${subtotal.body_class} / ${subtotal.size}`)
-    for (const member of members) {
-      const own = relativities(member)
-      if (own.liability !== null && own.physical !== null) {
-        classRatios.push(combined(own.liability, own.physical) / combined(rel.liability, rel.physical))
-      }
-    }
-    const words = `HLDI 2022–24 class average "${label}" (${subtotal.body_class}, ${subtotal.size}), used for EPA class ${classId}. The mapping from EPA class to HLDI class is our judgment.${
-      classId === "large-car"
-        ? " EPA sizes cars by interior room, so its large class includes hatchbacks such as the Hyundai Ioniq; HLDI sizes by footprint and weight, so we use HLDI's midsize average."
-        : ""
-    }`
-    classes[classId] = {
+    const name = kind ? `${kind}${lower(plainClass(classId))}` : plainClass(classId)
+    return {
       hldiSubtotal: label,
       liability: {
-        label: `${label}, liability share`,
+        label: `${name}: damage and injuries you cause`,
         value: Math.round(rel.liability),
         low: Math.round(rel.liability),
         high: Math.round(rel.liability),
         basis: "indicative",
         sources: ["hldi-2022-24"],
-        derivation: `${words} Bodily injury ${subtotal.bodily_injury || "—"} and property damage ${subtotal.property_damage || "—"}, weighted ${biShare}/${100 - biShare}.`,
+        derivation: `${words} Bodily injury ${subtotal.bodily_injury || "—"} and property damage ${subtotal.property_damage || "—"}, weighted ${biShare}/${100 - biShare}, before the liability weight.`,
         n: 1,
       },
       physical: {
-        label: `${label}, damage share`,
+        label: `${name}: damage to your own car`,
         value: Math.round(rel.physical),
         low: Math.round(rel.physical),
         high: Math.round(rel.physical),
@@ -826,6 +946,45 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
       },
     }
   }
+  const memberRatios = (label: string, into: number[]) => {
+    const subtotal = subtotals.find((row) => row.subtotal_label === label)
+    if (!subtotal) return
+    const rel = relativities({
+      bodilyInjury: numberOrNull(subtotal.bodily_injury),
+      propertyDamage: numberOrNull(subtotal.property_damage),
+      collision: numberOrNull(subtotal.collision),
+      comprehensive: numberOrNull(subtotal.comprehensive),
+    })
+    if (rel.liability === null || rel.physical === null) return
+    for (const member of models.filter((row) => row.hldiClass === `${subtotal.body_class} / ${subtotal.size}`)) {
+      const own = relativities(member)
+      if (own.liability !== null && own.physical !== null) {
+        into.push(combined(own.liability, own.physical) / combined(rel.liability, rel.physical))
+      }
+    }
+  }
+
+  const classes: Record<string, VehicleClassRow> = {}
+  const classRatios: number[] = []
+  for (const [classId, label] of Object.entries(families.classes)) {
+    const words = `HLDI 2022–24 class average "${label}", used for the EPA-based class "${plainClass(classId)}". Which HLDI class stands in for which EPA class is our judgment.${
+      classId === "large-car"
+        ? " EPA sizes cars by interior room, so its large class includes hatchbacks such as the Hyundai Ioniq; HLDI sizes by footprint and weight, so we use HLDI's midsize average."
+        : ""
+    }`
+    const row = classRow(classId, label, words, "")
+    if (row) classes[classId] = row
+    memberRatios(label, classRatios)
+  }
+
+  const luxuryClasses: Record<string, VehicleClassRow> = {}
+  const luxuryRatios: number[] = []
+  for (const [classId, label] of Object.entries(families.luxuryClasses)) {
+    const words = `HLDI 2022–24 class average "${label}", used for the class "${plainClass(classId)}" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment.`
+    const row = classRow(classId, label, words, "Luxury ")
+    if (row) luxuryClasses[classId] = row
+    memberRatios(label, luxuryRatios)
+  }
 
   const electricClasses: Record<string, VehicleClassRow> = {}
   for (const [classId, [body, size]] of Object.entries(families.electricClassCells)) {
@@ -835,27 +994,28 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
     const liabilities = electric.map((row) => relativities(row).liability).filter((value): value is number => value !== null)
     const physicals = electric.map((row) => relativities(row).physical).filter((value): value is number => value !== null)
     if (liabilities.length < 3 || physicals.length < 3) continue
-    const words = `Median of the ${electric.length} electric HLDI 2022–24 series we keep in ${body} / ${size} (${electric.map((row) => row.series).join("; ")}).`
+    const name = `Electric ${lower(plainClass(classId))}`
+    const words = `Middle of the ${electric.length} electric HLDI 2022–24 series we keep in HLDI's ${body} / ${size} class (${electric.map((row) => row.series).join("; ")}).`
     electricClasses[classId] = {
       hldiSubtotal: `Electric ${body} / ${size}`,
       liability: {
-        label: `Electric ${body.toLowerCase()} (${size.toLowerCase()}), liability share`,
+        label: `${name}: damage and injuries you cause`,
         value: Math.round(percentile(liabilities, 0.5)),
         low: Math.round(percentile(liabilities, 0.25)),
         high: Math.round(percentile(liabilities, 0.75)),
         basis: "indicative",
         sources: ["hldi-2022-24"],
-        derivation: `${words} Liability relativity per series, weighted as above.`,
+        derivation: `${words} Liability result per series, weighted as above, before the liability weight.`,
         n: liabilities.length,
       },
       physical: {
-        label: `Electric ${body.toLowerCase()} (${size.toLowerCase()}), damage share`,
+        label: `${name}: damage to your own car`,
         value: Math.round(percentile(physicals, 0.5)),
         low: Math.round(percentile(physicals, 0.25)),
         high: Math.round(percentile(physicals, 0.75)),
         basis: "indicative",
         sources: ["hldi-2022-24"],
-        derivation: `${words} Damage relativity per series, weighted as above.`,
+        derivation: `${words} Damage result per series, weighted as above.`,
         n: physicals.length,
       },
     }
@@ -865,8 +1025,22 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
     .map((row) => relativities(row))
     .filter((rel): rel is { liability: number; physical: number } => rel.liability !== null && rel.physical !== null)
     .map((rel) => combined(rel.liability, rel.physical) / 100)
-  const classSpread = summarize(classRatios)
-  const unknownSpread = summarize(allCombined)
+  const spreadOf = (values: number[], fallback: Summary): Summary => (values.length >= 5 ? summarize(values) : fallback)
+  const wide: Summary = { median: 1, p25: 0.8, p75: 1.25, n: 0 }
+  const classSpread = spreadOf(classRatios, wide)
+  const luxurySpread = spreadOf(luxuryRatios, wide)
+  const unknownSpread = spreadOf(allCombined, wide)
+  const luxuryHldiClasses = new Set(
+    subtotals
+      .filter((row) => Object.values(families.luxuryClasses).includes(row.subtotal_label))
+      .map((row) => `${row.body_class} / ${row.size}`),
+  )
+  const luxuryCombined = models
+    .filter((row) => luxuryHldiClasses.has(row.hldiClass))
+    .map((row) => relativities(row))
+    .filter((rel): rel is { liability: number; physical: number } => rel.liability !== null && rel.physical !== null)
+    .map((rel) => combined(rel.liability, rel.physical) / 100)
+  const unknownLuxurySpread = spreadOf(luxuryCombined, { median: 1, p25: 0.8, p75: 1.6, n: 0 })
 
   // --- Range cells.
   const typicalSummary = combine([ok, nd, tx, ca, co].map((rows) => summarize(dispersion(rows))))
@@ -888,25 +1062,58 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
       },
       "vehicle-model": rangeAssumption("vehicle-model"),
       "vehicle-model-years": rangeAssumption("vehicle-model-years"),
+      "vehicle-mixed-powertrain": rangeAssumption("vehicle-mixed-powertrain"),
+      "vehicle-luxury-class": {
+        label: "Using a luxury class average instead of the exact model",
+        value: 100,
+        low: Math.min(100, toHundredths(luxurySpread.p25)),
+        high: Math.max(100, toHundredths(luxurySpread.p75)),
+        basis: luxurySpread.n > 0 ? "indicative" : "assumed",
+        sources: luxurySpread.n > 0 ? ["hldi-2022-24"] : [],
+        derivation:
+          luxurySpread.n > 0
+            ? `How far the HLDI luxury and sports-car series we keep sit from their class average, full-coverage weighting: 25th and 75th percentiles over ${luxurySpread.n} series.`
+            : "Our estimate. No public source yet; help wanted. Without HLDI's model rows we use a wide spread.",
+        n: luxurySpread.n > 0 ? luxurySpread.n : null,
+      },
       "vehicle-class": {
         label: "Using a class average instead of the exact model",
         value: 100,
         low: Math.min(100, toHundredths(classSpread.p25)),
         high: Math.max(100, toHundredths(classSpread.p75)),
-        basis: "indicative",
-        sources: ["hldi-2022-24"],
-        derivation: `How far the HLDI series we keep sit from their class average, full-coverage weighting: 25th and 75th percentiles over ${classSpread.n} series.`,
-        n: classSpread.n,
+        basis: classSpread.n > 0 ? "indicative" : "assumed",
+        sources: classSpread.n > 0 ? ["hldi-2022-24"] : [],
+        derivation:
+          classSpread.n > 0
+            ? `How far the HLDI series we keep sit from their class average, full-coverage weighting: 25th and 75th percentiles over ${classSpread.n} series.`
+            : "Our estimate. No public source yet; help wanted. Without HLDI's model rows we use a wide spread.",
+        n: classSpread.n > 0 ? classSpread.n : null,
       },
       "vehicle-unknown": {
         label: "Vehicle not recognized",
         value: 100,
         low: Math.min(100, toHundredths(unknownSpread.p25)),
         high: Math.max(100, toHundredths(unknownSpread.p75)),
-        basis: "indicative",
-        sources: ["hldi-2022-24"],
-        derivation: `How far the HLDI series we keep sit from the all-vehicle average (100), full-coverage weighting: 25th and 75th percentiles over ${unknownSpread.n} series.`,
-        n: unknownSpread.n,
+        basis: unknownSpread.n > 0 ? "indicative" : "assumed",
+        sources: unknownSpread.n > 0 ? ["hldi-2022-24"] : [],
+        derivation:
+          unknownSpread.n > 0
+            ? `How far the HLDI series we keep sit from the all-vehicle average (100), full-coverage weighting: 25th and 75th percentiles over ${unknownSpread.n} series.`
+            : "Our estimate. No public source yet; help wanted. Without HLDI's model rows we use a wide spread.",
+        n: unknownSpread.n > 0 ? unknownSpread.n : null,
+      },
+      "vehicle-unknown-luxury": {
+        label: "Luxury or sports vehicle not recognized",
+        value: 100,
+        low: Math.min(100, toHundredths(unknownLuxurySpread.p25)),
+        high: Math.max(100, toHundredths(unknownLuxurySpread.p75)),
+        basis: unknownLuxurySpread.n > 0 ? "indicative" : "assumed",
+        sources: unknownLuxurySpread.n > 0 ? ["hldi-2022-24"] : [],
+        derivation:
+          unknownLuxurySpread.n > 0
+            ? `How far the HLDI luxury and sports-car series we keep sit from the all-vehicle average (100), full-coverage weighting: 25th and 75th percentiles over ${unknownLuxurySpread.n} series. Used for a luxury make when we can't tell what kind of vehicle it is.`
+            : "Our estimate. No public source yet; help wanted. Without HLDI's model rows we use a wide spread.",
+        n: unknownLuxurySpread.n > 0 ? unknownLuxurySpread.n : null,
       },
       "trim-limited": rangeAssumption("trim-limited"),
       "trim-unresolved": rangeAssumption("trim-unresolved"),
@@ -985,19 +1192,25 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
     formula:
       "estimate = starting premium × index(new) ÷ index(start), where index = driver and area factors × (liability share × limits × vehicle liability + damage share × deductible × loan or lease × vehicle age × vehicle damage)",
     changelogNote:
-      "Factors now come from public sources where we could find them: state insurance-department price surveys (Oklahoma, North Dakota, District of Columbia), North Carolina's accident surcharge rule, ISO loss costs, and HLDI losses by make and model. Everything else is labeled as our estimate and widens the range. The separate teen switch is gone; the 16–18 age band is the teen factor.",
+      "Factors now come from public sources where we could find them: state insurance-department price surveys from Oklahoma, North Dakota, the District of Columbia, Texas, California, and Colorado; North Carolina's accident surcharge rule; NAIC and ISO premium and claim figures; and HLDI insurance losses by make and model. Everything else is labeled as our estimate and widens the range. The separate teen switch is gone; the 16–18 age band is the teen factor. Vehicle liability results are passed on only partly, the way insurers' vehicle ratings do.",
     sources: sources.sources,
     groups,
     vehicle: {
+      modelsEnabled,
       sourceId: "hldi-2022-24",
       modelYears: "2022-24",
       yearMin: 2022,
       yearMax: 2024,
-      note: "HLDI insurance losses for 2022–24 models, 100 = the average vehicle. Collision and comprehensive move only the damage share of the premium; property-damage and bodily-injury liability move only the liability share. When we don't have the exact model, we use the class average.",
+      note: "HLDI insurance losses for 2022–24 models, 100 = the average vehicle. Collision and comprehensive move only the damage share of the premium, in full. Property-damage and bodily-injury liability move only the liability share, and only partly (see the liability weight). When we don't have the exact model, we use the class average.",
       models,
       aliases: families.aliases,
       classes,
       electricClasses,
+      luxuryClasses,
+      luxuryMakes: families.luxuryMakes.map((make) => compactName(make)),
+      liabilityWeight,
+      liabilityFloor: 100 - discountMax,
+      liabilityCap: 100 + surchargeMax,
     },
   }
 }
