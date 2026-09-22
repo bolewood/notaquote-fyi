@@ -130,13 +130,14 @@ function presetsFor(tab: Tab, now: Scenario): Preset[] {
           change: { deductible: 2000, coverage: hasPhysicalDamage(now.coverage) ? now.coverage : "full" },
         },
         { label: "Liability only", change: { coverage: "standard" } },
-        { label: "Higher limits", change: { coverage: "high" } },
+        { label: "Full coverage, higher limits", change: { coverage: "high" } },
+        { label: "Bundled with home or renters", change: { householdPolicy: true } },
       ]
     case "more":
       return [
         { label: "One at-fault accident", change: { incidents: "one" } },
         { label: "Under 7,500 miles a year", change: { mileage: "under-7500" } },
-        { label: "Bundled with home or renters", change: { householdPolicy: true } },
+        { label: "Over 15,000 miles a year", change: { mileage: "over-15000" } },
       ]
   }
 }
@@ -419,7 +420,7 @@ function CalculatorReady() {
               </h2>
               <p className="mt-1 text-sm text-muted-foreground lg:hidden">
                 Compared with now: {lowerFirst(situationSentence(now, false))}{" "}
-                <a href="#now" className="link whitespace-nowrap">
+                <a href="#now" className="link tap-target inline-flex items-center whitespace-nowrap">
                   Change
                 </a>
               </p>
@@ -549,7 +550,9 @@ function CalculatorReady() {
             <div ref={resultRef} className="scroll-mb-4 border-t border-border px-5 py-6 sm:px-6">
               {result && premiumInvalid ? (
                 <p className="py-4 text-center text-sm text-muted-foreground" data-testid="what-if-waiting">
-                  Finish typing what you pay now (or clear it), and the difference shows here.
+                  {premium.kind === "too-high"
+                    ? "What you pay now looks like more than we can work with. Check the number, or leave it empty, and the difference shows here."
+                    : "Finish typing what you pay now (or clear it), and the difference shows here."}
                 </p>
               ) : result ? (
                 <WhatIfResult
@@ -563,6 +566,8 @@ function CalculatorReady() {
                   next={result.next}
                   startKind={startKind}
                   startNote={startNote}
+                  sender={linked !== null && linked.premium !== null}
+                  plural={shown.length > 1}
                   state={stateName(next.state)}
                   chips={shown.map((key) => ({ key, label: changeChip(key, next) }))}
                   onUndo={undo}
@@ -734,7 +739,13 @@ function CalculatorReady() {
                       <ChevronDown className="size-4" aria-hidden="true" />
                     </summary>
                     <div className="pb-2">
-                      <HowWeGotThis estimate={nowEstimate} startKind={startKind} startNote={startNote} state={state} />
+                      <HowWeGotThis
+                        estimate={nowEstimate}
+                        startKind={startKind}
+                        startNote={startNote}
+                        state={state}
+                        sender={linked !== null && linked.premium !== null}
+                      />
                     </div>
                   </details>
                 ) : null}
@@ -913,6 +924,8 @@ function WhatIfResult({
   next,
   startKind,
   startNote,
+  sender,
+  plural,
   state,
   chips,
   onUndo,
@@ -934,6 +947,10 @@ function WhatIfResult({
   next: Estimate
   startKind: StartKind
   startNote?: string
+  /** The starting premium came from a shared link: it's what the sender pays. */
+  sender: boolean
+  /** More than one thing changed. */
+  plural: boolean
   state: string
   chips: { key: ChangeKey; label: string }[]
   onUndo: (key: ChangeKey) => void
@@ -953,6 +970,8 @@ function WhatIfResult({
   const rounded = Math.round(delta / 10) * 10
   const direction = mode === "teen-own" ? "neutral" : rounded > 0 ? "up" : rounded < 0 ? "down" : "same"
   const tone = direction === "up" ? "text-up" : direction === "down" ? "text-down" : "text-foreground"
+  // A piece that rounds to $0 doesn't explain anything.
+  const shownParts = parts.filter((part) => Math.round(part.amount / 10) !== 0)
   return (
     <div className="pop-in grid gap-6" key={headline}>
       <div className="grid gap-1">
@@ -985,16 +1004,18 @@ function WhatIfResult({
                 ? `On a policy that costs ${ownNumber ? "" : "about "}${nowWords} now.`
                 : direction === "same"
                   ? "Within $10 either way."
-                  : `About ${differenceWords(delta, "month")}.`}
+                  : differenceWords(delta, "month") === "about the same"
+                    ? "About the same each month."
+                    : `About ${differenceWords(delta, "month")}.`}
           </p>
         ) : null}
       </div>
 
-      {parts.length > 1 || (parts.length === 1 && vehicleChanged) ? (
+      {shownParts.length > 1 || (shownParts.length === 1 && vehicleChanged) ? (
         <div className="grid gap-2" data-testid="what-if-parts">
           <p className="text-sm font-semibold">What makes the difference</p>
           <ul className="grid text-sm">
-            {parts.map((part) => (
+            {shownParts.map((part) => (
               <li key={part.label} className="flex items-baseline justify-between gap-4 border-b border-border/70 py-1.5 last:border-b-0">
                 <span>{part.label}</span>
                 <span
@@ -1008,8 +1029,10 @@ function WhatIfResult({
               </li>
             ))}
           </ul>
-          {parts.length > 1 ? (
-            <p className="text-xs text-muted-foreground">Each piece is rounded to the nearest $10, so they may not add up exactly.</p>
+          {shownParts.length > 1 ? (
+            <p className="text-xs text-muted-foreground">
+              Each piece is rounded to the nearest $10 a year, so they may not add up exactly.
+            </p>
           ) : null}
         </div>
       ) : null}
@@ -1028,7 +1051,7 @@ function WhatIfResult({
         <div className="grid gap-1.5">
           <div className="flex flex-wrap items-baseline justify-between gap-x-3">
             <dt className="text-sm font-semibold">
-              {mode === "teen-own" ? "Their own policy" : mode === "teen-added" ? "With your teen" : "With this change"}
+              {mode === "teen-own" ? "Their own policy" : mode === "teen-added" ? "With your teen" : plural ? "With these changes" : "With this change"}
             </dt>
             <dd className="money text-sm text-muted-foreground" data-testid="what-if-yearly">
               <span className="text-lg font-semibold text-foreground">{estimateDollars(next.likely)}</span> a year ·{" "}
@@ -1076,7 +1099,7 @@ function WhatIfResult({
           <ChevronDown className="size-4" aria-hidden="true" />
         </summary>
         <div className="grid gap-3 pb-4">
-          <HowWeGotThis estimate={next} startKind={startKind} startNote={startNote} state={state} />
+          <HowWeGotThis estimate={next} startKind={startKind} startNote={startNote} state={state} sender={sender} />
           {vehicleChanged ? (
             <p>
               <VehicleFixLink carName={nextCarName} shown={vehicleMatchWords(next.vehicle)} />
@@ -1191,16 +1214,23 @@ function PrintSummary({
           <p>
             <strong>About {estimateDollars(result.next.likely)} a year</strong> ({rangeWords(result.next.low, result.next.high)}).
           </p>
-          {result.parts.length > 0 ? (
+          {result.parts.some((part) => Math.round(part.amount / 10) !== 0) ? (
             <ul style={{ margin: "6pt 0 0 14pt", listStyle: "disc" }}>
-              {result.parts.map((part) => (
-                <li key={part.label}>
-                  {part.label}: {signedDollars(part.amount)}
-                </li>
-              ))}
+              {result.parts
+                .filter((part) => Math.round(part.amount / 10) !== 0)
+                .map((part) => (
+                  <li key={part.label}>
+                    {part.label}: {signedDollars(part.amount)}
+                  </li>
+                ))}
             </ul>
           ) : null}
-          <p style={{ marginTop: "6pt" }}>{result.next.rangeNote}</p>
+          <p style={{ marginTop: "8pt", fontWeight: 600 }}>Why the range is this wide</p>
+          <ul style={{ margin: "2pt 0 0 14pt", listStyle: "disc" }}>
+            {result.next.rangePoints.map((point) => (
+              <li key={point}>{point}</li>
+            ))}
+          </ul>
         </>
       ) : null}
       <p style={{ marginTop: "14pt", borderTop: "0.75pt solid #999", paddingTop: "8pt" }}>

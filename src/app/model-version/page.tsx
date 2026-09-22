@@ -34,7 +34,7 @@ export default function ModelVersionPage() {
           body: (
             <p>
               All 50 states and DC now have their legal minimum coverage, each with at least one source link and its own
-              check date ({fullySourcedStateRules().length} of {sourcedStateRules().length} with all three dollar limits).
+              check date ({fullySourcedStateRules().length} of the {sourcedStateRules().length} with all three dollar limits).
               Where we couldn&apos;t confirm something, the row says so instead of guessing. We also added a typical yearly
               price for each state, from the National Association of Insurance Commissioners&apos; 2023 figures, used with
               credit. The math starts from it when you don&apos;t enter what you pay.

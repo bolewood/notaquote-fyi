@@ -356,7 +356,7 @@ export function decodeShareSearch(
 /** What to tell someone who opened a shared link, in plain words. */
 export function shareArrivalNotes(link: ShareLinkOk): string[] {
   const notes = [
-    "Someone shared this with you. Links carry choices, not prices, so every number here is worked out fresh.",
+    "Someone shared this with you. The link carries their choices, not our estimates, so every number here is worked out fresh.",
   ]
   if (link.modelMismatch) {
     notes.push(

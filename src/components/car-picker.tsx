@@ -343,7 +343,7 @@ export function CarPicker({
                   </button>
                 </div>
                 <p id={`${headingId}-vin-hint`} className="text-sm leading-snug text-muted-foreground">
-                  It&apos;s on your registration or insurance card. Your browser sends it straight to NHTSA&apos;s free decoder, and we don&apos;t keep it.
+                  It&apos;s on your registration or insurance card. Your browser sends it straight to the federal government&apos;s free VIN decoder (NHTSA), and we don&apos;t keep it.
                 </p>
                 {vinMessage ? (
                   <p role="status" className="text-sm leading-snug font-medium">

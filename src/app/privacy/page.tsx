@@ -49,11 +49,12 @@ export default function PrivacyPage() {
         it from the address bar.
       </p>
       <ul className="bullets">
-        <li>A link never includes prices. The numbers are worked out fresh when it&apos;s opened.</li>
         <li>
-          What you pay goes in only if you check &ldquo;Include what I pay now&rdquo;, and it&apos;s never saved on the other
-          person&apos;s device. Compare links never include it.
+          The link carries your choices, not our estimates. It includes what you pay only if you check the box
+          (&ldquo;Include what I pay now&rdquo;), and that&apos;s never saved on the other person&apos;s device. Compare
+          links never include it.
         </li>
+        <li>The numbers are worked out fresh when the link is opened.</li>
         <li>Opening a shared list never replaces your own list unless you choose to.</li>
       </ul>
 

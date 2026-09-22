@@ -1,7 +1,8 @@
 /**
  * How numbers read on the site. One place, so every screen rounds the same way:
  * - an estimate rounds to the nearest $10, a range to the nearest $50, and a
- *   monthly figure to the nearest $5;
+ *   monthly figure is the shown yearly figure ÷ 12, to the nearest $5 (so
+ *   $630 a year reads as $55 a month, the same on every screen);
  * - a number the visitor typed stays exactly as they typed it;
  * - sentences say "$630 more a year"; only table cells use + and −.
  * These change how numbers look, never the math behind them.
@@ -23,9 +24,19 @@ export function estimateDollars(amount: number): string {
   return dollars(Math.max(10, roundTo(amount, 10)))
 }
 
-/** A monthly figure from a yearly one, to the nearest $5: 1717 to "$145". */
+/** A yearly amount as it's shown: to the nearest $10. */
+export function shownYearly(amount: number): number {
+  return roundTo(amount, 10)
+}
+
+/** A monthly amount as it's shown: the shown yearly amount ÷ 12, to the nearest $5. */
+export function shownMonthly(yearly: number): number {
+  return roundTo(shownYearly(yearly) / 12, 5)
+}
+
+/** A monthly figure from a yearly one: 1717 to "$145", 630 to "$55". */
 export function monthlyDollars(yearly: number): string {
-  return dollars(Math.max(5, roundTo(yearly / 12, 5)))
+  return dollars(Math.max(5, shownMonthly(yearly)))
 }
 
 /** The ends of a range, to the nearest $50, always at least $50 apart. */
@@ -49,7 +60,7 @@ export function rangeWords(low: number, high: number): string {
 
 /** A yearly difference in a sentence: "$630 more a year", "$90 less a year", or "about the same". */
 export function differenceWords(delta: number, per: "year" | "month" = "year"): string {
-  const rounded = per === "year" ? roundTo(delta, 10) : roundTo(delta / 12, 5)
+  const rounded = per === "year" ? shownYearly(delta) : Math.sign(delta) * shownMonthly(Math.abs(delta))
   if (rounded === 0) return "about the same"
   return `${dollars(Math.abs(rounded))} ${rounded > 0 ? "more" : "less"} a ${per}`
 }

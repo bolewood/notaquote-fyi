@@ -12,6 +12,7 @@ import {
   filterRows,
   gapsToCheapest,
   headlineAmount,
+  shownAmount,
   nextSort,
   parseMaxYearly,
   scaleFor,
@@ -201,4 +202,20 @@ test("each car's gap to the cheapest, and a one-line answer", () => {
   assert.match(answer ?? "", /^For a 16–18-year-old in Illinois, a 2022 .+ costs about \$[\d,]+0 a year less to insure than a 2022 .+\.$/)
   assert.equal(compareAnswer(rows.slice(0, 1), "own", "For you"), null)
   assert.match(compareAnswer(addedRows(), "added", "For a 16–18-year-old in Illinois") ?? "", /less to add than/)
+})
+
+test("gaps and monthly figures come from the shown, rounded numbers", () => {
+  const rows = ownRows()
+  const { gaps, cheapest } = gapsToCheapest(rows)
+  for (const row of rows) {
+    const gap = gaps.get(row.key) ?? 0
+    assert.equal(gap % 10, 0, "a gap is a whole $10 step")
+    assert.equal(gap, shownAmount(row) - shownAmount(cheapest!), "the gap is the difference of the shown numbers")
+  }
+  const csv = toCsv(rows, { driver: "d", start: "s", disclaimer: "n", versions: "v" })
+  const lines = csv.slice(1).trimEnd().split("\r\n").slice(4, 4 + rows.length)
+  for (const line of lines) {
+    const cells = line.split(",")
+    assert.equal(Number(cells[4]), Math.max(5, Math.round(Number(cells[3]) / 12 / 5) * 5), "monthly is the shown yearly ÷ 12, to $5")
+  }
 })

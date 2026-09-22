@@ -98,8 +98,8 @@ export function ShareBox({
         </p>
       ) : (
         <p className="text-sm text-muted-foreground">
-          The link carries your choices, never prices.
-          {premiumAvailable ? " What you pay stays out unless you check the box." : ""}
+          The link carries your choices, not our estimates.
+          {premiumAvailable ? " It includes what you pay only if you check the box." : ""}
         </p>
       )}
     </div>

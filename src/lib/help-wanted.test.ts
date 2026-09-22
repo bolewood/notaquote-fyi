@@ -14,11 +14,12 @@ test("five open numbers, each with a hint and a prefilled issue that keeps its f
   }
 })
 
-test("the open numbers really are still our best guess (or rough) in the data", () => {
+test("four open numbers are our best guesses and the fifth rests on one state's prices, as the page says", () => {
   const cell = (group: string, key: string) => FACTOR_BUNDLE.groups[group].cells[key]
   assert.equal(cell("deductible", "2000").basis, "assumed")
   assert.equal(cell("vehicle-age", "8-12").basis, "assumed")
   assert.equal(cell("good-student", "yes").basis, "assumed")
-  assert.notEqual(cell("driver-age", "16-18-added").basis, "sourced")
+  assert.equal(cell("driver-age", "16-18-added").basis, "indicative")
+  assert.deepEqual(cell("driver-age", "16-18-added").sources, ["ca-2026"])
   assert.equal(cell("driving-record", "two-or-more").basis, "assumed")
 })

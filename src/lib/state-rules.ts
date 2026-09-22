@@ -396,14 +396,14 @@ function coverageClause(value: RequirementFlag, name: string, optionalPolicy: bo
 
 function liabilitySentence(rule: StateRule): string {
   if (rule.biPerPerson !== null && rule.biPerAccident !== null && rule.pd !== null) {
-    return `${formatLiabilityDollars(rule.biPerPerson)} per person and ${formatLiabilityDollars(rule.biPerAccident)} per accident for injuries you cause, plus ${formatLiabilityDollars(rule.pd)} for property damage.`
+    return `${formatLiabilityDollars(rule.biPerPerson)} per person and ${formatLiabilityDollars(rule.biPerAccident)} per crash for injuries you cause, plus ${formatLiabilityDollars(rule.pd)} for property damage.`
   }
   if (rule.combinedSingleLimit !== null) {
     return `${formatLiabilityDollars(rule.combinedSingleLimit)} of liability coverage for injuries and property damage combined.`
   }
   const named: string[] = []
   if (rule.biPerPerson !== null) named.push(`${formatLiabilityDollars(rule.biPerPerson)} per person for injuries you cause`)
-  if (rule.biPerAccident !== null) named.push(`${formatLiabilityDollars(rule.biPerAccident)} per accident for injuries`)
+  if (rule.biPerAccident !== null) named.push(`${formatLiabilityDollars(rule.biPerAccident)} per crash for injuries`)
   if (rule.pd !== null) named.push(`${formatLiabilityDollars(rule.pd)} for property damage`)
   if (named.length === 0) return "We haven't confirmed a dollar minimum for this state yet."
   const missingInjury = rule.biPerPerson === null || rule.biPerAccident === null
@@ -448,7 +448,6 @@ export function stateMinimumAssumption(state: string): string {
     parts.push(`You choose whether no-fault rules apply. ${noFaultDefaultText(rule)}`)
   }
 
-  parts.push(`Checked ${formatVerifiedDate(rule.checkedOn)}.`)
   parts.push(NO_PHYSICAL)
   return `State minimum: ${parts.join(" ")}`
 }

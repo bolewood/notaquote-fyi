@@ -30,7 +30,7 @@ It is not an insurance company, agent, or broker, and it doesn't sell anything o
 - **Your inputs stay in your browser.** The math runs on your device. We don't collect or store your answers.
 - **One exception, and only if you use it:** if you type in a VIN, your browser sends it straight to NHTSA's free vehicle decoder to look up the car. We don't keep it.
 - **No cookies, ad trackers, or analytics scripts.**
-- **Share links.** They carry your choices after the `#` in the address, which browsers don't send to any server. They never include prices, and they include what you pay only if you check the box for it.
+- **Share links.** The link carries your choices, not our estimates. It includes what you pay only if you check the box. It all sits after the `#` in the address, which browsers don't send to any server.
 
 ## Quickstart
 
@@ -75,7 +75,7 @@ Every dollar figure on the site comes from one set of math that runs in your bro
 
 You don't need to write code to help.
 
-**Five numbers that need a public source most.** Each is our best guess today. Many state insurance departments publish a "rate comparison guide" with sample prices from many companies; if yours shows one of these, [tell us](https://github.com/bolewood/notaquote-fyi/issues/new?template=1-number.yml).
+**Five numbers that need a public source most.** Four are our best guesses; the fifth rests on one state's prices. Many state insurance departments publish a "rate comparison guide" with sample prices from many companies; if yours shows one of these, [tell us](https://github.com/bolewood/notaquote-fyi/issues/new?template=1-number.yml).
 
 1. How a $500 or $2,000 deductible changes the price. Look for sample prices at two deductibles for the same driver and car.
 2. How much less an older car costs to insure. Look for the same car at two model years, with collision and comprehensive.

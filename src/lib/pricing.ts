@@ -131,13 +131,15 @@ export function priceWhatIf(
   if (!start) return null
   const now = situation.scenario
   const newTeen = next.age === "16-18" && now.age !== "16-18"
-  if (newTeen && !situation.teenOnParentPolicy) {
+  // A 19–21-year-old is always priced on their own policy, so a new one is a separate bill too.
+  const newYoung = next.age === "19-21" && now.age !== "19-21" && now.age !== "16-18"
+  if ((newTeen && !situation.teenOnParentPolicy) || newYoung) {
     const result = whatIf(start, now, next, { currentVehicle: nowVehicle, nextVehicle, trimConfidence })
     return {
       ...result,
       mode: "teen-own",
       parts: [],
-      headline: `Their own policy: about ${formatDollars(roundTen(result.next.likely))} a year, on top of your ${formatDollars(roundTen(result.current.likely))}.`,
+      headline: `A ${newYoung ? "19–21" : "16–18"}-year-old on their own policy: about ${formatDollars(roundTen(result.next.likely))} a year, on top of your ${formatDollars(roundTen(result.current.likely))}.`,
     }
   }
   if (!newTeen) {
@@ -157,7 +159,7 @@ export function priceWhatIf(
   const delta = added.after.likely - current.likely
   const deltaRounded = roundTen(delta)
   const onlyTheTeen = changedKeys(now, parent).every((key) => key === "goodStudent" || key === "driverTraining")
-  const headline = onlyTheTeen ? added.headline : `With those changes and your teen: ${amountWords(delta)}.`
+  const headline = onlyTheTeen ? added.headline : `With these changes and your teen: ${amountWords(delta)}.`
   const others = explainChange(start, now, nowVehicle, parent, nextVehicle)
   const parts = [...others.parts, { label: "Adding your teen", amount: added.after.likely - others.last }]
   return { current, next: added.after, delta, deltaRounded, headline, mode: "teen-added", parts }
@@ -333,6 +335,7 @@ export function whatIfLabel(now: Scenario, next: Scenario, teenOnParentPolicy: b
     }
     return `With a ${age}-year-old driver`
   }
+  if (keys.length > 1) return "With these changes"
   if (keys.length !== 1) return undefined
   switch (keys[0]) {
     case "vehicle":
@@ -506,22 +509,15 @@ const SURVEY_STATES: Record<string, string> = {
   "nc-sdip-2026": "North Carolina",
 }
 
-function possessive(name: string): string {
-  return `${name}'s`
-}
-
 /**
  * How we know a step, and, when its prices come from other states, which
- * ones: "From published prices (based on California's published prices;
- * Illinois may differ)".
+ * ones: "From published prices in Texas and Oklahoma (Illinois may differ)".
  */
 export function basisLabel(basis: keyof typeof BASIS_WORDS, sourceIds: readonly string[], state: string): string {
   const words = BASIS_WORDS[basis]
   const states = [...new Set(sourceIds.flatMap((id) => (SURVEY_STATES[id] ? [SURVEY_STATES[id]] : [])))]
   if (basis === "reference" || states.length === 0 || states.includes(state)) return words
   const named =
-    states.length === 1
-      ? possessive(states[0])
-      : `${states.slice(0, -1).map(possessive).join(", ")}${states.length > 2 ? "," : ""} and ${possessive(states[states.length - 1])}`
-  return `${words} (based on ${named} published prices; ${state} may differ)`
+    states.length === 1 ? states[0] : `${states.slice(0, -1).join(", ")}${states.length > 2 ? "," : ""} and ${states[states.length - 1]}`
+  return `${words} in ${named} (${state} may differ)`
 }

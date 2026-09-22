@@ -6,7 +6,7 @@
 import type { VehiclePick } from "./catalog"
 import { carKey } from "./car-search"
 import type { Estimate } from "./factor-engine"
-import { rangeEnds } from "./format"
+import { rangeEnds, shownMonthly, shownYearly } from "./format"
 import { vehicleMatchWords } from "./pricing"
 
 /**
@@ -37,6 +37,8 @@ export type CompareRow = {
   reason: string
   summary: string
   rangeNote: string
+  /** The same reasons as short points, for a bulleted list. */
+  rangePoints: string[]
   /** What we matched the car to, in the site's own words (for "Tell us" links). */
   vehicleShown: string
 }
@@ -67,6 +69,7 @@ export function buildRows(
       reason: reasons[order] ?? "",
       summary: row.estimate.summary,
       rangeNote: row.estimate.rangeNote,
+      rangePoints: row.estimate.rangePoints,
       vehicleShown: vehicleMatchWords(row.estimate.vehicle),
     }
   })
@@ -193,13 +196,13 @@ export type CsvNotes = {
   versions: string
 }
 
-/** Rounded the way the page shows them: yearly to $10, monthly to $5, ranges to $50. */
+/** Rounded the way the page shows them: yearly to $10, monthly to $5 (from the shown yearly), ranges to $50. */
 function tens(amount: number): number {
-  return Math.round(amount / 10) * 10
+  return shownYearly(amount)
 }
 
 function fives(yearly: number): number {
-  return Math.max(5, Math.round(yearly / 12 / 5) * 5)
+  return Math.max(5, shownMonthly(yearly))
 }
 
 /** "Pricier repairs, more at-fault claims" (the page's words, first letter up). */
@@ -245,15 +248,21 @@ export function toCsv(rows: readonly CompareRow[], notes: CsvNotes, mode: Compar
   return `\uFEFF${lines.join("\r\n")}\r\n`
 }
 
+/** The main number as it's shown in the table: to the nearest $10. */
+export function shownAmount(row: Pick<CompareRow, "extra" | "likely">): number {
+  return shownYearly(headlineAmount(row))
+}
+
 /**
- * How much more each car costs than the cheapest one in view (by the main
- * number), and which car that is. The cheapest car gets 0.
+ * How much more each car costs than the cheapest one in view, worked out
+ * from the numbers as shown (so "+$210" is exactly the gap between two
+ * shown figures), and which car that is. The cheapest car gets 0.
  */
 export function gapsToCheapest(rows: readonly CompareRow[]): { gaps: Map<string, number>; cheapest: CompareRow | null } {
   if (rows.length === 0) return { gaps: new Map(), cheapest: null }
   const cheapest = rows.reduce((best, row) => (headlineAmount(row) < headlineAmount(best) ? row : best))
   return {
-    gaps: new Map(rows.map((row) => [row.key, headlineAmount(row) - headlineAmount(cheapest)])),
+    gaps: new Map(rows.map((row) => [row.key, shownAmount(row) - shownAmount(cheapest)])),
     cheapest,
   }
 }
@@ -268,7 +277,7 @@ export function compareAnswer(rows: readonly CompareRow[], mode: CompareMode, wh
   const sorted = [...rows].sort((left, right) => headlineAmount(left) - headlineAmount(right) || left.order - right.order)
   const low = sorted[0]
   const high = sorted[sorted.length - 1]
-  const gap = tens(headlineAmount(high) - headlineAmount(low))
+  const gap = shownAmount(high) - shownAmount(low)
   if (gap === 0) return `${who}, these cars cost about the same to ${mode === "added" ? "add" : "insure"}.`
   return `${who}, a ${low.name} costs about $${gap.toLocaleString("en-US")} a year less to ${mode === "added" ? "add" : "insure"} than a ${high.name}.`
 }

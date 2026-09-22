@@ -190,12 +190,8 @@ export function StateNoteBody({ rule }: { rule: StateRule }) {
               <dd>{rule.umLimits}</dd>
             </div>
           ) : null}
-          {rule.effective ? (
-            <div>
-              <dt className="font-medium">Effective dates and changes</dt>
-              <dd>{rule.effective}</dd>
-            </div>
-          ) : null}
+          {/* The effective-date notes cite laws in shorthand ("P.A. 102-982, eff. 7-1-23"); they stay in the data and
+              its sources, and changes coming into force are shown above in plain words. */}
           <div>
             <dt className="font-medium">Checked</dt>
             <dd>{rule.checkedOn ? formatVerifiedDate(rule.checkedOn) : "Not checked yet"}</dd>

@@ -489,8 +489,21 @@
   }
   .chip,
   .btn,
-  .tab {
+  .tab,
+  .field-select,
+  .field-input {
     min-height: 2.75rem;
+  }
+  /* Pair with inline-flex items-center in the markup. */
+  .tap-target {
+    min-height: 2.75rem;
+  }
+}
+
+/* Phones on the Compare page: leave room under the footer for the bottom bar. */
+@media (max-width: 639px) {
+  body:has([data-testid="compare-bottom-bar"]) > footer {
+    padding-bottom: 4.5rem;
   }
 }
 

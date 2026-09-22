@@ -120,7 +120,7 @@ export function Segmented<T extends string>({
             <label
               key={option.value}
               className={cn(
-                "flex min-h-9 cursor-pointer items-center justify-center rounded-full px-3 text-center text-sm font-medium transition-colors has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-ring",
+                "flex min-h-9 cursor-pointer items-center justify-center rounded-full px-2 text-center text-sm font-medium whitespace-nowrap transition-colors has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-ring",
                 checked ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground",
               )}
             >

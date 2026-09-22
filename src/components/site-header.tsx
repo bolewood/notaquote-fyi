@@ -42,7 +42,7 @@ export function SiteHeader() {
                 href={link.href}
                 aria-current={current ? "page" : undefined}
                 className={cn(
-                  "rounded-full px-3 py-1.5 text-sm font-medium whitespace-nowrap",
+                  "tap-target inline-flex items-center rounded-full px-3 py-1.5 text-sm font-medium whitespace-nowrap",
                   current ? "bg-foreground text-background" : "text-foreground hover:bg-muted",
                 )}
               >
@@ -60,8 +60,8 @@ export function SiteHeader() {
                 href={link.href}
                 aria-current={current ? "page" : undefined}
                 className={cn(
-                  "rounded-sm text-sm",
-                  !link.always && "hidden sm:inline",
+                  "tap-target inline-flex items-center rounded-sm text-sm",
+                  !link.always && "hidden sm:inline-flex",
                   current ? "font-medium text-foreground" : "text-muted-foreground hover:text-foreground",
                 )}
               >

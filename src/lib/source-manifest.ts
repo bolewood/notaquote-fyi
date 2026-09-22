@@ -85,8 +85,11 @@ export function assertManifestSafe(): void {
   if (!/not used/i.test(supplement.licenseNote) || supplement.derivedFields.length !== 0) {
     throw new Error(`${supplement.id} must say it is not used and store no fields`)
   }
-  if (!/used with credit/i.test(report.licenseNote) || report.derivedFields.length === 0) {
+  if (!/with credit/i.test(report.licenseNote) || report.derivedFields.length === 0) {
     throw new Error(`${report.id} must say it is used with credit and list its fields`)
+  }
+  if (/approv|permission/i.test(report.licenseNote)) {
+    throw new Error(`${report.id} must not claim approval or permission: the figures are used as facts, with credit`)
   }
   for (const row of [supplement, report]) {
     if (!row.catalogCode || !row.publicationDate || !row.url) {

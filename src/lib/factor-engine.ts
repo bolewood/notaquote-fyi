@@ -193,7 +193,7 @@ const PLAIN_NOTES: Record<string, string> = {
   "driving-experience": "Only counts from age 26. For younger drivers, their age already says they're new.",
   "driving-record": "At-fault accidents in the last three years.",
   "annual-mileage": "How far the car is driven in a year.",
-  "good-student": "For drivers under 26, usually with a B average or better.",
+  "good-student": "Usually a B average or better, under 26.",
   "driver-training": "For drivers under 22 who took a driver's ed course.",
   "multi-policy": "Home or renters insurance with the same company.",
   area:
@@ -202,7 +202,7 @@ const PLAIN_NOTES: Record<string, string> = {
     "The most the policy pays for damage you cause to others, per person / per crash / property. This only moves the liability part of the bill.",
   deductible:
     "The part of a repair bill you pay yourself before insurance pays the rest. This only moves the part that fixes your own car.",
-  "loan-lease": "Lenders usually ask for extra coverage. This only moves the part that fixes your own car.",
+  "loan-lease": "Lenders usually ask for full coverage. This only moves the part that fixes your own car.",
   "vehicle-age":
     "Newer cars cost more to fix or replace. Measured from a car 0–3 years old; a typical state price already assumes an 8–12-year-old car. This only moves the part that fixes your own car.",
   "premium-split":
@@ -227,7 +227,7 @@ const PLAIN_LABELS: Record<string, Record<string, string>> = {
   area: { urban: "City", suburban: "Suburbs", rural: "Small town or country" },
   "liability-limits": {
     "100-300-100": "$100,000/$300,000/$100,000",
-    "state-minimum": "Your state's minimum",
+    "state-minimum": "your state's minimum",
     "250-500-250": "$250,000/$500,000/$250,000",
   },
   "driving-record": {
@@ -917,7 +917,7 @@ export function typicalStart(target: Scenario, options: DriverOptions = {}): Sta
     vehicle: "average",
     kind: "typical",
     label: options.teenOnParentPolicy
-      ? `a typical yearly price for one insured car in ${state} (we don't know your household's premium, so this stands in for it)`
+      ? `a typical yearly price for one insured car in ${state}, standing in for your household's premium`
       : `a typical yearly price in ${state}`,
     trended: Boolean(ratio),
     untrendedAnnual: baseline.annual,
@@ -952,8 +952,10 @@ export type Estimate = {
   spread: { down: number; up: number }
   /** Plain-language summary for the page. */
   summary: string
-  /** Plain-language reason for the range width. */
+  /** Plain-language reason for the range width, as one paragraph. */
   rangeNote: string
+  /** The same reasons as short points, for a bulleted list. */
+  rangePoints: string[]
 }
 
 type Spread = { down: bigint; up: bigint; weight: Rational }
@@ -1229,6 +1231,7 @@ function estimateAny(start: StartingPoint, target: Scenario, options: EstimateOp
     if (step.basis !== "reference") basisCount[step.basis] += 1
   }
 
+  const points = rangePoints(start, target, steps, to.vehicle, from.vehicle, options)
   return {
     low: kept.low,
     likely: kept.likely,
@@ -1240,7 +1243,8 @@ function estimateAny(start: StartingPoint, target: Scenario, options: EstimateOp
     basisCount,
     spread: { down: Number(down), up: Number(up) },
     summary: summarySentence(start, steps, kept.likely),
-    rangeNote: rangeSentence(start, target, steps, to.vehicle, from.vehicle, options),
+    rangePoints: points,
+    rangeNote: points.join(" "),
   }
 }
 
@@ -1272,34 +1276,41 @@ function summarySentence(start: StartingPoint, steps: ChangeStep[], likely: numb
   return `We started from ${startWords(start)} and adjusted for the ${changed}. That comes to about ${formatDollars(roundTen(likely))} a year (about ${monthlyDollars(likely)} a month).`
 }
 
-/** Our HLDI loss data covers these model years (from the bundle). */
+/** Our HLDI claims data covers these model years (from the bundle). */
 function outsideYearsSentence(modelYear: number): string {
   const first = bundle.vehicle.yearMin
   const last = bundle.vehicle.yearMax
   const nearest = modelYear > last ? last : first
-  return `Our loss data covers ${first}–${last} models, so for a ${modelYear} we use the closest year (${nearest}) and widen the range.`
+  return `Our claims data covers ${first}–${last} models, so for a ${modelYear} we used the closest year (${nearest}).`
 }
 
-function rangeSentence(
+/**
+ * Why the range is as wide as it is, as a few short points (each said once).
+ * Shown as a bulleted list; `rangeNote` is the same points as one paragraph.
+ */
+function rangePoints(
   start: StartingPoint,
   scenario: Scenario,
   steps: ChangeStep[],
   target: VehicleRelativity,
   origin: VehicleRelativity,
   options: EstimateOptions,
-): string {
+): string[] {
   const trim = options.trimConfidence ?? null
-  const parts: string[] = []
+  const points: string[] = []
+  const add = (point: string) => {
+    if (!points.includes(point)) points.push(point)
+  }
   if (start.kind === "typical") {
-    parts.push("Even for the same driver and car, companies' prices differ a lot, so real quotes can land well above or below this.")
+    add("Companies' prices differ a lot, even for the same driver and car, so real quotes can land well above or below this.")
   } else if (steps.length > 0) {
-    parts.push("The range shows how differently insurance companies price the same change.")
+    add("Companies price the same change differently.")
   }
   const assumed = steps.filter((step) => step.basis === "assumed" && step.group !== "vehicle" && step.group !== "state")
-  if (assumed.length > 0) {
-    parts.push(
-      `It's wider because our figure for ${joinWords(assumed.map((step) => lowerFirst(step.title)))} is our own estimate. We haven't found a public source for it yet.`,
-    )
+  if (assumed.length === 1) {
+    add(`Our figure for the ${lowerFirst(assumed[0].title)} is our best guess, with no public source yet.`)
+  } else if (assumed.length > 1) {
+    add(`Our figures for ${joinWords(assumed.map((step) => `the ${lowerFirst(step.title)}`))} are our best guesses, with no public source yet.`)
   }
   const vehicleChanged = steps.some((step) => step.group === "vehicle")
   if (vehicleChanged) {
@@ -1308,18 +1319,18 @@ function rangeSentence(
       [target, scenario.year],
     ] as const) {
       if (relativity.level === "class") {
-        parts.push(`We don't have loss data for that exact model, so we used the average for its class (${lowerFirst(relativity.label)}).`)
+        add(`We don't have claims data for that exact model, so we used the average for its kind (${lowerFirst(relativity.label)}).`)
       }
       if (relativity.level === "unknown") {
-        parts.push("We couldn't tell what kind of vehicle that is, so we treated it as an average one and widened the range.")
+        add("We couldn't tell what kind of vehicle that is, so we treated it as an average one.")
       }
       if (relativity.level === "model" && relativity.outsideYears) {
-        parts.push(outsideYearsSentence(modelYear))
+        add(outsideYearsSentence(modelYear))
       }
     }
   }
   if (steps.some((step) => step.group === "state" && step.basis === "assumed")) {
-    parts.push(`We don't have a typical price for ${stateName(scenario.state)} yet, so the range is much wider.`)
+    add(`We don't have a typical price for ${stateName(scenario.state)} yet, so the range is much wider.`)
   }
   if (vehicleChanged && target.mixedPowertrain) {
     const version =
@@ -1330,45 +1341,42 @@ function rangeSentence(
           : target.powertrain === "electric"
             ? "electric"
             : "gas"
-    parts.push(
+    add(
       target.hybridOnGasRows
-        ? "That name is sold in more than one version. We priced it as a mild hybrid, using the Highway Loss Data Institute's figures for the gas version, so the range is a little wider."
-        : `That name is sold in more than one version. We priced the ${version} one, so the range is a little wider.`,
+        ? "That name is sold in more than one version. We priced it as a mild hybrid, using the Highway Loss Data Institute's figures for the gas version."
+        : `That name is sold in more than one version. We priced the ${version} one.`,
     )
   } else if (vehicleChanged && target.hybridOnGasRows) {
-    parts.push("The claims data has no separate figures for this hybrid, so we used the gas version's.")
+    add("The claims data has no separate figures for this hybrid, so we used the gas version's.")
   }
   if (vehicleChanged && target.valueRisk) {
-    parts.push("Expensive and electric cars can cost more or less to insure than their repair records suggest, so the range is wider.")
+    add("Expensive and electric cars can cost more or less to insure than their repair records suggest.")
   }
   if (vehicleChanged && target.sporty && target.sportsCar) {
-    parts.push("Sporty cars often cost more to insure than their repair records suggest, so the range reaches higher.")
+    add("Sporty cars often cost more to insure than their repair records suggest, so the range reaches higher.")
   } else if (vehicleChanged && target.sporty) {
-    parts.push("This car's repair claims run a bit above the cars we could check against real prices, so the range reaches higher.")
+    add("This car's repair claims run a bit above the cars we could check against real prices, so the range reaches higher.")
   }
   if (start.trended) {
-    parts.push("We brought the 2023 state price up to today with a national price index, which is only a rough guide.")
+    add("We brought the 2023 state price up to today with a national price index, which is only a rough guide.")
   }
   if (scenario.age === "16-18" && options.teenOnParentPolicy) {
-    parts.push(
+    add("This is your whole household's policy after adding your teen, not the teen's own price.")
+    add(
       scenario.state === "CA"
-        ? "This is your whole household's policy after adding your teen, not the teen's own price. It comes from one California comparison of two families, so the range is wide."
-        : "This is your whole household's policy after adding your teen, not the teen's own price. We have little data on adding teens, so this range is wide.",
+        ? "It comes from one California comparison of two families, so the range is wide."
+        : "We have little data on adding teens, so this range is wide.",
     )
   } else if (scenario.age === "16-18") {
-    parts.push(
-      "This prices your teen as the only driver on their own policy. Adding a teen to a parent's policy usually costs less.",
-    )
+    add("This prices your teen as the only driver on their own policy. Adding a teen to a parent's policy usually costs less.")
   } else if (scenario.age === "19-21") {
-    parts.push(
-      "This prices a young driver as the only driver on their own policy. Staying on a parent's policy usually costs less.",
-    )
+    add("This prices a young driver as the only driver on their own policy. Staying on a parent's policy usually costs less.")
   }
   if (trim === "limited" || trim === "unresolved") {
-    parts.push("We couldn't pin down the exact version of the car, which widens the range a little.")
+    add("We couldn't pin down the exact version of the car, which widens the range a little.")
   }
-  if (parts.length === 0) return "This is your own number, so there's no range. Change something to see an estimate."
-  return parts.join(" ")
+  if (points.length === 0) return ["This is your own number, so there's no range. Change something to see an estimate."]
+  return points
 }
 
 // ---------------------------------------------------------------------------
@@ -1507,7 +1515,7 @@ function whatIfLabel(current: Scenario, next: Scenario): string {
   if (moved && !vehicleChanged && !others) return `Moving to ${stateName(next.state)}`
   if (vehicleChanged && !moved && !others) return `Switching to a ${next.year} ${next.make} ${next.model}`
   if (!vehicleChanged && !moved) return "With that change"
-  return "With those changes"
+  return "With these changes"
 }
 
 // ---------------------------------------------------------------------------
@@ -1759,7 +1767,10 @@ export function publishedFactorGroups(): PublishedFactorGroup[] {
     const item = group(id)
     const rows =
       id === "range"
-        ? Object.entries(item.cells).map(([key, cell]) => publishedRangeCell(cell, RANGE_LABELS[key] ?? cell.label))
+        ? Object.entries(item.cells)
+            // Every state has a typical price now, so this row never applies.
+            .filter(([key]) => key !== "state-unknown")
+            .map(([key, cell]) => publishedRangeCell(cell, RANGE_LABELS[key] ?? cell.label))
         : id === "premium-split"
           ? [publishedShareRow(item.cells.liability)]
           : Object.entries(item.cells).map(([key, cell]) => publishedRow(cell, plainLabel(id, key)))

@@ -189,7 +189,7 @@ export function DiscountFields({ scenario, onChange, idPrefix }: Props) {
       <CheckField
         id={`${idPrefix}-student`}
         label="Good student"
-        note={student ? "Usually a B average or better." : "Only for drivers under 26."}
+        note={student ? "Usually a B average or better, under 26." : "Only for drivers under 26."}
         checked={scenario.goodStudent}
         disabled={!student}
         onChange={(goodStudent) => onChange({ goodStudent })}

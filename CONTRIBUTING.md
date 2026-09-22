@@ -55,7 +55,7 @@ If you add a new test file, add its path to the `test` script in `package.json`.
 
 ## Five numbers that need a source
 
-These are the site's best guesses today, and a state insurance department's rate comparison guide (sample prices from many companies for the same drivers) could turn each into a sourced number. They're also listed on the site's Help page, each with a prefilled issue.
+Four are our best guesses; the fifth rests on one state's prices. A state insurance department's rate comparison guide (sample prices from many companies for the same drivers) could turn each into a sourced number. They're also listed on the site's Help page, each with a prefilled issue.
 
 1. **Deductible.** How a $500 or $2,000 deductible changes the price. Look for sample prices at two deductibles for the same driver and car.
 2. **Car's age.** How much less an older car costs to insure. Look for the same car at two model years, with collision and comprehensive.

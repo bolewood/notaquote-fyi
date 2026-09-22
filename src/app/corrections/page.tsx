@@ -82,7 +82,7 @@ export default function CorrectionsPage() {
 
       <h2>Five numbers that need a source</h2>
       <p>
-        These are our best guesses today. Many state insurance departments publish a &ldquo;rate comparison guide&rdquo;
+        Four are our best guesses; the fifth rests on one state&apos;s prices. Many state insurance departments publish a &ldquo;rate comparison guide&rdquo;
         with sample prices from many companies. If yours shows one of these, a link turns a guess into a sourced number for
         everyone.
       </p>

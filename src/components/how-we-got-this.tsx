@@ -10,6 +10,7 @@ export function HowWeGotThis({
   startKind,
   startNote,
   state,
+  sender = false,
 }: {
   estimate: Estimate
   startKind: StartKind
@@ -17,10 +18,14 @@ export function HowWeGotThis({
   startNote?: string
   /** The state being priced, to say when a number comes from another state's prices. */
   state: string
+  /** The starting premium came from a shared link: say it's what the sender pays. */
+  sender?: boolean
 }) {
+  const words = (text: string) =>
+    sender ? text.replace(/you told us you pay now/g, "the sender pays now").replace(/you pay now/g, "the sender pays now") : text
   return (
     <div className="grid gap-3 text-sm leading-relaxed">
-      <p data-testid="estimate-summary">{estimate.summary}</p>
+      <p data-testid="estimate-summary">{words(estimate.summary)}</p>
       {estimate.steps.length > 0 ? (
         <ul className="grid divide-y divide-border/70 border-y border-border/70">
           {estimate.steps.map((step) => {
@@ -57,12 +62,17 @@ export function HowWeGotThis({
           })}
         </ul>
       ) : null}
-      <p className="text-muted-foreground" data-testid="range-note">
-        {estimate.rangeNote}
-      </p>
+      <div data-testid="range-note">
+        <p className="font-semibold">Why the range is this wide</p>
+        <ul className="mt-1 grid list-disc gap-1 pl-5 text-muted-foreground">
+          {estimate.rangePoints.map((point) => (
+            <li key={point}>{words(point)}</li>
+          ))}
+        </ul>
+      </div>
       {startNote ? (
         <p className="text-muted-foreground">
-          {startNote}{" "}
+          {words(startNote)}{" "}
           {startKind === "typical" ? (
             <Link href="/sources#state-baselines" className="link">
               See every state

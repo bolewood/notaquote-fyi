@@ -69,7 +69,7 @@ test("single changes get plain headline words; cars and states keep the engine's
   assert.equal(whatIfLabel(NOW, { ...NOW, region: "rural" }, false), "Moving to a small town or the country")
   assert.equal(whatIfLabel(NOW, { ...NOW, ...MODEL_Y }, false), undefined)
   assert.equal(whatIfLabel(NOW, { ...NOW, state: "CO" }, false), undefined)
-  assert.equal(whatIfLabel(NOW, { ...NOW, state: "CO", deductible: 2000 }, false), undefined)
+  assert.equal(whatIfLabel(NOW, { ...NOW, state: "CO", deductible: 2000 }, false), "With these changes")
 
   assert.deepEqual(changedKeys(NOW, { ...NOW, ...MODEL_Y, deductible: 2000 }), ["vehicle", "deductible"])
   assert.equal(changeChip("vehicle", { ...NOW, ...MODEL_Y }), "2025 Tesla Model Y")
@@ -108,7 +108,7 @@ test("adding a teen and changing the car at once goes through the engine's teen 
   const next: Scenario = { ...NOW, ...MODEL_Y, age: "16-18", yearsLicensed: "under-1", teen: true }
   const result = priceWhatIf(DEFAULT_SITUATION, vehicleFacts(catalog, NOW), next, vehicleFacts(catalog, next))
   assert.ok(result)
-  assert.match(result!.headline, /^With those changes and your teen: about \$[\d,]+ (more|less) a year\.$/)
+  assert.match(result!.headline, /^With these changes and your teen: about \$[\d,]+ (more|less) a year\.$/)
   const own = priceWhatIf(
     { ...DEFAULT_SITUATION, teenOnParentPolicy: false },
     vehicleFacts(catalog, NOW),
@@ -189,13 +189,13 @@ test("a teen on their own policy is a separate bill, not a replacement", () => {
   const facts = vehicleFacts(catalog, NOW)
   const result = priceWhatIf({ ...DEFAULT_SITUATION, teenOnParentPolicy: false }, facts, next, facts)
   assert.equal(result?.mode, "teen-own")
-  assert.match(result!.headline, /^Their own policy: about \$[\d,]+0 a year, on top of your \$[\d,]+0\.$/)
+  assert.match(result!.headline, /^A 16–18-year-old on their own policy: about \$[\d,]+0 a year, on top of your \$[\d,]+0\.$/)
   assert.deepEqual(result!.parts, [])
 })
 
 test("a step's source says which state's prices it's based on, when that isn't yours", () => {
-  assert.equal(basisLabel("sourced", ["ca-2026"], "Illinois"), "From published prices (based on California's published prices; Illinois may differ)")
-  assert.equal(basisLabel("sourced", ["ca-2026", "tx-2025"], "Illinois"), "From published prices (based on California's and Texas's published prices; Illinois may differ)")
+  assert.equal(basisLabel("sourced", ["ca-2026"], "Illinois"), "From published prices in California (Illinois may differ)")
+  assert.equal(basisLabel("sourced", ["tx-2025", "ok-2026"], "Illinois"), "From published prices in Texas and Oklahoma (Illinois may differ)")
   assert.equal(basisLabel("sourced", ["ca-2026"], "California"), "From published prices")
   assert.equal(basisLabel("assumed", [], "Illinois"), "Our best guess")
   assert.equal(basisLabel("indicative", ["hldi-2022-24"], "Illinois"), "Worked out from public data")
@@ -204,4 +204,13 @@ test("a step's source says which state's prices it's based on, when that isn't y
 test("the short start line names the state and a rounded price", () => {
   const start = startingPoint(DEFAULT_SITUATION, vehicleFacts(catalog, NOW))!
   assert.match(startShort(start, "Illinois"), /^We start from the typical Illinois price, about \$[\d,]+0 a year today, then adjust for your car and driver\.$/)
+})
+
+test("a 19–21-year-old is a separate bill on their own policy, like a teen on their own", () => {
+  const next: Scenario = { ...NOW, age: "19-21", yearsLicensed: "1-3" }
+  const facts = vehicleFacts(catalog, NOW)
+  const result = priceWhatIf(DEFAULT_SITUATION, facts, next, facts)
+  assert.equal(result?.mode, "teen-own")
+  assert.match(result!.headline, /^A 19–21-year-old on their own policy: about \$[\d,]+0 a year, on top of your \$[\d,]+0\.$/)
+  assert.deepEqual(result!.parts, [])
 })

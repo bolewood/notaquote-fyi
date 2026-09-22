@@ -119,7 +119,7 @@ export default function MethodologyPage() {
         A car that costs more to repair raises the part of the bill that fixes your own car. A car whose drivers cause more
         crashes raises the liability part, though only partly, because insurers do the same. When we don&apos;t have a model,
         we use the average for its kind of car (small SUV, midsize car, and so on) and widen the range. That&apos;s the
-        &ldquo;Why&rdquo; you see next to each car on the Compare page.
+        &ldquo;Why&rdquo; you see when you tap a car on the Compare page.
       </p>
 
       <h2>3. A range, not a price</h2>
@@ -172,7 +172,8 @@ export default function MethodologyPage() {
       <p>
         {counts.assumed} of our adjustments are still our best guess. If your state&apos;s insurance department publishes
         sample prices (many do, often as a PDF called a &ldquo;rate comparison guide&rdquo;), it could turn a guess into a
-        sourced number for everyone. These five would help the most:
+        sourced number for everyone. These five would help the most. Four are our best guesses; the fifth rests on one
+        state&apos;s prices.
       </p>
       <div className="rounded-2xl bg-sun-soft p-5">
         <HelpWantedList compact />
@@ -207,9 +208,10 @@ export default function MethodologyPage() {
 
       <h2>Saving and sharing</h2>
       <p>
-        Your choices are kept in this browser, so the pages remember them. A share link carries your choices, never
-        prices, after the &ldquo;#&rdquo; in the address, which browsers don&apos;t send to any server. What you pay goes in
-        only if you check the box. Whoever opens the link gets the numbers worked out fresh.{" "}
+        Your choices are kept in this browser, so the pages remember them. The link carries your choices, not our
+        estimates. It includes what you pay only if you check the box. It all sits after the &ldquo;#&rdquo; in the
+        address, which browsers don&apos;t send to any server, and whoever opens the link gets the numbers worked out
+        fresh.{" "}
         <Link href="/privacy">More about privacy</Link>.
       </p>
 

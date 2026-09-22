@@ -1,8 +1,9 @@
 /**
  * The five numbers that most need a public source, in plain words, with
  * where to look. Shown on the Help page and How it works, and listed in
- * CONTRIBUTING.md. Each one is our best guess today; a state's published
- * rate guide could turn it into a sourced number for everyone.
+ * CONTRIBUTING.md. Four are our best guesses; the fifth (adding a teen
+ * outside California) rests on one state's prices. A state's published
+ * rate guide could turn each into a sourced number for everyone.
  */
 import { suggestFixUrl } from "./suggest-fix"
 

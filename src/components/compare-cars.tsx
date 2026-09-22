@@ -27,10 +27,10 @@ import {
   DEFAULT_SORT,
   filterRows,
   gapsToCheapest,
-  headlineAmount,
   nextSort,
   parseMaxYearly,
   reasonWords,
+  shownAmount,
   sortRows,
   toCsv,
   type CompareMode,
@@ -71,7 +71,7 @@ import { DEFAULT_SITUATION } from "@/lib/situation"
 import { useCatalog } from "@/lib/use-catalog"
 import { useCompareList, useSituation } from "@/lib/use-stored"
 import { cn } from "cn"
-import { ArrowDown, ArrowUp, ArrowUpDown, ChevronDown, Download, Plus, Printer, Star, Trash2, Trophy, X } from "lucide-react"
+import { ArrowDown, ArrowUp, ArrowUpDown, ChevronDown, Download, Plus, Printer, Send, Star, Trash2, Trophy, X } from "lucide-react"
 import Link from "next/link"
 import { Fragment, useEffect, useMemo, useRef, useState } from "react"
 
@@ -87,7 +87,7 @@ const SORT_LABELS: Record<SortKey, string> = {
   yearly: "Price",
   monthly: "Price",
   policy: "Whole policy",
-  range: "How sure we are (narrowest range)",
+  range: "Narrowest range",
   reason: "Why",
 }
 
@@ -182,6 +182,8 @@ function CompareCarsReady() {
   const [removed, setRemoved] = useState<{ name: string; before: CompareList; key: string } | null>(null)
   const removedTimer = useRef<number | undefined>(undefined)
   const [popKey, setPopKey] = useState<string | null>(null)
+  /** Phones: the price filter opens from the bottom bar. */
+  const [filterOpen, setFilterOpen] = useState(false)
 
   useEffect(() => {
     recordMountedCount("compare_session")
@@ -232,6 +234,23 @@ function CompareCarsReady() {
     focusCar(neighbor?.key ?? null)
   }
 
+  /** Phones: send the list with the share sheet, or copy the link where there isn't one. */
+  function shareList() {
+    recordCount("share_link_copy")
+    const url = new URL(
+      encodeSharePath({ page: "/compare", scenario: driver, teenOnParentPolicy: list.teenOnParentPolicy, cars: list.cars }),
+      window.location.origin,
+    ).toString()
+    if (typeof navigator.share === "function") {
+      void navigator.share({ title: "NotAQuote.FYI", text: "Here's our list of cars. It's a ballpark, not a quote.", url }).catch(() => undefined)
+      return
+    }
+    void navigator.clipboard?.writeText(url).then(
+      () => say("Link copied. It carries your choices, not our estimates."),
+      () => say("Copy the link from the share box below."),
+    )
+  }
+
   function undoRemove() {
     if (!removed) return
     save(removed.before)
@@ -269,12 +288,12 @@ function CompareCarsReady() {
     const reasons = distinctReasons(priced.map((item, index) => reasonParts(item.estimate, list.cars[index].year, driver)))
     return buildRows(priced, list.cars, reasons)
   }, [start, list, catalog, driver, parent, mode])
-  const driverNote = start ? driverOnlyEstimate(start, driver, mode === "added" ? parent : null).rangeNote : null
+  const driverPoints = start ? driverOnlyEstimate(start, driver, mode === "added" ? parent : null).rangePoints : null
 
   const maxYearly = parseMaxYearly(maxText)
   const visible = sortRows(filterRows(rows, { maxYearly, starredOnly }), sort)
   const { gaps, cheapest } = gapsToCheapest(visible)
-  const topAmount = Math.max(1, ...visible.map(headlineAmount))
+  const topAmount = Math.max(1, ...visible.map(shownAmount))
   const starredCount = list.cars.filter((car) => car.starred).length
   const hidden = rows.length - visible.length
   const added = mode === "added"
@@ -342,8 +361,8 @@ function CompareCarsReady() {
         {askToMerge && linked ? (
           <div className="mt-3 grid gap-3 rounded-2xl bg-sun-soft px-4 py-3 text-sm" data-testid="merge-choice">
             <p>
-              Someone shared a list of {linked.cars.length} {linked.cars.length === 1 ? "car" : "cars"} with you. You already
-              have a list of {stored.value?.cars.length}. What would you like to do?
+              This list has {linked.cars.length} {linked.cars.length === 1 ? "car" : "cars"}, and you already have a list of{" "}
+              {stored.value?.cars.length}. What would you like to do?
             </p>
             <div className="flex flex-wrap gap-2">
               <button type="button" className="btn btn-primary" onClick={() => save(linked)}>
@@ -574,7 +593,12 @@ function CompareCarsReady() {
 
           {rows.length > 0 ? (
             <>
-              <div className="no-print flex flex-wrap items-end gap-x-5 gap-y-3 border-b border-border px-5 py-3 sm:px-6">
+              <div
+                className={cn(
+                  "no-print flex-wrap items-end gap-x-5 gap-y-3 border-b border-border px-5 py-3 sm:flex sm:px-6",
+                  filterOpen ? "flex" : "hidden",
+                )}
+              >
                 <div className="grid gap-1">
                   <label htmlFor="max-yearly" className="field-label">
                     {added ? "Hide cars that add more than" : "Hide cars over"}
@@ -604,27 +628,7 @@ function CompareCarsReady() {
                   />
                   Only starred ({starredCount})
                 </label>
-                <div className="grid gap-1 sm:hidden">
-                  <label htmlFor="sort-mobile" className="field-label">
-                    Sort by
-                  </label>
-                  <select
-                    id="sort-mobile"
-                    className="field-select min-h-10"
-                    value={`${sort.key}:${sort.direction}`}
-                    onChange={(event) => {
-                      const [key, direction] = event.target.value.split(":") as [SortKey, "asc" | "desc"]
-                      setSort({ key, direction })
-                    }}
-                  >
-                    <option value="yearly:asc">Lowest price first</option>
-                    <option value="yearly:desc">Highest price first</option>
-                    <option value="car:asc">Car name, A to Z</option>
-                    <option value="range:asc">Narrowest range first</option>
-                    <option value="order:asc">The order you added them</option>
-                  </select>
-                </div>
-                <div className="ml-auto flex flex-wrap gap-2">
+                <div className="ml-auto hidden flex-wrap gap-2 sm:flex">
                   <button type="button" className="btn" onClick={download} data-testid="download-csv">
                     <Download className="size-4" aria-hidden="true" /> Download spreadsheet (CSV)
                   </button>
@@ -667,24 +671,30 @@ function CompareCarsReady() {
                       <th scope="col" className="sticky top-0 z-10 w-14 border-b border-border bg-card py-2.5 pl-3">
                         <span className="sr-only">Starred</span>
                       </th>
-                      <SortHeader label="Car" sortKey="car" sort={sort} onSort={setSort} />
-                      <SortHeader label={added ? "Extra a year" : "A year"} sortKey="yearly" sort={sort} onSort={setSort} align="right" className="w-28" />
+                      <SortHeader label="Car" sortKey="car" sort={sort} onSort={setSort} className="print:w-[30%]" />
+                      <SortHeader label={added ? "Extra a year" : "A year"} sortKey="yearly" sort={sort} onSort={setSort} align="right" className="w-36" />
                       <SortHeader
                         label={added ? "Extra a month" : "A month"}
                         sortKey="monthly"
                         sort={sort}
                         onSort={setSort}
                         align="right"
-                        className="hidden w-28 pr-5 xl:table-cell print:table-cell"
+                        className="hidden w-28 pr-5 xl:table-cell"
                       />
-                      <SortHeader label={added ? "Whole policy" : "Compared"} sortKey={added ? "policy" : "range"} sort={sort} onSort={setSort} className="w-44 pl-4" />
-                      <th scope="col" className="sticky top-0 z-10 hidden w-36 border-b border-border bg-card py-2.5 pr-3 font-medium xl:table-cell print:table-cell">
+                      <SortHeader
+                        label={added ? "Whole policy" : "Where quotes would land"}
+                        sortKey={added ? "policy" : "range"}
+                        sort={sort}
+                        onSort={setSort}
+                        className="w-48 pl-4"
+                      />
+                      <th scope="col" className="sticky top-0 z-10 hidden w-36 border-b border-border bg-card py-2.5 pr-3 font-medium xl:table-cell print:hidden">
                         vs. the cheapest
                       </th>
                       <th scope="col" className="no-print sticky top-0 z-10 w-14 border-b border-border bg-card py-2.5 pr-4">
                         <span className="sr-only">Remove</span>
                       </th>
-                      <th scope="col" className="hidden w-40 border-b border-border py-2.5 font-medium print:table-cell">
+                      <th scope="col" className="hidden w-[24%] border-b border-border py-2.5 pl-3 font-medium print:table-cell">
                         Notes
                       </th>
                     </tr>
@@ -713,36 +723,39 @@ function CompareCarsReady() {
                                 data-focus-key={row.key}
                                 onClick={() => setOpenRow(openRow === row.key ? null : row.key)}
                               >
-                                <span className="line-clamp-2 font-medium hover:underline">{row.name}</span>
+                                <span className="line-clamp-2 font-medium hover:underline print:line-clamp-none">{row.name}</span>
                                 {version ? <span className="truncate text-xs text-muted-foreground">{version}</span> : null}
                               </button>
                             </td>
                             <td className="money py-3 pr-3 text-right whitespace-nowrap">
                               <span className="block text-lg leading-tight font-semibold">{mainAmount(row)}</span>
-                              <span className="block text-xs text-muted-foreground xl:hidden print:hidden">
-                                {monthAmount(row)} a month
+                              <span className="block text-xs text-muted-foreground xl:hidden">{monthAmount(row)} a month</span>
+                              <span className="print-exact mt-1.5 ml-auto block h-1.5 w-full max-w-24 rounded-full bg-muted" aria-hidden="true">
+                                <span
+                                  className="block h-full rounded-full bg-primary/70"
+                                  style={{ width: `${Math.max(4, (shownAmount(row) / topAmount) * 100)}%` }}
+                                />
                               </span>
                               {lowest ? (
-                                <span className="tag mt-1 bg-down-soft text-down">
+                                <span className="tag mt-1.5 bg-down-soft text-down">
                                   <Trophy className="size-3.5" aria-hidden="true" /> Lowest
                                 </span>
                               ) : null}
                             </td>
-                            <td className="money hidden py-3 pr-5 text-right text-muted-foreground xl:table-cell print:table-cell">
+                            <td className="money hidden py-3 pr-5 text-right text-muted-foreground xl:table-cell print:hidden">
                               {monthAmount(row)}
                             </td>
-                            <td className="py-3 pr-4 pl-4">
-                              <span className="print-exact block h-2.5 w-full rounded-full bg-muted" aria-hidden="true">
-                                <span
-                                  className={cn("block h-full rounded-full", lowest ? "bg-down" : "bg-primary/70")}
-                                  style={{ width: `${Math.max(4, (headlineAmount(row) / topAmount) * 100)}%` }}
-                                />
-                              </span>
-                              <span className="money mt-1.5 block truncate text-xs text-muted-foreground">
-                                {added ? `Whole policy about ${estimateDollars(row.likely)}` : rangeWords(row.low, row.high)}
-                              </span>
+                            <td className="money py-3 pr-4 pl-4 text-sm text-muted-foreground">
+                              {added ? (
+                                <>
+                                  <span className="block text-foreground">About {estimateDollars(row.likely)}</span>
+                                  <span className="block text-xs">{rangeWords(row.low, row.high)}</span>
+                                </>
+                              ) : (
+                                rangeWords(row.low, row.high)
+                              )}
                             </td>
-                            <td className="hidden py-3 pr-3 text-sm text-muted-foreground xl:table-cell print:table-cell">
+                            <td className="hidden py-3 pr-3 text-sm text-muted-foreground xl:table-cell print:hidden">
                               {gapWords(row) ?? "The cheapest here"}
                             </td>
                             <td className="no-print py-3 pr-4 text-right">
@@ -796,7 +809,7 @@ function CompareCarsReady() {
                           </span>
                         </button>
                         <div className="money pl-2 text-right">
-                          <p className={cn("text-lg leading-tight font-semibold", lowest && "text-down")}>{mainAmount(row)}</p>
+                          <p className="text-lg leading-tight font-semibold">{mainAmount(row)}</p>
                           <p className="text-xs text-muted-foreground">{added ? "extra a year" : "a year"}</p>
                         </div>
                       </div>
@@ -822,26 +835,50 @@ function CompareCarsReady() {
               <div className="grid gap-3 px-5 py-5 text-sm leading-relaxed sm:px-6">
                 <p className="text-muted-foreground">
                   <span className="no-print">Tap a car to see why it costs what it does. </span>
-                  {start ? startLine(start) : null}
+                  {start ? startLine(start) : null} Yearly figures are rounded to the nearest $10, monthly to $5 (the yearly
+                  figure ÷ 12), and ranges to $50.
                 </p>
-                {driverNote ? (
+                {driverPoints ? (
                   <details className="disclosure no-print">
                     <summary>
                       Why the ranges are wide
                       <ChevronDown className="size-4" aria-hidden="true" />
                     </summary>
-                    <p className="pb-2 text-muted-foreground">
-                      {driverNote}{" "}
-                      <Link href="/methodology" className="link">
-                        Here&apos;s how it all works
-                      </Link>
-                    </p>
+                    <div className="grid gap-2 pb-2 text-muted-foreground">
+                      <ul className="grid list-disc gap-1 pl-5">
+                        {driverPoints.map((point) => (
+                          <li key={point}>{point}</li>
+                        ))}
+                      </ul>
+                      <p>
+                        <Link href="/methodology" className="link">
+                          Here&apos;s how it all works
+                        </Link>
+                      </p>
+                    </div>
                   </details>
                 ) : null}
-                {driverNote ? <p className="print-only">{driverNote}</p> : null}
+                {driverPoints ? (
+                  <div className="print-only">
+                    <p style={{ fontWeight: 600 }}>Why the ranges are wide</p>
+                    <ul style={{ margin: "2pt 0 0 14pt", listStyle: "disc" }}>
+                      {driverPoints.map((point) => (
+                        <li key={point}>{point}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
                 <div className="print-only">
-                  <p>Data updated {DATA_UPDATED}. Every source: notaquote.fyi/sources</p>
+                  <p>Data updated {DATA_UPDATED}. Every source, and how the math works: notaquote.fyi/methodology</p>
                   <DisclaimerText className="mt-1 text-black" />
+                </div>
+                <div className="no-print flex flex-wrap gap-2 sm:hidden">
+                  <button type="button" className="btn" onClick={download}>
+                    <Download className="size-4" aria-hidden="true" /> Download spreadsheet (CSV)
+                  </button>
+                  <button type="button" className="btn" onClick={() => window.print()}>
+                    <Printer className="size-4" aria-hidden="true" /> Print this list
+                  </button>
                 </div>
                 <div className="no-print flex flex-wrap items-start justify-between gap-3 border-t border-border pt-4">
                   <ShareBox
@@ -890,9 +927,60 @@ function CompareCarsReady() {
 
       <DisclaimerText className="no-print mt-10 max-w-3xl" />
 
+      {rows.length > 0 ? (
+        <div
+          className="no-print fixed inset-x-0 bottom-0 z-30 border-t border-border bg-card/95 px-3 py-2 backdrop-blur sm:hidden"
+          data-testid="compare-bottom-bar"
+        >
+          <div className="flex items-center gap-2">
+            <label htmlFor="sort-mobile" className="sr-only">
+              Sort by
+            </label>
+            <select
+              id="sort-mobile"
+              className="field-select min-h-11 min-w-0 flex-1 text-sm"
+              value={`${sort.key}:${sort.direction}`}
+              onChange={(event) => {
+                const [key, direction] = event.target.value.split(":") as [SortKey, "asc" | "desc"]
+                setSort({ key, direction })
+              }}
+            >
+              <option value="yearly:asc">Cheapest first</option>
+              <option value="yearly:desc">Priciest first</option>
+              <option value="car:asc">A to Z</option>
+              <option value="range:asc">Narrowest range</option>
+              <option value="order:asc">Order added</option>
+            </select>
+            <button
+              type="button"
+              className="btn min-h-11 px-3"
+              aria-pressed={starredOnly && starredCount > 0}
+              disabled={starredCount === 0}
+              onClick={() => setStarredOnly((on) => !on)}
+            >
+              <Star className={cn("size-4", starredOnly && starredCount > 0 && "fill-current text-star")} aria-hidden="true" />
+              Starred
+            </button>
+            <button
+              type="button"
+              className="btn min-h-11 px-3"
+              aria-expanded={filterOpen}
+              aria-controls="max-yearly"
+              onClick={() => setFilterOpen((open) => !open)}
+            >
+              Filter
+            </button>
+            <button type="button" className="btn btn-primary min-h-11 px-3" onClick={shareList}>
+              <Send className="size-4" aria-hidden="true" />
+              <span className="sr-only">Share this list</span>
+            </button>
+          </div>
+        </div>
+      ) : null}
+
       {removed ? (
         <div
-          className="no-print pop-in fixed inset-x-0 bottom-4 z-40 mx-auto flex w-fit max-w-[calc(100vw-2rem)] items-center gap-3 rounded-full bg-foreground py-2 pr-2 pl-5 text-sm text-background shadow-lg"
+          className="no-print pop-in fixed inset-x-0 bottom-20 z-40 sm:bottom-4 mx-auto flex w-fit max-w-[calc(100vw-2rem)] items-center gap-3 rounded-full bg-foreground py-2 pr-2 pl-5 text-sm text-background shadow-lg"
           role="status"
         >
           <span>Removed {removed.name}.</span>
@@ -999,7 +1087,14 @@ function RowDetails({ row, gap }: { row: CompareRow; gap: string | null }) {
         {reasonWords(row.reason)}.{gap ? ` ${gap}.` : ""}
       </p>
       <p>{row.summary}</p>
-      <p className="text-muted-foreground">{row.rangeNote}</p>
+      <div>
+        <p className="font-semibold">Why the range is this wide</p>
+        <ul className="mt-1 grid list-disc gap-1 pl-5 text-muted-foreground">
+          {row.rangePoints.map((point) => (
+            <li key={point}>{point}</li>
+          ))}
+        </ul>
+      </div>
       <p>
         <VehicleFixLink carName={row.name} shown={row.vehicleShown} />
       </p>

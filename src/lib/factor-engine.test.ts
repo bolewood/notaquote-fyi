@@ -226,7 +226,7 @@ test("the range is wider when more of the change is assumed", () => {
   const assumedToo = estimate(YOURS, { ...MOLLY_F150, region: "rural", deductible: 500 }, { vehicle: F150 })
   assert.ok(assumedToo.spread.down > sourced.spread.down)
   assert.ok(assumedToo.spread.up > sourced.spread.up)
-  assert.match(assumedToo.rangeNote, /deductible is our own estimate/)
+  assert.match(assumedToo.rangeNote, /figure for the deductible is our best guess/)
 
   const typical = estimate(
     { annual: 1800, scenario: MOLLY_F150, vehicle: "average", kind: "typical", label: "a typical yearly price in Illinois" },
@@ -266,7 +266,7 @@ test("what-if headlines for a move", () => {
   assert.equal(unknown.headline, "We don't have a typical price for Texas yet, so we can't say how moving changes your price.")
   assert.doesNotMatch(unknown.headline, /about the same/)
   const both = whatIf(YOURS, MOLLY_F150, on(texas, MODEL_Y), { currentVehicle: F150, nextVehicle: MODEL_Y })
-  assert.match(both.headline, /^With those changes/)
+  assert.match(both.headline, /^With these changes/)
   const trim = whatIf(YOURS, MOLLY_F150, { ...MOLLY_F150, age: "26-39" }, { currentVehicle: F150, nextVehicle: F150, trimConfidence: "unresolved" })
   assert.match(trim.next.rangeNote, /exact version of the car/)
 })
@@ -344,7 +344,7 @@ test("luxury makes without their own HLDI row use luxury or sports-car class ave
   assert.equal(relativity.spreadKey, "vehicle-luxury-class")
   assert.ok(relativity.physicalHundredths >= 180, `${relativity.physicalHundredths}`)
   const note = estimate(YOURS, on(MOLLY_F150, gt3), { vehicle: gt3 }).rangeNote
-  assert.match(note, /average for its class \(sporty luxury two-seater\)/)
+  assert.match(note, /average for its kind \(sporty luxury two-seater\)/)
   // Electric beats luxury: a Macan Electric uses the electric small SUV average, not the gas luxury one.
   const macanElectric = car(2024, "Porsche", "Macan", "Macan 4 Electric")
   assert.equal(vehicleRelativity(macanElectric).label, "electric small SUV")
@@ -519,7 +519,8 @@ test("the source manifest is safe and NAIC manifest rows cite the publications, 
   assert.deepEqual(supplement.derivedFields, [])
   assert.equal(report.catalogCode, "AUT-PB 2022-2023")
   assert.equal(report.publicationDate, "December 2025")
-  assert.match(report.licenseNote, /Used with credit/)
+  assert.match(report.licenseNote, /^Used as facts, with credit\./)
+  assert.doesNotMatch(report.licenseNote, /approv|permission/i)
   assert.match(report.licenseNote, /Source: NAIC, 2022\/2023 Auto Insurance Database Report, 2023 data/)
   assert.ok(report.derivedFields.length > 0)
   assert.match(NAIC_PARAPHRASE, /car-years/)
@@ -624,4 +625,13 @@ test("teenOnParentPolicy refuses a change of car or state", () => {
   assert.throws(() => estimate(YOURS, on(teen, RAV4), { vehicle: RAV4, teenOnParentPolicy: true }), /car and the state must match/)
   assert.throws(() => estimate(YOURS, { ...teen, state: "TX" }, { vehicle: F150, teenOnParentPolicy: true }), /car and the state must match/)
   assert.ok(estimate(YOURS, teen, { vehicle: F150, teenOnParentPolicy: true }).likely > 1800)
+})
+
+test("the range note is short points, each said once, with plurals right", () => {
+  const assumed = estimate(YOURS, { ...MOLLY_F150, deductible: 2000, year: 2012 }, { vehicle: vehicleFacts(null, { ...MOLLY_F150, year: 2012 }) })
+  const note = assumed.rangePoints.join(" ")
+  assert.equal(new Set(assumed.rangePoints).size, assumed.rangePoints.length, "no point repeats")
+  assert.match(note, /Our figures for the deductible and the car's age are our best guesses/)
+  assert.equal(assumed.rangeNote, note)
+  assert.ok(assumed.rangePoints.every((point) => point.length < 160), "each point is short")
 })
