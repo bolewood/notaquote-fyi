@@ -108,9 +108,9 @@ export function StateRulesTable() {
       <div className="grid gap-4">
         <h3 className="font-medium">Notes by state</h3>
         <p>
-          Each state has a short summary. Open &ldquo;Details and sources&rdquo; to
-          see effective dates, anything we couldn&rsquo;t confirm, and every page we
-          used.
+          Each state has a short summary, anything good to know, and anything we
+          couldn&rsquo;t confirm. Open &ldquo;Details and sources&rdquo; to see
+          effective dates and every page we used.
         </p>
         {STATE_RULES.map((rule) => (
           <StateNote key={rule.state} rule={rule} />
@@ -142,6 +142,11 @@ function StateNote({ rule }: { rule: StateRule }) {
           </a>
         </p>
       ))}
+      {rule.goodToKnow ? (
+        <p>
+          <span className="font-medium">Good to know:</span> {rule.goodToKnow}
+        </p>
+      ) : null}
       {rule.uncertain ? (
         <p>
           <span className="font-medium">What we couldn&rsquo;t confirm:</span> {rule.uncertain}

@@ -101,10 +101,28 @@ test("credit stays out of it on every row", () => {
   }
 })
 
-test("notes are plain words for visitors", () => {
+test("text shown to visitors is plain words", () => {
   for (const rule of STATE_RULES) {
     const note = rule.note ?? ""
     assert.equal(/for counsel|legal conclusion|reviewer|assumption/i.test(note), false, rule.state)
+    const fields = {
+      note: rule.note,
+      goodToKnow: rule.goodToKnow,
+      uncertain: rule.uncertain,
+      umLimits: rule.umLimits,
+      pipAmount: rule.pipAmount,
+    }
+    for (const [field, text] of Object.entries(fields)) {
+      if (!text) continue
+      const where = `${rule.state} ${field}`
+      assert.equal(/named insured/i.test(text), false, `${where}: say "you" or "the policyholder"`)
+      assert.equal(/\b[a-z]+Required\b|\bnoFault\b|\bbiPer/.test(text), false, `${where}: no field names`)
+      assert.equal(/\b(UM|UIM|MedPay|BI|PD)\b/.test(text), false, `${where}: spell out abbreviations`)
+      for (const phrase of ["uninsured motorist coverage", "underinsured motorist coverage"]) {
+        const count = text.toLowerCase().split(phrase).length - 1
+        assert.ok(count <= 1, `${where}: "${phrase}" appears ${count} times; say it once, then "it"`)
+      }
+    }
   }
 })
 
@@ -302,6 +320,12 @@ test("pinned: the California state-minimum line", () => {
   const nh = stateMinimumAssumption("NH")
   assert.match(nh, /If you buy a policy, it must include \$25,000 per person/)
   assert.match(nh, /It must also include medical payments coverage\./)
+  assert.match(
+    stateMinimumAssumption("PA"),
+    /You choose whether no-fault rules apply\. If you don't choose, ordinary fault rules apply\./,
+  )
+  assert.match(stateMinimumAssumption("KY"), /If you don't choose, no-fault rules apply\./)
+  assert.match(stateMinimumAssumption("NJ"), /haven't confirmed which rules apply if you don't choose/)
   const fl = stateMinimumAssumption("FL")
   assert.match(fl, /no general injury-liability minimum/)
   assert.match(fl, /You also need personal injury protection/)

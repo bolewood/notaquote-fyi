@@ -100,6 +100,8 @@ export type StateRule = {
   lastVerified: string | null
   /** One to three plain sentences for visitors. */
   note: string | null
+  /** A helpful caveat that isn't a gap in our research (shown as "Good to know"). */
+  goodToKnow: string | null
   /** What we could not confirm from a primary source, if anything. */
   uncertain: string | null
 }
@@ -126,7 +128,7 @@ const FLAG_VALUES: readonly unknown[] = [
 
 const DOLLAR_FIELDS = ["biPerPerson", "biPerAccident", "pd", "combinedSingleLimit"] as const
 const FLAG_FIELDS = ["pipRequired", "umRequired", "uimRequired", "medPayRequired"] as const
-const TEXT_FIELDS = ["pipAmount", "umLimits", "effective", "note", "uncertain"] as const
+const TEXT_FIELDS = ["pipAmount", "umLimits", "effective", "note", "goodToKnow", "uncertain"] as const
 const REQUIRED_FIELDS = [
   "state",
   "insuranceRequired",
@@ -440,6 +442,10 @@ export function stateMinimumAssumption(state: string): string {
       : coverageClause(rule.uimRequired, "underinsured motorist coverage", optionalPolicy),
   ]) {
     if (clause) parts.push(clause)
+  }
+
+  if (rule.noFault === NO_FAULT_CHOICE) {
+    parts.push(`You choose whether no-fault rules apply. ${noFaultDefaultText(rule)}`)
   }
 
   parts.push(`Checked ${formatVerifiedDate(rule.checkedOn)}.`)

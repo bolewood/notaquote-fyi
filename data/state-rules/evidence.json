@@ -70,8 +70,8 @@
     ],
     "AR": [
       {
-        "label": "Arkansas Insurance Department, Consumers FAQ: \"What coverages are mandatory?\"",
-        "url": "https://insurance.arkansas.gov/consumer-assistance/consumer-services/consumers-faq/",
+        "label": "Arkansas Insurance Department, Private Passenger Automobile Insurance FAQ (open 'What coverages are mandatory?')",
+        "url": "https://insurance.arkansas.gov/consumer-assistance/consumer-services/consumers-faq/private-passenger-automobile-insurance/",
         "supports": "biPerPerson, biPerAccident, pd",
         "quote": "The minimum liability you are required to carry by law is $25,000 per person for bodily injury, $50,000 per accident and $25,000 to cover property damage to other's property."
       },

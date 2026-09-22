@@ -25,6 +25,7 @@ Version `state-rules-2026-09-22`, checked 22 September 2026.
 | `sources` | Label and link for each source. The first one is the best source for the dollar limits. |
 | `checkedOn` | The day someone last read the sources. |
 | `note` | One to three plain sentences shown to visitors. |
+| `goodToKnow` | A helpful caveat that isn't a gap in our research, such as an exemption or how a "choice" state works. The Sources page shows it as "Good to know". |
 | `uncertain` | Anything we couldn't confirm from a primary source. Read this before trusting a flag. The Sources page shows it under each state as "What we couldn't confirm". |
 
 Flag values:
@@ -66,7 +67,7 @@ These are the places where a careful reader could reasonably disagree. If you kn
 
 ## Known gaps (help wanted)
 
-- **Arkansas (partly verified).** The limits (25/50/25) are confirmed on the Arkansas Insurance Department's Consumers FAQ, "What coverages are mandatory?", which is now the first source. The page loads its answers with JavaScript, so open it in a browser. The official Arkansas Code is only published through LexisNexis's public-access site, which blocks direct links behind a captcha. Those links are labeled "(Lexis public access, search for the section)": they open the code's front page, and you search for the section number. The PIP and uninsured-motorist statute quotes come from search-result excerpts, so the full sections weren't seen.
+- **Arkansas (partly verified).** The limits (25/50/25) are confirmed on the Arkansas Insurance Department's Private Passenger Automobile Insurance FAQ (open "What coverages are mandatory?"), which is now the first source. The page loads its answers with JavaScript, so open it in a browser. That FAQ says you "must be offered" uninsured motorist, underinsured motorist, and PIP coverage, which is weaker than the law excerpts we read (those say uninsured motorist coverage and PIP come with the policy unless you turn them down in writing). The official Arkansas Code is only published through LexisNexis's public-access site, which blocks direct links behind a captcha. Those links are labeled "(Lexis public access, search for the section)": they open the code's front page, and you search for the section number. The PIP and uninsured-motorist statute quotes come from search-result excerpts, so the full sections weren't seen.
 - **Georgia UM.** The official Georgia code is also only on LexisNexis. Unofficial copies say uninsured motorist coverage is included unless you reject it in writing, but we don't cite unofficial copies, so the flags are blank. The 25/50/25 limits come from the state insurance department's page.
 - **Tennessee.** The limits are confirmed on the Department of Revenue's page. The T.C.A. 56-7-1201 link is Lexis public access (search for the section). The 2022 public chapter that raised them (and names the $65,000 combined limit) blocks scripts, so its quote comes from a browser read during the first pass. Whether Tennessee's UM definition covers underinsured drivers wasn't confirmed, so UIM is blank.
 - **Mississippi and New Mexico.** The official code sites wouldn't load for us. Figures come from the state insurance department or MVD pages, plus legislature bill documents that reproduce current law.

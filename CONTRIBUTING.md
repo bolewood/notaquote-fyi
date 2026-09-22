@@ -105,6 +105,7 @@ Every state's row lives in one file, `data/state-rules/state-rules.json`. [`data
    - `noFault`: `true`, `false`, or `"choice"`. For `"choice"`, set `noFaultDefault` to what applies if you don't pick (`true`, `false`, or `null`). Otherwise `noFaultDefault` stays `null`.
    - `sources`: add `{ "label": "...", "url": "https://..." }`. Put the best source for the dollar limits first.
    - `note`: one to three plain sentences for visitors ([docs/VOICE.md](docs/VOICE.md)).
+   - `goodToKnow`: a helpful caveat that isn't a gap (an exemption, how a choice works), or `null`.
    - `uncertain`: anything you couldn't confirm. **If you can't confirm a figure, set it to `null` and say why here.** That's always a valid edit.
    - `effective`: when the rule took effect, and any recent change.
    - `scheduledChanges`: a law that's passed but not in effect yet, as `{ "from": "YYYY-MM-DD", "biPerPerson": ..., "biPerAccident": ..., "pd": ..., "summary": "...", "sourceUrl": "https://..." }`. Once that date arrives, a test fails until you apply the new figures to the row and remove the entry.
