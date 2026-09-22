@@ -87,7 +87,8 @@ The exact numbers, counts, and percentiles are in `src/data/model-factors.json` 
 | Liability share of a full-coverage premium | 51% | 45%–65% | Rough | NAIC 2023 countrywide |
 | How much of a vehicle's liability losses we pass on | 52% | 26%–79% | Our estimate | Fitted to ISO's +25% / 20% less band, then frozen |
 | How strongly repair losses move the damage part (exponent) | 0.38 | 0.24–0.52 | Rough | Fitted to California's prices for 12 cars |
-| Extra on the damage part for luxury makes | ×1.74 | ×1.64–×1.96 | Rough | Fitted to California's prices for 12 cars |
+| Extra on the damage part for luxury makes (car value) | ×1.74 | ×1.64–×1.96 | Rough | Fitted to California's prices for 12 cars (BMW and Tesla only) |
+| The same, half strength, for Lexus, Acura, Volvo, Genesis, Infiniti, Cadillac, Lincoln, Alfa Romeo | ×1.32 | ×1.00–×1.96 | Our estimate | Our judgment |
 | Price change since 2023, typical starts only | +18% | +13% to +23% | Rough | BLS consumer price index for car insurance |
 
 ### Driver age
@@ -174,7 +175,7 @@ This is the part that answers "what if I bought a Tesla Model Y?"
 
 **What kind of vehicle is it?** We read the EPA size class and powertrain that the government's own FuelEconomy.gov file lists for each trim (see `data/catalog/`). A Range Rover is a "Standard Sport Utility Vehicle 4WD", not a pickup. The Ioniq is a hybrid car and the Ioniq 5 is an electric SUV.
 
-Some trim names are sold in more than one version: 61 names as both gas and hybrid (like the 2024 Honda CR-V FWD), and a few as hybrid and plug-in (the 2024 Mazda CX-90 4WD). We price the least electrified version unless the name says otherwise, say which one we priced, and widen the range. We only fall back to the words in the name when the catalog has nothing.
+Some trim names are sold in more than one version: 61 names as both gas and hybrid (like the 2024 Honda CR-V FWD), and a few as hybrid and plug-in (the 2024 Mazda CX-90 4WD). We price the least electrified version unless the name says otherwise, say which one we priced, and widen the range. The CX-90 4WD is priced as a mild hybrid, and because HLDI has no hybrid row for it, on HLDI's gas row; the note says so. We only fall back to the words in the name when the catalog has nothing.
 
 **What HLDI tells us, and what it doesn't.** The Highway Loss Data Institute publishes, for each vehicle, how its insurance losses compare with the average vehicle (100). A collision result of 134 means collision claims cost 34% more than average.
 
@@ -189,7 +190,7 @@ So we don't use HLDI's numbers as they are. We calibrate them against real price
 - price ∝ liability share × liability factor + damage share × (HLDI damage result)^**0.38** × (**1.74** if the make is one HLDI mostly files as luxury).
 - The liability share is California's own, from NAIC (46.6%). The liability factor is the frozen weight below.
 - The exponent (0.38) says real prices differ between cars much less than HLDI's repair losses do.
-- The luxury term (×1.74 on the damage part) stands in for the car's value, because we found no public price list to use instead.
+- The luxury term (×1.74 on the damage part) stands in for the car's value, because we found no public price list to use instead. **It was fitted on BMW and Tesla only**, the only luxury makes in California's calibration.
 - The two numbers are chosen on a 0.01 grid to make each car ÷ the Accord as close to California's as possible. Before calibration the squared log error was 0.307; after, 0.093.
 
 | Car ÷ Accord | California's prices | Our model | Before calibration |
@@ -206,7 +207,15 @@ So we don't use HLDI's numbers as they are. We calibrate them against real price
 | Chevrolet Silverado | 0.95 | 0.99 | 0.90 |
 | BMW 530i | 1.37 | 1.30 | 0.97 |
 
-With only 12 cars, it's *rough*. Leaving each car out in turn moves the exponent between 0.24 and 0.52 and the luxury term between ×1.64 and ×1.96. The biggest miss when a car is left out is the Model S: real prices were 28% above what the others predict. So for luxury makes and electric cars the range reaches up to 28% higher, with a plain note. The whole fit is in `src/lib/factor-derivation.ts` and reruns with `npm run factors:build`. The raw California pages and the fetch script (`ca_vehicles.py`) are listed in `sources/README.md`.
+With only 12 cars, it's *rough*. Leaving each car out in turn moves the exponent between 0.24 and 0.52 and the luxury term between ×1.64 and ×1.96. When a luxury car is left out and predicted from the others, real ÷ model runs from 0.82 (the Model 3, which we over-predict by 18%) to 1.28 (the Model S, which we under-predict). So for luxury makes and electric cars the range reaches 18% lower and 28% higher, with a plain note. The whole fit is in `src/lib/factor-derivation.ts` and reruns with `npm run factors:build`. The scripts that fetched and parsed California's pages are in `scripts/research/ca-2026/`.
+
+**Which makes get the value term** is our judgment, because it was fitted on BMW and Tesla only (`vehicle-families.json`):
+
+- **Applied in full to** BMW, Mercedes-Benz, Audi, Porsche, Tesla, Land Rover, Jaguar, Maserati, Lucid, Rivian, Polestar, Bentley, Rolls Royce, Ferrari, Lamborghini, McLaren, and Aston Martin. Polestar is in because its cars are priced like a Tesla Model 3.
+- **Half strength** (the square root, ×1.32, with a range from no term up to ×1.96) **for** Lexus, Acura, Volvo, Genesis, Infiniti, Cadillac, Lincoln, and Alfa Romeo. Their cars mostly cost less than a comparable BMW. Alfa Romeo's Giulia and Stelvio are priced like a 3 Series and X3, but it sells few cars and we have no price evidence for it, so it gets half, not full.
+- **No term for** Buick and Mini. HLDI files some of their models as luxury, but their prices are mainstream. A Buick Envista comes out within 15% of a Chevrolet Trax, and an Acura Integra within 15% of a Honda Civic (tests check both).
+
+**Sporty and costly-to-repair mainstream cars.** No sports car was in the calibration, and its mainstream cars' HLDI damage results run from 36% less to +14%. For a mainstream car in HLDI's sports-car class (a Mustang's damage result is +36%), or with a damage result above +14% (a Camry's is +18%), we're extrapolating. Those get a range that reaches 30% higher (*our estimate*). Sports cars get the note "Sporty cars often cost more to insure than their repair records suggest"; others get a note that their repair costs are above the cars we checked. We looked for a public price point: California's survey lists a Mustang in its vehicle sheet but doesn't price it for any single-driver profile, so the likely figure isn't raised, only the range.
 
 With the calibration, our Model Y is about 30% above an Accord for a 45-year-old in suburban Illinois, and the range reaches about 88% above.
 
@@ -250,7 +259,7 @@ We keep HLDI rows for 187 popular, teen-friendly, and luxury or sports model fam
 
 A 45-year-old and a 16-year-old in suburban Illinois, clean record, 7,500–15,000 miles a year, no discounts, full coverage (100/300/100) with a $1,000 deductible, 2024 models. The starting point is Illinois's typical price, moved forward to today.
 
-The typical price stands for a 40–64-year-old in a suburb, on an average car as old as the insured fleet. S&P Global Mobility put the average US car at 12.5 years old in 2023, which sits on the line between our 8–12 and 13-plus bands. NAIC's collision and comprehensive averages only count cars that carry those coverages, which are newer, so we use 8–12. A 2024 model is newer than that, so its damage part costs more than the typical price's.
+The typical price stands for a 40–64-year-old in a suburb, on an average car as old as the insured fleet. S&P Global Mobility put the average US car at 12.5 years old in 2023, which sits on the line between our 8–12 and 13-plus bands. NAIC's collision and comprehensive averages only count cars that carry those coverages, which are newer, so we use 8–12. The 4–7 band is also plausible for cars with collision coverage. Using it would lower a new car's typical-start estimate by about 7%, which is inside the typical start's range (21% less to +27% before anything else is added). A 2024 model is newer than either, so its damage part costs more than the typical price's.
 
 "Liability" and "Damage" are the vehicle's calibrated factors for each part of the premium (1.00 = average vehicle). Figures are the likely yearly price, with the range in brackets. The last column is the whole household's policy after adding a 16-year-old to the 45-year-old's policy on that car: the increase, and the new total. Reproduce with `npx tsx scripts/example-table.ts`; a test checks this table matches.
 
@@ -258,18 +267,18 @@ Starting point: Illinois's average full-coverage cost in 2023 was $1,257 (NAIC).
 
 | 2024 vehicle | HLDI row used | Liability | Damage | 45-year-old | 16-year-old, own policy | Adding a 16-year-old to the 45-year-old's policy |
 | --- | --- | --- | --- | --- | --- | --- |
-| Tesla Model Y Long Range AWD | Tesla Model Y electric 4dr 4WD | 0.89 | 1.90 | $2,351 ($1,692–$3,403) | $6,748 ($4,728–$10,490) | +$1,552 (policy $3,903, $2,682–$5,778) |
+| Tesla Model Y Long Range AWD | Tesla Model Y electric 4dr 4WD | 0.89 | 1.90 | $2,351 ($1,568–$3,403) | $6,748 ($4,392–$10,490) | +$1,552 (policy $3,903, $2,494–$5,778) |
 | Toyota RAV4 | Toyota RAV4 4dr | 0.94 | 0.87 | $1,540 ($1,135–$2,057) | $4,421 ($3,169–$6,494) | +$1,017 (policy $2,557, $1,796–$3,524) |
 | Honda CR-V FWD | Honda CR-V 4dr | 0.86 | 0.84 | $1,447 ($1,044–$1,958) | $4,152 ($2,917–$6,151) | +$955 (policy $2,402, $1,655–$3,348) |
 | Honda Civic 4Dr | Honda Civic | 1.17 | 1.04 | $1,879 ($1,381–$2,512) | $5,391 ($3,855–$7,924) | +$1,239 (policy $3,118, $2,185–$4,302) |
-| Toyota Camry | Toyota Camry; Toyota Camry 4WD | 1.09 | 1.06 | $1,823 ($1,340–$2,437) | $5,232 ($3,743–$7,689) | +$1,203 (policy $3,026, $2,122–$4,174) |
+| Toyota Camry | Toyota Camry; Toyota Camry 4WD | 1.09 | 1.06 | $1,823 ($1,340–$2,645) | $5,232 ($3,743–$8,148) | +$1,203 (policy $3,026, $2,122–$4,489) |
 | Toyota Corolla | Toyota Corolla | 1.14 | 0.99 | $1,811 ($1,333–$2,420) | $5,196 ($3,720–$7,634) | +$1,195 (policy $3,006, $2,110–$4,145) |
 | Ford F150 Pickup 4WD | Ford F-150 4WD; Ford F-150 SuperCab 4WD; Ford F-150 SuperCrew 4WD | 0.94 | 0.94 | $1,596 ($1,173–$2,134) | $4,581 ($3,277–$6,733) | +$1,054 (policy $2,650, $1,858–$3,655) |
 | Chevrolet Silverado 4WD | Chevrolet Silverado 1500 4WD; Chevrolet Silverado 1500 crew cab 4WD; Chevrolet Silverado 1500 ext. cab 4WD | 1.05 | 0.92 | $1,674 ($1,235–$2,234) | $4,805 ($3,449–$7,055) | +$1,105 (policy $2,779, $1,955–$3,828) |
 | Jeep Wrangler 2dr 4WD | Jeep Wrangler 2dr convertible 4WD | 1.10 | 0.74 | $1,564 ($1,159–$2,084) | $4,488 ($3,234–$6,582) | +$1,032 (policy $2,596, $1,833–$3,571) |
 | Subaru Outback AWD | Subaru Outback 4WD with EyeSight | 0.80 | 0.87 | $1,419 ($1,032–$1,905) | $4,073 ($2,884–$6,004) | +$937 (policy $2,356, $1,636–$3,262) |
-| Ford Mustang | Ford Mustang 2dr | 1.09 | 1.12 | $1,878 ($1,379–$2,512) | $5,389 ($3,850–$7,923) | +$1,239 (policy $3,117, $2,183–$4,301) |
-| Tesla Model 3 Long Range AWD | Tesla Model 3 electric 4dr 4WD | 0.94 | 1.95 | $2,436 ($1,755–$3,525) | $6,990 ($4,905–$10,863) | +$1,607 (policy $4,043, $2,782–$5,983) |
+| Ford Mustang | Ford Mustang 2dr | 1.09 | 1.12 | $1,878 ($1,379–$2,726) | $5,389 ($3,850–$8,395) | +$1,239 (policy $3,117, $2,183–$4,626) |
+| Tesla Model 3 Long Range AWD | Tesla Model 3 electric 4dr 4WD | 0.94 | 1.95 | $2,436 ($1,626–$3,525) | $6,990 ($4,555–$10,863) | +$1,607 (policy $4,043, $2,587–$5,983) |
 | Honda Accord | Honda Accord | 1.13 | 1.00 | $1,806 ($1,329–$2,413) | $5,183 ($3,712–$7,615) | +$1,192 (policy $2,998, $2,104–$4,134) |
 | Toyota Tacoma 2WD | Toyota Tacoma double cab pickup | 0.96 | 0.94 | $1,611 ($1,185–$2,153) | $4,624 ($3,310–$6,795) | +$1,063 (policy $2,674, $1,876–$3,687) |
 | Kia Soul | Kia Soul | 1.16 | 0.93 | $1,773 ($1,306–$2,368) | $5,088 ($3,646–$7,474) | +$1,170 (policy $2,943, $2,067–$4,057) |
@@ -278,6 +287,7 @@ What it shows:
 
 - Teslas and other expensive cars cost more to repair and are worth more, so their damage factor is high. A Model Y comes out about 30% above an Accord for the 45-year-old, and its range reaches about 88% above.
 - Civics, Camrys, Corollas, and Souls have more liability claims than average in HLDI's data. We pass on only half of that.
+- The Mustang and Camry ranges reach higher than their neighbours', because their repair losses are above the mainstream cars we checked against real prices.
 - SUVs and trucks with low repair costs are the cheapest.
 - A teen on their own policy costs about 2.9 times the parent. Adding the teen to the parent's policy raises the household's premium by about two-thirds.
 

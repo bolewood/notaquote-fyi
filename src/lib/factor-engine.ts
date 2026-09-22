@@ -263,8 +263,16 @@ export type VehicleRelativity = {
   liabilityWeightSpread: number
   /** The powertrain we priced (for the note when a name is sold in more than one version). */
   powertrain: VehicleFacts["powertrain"]
-  /** A luxury make or an electric car: real prices can run higher than our factor, so the range reaches higher. */
+  /** A luxury make or an electric car: real prices can run higher or lower than our factor, so the range is wider. */
   valueRisk: boolean
+  /** A make that gets the half-strength value term, whose own range also widens the estimate. */
+  halfValue?: boolean
+  /** A mainstream car whose HLDI damage result is above the fitted range, or in HLDI's sports-car class: the range reaches higher. */
+  sporty?: boolean
+  /** A mainstream car in HLDI's sports-car class (gets the sporty-car note). */
+  sportsCar?: boolean
+  /** A hybrid priced on HLDI's gas rows because HLDI has no hybrid row for it (usually a mild hybrid). */
+  hybridOnGasRows?: boolean
 }
 
 function rowPowertrain(facts: VehicleFacts): VehicleLossRow["powertrain"] {
@@ -454,10 +462,28 @@ function creditedLiability(hldi: Rational, data: VehicleData, weightHundredths =
  * to California's survey: a lookup of HLDI ^ exponent (whole hundredths, so
  * the arithmetic stays exact), times the luxury-make term.
  */
+type ValueTier = "full" | "half" | "none"
+
+/** Which car-value term a make gets (see luxuryValueFull and luxuryValueHalf in vehicle-families.json). */
+function valueTier(make: string, data: VehicleData): ValueTier {
+  const calibration = data.calibration
+  if (!calibration) return "none"
+  const compact = compactName(make)
+  if ((calibration.valueFull ?? []).includes(compact)) return "full"
+  if ((calibration.valueHalf ?? []).includes(compact)) return "half"
+  return "none"
+}
+
 function calibratedDamage(hldi: Rational, make: string, data: VehicleData): Rational {
   const calibration = data.calibration
   if (!calibration) return hldi
-  const luxury = isLuxuryMake(make, data) ? rat(calibration.luxury.value, 100) : rat(1)
+  const tier = valueTier(make, data)
+  const luxury =
+    tier === "full"
+      ? rat(calibration.luxury.value, 100)
+      : tier === "half" && calibration.luxuryHalf
+        ? rat(calibration.luxuryHalf.value, 100)
+        : rat(1)
   const last = calibration.damageCurveMin + calibration.damageCurve.length - 1
   const index = Math.min(last, Math.max(calibration.damageCurveMin, toHundredths(hldi))) - calibration.damageCurveMin
   return mul(rat(calibration.damageCurve[index], 100), luxury)
@@ -525,8 +551,16 @@ export function vehicleRelativity(
   const bi = splitShare("bodily-injury-in-liability")
   const collision = splitShare("collision-in-physical")
   const mixedPowertrain = vehicle.powertrainMixed
-  const valueRisk = isLuxuryMake(vehicle.make, data) || vehicle.powertrain === "electric"
-  const shared = { mixedPowertrain, powertrain: vehicle.powertrain, valueRisk }
+  const tier = valueTier(vehicle.make, data)
+  const valueRisk = tier !== "none" || vehicle.powertrain === "electric"
+  const shared = { mixedPowertrain, powertrain: vehicle.powertrain, valueRisk, halfValue: tier === "half" }
+  // A mainstream car in HLDI's sports-car class is "sporty"; one whose damage
+  // result is above the cars we fitted to real prices is "beyond the fit".
+  // Both widen the range upward; only the first gets the sporty-car note.
+  const sportyDamage = (physical: Rational, sportsClass: boolean) =>
+    tier === "none" &&
+    (sportsClass || (data.calibration?.fitted === true && toHundredths(physical) > data.calibration.mainstreamDamageMax))
+  const sportsClassOnly = (sportsClass: boolean) => tier === "none" && sportsClass
 
   if (rows.length > 0) {
     const hldiLiability =
@@ -543,7 +577,14 @@ export function vehicleRelativity(
       ) ?? (klass ? hundredths(klass.row.physical.value) : rat(1))
     const liability = creditedLiability(hldiLiability, data)
     const physical = calibratedDamage(hldiPhysical, vehicle.make, data)
+    const inSportsClass = rows.some((row) => row.hldiClass.startsWith("Sports cars"))
+    const sporty = sportyDamage(hldiPhysical, inSportsClass)
+    const sportsCar = sportsClassOnly(inSportsClass)
+    const hybridOnGasRows = vehicle.powertrain === "hybrid" && rows.every((row) => row.powertrain === "combustion")
     return {
+      sporty,
+      sportsCar,
+      hybridOnGasRows,
       level: "model",
       label: `${vehicle.make} ${vehicle.model}`,
       rows,
@@ -565,6 +606,8 @@ export function vehicleRelativity(
     const liability = creditedLiability(hldiLiability, data)
     const physical = calibratedDamage(hundredths(klass.row.physical.value), vehicle.make, data)
     return {
+      sporty: sportyDamage(hundredths(klass.row.physical.value), /sports car/i.test(klass.row.hldiSubtotal)),
+      sportsCar: sportsClassOnly(/sports car/i.test(klass.row.hldiSubtotal)),
       level: "class",
       label: classWords(vehicle, klass.kind),
       rows: [],
@@ -907,6 +950,19 @@ function separate(low: number, likely: number, high: number): {
  * Estimate the yearly premium for `target`, starting from `start`.
  */
 export function estimate(start: StartingPoint, target: Scenario, options: EstimateOptions = {}): Estimate {
+  if (options.teenOnParentPolicy) {
+    const startVehicle = vehicleRelativity(resolveVehicle(start.scenario, start.vehicle)).key
+    const targetVehicle = vehicleRelativity(resolveVehicle(target, options.vehicle)).key
+    if (startVehicle !== targetVehicle || start.scenario.state !== target.state) {
+      throw new Error(
+        "teenOnParentPolicy adds a teen to the same household policy: the car and the state must match the starting point. To price a teen's own car, leave teenOnParentPolicy off; to add a teen on a different car, use teenAddedToPolicy.",
+      )
+    }
+  }
+  return estimateAny(start, target, options)
+}
+
+function estimateAny(start: StartingPoint, target: Scenario, options: EstimateOptions = {}): Estimate {
   if (!Number.isFinite(start.annual) || start.annual < 1) {
     throw new Error("A starting premium must be at least $1 a year")
   }
@@ -981,6 +1037,14 @@ export function estimate(start: StartingPoint, target: Scenario, options: Estima
       }
       if (relativity === to.vehicle && relativity.valueRisk && bundle.groups.range.cells["vehicle-value"]) {
         const extra = cellSpread(rangeCell("vehicle-value"))
+        spreads.push({ down: extra.down, up: extra.up, weight: rat(1) })
+      }
+      if (relativity === to.vehicle && relativity.halfValue && bundle.vehicle.calibration?.luxuryHalf) {
+        const extra = cellSpread(bundle.vehicle.calibration.luxuryHalf)
+        spreads.push({ down: extra.down, up: extra.up, weight: share(to.physicalPart, to.total) })
+      }
+      if (relativity === to.vehicle && relativity.sporty && bundle.groups.range.cells["vehicle-sporty"]) {
+        const extra = cellSpread(rangeCell("vehicle-sporty"))
         spreads.push({ down: extra.down, up: extra.up, weight: rat(1) })
       }
       if (relativity.liabilityWeightSpread > 0) {
@@ -1151,10 +1215,21 @@ function rangeSentence(
           : target.powertrain === "electric"
             ? "electric"
             : "gas"
-    parts.push(`That name is sold in more than one version. We priced the ${version} one, so the range is a little wider.`)
+    parts.push(
+      target.hybridOnGasRows
+        ? "That name is sold in more than one version. We priced it as a mild hybrid, using HLDI's figures for the gas version, so the range is a little wider."
+        : `That name is sold in more than one version. We priced the ${version} one, so the range is a little wider.`,
+    )
+  } else if (vehicleChanged && target.hybridOnGasRows) {
+    parts.push("HLDI has no separate figures for this hybrid, so we used the gas version's.")
   }
   if (vehicleChanged && target.valueRisk) {
-    parts.push("Expensive and electric cars can cost more to insure than their repair records suggest, so the range reaches higher.")
+    parts.push("Expensive and electric cars can cost more or less to insure than their repair records suggest, so the range is wider.")
+  }
+  if (vehicleChanged && target.sporty && target.sportsCar) {
+    parts.push("Sporty cars often cost more to insure than their repair records suggest, so the range reaches higher.")
+  } else if (vehicleChanged && target.sporty) {
+    parts.push("This car's repair costs are higher than any mainstream car we checked against real prices, so the range reaches higher.")
   }
   if (start.trended) {
     parts.push("We moved the typical price forward to today using a national price index, which is rough.")
@@ -1289,7 +1364,10 @@ export function teenAddedToPolicy(
   const shared = { vehicle: options.vehicle, stateAnnual: options.stateAnnual, trimConfidence: options.trimConfidence }
   const before = estimate(start, parent, shared)
   const teen: Scenario = { ...parent, age: "16-18", yearsLicensed: "under-1", teen: true }
-  const after = estimate(start, teen, { ...shared, teenOnParentPolicy: true })
+  // The household's car can differ from the start (a typical start is for an
+  // average car); both figures move to that same car, and only the teen is
+  // added between them.
+  const after = estimateAny(start, teen, { ...shared, teenOnParentPolicy: true })
   const increase = after.likely - before.likely
   const increaseRounded = Math.round(increase / 10) * 10
   const now = Math.round(before.likely / 10) * 10
@@ -1621,6 +1699,7 @@ export function assertFactorBundleSafe(candidate: FactorBundle = bundle): void {
   const calibration = candidate.vehicle.calibration
   checkCell("vehicle.calibration.exponent", calibration.exponent)
   checkCell("vehicle.calibration.luxury", calibration.luxury)
+  if (calibration.luxuryHalf) checkCell("vehicle.calibration.luxuryHalf", calibration.luxuryHalf)
   if (calibration.damageCurve.length === 0 || calibration.damageCurve.some((value) => !Number.isInteger(value) || value <= 0)) {
     throw new Error("The damage curve must be positive whole hundredths")
   }

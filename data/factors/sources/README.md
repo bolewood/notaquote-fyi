@@ -44,7 +44,13 @@ Columns: `source_id, state, data_year, url, locator, territory, carrier, profile
 - CDI says the survey premiums are "before any applicable discounts are applied". Company footnotes list California's Good Driver discount among those discounts ("California Good Driver Discount 30%", "20% Good Driver Discount"), so the clean profiles leave it out. A California driver who loses it after an accident probably sees a bigger jump than the survey shows.
 - Profiles 2565 (a couple with a 17-year-old) and 2555 (a younger couple without one) give the rough "teen added to a parent's policy" factor.
 - Mileage variants were only fetched for Los Angeles.
-- **Vehicle calibration.** Each Standard single-driver profile lists four cars (2512: Crosstrek, Civic, Accord, Tacoma; 2522: Accord, Prius, Tesla Model 3, F-150; 2532: Accord, BMW 340i, F-150, RAV4; 2542: Accord, Tesla Model S, Chevy Silverado, BMW 530i; 2023 models, per CDI's Vehicles sheet). On 22 September 2026 we fetched the clean-record, 7,600–10,000-mile pages for every car in all three places (36 more pages, the same form a visitor uses, two seconds apart; script `ca_vehicles.py`, next to the original fetch scripts). Profile ids end in `_V1` to `_V4` for the car's place in the list. All earlier rows are unchanged.
+- **Scripts** (in `scripts/research/ca-2026/`, run from the repository root; raw pages go to `.catalog-cache/research/ca-2026/raw/tool/`, which isn't committed):
+  - `ca_fetch.py` submits one query to the tool the way the page does.
+  - `ca_batch.py` is the first fetch: single drivers, married households, and mileage variants.
+  - `ca_vehicles.py` is the calibration fetch: every car in every Standard profile.
+  - `ca_probe.py` checks which vehicle names the tool accepts. The Mustang, CR-V, Elantra, and C 300 in CDI's Vehicles sheet aren't accepted for single-driver profiles.
+  - `ca_build.py` turns the saved pages into `premiums.csv` and `profiles.csv`, which are copied here as `ca-2026-*.csv`. Rebuilding from the saved pages gives these files byte for byte.
+- **Vehicle calibration.** Each Standard single-driver profile lists four cars (2512: Crosstrek, Civic, Accord, Tacoma; 2522: Accord, Prius, Tesla Model 3, F-150; 2532: Accord, BMW 340i, F-150, RAV4; 2542: Accord, Tesla Model S, Chevy Silverado, BMW 530i; 2023 models, per CDI's Vehicles sheet). On 22 September 2026 we fetched the clean-record, 7,600–10,000-mile pages for every car in all three places (36 more pages, the same form a visitor uses, two seconds apart). Profile ids end in `_V1` to `_V4` for the car's place in the list. All earlier rows are unchanged.
 
 ### co-2023: Colorado Division of Insurance
 

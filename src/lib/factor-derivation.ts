@@ -397,6 +397,8 @@ type Families = {
   luxuryMakes: string[]
   luxuryClasses: Record<string, string>
   luxurySportsClasses: Record<string, string>
+  luxuryValueFull: string[]
+  luxuryValueHalf: string[]
   calibration: Record<string, { make: string; series: string[] }>
   calibrationProfiles: Record<string, Record<string, string>>
   families: Record<string, string[]>
@@ -1106,7 +1108,10 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
   // factor (frozen weight), D HLDI's damage result, k the damage exponent,
   // and a the extra for makes HLDI files as luxury. k and a are chosen on a
   // 0.01 grid to minimize the squared log error of each car ÷ the Accord.
-  const luxuryMakeSet = new Set(families.luxuryMakes.map((make) => compactName(make)))
+  // The value term is fitted on the full-strength makes in the calibration
+  // (BMW and Tesla); see vehicle-families.json for which makes get it.
+  const valueFullSet = new Set(families.luxuryValueFull.map((make) => compactName(make)))
+  const valueHalfSet = new Set(families.luxuryValueHalf.map((make) => compactName(make)))
   const creditLiability = (raw: number) => Math.min(1 + surchargeMax / 100, Math.max(1 - discountMax / 100, 1 + weight * (raw - 1)))
   const medianOr = (values: (number | null)[]) => {
     const present = values.filter((value): value is number => value !== null)
@@ -1135,7 +1140,7 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
     }
     const car: CalibrationCar = {
       name,
-      luxury: luxuryMakeSet.has(compactName(spec.make)),
+      luxury: valueFullSet.has(compactName(spec.make)),
       liability: creditLiability(rel.liability / 100),
       damage: rel.physical / 100,
       observed: pairs.length > 0 ? summarize(ratios(ca, pairs, "same")) : { median: 1, p25: 1, p75: 1, n: 0 },
@@ -1183,6 +1188,10 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
     : []
   const residuals = points.map((point) => point.observed / point.fitted)
   const valueMisses = leaveOneOut.filter((item) => item.car.luxury).map((item) => item.ratio)
+  const mainstreamDamage = calibrationCars.filter((car) => !car.luxury).map((car) => car.damage)
+  if (accord) mainstreamDamage.push(accord.damage)
+  const mainstreamDamageMax = mainstreamDamage.length > 0 ? Math.round(Math.max(...mainstreamDamage) * 100) : 100
+  const mainstreamDamageMin = mainstreamDamage.length > 0 ? Math.round(Math.min(...mainstreamDamage) * 100) : 100
   const errorBefore = canFit ? squaredError(calibrationCars, 1, 0) : 0
   const pointWords = points
     .map((point) => `${point.vehicle} ${point.observed.toFixed(2)} (model ${point.fitted.toFixed(2)}, before ${point.uncalibrated.toFixed(2)})`)
@@ -1234,6 +1243,18 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
         derivation: `Our estimate. No public source yet; help wanted. ${calibrationWords}`,
         n: null,
       }
+  const fullWords = families.luxuryValueFull.join(", ")
+  const halfWords = families.luxuryValueHalf.join(", ")
+  const luxuryHalfCell: FactorCell = {
+    label: "Extra on the damage part for some other luxury makes (car value), half strength",
+    value: Math.round(Math.sqrt(luxuryCell.value / 100) * 100),
+    low: 100,
+    high: luxuryCell.high,
+    basis: "assumed",
+    sources: [],
+    derivation: `Our estimate, and our judgment; help wanted. The car-value term was fitted on BMW and Tesla only. We apply it in full to ${fullWords}. For ${halfWords}, whose cars mostly cost less than a comparable BMW, we use half strength on a multiplying scale (the square root: ×${(Math.sqrt(luxuryCell.value / 100)).toFixed(2)}), and the range runs from no term to the top of the full term's range (×${(luxuryCell.high / 100).toFixed(2)}). Buick and Mini get no term.`,
+    n: null,
+  }
   const damageCurveMin = 20
   const damageCurve: number[] = []
   for (let hundredth = damageCurveMin; hundredth <= 800; hundredth += 1) {
@@ -1304,22 +1325,22 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
         : rangeAssumption("vehicle-model"),
       "vehicle-value": canFit
         ? {
-            label: "Luxury and electric cars: price can be higher still",
+            label: "Luxury and electric cars: price can be higher or lower",
             value: 100,
-            low: 100,
+            low: Math.min(100, Math.round(Math.min(1, ...valueMisses) * 100)),
             high: Math.max(100, Math.round(Math.max(1, ...valueMisses) * 100)),
             basis: "indicative",
             sources: ["ca-2026", "hldi-2022-24"],
-            derivation: `Our factors can miss high for expensive cars, because we have no public price list. When each luxury car in the calibration is left out and predicted from the others, the largest miss is real ÷ model = ${Math.max(1, ...valueMisses).toFixed(2)} (${leaveOneOut
+            derivation: `Our factors can miss either way for expensive cars, because we have no public price list. When each luxury car in the calibration is left out and predicted from the others, real ÷ model runs from ${Math.min(1, ...valueMisses).toFixed(2)} to ${Math.max(1, ...valueMisses).toFixed(2)} (${leaveOneOut
               .filter((item) => item.car.luxury)
               .map((item) => `${item.car.name} ${item.ratio.toFixed(2)}`)
-              .join("; ")}). Used to widen the range upward for luxury makes and electric cars.`,
+              .join("; ")}). Used to widen the range both ways for luxury makes and electric cars.`,
             n: valueMisses.length,
           }
         : {
-            label: "Luxury and electric cars: price can be higher still",
+            label: "Luxury and electric cars: price can be higher or lower",
             value: 100,
-            low: 100,
+            low: 85,
             high: 130,
             basis: "assumed",
             sources: [],
@@ -1328,6 +1349,16 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
           },
       "vehicle-model-years": rangeAssumption("vehicle-model-years"),
       "vehicle-mixed-powertrain": rangeAssumption("vehicle-mixed-powertrain"),
+      "vehicle-sporty": {
+        label: "Sporty or costly-to-repair mainstream cars: price can be higher",
+        value: 100,
+        low: 100,
+        high: 130,
+        basis: "assumed",
+        sources: [],
+        derivation: `Our estimate. No public source yet; help wanted. The calibration has no sports car in it: its mainstream cars' HLDI damage results run from ${change(mainstreamDamageMin / 100)} to ${change(mainstreamDamageMax / 100)}. For a mainstream car above that, or in HLDI's sports-car class (a Mustang's is +36%), we're extrapolating, and sporty cars often cost more to insure than their repair records suggest, so the range reaches 30% higher. California's survey lists a Mustang in its vehicle sheet but doesn't price it for any single-driver profile, so we couldn't check.`,
+        n: null,
+      },
       "vehicle-luxury-class": {
         label: "Using a luxury class average instead of the exact model",
         value: 100,
@@ -1480,6 +1511,10 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
       calibration: {
         exponent: exponentCell,
         luxury: luxuryCell,
+        luxuryHalf: luxuryHalfCell,
+        valueFull: [...valueFullSet].sort(),
+        valueHalf: [...valueHalfSet].sort(),
+        mainstreamDamageMax,
         damageCurveMin,
         damageCurve,
         fitted: canFit,

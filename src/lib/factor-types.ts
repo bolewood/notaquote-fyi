@@ -138,8 +138,15 @@ export type CalibrationPoint = {
 export type VehicleCalibration = {
   /** Damage factor = HLDI damage result ^ exponent (hundredths: 38 means 0.38). */
   exponent: FactorCell
-  /** Extra multiplier on the damage share for makes HLDI files as luxury (hundredths). */
+  /** Extra multiplier on the damage share for full-strength luxury makes (hundredths). Fitted on BMW and Tesla. */
   luxury: FactorCell
+  /** Half strength (the square root of luxury) for the makes in valueHalf, with a wider range. */
+  luxuryHalf: FactorCell
+  /** Compact make names that get the full value term, and the half-strength term. */
+  valueFull: string[]
+  valueHalf: string[]
+  /** Highest HLDI damage result (hundredths) among the mainstream cars in the fit. Above it, a mainstream car is outside what was fitted. */
+  mainstreamDamageMax: number
   /** Lookup table: damageCurve[h - damageCurveMin] is the damage factor for an HLDI damage result of h hundredths. */
   damageCurveMin: number
   damageCurve: number[]

@@ -317,7 +317,7 @@ test("a trim name sold as gas and hybrid is priced as gas and widens the range",
   // The 2024 Mazda CX-90 4WD is listed as a mild hybrid and a plug-in; we price the hybrid and say so.
   const cx90 = car(2024, "Mazda", "CX-90", "CX-90 4WD")
   assert.equal(cx90.powertrain, "hybrid")
-  assert.match(estimate(YOURS, on(MOLLY_F150, cx90), { vehicle: cx90 }).rangeNote, /We priced the hybrid one/)
+  assert.match(estimate(YOURS, on(MOLLY_F150, cx90), { vehicle: cx90 }).rangeNote, /We priced it as a mild hybrid, using HLDI's figures for the gas version/)
 })
 
 test("body style: plain rows unless the trim names a body", () => {
@@ -574,4 +574,53 @@ test("a teen added to a parent's policy is the whole household's premium", () =>
     () => compareVehicles(start, { ...EXAMPLE_ADULT, age: "16-18" }, [accord], { teenOnParentPolicy: true }),
     /isn't a price for a teen's own car/,
   )
+})
+
+test("the car-value term: full, half strength, or none", () => {
+  const start = typicalStart(EXAMPLE_ADULT)!
+  const price = (make: string, model: string, trim?: string) => {
+    const trims = catalog.vehicles["2024"]?.[make]?.[model] ?? []
+    const name = trim ?? trims[0]?.name
+    assert.ok(name, `${make} ${model}`)
+    const facts = car(2024, make, model, name)
+    return estimate(start, { ...EXAMPLE_ADULT, make, model, trim: name }, { vehicle: facts })
+  }
+  const envista = price("Buick", "Envista").likely
+  const trax = price("Chevrolet", "Trax").likely
+  assert.ok(Math.abs(envista / trax - 1) <= 0.15, `Envista ${envista} vs Trax ${trax}`)
+  const integra = price("Acura", "Integra").likely
+  const civic = price("Honda", "Civic", "Civic 4Dr").likely
+  assert.ok(Math.abs(integra / civic - 1) <= 0.15, `Integra ${integra} vs Civic ${civic}`)
+  const calibration = FACTOR_BUNDLE.vehicle.calibration
+  assert.ok(calibration.valueFull.includes("bmw") && calibration.valueFull.includes("tesla"))
+  assert.ok(calibration.valueHalf.includes("acura"))
+  assert.ok(!calibration.valueFull.includes("buick") && !calibration.valueHalf.includes("buick"))
+  assert.equal(calibration.luxuryHalf.value, Math.round(Math.sqrt(calibration.luxury.value / 100) * 100))
+  // The luxury and electric range reaches lower as well as higher.
+  const modelY = price("Tesla", "Model Y", "Model Y Long Range AWD")
+  const rav4 = price("Toyota", "RAV4", "RAV4")
+  assert.ok(modelY.spread.down > rav4.spread.down && modelY.spread.up > rav4.spread.up)
+  assert.ok(FACTOR_BUNDLE.groups.range.cells["vehicle-value"].low < 100)
+})
+
+test("sporty mainstream cars get room above, with a note", () => {
+  const mustang = car(2024, "Ford", "Mustang", "Mustang")
+  assert.equal(vehicleRelativity(mustang).sporty, true)
+  assert.equal(vehicleRelativity(CIVIC).sporty, false)
+  const result = estimate(YOURS, on(MOLLY_F150, mustang), { vehicle: mustang })
+  const civic = estimate(YOURS, on(MOLLY_F150, CIVIC), { vehicle: CIVIC })
+  assert.match(result.rangeNote, /Sporty cars often cost more to insure than their repair records suggest/)
+  assert.ok(result.spread.up > civic.spread.up)
+  // A Camry's repair costs are just above the fitted mainstream cars: wider range, but not called sporty.
+  const camry = car(2024, "Toyota", "Camry", "Camry")
+  const camryNote = estimate(YOURS, on(MOLLY_F150, camry), { vehicle: camry }).rangeNote
+  assert.doesNotMatch(camryNote, /Sporty/)
+  assert.match(camryNote, /higher than any mainstream car we checked against real prices/)
+})
+
+test("teenOnParentPolicy refuses a change of car or state", () => {
+  const teen = { ...MOLLY_F150, age: "16-18" as const, yearsLicensed: "under-1" as const }
+  assert.throws(() => estimate(YOURS, on(teen, RAV4), { vehicle: RAV4, teenOnParentPolicy: true }), /car and the state must match/)
+  assert.throws(() => estimate(YOURS, { ...teen, state: "TX" }, { vehicle: F150, teenOnParentPolicy: true }), /car and the state must match/)
+  assert.ok(estimate(YOURS, teen, { vehicle: F150, teenOnParentPolicy: true }).likely > 1800)
 })

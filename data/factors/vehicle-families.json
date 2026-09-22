@@ -451,5 +451,35 @@
       "V3": "Chevy Silverado",
       "V4": "BMW 530i"
     }
-  }
+  },
+  "_luxuryValue": "Which makes get the car-value term on the damage part. It was fitted on BMW and Tesla only (the only luxury makes in California's calibration), so applying it elsewhere is our judgment. Full strength: makes priced like BMW and Tesla or above. Half strength (the square root of the term, with a wider range): makes whose cars mostly cost less than a comparable BMW. Polestar gets full strength because its cars are priced like a Tesla Model 3. Alfa Romeo gets half strength: its Giulia and Stelvio are priced like BMW's 3 Series and X3, but it sells few cars and we have no price evidence for it, so we don't give it the full term. Buick and Mini get no term: HLDI files some of their models as luxury, but their prices are mainstream.",
+  "luxuryValueFull": [
+    "BMW",
+    "Mercedes-Benz",
+    "Audi",
+    "Porsche",
+    "Tesla",
+    "Land Rover",
+    "Jaguar",
+    "Maserati",
+    "Lucid",
+    "Rivian",
+    "Polestar",
+    "Bentley",
+    "Rolls Royce",
+    "Ferrari",
+    "Lamborghini",
+    "McLaren",
+    "Aston Martin"
+  ],
+  "luxuryValueHalf": [
+    "Lexus",
+    "Acura",
+    "Volvo",
+    "Genesis",
+    "Infiniti",
+    "Cadillac",
+    "Lincoln",
+    "Alfa Romeo"
+  ]
 }
