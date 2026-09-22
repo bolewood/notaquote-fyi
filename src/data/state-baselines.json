@@ -1,0 +1,473 @@
+{
+  "version": "state-baselines-2026-09-22",
+  "checkedOn": "2026-09-22",
+  "measure": "Combined average premium: the average yearly cost of liability, collision, and comprehensive coverage added together, per insured car, in 2023. It is close to what a full-coverage policy cost an average driver in that state that year. It does not describe any particular driver, car, or set of limits.",
+  "coverage": "full",
+  "dataYear": 2023,
+  "currency": "USD",
+  "per": "insured car, per year",
+  "sources": [
+    {
+      "id": "naic-auto-db-2022-2023",
+      "name": "2022/2023 Auto Insurance Database Report",
+      "publisher": "National Association of Insurance Commissioners (NAIC)",
+      "url": "https://content.naic.org/sites/default/files/publication-aut-pb-auto-insurance-database.pdf",
+      "tables": {
+        "combinedAveragePremium": "Table 5, Combined Average Premium, printed page 25 (PDF page 30), 2023 column",
+        "liabilityAveragePremium": "Table 1C, Liability Average Premium, printed page 17 (PDF page 22), 2023 column",
+        "averageExpenditure": "Table 4, Average Expenditure, printed page 24 (PDF page 29), 2023 column"
+      },
+      "published": "Adopted December 2025; NAIC release dated 13 February 2026",
+      "announcement": "https://content.naic.org/article/naic-releases-20222023-auto-insurance-database-report",
+      "pdfSha256": "34759655ce8e5387b48d523ebab89f9cd8f29d3f67c6d391838398b7d2659b78",
+      "checkedOn": "2026-09-22",
+      "terms": "The report is copyrighted by NAIC (© 2025, all rights reserved; no reproduction without written permission). We store only per-state numbers, which are facts, with credit to NAIC. We don't copy the report's text or tables, and the PDF is not in this repository."
+    },
+    {
+      "id": "bls-cpi-motor-vehicle-insurance",
+      "name": "CPI-U, U.S. city average, Motor vehicle insurance (series CUUR0000SETE, not seasonally adjusted, 1982-84=100)",
+      "publisher": "U.S. Bureau of Labor Statistics",
+      "url": "https://data.bls.gov/timeseries/CUUR0000SETE",
+      "apiUrl": "https://api.bls.gov/publicAPI/v2/timeseries/data/CUUR0000SETE?startyear=2023&endyear=2026&annualaverage=true",
+      "checkedOn": "2026-09-22",
+      "terms": "U.S. government work, public domain."
+    }
+  ],
+  "trend": {
+    "sourceId": "bls-cpi-motor-vehicle-insurance",
+    "applied": false,
+    "note": "Recorded for later use, not applied to any figure. Dividing the latest value by the data-year average gives a rough price-change multiplier since 2023.",
+    "dataYearAverage": {
+      "period": "2023",
+      "value": 716.004
+    },
+    "annualAverages": {
+      "2023": 716.004,
+      "2024": 843.098,
+      "2025": 893.544
+    },
+    "latest": {
+      "period": "2026-08",
+      "value": 848.231
+    },
+    "gaps": "BLS published no October 2025 value because of the 2025 lapse in appropriations."
+  },
+  "countrywide": {
+    "annual": 1439,
+    "coverage": "full",
+    "sourceId": "naic-auto-db-2022-2023",
+    "combinedAveragePremium": 1438.6,
+    "liabilityAveragePremium": 736.65,
+    "averageExpenditure": 1281.92
+  },
+  "states": {
+    "AL": {
+      "annual": 1269,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1268.71,
+      "liabilityAveragePremium": 575.51,
+      "averageExpenditure": 1081.24
+    },
+    "AK": {
+      "annual": 1262,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1262.49,
+      "liabilityAveragePremium": 624.01,
+      "averageExpenditure": 1112.96
+    },
+    "AZ": {
+      "annual": 1505,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1504.59,
+      "liabilityAveragePremium": 792.89,
+      "averageExpenditure": 1344.24
+    },
+    "AR": {
+      "annual": 1296,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1296.46,
+      "liabilityAveragePremium": 538.39,
+      "averageExpenditure": 1050.52
+    },
+    "CA": {
+      "annual": 1418,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1417.94,
+      "liabilityAveragePremium": 660.84,
+      "averageExpenditure": 1225.02
+    },
+    "CO": {
+      "annual": 1655,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1655.3,
+      "liabilityAveragePremium": 781.9,
+      "averageExpenditure": 1452.82
+    },
+    "CT": {
+      "annual": 1508,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1508.21,
+      "liabilityAveragePremium": 853.74,
+      "averageExpenditure": 1393.9
+    },
+    "DE": {
+      "annual": 1569,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1569.21,
+      "liabilityAveragePremium": 962.42,
+      "averageExpenditure": 1462.03
+    },
+    "DC": {
+      "annual": 1818,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1818.28,
+      "liabilityAveragePremium": 890.7,
+      "averageExpenditure": 1676.99
+    },
+    "FL": {
+      "annual": 1994,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1993.81,
+      "liabilityAveragePremium": 1294.57,
+      "averageExpenditure": 1864.63
+    },
+    "GA": {
+      "annual": 1746,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1746.32,
+      "liabilityAveragePremium": 1046.3,
+      "averageExpenditure": 1555.1
+    },
+    "HI": {
+      "annual": 998,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 998.04,
+      "liabilityAveragePremium": 463.89,
+      "averageExpenditure": 888.07
+    },
+    "ID": {
+      "annual": 981,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 981.01,
+      "liabilityAveragePremium": 481.74,
+      "averageExpenditure": 863.91
+    },
+    "IL": {
+      "annual": 1257,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1256.58,
+      "liabilityAveragePremium": 597.91,
+      "averageExpenditure": 1153.11
+    },
+    "IN": {
+      "annual": 1032,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1031.86,
+      "liabilityAveragePremium": 485.37,
+      "averageExpenditure": 926.41
+    },
+    "IA": {
+      "annual": 1010,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1010.4,
+      "liabilityAveragePremium": 386.85,
+      "averageExpenditure": 872.61
+    },
+    "KS": {
+      "annual": 1182,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1181.69,
+      "liabilityAveragePremium": 483.45,
+      "averageExpenditure": 972.57
+    },
+    "KY": {
+      "annual": 1208,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1208.29,
+      "liabilityAveragePremium": 632.75,
+      "averageExpenditure": 1045.66
+    },
+    "LA": {
+      "annual": 1983,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1982.65,
+      "liabilityAveragePremium": 1055.1,
+      "averageExpenditure": 1754.03
+    },
+    "ME": {
+      "annual": 926,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 926.02,
+      "liabilityAveragePremium": 424.93,
+      "averageExpenditure": 856.28
+    },
+    "MD": {
+      "annual": 1602,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1601.63,
+      "liabilityAveragePremium": 868.68,
+      "averageExpenditure": 1476.78
+    },
+    "MA": {
+      "annual": 1413,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1413.49,
+      "liabilityAveragePremium": 710.19,
+      "averageExpenditure": 1326.46
+    },
+    "MI": {
+      "annual": 1573,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1572.77,
+      "liabilityAveragePremium": 765.72,
+      "averageExpenditure": 1444.01
+    },
+    "MN": {
+      "annual": 1223,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1223.48,
+      "liabilityAveragePremium": 542.43,
+      "averageExpenditure": 1103.05
+    },
+    "MS": {
+      "annual": 1395,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1394.52,
+      "liabilityAveragePremium": 636.67,
+      "averageExpenditure": 1199.52
+    },
+    "MO": {
+      "annual": 1323,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1322.55,
+      "liabilityAveragePremium": 614.25,
+      "averageExpenditure": 1154.78
+    },
+    "MT": {
+      "annual": 1184,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1183.66,
+      "liabilityAveragePremium": 471.84,
+      "averageExpenditure": 975.02
+    },
+    "NE": {
+      "annual": 1184,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1183.88,
+      "liabilityAveragePremium": 483.69,
+      "averageExpenditure": 981.06
+    },
+    "NV": {
+      "annual": 1600,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1600.12,
+      "liabilityAveragePremium": 1040.03,
+      "averageExpenditure": 1461.54
+    },
+    "NH": {
+      "annual": 1032,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1032.01,
+      "liabilityAveragePremium": 482.42,
+      "averageExpenditure": 986.84
+    },
+    "NJ": {
+      "annual": 1693,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1693.39,
+      "liabilityAveragePremium": 1032.5,
+      "averageExpenditure": 1573.21
+    },
+    "NM": {
+      "annual": 1301,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1301.12,
+      "liabilityAveragePremium": 623.83,
+      "averageExpenditure": 1081.61
+    },
+    "NY": {
+      "annual": 1896,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1895.99,
+      "liabilityAveragePremium": 1115.97,
+      "averageExpenditure": 1752.55
+    },
+    "NC": {
+      "annual": 1097,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1096.56,
+      "liabilityAveragePremium": 447.99,
+      "averageExpenditure": 925.08
+    },
+    "ND": {
+      "annual": 961,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 961.28,
+      "liabilityAveragePremium": 331.5,
+      "averageExpenditure": 807.77
+    },
+    "OH": {
+      "annual": 1038,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1037.61,
+      "liabilityAveragePremium": 485.07,
+      "averageExpenditure": 947.22
+    },
+    "OK": {
+      "annual": 1324,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1324.15,
+      "liabilityAveragePremium": 565.91,
+      "averageExpenditure": 1083.97
+    },
+    "OR": {
+      "annual": 1268,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1268.47,
+      "liabilityAveragePremium": 751.17,
+      "averageExpenditure": 1170.31
+    },
+    "PA": {
+      "annual": 1273,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1273.46,
+      "liabilityAveragePremium": 567.27,
+      "averageExpenditure": 1154.57
+    },
+    "RI": {
+      "annual": 1710,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1709.69,
+      "liabilityAveragePremium": 984.27,
+      "averageExpenditure": 1539.65
+    },
+    "SC": {
+      "annual": 1517,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1516.71,
+      "liabilityAveragePremium": 879.4,
+      "averageExpenditure": 1367.39
+    },
+    "SD": {
+      "annual": 1158,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1157.7,
+      "liabilityAveragePremium": 378.14,
+      "averageExpenditure": 936.84
+    },
+    "TN": {
+      "annual": 1212,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1211.72,
+      "liabilityAveragePremium": 541.98,
+      "averageExpenditure": 1049.8
+    },
+    "TX": {
+      "annual": 1727,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1726.91,
+      "liabilityAveragePremium": 797.86,
+      "averageExpenditure": 1428.94
+    },
+    "UT": {
+      "annual": 1285,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1284.6,
+      "liabilityAveragePremium": 746.43,
+      "averageExpenditure": 1168.93
+    },
+    "VT": {
+      "annual": 958,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 957.8,
+      "liabilityAveragePremium": 381.32,
+      "averageExpenditure": 893.16
+    },
+    "VA": {
+      "annual": 1238,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1238.13,
+      "liabilityAveragePremium": 626.63,
+      "averageExpenditure": 1114.46
+    },
+    "WA": {
+      "annual": 1235,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1234.68,
+      "liabilityAveragePremium": 708.06,
+      "averageExpenditure": 1152.5
+    },
+    "WV": {
+      "annual": 1227,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1227.39,
+      "liabilityAveragePremium": 523.08,
+      "averageExpenditure": 1062.98
+    },
+    "WI": {
+      "annual": 1000,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 999.99,
+      "liabilityAveragePremium": 446.8,
+      "averageExpenditure": 922.41
+    },
+    "WY": {
+      "annual": 1180,
+      "coverage": "full",
+      "sourceId": "naic-auto-db-2022-2023",
+      "combinedAveragePremium": 1180.01,
+      "liabilityAveragePremium": 389.93,
+      "averageExpenditure": 948.37
+    }
+  }
+}

@@ -1,26 +1,29 @@
 import assert from "node:assert/strict"
 import test from "node:test"
-import { DISCLAIMER, STATE_MINIMUM_COUNSEL_LABEL, STATE_MINIMUM_COUNSEL_NOTICE } from "./copy"
-import { coverageAssumption, MOLLY, STATES } from "./scenario"
+import rulesFile from "../../data/state-rules/state-rules.json"
+import evidenceFile from "../../data/state-rules/evidence.json"
+import { STATES } from "./scenario"
 import {
   CREDIT_BUCKET,
   CREDIT_FACTOR,
+  REQUIRED_UNLESS_REJECTED,
   REQUIRED_UNLESS_WRITTEN_DELETION,
   REQUIRED_UNLESS_WRITTEN_REJECTION,
   STATE_RULES,
   STATE_RULES_CHECKED_ON,
   STATE_RULES_VERSION,
   flagCell,
+  fullySourcedStateRules,
+  liabilityCell,
+  liabilityShorthand,
   sourcedStateRules,
   stateMinimumAssumption,
   stateRule,
   unsourcedStateRules,
+  validateRawRule,
 } from "./state-rules"
 
-const VERBATIM_DISCLAIMER =
-  "THIS IS NOT A QUOTE. NotAQuote.FYI is an independent educational estimate tool, not an insurance company, agency, broker, producer, or lead-generation service. Actual premiums are set by licensed insurers after underwriting and may vary materially."
-
-test("the state_rules table covers 50 states and DC", () => {
+test("the table covers 50 states and DC in the calculator's order", () => {
   assert.equal(STATE_RULES.length, 51)
   assert.deepEqual(
     STATE_RULES.map((rule) => rule.state),
@@ -29,168 +32,154 @@ test("the state_rules table covers 50 states and DC", () => {
   assert.equal(new Set(STATE_RULES.map((rule) => rule.state)).size, 51)
 })
 
-test("every row locks credit as unreviewed at 1.00 and leaves the reviewer unsigned", () => {
+test("every row has a source, a check date, and a note", () => {
+  assert.equal(sourcedStateRules().length, 51)
+  assert.equal(unsourcedStateRules().length, 0)
   for (const rule of STATE_RULES) {
-    assert.equal(rule.creditBucket, CREDIT_BUCKET)
-    assert.equal(rule.creditBucket, "unreviewed")
-    assert.equal(rule.creditFactor, CREDIT_FACTOR)
-    assert.equal(rule.creditFactor, 1)
-    assert.equal(rule.reviewer, null)
+    assert.ok(rule.sources.length > 0, rule.state)
+    assert.equal(rule.sourceUrl, rule.sources[0].url)
+    for (const source of rule.sources) {
+      assert.match(source.url, /^https:\/\//, `${rule.state} ${source.url}`)
+      assert.ok(source.label.length > 0)
+    }
+    assert.ok(rule.pagesOpened.includes(rule.sourceUrl ?? ""))
+    assert.equal(rule.checkedOn, STATE_RULES_CHECKED_ON)
+    assert.equal(rule.lastVerified, rule.checkedOn)
+    assert.ok(rule.note && rule.note.length > 40, rule.state)
   }
 })
 
-test("a row without a source URL has no dollar minimum", () => {
-  const blank = unsourcedStateRules()
-  assert.equal(blank.length, 45)
-  assert.equal(sourcedStateRules().length, 6)
-  for (const rule of blank) {
-    assert.equal(rule.sourceUrl, null)
-    assert.equal(rule.biPerPerson, null)
-    assert.equal(rule.biPerAccident, null)
-    assert.equal(rule.pd, null)
-    assert.equal(rule.pipRequired, null)
-    assert.equal(rule.noFault, null)
-    assert.equal(rule.umRequired, null)
-    assert.equal(rule.uimRequired, null)
-    assert.equal(rule.lastVerified, null)
-    assert.deepEqual(rule.pagesOpened, [])
-    const text = stateMinimumAssumption(rule.state)
-    assert.match(text, /The sourced table has no figure yet/)
-    assert.equal(text.includes("$"), false)
-    assert.equal(text.includes("Required"), false)
-  }
+test("all 51 rows have confirmed liability figures except Florida's injury limits", () => {
+  const full = fullySourcedStateRules().map((rule) => rule.state)
+  assert.equal(full.length, 50)
+  assert.deepEqual(
+    STATE_RULES.filter((rule) => !full.includes(rule.state)).map((rule) => rule.state),
+    ["FL"],
+  )
 })
 
-test("a dollar figure exists only on a row with a source URL", () => {
+test("dollar figures are positive whole numbers and per-accident is at least per-person", () => {
   for (const rule of STATE_RULES) {
-    const hasMoney =
-      rule.biPerPerson !== null || rule.biPerAccident !== null || rule.pd !== null
-    if (hasMoney) assert.ok(rule.sourceUrl)
-    if (rule.sourceUrl) {
-      assert.equal(rule.lastVerified, STATE_RULES_CHECKED_ON)
-      assert.ok(rule.pagesOpened.includes(rule.sourceUrl))
-      assert.ok(rule.note)
+    for (const amount of [rule.biPerPerson, rule.biPerAccident, rule.pd, rule.combinedSingleLimit]) {
+      if (amount !== null) assert.ok(Number.isInteger(amount) && amount > 0, rule.state)
+    }
+    if (rule.biPerPerson !== null && rule.biPerAccident !== null) {
+      assert.ok(rule.biPerAccident >= rule.biPerPerson, rule.state)
     }
   }
 })
 
-test("launch rows record the pages opened on 21 September 2026", () => {
-  const illinois = stateRule("IL")
-  const california = stateRule("CA")
-  const florida = stateRule("FL")
-  const texas = stateRule("TX")
-  const newYork = stateRule("NY")
-  const pennsylvania = stateRule("PA")
-  assert.ok(illinois && california && florida && texas && newYork && pennsylvania)
-
-  assert.equal(illinois.biPerPerson, 25000)
-  assert.equal(illinois.biPerAccident, 50000)
-  assert.equal(illinois.pd, 20000)
-  assert.equal(illinois.umRequired, true)
-  assert.equal(illinois.pipRequired, null)
-  assert.equal(
-    illinois.sourceUrl,
-    "https://www.ilga.gov/Documents/legislation/ilcs/documents/062500050K7-203.htm",
-  )
-
-  assert.equal(california.biPerPerson, 30000)
-  assert.equal(california.biPerAccident, 60000)
-  assert.equal(california.pd, 15000)
-  assert.notEqual(california.umRequired, false)
-  assert.notEqual(california.uimRequired, false)
-  assert.equal(california.umRequired, REQUIRED_UNLESS_WRITTEN_DELETION)
-  assert.equal(california.uimRequired, REQUIRED_UNLESS_WRITTEN_DELETION)
-  assert.equal(flagCell(california.umRequired), "Required unless deleted in writing")
-  assert.equal(flagCell(california.uimRequired), "Required unless deleted in writing")
-  assert.equal(
-    california.sourceUrl,
-    "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=16056.",
-  )
-
-  assert.equal(florida.biPerPerson, null)
-  assert.equal(florida.biPerAccident, null)
-  assert.equal(florida.pd, 10000)
-  assert.equal(florida.pipRequired, true)
-  assert.equal(florida.noFault, true)
-  assert.equal(florida.umRequired, null)
-
-  assert.equal(texas.biPerPerson, 30000)
-  assert.equal(texas.biPerAccident, 60000)
-  assert.equal(texas.pd, 25000)
-  assert.notEqual(texas.umRequired, false)
-  assert.notEqual(texas.uimRequired, false)
-  assert.notEqual(texas.pipRequired, false)
-  assert.equal(texas.umRequired, REQUIRED_UNLESS_WRITTEN_REJECTION)
-  assert.equal(texas.uimRequired, REQUIRED_UNLESS_WRITTEN_REJECTION)
-  assert.equal(texas.pipRequired, REQUIRED_UNLESS_WRITTEN_REJECTION)
-  assert.equal(flagCell(texas.umRequired), "Required unless rejected in writing")
-
-  assert.equal(newYork.biPerPerson, 25000)
-  assert.equal(newYork.biPerAccident, 50000)
-  assert.equal(newYork.pd, 10000)
-  assert.equal(newYork.umRequired, true)
-  assert.equal(newYork.uimRequired, false)
-  assert.equal(newYork.pipRequired, true)
-
-  assert.equal(pennsylvania.biPerPerson, 15000)
-  assert.equal(pennsylvania.biPerAccident, 30000)
-  assert.equal(pennsylvania.pd, 5000)
-  assert.equal(pennsylvania.pipRequired, true)
-  assert.equal(pennsylvania.umRequired, false)
-  assert.equal(pennsylvania.uimRequired, false)
-
-  assert.equal(STATE_RULES_VERSION, "state-rules-2026-09-21")
+test("credit stays out of it on every row", () => {
+  for (const rule of STATE_RULES) {
+    assert.equal(rule.creditBucket, CREDIT_BUCKET)
+    assert.equal(rule.creditFactor, CREDIT_FACTOR)
+    assert.equal(rule.creditFactor, 1)
+  }
 })
 
-test("the state-minimum line shows sourced dollars and hides a blank row", () => {
-  const illinois = stateMinimumAssumption("IL")
-  assert.match(illinois, /\$25,000 bodily injury per person/)
-  assert.match(illinois, /\$50,000 bodily injury per accident/)
-  assert.match(illinois, /\$20,000 property damage/)
-  assert.match(illinois, /Required uninsured motorist coverage/)
-  assert.equal(illinois.includes("Required personal injury protection"), false)
-  assert.match(illinois, /This is not coverage advice/)
+test("notes are plain words for visitors", () => {
+  for (const rule of STATE_RULES) {
+    const note = rule.note ?? ""
+    assert.equal(/for counsel|legal conclusion|reviewer|assumption/i.test(note), false, rule.state)
+  }
+})
 
-  const florida = stateMinimumAssumption("FL")
-  assert.match(florida, /\$10,000 property damage/)
-  assert.match(florida, /The sourced table has no bodily-injury figure/)
-  assert.match(florida, /Required personal injury protection/)
-  assert.equal(florida.includes("$25,000"), false)
-  assert.equal(florida.includes("$30,000"), false)
-  assert.equal(florida.includes("Required uninsured"), false)
+test("the evidence file has a quote for every row and matches the version", () => {
+  assert.equal(evidenceFile.version, STATE_RULES_VERSION)
+  const states = evidenceFile.states as Record<string, { url: string; quote: string | null }[]>
+  for (const rule of STATE_RULES) {
+    const rows = states[rule.state]
+    assert.ok(rows && rows.length === rule.sources.length, rule.state)
+    assert.ok(rows.some((row) => row.url === rule.sourceUrl && row.quote), rule.state)
+  }
+})
 
-  const ohio = stateMinimumAssumption("OH")
-  assert.match(ohio, /The sourced table has no figure yet/)
-  assert.equal(ohio.includes("$"), false)
+test("a broken row fails loudly", () => {
+  const good = rulesFile.states[0] as Parameters<typeof validateRawRule>[0]
+  assert.doesNotThrow(() => validateRawRule(good))
+  assert.throws(() => validateRawRule({ ...good, pd: -5 }), /pd/)
+  assert.throws(() => validateRawRule({ ...good, umRequired: "maybe" as never }), /umRequired/)
+  assert.throws(() => validateRawRule({ ...good, sources: [] }), /needs a source/)
+  assert.throws(
+    () => validateRawRule({ ...good, sources: [{ label: "x", url: "http://example.com" }] }),
+    /https/,
+  )
+})
 
-  const california = stateMinimumAssumption("CA")
+test("spot rows match the statutes checked on 22 September 2026", () => {
+  assert.equal(STATE_RULES_VERSION, "state-rules-2026-09-22")
+
+  const ca = stateRule("CA")
+  assert.ok(ca)
+  assert.equal(liabilityShorthand(ca), "30/60/15")
+  assert.equal(ca.umRequired, REQUIRED_UNLESS_WRITTEN_DELETION)
+  assert.equal(ca.uimRequired, REQUIRED_UNLESS_WRITTEN_DELETION)
+
+  const tx = stateRule("TX")
+  assert.ok(tx)
+  assert.equal(liabilityShorthand(tx), "30/60/25")
+  assert.equal(tx.pipRequired, REQUIRED_UNLESS_WRITTEN_REJECTION)
+  assert.equal(tx.umRequired, REQUIRED_UNLESS_WRITTEN_REJECTION)
+
+  const fl = stateRule("FL")
+  assert.ok(fl)
+  assert.equal(fl.biPerPerson, null)
+  assert.equal(fl.biPerAccident, null)
+  assert.equal(fl.pd, 10000)
+  assert.equal(fl.pipRequired, true)
+  assert.equal(fl.noFault, true)
+  assert.equal(fl.umRequired, false)
+
+  assert.equal(liabilityShorthand(stateRule("NY")!), "25/50/10")
+  assert.equal(stateRule("NY")?.umRequired, true)
+  assert.equal(liabilityShorthand(stateRule("PA")!), "15/30/5")
+  assert.equal(stateRule("PA")?.umRequired, false)
+  assert.equal(liabilityShorthand(stateRule("IL")!), "25/50/20")
+  assert.equal(liabilityShorthand(stateRule("HI")!), "40/80/20")
+  assert.equal(liabilityShorthand(stateRule("NC")!), "50/100/50")
+  assert.equal(liabilityShorthand(stateRule("VA")!), "50/100/25")
+  assert.equal(liabilityShorthand(stateRule("UT")!), "30/65/25")
+  assert.equal(stateRule("UT")?.combinedSingleLimit, 90000)
+  assert.equal(liabilityShorthand(stateRule("NJ")!), "35/70/25")
+  assert.equal(liabilityShorthand(stateRule("MA")!), "25/50/30")
+  assert.equal(stateRule("NH")?.insuranceRequired, false)
+  assert.equal(stateRule("AL")?.umRequired, REQUIRED_UNLESS_REJECTED)
+  assert.equal(stateRule("TN")?.uimRequired, null)
+})
+
+test("table cells read in plain words", () => {
+  assert.equal(flagCell(true), "Required")
+  assert.equal(flagCell(false), "Not required")
+  assert.equal(flagCell(REQUIRED_UNLESS_WRITTEN_REJECTION), "Included unless you decline in writing")
+  assert.equal(flagCell(REQUIRED_UNLESS_WRITTEN_DELETION), "Included unless you decline in writing")
+  assert.equal(flagCell(REQUIRED_UNLESS_REJECTED), "Included unless you decline")
+  assert.equal(flagCell(null), "Not confirmed yet")
+  const fl = stateRule("FL")!
+  assert.equal(liabilityCell(fl, fl.biPerPerson), "None set")
+  assert.equal(liabilityCell(fl, fl.pd), "$10,000")
+})
+
+test("the state-minimum line describes the sourced row", () => {
   assert.equal(
-    california,
-    "State minimum. Assumption: $30,000 bodily injury per person, $60,000 bodily injury per accident, $15,000 property damage. Uninsured motorist coverage is required unless a named insured deletes it in writing. Underinsured motorist coverage is required unless a named insured deletes it in writing. Checked 21 September 2026. No comprehensive or collision. This is not coverage advice.",
+    stateMinimumAssumption("CA"),
+    "State minimum: $30,000 per person and $60,000 per accident for injuries you cause, plus $15,000 for property damage. Your policy includes uninsured and underinsured motorist coverage unless you turn it down in writing. Checked 22 September 2026. This doesn't include comprehensive or collision, which pay to fix your own car.",
   )
 
   const texas = stateMinimumAssumption("TX")
-  assert.equal(
-    texas,
-    "State minimum. Assumption: $30,000 bodily injury per person, $60,000 bodily injury per accident, $25,000 property damage. Personal injury protection is required unless a named insured rejects it in writing. Uninsured motorist coverage is required unless a named insured rejects it in writing. Underinsured motorist coverage is required unless a named insured rejects it in writing. Checked 21 September 2026. No comprehensive or collision. This is not coverage advice.",
-  )
-  assert.equal(texas.includes("$2,500"), false)
+  assert.match(texas, /\$30,000 per person/)
+  assert.match(texas, /personal injury protection \(PIP\) unless you turn it down in writing/)
 
-  assert.equal(stateRule("OH")?.sourceUrl, null)
-  assert.equal(STATE_MINIMUM_COUNSEL_LABEL, "For counsel, not a legal conclusion.")
-  assert.match(STATE_MINIMUM_COUNSEL_NOTICE, /not a suggestion to buy only that amount/)
-  assert.equal(DISCLAIMER, VERBATIM_DISCLAIMER)
+  const florida = stateMinimumAssumption("FL")
+  assert.match(florida, /\$10,000 for property damage/)
+  assert.match(florida, /no general injury-liability minimum/)
+  assert.match(florida, /You also need personal injury protection/)
+  assert.equal(florida.includes("uninsured"), false)
 
-  assert.equal(
-    coverageAssumption("standard", MOLLY.state),
-    "Standard liability. Assumption: 100/300/100. No comprehensive or collision.",
-  )
-  assert.equal(
-    coverageAssumption("full", MOLLY.state),
-    "Full coverage. Assumption: 100/300/100, plus comprehensive and collision.",
-  )
-  assert.equal(
-    coverageAssumption("high", MOLLY.state),
-    "High limits. Assumption: 250/500/250, plus comprehensive and collision.",
-  )
+  const illinois = stateMinimumAssumption("IL")
+  assert.match(illinois, /You also need uninsured motorist coverage\./)
+  assert.equal(illinois.includes("underinsured"), false)
+
+  assert.match(stateMinimumAssumption("NH"), /aren't required to buy insurance/)
+  assert.match(stateMinimumAssumption("ZZ"), /haven't confirmed/)
+  assert.equal(stateMinimumAssumption("ZZ").includes("$"), false)
 })
