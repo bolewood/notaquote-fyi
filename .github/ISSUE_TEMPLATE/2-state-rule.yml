@@ -1,0 +1,54 @@
+name: A state rule is missing or wrong
+description: A state's minimum liability limits or required coverages are missing, wrong, or out of date.
+title: "State rule: "
+labels: ["data", "state-rules"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping fill in the state table. The best sources are the state's own insurance department page or the statute itself.
+
+        **This issue is public.** Please don't include your own premium, your VIN, a policy number, your name, or your address.
+  - type: input
+    id: state
+    attributes:
+      label: Which state?
+      placeholder: "e.g. Ohio"
+    validations:
+      required: true
+  - type: input
+    id: rule
+    attributes:
+      label: Which rule?
+      placeholder: "e.g. minimum liability limits, or whether uninsured motorist coverage is required"
+    validations:
+      required: true
+  - type: input
+    id: shown
+    attributes:
+      label: What the site says
+      description: Leave blank if the site doesn't show anything yet.
+      placeholder: "e.g. 25/50/25, or nothing listed"
+  - type: input
+    id: suggested
+    attributes:
+      label: What it should be
+      placeholder: "e.g. 25/50/25"
+  - type: input
+    id: source_url
+    attributes:
+      label: Source link
+      description: The state insurance department page or the statute that says this.
+      placeholder: "https://"
+    validations:
+      required: true
+  - type: input
+    id: source_checked
+    attributes:
+      label: When did you check the source?
+      placeholder: "e.g. 2026-09-21"
+  - type: textarea
+    id: details
+    attributes:
+      label: Anything else?
+      description: Effective dates, recent law changes, or the section number to look at.

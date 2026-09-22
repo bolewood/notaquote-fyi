@@ -27,7 +27,7 @@ export function SiteFooter() {
             href="/corrections"
             className="focus-visible:ring-ring rounded-sm focus-visible:ring-3"
           >
-            Corrections
+            Spot something wrong? Tell us
           </Link>
         </nav>
         <p>{PUBLISHER}</p>
