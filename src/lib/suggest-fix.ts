@@ -159,10 +159,17 @@ export function cleanSourceUrl(value: unknown): string | null {
   const href = url.toString()
   // Long digit runs are normal in URLs, so skip the phone check here.
   const normalized = href.normalize("NFKC")
-  if (DOLLAR_AMOUNT.test(normalized) || containsVinLike(href) || EMAIL_LIKE.test(normalized)) {
+  if (DOLLAR_AMOUNT.test(normalized) || containsVinLike(url.search) || pathHasVin(url.pathname) || EMAIL_LIKE.test(normalized)) {
     return null
   }
   return href.length > FIELD_MAX ? null : href
+}
+
+// Check each path segment on its own so IDs like UUIDs (which have dashes) stay.
+function pathHasVin(pathname: string): boolean {
+  return pathname
+    .split(/[/.]/)
+    .some((segment) => /^[A-HJ-NPR-Z0-9]{17}$/i.test(segment) && (segment.match(/\d/g) ?? []).length >= 3)
 }
 
 function cleanField(id: string, value: unknown): string | null {

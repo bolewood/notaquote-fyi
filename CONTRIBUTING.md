@@ -12,7 +12,7 @@ Please read the [Code of Conduct](CODE_OF_CONDUCT.md) first. The short version: 
 
 ## Get it running (about 5 minutes)
 
-You'll need [Node.js](https://nodejs.org/) 20.9 or newer (CI checks both 20.9 and 24) and npm, which comes with Node.
+You'll need [Node.js](https://nodejs.org/) 20.19 or newer (CI checks both 20.19 and 24) and npm, which comes with Node.
 
 ```bash
 git clone https://github.com/bolewood/notaquote-fyi.git

@@ -214,3 +214,9 @@ test("empty and whitespace-only values are left out", () => {
   const url = suggestFixUrl({ kind: "state-rule", title: "   ", fields: { state: "", rule: " \n " } })
   assert.deepEqual([...params(url).keys()], ["template"])
 })
+
+test("a source link path with a long ID is kept; a VIN in the query string is not", () => {
+  const uuid = "https://example.gov/files/3f2504e0-4f89-11d3-9a0c-0305e82c3301.pdf"
+  assert.equal(cleanSourceUrl(uuid), uuid)
+  assert.equal(cleanSourceUrl("https://example.gov/lookup?vin=1HGBH41JXMN109186"), null)
+})

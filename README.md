@@ -22,7 +22,7 @@ It is not an insurance company, agent, or broker, and it doesn't sell anything o
 
 ## Quickstart
 
-You'll need [Node.js](https://nodejs.org/) 20.9 or newer.
+You'll need [Node.js](https://nodejs.org/) 20.19 or newer (22+ recommended).
 
 ```bash
 git clone https://github.com/bolewood/notaquote-fyi.git
@@ -43,7 +43,7 @@ The idea is simple, and the goal is that every piece of it can be checked:
 2. **Factors.** Each thing that changes the price, like the driver's age, the car, the deductible (the part of a claim you pay yourself), or the coverage level, is a multiplier. Each multiplier should cite a public source and the date it was checked.
 3. **A range, not a price.** Where we're less sure, the range gets wider. Real quotes can land above or below it.
 
-Every dollar figure is meant to come from one set of math, with a version number so you can tell when it changes, running in your browser. We're partway through that switch; the [roadmap](docs/ROADMAP.md) has the details. The site's methodology and sources pages show the factors, where they came from, and which version of the data you're looking at.
+Every dollar figure should come from one set of math that runs in your browser and has a version number, so you can tell when it changes. We're partway through that switch; the [roadmap](docs/ROADMAP.md) has the details. The site's methodology and sources pages show the factors, where they came from, and which version of the data you're looking at.
 
 ## What's where
 

@@ -21,8 +21,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # 20.9 is the oldest Node that Next.js 16 supports; 24 is the current LTS.
-        node: ["20.9", "24"]
+        # 20.19 is the oldest Node every dependency supports; 24 is the current LTS.
+        node: ["20.19", "24"]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7

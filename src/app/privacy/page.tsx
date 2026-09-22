@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 import { CountLedgerPanel } from "@/components/count-ledger"
 import { TrustArticle } from "@/components/trust-article"
 import { PUBLISHER } from "@/lib/copy"
@@ -67,8 +68,9 @@ export default function PrivacyPage() {
         fingerprint. Pages send a noindex, nofollow request to crawlers.
       </p>
       <p>
-        To report a problem, the Help make this better page sends you to a
-        form on GitHub. Nothing is sent from this site. You see the whole
+        To report a problem, the{" "}
+        <Link href="/corrections">Help make this better</Link> page sends you
+        to a form on GitHub. Nothing is sent from this site. You see the whole
         report and decide whether to post it. Reports are public, so leave out
         your premium, your VIN, and anything about you.
       </p>
