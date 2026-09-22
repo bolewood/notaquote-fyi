@@ -1,45 +1,48 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 import { RecordTrustView } from "@/components/record-trust-view"
 import { TrustArticle } from "@/components/trust-article"
-import {
-  DISCLAIMER,
-  PUBLISHER,
-  STATE_MINIMUM_COUNSEL_LABEL,
-  STATE_MINIMUM_COUNSEL_NOTICE,
-} from "@/lib/copy"
+import { DISCLAIMER, PUBLISHER } from "@/lib/copy"
 
 export const metadata: Metadata = {
-  title: "Disclaimer",
+  title: "Not a quote",
 }
 
 export default function DisclaimerPage() {
   return (
-    <TrustArticle title="Disclaimer" closingDisclaimer={false}>
+    <TrustArticle title="This is not a quote" closingDisclaimer={false}>
       <RecordTrustView />
       <p className="text-base leading-7">{DISCLAIMER}</p>
+      <h2 className="text-base font-semibold">What the numbers are</h2>
       <p>
-        With no current premium entered, the dollars are a labeled sample. The
-        baseline is not cleared. When a current annual premium is entered, the
-        factor engine uses that amount as the base for that scenario only. Those
-        figures are still a planning range. They are not a premium from an
-        insurer, and they are not an offer of coverage.
+        Every dollar figure on this site is a ballpark worked out from public data: a typical price for your state (or what
+        you tell us you pay now), adjusted for the driver, the car, the coverage, and where the car is kept. Real quotes can
+        land well above or below it, because every insurance company prices things its own way, and they use things we
+        don&apos;t ask about, like your credit and your exact address.{" "}
+        <Link href="/methodology" className="link">
+          Here&apos;s how we got the numbers
+        </Link>
+        .
       </p>
+      <h2 className="text-base font-semibold">What coverage means here</h2>
       <p>
-        Package names on the calculator are assumptions with the limits written
-        next to them. A state-minimum dollar amount is shown only when that
-        state’s row has a source URL. A row with no source URL says the sourced
-        table has no figure yet. Standard liability stays 100/300/100. Full
-        coverage stays 100/300/100 plus comprehensive and collision. High limits
-        stay 250/500/250 plus comprehensive and collision.
+        &ldquo;State minimum&rdquo; uses the liability limits in your state&apos;s law, as we found them on the date shown on
+        the{" "}
+        <Link href="/sources" className="link">
+          Sources
+        </Link>{" "}
+        page. It&apos;s the least a policy can have there, not a suggestion. &ldquo;Liability only&rdquo; means 100/300/100
+        limits. &ldquo;Full coverage&rdquo; adds collision and comprehensive, which pay to fix your own car. We don&apos;t push
+        anyone toward more or less coverage; that&apos;s your call.
       </p>
+      <h2 className="text-base font-semibold">Who we are</h2>
       <p>
-        <span className="font-medium">{STATE_MINIMUM_COUNSEL_LABEL}</span>{" "}
-        {STATE_MINIMUM_COUNSEL_NOTICE}
-      </p>
-      <p>
-        {PUBLISHER} publishes this educational tool. This page does not provide a
-        street address, a phone number, or an email address. Counsel has not
-        signed this wording for a public launch.
+        {PUBLISHER} publishes NotAQuote.FYI as a free, open-source tool. We&apos;re not an insurance company, agent, or
+        broker, we don&apos;t sell leads, and we never pass your info to anyone. Spot something wrong?{" "}
+        <Link href="/corrections" className="link">
+          Tell us
+        </Link>
+        .
       </p>
     </TrustArticle>
   )

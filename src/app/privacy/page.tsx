@@ -11,75 +11,70 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
   return (
     <TrustArticle title="Privacy">
-      <p>
-        {PUBLISHER} publishes NotAQuote.FYI. This version does not collect a
-        name, email address, phone number, date of birth, driver license number,
-        street address, ZIP code, policy number, or carrier name. There is no
-        field for those items.
+      <p className="text-base leading-7">
+        The short version: everything you type stays in your browser. There&apos;s no account, no sign-up, and nothing to
+        sell. {PUBLISHER} publishes this site and never sees your answers.
       </p>
+
+      <h2 className="text-base font-semibold">What we don&apos;t ask for</h2>
       <p>
-        The labeled sample and the factor engine both run in the browser.
-        Changing a control does not send the scenario to a server. The vehicle
-        catalog, the factor bundle, and the source manifest are static files on
-        this site. Choosing a year, make, model, or trim does not create a
-        profile on a server.
+        No name, email, phone number, birthday, address, ZIP code, driver&apos;s license, policy number, or insurance
+        company. Location is just a state and whether the car is kept in a city, the suburbs, or the country.
       </p>
+
+      <h2 className="text-base font-semibold">Where the math happens</h2>
       <p>
-        An optional VIN can be decoded. This browser sends that VIN to the NHTSA
-        vPIC decode service and then clears the field. The VIN is not written to
-        storage on this site, a cookie, or a log this site keeps. Reloading the
-        page clears it. A decode that does not resolve leaves the year, make,
-        model, and trim controls as they were.
+        On your device. The list of cars, the factors, and the sources are ordinary files this site sends to your browser,
+        the same for everyone. Changing a choice doesn&apos;t send anything anywhere.
       </p>
+
+      <h2 className="text-base font-semibold">The one exception: a VIN lookup, only if you use it</h2>
       <p>
-        The optional current annual premium is an anchor for the open scenario.
-        Leaving it empty keeps the labeled sample. Choosing Molly, Jayden, or
-        Ava clears the open field. Reloading a page that is not a share link
-        clears the open field. This page does not send the amount to a server.
-        The count tally does not record that amount.
+        If you type a VIN (the 17-character vehicle ID), your browser sends it straight to NHTSA&apos;s free vehicle decoder
+        to find the car. It doesn&apos;t pass through us, and we don&apos;t keep it: the field clears afterward and the VIN
+        isn&apos;t saved anywhere.
       </p>
+
+      <h2 className="text-base font-semibold">What stays on your device</h2>
       <p>
-        Saving a comparison writes that scenario to local storage on this
-        browser. There is no account and no copy on a server. Refreshing the
-        page keeps those saved scenarios. If the saved scenario includes the
-        optional premium, that amount stays in local storage on this browser
-        only. Removing the scenario, or clearing this site’s data in the
-        browser, removes it.
+        So the pages remember your choices, this browser keeps them in its local storage: your situation on the What-if
+        page (including what you pay now, if you entered it), and your list of cars on the Compare page. They never leave
+        your device. To remove them, clear this site&apos;s data in your browser settings.
       </p>
+
+      <h2 className="text-base font-semibold">Share links</h2>
       <p>
-        A share link puts the scenario inputs and the model and data-bundle
-        versions in the address. It does not put a finished low, likely, or
-        high figure in the address. Opening the link recalculates on this page
-        and shows the disclaimer. If the model version in the link is not the
-        model on this page, the page says so. The optional premium is added to
-        the link only as the amount entered, and the page still calls that
-        amount the visitor’s anchor, not a cleared baseline. Copying the link
-        does not send the link. The count tally records that a copy happened,
-        and it does not record the address or any amount in it.
+        A share link puts your choices in the web address, so whoever opens it sees the same thing. It never includes
+        prices: the numbers are worked out fresh when the link is opened. On the What-if page, what you pay now goes into the
+        link only if you tick &ldquo;Include what I pay now&rdquo;. Compare links never include it. Share a link the way
+        you&apos;d share any personal note. Copying a link doesn&apos;t send it anywhere.
       </p>
+
+      <h2 className="text-base font-semibold">Printing and spreadsheets</h2>
       <p>
-        Printing uses the browser’s own print dialog. The worksheet is part of
-        this page. Nothing is uploaded.
+        Printing uses your browser&apos;s own print window. The spreadsheet download is made on your device from the table
+        you see. Nothing is uploaded.
       </p>
+
+      <h2 className="text-base font-semibold">No tracking</h2>
       <p>
-        There is no account, no document upload, and no visitor database. Product
-        counts stay in this browser. This version does not set a cookie for
-        them. There is no advertising pixel, no session replay, and no
-        fingerprint. Pages send a noindex, nofollow request to crawlers.
+        No cookies, ad trackers, analytics scripts, or session recording. The only counts are the simple tallies below,
+        kept in this browser and never sent. Each one records that something happened (like &ldquo;a share link was
+        copied&rdquo;), never what you chose or any amount.
       </p>
+
+      <h2 className="text-base font-semibold">Telling us about a problem</h2>
       <p>
-        To report a problem, the{" "}
-        <Link href="/corrections">Help make this better</Link> page sends you
-        to a form on GitHub. Nothing is sent from this site. You see the whole
-        report and decide whether to post it. Reports are public, so leave out
-        your premium, your VIN, and anything about you.
+        The{" "}
+        <Link href="/corrections" className="link">
+          Spot something wrong?
+        </Link>{" "}
+        links open a form on GitHub, filled in with the site&apos;s own labels, like the car&apos;s name. You see the whole
+        thing and decide whether to post it. Reports are public, so leave out what you pay, your VIN, and anything about
+        you.
       </p>
+
       <CountLedgerPanel />
-      <p>
-        Location is a state and a region class: urban, suburban, or rural.
-        Springfield appears only as the label for Molly’s Illinois urban
-        stand-in. It is not a city field.
-      </p>
     </TrustArticle>
   )
 }

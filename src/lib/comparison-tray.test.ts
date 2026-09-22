@@ -1,13 +1,19 @@
 import assert from "node:assert/strict"
 import test from "node:test"
+import { carKey } from "./car-search"
 import {
-  COMPARISON_STORAGE_KEY,
-  readComparisons,
-  rememberComparison,
-  writeComparisons,
-  type SavedComparison,
+  addCars,
+  clearCars,
+  COMPARE_LIMIT,
+  COMPARE_STORAGE_KEY,
+  compareSnapshot,
+  DEFAULT_COMPARE,
+  readCompare,
+  removeCar,
+  replaceCar,
+  toggleStar,
+  writeCompare,
 } from "./comparison-tray"
-import { JAYDEN, MOLLY } from "./scenario"
 
 function memoryStorage() {
   const data = new Map<string, string>()
@@ -22,88 +28,73 @@ function memoryStorage() {
   }
 }
 
-test("saving Molly and then Jayden keeps both after a new read", () => {
-  const storage = memoryStorage()
-  let items: SavedComparison[] = []
-  items = rememberComparison(items, {
-    scenario: MOLLY,
-    anchorAmount: null,
-    id: "molly-1",
-    now: "2026-09-21T12:00:00.000Z",
-  })
-  items = rememberComparison(items, {
-    scenario: JAYDEN,
-    anchorAmount: 1800,
-    id: "jayden-1",
-    now: "2026-09-21T12:01:00.000Z",
-  })
-  writeComparisons(storage, items)
+const CIVIC = { year: 2022, make: "Honda", model: "Civic", trim: "Civic 4Dr" }
+const COROLLA = { year: 2022, make: "Toyota", model: "Corolla", trim: "Corolla" }
 
-  const again = readComparisons(storage)
-  assert.equal(again.length, 2)
-  assert.equal(again[0].label, "Jayden")
-  assert.equal(again[0].anchorAmount, 1800)
-  assert.deepEqual(again[0].scenario, JAYDEN)
-  assert.equal(again[1].label, "Molly")
-  assert.equal(again[1].anchorAmount, null)
-  assert.deepEqual(again[1].scenario, MOLLY)
-
-  const stored = storage.data.get(COMPARISON_STORAGE_KEY) ?? ""
-  assert.equal(stored.includes("\"low\""), false)
-  assert.equal(stored.includes("\"likely\""), false)
-  assert.equal(stored.includes("\"high\""), false)
-  assert.equal(stored.includes("\"monthly\""), false)
-  assert.match(stored, /"anchorAmount":1800/)
-  assert.doesNotMatch(stored, /\$1,800|1620|2530/)
+test("the default list is a new teen driver on a parent's policy, with no cars", () => {
+  assert.equal(DEFAULT_COMPARE.driver.age, "16-18")
+  assert.equal(DEFAULT_COMPARE.teenOnParentPolicy, true)
+  assert.equal(DEFAULT_COMPARE.cars.length, 0)
 })
 
-test("a repeated save replaces the same scenario and an empty premium is not a zero anchor", () => {
-  let items = rememberComparison([], {
-    scenario: MOLLY,
-    anchorAmount: null,
-    id: "first",
-    now: "2026-09-21T12:00:00.000Z",
-  })
-  items = rememberComparison(items, {
-    scenario: MOLLY,
-    anchorAmount: null,
-    id: "second",
-    now: "2026-09-21T12:05:00.000Z",
-  })
-  assert.equal(items.length, 1)
-  assert.equal(items[0].id, "second")
-
-  const zero = rememberComparison([], {
-    scenario: MOLLY,
-    anchorAmount: 0,
-    id: "zero",
-  })
-  assert.equal(zero[0].anchorAmount, null)
-})
-
-test("a stored dollar field is dropped on read", () => {
-  const storage = memoryStorage()
-  storage.setItem(
-    COMPARISON_STORAGE_KEY,
-    JSON.stringify({
-      version: 1,
-      items: [
-        {
-          id: "molly-1",
-          label: "Molly",
-          savedAt: "2026-09-21T12:00:00.000Z",
-          scenario: MOLLY,
-          anchorAmount: null,
-          low: 1620,
-          likely: 2530,
-          high: 3850,
-        },
-      ],
-    }),
+test("adding skips duplicates and stops at 15", () => {
+  let result = addCars(DEFAULT_COMPARE, [CIVIC, COROLLA, CIVIC])
+  assert.equal(result.added, 2)
+  assert.equal(result.skipped, "duplicate")
+  assert.deepEqual(
+    result.list.cars.map((car) => car.model),
+    ["Civic", "Corolla"],
   )
-  const items = readComparisons(storage)
-  assert.equal(items.length, 1)
-  assert.equal("low" in items[0], false)
-  assert.equal("likely" in items[0], false)
-  assert.equal(items[0].anchorAmount, null)
+
+  const many = Array.from({ length: 20 }, (_, index) => ({ ...CIVIC, trim: `Civic ${index}` }))
+  result = addCars(DEFAULT_COMPARE, many)
+  assert.equal(result.list.cars.length, COMPARE_LIMIT)
+  assert.equal(result.added, COMPARE_LIMIT)
+  assert.equal(result.skipped, "full")
+})
+
+test("stars, removing, replacing, and clearing", () => {
+  let list = addCars(DEFAULT_COMPARE, [CIVIC, COROLLA]).list
+  list = toggleStar(list, carKey(CIVIC))
+  assert.equal(list.cars[0].starred, true)
+  list = replaceCar(list, carKey(CIVIC), { ...CIVIC, year: 2020 })
+  assert.equal(list.cars[0].year, 2020)
+  assert.equal(list.cars[0].starred, true, "a replaced car keeps its star")
+  assert.equal(clearCars(list, true).cars.length, 1)
+  assert.equal(clearCars(list).cars.length, 0)
+  list = removeCar(list, carKey(COROLLA))
+  assert.deepEqual(
+    list.cars.map((car) => car.model),
+    ["Civic"],
+  )
+})
+
+test("the list survives a reload, and only known fields are stored", () => {
+  const storage = memoryStorage()
+  const list = toggleStar(addCars(DEFAULT_COMPARE, [CIVIC, COROLLA]).list, carKey(COROLLA))
+  writeCompare(storage, list)
+  const again = readCompare(storage)
+  assert.deepEqual(again, list)
+
+  const raw = storage.data.get(COMPARE_STORAGE_KEY) ?? ""
+  for (const word of ['"likely"', '"low"', '"high"', '"monthly"', '"premium"', '"anchor"']) {
+    assert.equal(raw.includes(word), false, word)
+  }
+})
+
+test("a stored price or stray field is dropped on read, and junk reads as nothing", () => {
+  const storage = memoryStorage()
+  const snapshot = JSON.parse(compareSnapshot(addCars(DEFAULT_COMPARE, [CIVIC]).list))
+  snapshot.list.cars[0].likely = 2500
+  snapshot.list.premium = 1800
+  storage.setItem(COMPARE_STORAGE_KEY, JSON.stringify(snapshot))
+  const read = readCompare(storage)
+  assert.ok(read)
+  assert.equal("likely" in (read?.cars[0] ?? {}), false)
+  assert.equal("premium" in (read ?? {}), false)
+
+  storage.setItem(COMPARE_STORAGE_KEY, "{not json")
+  assert.equal(readCompare(storage), null)
+  storage.setItem(COMPARE_STORAGE_KEY, JSON.stringify({ version: 9, list: {} }))
+  assert.equal(readCompare(storage), null)
 })

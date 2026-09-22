@@ -12,14 +12,10 @@ export const MANIFEST_VERSION = sourceManifest.version
 
 export { CATALOG_VERSION }
 
+/** The one "not a quote" message. Show it once per page, in one place. */
 export const DISCLAIMER =
-  "THIS IS NOT A QUOTE. NotAQuote.FYI is an independent educational estimate tool, not an insurance company, agency, broker, producer, or lead-generation service. Actual premiums are set by licensed insurers after underwriting and may vary materially."
+  "This is an estimate to help you plan, not a quote. We don't sell insurance, and we never pass your info to anyone. Only an insurer can give you a real price."
 
-export const SAMPLE_RANGE_HEADING = "Sample range. Baseline not cleared."
-
-export const ENGINE_RANGE_HEADING = "Planning range. Baseline not cleared."
-
-export const STATE_MINIMUM_COUNSEL_LABEL = "For counsel, not a legal conclusion."
-
-export const STATE_MINIMUM_COUNSEL_NOTICE =
-  "Some states may require specific wording beside a summary of minimum coverage. This draft is that wording. A figure next to State minimum is only an amount named in that state’s sourced row on the date checked. It is not a suggestion to buy only that amount, not a complete list of what a policy must contain, and not a statement that the amount is enough. Where the sourced table has no figure yet, this page leaves the amount blank. A licensed insurer sets the premium after underwriting."
+/** Said once, near the premium field. */
+export const PREMIUM_HINT =
+  "If you know it, we'll start from your real number. It stays on your device."

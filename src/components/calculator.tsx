@@ -1,753 +1,843 @@
 "use client"
 
-import { ComparisonList, ComparisonSheet, useComparisonTray } from "@/components/comparison-tray"
-import { PersonaMark } from "@/components/persona-mark"
-import { PrintWorksheet } from "@/components/print-worksheet"
-import { RangePanel } from "@/components/range-panel"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { CarPicker } from "@/components/car-picker"
+import { DisclaimerText } from "@/components/disclaimer-text"
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import {
-  STATE_MINIMUM_COUNSEL_LABEL,
-  STATE_MINIMUM_COUNSEL_NOTICE,
-} from "@/lib/copy"
-import { matchingPersona, rememberComparison, type SavedComparison } from "@/lib/comparison-tray"
-import { factorSnapshot, runFactorEngine, type PremiumAnchor } from "@/lib/factor-engine"
-import { buildSampleRange, parseAnnualPremium } from "@/lib/sample-range"
-import {
-  decodeShareSearch,
-  encodeSharePath,
-  SHARE_INVALID_NOTE,
-  shareArrivalNotes,
-  type ShareLinkOk,
-} from "@/lib/share-link"
-import {
-  formatVerifiedDate,
-  stateRule,
-} from "@/lib/state-rules"
-import { VehicleFieldset } from "@/components/vehicle-fieldset"
-import {
-  isCatalogStale,
-  trimRecord,
-  type TrimConfidence,
-} from "@/lib/catalog"
-import {
-  AGE_BANDS,
-  COVERAGE_PACKAGES,
-  coverageAssumption,
-  DEDUCTIBLES,
-  INCIDENTS,
-  isAgeBand,
-  isCoverageId,
-  isDeductible,
-  isIncidents,
-  isMileageBand,
-  isRegion,
-  isStateCode,
-  isYearsLicensed,
-  MILEAGE_BANDS,
-  PERSONA_DETAILS,
-  PRESETS,
-  REGIONS,
-  STATES,
-  YEARS_LICENSED,
-  hasPhysicalDamage,
-  stateName,
-  type PersonaId,
-  type Scenario,
-  type StateCode,
-} from "@/lib/scenario"
+  AgeField,
+  CoverageField,
+  DeductibleField,
+  DiscountFields,
+  MileageField,
+  PolicyField,
+  RecordField,
+  RegionField,
+  StateField,
+  YearsField,
+} from "@/components/driver-fields"
+import { HowWeGotThis, VehicleFixLink } from "@/components/how-we-got-this"
+import { DeltaBadge, formatDollars, RangeBar, rangeWords } from "@/components/money"
+import { ShareBox } from "@/components/share-box"
+import { carName, modelTrims, resolveCar, WHAT_IF_CARS } from "@/lib/car-search"
+import { vehicleFacts } from "@/lib/catalog-class"
+import { catalogYears, trimRecord, type VehiclePick } from "@/lib/catalog"
+import { DATA_BUNDLE_VERSION, MODEL_VERSION, PREMIUM_HINT } from "@/lib/copy"
 import { recordCount, recordMountedCount } from "@/lib/counts"
+import type { Estimate, StartKind } from "@/lib/factor-engine"
+import {
+  changeChip,
+  changedKeys,
+  priceNow,
+  priceWhatIf,
+  sameVehicle,
+  startingPoint,
+  startLine,
+  vehicleMatchWords,
+  type ChangeKey,
+} from "@/lib/pricing"
+import {
+  situationSentence,
+  STARTERS,
+  shortVehicleLabel,
+  withTeenFlag,
+  type Scenario,
+  type Starter,
+  type StarterTab,
+} from "@/lib/scenario"
+import { decodeShareSearch, encodeSharePath, SHARE_INVALID_NOTE, shareArrivalNotes } from "@/lib/share-link"
+import { DEFAULT_SITUATION, parsePremium, PREMIUM_PERIODS, type PremiumPeriod, type Situation } from "@/lib/situation"
 import { useCatalog } from "@/lib/use-catalog"
-import { runVinLookup, selectionAfterVin } from "@/lib/vin-lookup"
+import { useSituation } from "@/lib/use-stored"
 import { cn } from "cn"
-import { useEffect, useState } from "react"
+import { ArrowRight, Car, ChevronDown, MapPin, Printer, RotateCcw, Shield, Sparkles, UserPlus, X } from "lucide-react"
+import Link from "next/link"
+import { useEffect, useMemo, useRef, useState } from "react"
 
-const PERSONA_ORDER: PersonaId[] = ["molly", "jayden", "ava"]
+type Tab = StarterTab | "more"
+
+const TABS: { id: Tab; label: string; icon: typeof Car }[] = [
+  { id: "car", label: "Car", icon: Car },
+  { id: "driver", label: "Driver", icon: UserPlus },
+  { id: "move", label: "Moving", icon: MapPin },
+  { id: "coverage", label: "Coverage", icon: Shield },
+  { id: "more", label: "Miles and record", icon: Sparkles },
+]
 
 function readInitial(search: string) {
   const decoded = decodeShareSearch(search)
   if (decoded.status === "ok") {
-    return {
-      persona: matchingPersona(decoded.scenario),
+    const situation: Situation = {
       scenario: decoded.scenario,
-      premiumText: decoded.anchorAmount === null ? "" : String(decoded.anchorAmount),
-      anchor:
-        decoded.anchorAmount === null
-          ? null
-          : { amount: decoded.anchorAmount, snapshot: factorSnapshot(decoded.scenario) },
-      arrival: decoded,
-      arrivalInvalid: false,
+      teenOnParentPolicy: decoded.teenOnParentPolicy,
+      premium: decoded.anchorAmount,
+    }
+    return {
+      situation,
+      next: decoded.next,
+      notes: shareArrivalNotes(decoded),
     }
   }
   return {
-    persona: "molly" as PersonaId | null,
-    scenario: PRESETS.molly,
-    premiumText: "",
-    anchor: null as PremiumAnchor | null,
-    arrival: null as ShareLinkOk | null,
-    arrivalInvalid: decoded.status === "invalid",
+    situation: null as Situation | null,
+    next: null as Scenario | null,
+    notes: decoded.status === "invalid" ? [SHARE_INVALID_NOTE] : [],
   }
 }
 
+/** Only the inputs that differ from now, so a what-if follows later changes to "now". */
+function diffFrom(now: Scenario, next: Scenario): Partial<Scenario> {
+  const changes: Partial<Scenario> = {}
+  if (!sameVehicle(now, next)) Object.assign(changes, { year: next.year, make: next.make, model: next.model, trim: next.trim })
+  for (const key of changedKeys(now, next)) {
+    if (key !== "vehicle") Object.assign(changes, { [key]: next[key] })
+  }
+  return changes
+}
+
 export function Calculator({ initialSearch = "" }: { initialSearch?: string }) {
-  const initial = readInitial(initialSearch)
-  const [persona, setPersona] = useState<PersonaId | null>(initial.persona)
-  const [scenario, setScenario] = useState<Scenario>(initial.scenario)
-  const [premiumText, setPremiumText] = useState(initial.premiumText)
-  const [premiumError, setPremiumError] = useState<string | null>(null)
-  const [anchor, setAnchor] = useState<PremiumAnchor | null>(initial.anchor)
-  const [filter, setFilter] = useState("")
-  const [vinText, setVinText] = useState("")
-  const [vinMessage, setVinMessage] = useState<string | null>(null)
-  const [vinPending, setVinPending] = useState(false)
-  const [confidenceOverride, setConfidenceOverride] = useState<TrimConfidence | null>(null)
-  const tray = useComparisonTray()
-  const [sheetOpen, setSheetOpen] = useState(false)
-  const [shareUrl, setShareUrl] = useState<string | null>(null)
-  const [shareStatus, setShareStatus] = useState<string | null>(null)
-  const [shareIncludedAnchor, setShareIncludedAnchor] = useState(false)
-  const arrival = initial.arrival
-  const arrivalInvalid = initial.arrivalInvalid
+  const [initial] = useState(() => readInitial(initialSearch))
+  const stored = useSituation()
   const catalogLoad = useCatalog()
+  const catalog = catalogLoad.catalog
+
+  // A shared link shows the sender's situation until the visitor changes something.
+  const [linked, setLinked] = useState<Situation | null>(initial.situation)
+  const situation = linked ?? stored.value ?? DEFAULT_SITUATION
+  const now = situation.scenario
+  const [changes, setChanges] = useState<Partial<Scenario>>(() =>
+    initial.situation && initial.next ? diffFrom(initial.situation.scenario, initial.next) : {},
+  )
+  const next = useMemo(() => withTeenFlag({ ...now, ...changes }), [now, changes])
+  const changed = changedKeys(now, next)
+  const [tab, setTab] = useState<Tab>("car")
+  const [notes, setNotes] = useState(initial.notes)
+  const [picker, setPicker] = useState<null | "now" | "next">(null)
+  const [premiumDraft, setPremiumDraft] = useState<string | null>(null)
+  const [period, setPeriod] = useState<PremiumPeriod>("year")
+  const whatIfRef = useRef<HTMLElement>(null)
+  const resultRef = useRef<HTMLDivElement>(null)
+
+  /** After a quick pick, bring the answer into view if it's off screen (it often is on a phone). */
+  function showResult() {
+    requestAnimationFrame(() => resultRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }))
+  }
 
   useEffect(() => {
     recordMountedCount("calculator_session")
     const onPrint = () => {
-      recordCount("worksheet_print")
+      recordCount("print")
     }
     window.addEventListener("beforeprint", onPrint)
     return () => window.removeEventListener("beforeprint", onPrint)
   }, [])
 
-  const sample = buildSampleRange(scenario, null)
-  const catalogTrim = catalogLoad.catalog ? trimRecord(catalogLoad.catalog, scenario) : null
-  const trimConfidence = confidenceOverride ?? catalogTrim?.confidence ?? null
-  const stale = catalogLoad.catalog
-    ? isCatalogStale(catalogLoad.catalog, new Date())
-    : false
-  const engine = runFactorEngine({
-    scenario,
-    anchor,
-    trimConfidence,
-    catalogStatus: catalogLoad.status,
-    stale,
-  })
+  const nowFacts = useMemo(() => vehicleFacts(catalog, now), [catalog, now])
+  const nextFacts = useMemo(() => vehicleFacts(catalog, next), [catalog, next])
+  const nowConfidence = catalog ? (trimRecord(catalog, now)?.confidence ?? null) : null
+  const nextConfidence = catalog ? (trimRecord(catalog, next)?.confidence ?? null) : null
+  const nowEstimate = priceNow(situation, nowFacts, nowConfidence)
+  const result = changed.length > 0 ? priceWhatIf(situation, nowFacts, next, nextFacts, nextConfidence) : null
+  const startKind: StartKind = situation.premium !== null ? "yours" : "typical"
+  const start = startingPoint(situation, nowFacts)
+  const startNote = start ? startLine(start) : undefined
 
-  function clearShareDraft() {
-    setShareUrl(null)
-    setShareStatus(null)
-    setShareIncludedAnchor(false)
+  function saveSituation(nextSituation: Situation) {
+    stored.write({ ...nextSituation, scenario: withTeenFlag(nextSituation.scenario) })
+    setLinked(null)
   }
 
-  function applyPersona(next: PersonaId) {
-    recordCount("persona_click")
-    setPersona(next)
-    setScenario(PRESETS[next])
-    setPremiumText("")
-    setPremiumError(null)
-    setAnchor(null)
-    setFilter("")
-    setVinText("")
-    setVinMessage(null)
-    setConfidenceOverride(null)
-    clearShareDraft()
-  }
-
-  function patch(partial: Partial<Scenario>) {
-    const changed = (Object.keys(partial) as (keyof Scenario)[]).some(
-      (key) => scenario[key] !== partial[key],
-    )
-    if (!changed) return
+  function patchNow(partial: Partial<Scenario>) {
     recordCount("adjustment")
-    setPersona(null)
-    setScenario((current) => ({ ...current, ...partial }))
-    clearShareDraft()
+    saveSituation({ ...situation, scenario: { ...now, ...partial } })
   }
 
-  async function decodeVin() {
-    const submitted = vinText
-    setVinPending(true)
-    try {
-      const result = await runVinLookup(submitted, {
-        fetchImpl: fetch,
-        catalog: catalogLoad.catalog,
-        current: scenario,
-      })
-      if (result.ok) {
+  function setPolicy(teenOnParentPolicy: boolean) {
+    recordCount("adjustment")
+    saveSituation({ ...situation, teenOnParentPolicy })
+  }
+
+  function patchNext(partial: Partial<Scenario>) {
+    recordCount("what_if")
+    setChanges(diffFrom(now, withTeenFlag({ ...next, ...partial })))
+  }
+
+  function undo(key: ChangeKey) {
+    const restore: Partial<Scenario> =
+      key === "vehicle" ? { year: now.year, make: now.make, model: now.model, trim: now.trim } : { [key]: now[key] }
+    setChanges(diffFrom(now, withTeenFlag({ ...next, ...restore })))
+  }
+
+  function keepWhatIf() {
+    recordCount("adjustment")
+    saveSituation({ ...situation, scenario: next })
+    setChanges({})
+  }
+
+  function tryStarter(item: Starter) {
+    recordCount("starter_click")
+    if (item.teenOnParentPolicy !== undefined && item.teenOnParentPolicy !== situation.teenOnParentPolicy) {
+      saveSituation({ ...situation, teenOnParentPolicy: item.teenOnParentPolicy })
+    }
+    setChanges(diffFrom(now, withTeenFlag({ ...now, ...item.change(now) })))
+    setTab(item.tab)
+    whatIfRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+  }
+
+  function onPremium(text: string, nextPeriod: PremiumPeriod = period) {
+    setPremiumDraft(text)
+    const parsed = parsePremium(text, nextPeriod)
+    if (text.trim() === "" || parsed !== null) {
+      if (parsed !== situation.premium) {
         recordCount("adjustment")
-        setPersona(null)
-        setScenario((current) => ({ ...current, ...selectionAfterVin(current, result) }))
-        setConfidenceOverride(result.confidence)
+        saveSituation({ ...situation, premium: parsed })
       }
-      setVinMessage(result.message)
-    } finally {
-      setVinText("")
-      setVinPending(false)
     }
   }
 
-  function onPremiumChange(value: string) {
-    setPremiumText(value)
-    clearShareDraft()
-    if (value.trim() === "") {
-      if (anchor !== null) recordCount("adjustment")
-      setAnchor(null)
-      setPremiumError(null)
-      return
-    }
-    const parsed = parseAnnualPremium(value)
-    if (parsed === null) {
-      if (anchor !== null) recordCount("adjustment")
-      setAnchor(null)
-      setPremiumError(
-        "Enter an annual amount from 1 to 100,000, or clear the field to return to the labeled sample.",
-      )
-      return
-    }
-    setPremiumError(null)
-    if (anchor?.amount !== parsed) recordCount("adjustment")
-    setAnchor({ amount: parsed, snapshot: factorSnapshot(scenario) })
-  }
+  const premiumText = premiumDraft ?? (situation.premium === null ? "" : String(situation.premium))
+  const premiumInvalid = premiumText.trim() !== "" && parsePremium(premiumText, period) === null
 
-  function saveCurrent() {
-    recordCount("save")
-    tray.replace(
-      rememberComparison(tray.items, {
-        scenario,
-        anchorAmount: anchor?.amount ?? null,
-      }),
-    )
-  }
-
-  function openSaved(item: SavedComparison) {
-    setPersona(matchingPersona(item.scenario))
-    setScenario(item.scenario)
-    setFilter("")
-    setVinText("")
-    setVinMessage(null)
-    setConfidenceOverride(null)
-    setPremiumError(null)
-    if (item.anchorAmount !== null) {
-      setPremiumText(String(item.anchorAmount))
-      setAnchor({
-        amount: item.anchorAmount,
-        snapshot: factorSnapshot(item.scenario),
-      })
-    } else {
-      setPremiumText("")
-      setAnchor(null)
-    }
-    clearShareDraft()
-    setSheetOpen(false)
-  }
-
-  function removeSaved(id: string) {
-    tray.replace(tray.items.filter((item) => item.id !== id))
-  }
-
-  function copyShareLink() {
-    recordCount("share_link_copy")
-    const path = encodeSharePath({
-      scenario,
-      anchorAmount: anchor?.amount ?? null,
-      baselineCleared: engine.baselineCleared,
-    })
-    const url = new URL(path, window.location.origin).toString()
-    const included = new URL(url).searchParams.has("anchor")
-    setShareUrl(url)
-    setShareIncludedAnchor(included)
-    const clipboard = navigator.clipboard
-    if (!clipboard?.writeText) {
-      setShareStatus("The share link is shown below. Copy it from there. It was not sent.")
-      return
-    }
-    void clipboard.writeText(url).then(
-      () => {
-        setShareStatus("Link copied. It carries the inputs and the model and data-bundle versions. It does not freeze a dollar result. It was not sent.")
-      },
-      () => {
-        setShareStatus("The share link is shown below. Copy it from there. It was not sent.")
-      },
-    )
-  }
-
-  const notices = [
-    ...(arrivalInvalid ? [SHARE_INVALID_NOTE] : []),
-    ...(arrival ? shareArrivalNotes(arrival) : []),
-  ]
-  const listProps = {
-    items: tray.items,
-    ready: tray.ready,
-    error: tray.error,
-    onOpen: openSaved,
-    onRemove: removeSaved,
-  }
+  const nowCar: VehiclePick = { year: now.year, make: now.make, model: now.model, trim: now.trim }
+  const nextCar: VehiclePick = { year: next.year, make: next.make, model: next.model, trim: next.trim }
 
   return (
     <>
-    <div className="no-print grid gap-6 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] lg:items-start lg:gap-8">
-      <div className="grid gap-4">
-        <RangePanel
-          scenario={scenario}
-          persona={persona}
-          sample={sample}
-          engine={engine}
-          catalogStatus={catalogLoad.status}
-          trimConfidence={trimConfidence}
-          stale={stale}
-          anchorAmount={anchor?.amount ?? null}
-          notices={notices}
-        />
-        <div
-          role="group"
-          aria-label="Scenario presets"
-          className="grid gap-2 sm:grid-cols-3"
-        >
-          {PERSONA_ORDER.map((id) => {
-            const active = persona === id
-            return (
-              <Button
-                key={id}
-                type="button"
-                variant={active ? "default" : "outline"}
-                aria-pressed={active}
-                onClick={() => applyPersona(id)}
-                className="preset-button h-auto items-start justify-start gap-2 px-3 py-2 text-left whitespace-normal"
-              >
-                <PersonaMark />
-                <span className="grid gap-0.5">
-                  <span className="font-medium">{PERSONA_DETAILS[id].name}</span>
-                  <span
-                    className={cn(
-                      "text-xs font-normal",
-                      active ? "text-primary-foreground/85" : "text-muted-foreground",
-                    )}
-                  >
-                    {PERSONA_DETAILS[id].summary}
-                  </span>
-                </span>
-              </Button>
-            )
-          })}
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <Button type="button" onClick={saveCurrent} data-testid="save-scenario">
-            Save this scenario
-          </Button>
-          <Button type="button" variant="outline" onClick={copyShareLink} data-testid="copy-share-link">
-            Copy share link
-          </Button>
-          <Button type="button" variant="outline" onClick={() => window.print()} data-testid="print-worksheet-button">
-            Print worksheet
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            className="lg:hidden"
-            aria-haspopup="dialog"
-            onClick={() => setSheetOpen(true)}
+      <div className="no-print">
+        <section className="max-w-3xl pt-6 sm:pt-8">
+          <p className="eyebrow text-sun-ink">Car insurance, in plain numbers</p>
+          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+            What would happen to your car insurance if…
+          </h1>
+          <p className="mt-2 max-w-2xl text-base leading-relaxed text-pretty text-muted-foreground sm:text-lg">
+            …you bought a different car, added a teen driver, or moved? Change one thing and see roughly what it does to the
+            price. No sign-up, and nothing you type leaves your device.
+          </p>
+        </section>
+
+        {notes.length > 0 ? (
+          <div className="mt-5 flex items-start gap-3 rounded-xl border border-border bg-card px-4 py-3" data-testid="share-notice">
+            <div className="grid flex-1 gap-1 text-sm">
+              {notes.map((note) => (
+                <p key={note}>{note}</p>
+              ))}
+            </div>
+            <button type="button" className="icon-btn" aria-label="Dismiss" onClick={() => setNotes([])}>
+              <X className="size-4" />
+            </button>
+          </div>
+        ) : null}
+        {stored.error ? <p className="mt-4 text-sm">{stored.error}</p> : null}
+
+        <div className="mt-5 grid items-start gap-5 lg:mt-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-6">
+          {/* What if */}
+          <section
+            ref={whatIfRef}
+            id="what-if"
+            aria-labelledby="what-if-heading"
+            className="card order-1 scroll-mt-4 overflow-hidden lg:order-2"
           >
-            Saved comparisons ({tray.items.length})
-          </Button>
-        </div>
-        {shareStatus ? (
-          <p className="text-sm leading-snug" data-testid="share-status">
-            {shareStatus}
-          </p>
-        ) : null}
-        {shareUrl ? (
-          <div className="grid gap-1">
-            <p className="text-sm font-medium" id="share-link-label">
-              Share link
-            </p>
-            <p
-              data-testid="share-url"
-              aria-labelledby="share-link-label"
-              className="font-mono text-xs leading-snug break-all"
-            >
-              {shareUrl}
-            </p>
-            {shareIncludedAnchor ? (
-              <p className="text-xs leading-snug" data-testid="share-anchor-note">
-                The annual amount in this link is the visitor&apos;s anchor for this
-                scenario. It is not a cleared baseline.
+            <div className="border-b border-border bg-sun-soft px-5 pt-5 pb-4 sm:px-6">
+              <h2 id="what-if-heading" className="text-xl font-semibold tracking-tight">
+                What if…
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Change one thing, and we&apos;ll show the difference from your situation now.
               </p>
-            ) : (
-              <p className="text-muted-foreground text-xs leading-snug">
-                No current premium is in this link.
+              <p className="mt-2 text-sm lg:hidden">
+                <span className="text-muted-foreground">Now: </span>
+                {situationSentence(now, false)}{" "}
+                <a href="#now" className="link whitespace-nowrap">
+                  Change
+                </a>
               </p>
-            )}
-          </div>
-        ) : null}
-      </div>
+            </div>
 
-      <form
-        className="grid gap-2"
-        onSubmit={(event) => event.preventDefault()}
-      >
-        <fieldset className="grid gap-3">
-          <legend className="text-sm font-medium">Driver</legend>
-          <div className="grid gap-3 sm:grid-cols-2">
-            <LabeledSelect
-              id="age-band"
-              label="Age band"
-              value={scenario.age}
-              options={AGE_BANDS.map((band) => ({
-                value: band.id,
-                label: band.label,
-              }))}
-              onChange={(value) => {
-                if (isAgeBand(value)) patch({ age: value })
-              }}
-            />
-            <LabeledSelect
-              id="years-licensed"
-              label="Years licensed"
-              value={scenario.yearsLicensed}
-              options={YEARS_LICENSED.map((band) => ({
-                value: band.id,
-                label: band.label,
-              }))}
-              onChange={(value) => {
-                if (isYearsLicensed(value)) patch({ yearsLicensed: value })
-              }}
-            />
-            <LabeledSelect
-              id="incidents"
-              label="Incidents"
-              value={scenario.incidents}
-              options={INCIDENTS.map((band) => ({
-                value: band.id,
-                label: band.label,
-              }))}
-              onChange={(value) => {
-                if (isIncidents(value)) patch({ incidents: value })
-              }}
-            />
-            <LabeledSelect
-              id="mileage"
-              label="Annual mileage"
-              value={scenario.mileage}
-              options={MILEAGE_BANDS.map((band) => ({
-                value: band.id,
-                label: band.label,
-              }))}
-              onChange={(value) => {
-                if (isMileageBand(value)) patch({ mileage: value })
-              }}
-            />
-          </div>
-          <div className="flex flex-wrap gap-x-4 gap-y-2">
-            <FlagToggle
-              id="flag-teen"
-              label="Teen driver"
-              checked={scenario.teen}
-              onChange={(teen) => patch({ teen })}
-            />
-            <FlagToggle
-              id="flag-good-student"
-              label="Good student"
-              checked={scenario.goodStudent}
-              onChange={(goodStudent) => patch({ goodStudent })}
-            />
-            <FlagToggle
-              id="flag-driver-training"
-              label="Driver training"
-              checked={scenario.driverTraining}
-              onChange={(driverTraining) => patch({ driverTraining })}
-            />
-            <FlagToggle
-              id="flag-household"
-              label="Household policy"
-              checked={scenario.householdPolicy}
-              onChange={(householdPolicy) => patch({ householdPolicy })}
-            />
-            <FlagToggle
-              id="flag-loan-lease"
-              label="Loan or lease"
-              checked={scenario.loanLease}
-              onChange={(loanLease) => patch({ loanLease })}
-            />
-          </div>
-          <div className="grid gap-1.5 border-t border-border pt-3">
-            <Label htmlFor="current-premium" className="text-muted-foreground font-normal">
-              Current annual premium, optional
-            </Label>
-            <Input
-              id="current-premium"
-              name="current-annual-premium"
-              inputMode="numeric"
-              autoComplete="off"
-              spellCheck={false}
-              value={premiumText}
-              aria-describedby="current-premium-hint"
-              aria-invalid={premiumError ? true : undefined}
-              placeholder="Empty keeps the labeled sample"
-              onChange={(event) => onPremiumChange(event.target.value)}
-            />
-            <p
-              id="current-premium-hint"
-              className={cn(
-                "text-xs leading-snug",
-                premiumError ? "text-foreground" : "text-muted-foreground",
+            <div role="tablist" aria-label="What to change" className="scroll-row border-b border-border px-3 py-2 sm:flex-wrap sm:px-4">
+              {TABS.map((item) => {
+                const Icon = item.icon
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    role="tab"
+                    id={`tab-${item.id}`}
+                    aria-selected={tab === item.id}
+                    aria-controls={`panel-${item.id}`}
+                    className="tab"
+                    onClick={() => setTab(item.id)}
+                  >
+                    <Icon className="size-4" aria-hidden="true" />
+                    {item.label}
+                  </button>
+                )
+              })}
+            </div>
+
+            <div role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`} className="px-5 py-5 sm:px-6">
+              {tab === "car" ? (
+                <div className="grid gap-4">
+                  <p className="text-sm font-medium">Try another car:</p>
+                  <div className="flex flex-wrap gap-2" data-testid="what-if-cars">
+                    {WHAT_IF_CARS.map((car) => {
+                      const pick = catalog ? resolveCar(catalog, car.year, car) : car.trim ? { ...car, trim: car.trim } : null
+                      const pressed = pick !== null && sameVehicle(pick, nextCar) && !sameVehicle(pick, nowCar)
+                      return (
+                        <button
+                          key={`${car.make}-${car.model}`}
+                          type="button"
+                          className="chip"
+                          aria-pressed={pressed}
+                          disabled={pick === null}
+                          onClick={() => {
+                            if (!pick) return
+                            patchNext(pick)
+                            showResult()
+                          }}
+                        >
+                          {car.year} {car.make} {car.model}
+                        </button>
+                      )
+                    })}
+                    <button type="button" className="chip border-dashed" onClick={() => setPicker("next")}>
+                      Search every car…
+                    </button>
+                  </div>
+                </div>
+              ) : null}
+              {tab === "driver" ? (
+                <div className="grid gap-4">
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      className="chip"
+                      aria-pressed={next.age === "16-18" && now.age !== "16-18"}
+                      onClick={() => patchNext({ age: "16-18", yearsLicensed: "under-1" })}
+                    >
+                      Add a new 16-year-old driver
+                    </button>
+                    <button
+                      type="button"
+                      className="chip"
+                      aria-pressed={next.age === "19-21" && now.age !== "19-21"}
+                      onClick={() => patchNext({ age: "19-21", yearsLicensed: "1-3" })}
+                    >
+                      A 19–21-year-old driver
+                    </button>
+                  </div>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <AgeField scenario={next} onChange={patchNext} idPrefix="next" label="What if the driver were" />
+                    <YearsField scenario={next} onChange={patchNext} idPrefix="next" />
+                    {next.age === "16-18" && now.age !== "16-18" ? (
+                      <div className="grid gap-1.5 sm:col-span-2">
+                        <PolicyField value={situation.teenOnParentPolicy} onChange={setPolicy} idPrefix="next" />
+                        <p className="text-xs leading-snug text-muted-foreground">
+                          {situation.teenOnParentPolicy
+                            ? "We price your whole policy after adding them, on the car in your situation now."
+                            : "We price the teen alone, on their own policy."}
+                        </p>
+                      </div>
+                    ) : null}
+                  </div>
+                  <DiscountFields scenario={next} onChange={patchNext} idPrefix="next" />
+                </div>
+              ) : null}
+              {tab === "move" ? (
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <StateField scenario={next} onChange={patchNext} idPrefix="next" />
+                  <RegionField scenario={next} onChange={patchNext} idPrefix="next" />
+                </div>
+              ) : null}
+              {tab === "coverage" ? (
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <CoverageField scenario={next} onChange={patchNext} idPrefix="next" />
+                  <DeductibleField scenario={next} onChange={patchNext} idPrefix="next" />
+                </div>
+              ) : null}
+              {tab === "more" ? (
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <RecordField scenario={next} onChange={patchNext} idPrefix="next" />
+                  <MileageField scenario={next} onChange={patchNext} idPrefix="next" />
+                </div>
+              ) : null}
+            </div>
+
+            <div ref={resultRef} className="scroll-mb-4 border-t border-border bg-background/60 px-5 py-5 sm:px-6" aria-live="polite">
+              {result ? (
+                <WhatIfResult
+                  headline={result.headline}
+                  delta={result.deltaRounded}
+                  current={result.current}
+                  next={result.next}
+                  startKind={startKind}
+                  startNote={startNote}
+                  chips={changed.map((key) => ({ key, label: changeChip(key, next) }))}
+                  onUndo={undo}
+                  onReset={() => setChanges({})}
+                  onKeep={keepWhatIf}
+                  vehicleChanged={changed.includes("vehicle")}
+                  nextCarName={carName(nextCar)}
+                  versionPicker={
+                    changed.includes("vehicle") ? (
+                      <VersionPicker idPrefix="next-car" pick={nextCar} catalog={catalog} onChange={(pick) => patchNext(pick)} compact />
+                    ) : null
+                  }
+                />
+              ) : (
+                <div className="grid gap-1 py-2 text-center" data-testid="what-if-empty">
+                  <p className="text-base font-medium">Pick a car or change anything above.</p>
+                  <p className="text-sm text-muted-foreground">We&apos;ll show what it does to your yearly price, right here.</p>
+                </div>
               )}
-            >
-              {premiumError ??
-                "Empty keeps the labeled sample. An amount is this scenario's anchor, not a cleared baseline. Saving a comparison keeps it in this browser. A share link can include it as that anchor. It is not sent to a server."}
+            </div>
+          </section>
+
+          {/* Now */}
+          <section id="now" aria-labelledby="now-heading" className="card order-2 scroll-mt-4 p-5 sm:p-6 lg:order-1">
+            <h2 id="now-heading" className="text-xl font-semibold tracking-tight">
+              Your situation now
+            </h2>
+            <p className="mt-1 text-sm text-muted-foreground">{situationSentence(now, false)}</p>
+
+            {nowEstimate ? <NowFigure estimate={nowEstimate} startKind={startKind} startNote={startNote} /> : null}
+
+            <div className="mt-5 grid gap-4">
+              <div className="grid gap-1.5">
+                <span className="field-label" id="now-car-label">
+                  Car
+                </span>
+                <button
+                  type="button"
+                  className="flex min-h-12 items-center gap-3 rounded-xl border border-input bg-card px-3.5 py-2 text-left hover:border-primary"
+                  aria-labelledby="now-car-label now-car-name"
+                  onClick={() => setPicker("now")}
+                >
+                  <Car className="size-5 text-muted-foreground" aria-hidden="true" />
+                  <span id="now-car-name" className="flex-1 font-medium">
+                    {shortVehicleLabel(now)}
+                  </span>
+                  <span className="text-sm font-medium text-primary">Change</span>
+                </button>
+                <VersionPicker idPrefix="now-car" pick={nowCar} catalog={catalog} onChange={(pick) => patchNow(pick)} compact />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <AgeField scenario={now} onChange={patchNow} idPrefix="now" />
+                <StateField scenario={now} onChange={patchNow} idPrefix="now" />
+                <RegionField scenario={now} onChange={patchNow} idPrefix="now" />
+                <CoverageField scenario={now} onChange={patchNow} idPrefix="now" showNote={false} />
+              </div>
+
+              <div className="grid gap-1.5 rounded-xl bg-muted/70 p-3.5">
+                <label htmlFor="premium" className="text-sm font-semibold">
+                  What do you pay now?{" "}
+                  <span className="font-normal text-muted-foreground">(Optional.)</span>
+                </label>
+                <div className="flex gap-2">
+                  <div className="relative flex-1">
+                    <span className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-muted-foreground">$</span>
+                    <input
+                      id="premium"
+                      className="field-input pl-7"
+                      inputMode="decimal"
+                      autoComplete="off"
+                      placeholder="1,800"
+                      value={premiumText}
+                      aria-invalid={premiumInvalid || undefined}
+                      aria-describedby="premium-hint"
+                      onChange={(event) => onPremium(event.target.value)}
+                    />
+                  </div>
+                  <select
+                    aria-label="How often"
+                    className="field-select w-auto"
+                    value={period}
+                    onChange={(event) => {
+                      const value = event.target.value as PremiumPeriod
+                      setPeriod(value)
+                      onPremium(premiumText, value)
+                    }}
+                  >
+                    {PREMIUM_PERIODS.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <p id="premium-hint" className={cn("text-xs leading-snug", premiumInvalid ? "text-destructive" : "text-muted-foreground")}>
+                  {premiumInvalid ? "Enter a dollar amount, like 1,800. Or leave it empty." : PREMIUM_HINT}
+                  {situation.premium !== null && period !== "year" && !premiumInvalid
+                    ? ` That's ${formatDollars(situation.premium)} a year.`
+                    : ""}
+                </p>
+              </div>
+
+              <details className="group rounded-xl border border-border">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-2 px-3.5 py-3 text-sm font-medium">
+                  More about the driver and coverage
+                  <ChevronDown className="size-4 transition-transform group-open:rotate-180" aria-hidden="true" />
+                </summary>
+                <div className="grid gap-3 border-t border-border px-3.5 py-3.5">
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <DeductibleField scenario={now} onChange={patchNow} idPrefix="now" />
+                    <RecordField scenario={now} onChange={patchNow} idPrefix="now" />
+                    <MileageField scenario={now} onChange={patchNow} idPrefix="now" />
+                    <YearsField scenario={now} onChange={patchNow} idPrefix="now" />
+                  </div>
+                  <DiscountFields scenario={now} onChange={patchNow} idPrefix="now" />
+                  <p className="text-xs leading-snug text-muted-foreground">
+                    We don&apos;t ask about credit. Many insurers use it, so your real quote could move up or down because of it.
+                  </p>
+                </div>
+              </details>
+
+              {nowEstimate ? (
+                <details className="group rounded-xl border border-border">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-2 px-3.5 py-3 text-sm font-medium">
+                    Here&apos;s how we got this
+                    <ChevronDown className="size-4 transition-transform group-open:rotate-180" aria-hidden="true" />
+                  </summary>
+                  <div className="border-t border-border px-3.5 py-3.5">
+                    <HowWeGotThis estimate={nowEstimate} startKind={startKind} />
+                  </div>
+                </details>
+              ) : null}
+            </div>
+          </section>
+        </div>
+
+        <section aria-labelledby="starters-heading" className="mt-10">
+          <h2 id="starters-heading" className="text-lg font-semibold">
+            Or start with a common question
+          </h2>
+          <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {STARTERS.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                className="card grid content-start gap-1 p-4 text-left transition-colors hover:border-primary"
+                onClick={() => tryStarter(item)}
+                data-testid={`starter-${item.id}`}
+              >
+                <span className="font-semibold">{item.title}</span>
+                <span className="text-sm leading-snug text-muted-foreground">{item.story}</span>
+              </button>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-6 flex flex-col items-start gap-4 rounded-2xl bg-foreground px-5 py-6 text-background sm:flex-row sm:items-center sm:px-7">
+          <div className="flex-1">
+            <h2 className="text-lg font-semibold">Shopping for a first car?</h2>
+            <p className="mt-1 text-sm text-background/75">
+              Put up to 15 cars side by side for the same driver. Sort them, star the favorites, and narrow it down together.
             </p>
           </div>
-        </fieldset>
+          <Link href="/compare" className="btn border-background bg-background text-foreground hover:bg-background/90">
+            Compare cars <ArrowRight className="size-4" aria-hidden="true" />
+          </Link>
+        </section>
 
-        <fieldset className="grid gap-3">
-          <legend className="text-sm font-medium">Location</legend>
-          <div className="grid gap-3 sm:grid-cols-2">
-            <LabeledSelect
-              id="state"
-              label="State"
-              value={scenario.state}
-              options={STATES.map((state) => ({
-                value: state.code,
-                label: state.name,
-              }))}
-              onChange={(value) => {
-                if (isStateCode(value)) patch({ state: value })
-              }}
-            />
-            <LabeledSelect
-              id="region"
-              label="Region class"
-              value={scenario.region}
-              options={REGIONS.map((region) => ({
-                value: region.id,
-                label: region.label,
-              }))}
-              onChange={(value) => {
-                if (isRegion(value)) patch({ region: value })
-              }}
-            />
-          </div>
-          <p className="text-xs leading-snug">
-            No credit control. The lawful sensitivity factor stays locked at 1.00.
-            {scenario.state === "CA"
-              ? " For this California scenario, credit rules are unreviewed, so this tool does not model credit as a rating sensitivity."
-              : null}
-          </p>
-        </fieldset>
-
-        <fieldset className="grid gap-3">
-          <legend className="text-sm font-medium">Coverage</legend>
-          <div className="grid gap-3 sm:grid-cols-2">
-            <LabeledSelect
-              id="coverage"
-              label="Coverage package"
-              value={scenario.coverage}
-              options={COVERAGE_PACKAGES.map((item) => ({
-                value: item.id,
-                label: item.label,
-              }))}
-              onChange={(value) => {
-                if (isCoverageId(value)) patch({ coverage: value })
-              }}
-            />
-            <LabeledSelect
-              id="deductible"
-              label="Deductible assumption"
-              value={String(scenario.deductible)}
-              disabled={!hasPhysicalDamage(scenario.coverage)}
-              describedBy="deductible-note"
-              options={DEDUCTIBLES.map((amount) => ({
-                value: String(amount),
-                label: `$${amount.toLocaleString("en-US")}`,
-              }))}
-              onChange={(value) => {
-                const amount = Number(value)
-                if (isDeductible(amount)) patch({ deductible: amount })
-              }}
-            />
-          </div>
-          <p id="coverage-assumption" className="text-sm leading-snug">
-            {coverageAssumption(scenario.coverage, scenario.state)}
-          </p>
-          {scenario.coverage === "state-minimum" ? (
-            <StateMinimumSource state={scenario.state} />
-          ) : null}
-          {hasPhysicalDamage(scenario.coverage) ? (
-            <p id="deductible-note" className="text-muted-foreground text-xs leading-snug">
-              The deductible assumption applies to comprehensive and collision.
-            </p>
-          ) : (
-            <p id="deductible-note" className="text-muted-foreground text-xs leading-snug">
-              The deductible is not applied. This package has no comprehensive or
-              collision.
-            </p>
-          )}
-        </fieldset>
-
-        <VehicleFieldset
-          pick={scenario}
-          catalogStatus={catalogLoad.status}
-          catalog={catalogLoad.catalog}
-          filter={filter}
-          vinText={vinText}
-          vinMessage={vinMessage}
-          vinPending={vinPending}
-          confidence={trimConfidence}
-          onFilter={setFilter}
-          onVinText={setVinText}
-          onDecode={() => void decodeVin()}
-          onPick={(pick) => {
-            setConfidenceOverride(null)
-            patch(pick)
-          }}
-        />
-      </form>
-      <div className="hidden lg:block lg:col-span-2" data-testid="comparison-tray">
-        <ComparisonList {...listProps} headingId="comparison-heading" />
+        <section className="mt-8 grid gap-4 border-t border-border pt-6 sm:grid-cols-[1fr_auto] sm:items-start">
+          <ShareBox
+            what="this what-if"
+            premiumAvailable={situation.premium !== null}
+            buildPath={(includePremium) =>
+              encodeSharePath({
+                page: "/",
+                scenario: now,
+                teenOnParentPolicy: situation.teenOnParentPolicy,
+                premium: situation.premium,
+                includePremium,
+                next: changed.length > 0 ? next : null,
+              })
+            }
+          />
+          <button type="button" className="btn justify-self-start" onClick={() => window.print()}>
+            <Printer className="size-4" aria-hidden="true" /> Print this
+          </button>
+        </section>
+        <DisclaimerText className="mt-6 max-w-3xl" />
       </div>
-    </div>
-    <ComparisonSheet open={sheetOpen} onClose={() => setSheetOpen(false)}>
-      <ComparisonList {...listProps} headingId="comparison-sheet-heading" />
-    </ComparisonSheet>
-    <PrintWorksheet
-      scenario={scenario}
-      persona={persona}
-      sample={sample}
-      engine={engine}
-      anchorAmount={anchor?.amount ?? null}
-      trimConfidence={trimConfidence}
-      catalogStatus={catalogLoad.status}
-      stale={stale}
-      saved={tray.items}
-      trayReady={tray.ready}
-      notices={notices}
-    />
+
+      <PrintSummary
+        situation={situation}
+        nowEstimate={nowEstimate}
+        result={result ? { headline: result.headline, next: result.next } : null}
+        nextName={changed.length > 0 ? situationSentence(next, situation.teenOnParentPolicy) : null}
+      />
+
+      <CarPicker
+        key={picker ?? "closed"}
+        open={picker !== null}
+        onClose={() => setPicker(null)}
+        catalog={catalog}
+        catalogStatus={catalogLoad.status}
+        initialYear={picker === "next" ? (changed.includes("vehicle") ? next.year : 2025) : now.year}
+        title={picker === "now" ? "Which car do you drive now?" : "Which car are you thinking about?"}
+        actionLabel={picker === "now" ? "Use this car" : "Try this car"}
+        allowVin={picker === "now"}
+        onPick={(pick) => {
+          if (picker === "now") patchNow(pick)
+          else {
+            patchNext(pick)
+            setTab("car")
+            showResult()
+          }
+        }}
+      />
     </>
   )
 }
 
-function LabeledSelect({
-  id,
-  label,
-  value,
-  options,
-  onChange,
-  disabled = false,
-  describedBy,
-}: {
-  id: string
-  label: string
-  value: string
-  options: { value: string; label: string }[]
-  onChange: (value: string) => void
-  disabled?: boolean
-  describedBy?: string
-}) {
+function NowFigure({ estimate, startKind, startNote }: { estimate: Estimate; startKind: StartKind; startNote?: string }) {
+  const ownNumber = startKind === "yours" && estimate.steps.length === 0
   return (
-    <div className="grid gap-1.5" data-disabled={disabled ? "true" : undefined}>
-      <Label htmlFor={id} className={disabled ? "text-muted-foreground font-normal" : undefined}>
-        {label}
-      </Label>
-      <Select
-        key={value}
-        value={value}
-        onValueChange={(next) => {
-          if (!next || next === value) return
-          onChange(next)
-        }}
-        disabled={disabled}
-      >
-        <SelectTrigger
-          id={id}
-          disabled={disabled}
-          aria-describedby={describedBy}
-          className="w-full disabled:bg-muted disabled:text-muted-foreground disabled:opacity-70"
-        >
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent position="popper" className="max-h-72">
-          {options.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
-              {option.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
-  )
-}
-
-function StateMinimumSource({ state }: { state: StateCode }) {
-  const rule = stateRule(state)
-  return (
-    <div className="grid gap-2">
-      {rule?.sourceUrl && rule.lastVerified ? (
-        <p className="text-sm leading-snug">
-          <a
-            href={rule.sourceUrl}
-            className="underline underline-offset-4"
-            rel="noreferrer"
-            data-testid="state-rule-source"
-          >
-            Opened page for {stateName(state)}
-          </a>
-          {", checked "}
-          {formatVerifiedDate(rule.lastVerified)}
-          {". "}
-          <a
-            href={`/sources#state-note-${state}`}
-            className="underline underline-offset-4"
-          >
-            Row notes
-          </a>
-          .
-        </p>
-      ) : (
-        <p className="text-sm leading-snug">
-          <a href={`/sources#state-rule-${state}`} className="underline underline-offset-4">
-            {stateName(state)} has no source URL in the table
-          </a>
-          .
-        </p>
-      )}
-      <p className="text-sm leading-snug" data-testid="state-minimum-counsel">
-        <span className="font-medium">{STATE_MINIMUM_COUNSEL_LABEL}</span>{" "}
-        {STATE_MINIMUM_COUNSEL_NOTICE}
+    <div className="mt-4 rounded-xl bg-primary/[0.06] px-4 py-4" data-testid="now-figure">
+      <p className="flex flex-wrap items-baseline gap-x-2">
+        <span className="money text-4xl font-semibold tracking-tight" data-testid="now-yearly">
+          {formatDollars(estimate.likely)}
+        </span>
+        <span className="text-base text-muted-foreground">a year</span>
       </p>
+      <p className="mt-0.5 text-sm text-muted-foreground">
+        {ownNumber
+          ? `What you pay now (about ${formatDollars(estimate.monthly)} a month).`
+          : `About ${formatDollars(estimate.monthly)} a month, ${rangeWords(estimate.low, estimate.high)} a year.`}
+      </p>
+      {ownNumber ? null : (
+        <RangeBar
+          className="mt-3"
+          low={estimate.low}
+          likely={estimate.likely}
+          high={estimate.high}
+          min={Math.round(estimate.low * 0.9)}
+          max={Math.round(estimate.high * 1.05)}
+        />
+      )}
+      {startKind === "typical" && startNote ? (
+        <p className="mt-3 text-xs leading-snug text-muted-foreground" data-testid="start-note">
+          {startNote}
+        </p>
+      ) : null}
     </div>
   )
 }
 
-function FlagToggle({
-  id,
-  label,
-  checked,
-  onChange,
+function WhatIfResult({
+  headline,
+  delta,
+  current,
+  next,
+  startKind,
+  startNote,
+  chips,
+  onUndo,
+  onReset,
+  onKeep,
+  vehicleChanged,
+  nextCarName,
+  versionPicker,
 }: {
-  id: string
-  label: string
-  checked: boolean
-  onChange: (checked: boolean) => void
+  headline: string
+  delta: number
+  current: Estimate
+  next: Estimate
+  startKind: StartKind
+  startNote?: string
+  chips: { key: ChangeKey; label: string }[]
+  onUndo: (key: ChangeKey) => void
+  onReset: () => void
+  onKeep: () => void
+  vehicleChanged: boolean
+  nextCarName: string
+  versionPicker: React.ReactNode
+}) {
+  const min = Math.round(Math.min(current.low, next.low) * 0.92)
+  const max = Math.round(Math.max(current.high, next.high) * 1.04)
+  const ownNumber = startKind === "yours" && current.steps.length === 0
+  return (
+    <div className="pop-in grid gap-4" key={headline}>
+      <div className="grid gap-2">
+        <p className="eyebrow">The difference</p>
+        <p className="text-2xl leading-snug font-semibold tracking-tight text-balance" data-testid="what-if-headline">
+          {headline}
+        </p>
+        <div>
+          <DeltaBadge amount={delta} />
+        </div>
+      </div>
+
+      <dl className="grid gap-3">
+        <div className="grid gap-1.5">
+          <div className="flex items-baseline justify-between gap-3">
+            <dt className="text-sm text-muted-foreground">Now</dt>
+            <dd className="money text-sm">
+              <span className="text-base font-semibold">{formatDollars(current.likely)}</span> a year
+              {ownNumber ? null : <span className="text-muted-foreground"> · {rangeWords(current.low, current.high)}</span>}
+            </dd>
+          </div>
+          {ownNumber ? null : <RangeBar low={current.low} likely={current.likely} high={current.high} min={min} max={max} tone="muted" />}
+        </div>
+        <div className="grid gap-1.5">
+          <div className="flex items-baseline justify-between gap-3">
+            <dt className="text-sm font-medium">What if</dt>
+            <dd className="money text-sm" data-testid="what-if-yearly">
+              <span className="text-lg font-semibold">{formatDollars(next.likely)}</span> a year
+              <span className="text-muted-foreground"> · {rangeWords(next.low, next.high)}</span>
+            </dd>
+          </div>
+          <RangeBar low={next.low} likely={next.likely} high={next.high} min={min} max={max} tone="sun" />
+          <p className="text-xs text-muted-foreground">About {formatDollars(next.monthly)} a month.</p>
+        </div>
+      </dl>
+      {versionPicker}
+
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="text-sm text-muted-foreground">Changed:</span>
+        {chips.map((chip) => (
+          <span key={chip.key} className="inline-flex items-center gap-1 rounded-full bg-sun-soft py-1 pr-1 pl-3 text-sm">
+            {chip.label}
+            <button type="button" className="icon-btn size-7" aria-label={`Undo ${chip.label}`} onClick={() => onUndo(chip.key)}>
+              <X className="size-3.5" />
+            </button>
+          </span>
+        ))}
+      </div>
+
+      <div className="flex flex-wrap gap-2">
+        <button type="button" className="btn" onClick={onReset}>
+          <RotateCcw className="size-4" aria-hidden="true" /> Start over
+        </button>
+        <button type="button" className="btn btn-quiet" onClick={onKeep}>
+          Make this my situation now
+        </button>
+        {vehicleChanged ? (
+          <Link href="/compare" className="btn btn-quiet">
+            Compare more cars <ArrowRight className="size-4" aria-hidden="true" />
+          </Link>
+        ) : null}
+      </div>
+
+      <details className="group rounded-xl border border-border bg-card">
+        <summary className="flex cursor-pointer list-none items-center justify-between gap-2 px-3.5 py-3 text-sm font-medium">
+          Here&apos;s how we got this
+          <ChevronDown className="size-4 transition-transform group-open:rotate-180" aria-hidden="true" />
+        </summary>
+        <div className="border-t border-border px-3.5 py-3.5">
+          <HowWeGotThis estimate={next} startKind={startKind} startNote={startNote} />
+        </div>
+      </details>
+      {vehicleChanged ? (
+        <p className="-mt-1 text-sm">
+          <VehicleFixLink carName={nextCarName} shown={vehicleMatchWords(next.vehicle)} />
+        </p>
+      ) : null}
+    </div>
+  )
+}
+
+/** Version (trim) and model year for a picked car, as small selects. */
+function VersionPicker({
+  idPrefix,
+  pick,
+  catalog,
+  onChange,
+  compact = false,
+}: {
+  idPrefix: string
+  pick: VehiclePick
+  catalog: ReturnType<typeof useCatalog>["catalog"]
+  onChange: (pick: VehiclePick) => void
+  compact?: boolean
+}) {
+  if (!catalog) return null
+  const trims = modelTrims(catalog, pick.year, pick.make, pick.model)
+  const years = catalogYears(catalog).filter((year) => modelTrims(catalog, year, pick.make, pick.model).length > 0)
+  const trimNames = trims.some((trim) => trim.name === pick.trim) ? trims.map((trim) => trim.name) : [pick.trim, ...trims.map((trim) => trim.name)]
+  return (
+    <div className={cn("grid grid-cols-[6rem_1fr] gap-2", compact ? "" : "rounded-xl bg-muted/70 p-3")}>
+      <div className="grid gap-1">
+        <label htmlFor={`${idPrefix}-year`} className="text-xs font-medium text-muted-foreground">
+          Model year
+        </label>
+        <select
+          id={`${idPrefix}-year`}
+          className="field-select min-h-9 py-1 text-sm"
+          value={pick.year}
+          onChange={(event) => {
+            const year = Number(event.target.value)
+            const resolved = resolveCar(catalog, year, { make: pick.make, model: pick.model, trim: pick.trim })
+            if (resolved) onChange(resolved)
+          }}
+        >
+          {years.map((year) => (
+            <option key={year} value={year}>
+              {year}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className="grid min-w-0 gap-1">
+        <label htmlFor={`${idPrefix}-trim`} className="text-xs font-medium text-muted-foreground">
+          Version
+        </label>
+        <select
+          id={`${idPrefix}-trim`}
+          className="field-select min-h-9 py-1 text-sm"
+          value={pick.trim}
+          onChange={(event) => onChange({ ...pick, trim: event.target.value })}
+        >
+          {trimNames.map((name) => (
+            <option key={name} value={name}>
+              {name}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+  )
+}
+
+function PrintSummary({
+  situation,
+  nowEstimate,
+  result,
+  nextName,
+}: {
+  situation: Situation
+  nowEstimate: Estimate | null
+  result: { headline: string; next: Estimate } | null
+  nextName: string | null
 }) {
   return (
-    <div className="flex items-center gap-2">
-      <Checkbox
-        id={id}
-        name={id}
-        checked={checked}
-        onCheckedChange={(value) => onChange(value === true)}
-      />
-      <Label htmlFor={id} className="font-normal">
-        {label}
-      </Label>
+    <div className="print-only">
+      <h1 style={{ fontSize: "18pt", fontWeight: 600 }}>NotAQuote.FYI: what-if summary</h1>
+      <p>Printed {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}.</p>
+      <h2 style={{ fontSize: "13pt", fontWeight: 600, marginTop: "12pt" }}>Your situation now</h2>
+      <p>{situationSentence(situation.scenario, false)}</p>
+      {nowEstimate ? (
+        <>
+          <p>
+            About {formatDollars(nowEstimate.likely)} a year ({rangeWords(nowEstimate.low, nowEstimate.high)}).
+          </p>
+          <p>{nowEstimate.summary}</p>
+        </>
+      ) : null}
+      {result && nextName ? (
+        <>
+          <h2 style={{ fontSize: "13pt", fontWeight: 600, marginTop: "12pt" }}>What if</h2>
+          <p>{nextName}</p>
+          <p style={{ fontWeight: 600 }}>{result.headline}</p>
+          <p>
+            About {formatDollars(result.next.likely)} a year ({rangeWords(result.next.low, result.next.high)}).
+          </p>
+          <p>{result.next.summary}</p>
+          <p>{result.next.rangeNote}</p>
+        </>
+      ) : null}
+      <p style={{ marginTop: "12pt" }}>
+        Model {MODEL_VERSION}, data {DATA_BUNDLE_VERSION}. Sources and method: notaquote.fyi/methodology
+      </p>
+      <DisclaimerText className="mt-3 text-black" />
     </div>
   )
 }

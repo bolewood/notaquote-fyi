@@ -281,7 +281,8 @@ test("vehicle and VIN modules do not reference storage or analytics sinks", () =
   const files = [
     "src/lib/vin-lookup.ts",
     "src/components/calculator.tsx",
-    "src/components/vehicle-fieldset.tsx",
+    "src/components/car-picker.tsx",
+    "src/components/compare-cars.tsx",
   ]
   const forbidden = [
     "localStorage",
@@ -299,7 +300,7 @@ test("vehicle and VIN modules do not reference storage or analytics sinks", () =
     }
   }
 
-  const tray = readFileSync("src/components/comparison-tray.tsx", "utf8")
+  const tray = readFileSync("src/lib/local-store.ts", "utf8")
   assert.match(tray, /localStorage/)
   assert.doesNotMatch(tray, /vin/i)
   assert.doesNotMatch(tray, /analytics|gtag|plausible|document\.cookie|sessionStorage/)

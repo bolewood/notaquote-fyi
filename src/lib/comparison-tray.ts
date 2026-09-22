@@ -1,164 +1,143 @@
-import { scenarioFromRecord, normalizeAnchor } from "./share-link"
-import {
-  PERSONA_DETAILS,
-  PRESETS,
-  type PersonaId,
-  type Scenario,
-} from "./scenario"
+/**
+ * The compare-cars list: who's driving, and up to 15 cars, some starred.
+ * Kept in this browser's local storage only. It never holds a price: prices
+ * are worked out fresh each time from the engine.
+ */
+import { carKey } from "./car-search"
+import { DEFAULT_SCENARIO, withTeenFlag, type Scenario } from "./scenario"
+import { scenarioFromRecord, vehiclePickFromRecord } from "./share-link"
 
-export const COMPARISON_STORAGE_KEY = "notaquote.comparisons.v1"
-export const COMPARISON_EVENT = "notaquote-comparisons"
-export const COMPARISON_SNAPSHOT_ERROR = "error"
-export const COMPARISON_LIMIT = 8
+export const COMPARE_STORAGE_KEY = "notaquote.compare.v1"
+export const COMPARE_EVENT = "notaquote-compare"
+export const COMPARE_LIMIT = 15
 
-export type SavedComparison = {
-  id: string
-  label: string
-  savedAt: string
-  scenario: Scenario
-  anchorAmount: number | null
+export type ComparedCar = {
+  year: number
+  make: string
+  model: string
+  trim: string
+  starred: boolean
 }
 
-export function matchingPersona(scenario: Scenario): PersonaId | null {
-  const ids: PersonaId[] = ["molly", "jayden", "ava"]
-  for (const id of ids) {
-    if (sameScenario(scenario, PRESETS[id])) return id
+export type CompareList = {
+  /** The driver, place, and coverage. Its car fields aren't used here. */
+  driver: Scenario
+  teenOnParentPolicy: boolean
+  /** Start from what they pay now (set on the What-if page) instead of a typical price. */
+  useMyPremium: boolean
+  cars: ComparedCar[]
+}
+
+/** A new driver on a parent's policy: the question most people bring here. */
+export const DEFAULT_COMPARE: CompareList = {
+  driver: withTeenFlag({ ...DEFAULT_SCENARIO, age: "16-18", yearsLicensed: "under-1" }),
+  teenOnParentPolicy: true,
+  useMyPremium: false,
+  cars: [],
+}
+
+export type AddResult = { list: CompareList; added: number; skipped: "full" | "duplicate" | null }
+
+/** Add cars to the end of the list, skipping ones already there, up to 15. */
+export function addCars(list: CompareList, picks: readonly Omit<ComparedCar, "starred">[]): AddResult {
+  const cars = [...list.cars]
+  const keys = new Set(cars.map((car) => carKey(car)))
+  let added = 0
+  let skipped: AddResult["skipped"] = null
+  for (const pick of picks) {
+    const clean = vehiclePickFromRecord(pick)
+    if (!clean) continue
+    if (keys.has(carKey(clean))) {
+      skipped ??= "duplicate"
+      continue
+    }
+    if (cars.length >= COMPARE_LIMIT) {
+      skipped = "full"
+      break
+    }
+    cars.push({ ...clean, starred: false })
+    keys.add(carKey(clean))
+    added += 1
   }
-  return null
+  return { list: { ...list, cars }, added, skipped }
 }
 
-export function comparisonLabel(scenario: Scenario): string {
-  const persona = matchingPersona(scenario)
-  return persona ? PERSONA_DETAILS[persona].name : "Custom scenario"
+export function removeCar(list: CompareList, key: string): CompareList {
+  return { ...list, cars: list.cars.filter((car) => carKey(car) !== key) }
 }
 
-export function comparisonSnapshot(storage: Pick<Storage, "getItem">): string {
-  try {
-    return storage.getItem(COMPARISON_STORAGE_KEY) ?? ""
-  } catch {
-    return COMPARISON_SNAPSHOT_ERROR
-  }
+export function toggleStar(list: CompareList, key: string): CompareList {
+  return { ...list, cars: list.cars.map((car) => (carKey(car) === key ? { ...car, starred: !car.starred } : car)) }
 }
 
-export function comparisonsFromSnapshot(raw: string): SavedComparison[] {
-  if (!raw || raw === COMPARISON_SNAPSHOT_ERROR) return []
-  return readComparisons({
-    getItem: () => raw,
-  })
+/** Swap one car for another version of it (a different trim or year), keeping its place and star. */
+export function replaceCar(list: CompareList, key: string, next: Omit<ComparedCar, "starred">): CompareList {
+  const clean = vehiclePickFromRecord(next)
+  if (!clean) return list
+  if (list.cars.some((car) => carKey(car) === carKey(clean) && carKey(car) !== key)) return list
+  return { ...list, cars: list.cars.map((car) => (carKey(car) === key ? { ...clean, starred: car.starred } : car)) }
 }
 
-export function readComparisons(storage: Pick<Storage, "getItem">): SavedComparison[] {
-  const raw = storage.getItem(COMPARISON_STORAGE_KEY)
-  if (!raw) return []
-  let parsed: unknown
-  try {
-    parsed = JSON.parse(raw)
-  } catch {
-    return []
-  }
-  if (!parsed || typeof parsed !== "object") return []
-  const record = parsed as { version?: unknown; items?: unknown }
-  if (record.version !== 1 || !Array.isArray(record.items)) return []
-  return record.items.flatMap((item) => {
-    const saved = parseSaved(item)
-    return saved ? [saved] : []
-  })
+export function clearCars(list: CompareList, keepStarred = false): CompareList {
+  return { ...list, cars: keepStarred ? list.cars.filter((car) => car.starred) : [] }
 }
 
-export function writeComparisons(storage: Pick<Storage, "setItem">, items: SavedComparison[]): void {
-  const payload = {
-    version: 1 as const,
-    items: items.map(stripSaved),
-  }
-  storage.setItem(COMPARISON_STORAGE_KEY, JSON.stringify(payload))
+function carFromRecord(value: unknown): ComparedCar | null {
+  const pick = vehiclePickFromRecord(value)
+  if (!pick) return null
+  const starred = (value as { starred?: unknown }).starred
+  return { ...pick, starred: starred === true }
 }
 
-export function rememberComparison(
-  items: SavedComparison[],
-  input: {
-    scenario: Scenario
-    anchorAmount: number | null
-    now?: string
-    id?: string
-  },
-): SavedComparison[] {
-  const scenario = scenarioFromRecord(input.scenario)
-  if (!scenario) return items
-  const anchorAmount = normalizeAnchor(input.anchorAmount)
-  const entry: SavedComparison = {
-    id: input.id ?? createId(),
-    label: comparisonLabel(scenario),
-    savedAt: input.now ?? new Date().toISOString(),
-    scenario,
-    anchorAmount,
-  }
-  const key = comparisonKey(scenario, anchorAmount)
-  const without = items.filter((item) => comparisonKey(item.scenario, item.anchorAmount) !== key)
-  return [entry, ...without].slice(0, COMPARISON_LIMIT)
-}
-
-export function comparisonKey(scenario: Scenario, anchorAmount: number | null): string {
-  return JSON.stringify({
-    age: scenario.age,
-    yearsLicensed: scenario.yearsLicensed,
-    incidents: scenario.incidents,
-    mileage: scenario.mileage,
-    teen: scenario.teen,
-    goodStudent: scenario.goodStudent,
-    driverTraining: scenario.driverTraining,
-    householdPolicy: scenario.householdPolicy,
-    loanLease: scenario.loanLease,
-    state: scenario.state,
-    region: scenario.region,
-    coverage: scenario.coverage,
-    deductible: scenario.deductible,
-    year: scenario.year,
-    make: scenario.make,
-    model: scenario.model,
-    trim: scenario.trim,
-    anchorAmount,
-  })
-}
-
-function parseSaved(value: unknown): SavedComparison | null {
+export function compareFromRecord(value: unknown): CompareList | null {
   if (!value || typeof value !== "object") return null
   const record = value as Record<string, unknown>
-  if (typeof record.id !== "string" || record.id.length === 0 || record.id.length > 80) return null
-  if (typeof record.label !== "string" || record.label.length === 0 || record.label.length > 80) {
-    return null
+  const driver = scenarioFromRecord(record.driver)
+  if (!driver) return null
+  if (typeof record.teenOnParentPolicy !== "boolean") return null
+  if (!Array.isArray(record.cars)) return null
+  const cars: ComparedCar[] = []
+  const keys = new Set<string>()
+  for (const item of record.cars.slice(0, COMPARE_LIMIT)) {
+    const car = carFromRecord(item)
+    if (!car || keys.has(carKey(car))) continue
+    keys.add(carKey(car))
+    cars.push(car)
   }
-  if (typeof record.savedAt !== "string" || record.savedAt.length === 0 || record.savedAt.length > 40) {
-    return null
-  }
-  const scenario = scenarioFromRecord(record.scenario)
-  if (!scenario) return null
-  if (record.anchorAmount !== null && normalizeAnchor(record.anchorAmount) === null) return null
-  return stripSaved({
-    id: record.id,
-    label: record.label,
-    savedAt: record.savedAt,
-    scenario,
-    anchorAmount: normalizeAnchor(record.anchorAmount),
-  })
-}
-
-function stripSaved(item: SavedComparison): SavedComparison {
   return {
-    id: item.id,
-    label: item.label,
-    savedAt: item.savedAt,
-    scenario: { ...item.scenario },
-    anchorAmount: item.anchorAmount,
+    driver: withTeenFlag(driver),
+    teenOnParentPolicy: record.teenOnParentPolicy,
+    useMyPremium: record.useMyPremium === true,
+    cars,
   }
 }
 
-function sameScenario(left: Scenario, right: Scenario): boolean {
-  return comparisonKey(left, null) === comparisonKey(right, null)
+export function compareFromSnapshot(raw: string): CompareList | null {
+  if (!raw) return null
+  try {
+    const parsed = JSON.parse(raw) as { version?: unknown; list?: unknown }
+    if (parsed?.version !== 1) return null
+    return compareFromRecord(parsed.list)
+  } catch {
+    return null
+  }
 }
 
-function createId(): string {
-  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
-    return crypto.randomUUID()
+/** Only known fields are written, so no price or stray field can be stored. */
+export function compareSnapshot(list: CompareList): string {
+  const clean = compareFromRecord(list)
+  if (!clean) throw new Error("This list could not be saved")
+  return JSON.stringify({ version: 1, list: clean })
+}
+
+export function readCompare(storage: Pick<Storage, "getItem">): CompareList | null {
+  try {
+    return compareFromSnapshot(storage.getItem(COMPARE_STORAGE_KEY) ?? "")
+  } catch {
+    return null
   }
-  return `saved-${Date.now().toString(36)}`
+}
+
+export function writeCompare(storage: Pick<Storage, "setItem">, list: CompareList): void {
+  storage.setItem(COMPARE_STORAGE_KEY, compareSnapshot(list))
 }

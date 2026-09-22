@@ -12,7 +12,7 @@ export default async function HomePage(props: PageProps<"/">) {
   const initialSearch = query.toString()
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-1 lg:px-6">
+    <div className="mx-auto w-full max-w-7xl px-4 pb-12 lg:px-6">
       <Calculator key={initialSearch} initialSearch={initialSearch} />
     </div>
   )

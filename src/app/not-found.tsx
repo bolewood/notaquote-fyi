@@ -8,15 +8,17 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <TrustArticle title="That page is not in this version.">
+    <TrustArticle title="We couldn't find that page">
+      <p>It may have moved, or the link may be missing a piece.</p>
       <p>
-        The calculator is on the home page. It opens on a sample range for one
-        driver and one vehicle.
-      </p>
-      <p>
-        <Link href="/" className="underline underline-offset-4">
-          Back to the calculator
+        <Link href="/" className="link">
+          Try a what-if
+        </Link>{" "}
+        or{" "}
+        <Link href="/compare" className="link">
+          compare cars
         </Link>
+        .
       </p>
     </TrustArticle>
   )

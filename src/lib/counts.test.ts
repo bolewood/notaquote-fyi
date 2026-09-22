@@ -40,11 +40,14 @@ test("a count payload is only a kind", () => {
     [...COUNT_KINDS],
     [
       "calculator_session",
-      "persona_click",
+      "starter_click",
+      "what_if",
       "adjustment",
-      "save",
+      "compare_session",
+      "compare_add",
+      "csv_download",
       "share_link_copy",
-      "worksheet_print",
+      "print",
       "trust_page_view",
     ],
   )
@@ -60,7 +63,7 @@ test("a payload with dollars, a VIN, a premium, or extra fields is refused", () 
     { kind: "calculator_session", vin: "1FTFW1E50MFC12345" },
     { kind: "calculator_session", amount: 1800 },
     { kind: "calculator_session", low: 1, likely: 2, high: 3 },
-    { kind: "save", scenario: { state: "IL" } },
+    { kind: "compare_add", car: "2022 Honda Civic" },
     { kind: "adjustment", anchor: 900 },
     { kind: "nope" },
     { kind: "calculator_session", name: "Molly" },
@@ -72,15 +75,17 @@ test("a payload with dollars, a VIN, a premium, or extra fields is refused", () 
   }
 })
 
-test("the stored tally is seven counters and drops anything else", () => {
+test("the stored tally is one counter per kind and drops anything else", () => {
   const storage = memoryStorage()
   assert.equal(recordCount("calculator_session", storage)?.calculator_session, 1)
-  assert.equal(recordCount("persona_click", storage)?.persona_click, 1)
-  assert.equal(recordCount("persona_click", storage)?.persona_click, 2)
+  assert.equal(recordCount("starter_click", storage)?.starter_click, 1)
+  assert.equal(recordCount("starter_click", storage)?.starter_click, 2)
+  assert.equal(recordCount("what_if", storage)?.what_if, 1)
   assert.equal(recordCount("adjustment", storage)?.adjustment, 1)
-  assert.equal(recordCount("save", storage)?.save, 1)
+  assert.equal(recordCount("compare_add", storage)?.compare_add, 1)
+  assert.equal(recordCount("csv_download", storage)?.csv_download, 1)
   assert.equal(recordCount("share_link_copy", storage)?.share_link_copy, 1)
-  assert.equal(recordCount("worksheet_print", storage)?.worksheet_print, 1)
+  assert.equal(recordCount("print", storage)?.print, 1)
   assert.equal(recordCount("trust_page_view", storage)?.trust_page_view, 1)
 
   const raw = storage.data.get(COUNTS_STORAGE_KEY) ?? ""
@@ -111,9 +116,9 @@ test("the stored tally is seven counters and drops anything else", () => {
   assert.equal(cleaned?.calculator_session, 4)
   assert.equal(JSON.stringify(cleaned).includes("premium"), false)
   assert.equal(JSON.stringify(cleaned).includes("SECRET"), false)
-  assert.deepEqual(sanitizeLedger({ adjustment: 1.5, save: -1, persona_click: 3 }), {
+  assert.deepEqual(sanitizeLedger({ adjustment: 1.5, what_if: -1, starter_click: 3, persona_click: 9 }), {
     ...emptyLedger(),
-    persona_click: 3,
+    starter_click: 3,
   })
 })
 
@@ -123,25 +128,23 @@ test("a mounted count in the same turn is recorded once", () => {
   assert.equal(recordMountedCount("trust_page_view", storage)?.trust_page_view, 1)
 })
 
-test("the calculator records kinds only, and does not touch storage itself", () => {
-  const calculator = readFileSync("src/components/calculator.tsx", "utf8")
-  const calls = [...calculator.matchAll(/record(?:Mounted)?Count\(\s*"([^"]+)"\s*\)/g)].map(
-    (match) => match[1],
-  )
-  assert.deepEqual(calls.sort(), [
-    "adjustment",
-    "adjustment",
-    "adjustment",
-    "adjustment",
-    "adjustment",
-    "calculator_session",
-    "persona_click",
-    "save",
-    "share_link_copy",
-    "worksheet_print",
-  ])
-  assert.equal(/record(?:Mounted)?Count\(\s*[^)"\s]/.test(calculator), false)
-  for (const token of ["localStorage", "sessionStorage", "document.cookie", "gtag", "plausible", "analytics", "console."]) {
-    assert.equal(calculator.includes(token), false, token)
+test("the pages record known kinds only, as literals, and never touch storage themselves", () => {
+  const files = [
+    "src/components/calculator.tsx",
+    "src/components/compare-cars.tsx",
+    "src/components/share-box.tsx",
+  ]
+  const seen = new Set<string>()
+  for (const file of files) {
+    const source = readFileSync(file, "utf8")
+    for (const match of source.matchAll(/record(?:Mounted)?Count\(\s*"([^"]+)"\s*\)/g)) seen.add(match[1])
+    assert.equal(/record(?:Mounted)?Count\(\s*[^)"\s]/.test(source), false, `${file} passes something other than a kind`)
+    for (const token of ["localStorage", "sessionStorage", "document.cookie", "gtag", "plausible", "analytics", "console."]) {
+      assert.equal(source.includes(token), false, `${file} contains ${token}`)
+    }
+  }
+  for (const kind of seen) assert.ok((COUNT_KINDS as readonly string[]).includes(kind), kind)
+  for (const kind of ["calculator_session", "what_if", "starter_click", "compare_session", "compare_add", "csv_download", "share_link_copy", "print"]) {
+    assert.ok(seen.has(kind), `${kind} is recorded somewhere`)
   }
 })

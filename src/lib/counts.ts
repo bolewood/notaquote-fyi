@@ -8,11 +8,14 @@ export const COUNTS_STORAGE_KEY = "notaquote.counts.v1"
 
 export const COUNT_KINDS = [
   "calculator_session",
-  "persona_click",
+  "starter_click",
+  "what_if",
   "adjustment",
-  "save",
+  "compare_session",
+  "compare_add",
+  "csv_download",
   "share_link_copy",
-  "worksheet_print",
+  "print",
   "trust_page_view",
 ] as const
 
@@ -26,13 +29,16 @@ export type CountPayload = {
 export type CountLedger = Record<CountKind, number>
 
 export const COUNT_LABELS: Record<CountKind, string> = {
-  calculator_session: "Calculator sessions",
-  persona_click: "Persona clicks",
-  adjustment: "Adjustments",
-  save: "Saves",
-  share_link_copy: "Share-link copies",
-  worksheet_print: "Worksheet prints",
-  trust_page_view: "Trust-page views",
+  calculator_session: "Visits to the What-if page",
+  starter_click: "Common questions tried",
+  what_if: "What-ifs tried",
+  adjustment: "Other changes",
+  compare_session: "Visits to the Compare page",
+  compare_add: "Cars added to a comparison",
+  csv_download: "Spreadsheets downloaded",
+  share_link_copy: "Share links copied",
+  print: "Pages printed",
+  trust_page_view: "Visits to the help and source pages",
 }
 
 export type CountStorage = {
@@ -52,15 +58,7 @@ let clientSnapshot: CountSnapshot | null = null
 const mountBurst = new Set<string>()
 
 export function emptyLedger(): CountLedger {
-  return {
-    calculator_session: 0,
-    persona_click: 0,
-    adjustment: 0,
-    save: 0,
-    share_link_copy: 0,
-    worksheet_print: 0,
-    trust_page_view: 0,
-  }
+  return Object.fromEntries(COUNT_KINDS.map((kind) => [kind, 0])) as CountLedger
 }
 
 export function countPayload(kind: CountKind): CountPayload {

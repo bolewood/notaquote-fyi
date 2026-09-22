@@ -42,9 +42,8 @@ export default function DataLicensesPage() {
         The factor bundle is {DATA_BUNDLE_VERSION}. The source manifest is{" "}
         {MANIFEST_VERSION}. The vehicle catalog bundle is {CATALOG_VERSION},
         retrieved {formatCatalogDate(CATALOG_RETRIEVED_ON)}. The state-rules table
-        is {STATE_RULES_VERSION}. It cites public statute and insurance-department
-        pages. It is not a premium baseline. Rows without a source URL have no
-        dollar minimum. There is no cleared dollar baseline.
+        is {STATE_RULES_VERSION}. It cites public statutes and insurance-department
+        pages.
       </p>
       <p>{CATALOG_TERMS}</p>
       <p>
@@ -59,10 +58,9 @@ export default function DataLicensesPage() {
         .
       </p>
       <p>
-        The factor bundle is original planning arithmetic. It was not derived
-        from a rate filing, a loss table, or a published premium average. The
-        labeled sample on the opening screen uses a separate set of display
-        weights. Those weights are not the factor engine.
+        The factors are worked out from the public sources listed on the Sources
+        page, and every dollar on the site comes from them. Where we couldn&rsquo;t
+        find a source, the factor says it&rsquo;s our estimate.
       </p>
       <p>
         We use one number per state from NAIC&rsquo;s 2022/2023 Auto Insurance

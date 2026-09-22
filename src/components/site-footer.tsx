@@ -1,50 +1,39 @@
 import Link from "next/link"
-import { CATALOG_VERSION } from "@/lib/catalog-meta"
 import { DATA_BUNDLE_VERSION, MODEL_VERSION, PUBLISHER } from "@/lib/copy"
-import { STATE_RULES_VERSION } from "@/lib/state-rules"
 import { GITHUB_REPO_URL } from "@/lib/suggest-fix"
 
 export function SiteFooter() {
   return (
     <footer className="mt-auto border-t border-border">
-      <div className="mx-auto grid w-full max-w-6xl gap-2 px-4 py-3 text-sm lg:px-6">
-        <nav aria-label="Footer" className="flex flex-wrap gap-x-4 gap-y-1">
-          <Link href="/disclaimer" className="focus-visible:ring-ring rounded-sm focus-visible:ring-3">
-            Disclaimer
+      <div className="mx-auto grid w-full max-w-7xl gap-2 px-4 py-5 text-sm lg:px-6">
+        <nav aria-label="Footer" className="flex flex-wrap gap-x-5 gap-y-1">
+          <Link href="/methodology" className="rounded-sm hover:underline focus-visible:ring-3 focus-visible:ring-ring">
+            How it works
           </Link>
-          <Link
-            href="/data-licenses"
-            className="focus-visible:ring-ring rounded-sm focus-visible:ring-3"
-          >
+          <Link href="/sources" className="rounded-sm hover:underline focus-visible:ring-3 focus-visible:ring-ring">
+            Sources
+          </Link>
+          <Link href="/privacy" className="rounded-sm hover:underline focus-visible:ring-3 focus-visible:ring-ring">
+            Privacy
+          </Link>
+          <Link href="/disclaimer" className="rounded-sm hover:underline focus-visible:ring-3 focus-visible:ring-ring">
+            Not a quote
+          </Link>
+          <Link href="/data-licenses" className="rounded-sm hover:underline focus-visible:ring-3 focus-visible:ring-ring">
             Data licenses
           </Link>
-          <Link
-            href="/model-version"
-            className="focus-visible:ring-ring rounded-sm focus-visible:ring-3"
-          >
-            Model version {MODEL_VERSION}
+          <Link href="/model-version" className="rounded-sm hover:underline focus-visible:ring-3 focus-visible:ring-ring">
+            What&apos;s changed (version {MODEL_VERSION})
           </Link>
-          <Link
-            href="/corrections"
-            className="focus-visible:ring-ring rounded-sm focus-visible:ring-3"
-          >
+          <Link href="/corrections" className="rounded-sm hover:underline focus-visible:ring-3 focus-visible:ring-ring">
             Spot something wrong? Tell us
           </Link>
-          <a
-            href={GITHUB_REPO_URL}
-            rel="noreferrer"
-            className="focus-visible:ring-ring rounded-sm focus-visible:ring-3"
-          >
+          <a href={GITHUB_REPO_URL} rel="noreferrer" className="rounded-sm hover:underline focus-visible:ring-3 focus-visible:ring-ring">
             Source code on GitHub
           </a>
         </nav>
-        <p>{PUBLISHER}</p>
         <p className="text-muted-foreground">
-          With no current premium entered, the dollars are a labeled sample. The
-          factor engine does not price an uncleared baseline. Saved comparisons
-          stay in this browser. Data bundle{" "}
-          {DATA_BUNDLE_VERSION}. Catalog {CATALOG_VERSION}. State rules{" "}
-          {STATE_RULES_VERSION}.
+          Free and open source, from {PUBLISHER}. Your choices stay in this browser. Data {DATA_BUNDLE_VERSION}.
         </p>
       </div>
     </footer>
