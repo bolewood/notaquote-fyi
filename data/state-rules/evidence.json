@@ -1,0 +1,1434 @@
+{
+  "version": "state-rules-2026-09-22",
+  "about": "Short quotes from each source, so you can check a figure without re-reading the whole statute. Quotes are from public statutes and government pages.",
+  "states": {
+    "AL": [
+      {
+        "label": "Ala. Code 32-7-6(c)",
+        "url": "https://alison.legislature.state.al.us/code-of-alabama?section=32-7-6",
+        "supports": "biPerPerson, biPerAccident, pd",
+        "quote": "not less than twenty-five thousand dollars ($25,000) because of bodily injury to or death to one person ... fifty thousand dollars ($50,000) ... twenty-five thousand dollars ($25,000) because of injury to or destruction of property"
+      },
+      {
+        "label": "Ala. Code 32-7A-4",
+        "url": "https://alison.legislature.state.al.us/code-of-alabama?section=32-7A-4",
+        "supports": "insuranceRequired",
+        "quote": "No person shall operate, register, or maintain registration of ... a motor vehicle ... unless the motor vehicle is covered by a liability insurance policy"
+      },
+      {
+        "label": "Ala. Code 32-7-23",
+        "url": "https://alison.legislature.state.al.us/code-of-alabama?section=32-7-23",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "shall be delivered ... unless coverage is provided therein ... provided, that the named insured shall have the right to reject such coverage"
+      }
+    ],
+    "AK": [
+      {
+        "label": "AS 28.22.101(d)",
+        "url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=28.22.101&secEnd=28.22.101",
+        "supports": "biPerPerson, biPerAccident, pd",
+        "quote": "(1) $50,000 because of bodily injury to or death of one person in one accident ... $100,000 ... (2) $25,000 because of injury to or destruction of property of others"
+      },
+      {
+        "label": "AS 28.22.011(a)",
+        "url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=28.22.011&secEnd=28.22.011",
+        "supports": "insuranceRequired",
+        "quote": "shall be insured under a motor vehicle liability policy that complies with this chapter or a certificate of self-insurance ... unless"
+      },
+      {
+        "label": "AS 28.22.101(e)",
+        "url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=28.22.101&secEnd=28.22.101",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "A motor vehicle liability policy must provide coverage ... in the amounts set out in (d) ... from the owner or operator of an uninsured or underinsured motor vehicle"
+      },
+      {
+        "label": "AS 21.96.020(e)",
+        "url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=21.96.020&secEnd=21.96.020",
+        "supports": "umRequired, uimRequired (waiver)",
+        "quote": "The coverage required under (c) and (d) of this section may be waived in writing by the insured in whole or in part."
+      }
+    ],
+    "AZ": [
+      {
+        "label": "A.R.S. 28-4009(A)(2)(b)",
+        "url": "https://www.azleg.gov/ars/28/04009.htm",
+        "supports": "biPerPerson, biPerAccident, pd, effective",
+        "quote": "For a policy that is issued or renewed beginning on July 1, 2020 ... $25,000 ... $50,000 ... $15,000 because of injury to or destruction of property of others"
+      },
+      {
+        "label": "A.R.S. 28-4135(A)",
+        "url": "https://www.azleg.gov/ars/28/04135.htm",
+        "supports": "insuranceRequired",
+        "quote": "A motor vehicle that is operated on a highway in this state shall be covered by ... A motor vehicle or automobile liability policy that provides limits not less than those prescribed in section 28-4009."
+      },
+      {
+        "label": "A.R.S. 20-259.01(A)-(B)",
+        "url": "https://www.azleg.gov/ars/20/00259-01.htm",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "shall make available to the named insured thereunder and by written notice offer the named insured and at the request of the named insured shall include within the policy uninsured motorist coverage"
+      }
+    ],
+    "AR": [
+      {
+        "label": "Arkansas Insurance Department, Private Passenger Automobile Insurance FAQ (open 'What coverages are mandatory?')",
+        "url": "https://insurance.arkansas.gov/consumer-assistance/consumer-services/consumers-faq/private-passenger-automobile-insurance/",
+        "supports": "biPerPerson, biPerAccident, pd",
+        "quote": "The minimum liability you are required to carry by law is $25,000 per person for bodily injury, $50,000 per accident and $25,000 to cover property damage to other's property."
+      },
+      {
+        "label": "A.C.A. 27-22-104 (Lexis public access, search for the section)",
+        "url": "https://advance.lexis.com/container?config=00JAA3ZTU0NTIzYy0zZDEyLTRhYmQtYmRmMS1iMWIxNDgxYWMxZTQKAFBvZENhdGFsb2cubRW4ifTiwi5vLw6cI1uX",
+        "supports": "biPerPerson, biPerAccident, pd, insuranceRequired",
+        "quote": "Not less than twenty-five thousand dollars ($25,000) for bodily injury or death of one (1) person ... fifty thousand dollars ($50,000) ... twenty-five thousand dollars ($25,000) for the damage to or destruction of property of others"
+      },
+      {
+        "label": "A.C.A. 23-89-403 (Lexis public access, search for the section)",
+        "url": "https://advance.lexis.com/container?config=00JAA3ZTU0NTIzYy0zZDEyLTRhYmQtYmRmMS1iMWIxNDgxYWMxZTQKAFBvZENhdGFsb2cubRW4ifTiwi5vLw6cI1uX",
+        "supports": "umRequired, umLimits",
+        "quote": "shall be delivered ... unless coverage is provided therein ... [not] applicable when any insured named in the policy has rejected the coverage in writing"
+      },
+      {
+        "label": "A.C.A. 23-89-209 (Lexis public access, search for the section)",
+        "url": "https://advance.lexis.com/container?config=00JAA3ZTU0NTIzYy0zZDEyLTRhYmQtYmRmMS1iMWIxNDgxYWMxZTQKAFBvZENhdGFsb2cubRW4ifTiwi5vLw6cI1uX",
+        "supports": "uimRequired",
+        "quote": "unless the insured has the opportunity, which he or she may reject in writing, to purchase underinsured motorist coverage"
+      },
+      {
+        "label": "A.C.A. 23-89-202 and 23-89-203 (Lexis public access, search for the section)",
+        "url": "https://advance.lexis.com/container?config=00JAA3ZTU0NTIzYy0zZDEyLTRhYmQtYmRmMS1iMWIxNDgxYWMxZTQKAFBvZENhdGFsb2cubRW4ifTiwi5vLw6cI1uX",
+        "supports": "pipRequired, pipAmount",
+        "quote": "shall provide minimum medical and hospital benefits ... up to an aggregate of five thousand dollars ($5,000) per person ... The named insured shall have the right to reject in writing"
+      }
+    ],
+    "CA": [
+      {
+        "label": "Cal. Veh. Code 16056(a)(2), (d)",
+        "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=16056",
+        "supports": "biPerPerson, biPerAccident, pd, effective",
+        "quote": "for any policy or bond issued or renewed on or after January 1, 2025 ... thirty thousand dollars ($30,000) ... sixty thousand dollars ($60,000) ... fifteen thousand dollars ($15,000)"
+      },
+      {
+        "label": "Cal. Veh. Code 16056(d)",
+        "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=16056",
+        "supports": "effective (2035 increase)",
+        "quote": "For a policy or bond issued or renewed on or after January 1, 2035, the minimum liability coverage shall be increased by twenty thousand dollars ($20,000)"
+      },
+      {
+        "label": "Cal. Veh. Code 16020(a)",
+        "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=16020",
+        "supports": "insuranceRequired",
+        "quote": "All drivers and all owners of a motor vehicle shall at all times be able to establish financial responsibility pursuant to Section 16021"
+      },
+      {
+        "label": "Cal. Ins. Code 11580.2(a)(1), (p)(7)",
+        "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=11580.2",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "may, by agreement in writing ... delete the provision covering damage caused by an uninsured motor vehicle completely; Underinsured motorist coverage shall be included in all policies of bodily injury liability insurance providing uninsured motorist coverage"
+      }
+    ],
+    "CO": [
+      {
+        "label": "C.R.S. 10-4-620",
+        "url": "https://leg.colorado.gov/sites/default/files/images/olls/crs2024-title-10.pdf",
+        "supports": "biPerPerson, biPerAccident, pd",
+        "quote": "twenty-five thousand dollars to any one person in any one accident and fifty thousand dollars to all persons ... fifteen thousand dollars in any one accident"
+      },
+      {
+        "label": "C.R.S. 10-4-619(1)",
+        "url": "https://leg.colorado.gov/sites/default/files/images/olls/crs2024-title-10.pdf",
+        "supports": "insuranceRequired",
+        "quote": "Every owner of a motor vehicle who operates the motor vehicle on the public highways of this state ... shall have in full force and effect a complying policy"
+      },
+      {
+        "label": "C.R.S. 10-4-609(1)(a), (4)",
+        "url": "https://leg.colorado.gov/sites/default/files/images/olls/crs2024-title-10.pdf",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "does not apply if the named insured rejects the coverage ... in writing; Uninsured motorist coverage shall include coverage for damage ... from the owner or driver of an underinsured motor vehicle"
+      },
+      {
+        "label": "C.R.S. 10-4-635(1)",
+        "url": "https://leg.colorado.gov/sites/default/files/images/olls/crs2024-title-10.pdf",
+        "supports": "medPayRequired",
+        "quote": "medical payments with benefits of five thousand dollars ... only if the named insured rejects medical payments coverage in writing or in the same medium in which the application for the policy was taken"
+      }
+    ],
+    "CT": [
+      {
+        "label": "Conn. Gen. Stat. 14-112(a)",
+        "url": "https://www.cga.ct.gov/current/pub/chap_246.htm",
+        "supports": "biPerPerson, biPerAccident, pd",
+        "quote": "of twenty-five thousand dollars, or by reason of personal injury to, or the death of, more than one person ... of at least fifty thousand dollars, and for damage to property of at least twenty-five thousand dollars"
+      },
+      {
+        "label": "Conn. Gen. Stat. 38a-335(a)",
+        "url": "https://www.cga.ct.gov/current/pub/chap_700.htm",
+        "supports": "limits apply to every auto policy",
+        "quote": "Each automobile liability insurance policy shall provide insurance ... with limits not less than those specified in subsection (a) of section 14-112"
+      },
+      {
+        "label": "Conn. Gen. Stat. 38a-371(a)",
+        "url": "https://www.cga.ct.gov/current/pub/chap_700.htm",
+        "supports": "insuranceRequired",
+        "quote": "The owner of a private passenger motor vehicle required to be registered in this state shall provide and continuously maintain throughout the registration period security"
+      },
+      {
+        "label": "Conn. Gen. Stat. 38a-336(a)",
+        "url": "https://www.cga.ct.gov/current/pub/chap_700.htm",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "Each automobile liability insurance policy shall provide insurance, herein called uninsured and underinsured motorist coverage ... with limits for bodily injury or death not less than those specified in subsection (a) of section 14-112"
+      }
+    ],
+    "DE": [
+      {
+        "label": "21 Del. C. 2902(b)(2)",
+        "url": "https://delcode.delaware.gov/title21/c029/sc01/index.html",
+        "supports": "biPerPerson, biPerAccident, pd",
+        "quote": "$25,000, because of bodily injury to or death of 1 person in any 1 accident ... $50,000 ... and $10,000, because of injury to or destruction of property of others"
+      },
+      {
+        "label": "21 Del. C. 2118(a)",
+        "url": "https://delcode.delaware.gov/title21/c021/sc01/index.html",
+        "supports": "insuranceRequired, pipRequired, pipAmount",
+        "quote": "unless the owner has insurance on such motor vehicle providing the following minimum insurance coverage ... $15,000 for any 1 person and $30,000 for all persons injured in any 1 accident"
+      },
+      {
+        "label": "18 Del. C. 3902(a)-(b)",
+        "url": "https://delcode.delaware.gov/title18/c039/index.html",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "No such coverage shall be required in or supplemental to a policy when rejected in writing ... Every insurer shall offer ... additional coverage ... Such additional insurance shall include underinsured bodily injury liability coverage."
+      }
+    ],
+    "DC": [
+      {
+        "label": "D.C. Code 31-2406(b)-(c)",
+        "url": "https://code.dccouncil.gov/us/dc/council/code/sections/31-2406",
+        "supports": "biPerPerson, biPerAccident, pd",
+        "quote": "$10,000 for property damage in any 1 accident ... shall be $25,000 per person injured in any 1 accident and $50,000 for all persons injured in any 1 accident"
+      },
+      {
+        "label": "D.C. Code 31-2403(a)",
+        "url": "https://code.dccouncil.gov/us/dc/council/code/sections/31-2403",
+        "supports": "insuranceRequired",
+        "quote": "Each owner of a motor vehicle which is required to be registered ... shall maintain insurance required by § 31-2406"
+      },
+      {
+        "label": "D.C. Code 31-2406(c-1), (f)(2)",
+        "url": "https://code.dccouncil.gov/us/dc/council/code/sections/31-2406",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "shall include coverage for bodily injury or death in amounts of $25,000 per person ... $5,000 for property damage; optional underinsured motor vehicle coverage"
+      },
+      {
+        "label": "D.C. Code 31-2404(a); 31-2405(b)",
+        "url": "https://code.dccouncil.gov/us/dc/council/code/sections/31-2404",
+        "supports": "pipRequired, noFault",
+        "quote": "each insurer shall offer ... optional personal injury protection insurance; An insured may obtain, solely at his or her option"
+      },
+      {
+        "label": "D.C. Law 26-155, secs. 2(a) and 3",
+        "url": "https://code.dccouncil.gov/us/dc/council/laws/26-155",
+        "supports": "effective (scheduled change)",
+        "quote": "inserting the phrase \"$20,000 for property damage in any one accident\" ... \"$50,000 per person ... $100,000 for all persons\" ... This act shall apply as of October 1, 2027."
+      }
+    ],
+    "FL": [
+      {
+        "label": "Fla. Stat. s. 324.022 (property damage requirement)",
+        "url": "https://www.flsenate.gov/Laws/Statutes/2026/324.022",
+        "supports": "pd, insuranceRequired",
+        "quote": "Every owner or operator of a motor vehicle required to be registered in this state shall establish and maintain the ability to respond in damages ... in the amount of $10,000 because of damage to ... property"
+      },
+      {
+        "label": "Fla. Stat. s. 627.736 (required PIP benefits)",
+        "url": "https://www.flsenate.gov/Laws/Statutes/2026/627.736",
+        "supports": "pipRequired, pipAmount",
+        "quote": "must provide personal injury protection ... to a limit of $10,000 in medical and disability benefits and $5,000 in death benefits"
+      },
+      {
+        "label": "Fla. Stat. s. 627.737 (tort exemption / threshold)",
+        "url": "https://www.flsenate.gov/Laws/Statutes/2026/627.737",
+        "supports": "noFault",
+        "quote": "is hereby exempted from tort liability for damages ... (a) Significant and permanent loss of an important bodily function."
+      },
+      {
+        "label": "Fla. Stat. s. 627.727 (UM/UIM)",
+        "url": "https://www.flsenate.gov/Laws/Statutes/2026/627.727",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "No motor vehicle liability insurance policy which provides bodily injury liability coverage shall be delivered ... unless uninsured motor vehicle coverage is provided ... not applicable when ... an insured named in the policy makes a written rejection"
+      },
+      {
+        "label": "FLHSMV - Insurance Requirements",
+        "url": "https://www.flhsmv.gov/insurance/",
+        "supports": "insuranceRequired, pd, pipAmount, BI not generally required",
+        "quote": "have a minimum of $10,000 in PIP AND a minimum of $10,000 in PDL. ... PIP covers 80 percent of all necessary and reasonable medical expenses up to $10,000"
+      },
+      {
+        "label": "Fla. Stat. s. 324.021(7) (BI proof only after crash / FR events)",
+        "url": "https://www.flsenate.gov/Laws/Statutes/2026/324.021",
+        "supports": "context: 10/20/10 financial-responsibility amounts, which apply only after certain crashes or violations",
+        "quote": "In the amount of $10,000 because of bodily injury to, or death of, one person in any one crash;"
+      },
+      {
+        "label": "Florida Senate - SB 522 (2026) status",
+        "url": "https://www.flsenate.gov/Session/Bill/2026/522",
+        "supports": "effective (no 2026 repeal)",
+        "quote": "Last Action: Died in Banking and Insurance"
+      }
+    ],
+    "GA": [
+      {
+        "label": "Georgia Office of Insurance and Safety Fire Commissioner - Auto",
+        "url": "https://oci.georgia.gov/insurance-resources/auto",
+        "supports": "insuranceRequired, biPerPerson, biPerAccident, pd",
+        "quote": "The minimum limits of liability insurance required under Georgia law are: Bodily Injury Liability – $25,000 per person and $50,000 per incident ... Property Damage Liability – $25,000 per incident"
+      },
+      {
+        "label": "Georgia SB 121 (2025, as passed/signed) - DUI minimums",
+        "url": "https://gov.georgia.gov/document/2025-signed-legislation/sb-121/download",
+        "supports": "effective",
+        "quote": "Bodily injury to or death of one person in any one accident, not less than $50,000.00 ... shall be in lieu of the minimum ... required under Code Section 33-7-11."
+      }
+    ],
+    "HI": [
+      {
+        "label": "HRS 431:10C-301 (required motor vehicle policy coverage)",
+        "url": "https://www.capitol.hawaii.gov/hrscurrent/Vol09_Ch0431-0435H/HRS0431/HRS_0431-0010C-0301.htm",
+        "supports": "biPerPerson, biPerAccident, pd, umRequired, uimRequired",
+        "quote": "Liability coverage of not less than $40,000 per person, with an aggregate limit of $80,000 per accident ... (2) Liability coverage of not less than $20,000 ... damage to or destruction of property"
+      },
+      {
+        "label": "HRS 431:10C-301(b)(3)-(4) UM/UIM",
+        "url": "https://www.capitol.hawaii.gov/hrscurrent/Vol09_Ch0431-0435H/HRS0431/HRS_0431-0010C-0301.htm",
+        "supports": "umRequired, uimRequired",
+        "quote": "the coverage required under this paragraph shall not be applicable where any named insured in the policy shall reject the coverage in writing ... Provide for written rejection of the coverage"
+      },
+      {
+        "label": "Hawaii Insurance Division - FAQ: Auto Insurance Minimum Limits (Effective January 1, 2026)",
+        "url": "https://cca.hawaii.gov/wp-content/uploads/2026/01/Auto-Minimum-Limits-FAQs.pdf",
+        "supports": "effective, biPerPerson, biPerAccident, pd, pipAmount",
+        "quote": "As of January 1, 2026, Hawaiʻi law increased the minimum liability insurance coverage limits ... apply to all new and renewal policies with effective dates on or after January 1, 2026."
+      },
+      {
+        "label": "HRS 431:10C-103.5 (PIP benefits; limits)",
+        "url": "https://www.capitol.hawaii.gov/hrscurrent/Vol09_Ch0431-0435H/HRS0431/HRS_0431-0010C-0103_0005.htm",
+        "supports": "pipAmount",
+        "quote": "Personal injury protection benefits shall be subject to an aggregate limit of $10,000 per person for services provided under this section."
+      },
+      {
+        "label": "HRS 431:10C-306 (abolition of tort liability / threshold)",
+        "url": "https://www.capitol.hawaii.gov/hrscurrent/Vol09_Ch0431-0435H/HRS0431/HRS_0431-0010C-0306.htm",
+        "supports": "noFault",
+        "quote": "this article abolishes tort liability ... Tort liability is not abolished ... personal injury protection benefits incurred by such person equal or exceed $5,000"
+      },
+      {
+        "label": "HRS 431:10C-104 (insurance required)",
+        "url": "https://www.capitol.hawaii.gov/hrscurrent/Vol09_Ch0431-0435H/HRS0431/HRS_0431-0010C-0104.htm",
+        "supports": "insuranceRequired",
+        "quote": "no person shall operate or use a motor vehicle upon any public street, road, or highway of this State at any time unless such motor vehicle is insured at all times"
+      }
+    ],
+    "ID": [
+      {
+        "label": "Idaho Code 49-117 (definition of proof of financial responsibility)",
+        "url": "https://legislature.idaho.gov/statutesrules/idstat/title49/t49ch1/sect49-117/",
+        "supports": "biPerPerson, biPerAccident, pd",
+        "quote": "twenty-five thousand dollars ($25,000) because of bodily injury to or death of one (1) person ... fifty thousand dollars ($50,000) ... fifteen thousand dollars ($15,000) because of injury to or destruction of property"
+      },
+      {
+        "label": "Idaho Code 49-1229 (insurance required)",
+        "url": "https://legislature.idaho.gov/statutesrules/idstat/title49/t49ch12/sect49-1229/",
+        "supports": "insuranceRequired",
+        "quote": "Every owner of a motor vehicle which is registered and operated in Idaho ... shall continuously ... provide insurance ... in an amount not less than that required by section 49-117"
+      },
+      {
+        "label": "Idaho Code 41-2502 (UM/UIM)",
+        "url": "https://legislature.idaho.gov/statutesrules/idstat/title41/t41ch25/sect41-2502/",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "A named insured shall have the right to reject either or both uninsured motorist coverage or underinsured motorist coverage, which rejection must be in writing or in an electronic record"
+      },
+      {
+        "label": "Idaho DOI Bulletin 26-07 (July 1, 2026)",
+        "url": "https://doi.idaho.gov/wp-content/uploads/ID/B26-07.pdf",
+        "supports": "effective (recent regulator guidance, no limit change)",
+        "quote": "any motor vehicle liability coverage above the statutory minimum (Idaho Code §§ 49-1229 and 49-117(18)) provide the same level of coverage for all insureds"
+      }
+    ],
+    "IL": [
+      {
+        "label": "625 ILCS 5/7-203 (requirements as to policy or bond)",
+        "url": "https://www.ilga.gov/Documents/legislation/ilcs/documents/062500050K7-203.htm",
+        "supports": "biPerPerson, biPerAccident, pd, effective",
+        "quote": "not less than $25,000 because of bodily injury to or death of any one person ... not less than $50,000 ... not less than $20,000 because of injury to or destruction of property"
+      },
+      {
+        "label": "625 ILCS 5/7-601 (required liability insurance policy)",
+        "url": "https://www.ilga.gov/Documents/legislation/ilcs/documents/062500050K7-601.htm",
+        "supports": "insuranceRequired",
+        "quote": "No person shall operate, register or maintain registration of ... a motor vehicle ... unless the motor vehicle is covered by a liability insurance policy."
+      },
+      {
+        "label": "215 ILCS 5/143a (uninsured motor vehicle coverage)",
+        "url": "https://www.ilga.gov/Documents/legislation/ilcs/documents/021500050K143a.htm",
+        "supports": "umRequired",
+        "quote": "No policy ... shall be renewed, delivered, or issued for delivery in this State unless coverage is provided therein ... in limits for bodily injury or death set forth in Section 7-203"
+      },
+      {
+        "label": "215 ILCS 5/143a-2 (additional UM; UIM)",
+        "url": "https://www.ilga.gov/Documents/legislation/ilcs/documents/021500050K143a-2.htm",
+        "supports": "umLimits, uimRequired",
+        "quote": "unless underinsured motorist coverage is included in such policy in an amount equal to the total amount of uninsured motorist coverage provided in that policy where such uninsured motorist coverage exceeds the l[imits]"
+      }
+    ],
+    "IN": [
+      {
+        "label": "IC 9-25-4-5 (minimum amounts of financial responsibility), 2026 Indiana Code",
+        "url": "https://iga.in.gov/laws/2026/ic/titles/9#9-25-4-5",
+        "supports": "biPerPerson, biPerAccident, pd, effective",
+        "quote": "twenty-five thousand dollars ($25,000) for bodily injury to or the death of one (1) individual. (2) Fifty thousand dollars ($50,000) ... Beginning July 1, 2018, twenty-five thousand dollars ($25,000) for damage to ... property"
+      },
+      {
+        "label": "Indiana BMV - Proof of Financial Responsibility",
+        "url": "https://www.in.gov/bmv/licenses-permits-ids/suspension-and-reinstatement/proof-of-financial-responsibility",
+        "supports": "insuranceRequired, limits",
+        "quote": "All motorists that operate a motor vehicle on Indiana roadways are required to maintain the state's minimum amount of liability insurance coverage ... The state of Indiana has a 25/50/25 minimum"
+      },
+      {
+        "label": "IC 27-7-5-2 (UM/UIM required coverage; rejection), 2026 Indiana Code",
+        "url": "https://iga.in.gov/laws/2026/ic/titles/27#27-7-5-2",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "in limits at least equal to the limits of liability specified in the bodily injury liability provisions of an insured's policy, unless such coverages have been rejected in writing by the insured"
+      },
+      {
+        "label": "Indiana Department of Insurance - Auto Insurance",
+        "url": "https://www.in.gov/idoi/consumer-services/types-of-insurance/auto-insurance/",
+        "supports": "umRequired, uimRequired",
+        "quote": "Each newly written Indiana auto liability policy must include uninsured and underinsured motorist's coverage unless you reject this in writing"
+      }
+    ],
+    "IA": [
+      {
+        "label": "Iowa Code 321A.1(11) (Iowa Code 2026)",
+        "url": "https://www.legis.iowa.gov/docs/code/321A.1.pdf",
+        "supports": "biPerPerson, biPerAccident, pd",
+        "quote": "in the amount of twenty thousand dollars because of bodily injury to or death of one person ... forty thousand dollars ... fifteen thousand dollars because of injury to or destruction of property"
+      },
+      {
+        "label": "Iowa Code 321.20B (financial liability coverage required)",
+        "url": "https://www.legis.iowa.gov/docs/code/321.20B.pdf",
+        "supports": "insuranceRequired",
+        "quote": "a person shall not drive a motor vehicle on the highways of this state unless financial liability coverage ... is in effect for the motor vehicle"
+      },
+      {
+        "label": "Iowa Code 516A.1 (UM/UIM in every liability policy; rejection)",
+        "url": "https://www.legis.iowa.gov/docs/code/516A.1.pdf",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "the named insured may reject all of such coverage, or reject the uninsured motor vehicle or hit-and-run motor vehicle coverage, or reject the underinsured motor vehicle coverage, by written rejections signed by the named insured"
+      },
+      {
+        "label": "Iowa Legislature - bill history SF 119 / HF 6 / HF 129 / HF 2352 (91st GA)",
+        "url": "https://www.legis.iowa.gov/legislation/billTracking/billHistory?billName=HF%202352&ga=91",
+        "supports": "effective (pending, not enacted)",
+        "quote": "A bill for an act relating to the minimum amounts required for motor vehicle financial responsibility ... February 09, 2026 Introduced, placed on calendar."
+      }
+    ],
+    "KS": [
+      {
+        "label": "K.S.A. 40-3107(e) (required policy contents)",
+        "url": "https://www.ksrevisor.gov/statutes/chapters/ch40/040_031_0007.html",
+        "supports": "biPerPerson, biPerAccident, pd, effective, pipRequired",
+        "quote": "not less than $25,000 because of bodily injury to, or death of, one person ... not less than $50,000 ... not less than $25,000 because of harm to or destruction of property of others"
+      },
+      {
+        "label": "K.S.A. 40-3104 (compulsory coverage)",
+        "url": "https://www.ksrevisor.gov/statutes/chapters/ch40/040_031_0004.html",
+        "supports": "insuranceRequired",
+        "quote": "Every owner shall provide motor vehicle liability insurance coverage in accordance with the provisions of this act for every motor vehicle owned by such person"
+      },
+      {
+        "label": "K.S.A. 40-3103 (PIP benefit definitions)",
+        "url": "https://www.ksrevisor.gov/statutes/chapters/ch40/040_031_0003.html",
+        "supports": "pipAmount",
+        "quote": "\"Medical benefits\" means ... reasonable expenses, up to a limit of not less than $4,500 ... up to a maximum of not less than $900 per month for not to exceed one year"
+      },
+      {
+        "label": "K.S.A. 40-3117 (tort threshold)",
+        "url": "https://www.ksrevisor.gov/statutes/chapters/ch40/040_031_0017.html",
+        "supports": "noFault",
+        "quote": "may recover damages in tort for pain, suffering ... only in the event the injury requires medical treatment ... having a reasonable value of $2,000 or more"
+      },
+      {
+        "label": "K.S.A. 40-284 (UM/UIM)",
+        "url": "https://www.ksrevisor.gov/statutes/chapters/ch40/040_002_0084.html",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "Any uninsured motorist coverage shall include an underinsured motorist provision ... right to reject, in writing, the uninsured motorist coverage ... which is in excess of the limits ... set forth in K.S.A. 40-3107"
+      }
+    ],
+    "KY": [
+      {
+        "label": "KRS 304.39-110 (required minimum tort liability insurance)",
+        "url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=46758",
+        "supports": "biPerPerson, biPerAccident, pd, combinedSingleLimit",
+        "quote": "not less than twenty-five thousand dollars ($25,000) ... fifty thousand dollars ($50,000) ... twenty-five thousand dollars ($25,000) ... property ... or 2. Single limits liability coverage of not less than sixty thousand dollars ($60,000)"
+      },
+      {
+        "label": "KRS 304.39-080(5) (security required)",
+        "url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=30032",
+        "supports": "insuranceRequired, pipRequired",
+        "quote": "every owner or operator of a motor vehicle registered in this Commonwealth ... shall continuously provide ... security for the payment of basic reparation benefits ... and security for payment of tort liabilities"
+      },
+      {
+        "label": "KRS 304.39-020(2) (basic reparation benefits)",
+        "url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=57854",
+        "supports": "pipAmount, effective",
+        "quote": "The maximum amount of basic reparation benefits payable for all economic loss resulting from injury to any one (1) person as the result of one (1) accident shall be ten thousand dollars ($10,000)"
+      },
+      {
+        "label": "KRS 304.39-060 (acceptance or rejection of tort limitation - 'choice no-fault')",
+        "url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=30030",
+        "supports": "noFault",
+        "quote": "Any person may refuse to consent to the limitations of his or her tort rights and liabilities ... Such rejection must be completed in writing or electronically in a form to be prescribed by the Department of Insurance"
+      },
+      {
+        "label": "KRS 304.20-020 (UM coverage)",
+        "url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=45815",
+        "supports": "umRequired, umLimits",
+        "quote": "unless coverage is provided therein ... in limits for bodily injury or death set forth in KRS 304.39-110 ... provided that any named insured shall have the right to reject in writing such coverage"
+      },
+      {
+        "label": "KRS 304.39-320 (UIM)",
+        "url": "https://apps.legislature.ky.gov/law/Statutes/statute.aspx?id=54466",
+        "supports": "uimRequired",
+        "quote": "Every insurer shall make available, upon request, to its insureds underinsured motorist coverage"
+      },
+      {
+        "label": "2026 Ky. Acts ch. 149 (HB 627)",
+        "url": "https://apps.legislature.ky.gov/law/acts/26RS/documents/0149.pdf",
+        "supports": "effective",
+        "quote": "Section 1. KRS 304.39-020 is amended to read as follows: ... shall be ten thousand dollars ($10,000)"
+      }
+    ],
+    "LA": [
+      {
+        "label": "La. R.S. 32:900(B)(2)",
+        "url": "https://legis.la.gov/Legis/Law.aspx?d=88632",
+        "supports": "biPerPerson, biPerAccident, pd",
+        "quote": "(a) Fifteen thousand dollars because of bodily injury to or death of one person ... (b) ... thirty thousand dollars ... (c) Twenty-five thousand dollars because of damage to or destruction of property"
+      },
+      {
+        "label": "La. R.S. 32:861",
+        "url": "https://legis.la.gov/legis/Law.aspx?d=88604",
+        "supports": "insuranceRequired",
+        "quote": "It shall be the duty of the registered owner of a motor vehicle to maintain the security hereinabove required."
+      },
+      {
+        "label": "La. R.S. 22:1295(1)(a)",
+        "url": "https://www.legis.la.gov/legis/Law.aspx?d=508161",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "unless coverage is provided ... in not less than the limits of bodily injury liability provided by the policy ... uninsured or underinsured motor vehicles ... rejection ... shall be made only on a form prescribed by the commissioner"
+      },
+      {
+        "label": "2025 La. HB 434 (Enrolled), amending R.S. 32:866",
+        "url": "https://www.legis.la.gov/legis/ViewDocument.aspx?d=1417433",
+        "supports": "effective (no-pay-no-play change)",
+        "quote": "There shall be no recovery for the first fifteen one hundred thousand dollars of bodily injury (struck-through text = deleted)"
+      }
+    ],
+    "ME": [
+      {
+        "label": "29-A M.R.S. §1605(1)(C)",
+        "url": "https://legislature.maine.gov/statutes/29-A/title29-Asec1605.html",
+        "supports": "biPerPerson, biPerAccident, pd, medPayRequired",
+        "quote": "For damage to property, $25,000; For injury to or death of any one person, $50,000; For one accident ... $100,000; For medical payments pursuant to section 1605-A, $2,000"
+      },
+      {
+        "label": "29-A M.R.S. §1601",
+        "url": "https://legislature.maine.gov/statutes/29-A/title29-Asec1601.html",
+        "supports": "insuranceRequired",
+        "quote": "An operator or owner of a vehicle registered in this State ... shall maintain the amounts of motor vehicle financial responsibility specified in section 1605."
+      },
+      {
+        "label": "29-A M.R.S. §1605-A",
+        "url": "https://legislature.maine.gov/statutes/29-A/title29-Asec1605-A.html",
+        "supports": "medPayRequired",
+        "quote": "must provide coverage in an amount equal to or greater than $2,000 per person for medical costs"
+      },
+      {
+        "label": "24-A M.R.S. §2902",
+        "url": "https://legislature.maine.gov/statutes/24-A/title24-Asec2902.html",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "may not be delivered ... unless coverage is provided ... uninsured, underinsured or hit-and-run motor vehicles ... may not be less than the amount of coverage for liability for bodily injury ... unless the purchaser expressly rejects such an amount"
+      }
+    ],
+    "MD": [
+      {
+        "label": "Md. Code, Transp. §17-103(b)",
+        "url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gtr&section=17-103&enactments=false",
+        "supports": "biPerPerson, biPerAccident, pd, pipRequired, umRequired",
+        "quote": "up to $30,000 for any one person and up to $60,000 for any two or more persons ... property of others ... up to $15,000"
+      },
+      {
+        "label": "Md. Code, Transp. §17-104",
+        "url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gtr&section=17-104&enactments=false",
+        "supports": "insuranceRequired",
+        "quote": "The owner of a motor vehicle that is required to be registered in this State shall maintain the required security for the vehicle during the registration period."
+      },
+      {
+        "label": "Md. Code, Ins. §19-505",
+        "url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gin&section=19-505&enactments=false",
+        "supports": "pipRequired, pipAmount",
+        "quote": "Unless waived in accordance with § 19-506 ... The minimum medical, hospital, and disability benefits ... shall include up to $2,500"
+      },
+      {
+        "label": "Md. Code, Ins. §19-506",
+        "url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gin&section=19-506&enactments=false",
+        "supports": "pipRequired (waiver)",
+        "quote": "the first named insured shall make an affirmative written waiver of those benefits"
+      },
+      {
+        "label": "Md. Code, Ins. §19-509",
+        "url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gin&section=19-509&enactments=false",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "each motor vehicle liability insurance policy ... shall contain coverage ... from the owner or operator of an uninsured motor vehicle ... shall at least equal ... the amounts required by Title 17"
+      },
+      {
+        "label": "Md. Code, Ins. §19-510",
+        "url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gin&section=19-510&enactments=false",
+        "supports": "umLimits",
+        "quote": "shall make an affirmative written waiver of having uninsured motorist coverage in the same amount as the liability coverage"
+      }
+    ],
+    "MA": [
+      {
+        "label": "Mass. G.L. c.90 §34A ('Motor vehicle liability policy' definition)",
+        "url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleXIV/Chapter90/Section34A",
+        "supports": "biPerPerson, biPerAccident, pipRequired, pipAmount",
+        "quote": "not less than $25,000 on account of injury to or death of any one person ... not less than $50,000 on account of any one accident ... at least eight thousand dollars"
+      },
+      {
+        "label": "Mass. G.L. c.90 §34O",
+        "url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleXIV/Chapter90/Section34O",
+        "supports": "pd",
+        "quote": "shall also maintain in force either property damage liability insurance ... subject to a limit of not less than $30,000"
+      },
+      {
+        "label": "St. 2024, c. 275, §§1-4",
+        "url": "https://malegislature.gov/Laws/SessionLaws/Acts/2024/Chapter275",
+        "supports": "effective",
+        "quote": "Sections 1 to 3, inclusive, shall apply to motor vehicle liability policies issued or renewed on or after July 1, 2025."
+      },
+      {
+        "label": "Mass. G.L. c.90 §34J",
+        "url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleXIV/Chapter90/Section34J",
+        "supports": "insuranceRequired",
+        "quote": "Whoever operates ... a motor vehicle ... during such time as the motor vehicle liability policy or bond or deposit required ... has not been provided"
+      },
+      {
+        "label": "Mass. G.L. c.175 §113L",
+        "url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleXXII/Chapter175/Section113L",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "No policy shall be issued ... unless such policy provides coverage in amounts or limits prescribed for bodily injury ... uninsured motor vehicles ... if the policyholder ... elects to purchase"
+      },
+      {
+        "label": "Mass. G.L. c.231 §6D",
+        "url": "https://malegislature.gov/Laws/GeneralLaws/PartIII/TitleII/Chapter231/Section6D",
+        "supports": "noFault",
+        "quote": "may recover damages for pain and suffering ... only if the reasonable and necessary expenses ... are in excess of two thousand dollars"
+      }
+    ],
+    "MI": [
+      {
+        "label": "MCL 500.3009",
+        "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-500-3009",
+        "supports": "biPerPerson, biPerAccident, pd, effective",
+        "quote": "after July 1, 2020 ... not less than $250,000.00 ... may choose to purchase lower limits ... but not lower than $50,000.00 under subsection (1)(a) and $100,000.00 under subsection (1)(b) ... $10,000.00 because of injury to or destruction of property"
+      },
+      {
+        "label": "MCL 500.3101",
+        "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-500-3101",
+        "supports": "insuranceRequired, pipRequired",
+        "quote": "the owner or registrant of a motor vehicle required to be registered in this state shall maintain security for payment of benefits under personal protection insurance and property protection insurance ... and residual liability insurance"
+      },
+      {
+        "label": "MCL 500.3107c",
+        "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-500-3107c",
+        "supports": "pipAmount",
+        "quote": "select 1 of the following coverage levels ... $50,000.00 ... $250,000.00 ... $500,000.00 ... (d) No limit"
+      },
+      {
+        "label": "MCL 500.3107d",
+        "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-500-3107d",
+        "supports": "pipAmount (Medicare opt-out)",
+        "quote": "may ... elect to not maintain coverage for personal protection insurance benefits payable under section 3107(1)(a) if the applicant or named insured is a qualified person"
+      },
+      {
+        "label": "MCL 500.3121(5)",
+        "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-500-3121",
+        "supports": "pipAmount (PPI $1M)",
+        "quote": "property protection insurance benefits paid under 1 policy for damage to all tangible property arising from 1 accident shall not exceed $1,000,000.00"
+      },
+      {
+        "label": "MCL 500.3135",
+        "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-500-3135",
+        "supports": "noFault",
+        "quote": "subject to tort liability for noneconomic loss ... only if the injured person has suffered death, serious impairment of body function, or permanent serious disfigurement"
+      },
+      {
+        "label": "MCL 257.520",
+        "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-257-520",
+        "supports": "effective (20/40/10 financial-responsibility figure)",
+        "quote": "$20,000.00 because of bodily injury to or death of 1 person ... $40,000.00 ... and $10,000.00 because of injury to or destruction of property"
+      },
+      {
+        "label": "Michigan DIFS, 'Michigan's Auto Insurance Law Has Changed' guide (pre-reform edition)",
+        "url": "https://www.michigan.gov/-/media/Project/Websites/difs/Publication/Auto/Auto_Insurance_Guide.pdf",
+        "supports": "umRequired, uimRequired",
+        "quote": "Uninsured Motorist/Underinsured Motorist Bodily Injury - These are both optional coverages available from insurers for purchase."
+      }
+    ],
+    "MN": [
+      {
+        "label": "Minn. Stat. 65B.49, subd. 3(1)",
+        "url": "https://www.revisor.mn.gov/statutes/cite/65B.49",
+        "supports": "biPerPerson, biPerAccident, pd",
+        "quote": "not less than $30,000 because of bodily injury to one person ... not less than $60,000 ... not less than $10,000 because of such injury to or destruction of property"
+      },
+      {
+        "label": "Minn. Stat. 65B.49, subd. 3a(1)",
+        "url": "https://www.revisor.mn.gov/statutes/cite/65B.49",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "unless separate uninsured and underinsured motorist coverages are provided therein. Each coverage, at a minimum, must provide limits of $25,000 ... and $50,000"
+      },
+      {
+        "label": "Minn. Stat. 65B.44, subd. 1",
+        "url": "https://www.revisor.mn.gov/statutes/cite/65B.44",
+        "supports": "pipRequired, pipAmount",
+        "quote": "shall provide a minimum of $40,000 ... (1) $20,000 for medical expense loss ... (2) a total of $20,000 for income loss"
+      },
+      {
+        "label": "Minn. Stat. 65B.48, subd. 1",
+        "url": "https://www.revisor.mn.gov/statutes/cite/65B.48",
+        "supports": "insuranceRequired",
+        "quote": "Every owner of a motor vehicle ... shall maintain during the period in which operation or use is contemplated a plan of reparation security"
+      },
+      {
+        "label": "Minn. Stat. 65B.51, subd. 3",
+        "url": "https://www.revisor.mn.gov/statutes/cite/65B.51",
+        "supports": "noFault",
+        "quote": "The sum of the following exceeds $4,000"
+      }
+    ],
+    "MS": [
+      {
+        "label": "Mississippi Insurance Department, Auto Insurance consumer page",
+        "url": "https://www.mid.ms.gov/mississippi-insurance-department/consumers/auto-insurance/",
+        "supports": "biPerPerson, biPerAccident, pd, insuranceRequired, effective, medPayRequired",
+        "quote": "On January 1, 2006, the minimum liability requirements increased to the following: $25,000 per person ..., $50,000 per accident for bodily injury, and $25,000 per accident for property damage."
+      },
+      {
+        "label": "Miss. Code 63-15-3(j) (text as reproduced in 2015 HB 303)",
+        "url": "https://billstatus.ls.state.ms.us/documents/2015/html/HB/0300-0399/HB0303IN.htm",
+        "supports": "biPerPerson, biPerAccident, pd",
+        "quote": "Twenty-five Thousand Dollars ($25,000.00) because of bodily injury to or death of one (1) person ... Fifty Thousand Dollars ($50,000.00) ... Twenty-five Thousand Dollars ($25,000.00) because of injury to or destruction of property"
+      },
+      {
+        "label": "Miss. Code 83-11-101 (text as reproduced in 2026 HB 382, died in committee)",
+        "url": "https://billstatus.ls.state.ms.us/documents/2026/html/HB/0300-0399/HB0382IN.htm",
+        "supports": "umRequired, umLimits",
+        "quote": "within limits which shall be no less than those set forth in the Mississippi Motor Vehicle Safety Responsibility Law ... The coverage herein required shall not be applicable where any insured named in the policy shall reject the coverage in writing"
+      },
+      {
+        "label": "Miss. Code 83-11-103(c)(iii) (text as reproduced in 2020 HB 1046)",
+        "url": "https://billstatus.ls.state.ms.us/documents/2020/html/HB/1000-1099/HB1046IN.htm",
+        "supports": "uimRequired",
+        "quote": "An insured motor vehicle, when the liability insurer of such vehicle has provided limits of bodily injury liability ... which are less than the limits applicable to the injured person provided under his uninsured motorist coverage"
+      },
+      {
+        "label": "MS Legislature bill status, 2026 HB 382",
+        "url": "https://billstatus.ls.state.ms.us/2026/pdf/history/HB/HB0382.xml",
+        "supports": "effective",
+        "quote": "02/03 (H) Died In Committee"
+      }
+    ],
+    "MO": [
+      {
+        "label": "RSMo 303.190.2(2)",
+        "url": "https://revisor.mo.gov/main/OneSection.aspx?section=303.190",
+        "supports": "biPerPerson, biPerAccident, pd",
+        "quote": "twenty-five thousand dollars because of bodily injury to or death of one person ... fifty thousand dollars ... twenty-five thousand dollars because of injury to or destruction of property"
+      },
+      {
+        "label": "RSMo 303.025",
+        "url": "https://revisor.mo.gov/main/OneSection.aspx?section=303.025",
+        "supports": "insuranceRequired",
+        "quote": "No owner of a motor vehicle registered in this state ... shall operate, register or maintain registration ... unless the owner maintains the financial responsibility"
+      },
+      {
+        "label": "RSMo 379.203.1",
+        "url": "https://revisor.mo.gov/main/OneSection.aspx?section=379.203",
+        "supports": "umRequired, umLimits",
+        "quote": "No automobile liability insurance ... shall be delivered or issued ... unless coverage is provided therein ... in not less than the limits for bodily injury or death set forth in section 303.030"
+      },
+      {
+        "label": "Missouri Department of Revenue, Insurance Information",
+        "url": "https://dor.mo.gov/driver-license/insurance/",
+        "supports": "biPerPerson, pd, umLimits",
+        "quote": "The law also requires you to have uninsured motorist coverage of $25,000 for bodily injury per person and $50,000 for bodily injury per accident."
+      },
+      {
+        "label": "RSMo 379.204",
+        "url": "https://revisor.mo.gov/main/OneSection.aspx?section=379.204",
+        "supports": "uimRequired",
+        "quote": "Any underinsured motor vehicle coverage with limits of liability less than two times the limits ... shall be construed to provide coverage in excess"
+      }
+    ],
+    "MT": [
+      {
+        "label": "MCA 61-6-103(1)(b)",
+        "url": "https://mca.legmt.gov/bills/mca/title_0610/chapter_0060/part_0010/section_0030/0610-0060-0010-0030.html",
+        "supports": "biPerPerson, biPerAccident, pd",
+        "quote": "$25,000 because of bodily injury to or death of one person ... $50,000 ... $20,000 because of injury to or destruction of property of others"
+      },
+      {
+        "label": "MCA 61-6-301(1)",
+        "url": "https://mca.legmt.gov/bills/mca/title_0610/chapter_0060/part_0030/section_0010/0610-0060-0030-0010.html",
+        "supports": "insuranceRequired",
+        "quote": "an owner of a motor vehicle that is registered and operated in Montana ... shall continuously provide insurance against loss resulting from liability"
+      },
+      {
+        "label": "MCA 33-23-201",
+        "url": "https://mca.legmt.gov/bills/mca/title_0330/chapter_0230/part_0020/section_0010/0330-0230-0020-0010.html",
+        "supports": "umRequired, umLimits",
+        "quote": "may not be delivered or issued ... unless coverage is provided ... in limits for bodily injury or death set forth in 61-6-103 ... The named insured has the right to reject the coverage."
+      },
+      {
+        "label": "Montana CSI, Auto insurance page",
+        "url": "https://csimt.gov/your-insurance/auto/",
+        "supports": "umRequired (signed form), biPerPerson, pd",
+        "quote": "Unless you sign a form stating you do not want Uninsured Motorist coverage, your agent is required by law to provide it to you."
+      }
+    ],
+    "NE": [
+      {
+        "label": "Neb. Rev. Stat. 60-310",
+        "url": "https://nebraskalegislature.gov/laws/statutes.php?statute=60-310",
+        "supports": "biPerPerson, biPerAccident, pd",
+        "quote": "in the amount of twenty-five thousand dollars because of bodily injury to or death of one person ... fifty thousand dollars ... twenty-five thousand dollars because of injury to or destruction of property"
+      },
+      {
+        "label": "Neb. Rev. Stat. 60-3,167",
+        "url": "https://nebraskalegislature.gov/laws/statutes.php?statute=60-3,167",
+        "supports": "insuranceRequired",
+        "quote": "without having a current and effective automobile liability policy, evidence of insurance, or proof of financial responsibility"
+      },
+      {
+        "label": "Neb. Rev. Stat. 44-6408",
+        "url": "https://nebraskalegislature.gov/laws/statutes.php?statute=44-6408",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "No policy ... shall be delivered, issued for delivery, or renewed ... unless coverage is provided ... (a) ... uninsured motor vehicle in limits of twenty-five thousand dollars ... and (b) ... underinsured motor vehicle"
+      }
+    ],
+    "NV": [
+      {
+        "label": "NRS 485.185",
+        "url": "https://www.leg.state.nv.us/NRS/NRS-485.html#NRS485Sec185",
+        "supports": "insuranceRequired, biPerPerson, biPerAccident, pd, effective",
+        "quote": "(a) In the amount of $25,000 for bodily injury to or death of one person ... (b) ... $50,000 ... (c) In the amount of $20,000 for injury to or destruction of property"
+      },
+      {
+        "label": "NRS 690B.020",
+        "url": "https://www.leg.state.nv.us/NRS/NRS-690B.html#NRS690BSec020",
+        "supports": "umRequired, umLimits",
+        "quote": "No such coverage is required ... where rejected in writing, on a form furnished by the insurer describing the coverage being rejected, by an insured named therein"
+      },
+      {
+        "label": "NRS 687B.145(2)-(3)",
+        "url": "https://www.leg.state.nv.us/NRS/NRS-687B.html#NRS687BSec145",
+        "supports": "uimRequired, medPayRequired",
+        "quote": "must offer, on a form approved by the Commissioner, uninsured and underinsured vehicle coverage ... must offer ... the option of purchasing coverage in an amount of at least $1,000 for ... medical expenses"
+      }
+    ],
+    "NH": [
+      {
+        "label": "RSA 259:61 (motor vehicle liability policy)",
+        "url": "https://gc.nh.gov/rsa/html/XXI/259/259-61.htm",
+        "supports": "biPerPerson, biPerAccident, pd",
+        "quote": "at least $25,000 on account of injury to or death of any one person ... at least $50,000 ... and at least $25,000 for damage to property of others"
+      },
+      {
+        "label": "NH Insurance Department, 2022 Automobile Insurance Consumer Guide",
+        "url": "https://mm.nh.gov/files/uploads/nhid/documents/nh-auto-guide.pdf",
+        "supports": "insuranceRequired, medPayRequired, umRequired",
+        "quote": "New Hampshire motor vehicle laws do not require you to carry auto insurance ... By law, you must buy at least $1,000 of Medical Payments Coverage."
+      },
+      {
+        "label": "RSA 264:20 (amount of proof of financial responsibility)",
+        "url": "https://gc.nh.gov/rsa/html/XXI/264/264-20.htm",
+        "supports": "financial-responsibility amounts",
+        "quote": "in the amount of $25,000 because of bodily injury or death to any one person ... $50,000 ... $25,000 because of injury to and destruction of property"
+      },
+      {
+        "label": "RSA 264:15 (uninsured motorist coverage)",
+        "url": "https://gc.nh.gov/rsa/html/XXI/264/264-15.htm",
+        "supports": "umRequired, umLimits",
+        "quote": "no policy shall be issued ... unless coverage is provided therein ... at least in amounts and limits prescribed for bodily injury or death for a liability policy"
+      },
+      {
+        "label": "RSA 259:117 (uninsured motor vehicle)",
+        "url": "https://gc.nh.gov/rsa/html/XXI/259/259-117.htm",
+        "supports": "uimRequired",
+        "quote": "The term shall also include an insured motor vehicle if ... the applicable liability insurance limits are less than the limits of the uninsured motorist coverage"
+      },
+      {
+        "label": "RSA 264:16 (medical payments)",
+        "url": "https://gc.nh.gov/rsa/html/XXI/264/264-16.htm",
+        "supports": "medPayRequired",
+        "quote": "shall provide medical payments coverage ... in an amount equal to or greater than $1,000 per person"
+      }
+    ],
+    "NJ": [
+      {
+        "label": "P.L.2022, c.87 (amending N.J.S.A. 39:6B-1, 17:28-1.1, 39:6A-3)",
+        "url": "https://pub.njleg.gov/bills/2022/PL22/87_.HTM",
+        "supports": "biPerPerson, biPerAccident, pd, effective, umRequired, uimRequired, umLimits",
+        "quote": "$35,000 for plans issued or renewed on or after January 1, 2026 ... $70,000 for plans issued or renewed on or after January 1, 2026 ... $25,000 ... for damage to property"
+      },
+      {
+        "label": "N.J.S.A. 17:28-1.1 as amended by P.L.2022, c.87",
+        "url": "https://pub.njleg.gov/bills/2022/PL22/87_.HTM",
+        "supports": "umRequired, uimRequired",
+        "quote": "Except for a basic automobile insurance policy, no motor vehicle liability policy ... shall be issued ... unless it includes coverage ... from the operator or owner of an uninsured motor vehicle, underinsured motor vehicle"
+      },
+      {
+        "label": "NJ DOBI, Auto Insurance New Jersey Buyer's Guide (2026)",
+        "url": "https://www.nj.gov/dobi/division_consumers/pdf/autoguide2026.pdf",
+        "supports": "insuranceRequired, pipRequired, pipAmount, Basic Policy details, umRequired",
+        "quote": "Car insurance is required in New Jersey. ... PERSONAL INJURY PROTECTION As low as: $15,000 per person or accident ... A minimum amount of Uninsured/Underinsured Motorist Coverage is required."
+      }
+    ],
+    "NM": [
+      {
+        "label": "NM MVD Manual Ch. 11 (quoting NMSA 66-5-205(A), 66-5-208)",
+        "url": "https://www.mvd.newmexico.gov/chapter-11-mandatory-insurance/",
+        "supports": "insuranceRequired, biPerPerson, biPerAccident, pd",
+        "quote": "$25,000 because of bodily injury to or death of one person ... $50,000 ... $10,000 because of injury to or destruction of property of others in any one accident"
+      },
+      {
+        "label": "NM MVD FAQ: What automobile insurance am I required to have",
+        "url": "https://www.mvd.newmexico.gov/what-automobile-insurance-am-i-required-to-have-in-new-mexico/",
+        "supports": "insuranceRequired, limits",
+        "quote": "You must have an auto insurance liability policy with minimum coverage of: $25,000 ... $50,000 ... and $10,000 for property damage"
+      },
+      {
+        "label": "NMSA 66-5-301 (current text as reproduced in 2025 HB 97 committee substitute, which died)",
+        "url": "https://www.nmlegis.gov/Sessions/25%20Regular/bills/house/HB0097TPS.HTML",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "The uninsured motorist coverage described in Subsection A of this section shall include underinsured motorist coverage ... The named insured shall have the right to reject uninsured motorist coverage"
+      },
+      {
+        "label": "13.12.3.9 NMAC",
+        "url": "https://www.srca.nm.gov/parts/title13/13.012.0003.html",
+        "supports": "umRequired (written rejection)",
+        "quote": "The rejection of the provisions covering damage caused by an uninsured or unknown motor vehicle as required in writing by the provisions of Section 66-5-301 NMSA 1978 must be endorsed, attached"
+      },
+      {
+        "label": "NM Legislature, HB 97 (2025) status",
+        "url": "https://www.nmlegis.gov/Legislation/Legislation?chamber=H&legType=B&legNo=97&year=25",
+        "supports": "effective (bill died)",
+        "quote": "Current Location Died"
+      }
+    ],
+    "NY": [
+      {
+        "label": "N.Y. Veh. & Traf. Law 311(4)",
+        "url": "https://www.nysenate.gov/legislation/laws/VAT/311",
+        "supports": "biPerPerson, biPerAccident, pd",
+        "quote": "twenty-five thousand dollars because of bodily injuries to and fifty thousand dollars because of death of one person ... a limit of ten thousand dollars because of injury to or destruction of property"
+      },
+      {
+        "label": "NY Department of Financial Services, \"How much auto insurance must I carry?\" (plain-language fallback)",
+        "url": "https://www.dfs.ny.gov/faqs/consumer-auto/how-much-auto-insurance-must-i-carry",
+        "supports": "biPerPerson, biPerAccident, pd, pipAmount",
+        "quote": "a minimum amount of liability insurance of $25,000 for bodily injury to one person, $50,000 for bodily injury to all persons, and $10,000 for property damage in any one accident. Mandatory \"no-fault\" coverage of $50,000 is also required."
+      },
+      {
+        "label": "N.Y. Veh. & Traf. Law 312",
+        "url": "https://www.nysenate.gov/legislation/laws/VAT/312",
+        "supports": "insuranceRequired",
+        "quote": "No motor vehicle shall be registered in this state unless the application for such registration is accompanied by proof of financial security"
+      },
+      {
+        "label": "N.Y. Ins. Law 3420(f)",
+        "url": "https://www.nysenate.gov/legislation/laws/ISC/3420",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "(f)(1) No policy ... shall be issued ... unless it contains a provision ... twenty-five thousand dollars ... (2)(A) Any such policy shall, at the option of the insured, also provide supplementary uninsured/underinsured motorists insurance"
+      },
+      {
+        "label": "N.Y. Ins. Law 5102",
+        "url": "https://www.nysenate.gov/legislation/laws/ISC/5102",
+        "supports": "pipAmount, noFault",
+        "quote": "\"Basic economic loss\" means, up to fifty thousand dollars per person ... \"Serious injury\" means a personal injury which results in death; dismemberment; significant disfigurement; a fracture"
+      }
+    ],
+    "NC": [
+      {
+        "label": "N.C.G.S. 20-279.21(b)(2)",
+        "url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_20/GS_20-279.21.html",
+        "supports": "biPerPerson, biPerAccident, pd",
+        "quote": "fifty thousand dollars ($50,000) because of bodily injury to or death of one person ... one hundred thousand dollars ($100,000) ... fifty thousand dollars ($50,000) because of injury to or destruction of property"
+      },
+      {
+        "label": "N.C.G.S. 20-309(a)",
+        "url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_20/GS_20-309.html",
+        "supports": "insuranceRequired",
+        "quote": "No motor vehicle shall be registered in this State unless the owner at the time of registration provides proof of financial responsibility"
+      },
+      {
+        "label": "N.C.G.S. 20-279.21(b)(3), (b)(4), (m)",
+        "url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_20/GS_20-279.21.html",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "The named insured is required to purchase uninsured motorist bodily injury coverage, uninsured motorist property damage coverage, and underinsured motorist bodily injury coverage."
+      },
+      {
+        "label": "S.L. 2024-29 s.8(c) (amending S.L. 2023-133 s.12(i))",
+        "url": "https://www.ncleg.gov/EnactedLegislation/SessionLaws/HTML/2023-2024/SL2024-29.html",
+        "supports": "effective",
+        "quote": "This section becomes effective ... July 1, 2025, and applies to policies issued or renewed on or after that date."
+      },
+      {
+        "label": "N.C.G.S. 20-279.1(11)",
+        "url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_20/GS_20-279.1.html",
+        "supports": "financial-responsibility amounts",
+        "quote": "fifty thousand dollars ($50,000) ... one hundred thousand dollars ($100,000) ... fifty thousand dollars ($50,000) because of injury to or destruction of property"
+      }
+    ],
+    "ND": [
+      {
+        "label": "N.D.C.C. 39-16.1-11",
+        "url": "https://ndlegis.gov/cencode/t39c16-1.pdf",
+        "supports": "biPerPerson, biPerAccident, pd",
+        "quote": "twenty-five thousand dollars because of bodily injury to or death of one person ... fifty thousand dollars ... twenty-five thousand dollars because of injury to or destruction of property"
+      },
+      {
+        "label": "N.D.C.C. 26.1-41-02",
+        "url": "https://ndlegis.gov/cencode/t26-1c41.pdf",
+        "supports": "insuranceRequired, pipRequired",
+        "quote": "shall continuously provide ... security for payment of basic no-fault benefits and the liabilities covered under the motor vehicle liability insurance"
+      },
+      {
+        "label": "N.D.C.C. 26.1-41-01(2), (21)",
+        "url": "https://ndlegis.gov/cencode/t26-1c41.pdf",
+        "supports": "pipAmount, noFault",
+        "quote": "may not exceed thirty thousand dollars ... \"Serious injury\" means ... medical expenses in excess of two thousand five hundred dollars"
+      },
+      {
+        "label": "N.D.C.C. 26.1-40-15.2, 26.1-40-15.3",
+        "url": "https://ndlegis.gov/cencode/t26-1c40.pdf",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "No motor vehicle liability insurance policy may be delivered ... unless uninsured motorist coverage is provided ... The insurer shall also provide underinsured motorist coverage at limits equal to the limits of uninsured motorist coverage."
+      }
+    ],
+    "OH": [
+      {
+        "label": "Ohio Rev. Code 4509.01(K)",
+        "url": "https://codes.ohio.gov/ohio-revised-code/section-4509.01",
+        "supports": "biPerPerson, biPerAccident, pd",
+        "quote": "twenty-five thousand dollars because of bodily injury to or death of one person ... fifty thousand dollars ... twenty-five thousand dollars because of injury to property of others"
+      },
+      {
+        "label": "Ohio Rev. Code 4509.101(A)(1)",
+        "url": "https://codes.ohio.gov/ohio-revised-code/section-4509.101",
+        "supports": "insuranceRequired",
+        "quote": "No person shall operate, or permit the operation of, a motor vehicle in this state, unless proof of financial responsibility is maintained continuously"
+      },
+      {
+        "label": "Ohio Rev. Code 3937.18(A)",
+        "url": "https://codes.ohio.gov/ohio-revised-code/section-3937.18",
+        "supports": "umRequired, uimRequired",
+        "quote": "may, but is not required to, include uninsured motorist coverage, underinsured motorist coverage, or both"
+      }
+    ],
+    "OK": [
+      {
+        "label": "47 O.S. 7-324",
+        "url": "https://www.oscn.net/applications/oscn/DeliverDocument.asp?CiteID=82199",
+        "supports": "biPerPerson, biPerAccident, pd",
+        "quote": "Twenty-five Thousand Dollars ($25,000.00) because of bodily injury to or death of one person ... Fifty Thousand Dollars ($50,000.00) ... Twenty-five Thousand Dollars ($25,000.00) because of injury to or destruction of property"
+      },
+      {
+        "label": "47 O.S. 7-601",
+        "url": "https://www.oscn.net/applications/oscn/DeliverDocument.asp?CiteID=82225",
+        "supports": "insuranceRequired",
+        "quote": "Every owner of a motor vehicle registered in this state ... shall, at all times, maintain in force with respect to such vehicle security for the payment of loss"
+      },
+      {
+        "label": "36 O.S. 3636",
+        "url": "https://www.oscn.net/applications/oscn/DeliverDocument.asp?CiteID=87144",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "No policy ... shall be issued ... unless the policy includes the coverage described in subsection B\" / \"A named insured or applicant shall have the right to reject uninsured motorist coverage in writing.\" / \"'uninsured motor vehicle' shall also include an insured motor vehicle, the liability limits of which are less than the amount of the claim"
+      }
+    ],
+    "OR": [
+      {
+        "label": "ORS 806.070",
+        "url": "https://www.oregonlegislature.gov/bills_laws/ors/ors806.html",
+        "supports": "biPerPerson, biPerAccident, pd",
+        "quote": "(a) $25,000 because of bodily injury to or death of one person ... $50,000 because of bodily injury to or death of two or more persons ... (c) $20,000 because of injury to or destruction of the property of others"
+      },
+      {
+        "label": "ORS 806.010",
+        "url": "https://www.oregonlegislature.gov/bills_laws/ors/ors806.html",
+        "supports": "insuranceRequired",
+        "quote": "A person commits the offense of driving uninsured if the person operates a motor vehicle in this state on any highway or premises open to the public"
+      },
+      {
+        "label": "ORS 742.520 and 742.524",
+        "url": "https://www.oregonlegislature.gov/bills_laws/ors/ors742.html",
+        "supports": "pipRequired, pipAmount",
+        "quote": "Every motor vehicle liability policy issued for delivery in this state that covers any private passenger motor vehicle shall provide personal injury protection benefits\" / \"but not more than $15,000 in the aggregate"
+      },
+      {
+        "label": "ORS 742.502",
+        "url": "https://www.oregonlegislature.gov/bills_laws/ors/ors742.html",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "shall provide in the policy or by indorsement on the policy uninsured motorist coverage\" / \"may not elect limits lower than the amounts prescribed to meet the requirements of ORS 806.070\" / \"Uninsured motorist coverage must include underinsurance coverage"
+      }
+    ],
+    "PA": [
+      {
+        "label": "75 Pa.C.S. 1702",
+        "url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=75&div=0&chapter=17&section=2&subsctn=0",
+        "supports": "biPerPerson, biPerAccident, pd",
+        "quote": "in the amount of $15,000 because of injury to one person in any one accident, in the amount of $30,000 because of injury to two or more persons in any one accident and in the amount of $5,000 because of damage"
+      },
+      {
+        "label": "75 Pa.C.S. 1786",
+        "url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=75&div=0&chapter=17&section=86&subsctn=0",
+        "supports": "insuranceRequired",
+        "quote": "Every motor vehicle of the type required to be registered under this title which is operated or currently registered shall be covered by financial responsibility."
+      },
+      {
+        "label": "75 Pa.C.S. 1711",
+        "url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=75&div=0&chapter=17&section=11&subsctn=0",
+        "supports": "pipRequired, pipAmount",
+        "quote": "shall include coverage providing a medical benefit in the amount of $5,000."
+      },
+      {
+        "label": "75 Pa.C.S. 1731",
+        "url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=75&div=0&chapter=17&section=31&subsctn=0",
+        "supports": "umRequired, uimRequired",
+        "quote": "Purchase of uninsured motorist and underinsured motorist coverages is optional."
+      },
+      {
+        "label": "75 Pa.C.S. 1705",
+        "url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=75&div=0&chapter=17&section=5&subsctn=0",
+        "supports": "noFault (choice of full tort vs. limited tort)",
+        "quote": "the availability of two alternatives of full tort insurance and limited tort insurance"
+      }
+    ],
+    "RI": [
+      {
+        "label": "R.I. Gen. Laws 31-47-2",
+        "url": "https://webserver.rilegislature.gov/Statutes/TITLE31/31-47/31-47-2.htm",
+        "supports": "biPerPerson, biPerAccident, pd, combinedSingleLimit",
+        "quote": "twenty-five thousand dollars ($25,000) because of bodily injury to, or death of, one person ... fifty thousand dollars ($50,000) ... twenty-five thousand dollars ($25,000) because of injury to, or destruction of, property ... or seventy-five thousand dollars ($75,000) combined, single limit"
+      },
+      {
+        "label": "R.I. Gen. Laws 31-47-9",
+        "url": "https://webserver.rilegislature.gov/Statutes/TITLE31/31-47/31-47-9.htm",
+        "supports": "insuranceRequired",
+        "quote": "knowingly operate the motor vehicle or knowingly permit it to be operated in this state without having in full force and effect the financial security required by the provisions of this chapter"
+      },
+      {
+        "label": "R.I. Gen. Laws 27-7-2.1",
+        "url": "https://webserver.rilegislature.gov/Statutes/TITLE27/27-7/27-7-2.1.htm",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "unless the named insured is purchasing only the minimum coverage required ... in which case the limit can be reduced to zero, but only after signing an advisory notice\" / \"'uninsured motorist' shall include an underinsured motorist"
+      }
+    ],
+    "SC": [
+      {
+        "label": "S.C. Code 38-77-140",
+        "url": "https://www.scstatehouse.gov/code/t38c077.php",
+        "supports": "biPerPerson, biPerAccident, pd",
+        "quote": "(1) twenty-five thousand dollars because of bodily injury to one person ... (2) fifty thousand dollars because of bodily injury to two or more persons ... (3) twenty-five thousand dollars because of injury to or destruction of property"
+      },
+      {
+        "label": "S.C. Code 38-77-150",
+        "url": "https://www.scstatehouse.gov/code/t38c077.php",
+        "supports": "umRequired, umLimits",
+        "quote": "No automobile insurance policy or contract may be issued or delivered unless it contains ... the uninsured motorist provision\" / \"no less than twenty-five thousand dollars' coverage for injury to or destruction of the property"
+      },
+      {
+        "label": "S.C. Code 38-77-160",
+        "url": "https://www.scstatehouse.gov/code/t38c077.php",
+        "supports": "uimRequired",
+        "quote": "Such carriers shall also offer, at the option of the insured, underinsured motorist coverage up to the limits of the insured liability coverage"
+      },
+      {
+        "label": "S.C. Code 56-10-10 and 56-10-510",
+        "url": "https://www.scstatehouse.gov/code/t56c010.php",
+        "supports": "insuranceRequired, effective",
+        "quote": "Every owner of a motor vehicle required to be registered in this State shall maintain the security required\" / \"Reserved by 2023 Act No. 51, SECTION 5, eff July 1, 2024."
+      }
+    ],
+    "SD": [
+      {
+        "label": "SDCL 32-35-70",
+        "url": "https://sdlegislature.gov/Statutes/32-35-70",
+        "supports": "biPerPerson, biPerAccident, pd",
+        "quote": "twenty-five thousand dollars because of bodily injury to or death of one person ... fifty thousand dollars ... twenty-five thousand dollars because of injury to or destruction of property"
+      },
+      {
+        "label": "SDCL 32-35-113",
+        "url": "https://sdlegislature.gov/Statutes/32-35-113",
+        "supports": "insuranceRequired",
+        "quote": "Every driver or owner of a motor vehicle shall at all times maintain in force one of the forms of financial responsibility"
+      },
+      {
+        "label": "SDCL 58-11-9",
+        "url": "https://sdlegislature.gov/Statutes/58-11-9",
+        "supports": "umRequired, umLimits",
+        "quote": "unless coverage is provided therein ... in limits for bodily injury or death equal to the coverage provided by such policy for bodily injury and death"
+      },
+      {
+        "label": "SDCL 58-11-9.4",
+        "url": "https://sdlegislature.gov/Statutes/58-11-9.4",
+        "supports": "uimRequired, umLimits",
+        "quote": "unless underinsured motorist coverage is provided therein at a face amount equal to the bodily injury limits of the policy"
+      }
+    ],
+    "TN": [
+      {
+        "label": "2022 Tenn. Pub. Acts ch. 860 (amending T.C.A. 55-12-102(12))",
+        "url": "https://publications.tnsosfiles.com/acts/112/pub/pc0860.pdf",
+        "supports": "biPerPerson, biPerAccident, pd, combinedSingleLimit, effective",
+        "quote": "If proof is required after December 31, 2022 ... not less than twenty-five thousand dollars ($25,000) for bodily injury ... fifty thousand dollars ($50,000) ... twenty-five thousand dollars ($25,000) for damage to property"
+      },
+      {
+        "label": "Tennessee Department of Revenue - Financial Responsibility Law",
+        "url": "https://www.tn.gov/revenue/title-and-registration/drive-insured-tennessee/why-you-should-have-insurance.html",
+        "supports": "biPerPerson, biPerAccident, pd, insuranceRequired",
+        "quote": "$25,000 for each injury or death per accident. $50,000 for total injuries or deaths per accident. $25,000 for property damage per accident."
+      },
+      {
+        "label": "T.C.A. 56-7-1201 (Lexis public access, search for the section)",
+        "url": "https://advance.lexis.com/container?config=014CJAA5ZGVhZjA3NS02MmMzLTRlZWQtOGJjNC00YzQ1MmZlNzc2YWYKAFBvZENhdGFsb2e9zYpNUjTRaIWVfyrur9ud",
+        "supports": "umRequired, umLimits",
+        "quote": "(3) However, any named insured may reject in writing the uninsured motorist coverage completely or select lower limits of the coverage but not less than the minimum coverage"
+      }
+    ],
+    "TX": [
+      {
+        "label": "Tex. Transp. Code 601.072",
+        "url": "https://tcss.legis.texas.gov/resources/TN/htm/TN.601.htm",
+        "supports": "biPerPerson, biPerAccident, pd, effective",
+        "quote": "Effective January 1, 2011 ... (1) $30,000 for bodily injury to or death of one person in one collision; (2) $60,000 ... (3) $25,000 for damage to or destruction of property"
+      },
+      {
+        "label": "Tex. Transp. Code 601.051",
+        "url": "https://tcss.legis.texas.gov/resources/TN/htm/TN.601.htm",
+        "supports": "insuranceRequired",
+        "quote": "A person may not operate a motor vehicle in this state unless financial responsibility is established for that vehicle through: (1) a motor vehicle liability insurance policy"
+      },
+      {
+        "label": "Tex. Ins. Code 1952.101",
+        "url": "https://tcss.legis.texas.gov/resources/IN/htm/IN.1952.htm",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "unless the insurer provides uninsured or underinsured motorist coverage in the policy ... does not apply if any insured named in the insurance policy rejects the coverage in writing"
+      },
+      {
+        "label": "Tex. Ins. Code 1952.152-1952.153",
+        "url": "https://tcss.legis.texas.gov/resources/IN/htm/IN.1952.htm",
+        "supports": "pipRequired, pipAmount",
+        "quote": "unless the insurer provides personal injury protection coverage ... does not apply if any insured named in the insurance policy rejects the coverage in writing. ... amount that exceeds $2,500"
+      },
+      {
+        "label": "Texas Department of Insurance, Auto insurance guide",
+        "url": "https://www.tdi.texas.gov/pubs/consumer/cb020.html",
+        "supports": "limits (confirmation), pipRequired, umRequired",
+        "quote": "at least $30,000 of coverage for injuries per person, up to a total of $60,000 per accident, and $25,000 of coverage for property damage"
+      }
+    ],
+    "UT": [
+      {
+        "label": "Utah Code 31A-22-304",
+        "url": "https://le.utah.gov/xcode/Title31A/Chapter22/31A-22-S304.html",
+        "supports": "biPerPerson, biPerAccident, pd, combinedSingleLimit, effective",
+        "quote": "a policy issued or renewed on or after January 1, 2025 ... $30,000 ... $65,000 ... $25,000 ... or (b) $90,000 in any one accident"
+      },
+      {
+        "label": "Utah Code 31A-22-302",
+        "url": "https://le.utah.gov/xcode/Title31A/Chapter22/31A-22-S302.html",
+        "supports": "insuranceRequired, pipRequired, umRequired, uimRequired",
+        "quote": "uninsured motorist coverage ... unless affirmatively waived ... underinsured motorist coverage ... unless affirmatively waived ... personal injury protection under Sections 31A-22-306 through 31A-22-309"
+      },
+      {
+        "label": "Utah Code 31A-22-307",
+        "url": "https://le.utah.gov/xcode/Title31A/Chapter22/31A-22-S307.html",
+        "supports": "pipAmount",
+        "quote": "up to the minimum amount required coverage of not less than $3,000 per person"
+      },
+      {
+        "label": "Utah Code 31A-22-309",
+        "url": "https://le.utah.gov/xcode/Title31A/Chapter22/31A-22-S309.html",
+        "supports": "noFault",
+        "quote": "may not maintain a cause of action for general damages ... except where the person sustains ... (vi) medical expenses to a person in excess of $3,000."
+      },
+      {
+        "label": "Utah Code 31A-22-305 and 31A-22-305.3",
+        "url": "https://le.utah.gov/xcode/Title31A/Chapter22/31A-22-S305.html",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "the named insured may reject uninsured motorist coverage by an express writing to the insurer"
+      }
+    ],
+    "VT": [
+      {
+        "label": "23 V.S.A. 800",
+        "url": "https://legislature.vermont.gov/statutes/section/23/011/00800",
+        "supports": "biPerPerson, biPerAccident, pd, insuranceRequired",
+        "quote": "in the amounts of at least $25,000.00 for one person and $50,000.00 for two or more persons killed or injured and $10,000.00 for damages to property in any one crash"
+      },
+      {
+        "label": "23 V.S.A. 941",
+        "url": "https://legislature.vermont.gov/statutes/section/23/011/00941",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "unless coverage is provided ... from owners or operators of uninsured, underinsured, or hit-and-run motor vehicles\" / \"not less than $50,000.00 for one person and $100,000.00 for two or more persons"
+      }
+    ],
+    "VA": [
+      {
+        "label": "Va. Code 46.2-472",
+        "url": "https://law.lis.virginia.gov/vacode/title46.2/chapter3/section46.2-472/",
+        "supports": "biPerPerson, biPerAccident, pd, effective",
+        "quote": "For all policies effective on or after January 1, 2025 ... $50,000 because of bodily injury to or death of one person ... $100,000 ... $25,000 because of injury to or destruction of property"
+      },
+      {
+        "label": "Virginia DMV, Insurance Requirements",
+        "url": "https://www.dmv.virginia.gov/vehicles/insurance-requirements",
+        "supports": "limits (confirmation), prior limits",
+        "quote": "Policies effective Jan. 1, 2022 through December 31, 2024 $30,000 $60,000 $20,000 Policies effective on or after Jan. 1, 2025 $50,000 $100,000 $25,000"
+      },
+      {
+        "label": "Virginia DMV, New Laws Take Effect July 1, 2024",
+        "url": "https://www.dmv.virginia.gov/news/new-laws-take-effect-today-july-1-2024",
+        "supports": "insuranceRequired, effective (UMV fee eliminated)",
+        "quote": "DMV will no longer collect the Uninsured Motor Vehicle (UMV) fee. All vehicles registered in Virginia will be required to obtain an insurance policy that meets Virginia's liability limits."
+      },
+      {
+        "label": "Va. Code 46.2-706",
+        "url": "https://law.lis.virginia.gov/vacode/title46.2/chapter7/section46.2-706/",
+        "supports": "insuranceRequired",
+        "quote": "Every person applying for registration of a motor vehicle shall ... furnish to the Commissioner his certificate that the motor vehicle is an insured motor vehicle"
+      },
+      {
+        "label": "Va. Code 38.2-2206",
+        "url": "https://law.lis.virginia.gov/vacode/title38.2/chapter22/section38.2-2206/",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "within limits not less than the requirements of 46.2-472 ... unless any one named insured rejects the additional uninsured motorist insurance coverage ... shall also provide underinsured motorist insurance coverage with limits that shall be equal to the uninsured motorist"
+      },
+      {
+        "label": "Va. Code 38.2-2201",
+        "url": "https://law.lis.virginia.gov/vacode/title38.2/chapter22/section38.2-2201/",
+        "supports": "medPayRequired",
+        "quote": "Upon request of an insured, each insurer ... shall provide on payment of the premium, as a minimum coverage"
+      }
+    ],
+    "WA": [
+      {
+        "label": "RCW 46.29.090",
+        "url": "https://app.leg.wa.gov/RCW/default.aspx?cite=46.29.090",
+        "supports": "biPerPerson, biPerAccident, pd",
+        "quote": "not less than twenty-five thousand dollars because of bodily injury to or death of one person ... not less than fifty thousand dollars ... not less than ten thousand dollars because of injury to or destruction of property"
+      },
+      {
+        "label": "RCW 46.30.020",
+        "url": "https://app.leg.wa.gov/RCW/default.aspx?cite=46.30.020",
+        "supports": "insuranceRequired",
+        "quote": "No person may operate a motor vehicle subject to registration ... unless the person is insured under a motor vehicle liability policy with liability limits of at least the amounts provided in RCW 46.29.090"
+      },
+      {
+        "label": "RCW 48.22.030",
+        "url": "https://app.leg.wa.gov/RCW/default.aspx?cite=48.22.030",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "unless coverage is provided therein or supplemental thereto for the protection of persons insured thereunder who are legally entitled to recover damages from owners or operators of underinsured motor vehicles ... may reject, in writing, underinsured coverage"
+      },
+      {
+        "label": "RCW 48.22.085",
+        "url": "https://app.leg.wa.gov/RCW/default.aspx?cite=48.22.085",
+        "supports": "pipRequired",
+        "quote": "may be issued unless personal injury protection coverage is offered as an optional coverage. (2) A named insured may reject, in writing, personal injury protection coverage"
+      },
+      {
+        "label": "RCW 48.22.095",
+        "url": "https://app.leg.wa.gov/RCW/default.aspx?cite=48.22.095",
+        "supports": "pipAmount",
+        "quote": "must offer minimum personal injury protection coverage ... (a) Medical and hospital benefits of ten thousand dollars; (b) A funeral expense benefit of two thousand dollars"
+      }
+    ],
+    "WV": [
+      {
+        "label": "W. Va. Code 17D-4-2",
+        "url": "https://code.wvlegislature.gov/17D-4-2/",
+        "supports": "biPerPerson, biPerAccident, pd, effective",
+        "quote": "Beginning January 1, 2016 ... $25,000 because of bodily injury to or death of one person ... $50,000 ... $25,000 because of injury to or destruction of property of others"
+      },
+      {
+        "label": "W. Va. Code 17D-2A-3",
+        "url": "https://code.wvlegislature.gov/17D-2A-3/",
+        "supports": "insuranceRequired",
+        "quote": "Every owner or registrant of a motor vehicle required to be registered and licensed in this state shall maintain security as hereinafter provided in effect continuously"
+      },
+      {
+        "label": "W. Va. Code 33-6-31",
+        "url": "https://code.wvlegislature.gov/33-6-31/",
+        "supports": "umRequired, uimRequired, umLimits",
+        "quote": "Nor may any such policy ... be so issued ... unless it contains an endorsement ... uninsured motor vehicle, within limits which shall be no less than the requirements of section two, article four, chapter seventeen-d"
+      }
+    ],
+    "WI": [
+      {
+        "label": "Wis. Stat. 344.33(2)",
+        "url": "https://docs.legis.wisconsin.gov/statutes/statutes/344/III/33",
+        "supports": "biPerPerson, biPerAccident, pd",
+        "quote": "(a) Twenty-five thousand dollars because of bodily injury to or death of one person ... (b) ... $50,000 ... (c) Ten thousand dollars because of injury to or destruction of property"
+      },
+      {
+        "label": "Wis. Stat. 344.62(1) and 344.61(2)(c)",
+        "url": "https://docs.legis.wisconsin.gov/document/statutes/344.62",
+        "supports": "insuranceRequired",
+        "quote": "no person may operate a motor vehicle upon a highway in this state unless the owner or operator of the vehicle has in effect a motor vehicle liability policy"
+      },
+      {
+        "label": "Wis. Stat. 632.32(4)",
+        "url": "https://docs.legis.wisconsin.gov/document/statutes/632.32",
+        "supports": "umRequired, medPayRequired, umLimits",
+        "quote": "uninsured motorist coverage, in limits of at least $25,000 per person and $50,000 per accident. 2. Medical payments coverage, in the amount of at least $1,000 per person ... the named insured may reject medical payments coverage"
+      },
+      {
+        "label": "Wis. Stat. 632.32(4m)",
+        "url": "https://docs.legis.wisconsin.gov/document/statutes/632.32",
+        "supports": "uimRequired",
+        "quote": "notice of the availability of underinsured motorist coverage ... Acceptance or rejection of underinsured motorist coverage ... need not be in writing"
+      }
+    ],
+    "WY": [
+      {
+        "label": "Wyo. Stat. 31-9-405(b)",
+        "url": "https://wyoleg.gov/statutes/compress/title31.pdf",
+        "supports": "biPerPerson, biPerAccident, pd",
+        "quote": "twenty-five thousand dollars ($25,000.00) because of bodily injury to or death of one (1) person ... fifty thousand dollars ($50,000.00) ... twenty thousand dollars ($20,000.00) because of injury to or destruction of property"
+      },
+      {
+        "label": "Wyo. Stat. 31-4-103(a)",
+        "url": "https://wyoleg.gov/statutes/compress/title31.pdf",
+        "supports": "insuranceRequired",
+        "quote": "No owner of a motor vehicle ... shall operate or permit the operation of his motor vehicle without having in full force and effect a motor vehicle liability policy in amounts provided by W.S. 31-9-405(b)"
+      },
+      {
+        "label": "Wyo. Stat. 31-10-101",
+        "url": "https://wyoleg.gov/statutes/compress/title31.pdf",
+        "supports": "umRequired, umLimits",
+        "quote": "unless coverage is provided therein ... in limits for bodily injury or death as provided by W.S. 31-9-102(a)(xi) ... uninsured motor vehicles ... The named insured may reject the coverage."
+      }
+    ]
+  }
+}

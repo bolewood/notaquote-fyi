@@ -23,6 +23,8 @@ import {
 import type { FactorBundle } from "./factor-types"
 import { DATA_BUNDLE_VERSION, MODEL_VERSION } from "./copy"
 import { JAYDEN, MOLLY, type Scenario } from "./scenario"
+import { assertManifestSafe, MANIFEST_VERSION, NAIC_PARAPHRASE, naicPublicationRows } from "./source-manifest"
+import { MANIFEST_VERSION as COPY_MANIFEST } from "./copy"
 
 const catalog = JSON.parse(readFileSync("public/catalog/vehicle-catalog.json", "utf8")) as VehicleCatalog
 
@@ -340,4 +342,23 @@ test("the repository has no premium-report PDF", () => {
   }
   walk(root)
   assert.deepEqual(found, [])
+})
+
+test("the source manifest is safe and NAIC manifest rows cite the publications, and only the final report is used", () => {
+  assertManifestSafe()
+  assert.equal(COPY_MANIFEST, MANIFEST_VERSION)
+  assert.match(MANIFEST_VERSION, /^manifest-\d{4}-\d{2}-\d{2}$/)
+  const [supplement, report] = naicPublicationRows()
+  assert.equal(supplement.catalogCode, "AUT-PB 2023")
+  assert.equal(supplement.publicationDate, "June 2025")
+  assert.match(supplement.licenseNote, /Not used/)
+  assert.deepEqual(supplement.derivedFields, [])
+  assert.equal(report.catalogCode, "AUT-PB 2022-2023")
+  assert.equal(report.publicationDate, "December 2025")
+  assert.match(report.licenseNote, /Used with credit/)
+  assert.match(report.licenseNote, /Source: NAIC, 2022\/2023 Auto Insurance Database Report, 2023 data/)
+  assert.ok(report.derivedFields.length > 0)
+  assert.match(NAIC_PARAPHRASE, /car-years/)
+  assert.equal(/naic estimate/i.test(NAIC_PARAPHRASE), false)
+  assert.equal(NAIC_PARAPHRASE.includes("$"), false)
 })

@@ -1,6 +1,6 @@
 {
-  "version": "manifest-2026-09-21",
-  "lastChecked": "2026-09-21",
+  "version": "manifest-2026-09-22",
+  "lastChecked": "2026-09-22",
   "rows": [
     {
       "id": "nhtsa-vpic",
@@ -11,7 +11,11 @@
       "accessMethod": "HTTPS GET of the vPIC model list, saved as a versioned catalog snapshot.",
       "refreshCadence": "Rebuild when the catalog refresh date arrives. The current snapshot asks for a refresh after 20 March 2027.",
       "lastChecked": "2026-09-21",
-      "derivedFields": ["year", "make", "model"]
+      "derivedFields": [
+        "year",
+        "make",
+        "model"
+      ]
     },
     {
       "id": "fueleconomy",
@@ -22,17 +26,19 @@
       "accessMethod": "HTTPS download of vehicles.csv, described at https://www.fueleconomy.gov/feg/ws/index.shtml.",
       "refreshCadence": "Rebuild with the NHTSA snapshot. The current snapshot asks for a refresh after 20 March 2027.",
       "lastChecked": "2026-09-21",
-      "derivedFields": ["trim name"]
+      "derivedFields": [
+        "trim name"
+      ]
     },
     {
       "id": "bls-cpi-mv-insurance",
       "name": "BLS CPI, motor vehicle insurance",
       "url": "https://data.bls.gov/timeseries/CUUR0000SETE",
       "owner": "U.S. Bureau of Labor Statistics",
-      "licenseNote": "BLS publications are in the public domain, except previously copyrighted images. Do not use the BLS emblem. This series is not applied until a baseline is cleared. No index value is stored.",
-      "accessMethod": "Public series CUUR0000SETE. Not snapshotted.",
-      "refreshCadence": "Not refreshed into this bundle until a baseline is cleared.",
-      "lastChecked": "2026-09-21",
+      "licenseNote": "BLS publications are in the public domain, except previously copyrighted images. Do not use the BLS emblem. We record the 2023 average and the latest monthly value next to the state baselines as optional price-trend inputs. The series is not applied to any figure.",
+      "accessMethod": "Public series CUUR0000SETE, fetched through the BLS public API on 22 September 2026.",
+      "refreshCadence": "Refresh the recorded values when the state baselines are refreshed.",
+      "lastChecked": "2026-09-22",
       "derivedFields": []
     },
     {
@@ -40,19 +46,21 @@
       "name": "State statutes and insurance departments",
       "url": null,
       "owner": "State legislatures and insurance departments",
-      "licenseNote": "Public statute and department pages. The state-rules table is source research, not a premium baseline. Rows without a source URL have no dollar minimum.",
-      "accessMethod": "Pages opened in a browser and cited on the state-rules row. No bulk download.",
-      "refreshCadence": "Review the launch rows when a cited statute changes. The current table was checked on 21 September 2026.",
-      "lastChecked": "2026-09-21",
+      "licenseNote": "Public statute and government pages. Every state and DC has a row with at least one source link and a check date. A figure we couldn't confirm stays blank. This is a table of legal minimums, not a premium.",
+      "accessMethod": "Pages read directly or in a browser and cited on each state row, with short quotes in data/state-rules/evidence.json. No bulk download.",
+      "refreshCadence": "Re-check a row when its law changes. Scheduled changes are listed on the row, and a test fails once one takes effect.",
+      "lastChecked": "2026-09-22",
       "derivedFields": [
         "minimum bodily injury per person",
         "minimum bodily injury per accident",
         "minimum property damage",
+        "combined single limit",
         "personal injury protection flag",
-        "no-fault flag",
+        "medical payments flag",
+        "no-fault setting",
         "uninsured motorist flag",
         "underinsured motorist flag",
-        "credit bucket"
+        "scheduled changes"
       ]
     },
     {
@@ -60,10 +68,10 @@
       "name": "NAIC publications catalog",
       "url": "https://content.naic.org/publications",
       "owner": "National Association of Insurance Commissioners",
-      "licenseNote": "Not cleared. This row is a link to the catalog. No publication body is stored.",
+      "licenseNote": "A link to NAIC's publications list, so you can look for newer editions. No publication text is stored.",
       "accessMethod": "Link only.",
       "refreshCadence": "Check the catalog when a new auto database publication is announced. Do not download files into this bundle.",
-      "lastChecked": "2026-09-21",
+      "lastChecked": "2026-09-22",
       "derivedFields": []
     },
     {
@@ -71,10 +79,10 @@
       "name": "2023 Auto Insurance Database Average Premium Supplement",
       "url": "https://content.naic.org/sites/default/files/aut-db_1.pdf",
       "owner": "National Association of Insurance Commissioners",
-      "licenseNote": "Not cleared. No written permission covers storage in this bundle or display inside a computed range. This row has no premium, expenditure, exposure, or loss figures.",
+      "licenseNote": "Not used. This June 2025 supplement had preliminary 2023 figures. The December 2025 report revised many of them, so we use the report instead. No figures from this edition are stored.",
       "accessMethod": "Citation link only. The PDF is not stored in this repository.",
-      "refreshCadence": "Not refreshed into this bundle. A later permission decision would be a new manifest version.",
-      "lastChecked": "2026-09-21",
+      "refreshCadence": "None. Superseded by the December 2025 report.",
+      "lastChecked": "2026-09-22",
       "derivedFields": [],
       "catalogCode": "AUT-PB 2023",
       "publicationDate": "June 2025"
@@ -84,11 +92,15 @@
       "name": "2022/2023 Auto Insurance Database Report",
       "url": "https://content.naic.org/sites/default/files/publication-aut-pb-auto-insurance-database.pdf",
       "owner": "National Association of Insurance Commissioners",
-      "licenseNote": "Not cleared. No written permission covers storage in this bundle or display inside a computed range. This row has no premium, expenditure, exposure, or loss figures.",
-      "accessMethod": "Citation link only. The PDF is not stored in this repository.",
-      "refreshCadence": "Not refreshed into this bundle. A later permission decision would be a new manifest version.",
-      "lastChecked": "2026-09-21",
-      "derivedFields": [],
+      "licenseNote": "Used with credit. The owner approved using the per-state 2023 figures as facts, for non-commercial use. We store three per-state numbers from the 2023 column (combined average premium, liability average premium, and average expenditure) and credit them as: Source: NAIC, 2022/2023 Auto Insurance Database Report, 2023 data. We don't copy the report's text or tables, and the PDF is not in this repository.",
+      "accessMethod": "Read in a browser (the NAIC site blocks scripts). Figures transcribed from Tables 5, 1C, and 4 and checked twice against the PDF text. The PDF is not stored here.",
+      "refreshCadence": "Check for a newer edition about once a year. A new edition means a new data/state-baselines version.",
+      "lastChecked": "2026-09-22",
+      "derivedFields": [
+        "typical yearly premium by state (2023 combined average premium, Table 5)",
+        "liability average premium by state (2023, Table 1C)",
+        "average expenditure by state (2023, Table 4)"
+      ],
       "catalogCode": "AUT-PB 2022-2023",
       "publicationDate": "December 2025"
     },

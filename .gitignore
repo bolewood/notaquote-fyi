@@ -42,3 +42,6 @@ next-env.d.ts
 
 # raw catalog downloads; the derived snapshot is committed
 .catalog-cache/
+
+# browser automation logs
+.playwright-mcp/

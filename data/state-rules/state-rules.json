@@ -1,0 +1,2132 @@
+{
+  "version": "state-rules-2026-09-22",
+  "checkedOn": "2026-09-22",
+  "states": [
+    {
+      "state": "AL",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 25000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": "required-unless-rejected",
+      "uimRequired": "required-unless-rejected",
+      "medPayRequired": false,
+      "umLimits": "At least $25,000 per person and $50,000 per accident. Because Alabama counts underinsured drivers as uninsured, one coverage handles both.",
+      "effective": "25/50/25 in current Ala. Code 32-7-6(c); no 2024-2026 change found on the Legislature's code site.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "Ala. Code 32-7-6(c)",
+          "url": "https://alison.legislature.state.al.us/code-of-alabama?section=32-7-6"
+        },
+        {
+          "label": "Ala. Code 32-7A-4",
+          "url": "https://alison.legislature.state.al.us/code-of-alabama?section=32-7A-4"
+        },
+        {
+          "label": "Ala. Code 32-7-23",
+          "url": "https://alison.legislature.state.al.us/code-of-alabama?section=32-7-23"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Alabama requires at least $25,000 per person and $50,000 per accident for injuries, plus $25,000 for property damage. Uninsured/underinsured-motorist coverage is included unless you turn it down.",
+      "goodToKnow": "Alabama's law gives you the right to turn down uninsured motorist coverage but doesn't say the first refusal has to be in writing, so we mark it \"included unless you decline.\" Insurers usually ask you to sign a form anyway. Alabama counts a driver with too little insurance as uninsured, so this coverage also protects you from underinsured drivers.",
+      "uncertain": "We only saw part of the law's definition of an uninsured vehicle (the text was cut off). We marked PIP and medical payments coverage not required because we found no law requiring them, not because a law says they're optional."
+    },
+    {
+      "state": "AK",
+      "insuranceRequired": true,
+      "biPerPerson": 50000,
+      "biPerAccident": 100000,
+      "pd": 25000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": "required-unless-written-rejection",
+      "uimRequired": "required-unless-written-rejection",
+      "medPayRequired": false,
+      "umLimits": "One coverage handles both uninsured and underinsured drivers, at the state minimums ($50,000/$100,000 for injuries and $25,000 for property damage). You can waive all or part of it in writing.",
+      "effective": "50/100/25 in current AS 28.22.101(d) and AS 28.20.440(b)(2); no 2024-2026 change found.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "AS 28.22.101(d)",
+          "url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=28.22.101&secEnd=28.22.101"
+        },
+        {
+          "label": "AS 28.22.011(a)",
+          "url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=28.22.011&secEnd=28.22.011"
+        },
+        {
+          "label": "AS 28.22.101(e)",
+          "url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=28.22.101&secEnd=28.22.101"
+        },
+        {
+          "label": "AS 21.96.020(e)",
+          "url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=21.96.020&secEnd=21.96.020"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Alaska requires at least $50,000 per person and $100,000 per accident for injuries, plus $25,000 for property damage. Uninsured/underinsured-motorist coverage at those same amounts is included unless you waive it in writing.",
+      "goodToKnow": "Some vehicles driven only in areas off the main road system are exempt, if the driver has no recent serious violations. The table describes the general rule.",
+      "uncertain": "We marked PIP and medical payments coverage not required because we found no law requiring them, not because a law says they're optional."
+    },
+    {
+      "state": "AZ",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 15000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": false,
+      "uimRequired": false,
+      "medPayRequired": false,
+      "umLimits": "Your insurer must offer uninsured and underinsured motorist coverage in writing, on a state-approved form, up to your injury liability limits. Buying either one is up to you.",
+      "effective": "25/50/15 for policies issued or renewed beginning July 1, 2020 (was 15/30/10). No later change found.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "A.R.S. 28-4009(A)(2)(b)",
+          "url": "https://www.azleg.gov/ars/28/04009.htm"
+        },
+        {
+          "label": "A.R.S. 28-4135(A)",
+          "url": "https://www.azleg.gov/ars/28/04135.htm"
+        },
+        {
+          "label": "A.R.S. 20-259.01(A)-(B)",
+          "url": "https://www.azleg.gov/ars/20/00259-01.htm"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Arizona requires at least $25,000 per person and $50,000 per accident for injuries, plus $15,000 for property damage. Your insurer has to offer uninsured and underinsured-motorist coverage in writing, but buying it is your choice.",
+      "goodToKnow": null,
+      "uncertain": "We marked PIP and medical payments coverage not required because we found no law requiring them; the only mention of medical payments we found is about liens."
+    },
+    {
+      "state": "AR",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 25000,
+      "combinedSingleLimit": null,
+      "pipRequired": "required-unless-written-rejection",
+      "pipAmount": "Medical and hospital benefits up to $5,000 per person, income-disability benefits, and a $5,000 accidental-death benefit; any or all parts may be rejected in writing.",
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": "required-unless-written-rejection",
+      "uimRequired": false,
+      "medPayRequired": false,
+      "umLimits": "Uninsured motorist coverage for injuries is at least the state's liability minimums, and your insurer must offer more, up to your own liability limits. Underinsured motorist coverage must be offered, you can turn it down in writing, and it's only sold together with the uninsured coverage.",
+      "effective": "25/50/25 in current A.C.A. 27-22-104 (Lexis public-access Arkansas Code, viewed 2026-09-22). No 2024-2026 change found.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "Arkansas Insurance Department, Private Passenger Automobile Insurance FAQ (open 'What coverages are mandatory?')",
+          "url": "https://insurance.arkansas.gov/consumer-assistance/consumer-services/consumers-faq/private-passenger-automobile-insurance/"
+        },
+        {
+          "label": "A.C.A. 27-22-104 (Lexis public access, search for the section)",
+          "url": "https://advance.lexis.com/container?config=00JAA3ZTU0NTIzYy0zZDEyLTRhYmQtYmRmMS1iMWIxNDgxYWMxZTQKAFBvZENhdGFsb2cubRW4ifTiwi5vLw6cI1uX"
+        },
+        {
+          "label": "A.C.A. 23-89-403 (Lexis public access, search for the section)",
+          "url": "https://advance.lexis.com/container?config=00JAA3ZTU0NTIzYy0zZDEyLTRhYmQtYmRmMS1iMWIxNDgxYWMxZTQKAFBvZENhdGFsb2cubRW4ifTiwi5vLw6cI1uX"
+        },
+        {
+          "label": "A.C.A. 23-89-209 (Lexis public access, search for the section)",
+          "url": "https://advance.lexis.com/container?config=00JAA3ZTU0NTIzYy0zZDEyLTRhYmQtYmRmMS1iMWIxNDgxYWMxZTQKAFBvZENhdGFsb2cubRW4ifTiwi5vLw6cI1uX"
+        },
+        {
+          "label": "A.C.A. 23-89-202 and 23-89-203 (Lexis public access, search for the section)",
+          "url": "https://advance.lexis.com/container?config=00JAA3ZTU0NTIzYy0zZDEyLTRhYmQtYmRmMS1iMWIxNDgxYWMxZTQKAFBvZENhdGFsb2cubRW4ifTiwi5vLw6cI1uX"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Arkansas requires at least $25,000 per person and $50,000 per accident for injuries, plus $25,000 for property damage. Personal injury protection and uninsured-motorist coverage come with your policy unless you turn them down in writing, and underinsured-motorist coverage must be offered to you.",
+      "goodToKnow": null,
+      "uncertain": "The limits are confirmed on the Arkansas Insurance Department's FAQ. That same FAQ says you \"must be offered\" uninsured motorist, underinsured motorist, and PIP coverage, which is weaker than the law excerpts we read (those say uninsured motorist coverage and PIP come with the policy unless you turn them down in writing). The official Arkansas Code is only on LexisNexis public access, which blocks direct links behind a captcha, so we saw only search excerpts of those laws, not the full sections. We didn't capture the exact PIP income benefits. We marked medical payments coverage not required because PIP already covers medical bills."
+    },
+    {
+      "state": "CA",
+      "insuranceRequired": true,
+      "biPerPerson": 30000,
+      "biPerAccident": 60000,
+      "pd": 15000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": "required-unless-written-deletion",
+      "uimRequired": "required-unless-written-deletion",
+      "medPayRequired": false,
+      "umLimits": "Uninsured motorist coverage comes with every policy that has injury liability, unless you remove it by signing the state's form. You can also agree to lower limits, but not below the state minimums. Any policy with this coverage must also include underinsured motorist coverage.",
+      "effective": "30/60/15 for policies issued or renewed on or after Jan 1, 2025 (was 15/30/5). Scheduled: for policies issued or renewed on or after Jan 1, 2035, minimums rise by $20,000/$40,000/$10,000 (to 50/100/25).",
+      "scheduledChanges": [
+        {
+          "from": "2035-01-01",
+          "biPerPerson": 50000,
+          "biPerAccident": 100000,
+          "pd": 25000,
+          "summary": "Vehicle Code 16056(d) raises each minimum by $20,000/$40,000/$10,000, to $50,000/$100,000/$25,000, for policies issued or renewed from 1 January 2035.",
+          "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=16056"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Cal. Veh. Code 16056(a)(2), (d)",
+          "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=16056"
+        },
+        {
+          "label": "Cal. Veh. Code 16056(d)",
+          "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=16056"
+        },
+        {
+          "label": "Cal. Veh. Code 16020(a)",
+          "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=16020"
+        },
+        {
+          "label": "Cal. Ins. Code 11580.2(a)(1), (p)(7)",
+          "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=11580.2"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "California requires at least $30,000 per person and $60,000 per accident for injuries, plus $15,000 for property damage, for policies issued or renewed since January 1, 2025. Uninsured and underinsured-motorist coverage is included unless you sign a form removing it. The minimums are set to rise again in 2035.",
+      "goodToKnow": "You can also meet California's requirement with a bond, a cash deposit, or self-insurance instead of a policy. Uninsured motorist coverage in California includes underinsured drivers, so if you keep one you have both.",
+      "uncertain": "We marked medical payments coverage not required because we found no law requiring it, not because a law says it's optional."
+    },
+    {
+      "state": "CO",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 15000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": "required-unless-written-rejection",
+      "uimRequired": "required-unless-written-rejection",
+      "medPayRequired": "required-unless-written-rejection",
+      "umLimits": "Uninsured motorist coverage is at least Colorado's injury liability minimums, and by law it also covers underinsured drivers. Your insurer must offer it at your own injury liability limits. Medical payments coverage is $5,000 unless you turn it down in writing (or the same way you applied, such as online).",
+      "effective": "25/50/15 in C.R.S. 10-4-620 (section added 2003, effective July 1). No change found through the 2024 statutes.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "C.R.S. 10-4-620",
+          "url": "https://leg.colorado.gov/sites/default/files/images/olls/crs2024-title-10.pdf"
+        },
+        {
+          "label": "C.R.S. 10-4-619(1)",
+          "url": "https://leg.colorado.gov/sites/default/files/images/olls/crs2024-title-10.pdf"
+        },
+        {
+          "label": "C.R.S. 10-4-609(1)(a), (4)",
+          "url": "https://leg.colorado.gov/sites/default/files/images/olls/crs2024-title-10.pdf"
+        },
+        {
+          "label": "C.R.S. 10-4-635(1)",
+          "url": "https://leg.colorado.gov/sites/default/files/images/olls/crs2024-title-10.pdf"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Colorado requires at least $25,000 per person and $50,000 per accident for injuries, plus $15,000 for property damage. Uninsured/underinsured-motorist coverage and $5,000 of medical payments coverage are included unless you turn them down in writing.",
+      "goodToKnow": null,
+      "uncertain": "The newest official statute file we found is the 2024 edition (marked \"uncertified\"), so we couldn't check 2025-2026 changes against the law's text. You may be able to turn down medical payments coverage the same way you applied (for example, online), not only on paper."
+    },
+    {
+      "state": "CT",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 25000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": true,
+      "uimRequired": true,
+      "medPayRequired": false,
+      "umLimits": "Every policy includes combined uninsured and underinsured motorist coverage. It matches your injury liability limits unless you ask in writing, on a signed consent form, for less. It can never go below $25,000 per person and $50,000 per accident. Insurers must offer up to twice your injury liability limits.",
+      "effective": "25/50/25 in current Conn. Gen. Stat. 14-112(a), incorporated by 38a-335(a). No 2024-2026 change found.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "Conn. Gen. Stat. 14-112(a)",
+          "url": "https://www.cga.ct.gov/current/pub/chap_246.htm"
+        },
+        {
+          "label": "Conn. Gen. Stat. 38a-335(a)",
+          "url": "https://www.cga.ct.gov/current/pub/chap_700.htm"
+        },
+        {
+          "label": "Conn. Gen. Stat. 38a-371(a)",
+          "url": "https://www.cga.ct.gov/current/pub/chap_700.htm"
+        },
+        {
+          "label": "Conn. Gen. Stat. 38a-336(a)",
+          "url": "https://www.cga.ct.gov/current/pub/chap_700.htm"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Connecticut requires at least $25,000 per person and $50,000 per accident for injuries, plus $25,000 for property damage. Every policy must include uninsured/underinsured-motorist coverage. It matches your liability limits unless you sign a form lowering it, and it can't go below $25,000/$50,000.",
+      "goodToKnow": "Connecticut ended its no-fault system years ago, so PIP isn't required.",
+      "uncertain": "We marked medical payments coverage not required because we found no law requiring it, not because a law says it's optional."
+    },
+    {
+      "state": "DE",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 10000,
+      "combinedSingleLimit": null,
+      "pipRequired": true,
+      "pipAmount": "At least $15,000 per person and $30,000 per accident (medical bills, lost earnings, funeral costs up to $5,000, and more). Delaware also requires at least $10,000 of coverage for damage to property other than vehicles.",
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": "required-unless-written-rejection",
+      "uimRequired": false,
+      "medPayRequired": false,
+      "umLimits": "Uninsured motorist coverage is at least the state's minimums for injuries and property damage (with a $250 deductible for property damage). Insurers must offer more, up to $100,000/$300,000. Underinsured motorist coverage is part of that optional extra.",
+      "effective": "25/50/10 in 21 Del. C. 2902(b)(2), incorporated by 2118(a)(1). No 2024-2026 change found.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "21 Del. C. 2902(b)(2)",
+          "url": "https://delcode.delaware.gov/title21/c029/sc01/index.html"
+        },
+        {
+          "label": "21 Del. C. 2118(a)",
+          "url": "https://delcode.delaware.gov/title21/c021/sc01/index.html"
+        },
+        {
+          "label": "18 Del. C. 3902(a)-(b)",
+          "url": "https://delcode.delaware.gov/title18/c039/index.html"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Delaware requires at least $25,000 per person and $50,000 per accident for injuries, plus $10,000 for property damage. You must also carry personal injury protection (at least $15,000 per person and $30,000 per accident). Uninsured-motorist coverage is included unless you turn it down in writing, and underinsured coverage is an option you can buy.",
+      "goodToKnow": "Delaware's PIP pays your own medical bills no matter who caused the crash, but we found no limit on your right to sue, so Delaware isn't marked as a no-fault state.",
+      "uncertain": "We marked medical payments coverage not required because we found no separate law requiring it. PIP already covers medical bills."
+    },
+    {
+      "state": "DC",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 10000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": "Optional. Insurers must offer PIP (medical and rehabilitation, lost work, funeral), and you can buy any or all parts.",
+      "noFault": "choice",
+      "noFaultDefault": false,
+      "umRequired": true,
+      "uimRequired": false,
+      "medPayRequired": false,
+      "umLimits": "Uninsured motorist coverage is required: $25,000 per person and $50,000 per accident for injuries, and $5,000 for property damage (with a $200 deductible). You can buy up to 100/300/25. Underinsured motorist coverage is optional; insurers must offer it.",
+      "effective": "Today's minimums are 25/50/10. A 2026 law (D.C. Law 26-155) takes effect on 1 October 2027: injury liability rises to $50,000/$100,000, property damage to $20,000, and uninsured motorist coverage to 50/100/20. It also requires underinsured motorist coverage (or an \"enhanced\" version), with ways to waive it, and raises the minimums again every 10 years starting 1 January 2037.",
+      "scheduledChanges": [
+        {
+          "from": "2027-10-01",
+          "biPerPerson": 50000,
+          "biPerAccident": 100000,
+          "pd": 20000,
+          "summary": "D.C. Law 26-155 raises the minimums to $50,000/$100,000/$20,000 (and uninsured-motorist coverage to match) for policies from 1 October 2027.",
+          "sourceUrl": "https://code.dccouncil.gov/us/dc/council/laws/26-155"
+        }
+      ],
+      "sources": [
+        {
+          "label": "D.C. Code 31-2406(b)-(c)",
+          "url": "https://code.dccouncil.gov/us/dc/council/code/sections/31-2406"
+        },
+        {
+          "label": "D.C. Code 31-2403(a)",
+          "url": "https://code.dccouncil.gov/us/dc/council/code/sections/31-2403"
+        },
+        {
+          "label": "D.C. Code 31-2406(c-1), (f)(2)",
+          "url": "https://code.dccouncil.gov/us/dc/council/code/sections/31-2406"
+        },
+        {
+          "label": "D.C. Code 31-2404(a); 31-2405(b)",
+          "url": "https://code.dccouncil.gov/us/dc/council/code/sections/31-2404"
+        },
+        {
+          "label": "D.C. Law 26-155, secs. 2(a) and 3",
+          "url": "https://code.dccouncil.gov/us/dc/council/laws/26-155"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "D.C. requires at least $25,000 per person and $50,000 per accident for injuries, plus $10,000 for property damage. Uninsured-motorist coverage is mandatory, while personal injury protection and underinsured coverage are options. A new law raises the minimums to $50,000/$100,000/$20,000 starting October 1, 2027.",
+      "goodToKnow": "D.C. is a \"choice\" no-fault system. PIP is optional, and the limit on lawsuits only applies if an injured person who has PIP chooses PIP benefits. Without PIP, ordinary fault rules apply.",
+      "uncertain": "We found no way to turn down uninsured motorist coverage in the law, so it's marked required. We marked medical payments coverage not required because we found no law requiring it, not because a law says it's optional."
+    },
+    {
+      "state": "FL",
+      "insuranceRequired": true,
+      "biPerPerson": null,
+      "biPerAccident": null,
+      "pd": 10000,
+      "combinedSingleLimit": null,
+      "pipRequired": true,
+      "pipAmount": "$10,000 for medical and disability benefits (it pays 80% of reasonable medical bills), plus a $5,000 death benefit.",
+      "noFault": true,
+      "noFaultDefault": null,
+      "umRequired": false,
+      "uimRequired": false,
+      "medPayRequired": false,
+      "umLimits": "Only applies if your policy includes injury liability. Then uninsured motorist coverage matches your injury limits unless you pick lower limits or turn it down in writing. In Florida it also covers drivers who have too little insurance.",
+      "effective": "Property damage $10,000 (s. 324.022) and PIP $10,000 (s. 627.736) are current. Repeal bills in the 2026 session (SB 522 / HB 769) would have ended no-fault and required 25/50 bodily injury. SB 522 'Died in Banking and Insurance'. No change enacted.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "Fla. Stat. s. 324.022 (property damage requirement)",
+          "url": "https://www.flsenate.gov/Laws/Statutes/2026/324.022"
+        },
+        {
+          "label": "Fla. Stat. s. 627.736 (required PIP benefits)",
+          "url": "https://www.flsenate.gov/Laws/Statutes/2026/627.736"
+        },
+        {
+          "label": "Fla. Stat. s. 627.737 (tort exemption / threshold)",
+          "url": "https://www.flsenate.gov/Laws/Statutes/2026/627.737"
+        },
+        {
+          "label": "Fla. Stat. s. 627.727 (UM/UIM)",
+          "url": "https://www.flsenate.gov/Laws/Statutes/2026/627.727"
+        },
+        {
+          "label": "FLHSMV - Insurance Requirements",
+          "url": "https://www.flhsmv.gov/insurance/"
+        },
+        {
+          "label": "Fla. Stat. s. 324.021(7) (BI proof only after crash / FR events)",
+          "url": "https://www.flsenate.gov/Laws/Statutes/2026/324.021"
+        },
+        {
+          "label": "Florida Senate - SB 522 (2026) status",
+          "url": "https://www.flsenate.gov/Session/Bill/2026/522"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Florida doesn't make most drivers carry bodily-injury liability. You need $10,000 of personal injury protection (PIP), which pays your own medical bills no matter who caused the crash, plus $10,000 of property damage liability. If you add bodily-injury coverage, uninsured-motorist coverage comes with it unless you turn it down in writing.",
+      "goodToKnow": "Florida doesn't make most drivers carry injury liability, so those cells are blank. It becomes required ($10,000/$20,000) after certain crashes or violations, and a DUI conviction requires more. Uninsured motorist coverage comes only with policies that include injury liability, so a minimum Florida policy (PIP plus property damage) doesn't have it.",
+      "uncertain": "We didn't re-read the higher amounts required after a DUI."
+    },
+    {
+      "state": "GA",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 25000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": null,
+      "uimRequired": null,
+      "medPayRequired": false,
+      "umLimits": null,
+      "effective": "25/50/25 has not changed. SB 121 (2025, signed) created O.C.G.A. 33-7-16, which requires 50/100/50 after a first DUI conviction and 100/300/100 after a second, for convictions on or after the Act's approval. It does not change the general minimum.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "Georgia Office of Insurance and Safety Fire Commissioner - Auto",
+          "url": "https://oci.georgia.gov/insurance-resources/auto"
+        },
+        {
+          "label": "Georgia SB 121 (2025, as passed/signed) - DUI minimums",
+          "url": "https://gov.georgia.gov/document/2025-signed-legislation/sb-121/download"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Georgia requires at least $25,000 per person and $50,000 per accident for injuries you cause, plus $25,000 for property damage. Georgia is an at-fault state with no required PIP. We haven't yet confirmed the uninsured-motorist rule from the official code.",
+      "goodToKnow": null,
+      "uncertain": "Whether uninsured motorist coverage is included is left blank. The official Georgia code is published only through LexisNexis, which we couldn't open. Unofficial copies say this coverage is included unless you turn it down in writing, but we don't cite unofficial copies. We marked PIP and medical payments coverage not required because we found no law requiring them, not because a law says they're optional."
+    },
+    {
+      "state": "HI",
+      "insuranceRequired": true,
+      "biPerPerson": 40000,
+      "biPerAccident": 80000,
+      "pd": 20000,
+      "combinedSingleLimit": null,
+      "pipRequired": true,
+      "pipAmount": "$10,000 per person.",
+      "noFault": true,
+      "noFaultDefault": null,
+      "umRequired": "required-unless-written-rejection",
+      "uimRequired": "required-unless-written-rejection",
+      "medPayRequired": false,
+      "umLimits": "Uninsured motorist coverage comes with your policy at your injury liability limits (at least $40,000/$80,000) unless you turn it down in writing. Underinsured motorist coverage is also included and can be turned down the same way, with your signature on the offer.",
+      "effective": "Limits rose from 20/40/10 to 40/80/20 for new and renewal policies effective on or after January 1, 2026 (L 2024, c 138). PIP stays at $10,000.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "HRS 431:10C-301 (required motor vehicle policy coverage)",
+          "url": "https://www.capitol.hawaii.gov/hrscurrent/Vol09_Ch0431-0435H/HRS0431/HRS_0431-0010C-0301.htm"
+        },
+        {
+          "label": "HRS 431:10C-301(b)(3)-(4) UM/UIM",
+          "url": "https://www.capitol.hawaii.gov/hrscurrent/Vol09_Ch0431-0435H/HRS0431/HRS_0431-0010C-0301.htm"
+        },
+        {
+          "label": "Hawaii Insurance Division - FAQ: Auto Insurance Minimum Limits (Effective January 1, 2026)",
+          "url": "https://cca.hawaii.gov/wp-content/uploads/2026/01/Auto-Minimum-Limits-FAQs.pdf"
+        },
+        {
+          "label": "HRS 431:10C-103.5 (PIP benefits; limits)",
+          "url": "https://www.capitol.hawaii.gov/hrscurrent/Vol09_Ch0431-0435H/HRS0431/HRS_0431-0010C-0103_0005.htm"
+        },
+        {
+          "label": "HRS 431:10C-306 (abolition of tort liability / threshold)",
+          "url": "https://www.capitol.hawaii.gov/hrscurrent/Vol09_Ch0431-0435H/HRS0431/HRS_0431-0010C-0306.htm"
+        },
+        {
+          "label": "HRS 431:10C-104 (insurance required)",
+          "url": "https://www.capitol.hawaii.gov/hrscurrent/Vol09_Ch0431-0435H/HRS0431/HRS_0431-0010C-0104.htm"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Since January 1, 2026, Hawaii requires at least $40,000 per person and $80,000 per accident for injuries, plus $20,000 for property damage (up from 20/40/10). You also need $10,000 of personal injury protection, which pays your own medical bills no matter who caused the crash. Uninsured and underinsured motorist coverage are included unless you turn them down in writing.",
+      "goodToKnow": null,
+      "uncertain": "Hawaii's statute site blocks scripts, so we read it in a browser. We didn't open the 2024 law that raised the minimums; the January 1, 2026 start date comes from the Insurance Division's FAQ."
+    },
+    {
+      "state": "ID",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 15000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": "required-unless-written-rejection",
+      "uimRequired": "required-unless-written-rejection",
+      "medPayRequired": false,
+      "umLimits": "Uninsured and underinsured motorist coverage are both included, at least $25,000 per person and $50,000 per accident. You can turn down either or both in writing or electronically.",
+      "effective": "25/50/15 is unchanged. Idaho Code 49-117 was last amended in 2022 (ch. 98), and 41-2502 in 2009. No 2025-2026 bill changing the limits was found. The Dept. of Insurance issued Bulletin 26-07 on July 1, 2026 about household exclusions and step-down provisions; it does not change the minimums.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "Idaho Code 49-117 (definition of proof of financial responsibility)",
+          "url": "https://legislature.idaho.gov/statutesrules/idstat/title49/t49ch1/sect49-117/"
+        },
+        {
+          "label": "Idaho Code 49-1229 (insurance required)",
+          "url": "https://legislature.idaho.gov/statutesrules/idstat/title49/t49ch12/sect49-1229/"
+        },
+        {
+          "label": "Idaho Code 41-2502 (UM/UIM)",
+          "url": "https://legislature.idaho.gov/statutesrules/idstat/title41/t41ch25/sect41-2502/"
+        },
+        {
+          "label": "Idaho DOI Bulletin 26-07 (July 1, 2026)",
+          "url": "https://doi.idaho.gov/wp-content/uploads/ID/B26-07.pdf"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Idaho requires at least $25,000 per person and $50,000 per accident for injuries, plus $15,000 for property damage. Uninsured and underinsured motorist coverage are included unless you turn them down in writing. Idaho is an at-fault state with no required PIP.",
+      "goodToKnow": null,
+      "uncertain": "We found no 2025 or 2026 bill changing Idaho's minimums, but we didn't search every 2026 bill. We marked PIP and medical payments coverage not required because we found no law requiring them, not because a law says they're optional."
+    },
+    {
+      "state": "IL",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 20000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": true,
+      "uimRequired": false,
+      "medPayRequired": false,
+      "umLimits": "Every policy includes uninsured motorist coverage of at least $25,000 per person and $50,000 per accident, and you can't turn that part down. By default it matches your injury liability limits; you can turn down only the amount above 25/50, in writing. Underinsured motorist coverage is required only when your uninsured coverage is above that minimum, and then it must match. So a minimum 25/50/20 policy doesn't need it.",
+      "effective": "25/50/20 applies to policies issued or renewed on or after January 1, 2015. The latest amendment to 7-203 (P.A. 102-982, eff. 7-1-23) only changed wording ('crash'). No change is scheduled.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "625 ILCS 5/7-203 (requirements as to policy or bond)",
+          "url": "https://www.ilga.gov/Documents/legislation/ilcs/documents/062500050K7-203.htm"
+        },
+        {
+          "label": "625 ILCS 5/7-601 (required liability insurance policy)",
+          "url": "https://www.ilga.gov/Documents/legislation/ilcs/documents/062500050K7-601.htm"
+        },
+        {
+          "label": "215 ILCS 5/143a (uninsured motor vehicle coverage)",
+          "url": "https://www.ilga.gov/Documents/legislation/ilcs/documents/021500050K143a.htm"
+        },
+        {
+          "label": "215 ILCS 5/143a-2 (additional UM; UIM)",
+          "url": "https://www.ilga.gov/Documents/legislation/ilcs/documents/021500050K143a-2.htm"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Illinois requires at least $25,000 per person and $50,000 per accident for injuries, plus $20,000 for property damage. Uninsured-motorist coverage at 25/50 is always included and can't be turned down. If you buy higher limits, underinsured-motorist coverage is added to match.",
+      "goodToKnow": "Underinsured motorist coverage isn't needed on a minimum 25/50/20 policy. It becomes required as soon as your uninsured coverage is above 25/50. Your uninsured coverage matches your injury limits unless you turn down the extra in writing.",
+      "uncertain": null
+    },
+    {
+      "state": "IN",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 25000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": "required-unless-written-rejection",
+      "uimRequired": "required-unless-written-rejection",
+      "medPayRequired": false,
+      "umLimits": "Uninsured and underinsured motorist coverage come with your policy at no less than your injury liability limits, unless you turn them down in writing (together or separately). Underinsured coverage can't be sold below $50,000. Uninsured motorist coverage for property damage is optional; we didn't re-read that law.",
+      "effective": "Property damage rose from $10,000 to $25,000 on July 1, 2018 (IC 9-25-4-5, as amended by P.L.24-2017). No 2024-2026 change appears in the 2026 Indiana Code.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "IC 9-25-4-5 (minimum amounts of financial responsibility), 2026 Indiana Code",
+          "url": "https://iga.in.gov/laws/2026/ic/titles/9#9-25-4-5"
+        },
+        {
+          "label": "Indiana BMV - Proof of Financial Responsibility",
+          "url": "https://www.in.gov/bmv/licenses-permits-ids/suspension-and-reinstatement/proof-of-financial-responsibility"
+        },
+        {
+          "label": "IC 27-7-5-2 (UM/UIM required coverage; rejection), 2026 Indiana Code",
+          "url": "https://iga.in.gov/laws/2026/ic/titles/27#27-7-5-2"
+        },
+        {
+          "label": "Indiana Department of Insurance - Auto Insurance",
+          "url": "https://www.in.gov/idoi/consumer-services/types-of-insurance/auto-insurance/"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Indiana requires at least $25,000 per person and $50,000 per accident for injuries, plus $25,000 for property damage. Uninsured and underinsured motorist coverage are included unless you turn them down in writing. Underinsured coverage is at least $50,000.",
+      "goodToKnow": null,
+      "uncertain": "Indiana's code site needs JavaScript, so we read it in a browser. We marked PIP and medical payments coverage not required because we found no law requiring them, not because a law says they're optional."
+    },
+    {
+      "state": "IA",
+      "insuranceRequired": true,
+      "biPerPerson": 20000,
+      "biPerAccident": 40000,
+      "pd": 15000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": "required-unless-written-rejection",
+      "uimRequired": "required-unless-written-rejection",
+      "medPayRequired": false,
+      "umLimits": "Uninsured motorist coverage (including hit-and-run) and underinsured motorist coverage are each included at no less than $20,000 per person and $40,000 per accident. You can turn down both, or either one, by signing a separate written rejection.",
+      "effective": "20/40/15 applies as printed in Iowa Code 2026. Bills in the 91st General Assembly would raise it to 50/100/25 (SF 119, HF 6, SF 2073, HF 129 renumbered as HF 2352). HF 2352 was 'placed on calendar' on Feb. 9, 2026 with no later action shown. None enacted as of the bill-history pages checked.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "Iowa Code 321A.1(11) (Iowa Code 2026)",
+          "url": "https://www.legis.iowa.gov/docs/code/321A.1.pdf"
+        },
+        {
+          "label": "Iowa Code 321.20B (financial liability coverage required)",
+          "url": "https://www.legis.iowa.gov/docs/code/321.20B.pdf"
+        },
+        {
+          "label": "Iowa Code 516A.1 (UM/UIM in every liability policy; rejection)",
+          "url": "https://www.legis.iowa.gov/docs/code/516A.1.pdf"
+        },
+        {
+          "label": "Iowa Legislature - bill history SF 119 / HF 6 / HF 129 / HF 2352 (91st GA)",
+          "url": "https://www.legis.iowa.gov/legislation/billTracking/billHistory?billName=HF%202352&ga=91"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Iowa requires at least $20,000 per person and $40,000 per accident for injuries, plus $15,000 for property damage. These are among the lowest in the country. Uninsured and underinsured motorist coverage are included unless you turn them down in writing.",
+      "goodToKnow": null,
+      "uncertain": "Bills to raise the minimums to 50/100/25 were pending in 2026 and show no passage, but we could have missed a late-session law; the 2026 Iowa Acts would confirm. We marked PIP and medical payments coverage not required because we found no law requiring them, not because a law says they're optional."
+    },
+    {
+      "state": "KS",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 25000,
+      "combinedSingleLimit": null,
+      "pipRequired": true,
+      "pipAmount": "Minimums: $4,500 medical; $900/month disability/work loss for 1 year; $4,500 rehabilitation; $2,000 funeral; $25/day substitution (in-home services) for 365 days; $900/month survivor benefits",
+      "noFault": true,
+      "noFaultDefault": null,
+      "umRequired": true,
+      "uimRequired": true,
+      "medPayRequired": false,
+      "umLimits": "Uninsured motorist coverage matches your injury liability limits and also covers underinsured drivers. You can turn down in writing only the part above $25,000/$50,000, so everyone keeps at least that much.",
+      "effective": "25/50/25 applies to policies issued or renewed on or after January 1, 2017 (L. 2016, ch. 72). Starting with the 2026 legislative interim, and at least every 10 years after, a legislative study committee will review whether to change the minimums (40-3107(j)). No change enacted.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "K.S.A. 40-3107(e) (required policy contents)",
+          "url": "https://www.ksrevisor.gov/statutes/chapters/ch40/040_031_0007.html"
+        },
+        {
+          "label": "K.S.A. 40-3104 (compulsory coverage)",
+          "url": "https://www.ksrevisor.gov/statutes/chapters/ch40/040_031_0004.html"
+        },
+        {
+          "label": "K.S.A. 40-3103 (PIP benefit definitions)",
+          "url": "https://www.ksrevisor.gov/statutes/chapters/ch40/040_031_0003.html"
+        },
+        {
+          "label": "K.S.A. 40-3117 (tort threshold)",
+          "url": "https://www.ksrevisor.gov/statutes/chapters/ch40/040_031_0017.html"
+        },
+        {
+          "label": "K.S.A. 40-284 (UM/UIM)",
+          "url": "https://www.ksrevisor.gov/statutes/chapters/ch40/040_002_0084.html"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Kansas requires at least $25,000 per person and $50,000 per accident for injuries, plus $25,000 for property damage. You also need personal injury protection, which covers at least $4,500 of your own medical bills no matter who caused the crash. Uninsured and underinsured motorist coverage at the minimum limits is always included.",
+      "goodToKnow": "The PIP disability benefit depends on your income; $900 a month is the minimum.",
+      "uncertain": "We didn't check whether the 2026 legislative study of the minimums has made recommendations."
+    },
+    {
+      "state": "KY",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 25000,
+      "combinedSingleLimit": 60000,
+      "pipRequired": true,
+      "pipAmount": "$10,000 per person (Kentucky calls these basic reparation benefits).",
+      "noFault": "choice",
+      "noFaultDefault": true,
+      "umRequired": "required-unless-written-rejection",
+      "uimRequired": false,
+      "medPayRequired": false,
+      "umLimits": "Uninsured motorist coverage is included at no less than $25,000 per person and $50,000 per accident unless you turn it down in writing. Insurers only have to make underinsured motorist coverage available if you ask, so it's optional.",
+      "effective": "Split limits of 25/50/25, or a $60,000 combined single limit (KRS 304.39-110, eff. June 29, 2017). The $10,000 basic reparation benefit stayed the same when 2026 Ky. Acts ch. 149 (HB 627, eff. July 15, 2026) amended 304.39-020; that Act changed PIP medical-fee and fraud provisions. Underinsured motorist coverage statute 304.39-320 was amended in 2024 (ch. 27, eff. April 2, 2024).",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "KRS 304.39-110 (required minimum tort liability insurance)",
+          "url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=46758"
+        },
+        {
+          "label": "KRS 304.39-080(5) (security required)",
+          "url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=30032"
+        },
+        {
+          "label": "KRS 304.39-020(2) (basic reparation benefits)",
+          "url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=57854"
+        },
+        {
+          "label": "KRS 304.39-060 (acceptance or rejection of tort limitation - 'choice no-fault')",
+          "url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=30030"
+        },
+        {
+          "label": "KRS 304.20-020 (UM coverage)",
+          "url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=45815"
+        },
+        {
+          "label": "KRS 304.39-320 (UIM)",
+          "url": "https://apps.legislature.ky.gov/law/Statutes/statute.aspx?id=54466"
+        },
+        {
+          "label": "2026 Ky. Acts ch. 149 (HB 627)",
+          "url": "https://apps.legislature.ky.gov/law/acts/26RS/documents/0149.pdf"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Kentucky requires at least $25,000 per person and $50,000 per accident for injuries, plus $25,000 for property damage, or a $60,000 combined limit. You also need $10,000 of personal injury protection. Kentucky is a 'choice' no-fault state: you're under no-fault rules unless you file a form with the Department of Insurance keeping your full right to sue (and be sued). Uninsured-motorist coverage is included unless you reject it in writing; underinsured coverage is optional.",
+      "goodToKnow": "Kentucky is a \"choice\" no-fault state. No-fault applies unless you file a written rejection with the Department of Insurance. Under no-fault, you can sue for pain and suffering only if medical bills pass $1,000 or the injury is serious.",
+      "uncertain": null
+    },
+    {
+      "state": "LA",
+      "insuranceRequired": true,
+      "biPerPerson": 15000,
+      "biPerAccident": 30000,
+      "pd": 25000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": "required-unless-written-rejection",
+      "uimRequired": "required-unless-written-rejection",
+      "medPayRequired": false,
+      "umLimits": "One coverage handles both uninsured and underinsured drivers. By default it matches your injury liability limits. You can turn it down, pick lower limits, or pick economic-only coverage, but only on the state's form, signed by the policyholder. Limits can't go below the state minimums unless you choose economic-only coverage.",
+      "effective": "The 15/30/25 limits in R.S. 32:900 have been in place since Jan. 1, 2010 (Acts 2008, No. 921); the section was last amended in 2011. Act 381 of 2024 (HB 511) changed how insurers verify and keep the uninsured motorist coverage rejection form. HB 434 of 2025 changed R.S. 32:866 ('no pay, no play'): uninsured owners can't recover the first $100,000 of bodily-injury damages or the first $100,000 of property damages (it had been $15,000 and $25,000). The minimum limits didn't change.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "La. R.S. 32:900(B)(2)",
+          "url": "https://legis.la.gov/Legis/Law.aspx?d=88632"
+        },
+        {
+          "label": "La. R.S. 32:861",
+          "url": "https://legis.la.gov/legis/Law.aspx?d=88604"
+        },
+        {
+          "label": "La. R.S. 22:1295(1)(a)",
+          "url": "https://www.legis.la.gov/legis/Law.aspx?d=508161"
+        },
+        {
+          "label": "2025 La. HB 434 (Enrolled), amending R.S. 32:866",
+          "url": "https://www.legis.la.gov/legis/ViewDocument.aspx?d=1417433"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Louisiana requires at least $15,000 per person and $30,000 per accident for injuries, plus $25,000 for property damage. Uninsured/underinsured motorist coverage matches your liability limits unless you reject it or lower it on a signed state form. If you drive without insurance, you can't recover the first $100,000 of your own injury or property damages after a crash.",
+      "goodToKnow": null,
+      "uncertain": "For the 2025 \"no pay, no play\" change, we read the bill as passed, not the updated law, and didn't confirm its start date. We found no 2026 change to the minimums. We marked medical payments coverage not required because we found no law requiring it."
+    },
+    {
+      "state": "ME",
+      "insuranceRequired": true,
+      "biPerPerson": 50000,
+      "biPerAccident": 100000,
+      "pd": 25000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": true,
+      "uimRequired": true,
+      "medPayRequired": true,
+      "umLimits": "Maine's \"uninsured vehicle coverage\" covers both uninsured and underinsured drivers and can't be dropped. On a personal policy it matches your injury liability limits unless you sign the state's form choosing less, and it can never be below $50,000/$100,000.",
+      "effective": "The current figures appear in 29-A M.R.S. §1605 as shown on the Revisor's site (data extracted Oct. 2025). We found no 2024-2026 change.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "29-A M.R.S. §1605(1)(C)",
+          "url": "https://legislature.maine.gov/statutes/29-A/title29-Asec1605.html"
+        },
+        {
+          "label": "29-A M.R.S. §1601",
+          "url": "https://legislature.maine.gov/statutes/29-A/title29-Asec1601.html"
+        },
+        {
+          "label": "29-A M.R.S. §1605-A",
+          "url": "https://legislature.maine.gov/statutes/29-A/title29-Asec1605-A.html"
+        },
+        {
+          "label": "24-A M.R.S. §2902",
+          "url": "https://legislature.maine.gov/statutes/24-A/title24-Asec2902.html"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Maine requires at least $50,000 per person and $100,000 per accident for injuries, plus $25,000 for property damage. Every policy must also include at least $2,000 of medical payments coverage and uninsured/underinsured motorist coverage. That coverage matches your liability limits unless you sign a form choosing less.",
+      "goodToKnow": "The medical payments requirement doesn't apply to policies covering more than four vehicles or to garage policies. Maine also requires $500 of towing coverage, which the table doesn't show.",
+      "uncertain": null
+    },
+    {
+      "state": "MD",
+      "insuranceRequired": true,
+      "biPerPerson": 30000,
+      "biPerAccident": 60000,
+      "pd": 15000,
+      "combinedSingleLimit": null,
+      "pipRequired": "required-unless-written-rejection",
+      "pipAmount": "At least $2,500 for medical, hospital, and disability benefits, unless the policyholder signs a written waiver on the state's form.",
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": true,
+      "uimRequired": true,
+      "medPayRequired": false,
+      "umLimits": "You can't drop uninsured motorist coverage. Maryland counts a driver whose limits are lower than yours as uninsured, so it also covers underinsured drivers. The minimum is $30,000/$60,000 for injuries and $15,000 for property damage. On a personal policy it matches your liability limits unless you sign a written waiver, and the waiver only lets you go down toward the minimum, not remove it. \"Enhanced\" underinsured coverage is available as an option.",
+      "effective": "30/60/15 is current under Transp. §17-103. The legislature site shows new versions of Ins. §§19-509 and 19-510 taking effect June 30, 2029 (Ch. 514 of 2023). They cover electing enhanced underinsured coverage in place of standard uninsured motorist coverage. The minimum amounts don't change.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "Md. Code, Transp. §17-103(b)",
+          "url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gtr&section=17-103&enactments=false"
+        },
+        {
+          "label": "Md. Code, Transp. §17-104",
+          "url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gtr&section=17-104&enactments=false"
+        },
+        {
+          "label": "Md. Code, Ins. §19-505",
+          "url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gin&section=19-505&enactments=false"
+        },
+        {
+          "label": "Md. Code, Ins. §19-506",
+          "url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gin&section=19-506&enactments=false"
+        },
+        {
+          "label": "Md. Code, Ins. §19-509",
+          "url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gin&section=19-509&enactments=false"
+        },
+        {
+          "label": "Md. Code, Ins. §19-510",
+          "url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gin&section=19-510&enactments=false"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Maryland requires at least $30,000 per person and $60,000 per accident for injuries, plus $15,000 for property damage. Your policy also includes $2,500 of personal injury protection unless you waive it in writing. Uninsured motorist coverage, which also covers underinsured drivers, can't be dropped.",
+      "goodToKnow": null,
+      "uncertain": "It isn't marked as a no-fault state because Maryland PIP pays regardless of fault but no statute we found limits lawsuits (it is add-on PIP). We didn't retrieve a statute on that point. Medical payments coverage is marked not required because no statute we found requires it."
+    },
+    {
+      "state": "MA",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 30000,
+      "combinedSingleLimit": null,
+      "pipRequired": true,
+      "pipAmount": "$8,000 per person.",
+      "noFault": true,
+      "noFaultDefault": null,
+      "umRequired": true,
+      "uimRequired": false,
+      "medPayRequired": false,
+      "umLimits": "Uninsured motorist coverage for injuries is required at the same amounts as injury liability, which we read as 25/50 for policies from 1 July 2025. Underinsured coverage is optional, and your insurer must tell you it's available.",
+      "effective": "St. 2024, c. 275 raised the minimums from 20/40 bodily injury and $5,000 property damage to $25,000/$50,000 bodily injury and $30,000 property damage. The increase applies to policies issued or renewed on or after July 1, 2025. PIP stays at $8,000.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "Mass. G.L. c.90 §34A ('Motor vehicle liability policy' definition)",
+          "url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleXIV/Chapter90/Section34A"
+        },
+        {
+          "label": "Mass. G.L. c.90 §34O",
+          "url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleXIV/Chapter90/Section34O"
+        },
+        {
+          "label": "St. 2024, c. 275, §§1-4",
+          "url": "https://malegislature.gov/Laws/SessionLaws/Acts/2024/Chapter275"
+        },
+        {
+          "label": "Mass. G.L. c.90 §34J",
+          "url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleXIV/Chapter90/Section34J"
+        },
+        {
+          "label": "Mass. G.L. c.175 §113L",
+          "url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleXXII/Chapter175/Section113L"
+        },
+        {
+          "label": "Mass. G.L. c.231 §6D",
+          "url": "https://malegislature.gov/Laws/GeneralLaws/PartIII/TitleII/Chapter231/Section6D"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "For policies issued or renewed since July 1, 2025, Massachusetts requires at least $25,000 per person and $50,000 per accident for injuries, plus $30,000 for property damage. Every policy also includes $8,000 of personal injury protection and uninsured motorist coverage. Massachusetts is a no-fault state, so your own PIP pays first after a crash.",
+      "goodToKnow": null,
+      "uncertain": "The $25,000/$50,000 minimum for uninsured motorist coverage comes from reading the law's cross-reference together with the 2024 increase. mass.gov blocked our tools, so we couldn't quote the insurance division's bulletin; a search result from mass.gov listed the same amount. As far as we found, medical payments coverage is optional."
+    },
+    {
+      "state": "MI",
+      "insuranceRequired": true,
+      "biPerPerson": 50000,
+      "biPerAccident": 100000,
+      "pd": 10000,
+      "combinedSingleLimit": null,
+      "pipRequired": true,
+      "pipAmount": "PIP medical has been a choice since July 2, 2020: unlimited, $500,000, $250,000, or $50,000 (only if you're on Medicaid and your household is covered). If you make no valid choice, you get unlimited. Some people with Medicare Parts A and B can opt out of PIP medical entirely. Property protection insurance (PPI) pays up to $1,000,000 per accident for damage your car does in Michigan.",
+      "noFault": true,
+      "noFaultDefault": null,
+      "umRequired": false,
+      "uimRequired": false,
+      "medPayRequired": false,
+      "umLimits": null,
+      "effective": "Since July 2, 2020 (2019 no-fault reform), the default bodily injury limits in a Michigan policy are $250,000/$500,000 (MCL 500.3009(1)). You can sign the state's form to choose lower limits, but not below $50,000/$100,000 (MCL 500.3009(5)). Those are the lowest limits you can actually buy. The old 20/40/10 still appears in MCL 257.520 (financial-responsibility certificates) and was the policy minimum before July 2, 2020. The $10,000 property damage figure in 500.3009(1)(c) is unchanged; inside Michigan, PPI covers property damage.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "MCL 500.3009",
+          "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-500-3009"
+        },
+        {
+          "label": "MCL 500.3101",
+          "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-500-3101"
+        },
+        {
+          "label": "MCL 500.3107c",
+          "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-500-3107c"
+        },
+        {
+          "label": "MCL 500.3107d",
+          "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-500-3107d"
+        },
+        {
+          "label": "MCL 500.3121(5)",
+          "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-500-3121"
+        },
+        {
+          "label": "MCL 500.3135",
+          "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-500-3135"
+        },
+        {
+          "label": "MCL 257.520",
+          "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-257-520"
+        },
+        {
+          "label": "Michigan DIFS, 'Michigan's Auto Insurance Law Has Changed' guide (pre-reform edition)",
+          "url": "https://www.michigan.gov/-/media/Project/Websites/difs/Publication/Auto/Auto_Insurance_Guide.pdf"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Michigan policies now start at $250,000 per person and $500,000 per accident for injuries. You can sign a state form to drop that to $50,000/$100,000, the lowest allowed. Every policy includes no-fault personal injury protection (you pick a medical limit) and up to $1 million for damage your car does to property in Michigan. Uninsured and underinsured motorist coverage is optional.",
+      "goodToKnow": "The table shows the lowest injury limits you can buy (50/100), not the 250/500 a policy starts with. The $10,000 property-damage figure applies outside Michigan; inside Michigan, damage your car does is paid by up to $1 million of property protection insurance.",
+      "uncertain": "The state guide that says uninsured and underinsured motorist coverage are optional is an older edition from before 2020; we relied on it only for that point. We marked medical payments coverage not required because we found no law requiring it, not because a law says it's optional."
+    },
+    {
+      "state": "MN",
+      "insuranceRequired": true,
+      "biPerPerson": 30000,
+      "biPerAccident": 60000,
+      "pd": 10000,
+      "combinedSingleLimit": null,
+      "pipRequired": true,
+      "pipAmount": "$40,000 per person: $20,000 for medical expenses and $20,000 for income loss, replacement services, funeral, and survivor losses.",
+      "noFault": true,
+      "noFaultDefault": null,
+      "umRequired": true,
+      "uimRequired": true,
+      "medPayRequired": false,
+      "umLimits": "Uninsured and underinsured motorist coverage are separate, and both are required, each at least $25,000 per person and $50,000 per accident. You can't turn either one down.",
+      "effective": "The current figures appear in the 2025 Minnesota Statutes. HF 2494 / SF 2639 (2025-2026) would have raised them to 60/120 bodily injury and 50/100 uninsured/underinsured motorist coverage. HF 2494 never left committee (last action May 5, 2025), and no enacted change appears on the revisor's page.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "Minn. Stat. 65B.49, subd. 3(1)",
+          "url": "https://www.revisor.mn.gov/statutes/cite/65B.49"
+        },
+        {
+          "label": "Minn. Stat. 65B.49, subd. 3a(1)",
+          "url": "https://www.revisor.mn.gov/statutes/cite/65B.49"
+        },
+        {
+          "label": "Minn. Stat. 65B.44, subd. 1",
+          "url": "https://www.revisor.mn.gov/statutes/cite/65B.44"
+        },
+        {
+          "label": "Minn. Stat. 65B.48, subd. 1",
+          "url": "https://www.revisor.mn.gov/statutes/cite/65B.48"
+        },
+        {
+          "label": "Minn. Stat. 65B.51, subd. 3",
+          "url": "https://www.revisor.mn.gov/statutes/cite/65B.51"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Minnesota requires at least $30,000 per person and $60,000 per accident for injuries, plus $10,000 for property damage. Every policy also includes $40,000 of no-fault personal injury protection ($20,000 medical and $20,000 for lost income and similar losses). Separate uninsured and underinsured motorist coverage is required at $25,000/$50,000 each.",
+      "goodToKnow": "Under no-fault, you can sue for pain and suffering only if medical bills pass $4,000 or the injury is serious, such as a permanent injury or more than 60 days of disability.",
+      "uncertain": "We marked medical payments coverage not required because we found no law requiring it. PIP already covers medical bills."
+    },
+    {
+      "state": "MS",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 25000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": "required-unless-written-rejection",
+      "uimRequired": "required-unless-written-rejection",
+      "medPayRequired": false,
+      "umLimits": "Uninsured motorist coverage for injuries and for property damage comes with your policy, at no less than $25,000/$50,000 for injuries and $25,000 for property damage, unless you turn it down in writing. The property damage part may exclude the first $200. Mississippi counts a driver whose limits are lower than yours as uninsured, so this also covers underinsured drivers.",
+      "effective": "25/50/25 has been in effect since Jan. 1, 2006 (per the Mississippi Insurance Department). 2026 HB 382, which would have made uninsured motorist coverage mandatory with no rejection, died in committee on Feb. 3, 2026.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "Mississippi Insurance Department, Auto Insurance consumer page",
+          "url": "https://www.mid.ms.gov/mississippi-insurance-department/consumers/auto-insurance/"
+        },
+        {
+          "label": "Miss. Code 63-15-3(j) (text as reproduced in 2015 HB 303)",
+          "url": "https://billstatus.ls.state.ms.us/documents/2015/html/HB/0300-0399/HB0303IN.htm"
+        },
+        {
+          "label": "Miss. Code 83-11-101 (text as reproduced in 2026 HB 382, died in committee)",
+          "url": "https://billstatus.ls.state.ms.us/documents/2026/html/HB/0300-0399/HB0382IN.htm"
+        },
+        {
+          "label": "Miss. Code 83-11-103(c)(iii) (text as reproduced in 2020 HB 1046)",
+          "url": "https://billstatus.ls.state.ms.us/documents/2020/html/HB/1000-1099/HB1046IN.htm"
+        },
+        {
+          "label": "MS Legislature bill status, 2026 HB 382",
+          "url": "https://billstatus.ls.state.ms.us/2026/pdf/history/HB/HB0382.xml"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Mississippi requires at least $25,000 per person and $50,000 per accident for injuries, plus $25,000 for property damage. Uninsured motorist coverage, which also covers underinsured drivers, is included unless you turn it down in writing.",
+      "goodToKnow": null,
+      "uncertain": "The official Mississippi Code is only on LexisNexis, which we couldn't open, so the law's text comes from legislature bill documents that reprint it. One of those bills is from 2020, so a later small change is possible. Medical payments coverage is optional, according to the Mississippi Insurance Department's consumer page."
+    },
+    {
+      "state": "MO",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 25000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": true,
+      "uimRequired": false,
+      "medPayRequired": false,
+      "umLimits": "Uninsured motorist coverage for injuries is required on personal policies, at no less than $25,000/$50,000, and there's no way to turn it down. For commercial vehicles and fleets of five or more, it only has to be offered. Underinsured motorist coverage is optional.",
+      "effective": "RSMo 303.190 has been effective since July 1, 2019, 303.025 since Jan. 1, 2024, and 379.203 since Aug. 28, 1991. We found no change to the minimum amounts in 2024-2026.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "RSMo 303.190.2(2)",
+          "url": "https://revisor.mo.gov/main/OneSection.aspx?section=303.190"
+        },
+        {
+          "label": "RSMo 303.025",
+          "url": "https://revisor.mo.gov/main/OneSection.aspx?section=303.025"
+        },
+        {
+          "label": "RSMo 379.203.1",
+          "url": "https://revisor.mo.gov/main/OneSection.aspx?section=379.203"
+        },
+        {
+          "label": "Missouri Department of Revenue, Insurance Information",
+          "url": "https://dor.mo.gov/driver-license/insurance/"
+        },
+        {
+          "label": "RSMo 379.204",
+          "url": "https://revisor.mo.gov/main/OneSection.aspx?section=379.204"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Missouri requires at least $25,000 per person and $50,000 per accident for injuries, plus $25,000 for property damage. Every personal auto policy must also include uninsured motorist coverage of at least $25,000/$50,000. Underinsured motorist coverage is optional.",
+      "goodToKnow": null,
+      "uncertain": "We marked underinsured motorist coverage not required because we found no law requiring it; the law only covers how it works if you buy it. We marked medical payments coverage not required because we found no law requiring it, not because a law says it's optional."
+    },
+    {
+      "state": "MT",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 20000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": "required-unless-rejected",
+      "uimRequired": false,
+      "medPayRequired": false,
+      "umLimits": "Uninsured motorist coverage for injuries comes with your policy at $25,000 per person and $50,000 per accident unless you turn it down. After you do, renewals leave it out unless you ask for it in writing.",
+      "effective": "The figures appear in MCA 61-6-103 (Montana Code Annotated 2025). We found no 2024-2026 change.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "MCA 61-6-103(1)(b)",
+          "url": "https://mca.legmt.gov/bills/mca/title_0610/chapter_0060/part_0010/section_0030/0610-0060-0010-0030.html"
+        },
+        {
+          "label": "MCA 61-6-301(1)",
+          "url": "https://mca.legmt.gov/bills/mca/title_0610/chapter_0060/part_0030/section_0010/0610-0060-0030-0010.html"
+        },
+        {
+          "label": "MCA 33-23-201",
+          "url": "https://mca.legmt.gov/bills/mca/title_0330/chapter_0230/part_0020/section_0010/0330-0230-0020-0010.html"
+        },
+        {
+          "label": "Montana CSI, Auto insurance page",
+          "url": "https://csimt.gov/your-insurance/auto/"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Montana requires at least $25,000 per person and $50,000 per accident for injuries, plus $20,000 for property damage. Uninsured motorist coverage is included unless you sign a form turning it down. Underinsured motorist coverage is optional.",
+      "goodToKnow": "Montana's law gives you the right to turn down uninsured motorist coverage without saying it has to be in writing, so we mark it \"included unless you decline.\" The state insurance office says you sign a form to do it.",
+      "uncertain": "We read the insurance office's page through a summarizing tool because it blocked direct downloads. We marked underinsured motorist coverage not required because we found no law requiring it, but no source we read says it's optional. We marked medical payments coverage not required because we found no law requiring it, not because a law says it's optional."
+    },
+    {
+      "state": "NE",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 25000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": true,
+      "uimRequired": true,
+      "medPayRequired": false,
+      "umLimits": "Uninsured and underinsured motorist coverage are each at least $25,000 per person and $50,000 per accident for injuries. If you ask in writing, your insurer must provide more, up to $100,000/$300,000.",
+      "effective": "No 2024-2026 change found; current text of Neb. Rev. Stat. 60-310 and 44-6408 as published by the Nebraska Legislature.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "Neb. Rev. Stat. 60-310",
+          "url": "https://nebraskalegislature.gov/laws/statutes.php?statute=60-310"
+        },
+        {
+          "label": "Neb. Rev. Stat. 60-3,167",
+          "url": "https://nebraskalegislature.gov/laws/statutes.php?statute=60-3,167"
+        },
+        {
+          "label": "Neb. Rev. Stat. 44-6408",
+          "url": "https://nebraskalegislature.gov/laws/statutes.php?statute=44-6408"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Nebraska requires at least $25,000 per person and $50,000 per accident for injuries, plus $25,000 for property damage. Every policy must also include uninsured and underinsured motorist coverage of at least $25,000/$50,000; there is no written opt-out in the statute.",
+      "goodToKnow": null,
+      "uncertain": "We marked PIP and medical payments coverage not required because we found no law requiring them, not because a law says they're optional."
+    },
+    {
+      "state": "NV",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 20000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": "required-unless-written-rejection",
+      "uimRequired": false,
+      "medPayRequired": false,
+      "umLimits": "Uninsured motorist coverage is at least $25,000 per person and $50,000 per accident. Insurers must offer uninsured and underinsured coverage up to your injury liability limits; underinsured coverage is offered, not required.",
+      "effective": "NRS 485.185 last amended 2017; NRS chapter 485 page is revised through the 2025 session (Rev. 4/15/2026) and shows no change to the 25/50/20 limits.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "NRS 485.185",
+          "url": "https://www.leg.state.nv.us/NRS/NRS-485.html#NRS485Sec185"
+        },
+        {
+          "label": "NRS 690B.020",
+          "url": "https://www.leg.state.nv.us/NRS/NRS-690B.html#NRS690BSec020"
+        },
+        {
+          "label": "NRS 687B.145(2)-(3)",
+          "url": "https://www.leg.state.nv.us/NRS/NRS-687B.html#NRS687BSec145"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Nevada requires at least $25,000 per person and $50,000 per accident for injuries, plus $20,000 for property damage. Uninsured-motorist coverage is included unless you turn it down in writing; underinsured-motorist and medical-payments coverage must be offered but are optional.",
+      "goodToKnow": null,
+      "uncertain": "We marked underinsured motorist coverage optional because the law says insurers \"must offer\" it, while it requires only uninsured (and hit-and-run) coverage. Nevada's law counts a driver below the state minimum as uninsured, which isn't the same as underinsured coverage."
+    },
+    {
+      "state": "NH",
+      "insuranceRequired": false,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 25000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": true,
+      "uimRequired": true,
+      "medPayRequired": true,
+      "umLimits": "If you buy a policy, uninsured motorist coverage must be at least $25,000/$50,000, and it matches your liability limits if you buy more. New Hampshire counts underinsured drivers as uninsured, so this coverage handles both.",
+      "effective": "RSA 259:61 last amended 2016; RSA 264:20 unchanged since 1982. No 2024-2026 change found.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "RSA 259:61 (motor vehicle liability policy)",
+          "url": "https://gc.nh.gov/rsa/html/XXI/259/259-61.htm"
+        },
+        {
+          "label": "NH Insurance Department, 2022 Automobile Insurance Consumer Guide",
+          "url": "https://mm.nh.gov/files/uploads/nhid/documents/nh-auto-guide.pdf"
+        },
+        {
+          "label": "RSA 264:20 (amount of proof of financial responsibility)",
+          "url": "https://gc.nh.gov/rsa/html/XXI/264/264-20.htm"
+        },
+        {
+          "label": "RSA 264:15 (uninsured motorist coverage)",
+          "url": "https://gc.nh.gov/rsa/html/XXI/264/264-15.htm"
+        },
+        {
+          "label": "RSA 259:117 (uninsured motor vehicle)",
+          "url": "https://gc.nh.gov/rsa/html/XXI/259/259-117.htm"
+        },
+        {
+          "label": "RSA 264:16 (medical payments)",
+          "url": "https://gc.nh.gov/rsa/html/XXI/264/264-16.htm"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "New Hampshire doesn't require most drivers to buy car insurance, but you're still on the hook for crash damages, and the state can require insurance after a crash or violation. If you do buy a policy, it must include at least $25,000/$50,000 for injuries, $25,000 for property damage, $1,000 of medical payments, and uninsured-motorist coverage (which also covers underinsured drivers).",
+      "goodToKnow": "The \"required\" marks for uninsured, underinsured, and medical payments coverage apply only if you buy a policy, since most drivers don't have to. The insurance department's guide is from 2022; we confirmed the laws it relies on are current.",
+      "uncertain": null
+    },
+    {
+      "state": "NJ",
+      "insuranceRequired": true,
+      "biPerPerson": 35000,
+      "biPerAccident": 70000,
+      "pd": 25000,
+      "combinedSingleLimit": null,
+      "pipRequired": true,
+      "pipAmount": "Standard Policy: at least $15,000 per person/accident (up to $250,000 or more available); up to $250,000 for certain serious injuries regardless of the limit you choose. Basic Policy: $15,000 per person/accident.",
+      "noFault": "choice",
+      "noFaultDefault": null,
+      "umRequired": true,
+      "uimRequired": true,
+      "medPayRequired": false,
+      "umLimits": "A Standard Policy must include uninsured and underinsured motorist coverage at the injury minimums ($35,000/$70,000 from 2026), plus property damage coverage ($25,000 total, $500 deductible). You can buy more, up to your liability limits. A Basic Policy has none.",
+      "effective": "P.L.2022, c.87 raised Standard minimums: 15/30 before 2023-01-01; 25/50/25 for policies issued or renewed 2023-01-01 to 2025-12-31; 35/70/25 for policies issued or renewed on or after 2026-01-01. Figures above are the current 2026 Standard Policy minimums.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "P.L.2022, c.87 (amending N.J.S.A. 39:6B-1, 17:28-1.1, 39:6A-3)",
+          "url": "https://pub.njleg.gov/bills/2022/PL22/87_.HTM"
+        },
+        {
+          "label": "N.J.S.A. 17:28-1.1 as amended by P.L.2022, c.87",
+          "url": "https://pub.njleg.gov/bills/2022/PL22/87_.HTM"
+        },
+        {
+          "label": "NJ DOBI, Auto Insurance New Jersey Buyer's Guide (2026)",
+          "url": "https://www.nj.gov/dobi/division_consumers/pdf/autoguide2026.pdf"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "With a Standard Policy, New Jersey requires at least $35,000 per person and $70,000 per accident for injuries, $25,000 for property damage, at least $15,000 of PIP, and uninsured/underinsured motorist coverage. A cheaper Basic Policy is also legal: it carries $15,000 PIP and $5,000 property damage, with injury liability only as an optional $10,000, and it gives you much less protection.",
+      "goodToKnow": "New Jersey is a \"choice\" state. With a Standard Policy you pick the limited or unlimited right to sue for pain and suffering; the Basic Policy always has the limited right.",
+      "uncertain": "We haven't confirmed from an official copy of the law which option applies if you don't choose, so that default is blank. The PIP minimum and the Basic Policy figures ($5,000 property damage, optional $10,000 injury liability) come from the state's 2026 buyer's guide; we didn't read the laws behind them."
+    },
+    {
+      "state": "NM",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 10000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": "required-unless-written-rejection",
+      "uimRequired": "required-unless-written-rejection",
+      "medPayRequired": false,
+      "umLimits": "Uninsured motorist coverage, which by law also covers underinsured drivers, must be at least $25,000/$50,000 for injuries and $10,000 for property damage (up to $250 of property damage may be excluded). You can buy more, up to your liability limits. You can turn it down, but only in writing, and the rejection becomes part of the policy.",
+      "effective": "No change found. 2025 bills to raise minimums (SB 319) and to remove the uninsured motorist coverage rejection right (HB 97) both died in the 2025 regular session.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "NM MVD Manual Ch. 11 (quoting NMSA 66-5-205(A), 66-5-208)",
+          "url": "https://www.mvd.newmexico.gov/chapter-11-mandatory-insurance/"
+        },
+        {
+          "label": "NM MVD FAQ: What automobile insurance am I required to have",
+          "url": "https://www.mvd.newmexico.gov/what-automobile-insurance-am-i-required-to-have-in-new-mexico/"
+        },
+        {
+          "label": "NMSA 66-5-301 (current text as reproduced in 2025 HB 97 committee substitute, which died)",
+          "url": "https://www.nmlegis.gov/Sessions/25%20Regular/bills/house/HB0097TPS.HTML"
+        },
+        {
+          "label": "13.12.3.9 NMAC",
+          "url": "https://www.srca.nm.gov/parts/title13/13.012.0003.html"
+        },
+        {
+          "label": "NM Legislature, HB 97 (2025) status",
+          "url": "https://www.nmlegis.gov/Legislation/Legislation?chamber=H&legType=B&legNo=97&year=25"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "New Mexico requires at least $25,000 per person and $50,000 per accident for injuries, plus $10,000 for property damage. Uninsured-motorist coverage, which also covers underinsured drivers, is included unless you turn it down in writing.",
+      "goodToKnow": null,
+      "uncertain": "We couldn't load the official New Mexico statutes. The limits come from Motor Vehicle Division pages that quote the law, and the uninsured motorist wording comes from current-law text reprinted in a 2025 bill (which failed). We didn't read the uninsured motorist minimums in the law itself."
+    },
+    {
+      "state": "NY",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 10000,
+      "combinedSingleLimit": null,
+      "pipRequired": true,
+      "pipAmount": "$50,000 per person of no-fault benefits for medical bills and lost income.",
+      "noFault": true,
+      "noFaultDefault": null,
+      "umRequired": true,
+      "uimRequired": false,
+      "medPayRequired": false,
+      "umLimits": "Uninsured motorist coverage is required: $25,000 per person for injury ($50,000 for death) and $50,000 per accident for injury ($100,000 for death). Extra coverage for uninsured and underinsured drivers (\"SUM\") is optional, up to your injury liability limits ($250,000/$500,000 at most).",
+      "effective": "No 2024-2026 change found in VTL 311 as published by the NY Senate. Death limits are higher: $50,000 per person and $100,000 per accident.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "N.Y. Veh. & Traf. Law 311(4)",
+          "url": "https://www.nysenate.gov/legislation/laws/VAT/311"
+        },
+        {
+          "label": "NY Department of Financial Services, \"How much auto insurance must I carry?\" (plain-language fallback)",
+          "url": "https://www.dfs.ny.gov/faqs/consumer-auto/how-much-auto-insurance-must-i-carry"
+        },
+        {
+          "label": "N.Y. Veh. & Traf. Law 312",
+          "url": "https://www.nysenate.gov/legislation/laws/VAT/312"
+        },
+        {
+          "label": "N.Y. Ins. Law 3420(f)",
+          "url": "https://www.nysenate.gov/legislation/laws/ISC/3420"
+        },
+        {
+          "label": "N.Y. Ins. Law 5102",
+          "url": "https://www.nysenate.gov/legislation/laws/ISC/5102"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "New York requires at least $25,000 per person and $50,000 per accident for injuries ($50,000/$100,000 if someone dies), plus $10,000 for property damage. Your policy also must include $50,000 of no-fault (PIP) coverage and basic uninsured-motorist coverage; underinsured-motorist (SUM) coverage is optional.",
+      "goodToKnow": null,
+      "uncertain": "We didn't read the law that says you must carry no-fault coverage; the $50,000 figure comes from the law that defines it."
+    },
+    {
+      "state": "NC",
+      "insuranceRequired": true,
+      "biPerPerson": 50000,
+      "biPerAccident": 100000,
+      "pd": 50000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": true,
+      "uimRequired": true,
+      "medPayRequired": false,
+      "umLimits": "Uninsured motorist coverage for injuries starts at your highest injury liability limit (up to $1 million). You can choose less, but not below $50,000/$100,000. Its property damage part starts at your property damage limit. Underinsured motorist coverage must match your uninsured coverage for injuries.",
+      "effective": "A 2023 law raised the minimums from 30/60/25 to 50/100/50, and a 2024 law moved the start date from 1 January 2025 to 1 July 2025, for policies issued or renewed on or after that date. The same change made uninsured and underinsured motorist coverage mandatory.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "N.C.G.S. 20-279.21(b)(2)",
+          "url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_20/GS_20-279.21.html"
+        },
+        {
+          "label": "N.C.G.S. 20-309(a)",
+          "url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_20/GS_20-309.html"
+        },
+        {
+          "label": "N.C.G.S. 20-279.21(b)(3), (b)(4), (m)",
+          "url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_20/GS_20-279.21.html"
+        },
+        {
+          "label": "S.L. 2024-29 s.8(c) (amending S.L. 2023-133 s.12(i))",
+          "url": "https://www.ncleg.gov/EnactedLegislation/SessionLaws/HTML/2023-2024/SL2024-29.html"
+        },
+        {
+          "label": "N.C.G.S. 20-279.1(11)",
+          "url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_20/GS_20-279.1.html"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Since July 1, 2025, North Carolina requires at least $50,000 per person and $100,000 per accident for injuries, plus $50,000 for property damage. Every policy must also include uninsured and underinsured motorist coverage, which by default match your liability limits.",
+      "goodToKnow": null,
+      "uncertain": "The 2024 law shows the old and new start dates side by side; following North Carolina's usual strike-and-insert style, we read July 1, 2025 as the start. We marked medical payments coverage not required because we found no law requiring it."
+    },
+    {
+      "state": "ND",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 25000,
+      "combinedSingleLimit": null,
+      "pipRequired": true,
+      "pipAmount": "$30,000 per person basic no-fault benefits (max $150/week work loss; $3,500 funeral)",
+      "noFault": true,
+      "noFaultDefault": null,
+      "umRequired": true,
+      "uimRequired": true,
+      "medPayRequired": false,
+      "umLimits": "Uninsured motorist coverage is at least $25,000 per person and $50,000 per accident, and underinsured motorist coverage must match it. You can ask for more, up to your injury liability limits or $100,000/$300,000.",
+      "effective": "No 2024-2026 change found in the current NDCC chapter PDFs.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "N.D.C.C. 39-16.1-11",
+          "url": "https://ndlegis.gov/cencode/t39c16-1.pdf"
+        },
+        {
+          "label": "N.D.C.C. 26.1-41-02",
+          "url": "https://ndlegis.gov/cencode/t26-1c41.pdf"
+        },
+        {
+          "label": "N.D.C.C. 26.1-41-01(2), (21)",
+          "url": "https://ndlegis.gov/cencode/t26-1c41.pdf"
+        },
+        {
+          "label": "N.D.C.C. 26.1-40-15.2, 26.1-40-15.3",
+          "url": "https://ndlegis.gov/cencode/t26-1c40.pdf"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "North Dakota requires at least $25,000 per person and $50,000 per accident for injuries, plus $25,000 for property damage. It is a no-fault state: your policy must include $30,000 of no-fault (PIP) benefits, plus uninsured and underinsured motorist coverage.",
+      "goodToKnow": null,
+      "uncertain": null
+    },
+    {
+      "state": "OH",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 25000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": false,
+      "uimRequired": false,
+      "medPayRequired": false,
+      "umLimits": null,
+      "effective": "ORC 4509.01 effective April 15, 2021 (no limit change); 4509.101 effective Sept 30, 2025 (HB 96, penalties/administration, not limits). No 2024-2026 change to 25/50/25 found.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "Ohio Rev. Code 4509.01(K)",
+          "url": "https://codes.ohio.gov/ohio-revised-code/section-4509.01"
+        },
+        {
+          "label": "Ohio Rev. Code 4509.101(A)(1)",
+          "url": "https://codes.ohio.gov/ohio-revised-code/section-4509.101"
+        },
+        {
+          "label": "Ohio Rev. Code 3937.18(A)",
+          "url": "https://codes.ohio.gov/ohio-revised-code/section-3937.18"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Ohio requires at least $25,000 per person and $50,000 per accident for injuries, plus $25,000 for property damage. Uninsured- and underinsured-motorist coverage is optional, so ask for it if you want it.",
+      "goodToKnow": "You can also show financial responsibility with a bond, a deposit, or self-insurance instead of a policy.",
+      "uncertain": "We marked medical payments coverage not required because we found no law requiring it, not because a law says it's optional."
+    },
+    {
+      "state": "OK",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 25000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": "required-unless-written-rejection",
+      "uimRequired": "required-unless-written-rejection",
+      "medPayRequired": false,
+      "umLimits": "At least $25,000/$50,000 unless you turn it down in writing, and insurers must offer more, up to your liability limits. Oklahoma counts underinsured drivers as uninsured, so one coverage handles both.",
+      "effective": "The 25/50/25 minimums are in 47 O.S. 7-324. The 25/50 minimum for uninsured motorist coverage has applied since 1 April 2005. We found no change in 2024-2026.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "47 O.S. 7-324",
+          "url": "https://www.oscn.net/applications/oscn/DeliverDocument.asp?CiteID=82199"
+        },
+        {
+          "label": "47 O.S. 7-601",
+          "url": "https://www.oscn.net/applications/oscn/DeliverDocument.asp?CiteID=82225"
+        },
+        {
+          "label": "36 O.S. 3636",
+          "url": "https://www.oscn.net/applications/oscn/DeliverDocument.asp?CiteID=87144"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Oklahoma requires at least $25,000 per person and $50,000 per accident for injuries, plus $25,000 for property damage. Uninsured-motorist coverage, which also covers drivers who don't carry enough insurance, comes with your policy unless you turn it down in writing.",
+      "goodToKnow": null,
+      "uncertain": "We marked PIP and medical payments coverage not required because we found no law requiring them, not because a law says they're optional."
+    },
+    {
+      "state": "OR",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 20000,
+      "combinedSingleLimit": null,
+      "pipRequired": true,
+      "pipAmount": "Required on personal policies: at least $15,000 per person for medical and related expenses, plus other benefits such as lost income.",
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": true,
+      "uimRequired": true,
+      "medPayRequired": false,
+      "umLimits": "Uninsured motorist coverage matches your injury liability limits unless you choose lower limits in writing, and it can't go below $25,000/$50,000 or be dropped. It also covers underinsured drivers.",
+      "effective": "ORS 2025 edition. Property damage $20,000 (amounts last amended 2009 c.66 per history note). No 2024-2026 change found.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "ORS 806.070",
+          "url": "https://www.oregonlegislature.gov/bills_laws/ors/ors806.html"
+        },
+        {
+          "label": "ORS 806.010",
+          "url": "https://www.oregonlegislature.gov/bills_laws/ors/ors806.html"
+        },
+        {
+          "label": "ORS 742.520 and 742.524",
+          "url": "https://www.oregonlegislature.gov/bills_laws/ors/ors742.html"
+        },
+        {
+          "label": "ORS 742.502",
+          "url": "https://www.oregonlegislature.gov/bills_laws/ors/ors742.html"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Oregon requires at least $25,000 per person and $50,000 per accident for injuries, plus $20,000 for property damage. Every car policy also has to include personal injury protection (at least $15,000 for medical bills) and uninsured/underinsured-motorist coverage.",
+      "goodToKnow": "Oregon's PIP pays your own medical bills no matter who caused the crash, but we found no limit on your right to sue, so Oregon isn't marked as a no-fault state.",
+      "uncertain": "No law we read says outright that Oregon isn't a no-fault state. We marked medical payments coverage not required because PIP already covers medical bills."
+    },
+    {
+      "state": "PA",
+      "insuranceRequired": true,
+      "biPerPerson": 15000,
+      "biPerAccident": 30000,
+      "pd": 5000,
+      "combinedSingleLimit": null,
+      "pipRequired": true,
+      "pipAmount": "First-party medical benefit of $5,000.",
+      "noFault": "choice",
+      "noFaultDefault": false,
+      "umRequired": false,
+      "uimRequired": false,
+      "medPayRequired": false,
+      "umLimits": "Insurers must offer uninsured and underinsured motorist coverage, but buying them is optional. You can also ask for lower limits.",
+      "effective": "15/30/5 financial responsibility definition in 75 Pa.C.S. 1702; no 2024-2026 change found.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "75 Pa.C.S. 1702",
+          "url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=75&div=0&chapter=17&section=2&subsctn=0"
+        },
+        {
+          "label": "75 Pa.C.S. 1786",
+          "url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=75&div=0&chapter=17&section=86&subsctn=0"
+        },
+        {
+          "label": "75 Pa.C.S. 1711",
+          "url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=75&div=0&chapter=17&section=11&subsctn=0"
+        },
+        {
+          "label": "75 Pa.C.S. 1731",
+          "url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=75&div=0&chapter=17&section=31&subsctn=0"
+        },
+        {
+          "label": "75 Pa.C.S. 1705",
+          "url": "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=75&div=0&chapter=17&section=5&subsctn=0"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Pennsylvania requires at least $15,000 per person and $30,000 per accident for injuries, plus $5,000 for property damage, and every policy includes a $5,000 medical benefit. Uninsured and underinsured-motorist coverage must be offered to you but is optional. You also choose between 'full tort' and 'limited tort', which affects your right to sue for pain and suffering.",
+      "goodToKnow": "Pennsylvania is a \"choice\" state: you pick full tort or limited tort. If you don't choose, the law presumes full tort, which keeps your full right to sue. The required $5,000 medical benefit is shown as PIP; there's no separate medical payments requirement.",
+      "uncertain": null
+    },
+    {
+      "state": "RI",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 25000,
+      "combinedSingleLimit": 75000,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": "required-unless-written-rejection",
+      "uimRequired": "required-unless-written-rejection",
+      "medPayRequired": false,
+      "umLimits": "Uninsured motorist coverage matches your injury liability limits. You can pick lower limits in writing, but not below 25/50, and you can drop it entirely only if you buy just the state minimum and sign a written notice. It also covers underinsured drivers. You can turn down its property-damage part in writing.",
+      "effective": "31-47-2 amounts last amended by P.L. 2014 per history note; no 2024-2026 change found.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "R.I. Gen. Laws 31-47-2",
+          "url": "https://webserver.rilegislature.gov/Statutes/TITLE31/31-47/31-47-2.htm"
+        },
+        {
+          "label": "R.I. Gen. Laws 31-47-9",
+          "url": "https://webserver.rilegislature.gov/Statutes/TITLE31/31-47/31-47-9.htm"
+        },
+        {
+          "label": "R.I. Gen. Laws 27-7-2.1",
+          "url": "https://webserver.rilegislature.gov/Statutes/TITLE27/27-7/27-7-2.1.htm"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Rhode Island requires at least $25,000 per person and $50,000 per accident for injuries, plus $25,000 for property damage (or a $75,000 combined limit). Uninsured/underinsured-motorist coverage comes with your policy. You can drop it only if you buy just the state minimum and sign a written warning notice.",
+      "goodToKnow": "You can drop uninsured motorist coverage only if you buy just the state minimum and sign a written notice, so it's shown as \"included unless you decline in writing.\"",
+      "uncertain": "We marked PIP and medical payments coverage not required because we found no law requiring them, not because a law says they're optional."
+    },
+    {
+      "state": "SC",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 25000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": true,
+      "uimRequired": false,
+      "medPayRequired": false,
+      "umLimits": "Uninsured motorist coverage is required, at no less than $25,000/$50,000 for injuries and $25,000 for property damage (the first $200 of property loss may be excluded). Insurers must offer more, and must offer underinsured motorist coverage, up to your liability limits, but underinsured coverage is optional.",
+      "effective": "25/50/25 since 2006 Act No. 395, for policies issued or renewed on or after Jan 1, 2007. Uninsured motorist coverage minimums raised by 2013 Act No. 47, effective Jan 1, 2014. The option to pay a fee and register an uninsured vehicle (56-10-510) was removed by 2023 Act No. 51, effective July 1, 2024.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "S.C. Code 38-77-140",
+          "url": "https://www.scstatehouse.gov/code/t38c077.php"
+        },
+        {
+          "label": "S.C. Code 38-77-150",
+          "url": "https://www.scstatehouse.gov/code/t38c077.php"
+        },
+        {
+          "label": "S.C. Code 38-77-160",
+          "url": "https://www.scstatehouse.gov/code/t38c077.php"
+        },
+        {
+          "label": "S.C. Code 56-10-10 and 56-10-510",
+          "url": "https://www.scstatehouse.gov/code/t56c010.php"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "South Carolina requires at least $25,000 per person and $50,000 per accident for injuries, plus $25,000 for property damage. Uninsured-motorist coverage is mandatory. Underinsured-motorist coverage must be offered to you but is optional.",
+      "goodToKnow": null,
+      "uncertain": "We marked PIP not required because we found no law requiring it. Medical payments coverage is optional: the law describes it as offered \"at the option of the insured.\""
+    },
+    {
+      "state": "SD",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 25000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": true,
+      "uimRequired": true,
+      "medPayRequired": false,
+      "umLimits": "Uninsured and underinsured motorist coverage must each match your injury liability limits, up to $100,000/$300,000 unless you ask for more, and you can't turn them down. At the $25,000/$50,000 minimum, you carry $25,000/$50,000 of each.",
+      "effective": "Statute source notes show no amendments to 32-35-70 since 1992 or to 58-11-9.4 since 1997; no 2024-2026 change found.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "SDCL 32-35-70",
+          "url": "https://sdlegislature.gov/Statutes/32-35-70"
+        },
+        {
+          "label": "SDCL 32-35-113",
+          "url": "https://sdlegislature.gov/Statutes/32-35-113"
+        },
+        {
+          "label": "SDCL 58-11-9",
+          "url": "https://sdlegislature.gov/Statutes/58-11-9"
+        },
+        {
+          "label": "SDCL 58-11-9.4",
+          "url": "https://sdlegislature.gov/Statutes/58-11-9.4"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "South Dakota requires at least $25,000 per person and $50,000 per accident for injuries, plus $25,000 for property damage. Every policy must also include uninsured and underinsured-motorist coverage at the same limits as your injury liability.",
+      "goodToKnow": null,
+      "uncertain": "The legislature's statute pages load with JavaScript, so we read the same text through its data feed. We marked PIP and medical payments coverage not required because we found no law requiring them, not because a law says they're optional."
+    },
+    {
+      "state": "TN",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 25000,
+      "combinedSingleLimit": 65000,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": "required-unless-written-rejection",
+      "uimRequired": null,
+      "medPayRequired": false,
+      "umLimits": "Uninsured motorist coverage matches your injury liability limits unless you turn it down completely in writing, or pick lower limits in writing (not below the state minimums).",
+      "effective": "Property damage rose from $15,000 to $25,000 and the single-limit option rose to $65,000 for proof required after Dec 31, 2022 (2022 Pub. Ch. 860). Existing policies had until their first renewal after that date.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "2022 Tenn. Pub. Acts ch. 860 (amending T.C.A. 55-12-102(12))",
+          "url": "https://publications.tnsosfiles.com/acts/112/pub/pc0860.pdf"
+        },
+        {
+          "label": "Tennessee Department of Revenue - Financial Responsibility Law",
+          "url": "https://www.tn.gov/revenue/title-and-registration/drive-insured-tennessee/why-you-should-have-insurance.html"
+        },
+        {
+          "label": "T.C.A. 56-7-1201 (Lexis public access, search for the section)",
+          "url": "https://advance.lexis.com/container?config=014CJAA5ZGVhZjA3NS02MmMzLTRlZWQtOGJjNC00YzQ1MmZlNzc2YWYKAFBvZENhdGFsb2e9zYpNUjTRaIWVfyrur9ud"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Tennessee requires at least $25,000 per person and $50,000 per accident for injuries, plus $25,000 for property damage (or a $65,000 combined limit). Uninsured-motorist coverage is included at your liability limits unless you turn it down in writing.",
+      "goodToKnow": null,
+      "uncertain": "The official Tennessee code site (Lexis) blocked full access with a captcha, so we read only a search excerpt of the uninsured motorist law. We haven't confirmed whether Tennessee counts underinsured drivers as uninsured, so underinsured motorist coverage is blank. We also didn't read the law that requires insurance itself; that part rests on the Department of Revenue's page. We marked PIP and medical payments coverage not required because we found no law requiring them, not because a law says they're optional."
+    },
+    {
+      "state": "TX",
+      "insuranceRequired": true,
+      "biPerPerson": 30000,
+      "biPerAccident": 60000,
+      "pd": 25000,
+      "combinedSingleLimit": null,
+      "pipRequired": "required-unless-written-rejection",
+      "pipAmount": "$2,500 per person is the standard amount; the law doesn't require insurers to offer more.",
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": "required-unless-written-rejection",
+      "uimRequired": "required-unless-written-rejection",
+      "medPayRequired": false,
+      "umLimits": "One coverage handles both uninsured and underinsured drivers, at no less than the state minimums (30/60/25), including property damage.",
+      "effective": "30/60/25 effective January 1, 2011 (Transp. Code 601.072(a-1)); no change found for 2024-2026.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "Tex. Transp. Code 601.072",
+          "url": "https://tcss.legis.texas.gov/resources/TN/htm/TN.601.htm"
+        },
+        {
+          "label": "Tex. Transp. Code 601.051",
+          "url": "https://tcss.legis.texas.gov/resources/TN/htm/TN.601.htm"
+        },
+        {
+          "label": "Tex. Ins. Code 1952.101",
+          "url": "https://tcss.legis.texas.gov/resources/IN/htm/IN.1952.htm"
+        },
+        {
+          "label": "Tex. Ins. Code 1952.152-1952.153",
+          "url": "https://tcss.legis.texas.gov/resources/IN/htm/IN.1952.htm"
+        },
+        {
+          "label": "Texas Department of Insurance, Auto insurance guide",
+          "url": "https://www.tdi.texas.gov/pubs/consumer/cb020.html"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Texas requires at least $30,000 per person and $60,000 per accident for injuries, plus $25,000 for property damage. Personal injury protection (PIP) and uninsured/underinsured-motorist coverage come with your policy unless you turn them down in writing.",
+      "goodToKnow": "Texas is an at-fault state even though PIP comes with your policy by default. We found nothing in the law that limits your right to sue.",
+      "uncertain": "We marked medical payments coverage not required because we found no law requiring it, not because a law says it's optional."
+    },
+    {
+      "state": "UT",
+      "insuranceRequired": true,
+      "biPerPerson": 30000,
+      "biPerAccident": 65000,
+      "pd": 25000,
+      "combinedSingleLimit": 90000,
+      "pipRequired": true,
+      "pipAmount": "At least $3,000 per person for medical expenses, plus other listed benefits (e.g., $3,000 death benefit).",
+      "noFault": true,
+      "noFaultDefault": null,
+      "umRequired": "required-unless-written-rejection",
+      "uimRequired": "required-unless-written-rejection",
+      "medPayRequired": false,
+      "umLimits": "Uninsured and underinsured motorist coverage match your liability limits (or the insurer's maximum, if lower). You can turn them down or buy lower limits by signing a form, but uninsured motorist coverage can't go below the state's injury minimums.",
+      "effective": "Policies issued or renewed on or after Jan 1, 2025: 30/65/25 or a $90,000 combined single limit. Through Dec 31, 2024 it was 25/65/15 or $80,000. 31A-22-302, -305, -305.3 and -309 were amended in the 2026 General Session (effective 5/6/2026); the 304 limits were not changed.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "Utah Code 31A-22-304",
+          "url": "https://le.utah.gov/xcode/Title31A/Chapter22/31A-22-S304.html"
+        },
+        {
+          "label": "Utah Code 31A-22-302",
+          "url": "https://le.utah.gov/xcode/Title31A/Chapter22/31A-22-S302.html"
+        },
+        {
+          "label": "Utah Code 31A-22-307",
+          "url": "https://le.utah.gov/xcode/Title31A/Chapter22/31A-22-S307.html"
+        },
+        {
+          "label": "Utah Code 31A-22-309",
+          "url": "https://le.utah.gov/xcode/Title31A/Chapter22/31A-22-S309.html"
+        },
+        {
+          "label": "Utah Code 31A-22-305 and 31A-22-305.3",
+          "url": "https://le.utah.gov/xcode/Title31A/Chapter22/31A-22-S305.html"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Utah requires at least $30,000 per person and $65,000 per accident for injuries, plus $25,000 for property damage, on policies issued or renewed since January 1, 2025. Your policy also must include $3,000 of personal injury protection. Uninsured and underinsured-motorist coverage are included unless you turn them down in writing.",
+      "goodToKnow": null,
+      "uncertain": "We didn't read the law that requires owners to carry insurance directly; that part rests on the insurance code's reference to it. We marked medical payments coverage not required because PIP already covers medical bills."
+    },
+    {
+      "state": "VT",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 10000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": true,
+      "uimRequired": true,
+      "medPayRequired": false,
+      "umLimits": "Combined uninsured and underinsured motorist coverage is required: at least $50,000 per person and $100,000 per accident for injuries, plus up to $10,000 for property damage ($150 deductible). If your liability limits are higher, it matches them unless you ask otherwise.",
+      "effective": "Vermont Statutes Online reflects the 2025 session; history shows the last amendment to 800 effective July 1, 2024 (not to the dollar amounts). No 2026 change to the limits was found, but the online code may not yet include 2026 acts.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "23 V.S.A. 800",
+          "url": "https://legislature.vermont.gov/statutes/section/23/011/00800"
+        },
+        {
+          "label": "23 V.S.A. 941",
+          "url": "https://legislature.vermont.gov/statutes/section/23/011/00941"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Vermont requires at least $25,000 per person and $50,000 per accident for injuries, plus $10,000 for property damage. Every policy must also include uninsured/underinsured-motorist coverage of at least $50,000 per person and $100,000 per accident.",
+      "goodToKnow": null,
+      "uncertain": "Vermont's online statutes include laws through the 2025 session, so a 2026 change can't be fully ruled out. We marked PIP and medical payments coverage not required because we found no law requiring them, not because a law says they're optional."
+    },
+    {
+      "state": "VA",
+      "insuranceRequired": true,
+      "biPerPerson": 50000,
+      "biPerAccident": 100000,
+      "pd": 25000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": true,
+      "uimRequired": true,
+      "medPayRequired": false,
+      "umLimits": "Uninsured and underinsured motorist coverage come together in one part of the policy. They must be at least $50,000/$100,000/$25,000 and match your liability limits unless you turn down the amount above the minimum.",
+      "effective": "50/100/25 for policies effective on or after January 1, 2025 (was 30/60/20 for policies effective 2022-01-01 through 2024-12-31). The option to pay an uninsured motor vehicle fee instead of buying insurance ended July 1, 2024.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "Va. Code 46.2-472",
+          "url": "https://law.lis.virginia.gov/vacode/title46.2/chapter3/section46.2-472/"
+        },
+        {
+          "label": "Virginia DMV, Insurance Requirements",
+          "url": "https://www.dmv.virginia.gov/vehicles/insurance-requirements"
+        },
+        {
+          "label": "Virginia DMV, New Laws Take Effect July 1, 2024",
+          "url": "https://www.dmv.virginia.gov/news/new-laws-take-effect-today-july-1-2024"
+        },
+        {
+          "label": "Va. Code 46.2-706",
+          "url": "https://law.lis.virginia.gov/vacode/title46.2/chapter7/section46.2-706/"
+        },
+        {
+          "label": "Va. Code 38.2-2206",
+          "url": "https://law.lis.virginia.gov/vacode/title38.2/chapter22/section38.2-2206/"
+        },
+        {
+          "label": "Va. Code 38.2-2201",
+          "url": "https://law.lis.virginia.gov/vacode/title38.2/chapter22/section38.2-2201/"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "For policies starting on or after January 1, 2025, Virginia requires at least $50,000 per person and $100,000 per accident for injuries, plus $25,000 for property damage. Uninsured/underinsured-motorist coverage at those minimums is always included. Since July 1, 2024, you can no longer pay a fee to drive uninsured.",
+      "goodToKnow": "You can turn down only the uninsured and underinsured coverage above the state minimum. The minimum amount has no opt-out.",
+      "uncertain": "The date the uninsured motor vehicle fee ended comes from the Virginia DMV's announcement; we didn't read the 2023 law that ended it."
+    },
+    {
+      "state": "WA",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 10000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": "Insurers must offer PIP with at least $10,000 medical/hospital, $2,000 funeral, $10,000 income continuation (max $200/week), and $5,000 loss of services (max $200/week). You can reject it in writing.",
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": "required-unless-written-rejection",
+      "uimRequired": "required-unless-written-rejection",
+      "medPayRequired": false,
+      "umLimits": "Washington counts a driver with no insurance as underinsured, so one coverage handles both. It matches your liability limits unless you turn down all or part of it in writing.",
+      "effective": "25/50/10 unchanged since 1980 (RCW 46.29.090 history); no 2024-2026 change found. RCW 46.30.020 was amended by 2025 c 332 but the minimum amounts still reference RCW 46.29.090.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "RCW 46.29.090",
+          "url": "https://app.leg.wa.gov/RCW/default.aspx?cite=46.29.090"
+        },
+        {
+          "label": "RCW 46.30.020",
+          "url": "https://app.leg.wa.gov/RCW/default.aspx?cite=46.30.020"
+        },
+        {
+          "label": "RCW 48.22.030",
+          "url": "https://app.leg.wa.gov/RCW/default.aspx?cite=48.22.030"
+        },
+        {
+          "label": "RCW 48.22.085",
+          "url": "https://app.leg.wa.gov/RCW/default.aspx?cite=48.22.085"
+        },
+        {
+          "label": "RCW 48.22.095",
+          "url": "https://app.leg.wa.gov/RCW/default.aspx?cite=48.22.095"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Washington requires at least $25,000 per person and $50,000 per accident for injuries, plus $10,000 for property damage. Underinsured-motorist coverage (which also covers uninsured drivers) is included unless you reject it in writing. Your insurer must offer PIP, and you have to reject it in writing if you don't want it.",
+      "goodToKnow": "The law calls PIP \"an optional coverage\" that insurers must offer, so it's marked not required. But to go without it, you have to turn it down in writing.",
+      "uncertain": null
+    },
+    {
+      "state": "WV",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 25000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": true,
+      "uimRequired": false,
+      "medPayRequired": false,
+      "umLimits": "Uninsured motorist coverage is at least $25,000/$50,000/$25,000, and the first $300 of property damage may be excluded. Insurers must offer more, up to 100/300/50, and must offer underinsured coverage as an option.",
+      "effective": "25/50/25 beginning January 1, 2016 (was 20/40/10). No 2024-2026 change found.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "W. Va. Code 17D-4-2",
+          "url": "https://code.wvlegislature.gov/17D-4-2/"
+        },
+        {
+          "label": "W. Va. Code 17D-2A-3",
+          "url": "https://code.wvlegislature.gov/17D-2A-3/"
+        },
+        {
+          "label": "W. Va. Code 33-6-31",
+          "url": "https://code.wvlegislature.gov/33-6-31/"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "West Virginia requires at least $25,000 per person and $50,000 per accident for injuries, plus $25,000 for property damage. Uninsured-motorist coverage at those amounts is always part of your policy; underinsured-motorist coverage is an option your insurer has to offer.",
+      "goodToKnow": null,
+      "uncertain": "We marked underinsured motorist coverage not required because the law says the policy must \"provide an option\" for it. We found no general PIP or medical payments requirement, and no-fault status is inferred from the absence of any PIP or lawsuit-limit law."
+    },
+    {
+      "state": "WI",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 10000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": true,
+      "uimRequired": false,
+      "medPayRequired": "required-unless-rejected",
+      "umLimits": "Uninsured motorist coverage for injuries is at least $25,000 per person and $50,000 per accident. Underinsured motorist coverage is optional; insurers must tell you it's available, and if you buy it, it must be at least $50,000/$100,000. Medical payments coverage of at least $1,000 per person comes with the policy unless you turn it down.",
+      "effective": "25/50/10 in s. 344.33(2) and s. 344.01(2)(d); no 2024-2026 change found. Current uninsured, underinsured, and medical payments rules reflect 2011 Wisconsin Act 14 (underinsured motorist coverage notice applies to policies effective after Nov. 1, 2011).",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "Wis. Stat. 344.33(2)",
+          "url": "https://docs.legis.wisconsin.gov/statutes/statutes/344/III/33"
+        },
+        {
+          "label": "Wis. Stat. 344.62(1) and 344.61(2)(c)",
+          "url": "https://docs.legis.wisconsin.gov/document/statutes/344.62"
+        },
+        {
+          "label": "Wis. Stat. 632.32(4)",
+          "url": "https://docs.legis.wisconsin.gov/document/statutes/632.32"
+        },
+        {
+          "label": "Wis. Stat. 632.32(4m)",
+          "url": "https://docs.legis.wisconsin.gov/document/statutes/632.32"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Wisconsin requires at least $25,000 per person and $50,000 per accident for injuries, plus $10,000 for property damage. Uninsured-motorist coverage is always included, and $1,000 of medical payments coverage is included unless you turn it down. Underinsured-motorist coverage is optional.",
+      "goodToKnow": "The law lets you turn down medical payments coverage without saying the first refusal has to be in writing, so it's marked \"included unless you decline.\" Town mutual insurers don't have to include uninsured motorist coverage.",
+      "uncertain": null
+    },
+    {
+      "state": "WY",
+      "insuranceRequired": true,
+      "biPerPerson": 25000,
+      "biPerAccident": 50000,
+      "pd": 20000,
+      "combinedSingleLimit": null,
+      "pipRequired": false,
+      "pipAmount": null,
+      "noFault": false,
+      "noFaultDefault": null,
+      "umRequired": "required-unless-rejected",
+      "uimRequired": false,
+      "medPayRequired": false,
+      "umLimits": "Uninsured motorist coverage for injuries is at least $25,000/$50,000. There's no property-damage requirement.",
+      "effective": "25/50/20 per W.S. 31-9-405(b) and 31-9-102(a)(xi) in the official Title 31 compilation (PDF dated May 8, 2026); no 2024-2026 change found.",
+      "scheduledChanges": [],
+      "sources": [
+        {
+          "label": "Wyo. Stat. 31-9-405(b)",
+          "url": "https://wyoleg.gov/statutes/compress/title31.pdf"
+        },
+        {
+          "label": "Wyo. Stat. 31-4-103(a)",
+          "url": "https://wyoleg.gov/statutes/compress/title31.pdf"
+        },
+        {
+          "label": "Wyo. Stat. 31-10-101",
+          "url": "https://wyoleg.gov/statutes/compress/title31.pdf"
+        }
+      ],
+      "checkedOn": "2026-09-22",
+      "note": "Wyoming requires at least $25,000 per person and $50,000 per accident for injuries, plus $20,000 for property damage. Uninsured-motorist coverage comes with your policy unless you turn it down.",
+      "goodToKnow": "The law lets you turn down uninsured motorist coverage without saying the first refusal has to be in writing, so it's marked \"included unless you decline.\"",
+      "uncertain": "We found no underinsured motorist requirement in the traffic laws, but we didn't check the insurance code for a rule that insurers must offer it."
+    }
+  ]
+}

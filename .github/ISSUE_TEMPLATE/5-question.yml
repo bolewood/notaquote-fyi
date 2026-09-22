@@ -1,0 +1,22 @@
+name: Ask a question
+description: Not sure how something works, or where a number comes from? Ask away.
+title: "Question: "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        There are no silly questions here. If you're wondering, someone else probably is too.
+
+        **This issue is public.** Please don't include your own premium, your VIN, a policy number, your name, or your address.
+  - type: textarea
+    id: question
+    attributes:
+      label: What would you like to know?
+    validations:
+      required: true
+  - type: input
+    id: page
+    attributes:
+      label: Which page is it about, if any?
+      placeholder: "e.g. / (the calculator) or /methodology"
