@@ -44,6 +44,7 @@ Columns: `source_id, state, data_year, url, locator, territory, carrier, profile
 - CDI says the survey premiums are "before any applicable discounts are applied". Company footnotes list California's Good Driver discount among those discounts ("California Good Driver Discount 30%", "20% Good Driver Discount"), so the clean profiles leave it out. A California driver who loses it after an accident probably sees a bigger jump than the survey shows.
 - Profiles 2565 (a couple with a 17-year-old) and 2555 (a younger couple without one) give the rough "teen added to a parent's policy" factor.
 - Mileage variants were only fetched for Los Angeles.
+- **Vehicle calibration.** Each Standard single-driver profile lists four cars (2512: Crosstrek, Civic, Accord, Tacoma; 2522: Accord, Prius, Tesla Model 3, F-150; 2532: Accord, BMW 340i, F-150, RAV4; 2542: Accord, Tesla Model S, Chevy Silverado, BMW 530i; 2023 models, per CDI's Vehicles sheet). On 22 September 2026 we fetched the clean-record, 7,600–10,000-mile pages for every car in all three places (36 more pages, the same form a visitor uses, two seconds apart; script `ca_vehicles.py`, next to the original fetch scripts). Profile ids end in `_V1` to `_V4` for the car's place in the list. All earlier rows are unchanged.
 
 ### co-2023: Colorado Division of Insurance
 
@@ -60,6 +61,10 @@ The North Carolina Department of Insurance's "Safe Driver Incentive Plan (Insura
 ## iso-liability-symbols-2004.csv
 
 Two numbers from Insurance Journal's 1 April 2004 report on ISO's liability symbols: surcharges "of up to 25 percent and discounts of up to 20 percent". We use them to decide how much of HLDI's liability result to pass on.
+
+## sp-global-vehicle-age-2023.csv
+
+One number from S&P Global Mobility's 15 May 2023 press release: the average US car or light truck was 12.5 years old. It sets the vehicle age behind a typical starting price.
 
 ## iso-loss-costs-2024.csv
 

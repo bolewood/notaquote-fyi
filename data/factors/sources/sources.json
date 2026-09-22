@@ -43,7 +43,7 @@
       "url": "https://interactive.web.insurance.ca.gov/apex_extprd/f?p=111:11",
       "dataYear": "2026 (rates effective 1 January 2026)",
       "checkedOn": "2026-09-22",
-      "terms": "Pages show 'Copyright © California Department of Insurance' and 'This is not an insurance premium quote.' No other terms found. Profiles: https://www.insurance.ca.gov/01-consumers/105-type/9-compare-prem/upload/APS2026ProfilesExhibit-2.xlsx"
+      "terms": "Pages show 'Copyright © California Department of Insurance' and 'This is not an insurance premium quote.' No other terms found. Profiles: https://www.insurance.ca.gov/01-consumers/105-type/9-compare-prem/upload/APS2026ProfilesExhibit-2.xlsx The Standard single-driver profiles were also fetched for all four vehicles each profile lists (22 September 2026, clean record, 7,600-10,000 miles, all three places) to calibrate vehicle factors against real prices."
     },
     {
       "id": "co-2023",
@@ -98,6 +98,24 @@
       "dataYear": "2004",
       "checkedOn": "2026-09-22",
       "terms": "News article. We keep two numbers (25 and 20 percent) and one quoted sentence, with a link."
+    },
+    {
+      "id": "bls-cpi-sete",
+      "title": "CPI-U, U.S. city average, Motor vehicle insurance (series CUUR0000SETE, not seasonally adjusted, 1982-84=100)",
+      "publisher": "U.S. Bureau of Labor Statistics",
+      "url": "https://data.bls.gov/timeseries/CUUR0000SETE",
+      "dataYear": "2023 annual average and the latest month, both read from data/state-baselines/state-baselines.json (trend)",
+      "checkedOn": "2026-09-22",
+      "terms": "U.S. government work, public domain."
+    },
+    {
+      "id": "sp-global-vio-2023",
+      "title": "Average Age of Light Vehicles in the US Hits Record High 12.5 years, according to S&P Global Mobility",
+      "publisher": "S&P Global Mobility (press release)",
+      "url": "https://press.spglobal.com/2023-05-15-Average-Age-of-Light-Vehicles-in-the-US-Hits-Record-High-12-5-years,-according-to-S-P-Global-Mobility",
+      "dataYear": "2023",
+      "checkedOn": "2026-09-22",
+      "terms": "Press release. We keep one number and one quoted sentence, with a link."
     }
   ]
 }

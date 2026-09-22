@@ -17,7 +17,23 @@
       "5series",
       "x1",
       "x3",
-      "x5"
+      "x5",
+      "2series",
+      "4series",
+      "i4",
+      "i5",
+      "m2",
+      "m235xi",
+      "m240i",
+      "m240xi",
+      "m3",
+      "m340i",
+      "m340xi",
+      "m4",
+      "m440i",
+      "m440xi",
+      "m8",
+      "m850xi"
     ],
     "Buick": [
       "encoregx",
@@ -146,7 +162,15 @@
     "Mercedes-Benz": [
       "glcclass",
       "gleclass",
-      "cclass"
+      "cclass",
+      "claclassamg",
+      "glaclassamg",
+      "gleclassamg",
+      "gclassamg",
+      "glsclassamg",
+      "amgglb",
+      "amgslclass",
+      "amggleclass"
     ],
     "Mini": [
       "cooper"
@@ -208,6 +232,16 @@
       "atlascrosssport",
       "id4",
       "taos"
+    ],
+    "Porsche": [
+      "911carrera",
+      "911targa",
+      "911turbo",
+      "boxster",
+      "cayman",
+      "taycan",
+      "macan",
+      "cayenne"
     ]
   },
   "aliases": {
@@ -226,7 +260,9 @@
     "bmw|xdrive28i": "x1",
     "chevrolet|equinoxev": "equinox",
     "chevrolet|blazerev": "blazer",
-    "chevrolet|suburban": "suburban1500"
+    "chevrolet|suburban": "suburban1500",
+    "porsche|718boxster": "boxster",
+    "porsche|718cayman": "cayman"
   },
   "classes": {
     "small-car": "Smallcar 4-door",
@@ -305,5 +341,115 @@
     "large-suv": "Large luxury SUV",
     "special-purpose": "Midsize luxury SUV"
   },
-  "_luxuryClasses": "HLDI publishes no small luxury car average, so small luxury cars use the midsize one. Luxury two-seaters use HLDI's large sports car average. Pickups, minivans, and vans from luxury makes use the regular class averages."
+  "_luxuryClasses": "HLDI publishes no small luxury car average, so small luxury cars use the midsize one. Luxury two-seaters use HLDI's large sports car average. Pickups, minivans, and vans from luxury makes use the regular class averages.",
+  "luxurySportsClasses": {
+    "small-car": "Midsize sports car",
+    "midsize-car": "Midsize sports car",
+    "large-car": "Large sports car",
+    "two-seater": "Midsize sports car"
+  },
+  "_luxurySportsClasses": "Luxury-make two-doors and convertibles without their own row use HLDI's sports-car averages instead of the luxury sedan averages. The Porsche 911, Boxster, and Cayman are all in HLDI's sports-car classes.",
+  "_calibration": "The 12 vehicles California's 2026 survey prices for its Standard single-driver profiles (APS2026ProfilesExhibit-2.xlsx, sheets Standard and Vehicles), with the HLDI 2022-24 rows that stand for each. CA lists 2023 models. Where CA doesn't name the drive or trim, we take every matching HLDI row. The Tacoma is CA's SR Access Cab; HLDI's 2022-24 table has only double-cab Tacomas, so the 2WD double cab stands in.",
+  "calibration": {
+    "Subaru Crosstrek": {
+      "make": "Subaru",
+      "series": [
+        "Subaru Crosstrek station wagon 4WD with EyeSight"
+      ]
+    },
+    "Honda Civic": {
+      "make": "Honda",
+      "series": [
+        "Honda Civic"
+      ]
+    },
+    "Honda Accord": {
+      "make": "Honda",
+      "series": [
+        "Honda Accord"
+      ]
+    },
+    "Toyota Tacoma": {
+      "make": "Toyota",
+      "series": [
+        "Toyota Tacoma double cab pickup"
+      ]
+    },
+    "Toyota Prius": {
+      "make": "Toyota",
+      "series": [
+        "Toyota Prius hybrid"
+      ]
+    },
+    "Tesla Model 3": {
+      "make": "Tesla",
+      "series": [
+        "Tesla Model 3 electric 4dr",
+        "Tesla Model 3 electric 4dr 4WD"
+      ]
+    },
+    "Ford F-150": {
+      "make": "Ford",
+      "series": [
+        "Ford F-150"
+      ]
+    },
+    "BMW 340i": {
+      "make": "BMW",
+      "series": [
+        "BMW M340i 4dr"
+      ]
+    },
+    "Toyota RAV4": {
+      "make": "Toyota",
+      "series": [
+        "Toyota RAV4 4dr",
+        "Toyota RAV4 4dr 4WD"
+      ]
+    },
+    "Tesla Model S": {
+      "make": "Tesla",
+      "series": [
+        "Tesla Model S 4dr electric 4WD"
+      ]
+    },
+    "Chevy Silverado": {
+      "make": "Chevrolet",
+      "series": [
+        "Chevrolet Silverado 1500"
+      ]
+    },
+    "BMW 530i": {
+      "make": "BMW",
+      "series": [
+        "BMW 5 series 4dr"
+      ]
+    }
+  },
+  "calibrationProfiles": {
+    "2512": {
+      "V1": "Subaru Crosstrek",
+      "V2": "Honda Civic",
+      "V3": "Honda Accord",
+      "V4": "Toyota Tacoma"
+    },
+    "2522": {
+      "V1": "Honda Accord",
+      "V2": "Toyota Prius",
+      "V3": "Tesla Model 3",
+      "V4": "Ford F-150"
+    },
+    "2532": {
+      "V1": "Honda Accord",
+      "V2": "BMW 340i",
+      "V3": "Ford F-150",
+      "V4": "Toyota RAV4"
+    },
+    "2542": {
+      "V1": "Honda Accord",
+      "V2": "Tesla Model S",
+      "V3": "Chevy Silverado",
+      "V4": "BMW 530i"
+    }
+  }
 }

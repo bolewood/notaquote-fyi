@@ -142,5 +142,27 @@
       "high": 110,
       "why": "FuelEconomy.gov lists some trim names (for example the 2024 Honda CR-V FWD) with both gas and hybrid versions. We price the gas one unless the name says hybrid, and widen the range because yours could be either."
     }
+  },
+  "vehicle": {
+    "liability-weight": {
+      "label": "How much of a vehicle's liability losses we pass on",
+      "value": 52,
+      "low": 26,
+      "high": 79,
+      "why": "Frozen at 0.52 on 22 September 2026 so that adding vehicles can't move it silently. It was chosen as the largest share of HLDI's liability results that keeps the middle 90% of the vehicles we kept then inside ISO's liability symbol band (surcharges up to 25 percent, discounts up to 20 percent, as reported by Insurance Journal in 2004). The derivation recomputes that check every build and reports it next to this value. We looked for a public insurer liability symbol table (SERFF filings, the Massachusetts residual market manual) and didn't find one; Massachusetts' vehicle rating groups apply to physical damage only."
+    }
+  },
+  "typical-start": {
+    "trend-spread": {
+      "label": "Price change since the typical price's year",
+      "low": -5,
+      "high": 5,
+      "why": "The government index is national and covers all car insurance; one state's full-coverage price may have moved a bit more or less. We widen the range by 5 points either way."
+    },
+    "fleet-age-band": {
+      "label": "Vehicle age of the typical price",
+      "band": "8-12",
+      "why": "S&P Global Mobility put the average age of US cars and light trucks at 12.5 years in 2023, which sits on the line between our 8-12 and 13-plus bands. NAIC's collision and comprehensive averages only count cars that carry those coverages, and those cars are newer than the whole fleet, so we use the 8-12 band."
+    }
   }
 }

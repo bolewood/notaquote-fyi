@@ -117,6 +117,56 @@ export type VehicleData = {
   liabilityWeight: FactorCell
   liabilityFloor: number
   liabilityCap: number
+  /** Class fallback for two-doors and convertibles from luxury makes: HLDI's sports-car averages. */
+  luxurySportsClasses: Record<string, VehicleClassRow>
+  /** How HLDI damage results turn into prices, fitted to California's survey. */
+  calibration: VehicleCalibration
+}
+
+export type CalibrationPoint = {
+  vehicle: string
+  /** Median premium ÷ the Accord's, same company, place, and driver. */
+  observed: number
+  /** What the fitted model gives for the same ratio. */
+  fitted: number
+  /** What the model gave before calibration (exponent 1, no luxury term). */
+  uncalibrated: number
+  n: number
+  luxury: boolean
+}
+
+export type VehicleCalibration = {
+  /** Damage factor = HLDI damage result ^ exponent (hundredths: 38 means 0.38). */
+  exponent: FactorCell
+  /** Extra multiplier on the damage share for makes HLDI files as luxury (hundredths). */
+  luxury: FactorCell
+  /** Lookup table: damageCurve[h - damageCurveMin] is the damage factor for an HLDI damage result of h hundredths. */
+  damageCurveMin: number
+  damageCurve: number[]
+  /** False when HLDI's model rows are off; the damage curve is then 1:1 and there is no luxury term. */
+  fitted: boolean
+  points: CalibrationPoint[]
+  /** Sum of squared log errors, before and after. */
+  errorBefore: number
+  errorAfter: number
+  /** California's liability share used in the fit (NAIC 2023, hundredths). */
+  liabilityShare: number
+}
+
+export type TypicalStartData = {
+  /** Average vehicle age behind the typical price, and the band we use for it. */
+  fleetAgeYears: number
+  vehicleAgeBand: string
+  fleetAgeNote: string
+  /** Price change since the typical price's year (BLS CPI, motor vehicle insurance). */
+  trend: {
+    basePeriod: string
+    baseValue: number
+    latestPeriod: string
+    latestValue: number
+    cell: FactorCell
+  }
+  sources: string[]
 }
 
 export type FactorBundle = {
@@ -129,4 +179,5 @@ export type FactorBundle = {
   sources: FactorSource[]
   groups: Record<string, FactorGroup>
   vehicle: VehicleData
+  typicalStart: TypicalStartData
 }

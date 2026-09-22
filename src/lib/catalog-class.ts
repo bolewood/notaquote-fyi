@@ -157,13 +157,14 @@ function powertrainFromCodes(
   if (unique.length === 0) return { value: null, mixed: false }
   if (unique.length === 1) return { value: CODE_TO_POWERTRAIN[unique[0]], mixed: false }
   // One trim name with rows of two powertrains (for example the 2024 Honda
-  // "CR-V FWD", sold as gas and as hybrid). Believe the name when it says
-  // which one; otherwise assume the gas version, which is the plain name. The
-  // result is flagged as mixed so the engine can widen the range.
+  // "CR-V FWD", sold as gas and as hybrid, or the 2024 Mazda "CX-90 4WD",
+  // sold as a mild hybrid and a plug-in). Believe the name when it says which
+  // one; otherwise assume the least electrified version, which is usually the
+  // plain name. The result is flagged as mixed so the engine can widen the
+  // range and say which one it priced.
   const named = powertrainFromName(name)
   if (named && unique.includes(POWERTRAIN_TO_CODE[named])) return { value: named, mixed: true }
-  if (unique.includes("g")) return { value: "combustion", mixed: true }
-  const order = ["e", "f", "p", "h"]
+  const order = ["g", "h", "p", "e", "f"]
   const first = order.find((code) => unique.includes(code)) ?? unique[0]
   return { value: CODE_TO_POWERTRAIN[first], mixed: true }
 }

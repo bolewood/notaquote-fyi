@@ -367,6 +367,7 @@ export function hldiBody(model: string): string[] {
   if (/\bconvertible\b/.test(value)) tags.push("convertible")
   if (/\bhatchback\b/.test(value)) tags.push("hatchback")
   if (/\bwagon\b/.test(value)) tags.push("wagon")
+  if (/\bcoupe\b/.test(value)) tags.push("coupe")
   if (/\b2dr\b/.test(value)) tags.push("2dr")
   return tags
 }
@@ -395,6 +396,9 @@ type Families = {
   useHldiModels: boolean
   luxuryMakes: string[]
   luxuryClasses: Record<string, string>
+  luxurySportsClasses: Record<string, string>
+  calibration: Record<string, { make: string; series: string[] }>
+  calibrationProfiles: Record<string, Record<string, string>>
   families: Record<string, string[]>
   aliases: Record<string, string>
   classes: Record<string, string>
@@ -586,13 +590,34 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
       "same",
     ),
   )
+  // The teen family's parents are licensed 28 and 25 years; the other couple
+  // 13 and 10. California's single drivers show what that experience is worth:
+  // licensed 25 years ÷ 13 years, same company, place, car, and record.
+  const experience25 = summarize(
+    ratios(
+      ca,
+      [
+        ["ca-1142A", "ca-1132A"],
+        ["ca-2542A_V1", "ca-2532A_V1"],
+      ],
+      "same",
+    ),
+  )
+  const inverse = (summary: Summary): Summary => ({
+    median: 1 / summary.median,
+    p25: 1 / summary.p75,
+    p75: 1 / summary.p25,
+    n: summary.n,
+  })
+  const teenAdjusted = chain(teenAdded, inverse(experience25))
   const age1618Added = cellFrom(
-    "16–18, added to a parent's policy",
-    teenAdded,
+    "16–18, added to a parent's policy (whole household)",
+    teenAdjusted,
     "indicative",
     ["ca-2026"],
-    `The whole household's premium after adding a teen, compared with before. California 2026, profile 2565 (married couple licensed 28 and 25 years, plus a 17-year-old licensed 1 year who "drives pleasure use only"; Camry 20,000 miles and Highlander 12,000 miles) ÷ profile 2555 (married couple licensed 13 and 10 years; Camry and Sienna, 15,000 miles each), with and without a multi-policy discount, same company and place: ${pct(teenAdded)}, ${teenAdded.n} comparisons. Rough, because the two households also differ in the parents' experience, the second car, and mileage, and because both are two-car households. California rates by years licensed, not age. Used only when you ask for a teen added to your own policy.`,
+    `How much the whole household's policy goes up when a teen is added. California 2026, profile 2565 (married couple licensed 28 and 25 years, plus a 17-year-old licensed 1 year who "drives pleasure use only"; Camry 20,000 miles and Highlander 12,000 miles) ÷ profile 2555 (married couple licensed 13 and 10 years; Camry and Sienna, 15,000 miles each), with and without a multi-policy discount, same company and place: ${pct(teenAdded)}, ${teenAdded.n} comparisons. That understates the teen, because the teen family's parents are more experienced and so cheaper. California's single drivers licensed 25 years ÷ 13 years (same company, place, car, and record) cost ${pct(experience25)}, ${experience25.n} comparisons, so we divide by that: ${change(teenAdjusted.median)}. This assumes the parents' experience credit works like a single driver's; it may be smaller on a two-driver policy, which would make the true figure lower, so the low edge goes down to the unadjusted figure. The second car and mileage also differ, and both are two-car households. It's the whole household's premium, not the teen's share, and it isn't a price for a teen's own car.`,
   )
+  age1618Added.low = Math.min(age1618Added.low, toHundredths(teenAdded.median))
 
   const driverAge: FactorGroup = {
     title: "Driver age",
@@ -797,6 +822,8 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
   const isoLiabilityShare = (bi + pd) / (bi + pd + coll + comp)
   const baselines = JSON.parse(need(files, "state-baselines.json")) as {
     countrywide: { liabilityAveragePremium: number; combinedAveragePremium: number }
+    states?: Record<string, { liabilityAveragePremium: number; combinedAveragePremium: number }>
+    trend: { dataYearAverage: { period: string; value: number }; latest: { period: string; value: number } }
   }
   const naicLiability = baselines.countrywide.liabilityAveragePremium
   const naicCombined = baselines.countrywide.combinedAveragePremium
@@ -891,15 +918,18 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
   const p95 = hldiLiabilities.length > 0 ? percentile(hldiLiabilities, 0.95) : 1
   const weightUp = p95 > 1 ? surchargeMax / 100 / (p95 - 1) : 1
   const weightDown = p05 < 1 ? discountMax / 100 / (1 - p05) : 1
-  const weight = Math.min(1, weightUp, weightDown)
+  const fittedWeight = Math.min(1, weightUp, weightDown)
+  const frozen = guess("vehicle", "liability-weight")
+  if (frozen.value === null || frozen.low === null || frozen.high === null) throw new Error("liability weight needs a value")
+  const weight = frozen.value / 100
   const liabilityWeight: FactorCell = {
-    label: "How much of a vehicle's liability losses we pass on",
-    value: toHundredths(weight),
-    low: toHundredths(weight / 2),
-    high: toHundredths(Math.min(1, weight * 1.5)),
+    label: frozen.label,
+    value: frozen.value,
+    low: frozen.low,
+    high: frozen.high,
     basis: "assumed",
     sources: [],
-    derivation: `Our estimate, and our judgment; help wanted. HLDI's liability results by vehicle spread widely (the middle 90% of the ${hldiLiabilities.length} series we keep run from ${change(p05)} to ${change(p95)}), but insurers move liability prices by vehicle much less: ISO's liability symbol plan, as reported by Insurance Journal in 2004, allows surcharges "of up to 25 percent and discounts of up to 20 percent". We pass on the largest share of HLDI's liability result that keeps that middle 90% inside +${surchargeMax}% and ${discountMax}% less, and keep every vehicle inside that band: liability factor = 1 + ${weight.toFixed(2)} × (HLDI − 1). Collision and comprehensive results are passed on in full. The range allows half to one and a half times this weight.`,
+    derivation: `Our estimate, and our judgment; help wanted. ${frozen.why} Liability factor = 1 + ${weight.toFixed(2)} × (HLDI − 1), kept inside +${surchargeMax}% and ${discountMax}% less. This build's check: the middle 90% of the ${hldiLiabilities.length} HLDI liability results we keep run from ${change(p05)} to ${change(p95)}, and the largest weight that keeps them inside ISO's band is ${fittedWeight.toFixed(2)}.`,
     n: null,
   }
 
@@ -985,6 +1015,17 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
     if (row) luxuryClasses[classId] = row
     memberRatios(label, luxuryRatios)
   }
+  const luxurySportsClasses: Record<string, VehicleClassRow> = {}
+  for (const [classId, label] of Object.entries(families.luxurySportsClasses)) {
+    const words = `HLDI 2022–24 class average "${label}", used for two-doors and convertibles in the class "${plainClass(classId)}" from makes HLDI mostly files as luxury or sports cars. The mapping is our judgment.`
+    const row = classRow(classId, label, words, "Luxury ")
+    if (row) {
+      row.liability.label = row.liability.label.replace(/^Luxury /, "Luxury sporty ")
+      row.physical.label = row.physical.label.replace(/^Luxury /, "Luxury sporty ")
+      luxurySportsClasses[classId] = row
+    }
+    memberRatios(label, luxuryRatios)
+  }
 
   const electricClasses: Record<string, VehicleClassRow> = {}
   for (const [classId, [body, size]] of Object.entries(families.electricClassCells)) {
@@ -1028,7 +1069,17 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
   const spreadOf = (values: number[], fallback: Summary): Summary => (values.length >= 5 ? summarize(values) : fallback)
   const wide: Summary = { median: 1, p25: 0.8, p75: 1.25, n: 0 }
   const classSpread = spreadOf(classRatios, wide)
-  const luxurySpread = spreadOf(luxuryRatios, wide)
+  // Luxury and sports cars vary more around their class average, so this
+  // range uses the 10th and 90th percentiles instead of the middle half.
+  const luxurySpread: Summary =
+    luxuryRatios.length >= 5
+      ? {
+          median: percentile(luxuryRatios, 0.5),
+          p25: percentile(luxuryRatios, 0.1),
+          p75: percentile(luxuryRatios, 0.9),
+          n: luxuryRatios.length,
+        }
+      : { median: 1, p25: 0.7, p75: 1.45, n: 0 }
   const unknownSpread = spreadOf(allCombined, wide)
   const luxuryHldiClasses = new Set(
     subtotals
@@ -1041,6 +1092,185 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
     .filter((rel): rel is { liability: number; physical: number } => rel.liability !== null && rel.physical !== null)
     .map((rel) => combined(rel.liability, rel.physical) / 100)
   const unknownLuxurySpread = spreadOf(luxuryCombined, { median: 1, p25: 0.8, p75: 1.6, n: 0 })
+
+  // --- Calibration: from HLDI losses to real prices.
+  // HLDI adjusts its results for the driver's age, gender, marital status,
+  // state, density, risk type, and (for collision and comprehensive) the
+  // deductible. It does not adjust for credit, mileage, prior claims, or
+  // income, and insurers' vehicle ratings also follow the car's value. So we
+  // fit how HLDI's damage results turn into prices, using California's 2026
+  // survey, which prices the same driver on four cars in each Standard
+  // (full-coverage) profile.
+  //   price ∝ s × L(car) + (1 − s) × D(car)^k × (1 + a × luxury)
+  // s is California's liability share (NAIC 2023), L the credited liability
+  // factor (frozen weight), D HLDI's damage result, k the damage exponent,
+  // and a the extra for makes HLDI files as luxury. k and a are chosen on a
+  // 0.01 grid to minimize the squared log error of each car ÷ the Accord.
+  const luxuryMakeSet = new Set(families.luxuryMakes.map((make) => compactName(make)))
+  const creditLiability = (raw: number) => Math.min(1 + surchargeMax / 100, Math.max(1 - discountMax / 100, 1 + weight * (raw - 1)))
+  const medianOr = (values: (number | null)[]) => {
+    const present = values.filter((value): value is number => value !== null)
+    return present.length === 0 ? null : percentile(present, 0.5)
+  }
+  type CalibrationCar = { name: string; luxury: boolean; liability: number; damage: number; observed: Summary }
+  const caTypical = baselines.states?.CA
+  const calibrationShare = caTypical ? caTypical.liabilityAveragePremium / caTypical.combinedAveragePremium : fullLiability / 100
+  const calibrationCars: CalibrationCar[] = []
+  let accord: CalibrationCar | null = null
+  for (const [name, spec] of Object.entries(families.calibration)) {
+    const rows = models.filter((row) => spec.series.includes(row.series))
+    if (rows.length === 0) continue
+    const rel = relativities({
+      bodilyInjury: medianOr(rows.map((row) => row.bodilyInjury)),
+      propertyDamage: medianOr(rows.map((row) => row.propertyDamage)),
+      collision: medianOr(rows.map((row) => row.collision)),
+      comprehensive: medianOr(rows.map((row) => row.comprehensive)),
+    })
+    if (rel.liability === null || rel.physical === null) continue
+    const pairs: [string, string][] = []
+    for (const [profile, vehicles] of Object.entries(families.calibrationProfiles)) {
+      const accordKey = Object.entries(vehicles).find(([, vehicle]) => vehicle === "Honda Accord")?.[0]
+      const ownKey = Object.entries(vehicles).find(([, vehicle]) => vehicle === name)?.[0]
+      if (accordKey && ownKey && ownKey !== accordKey) pairs.push([`ca-${profile}A_${ownKey}`, `ca-${profile}A_${accordKey}`])
+    }
+    const car: CalibrationCar = {
+      name,
+      luxury: luxuryMakeSet.has(compactName(spec.make)),
+      liability: creditLiability(rel.liability / 100),
+      damage: rel.physical / 100,
+      observed: pairs.length > 0 ? summarize(ratios(ca, pairs, "same")) : { median: 1, p25: 1, p75: 1, n: 0 },
+    }
+    if (name === "Honda Accord") accord = car
+    else if (pairs.length > 0) calibrationCars.push(car)
+  }
+  const predict = (car: CalibrationCar, k: number, a: number) =>
+    calibrationShare * car.liability + (1 - calibrationShare) * Math.pow(car.damage, k) * (1 + (car.luxury ? a : 0))
+  const squaredError = (cars: CalibrationCar[], k: number, a: number) => {
+    if (!accord) return Infinity
+    const base = predict(accord, k, a)
+    return cars.reduce((total, car) => total + Math.pow(Math.log(predict(car, k, a) / base) - Math.log(car.observed.median), 2), 0)
+  }
+  const bestFit = (cars: CalibrationCar[], step: number) => {
+    let best = { k: 1, a: 0, error: Infinity }
+    for (let kk = 20; kk <= 200; kk += step) {
+      for (let aa = 0; aa <= 150; aa += step) {
+        const error = squaredError(cars, kk / 100, aa / 100)
+        if (error < best.error) best = { k: kk / 100, a: aa / 100, error }
+      }
+    }
+    return best
+  }
+  const canFit = modelsEnabled && accord !== null && calibrationCars.length >= 6
+  const fit = canFit ? bestFit(calibrationCars, 1) : { k: 1, a: 0, error: 0 }
+  const ratioFor = (car: CalibrationCar, k: number, a: number) => (accord ? predict(car, k, a) / predict(accord, k, a) : 1)
+  const points = canFit
+    ? calibrationCars.map((car) => ({
+        vehicle: car.name,
+        observed: Math.round(car.observed.median * 1000) / 1000,
+        fitted: Math.round(ratioFor(car, fit.k, fit.a) * 1000) / 1000,
+        uncalibrated: Math.round(ratioFor(car, 1, 0) * 1000) / 1000,
+        n: car.observed.n,
+        luxury: car.luxury,
+      }))
+    : []
+  // Leave each car out in turn and predict it from the others.
+  const leaveOneOut = canFit
+    ? calibrationCars.map((car) => {
+        const others = calibrationCars.filter((other) => other !== car)
+        const partial = bestFit(others, 2)
+        return { car, k: partial.k, a: partial.a, ratio: car.observed.median / ratioFor(car, partial.k, partial.a) }
+      })
+    : []
+  const residuals = points.map((point) => point.observed / point.fitted)
+  const valueMisses = leaveOneOut.filter((item) => item.car.luxury).map((item) => item.ratio)
+  const errorBefore = canFit ? squaredError(calibrationCars, 1, 0) : 0
+  const pointWords = points
+    .map((point) => `${point.vehicle} ${point.observed.toFixed(2)} (model ${point.fitted.toFixed(2)}, before ${point.uncalibrated.toFixed(2)})`)
+    .join("; ")
+  const calibrationWords = canFit
+    ? `California 2026 Standard single-driver profiles (full coverage, clean record, 7,600–10,000 miles, Los Angeles, Irvine, and Alturas): each car ÷ the Accord in the same profile, same company and place, median across companies. ${pointWords}. California's liability share (NAIC 2023): ${(calibrationShare * 100).toFixed(1)}%. Squared log error ${errorBefore.toFixed(3)} before calibration, ${fit.error.toFixed(3)} after.`
+    : "Without HLDI's model rows we can't calibrate, so HLDI's damage result is used as it is."
+  const kValues = leaveOneOut.map((item) => item.k)
+  const aValues = leaveOneOut.map((item) => item.a)
+  const exponentCell: FactorCell = canFit
+    ? {
+        label: "How strongly repair losses move the damage part",
+        value: Math.round(fit.k * 100),
+        low: Math.round(Math.min(fit.k, ...kValues) * 100),
+        high: Math.round(Math.max(fit.k, ...kValues) * 100),
+        basis: "indicative",
+        sources: ["ca-2026", "hldi-2022-24", "naic-auto-db-2022-2023"],
+        derivation: `Damage factor = HLDI damage result ^ ${fit.k.toFixed(2)}. Below 1, so real prices differ between cars less than HLDI's repair losses do. ${calibrationWords} The range is the lowest and highest exponent when each car is left out in turn. Rough: 12 cars.`,
+        n: points.length,
+      }
+    : {
+        label: "How strongly repair losses move the damage part",
+        value: 100,
+        low: 70,
+        high: 130,
+        basis: "assumed",
+        sources: [],
+        derivation: `Our estimate. No public source yet; help wanted. ${calibrationWords}`,
+        n: null,
+      }
+  const luxuryCell: FactorCell = canFit
+    ? {
+        label: "Extra on the damage part for luxury makes (car value)",
+        value: Math.round((1 + fit.a) * 100),
+        low: Math.round((1 + Math.min(fit.a, ...aValues)) * 100),
+        high: Math.round((1 + Math.max(fit.a, ...aValues)) * 100),
+        basis: "indicative",
+        sources: ["ca-2026", "hldi-2022-24", "naic-auto-db-2022-2023"],
+        derivation: `Insurers' damage ratings follow the car's price as well as its losses, and we have no public price list, so being from a make HLDI mostly files as luxury (BMW and Tesla in the fit) stands in for value. Fitted together with the exponent: ×${(1 + fit.a).toFixed(2)} on the damage part. ${calibrationWords} The range is the lowest and highest value when each car is left out in turn.`,
+        n: points.length,
+      }
+    : {
+        label: "Extra on the damage part for luxury makes (car value)",
+        value: 100,
+        low: 100,
+        high: 175,
+        basis: "assumed",
+        sources: [],
+        derivation: `Our estimate. No public source yet; help wanted. ${calibrationWords}`,
+        n: null,
+      }
+  const damageCurveMin = 20
+  const damageCurve: number[] = []
+  for (let hundredth = damageCurveMin; hundredth <= 800; hundredth += 1) {
+    damageCurve.push(Math.round(100 * Math.pow(hundredth / 100, canFit ? fit.k : 1)))
+  }
+
+  // --- Typical start: price change since 2023 and the fleet's vehicle age.
+  const trendBase = baselines.trend.dataYearAverage
+  const trendLatest = baselines.trend.latest
+  const trendRatio = trendLatest.value / trendBase.value
+  const trendSpread = guess("typical-start", "trend-spread") as AssumedEntry & { low: number; high: number }
+  const fleetAgeRow = parseCsv(need(files, "sources/sp-global-vehicle-age-2023.csv"))[0]
+  const fleetAge = Number(fleetAgeRow?.value)
+  if (!Number.isFinite(fleetAge)) throw new Error("fleet age missing")
+  const fleetBand = assumptions["typical-start"]?.["fleet-age-band"] as unknown as { band: string; why: string }
+  const typicalStartData = {
+    fleetAgeYears: fleetAge,
+    vehicleAgeBand: fleetBand.band,
+    fleetAgeNote: `S&P Global Mobility: the average US car or light truck was ${fleetAge} years old in 2023. ${fleetBand.why}`,
+    trend: {
+      basePeriod: trendBase.period,
+      baseValue: trendBase.value,
+      latestPeriod: trendLatest.period,
+      latestValue: trendLatest.value,
+      cell: {
+        label: "Price change since the typical price's year",
+        value: toHundredths(trendRatio),
+        low: toHundredths(trendRatio) + trendSpread.low,
+        high: toHundredths(trendRatio) + trendSpread.high,
+        basis: "indicative" as const,
+        sources: ["bls-cpi-sete"],
+        derivation: `Rough. U.S. Bureau of Labor Statistics consumer price index for motor vehicle insurance (CUUR0000SETE), ${trendLatest.period} (${trendLatest.value}) ÷ the ${trendBase.period} average (${trendBase.value}) = ${trendRatio.toFixed(4)}. Only applied to a typical starting price, never to a price you enter. ${trendSpread.why}`,
+        n: 2,
+      },
+    },
+    sources: ["sp-global-vio-2023", "bls-cpi-sete", "naic-auto-db-2022-2023"],
+  }
 
   // --- Range cells.
   const typicalSummary = combine([ok, nd, tx, ca, co].map((rows) => summarize(dispersion(rows))))
@@ -1060,7 +1290,42 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
         derivation: `How far companies' prices sit from the middle company for the same driver, car, and place: each premium ÷ the median premium for that profile and place (groups of 5 or more companies). Oklahoma 2026, North Dakota 2026, Texas 2025, California 2026, and Colorado 2023; median of the five states' 25th and 75th percentiles; ${typicalSummary.n} premiums.`,
         n: typicalSummary.n,
       },
-      "vehicle-model": rangeAssumption("vehicle-model"),
+      "vehicle-model": canFit
+        ? {
+            label: "How closely real prices follow our vehicle factors",
+            value: 100,
+            low: Math.min(100, Math.round(Math.min(...residuals) * 100)),
+            high: Math.max(100, Math.round(Math.max(...residuals) * 100)),
+            basis: "indicative",
+            sources: ["ca-2026", "hldi-2022-24"],
+            derivation: `How far California's real prices sit from our calibrated vehicle factors, for the ${residuals.length} cars in the fit: the lowest and highest of real ÷ model (each car ÷ the Accord).`,
+            n: residuals.length,
+          }
+        : rangeAssumption("vehicle-model"),
+      "vehicle-value": canFit
+        ? {
+            label: "Luxury and electric cars: price can be higher still",
+            value: 100,
+            low: 100,
+            high: Math.max(100, Math.round(Math.max(1, ...valueMisses) * 100)),
+            basis: "indicative",
+            sources: ["ca-2026", "hldi-2022-24"],
+            derivation: `Our factors can miss high for expensive cars, because we have no public price list. When each luxury car in the calibration is left out and predicted from the others, the largest miss is real ÷ model = ${Math.max(1, ...valueMisses).toFixed(2)} (${leaveOneOut
+              .filter((item) => item.car.luxury)
+              .map((item) => `${item.car.name} ${item.ratio.toFixed(2)}`)
+              .join("; ")}). Used to widen the range upward for luxury makes and electric cars.`,
+            n: valueMisses.length,
+          }
+        : {
+            label: "Luxury and electric cars: price can be higher still",
+            value: 100,
+            low: 100,
+            high: 130,
+            basis: "assumed",
+            sources: [],
+            derivation: "Our estimate. No public source yet; help wanted. Expensive cars can cost more to insure than their losses suggest.",
+            n: null,
+          },
       "vehicle-model-years": rangeAssumption("vehicle-model-years"),
       "vehicle-mixed-powertrain": rangeAssumption("vehicle-mixed-powertrain"),
       "vehicle-luxury-class": {
@@ -1211,6 +1476,19 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
       liabilityWeight,
       liabilityFloor: 100 - discountMax,
       liabilityCap: 100 + surchargeMax,
+      luxurySportsClasses,
+      calibration: {
+        exponent: exponentCell,
+        luxury: luxuryCell,
+        damageCurveMin,
+        damageCurve,
+        fitted: canFit,
+        points,
+        errorBefore: Math.round(errorBefore * 10000) / 10000,
+        errorAfter: Math.round(fit.error * 10000) / 10000,
+        liabilityShare: Math.round(calibrationShare * 1000) / 10,
+      },
     },
+    typicalStart: typicalStartData,
   }
 }

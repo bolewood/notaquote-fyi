@@ -15,6 +15,8 @@ import {
   publishedFactorGroups,
   runFactorEngine,
   selectionKeys,
+  teenAddedToPolicy,
+  FACTOR_YEAR,
   typicalScenario,
   typicalStart,
   TYPICAL_START_ATTRIBUTION,
@@ -25,6 +27,7 @@ import {
 } from "./factor-engine"
 import { deriveFactors, type FactorFiles } from "./factor-derivation"
 import { stateBaseline } from "./state-baselines"
+import { EXAMPLE_ADULT, exampleTable, loadCatalog } from "../../scripts/example-table"
 import type { FactorBundle } from "./factor-types"
 import { DATA_BUNDLE_VERSION, MODEL_VERSION } from "./copy"
 import { JAYDEN, MOLLY, type Scenario } from "./scenario"
@@ -271,13 +274,32 @@ test("a typical start comes from the state's NAIC figure", () => {
   const target: Scenario = { ...MOLLY_F150, state: "OH" }
   const start = typicalStart(target)
   assert.ok(start)
-  assert.equal(start.annual, stateBaseline("OH")?.annual)
+  const naic = stateBaseline("OH")?.annual ?? 0
+  const trend = FACTOR_BUNDLE.typicalStart.trend
+  // Moved forward by the BLS index, exactly: NAIC × latest ÷ 2023 average, rounded half up.
+  const trended = Math.round(naic * (trend.latestValue / trend.baseValue))
+  assert.equal(start.annual, trended)
+  assert.equal(start.untrendedAnnual, naic)
+  assert.equal(start.trended, true)
   assert.equal(start.kind, "typical")
   assert.equal(start.vehicle, "average")
   assert.equal(start.scenario.age, "40-64")
   assert.equal(start.scenario.region, "suburban")
-  assert.equal(start.scenario.year, target.year)
+  // As old as the insured fleet (8–12 band), not the target's model year.
+  assert.equal(start.scenario.year, FACTOR_YEAR - 12)
+  assert.equal(selectionKeys(start.scenario)["vehicle-age"], "8-12")
   assert.match(start.label ?? "", /Ohio/)
+  const illinois = typicalStart({ ...MOLLY_F150, state: "IL" })
+  assert.equal(
+    illinois?.attribution,
+    "Illinois's average full-coverage cost in 2023 was $1,257 (NAIC). Car insurance prices nationally have risen about 18% since then (government price index, August 2026), so we start from about $1,490.",
+  )
+  // The trend widens a typical start's range; a premium you enter is never trended.
+  const withTrend = estimate(illinois!, { ...MOLLY_F150, state: "IL" }, { vehicle: F150 })
+  const withoutTrend = estimate({ ...illinois!, trended: false }, { ...MOLLY_F150, state: "IL" }, { vehicle: F150 })
+  assert.ok(withTrend.spread.up > withoutTrend.spread.up)
+  assert.match(withTrend.rangeNote, /moved the typical price forward/)
+  assert.equal(estimate(YOURS, MOLLY_F150, { vehicle: F150 }).likely, 1800)
   assert.equal(TYPICAL_START_ATTRIBUTION, "Source: NAIC, 2022/2023 Auto Insurance Database Report, 2023 data")
   assert.deepEqual(typicalScenario(target), start.scenario)
 })
@@ -290,8 +312,12 @@ test("a trim name sold as gas and hybrid is priced as gas and widens the range",
   assert.ok(rows.length > 0 && rows.every((row) => row.family === "crv" && row.powertrain === "combustion" && row.drive === "2wd"))
   const plain = estimate(YOURS, on(MOLLY_F150, RAV4), { vehicle: RAV4 })
   const mixed = estimate(YOURS, on(MOLLY_F150, crv), { vehicle: crv })
-  assert.match(mixed.rangeNote, /both a gas and a hybrid/)
-  assert.doesNotMatch(plain.rangeNote, /both a gas and a hybrid/)
+  assert.match(mixed.rangeNote, /more than one version\. We priced the gas one/)
+  assert.doesNotMatch(plain.rangeNote, /more than one version/)
+  // The 2024 Mazda CX-90 4WD is listed as a mild hybrid and a plug-in; we price the hybrid and say so.
+  const cx90 = car(2024, "Mazda", "CX-90", "CX-90 4WD")
+  assert.equal(cx90.powertrain, "hybrid")
+  assert.match(estimate(YOURS, on(MOLLY_F150, cx90), { vehicle: cx90 }).rangeNote, /We priced the hybrid one/)
 })
 
 test("body style: plain rows unless the trim names a body", () => {
@@ -303,23 +329,29 @@ test("body style: plain rows unless the trim names a body", () => {
   assert.deepEqual(series(car(2024, "Toyota", "Corolla", "Corolla Hatchback")), ["Toyota Corolla hatchback"])
   assert.deepEqual(series(car(2024, "Jeep", "Wrangler", "Wrangler 2dr 4WD")), ["Jeep Wrangler 2dr convertible 4WD"])
   assert.deepEqual(series(car(2024, "Jeep", "Wrangler", "Wrangler 4dr 4WD")), ["Jeep Wrangler 4dr convertible 4WD"])
-  const mustang = estimate(YOURS, on(MOLLY_F150, car(2024, "Ford", "Mustang", "Mustang")), { vehicle: car(2024, "Ford", "Mustang", "Mustang") })
-  const civic = estimate(YOURS, on(MOLLY_F150, CIVIC), { vehicle: CIVIC })
-  assert.ok(mustang.likely > civic.likely, "a Mustang coupe costs more than a Civic sedan")
+  assert.deepEqual(series(car(2024, "Porsche", "Cayenne", "Cayenne")), ["Porsche Cayenne 4dr 4WD"])
+  assert.deepEqual(series(car(2024, "Porsche", "Cayenne", "Cayenne Coupe")), ["Porsche Cayenne Coupe 4dr 4WD"])
+  assert.deepEqual(series(car(2024, "BMW", "M", "M4 Coupe")), ["BMW M4 2dr", "BMW M4 2dr 4WD"])
+  assert.deepEqual(series(car(2024, "Porsche", "911", "911 Turbo S Cabriolet")), ["Porsche 911 Turbo convertible 4WD"])
 })
 
-test("luxury makes without their own HLDI row use luxury class averages", () => {
-  const m4 = car(2024, "BMW", "M", "M4 Coupe")
-  const relativity = vehicleRelativity(m4)
+test("luxury makes without their own HLDI row use luxury or sports-car class averages", () => {
+  const gt3 = car(2024, "Porsche", "911", "911 GT3")
+  const relativity = vehicleRelativity(gt3)
   assert.equal(relativity.level, "class")
-  assert.match(relativity.label, /^luxury /)
+  assert.equal(relativity.label, "sporty luxury two-seater")
   assert.equal(relativity.spreadKey, "vehicle-luxury-class")
-  assert.ok(relativity.physicalHundredths >= 140, `${relativity.physicalHundredths}`)
-  const note = estimate(YOURS, on(MOLLY_F150, m4), { vehicle: m4 }).rangeNote
-  assert.match(note, /average for its class \(luxury /)
+  assert.ok(relativity.physicalHundredths >= 180, `${relativity.physicalHundredths}`)
+  const note = estimate(YOURS, on(MOLLY_F150, gt3), { vehicle: gt3 }).rangeNote
+  assert.match(note, /average for its class \(sporty luxury two-seater\)/)
+  // Electric beats luxury: a Macan Electric uses the electric small SUV average, not the gas luxury one.
+  const macanElectric = car(2024, "Porsche", "Macan", "Macan 4 Electric")
+  assert.equal(vehicleRelativity(macanElectric).label, "electric small SUV")
+  const panamera = car(2024, "Porsche", "Panamera", "Panamera")
+  assert.equal(vehicleRelativity(panamera).label, "luxury large car")
   assert.doesNotMatch(note, /smallcar|liability share|4-door/i)
   // A luxury make we can't classify at all gets the wider luxury spread.
-  const unresolved = car(2024, "BMW", "M4", "Trim not resolved")
+  const unresolved = vehicleFacts(catalog, { year: 2024, make: "BMW", model: "Z9", trim: "Concept" })
   assert.equal(vehicleRelativity(unresolved).spreadKey, "vehicle-unknown-luxury")
   const plainUnknown = vehicleFacts(null, { year: 2024, make: "Nobody", model: "Mystery", trim: "" })
   const luxurySpread = estimate(YOURS, on(MOLLY_F150, unresolved), { vehicle: unresolved }).spread.up
@@ -365,7 +397,7 @@ test("teens: own policy by default, and a rough figure for adding them to a pare
   const own = estimate(YOURS, teen, { vehicle: F150 })
   const added = estimate(YOURS, teen, { vehicle: F150, teenOnParentPolicy: true })
   assert.match(own.rangeNote, /only driver on their own policy\. Adding a teen to a parent's policy usually costs less than this\./)
-  assert.match(added.rangeNote, /adds your teen to your own policy/)
+  assert.match(added.rangeNote, /whole household's policy after adding your teen, not the teen's own price/)
   assert.ok(added.likely < own.likely)
   assert.equal(added.steps.find((step) => step.group === "driver-age")?.basis, "indicative")
   const young = estimate(YOURS, { ...MOLLY_F150, age: "19-21" as const }, { vehicle: F150, teenOnParentPolicy: true })
@@ -492,4 +524,54 @@ test("the source manifest is safe and NAIC manifest rows cite the publications, 
   assert.match(NAIC_PARAPHRASE, /car-years/)
   assert.equal(/naic estimate/i.test(NAIC_PARAPHRASE), false)
   assert.equal(NAIC_PARAPHRASE.includes("$"), false)
+})
+
+test("vehicle bias checks, from a typical start in suburban Illinois", () => {
+  const start = typicalStart(EXAMPLE_ADULT)!
+  const price = (make: string, model: string, trim: string) => {
+    const facts = car(2024, make, model, trim)
+    return estimate(start, { ...EXAMPLE_ADULT, make, model, trim }, { vehicle: facts }).likely
+  }
+  const modelY = price("Tesla", "Model Y", "Model Y Long Range AWD")
+  const model3 = price("Tesla", "Model 3", "Model 3 Long Range AWD")
+  const accord = price("Honda", "Accord", "Accord")
+  const rav4 = price("Toyota", "RAV4", "RAV4")
+  const civic = price("Honda", "Civic", "Civic 4Dr")
+  const mustang = price("Ford", "Mustang", "Mustang")
+  const f150 = price("Ford", "F-150", "F150 Pickup 4WD")
+  const crv = price("Honda", "CR-V", "CR-V FWD")
+  assert.ok(price("Porsche", "911", "911 Carrera") > mustang, "911 > Mustang")
+  assert.ok(modelY > rav4, "Model Y > RAV4")
+  assert.ok(modelY > accord * 1.15, "Model Y well above the Accord")
+  assert.ok(model3 > accord, "Model 3 > Accord")
+  assert.ok(price("Porsche", "Macan", "Macan") > civic, "Macan > Civic")
+  assert.ok(price("Porsche", "Cayenne", "Cayenne") > rav4, "Cayenne > RAV4")
+  assert.ok(price("BMW", "M", "M4 Coupe") > mustang, "M4 > Mustang")
+  assert.ok(f150 > crv && f150 < modelY, "a full-size pickup sits between a small SUV and a Tesla")
+  assert.ok(rav4 < accord, "a RAV4 costs less than an Accord, as in California's survey")
+})
+
+test("the README's worked example is exactly what the engine gives", () => {
+  const readme = readFileSync("data/factors/README.md", "utf8")
+  const table = exampleTable(loadCatalog())
+  assert.ok(readme.includes(table), "run `npx tsx scripts/example-table.ts` and paste the output into data/factors/README.md")
+})
+
+test("a teen added to a parent's policy is the whole household's premium", () => {
+  const start = typicalStart(EXAMPLE_ADULT, { teenOnParentPolicy: true })!
+  assert.match(start.label ?? "", /one insured car in Illinois/)
+  const accord = car(2024, "Honda", "Accord", "Accord")
+  const parent = { ...EXAMPLE_ADULT, make: "Honda", model: "Accord", trim: "Accord" }
+  const added = teenAddedToPolicy(start, parent, { vehicle: accord })
+  const factor = FACTOR_BUNDLE.groups["driver-age"].cells["16-18-added"].value
+  assert.ok(Math.abs(added.after.likely - (added.before.likely * factor) / 100) <= 1)
+  assert.equal(added.increase, added.after.likely - added.before.likely)
+  assert.match(
+    added.headline,
+    /^Adding your teen to your policy: about \+\$[\d,]+ a year on a policy that costs \$[\d,]+ now\.$/,
+  )
+  assert.throws(
+    () => compareVehicles(start, { ...EXAMPLE_ADULT, age: "16-18" }, [accord], { teenOnParentPolicy: true }),
+    /isn't a price for a teen's own car/,
+  )
 })

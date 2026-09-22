@@ -147,8 +147,16 @@ test("spot check: a teen added to a parent's policy, from California's two famil
     ["ca-2565M", "ca-2555M"],
   ])
   assert.ok(ratios.length > 200)
-  assert.equal(committed.groups["driver-age"].cells["16-18-added"].value, Math.round(median(ratios) * 100))
-  assert.equal(committed.groups["driver-age"].cells["16-18-added"].basis, "indicative")
+  const experience = profileRatios(ca, [
+    ["ca-1142A", "ca-1132A"],
+    ["ca-2542A_V1", "ca-2532A_V1"],
+  ])
+  const cell = committed.groups["driver-age"].cells["16-18-added"]
+  // Divided by what 25 years' experience is worth for single drivers (the teen family's parents are more experienced).
+  assert.equal(cell.value, Math.round((median(ratios) / median(experience)) * 100))
+  assert.ok(cell.low <= Math.round(median(ratios) * 100), "the low edge reaches the unadjusted figure")
+  assert.equal(cell.basis, "indicative")
+  assert.match(cell.derivation, /whole household/)
 })
 
 test("years licensed is an estimate, capped so a 26+ driver never costs more than a young one", () => {
@@ -173,7 +181,7 @@ test("urban and suburban say how much the states disagree", () => {
   assert.ok(urban.low <= 100 && urban.high >= 200, `${urban.low}-${urban.high}`)
   assert.equal(suburban.basis, "indicative")
   assert.match(suburban.derivation, /Rough/)
-  assert.match(suburban.derivation, /\+32%/)
+  assert.match(suburban.derivation, /We use neither/)
   assert.ok(suburban.value > 100 && suburban.value < urban.value)
 })
 
@@ -205,6 +213,7 @@ test("every source file is listed in sources.json and used by a factor", () => {
   }
   visit(committed.groups)
   visit(committed.vehicle)
+  visit(committed.typicalStart)
   used.add(committed.vehicle.sourceId)
   for (const name of readdirSync(path.join(DATA, "sources"))) {
     if (!name.endsWith(".csv")) continue
@@ -212,13 +221,14 @@ test("every source file is listed in sources.json and used by a factor", () => {
       .replace(/-(premiums|profiles)\.csv$/, "")
       .replace(/^iso-loss-costs-2024\.csv$/, "iso-via-iii-2024")
       .replace(/^iso-liability-symbols-2004\.csv$/, "iso-symbols-2004")
+      .replace(/^sp-global-vehicle-age-2023\.csv$/, "sp-global-vio-2023")
       .replace(/^hldi-class-subtotals-2022-24\.csv$/, "hldi-2022-24")
       .replace(/\.csv$/, "")
     assert.ok(ids.has(id), `${name} is not listed in sources.json`)
     if (id !== "iso-symbols-2004") assert.ok(used.has(id), `${name} is not used by any factor`)
   }
   for (const id of ids) assert.ok(used.has(id) || id === "iso-symbols-2004", `${id} is listed but not used`)
-  assert.match(committed.vehicle.liabilityWeight.derivation, /25 percent and discounts of up to 20 percent/)
+  assert.match(committed.vehicle.liabilityWeight.derivation, /up to 25 percent, discounts up to 20 percent/)
 })
 
 test("HLDI rows are copied faithfully and named consistently", () => {
@@ -257,4 +267,38 @@ test("every source file is listed and every row keeps a locator", () => {
       assert.ok((row.locator ?? "").trim().length > 10, `${name} row without a locator`)
     }
   }
+})
+
+test("vehicle calibration: the fit is reproducible from California's prices", () => {
+  const calibration = committed.vehicle.calibration
+  assert.equal(calibration.fitted, true)
+  assert.ok(calibration.errorAfter < calibration.errorBefore / 2)
+  assert.equal(calibration.points.length, 11)
+  for (const point of calibration.points) {
+    assert.ok(Math.abs(point.fitted / point.observed - 1) < 0.2, point.vehicle)
+  }
+  // Recompute one observed ratio by hand: Tesla Model 3 ÷ Accord in profile 2522.
+  const ca = rows("ca-2026-premiums.csv").filter((row) => !CA_FOOTNOTED.has(row.carrier))
+  const model3 = median(profileRatios(ca, [["ca-2522A_V3", "ca-2522A_V1"]]))
+  assert.equal(calibration.points.find((point) => point.vehicle === "Tesla Model 3")?.observed, Math.round(model3 * 1000) / 1000)
+  // The damage curve is HLDI ^ exponent in hundredths.
+  const k = calibration.exponent.value / 100
+  assert.equal(calibration.damageCurve[200 - calibration.damageCurveMin], Math.round(100 * Math.pow(2, k)))
+  assert.equal(calibration.damageCurve[100 - calibration.damageCurveMin], 100)
+})
+
+test("the liability weight is frozen in assumptions.json", () => {
+  const assumptions = JSON.parse(readFileSync("data/factors/assumptions.json", "utf8"))
+  assert.equal(committed.vehicle.liabilityWeight.value, assumptions.vehicle["liability-weight"].value)
+  assert.equal(committed.vehicle.liabilityWeight.value, 52)
+  assert.match(committed.vehicle.liabilityWeight.derivation, /This build's check/)
+})
+
+test("the typical start's trend and fleet age are pinned and cited", () => {
+  const typical = committed.typicalStart
+  assert.equal(typical.trend.basePeriod, "2023")
+  assert.equal(typical.trend.latestPeriod, "2026-08")
+  assert.equal(typical.trend.cell.value, Math.round((typical.trend.latestValue / typical.trend.baseValue) * 100))
+  assert.equal(typical.fleetAgeYears, 12.5)
+  assert.equal(typical.vehicleAgeBand, "8-12")
 })
