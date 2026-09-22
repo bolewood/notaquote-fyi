@@ -1,5 +1,5 @@
 name: A number looks wrong
-description: A multiplier or adjustment on the site seems off, is out of date, or needs a better source.
+description: An adjustment on the site seems off, is out of date, or needs a better source.
 title: "Number looks wrong: "
 labels: ["data", "factors"]
 body:
@@ -14,7 +14,7 @@ body:
     attributes:
       label: Which number?
       description: A short name is plenty.
-      placeholder: "e.g. the adjustment for a teen driver, or the $1,000 deductible"
+      placeholder: "e.g. one at-fault accident, or the $2,000 deductible"
     validations:
       required: true
   - type: input
@@ -22,17 +22,17 @@ body:
     attributes:
       label: Where did you see it?
       description: The page on the site, if you remember.
-      placeholder: "e.g. / (the calculator) or /methodology"
+      placeholder: "e.g. the What-if page, or How it works"
   - type: input
     id: shown
     attributes:
       label: What the site says
-      placeholder: "e.g. 1.25"
+      placeholder: "e.g. +52% for one accident, or +$530 for the Tesla"
   - type: input
     id: suggested
     attributes:
       label: What you think it should be
-      placeholder: "e.g. closer to 1.15"
+      placeholder: "e.g. closer to +40%"
   - type: input
     id: source_url
     attributes:
@@ -43,7 +43,7 @@ body:
     id: source_checked
     attributes:
       label: When did you check the source?
-      placeholder: "e.g. 2026-09-21"
+      placeholder: "e.g. September 21, 2026"
   - type: textarea
     id: details
     attributes:

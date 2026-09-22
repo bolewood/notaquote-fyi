@@ -15,20 +15,22 @@ import {
   YearsField,
 } from "@/components/driver-fields"
 import { VehicleFixLink } from "@/components/how-we-got-this"
-import { formatDollars, RangeBar, rangeWords } from "@/components/money"
+import { PageSkeleton } from "@/components/page-skeleton"
 import { ShareBox } from "@/components/share-box"
-import { carKey, FIRST_CARS, POPULAR_SUVS, resolveCar, TRUCKS_AND_FUN, type QuickCar } from "@/lib/car-search"
+import { carKey, FIRST_CARS, POPULAR_SUVS, resolveCar, STARTER_MIX, TRUCKS_AND_FUN, type QuickCar } from "@/lib/car-search"
 import { vehicleFacts } from "@/lib/catalog-class"
 import { catalogYears, type VehiclePick } from "@/lib/catalog"
 import {
   buildRows,
+  compareAnswer,
   csvFilename,
   DEFAULT_SORT,
   filterRows,
+  gapsToCheapest,
   headlineAmount,
   nextSort,
   parseMaxYearly,
-  scaleFor,
+  reasonWords,
   sortRows,
   toCsv,
   type CompareMode,
@@ -40,6 +42,7 @@ import {
   addCars,
   addSharedCars,
   carryFromWhatIf,
+  carryNote,
   clearCars,
   COMPARE_LIMIT,
   defaultCompareFor,
@@ -47,9 +50,10 @@ import {
   toggleStar,
   type CompareList,
 } from "@/lib/compare-list"
-import { DATA_UPDATED, DISCLAIMER, MODEL_VERSION } from "@/lib/copy"
+import { DATA_UPDATED, DISCLAIMER } from "@/lib/copy"
 import { recordCount, recordMountedCount } from "@/lib/counts"
 import { typicalStart } from "@/lib/factor-engine"
+import { dollars, estimateDollars, monthlyDollars, rangeWords, signedDollars } from "@/lib/format"
 import {
   distinctReasons,
   driverOnlyEstimate,
@@ -60,9 +64,8 @@ import {
   startingPoint,
   startLine,
 } from "@/lib/pricing"
-import { situationSentence, shortVehicleLabel, withTeenFlag, type Scenario } from "@/lib/scenario"
+import { AGE_BANDS, situationSentence, shortVehicleLabel, stateName, withTeenFlag, type Scenario } from "@/lib/scenario"
 import { encodeSharePath, SHARE_INVALID_NOTE, shareArrivalNotes } from "@/lib/share-link"
-import { PageSkeleton } from "@/components/page-skeleton"
 import { readShareArrival, useClearShareFromAddress, useMounted } from "@/lib/use-share-arrival"
 import { DEFAULT_SITUATION } from "@/lib/situation"
 import { useCatalog } from "@/lib/use-catalog"
@@ -81,8 +84,8 @@ const QUICK_GROUPS: { id: string; label: string; cars: readonly QuickCar[] }[] =
 const SORT_LABELS: Record<SortKey, string> = {
   order: "The order you added them",
   car: "Car name",
-  yearly: "Yearly estimate",
-  monthly: "Monthly",
+  yearly: "Price",
+  monthly: "Price",
   policy: "Whole policy",
   range: "How sure we are (narrowest range)",
   reason: "Why",
@@ -118,6 +121,20 @@ function readArrival(): Arrival {
   return { shared, carry: null, notes: shareArrivalNotes(decoded), present: true }
 }
 
+/** "2022 Honda Civic" and "Civic 4Dr": show the version only when it adds something. */
+function versionWords(row: CompareRow): string | null {
+  return row.trim && row.trim !== row.car.model ? row.trim : null
+}
+
+/** Focus a car's name (the visible copy: table or card), or the list's heading. */
+function focusCar(key: string | null) {
+  window.setTimeout(() => {
+    const targets = key ? Array.from(document.querySelectorAll<HTMLElement>(`[data-focus-key="${CSS.escape(key)}"]`)) : []
+    const visible = targets.find((element) => element.offsetParent !== null)
+    ;(visible ?? document.getElementById("cars-heading"))?.focus()
+  }, 30)
+}
+
 /** Waits for the browser (saved choices, share link) before drawing, so nothing flashes. */
 export function CompareCars() {
   const mounted = useMounted()
@@ -151,7 +168,9 @@ function CompareCarsReady() {
   const askToMerge = linked !== null && (stored.value?.cars.length ?? 0) > 0
   const [driverOpen, setDriverOpen] = useState(false)
 
-  const [notes, setNotes] = useState(initial.notes)
+  const [notes, setNotes] = useState(() =>
+    carried && initial.carry ? [carryNote(carried, initial.carry.cars, (car) => shortVehicleLabel(car))] : initial.notes,
+  )
   const [sort, setSort] = useState<SortState>(DEFAULT_SORT)
   const [maxText, setMaxText] = useState("")
   const [starredOnly, setStarredOnly] = useState(false)
@@ -160,6 +179,9 @@ function CompareCarsReady() {
   const [openRow, setOpenRow] = useState<string | null>(null)
   const [message, setMessage] = useState<string | null>(null)
   const messageTimer = useRef<number | undefined>(undefined)
+  const [removed, setRemoved] = useState<{ name: string; before: CompareList; key: string } | null>(null)
+  const removedTimer = useRef<number | undefined>(undefined)
+  const [popKey, setPopKey] = useState<string | null>(null)
 
   useEffect(() => {
     recordMountedCount("compare_session")
@@ -198,6 +220,33 @@ function CompareCarsReady() {
     else setMessage(null)
   }
 
+  /** Remove a car, offer to undo it for a few seconds, and keep focus on the next car. */
+  function remove(row: CompareRow, visibleRows: readonly CompareRow[]) {
+    const index = visibleRows.findIndex((item) => item.key === row.key)
+    const neighbor = visibleRows[index + 1] ?? visibleRows[index - 1] ?? null
+    setRemoved({ name: row.name, before: list, key: row.key })
+    window.clearTimeout(removedTimer.current)
+    removedTimer.current = window.setTimeout(() => setRemoved(null), 8000)
+    save(removeCar(list, row.key))
+    if (openRow === row.key) setOpenRow(null)
+    focusCar(neighbor?.key ?? null)
+  }
+
+  function undoRemove() {
+    if (!removed) return
+    save(removed.before)
+    focusCar(removed.key)
+    setRemoved(null)
+  }
+
+  function star(row: CompareRow) {
+    if (!row.starred) {
+      setPopKey(row.key)
+      window.setTimeout(() => setPopKey((key) => (key === row.key ? null : key)), 400)
+    }
+    save(toggleStar(list, row.key))
+  }
+
   // Prices, all from the engine.
   // A teen added to a parent's policy is priced one car at a time as the
   // extra on the household's policy; everyone else is priced on their own.
@@ -224,10 +273,14 @@ function CompareCarsReady() {
 
   const maxYearly = parseMaxYearly(maxText)
   const visible = sortRows(filterRows(rows, { maxYearly, starredOnly }), sort)
-  const scale = scaleFor(rows)
-  const lowest = rows.length > 1 ? Math.min(...rows.map(headlineAmount)) : null
+  const { gaps, cheapest } = gapsToCheapest(visible)
+  const topAmount = Math.max(1, ...visible.map(headlineAmount))
   const starredCount = list.cars.filter((car) => car.starred).length
   const hidden = rows.length - visible.length
+  const added = mode === "added"
+  const age = AGE_BANDS.find((band) => band.id === driver.age)?.label ?? driver.age
+  const who = `For a ${age}-year-old in ${stateName(driver.state)}${added ? ", added to your policy" : ""}`
+  const answer = compareAnswer(visible, mode, who)
 
   function download() {
     recordCount("csv_download")
@@ -237,7 +290,7 @@ function CompareCarsReady() {
         driver: situationSentence(driver, list.teenOnParentPolicy, false),
         start: start ? startLine(start) : "",
         disclaimer: DISCLAIMER,
-        versions: `Updated ${DATA_UPDATED} (math version ${MODEL_VERSION})`,
+        versions: `Data updated ${DATA_UPDATED}`,
       },
       mode,
     )
@@ -252,26 +305,28 @@ function CompareCarsReady() {
     setTimeout(() => URL.revokeObjectURL(url), 1000)
   }
 
-  const added = mode === "added"
-  const mainAmount = (row: CompareRow) => (row.extra !== null ? `+${formatDollars(row.extra)}` : formatDollars(row.likely))
-  const monthAmount = (row: CompareRow) =>
-    row.extra !== null ? `+${formatDollars(Math.round(row.extra / 12))}` : formatDollars(row.monthly)
+  const mainAmount = (row: CompareRow) => (row.extra !== null ? signedDollars(row.extra) : estimateDollars(row.likely))
+  const monthAmount = (row: CompareRow) => (row.extra !== null ? `+${monthlyDollars(row.extra)}` : monthlyDollars(row.likely))
+  const gapWords = (row: CompareRow) => {
+    const gap = gaps.get(row.key) ?? 0
+    if (!cheapest || row.key === cheapest.key) return null
+    if (Math.round(gap / 10) === 0) return `Same as the ${cheapest.car.model}`
+    return `${signedDollars(gap)} vs. ${cheapest.car.model}`
+  }
   const years = catalog ? catalogYears(catalog) : [quickYear]
   const full = list.cars.length >= COMPARE_LIMIT
+  const starterPicks = catalog
+    ? STARTER_MIX.flatMap((car) => {
+        const pick = resolveCar(catalog, quickYear, car)
+        return pick ? [pick] : []
+      })
+    : []
+  const listedKeys = new Set(list.cars.map((car) => carKey(car)))
+  const starterRemaining = starterPicks.filter((pick) => !listedKeys.has(carKey(pick)))
 
   return (
     <>
       <div className="no-print">
-        <section className="max-w-3xl pt-8 sm:pt-12">
-          <h1 className="text-3xl leading-tight font-semibold tracking-tight text-balance sm:text-[2.6rem]">
-            Which car costs the least to insure?
-          </h1>
-          <p className="mt-3 max-w-2xl text-lg leading-relaxed text-pretty text-muted-foreground">
-            Add up to {COMPARE_LIMIT} cars and we&apos;ll price each one for the same driver. Sort them, star the favorites,
-            and narrow the list down together.
-          </p>
-        </section>
-
         {notes.length > 0 ? (
           <div className="mt-6 flex items-start gap-3 rounded-2xl bg-primary/[0.06] px-4 py-3" data-testid="share-notice">
             <div className="grid flex-1 gap-1 text-sm">
@@ -306,7 +361,7 @@ function CompareCarsReady() {
         {stored.error ? <p className="mt-4 text-sm">{stored.error}</p> : null}
       </div>
 
-      <div className="mt-6 grid items-start gap-5 lg:mt-8 lg:grid-cols-[minmax(0,4fr)_minmax(0,9fr)] lg:gap-6 print:mt-0 print:block">
+      <div className="mt-6 grid items-start gap-5 lg:mt-8 lg:grid-cols-[minmax(0,4fr)_minmax(0,9fr)] lg:gap-6 xl:grid-cols-[20rem_minmax(0,1fr)] print:mt-0 print:block">
         {/* Driver */}
         <section aria-labelledby="driver-heading" className="card no-print p-5 sm:p-6 lg:sticky lg:top-4">
           <div className="flex items-start justify-between gap-3">
@@ -328,7 +383,7 @@ function CompareCarsReady() {
           </p>
           <p className="mt-1 hidden text-sm text-muted-foreground lg:block">Every car in your list is priced for this driver.</p>
           <div id="driver-form" className={cn("mt-4 gap-3 lg:grid", driverOpen ? "grid" : "hidden")}>
-            <div className="grid grid-cols-2 gap-3 lg:grid-cols-1 xl:grid-cols-2">
+            <div className="grid grid-cols-2 gap-3 lg:grid-cols-1">
               <AgeField scenario={driver} onChange={patchDriver} idPrefix="driver" />
               <StateField scenario={driver} onChange={patchDriver} idPrefix="driver" />
             </div>
@@ -342,7 +397,7 @@ function CompareCarsReady() {
                 idPrefix="driver"
               />
             ) : null}
-            <div className="grid grid-cols-2 gap-3 lg:grid-cols-1 xl:grid-cols-2">
+            <div className="grid grid-cols-2 gap-3 lg:grid-cols-1">
               <RegionField scenario={driver} onChange={patchDriver} idPrefix="driver" />
               <CoverageField scenario={driver} onChange={patchDriver} idPrefix="driver" showNote={false} />
             </div>
@@ -370,8 +425,8 @@ function CompareCarsReady() {
                   />
                   <span>
                     {mode === "added"
-                      ? `Start from the ${formatDollars(situation.premium ?? 0)} a year your whole policy costs now, with your ${shortVehicleLabel(situation.scenario)}.`
-                      : `Start from the ${formatDollars(situation.premium ?? 0)} a year you pay now for your ${shortVehicleLabel(situation.scenario)}.`}{" "}
+                      ? `Start from the ${dollars(situation.premium ?? 0)} a year your whole policy costs now, with your ${shortVehicleLabel(situation.scenario)}.`
+                      : `Start from the ${dollars(situation.premium ?? 0)} a year you pay now for your ${shortVehicleLabel(situation.scenario)}.`}{" "}
                     It stays on your device.
                   </span>
                 </label>
@@ -395,7 +450,7 @@ function CompareCarsReady() {
         </section>
 
         {/* Cars */}
-        <section aria-labelledby="cars-heading" className="card min-w-0 overflow-hidden">
+        <section aria-labelledby="cars-heading" className="card min-w-0 overflow-clip print:overflow-visible">
           <div className="print-only print-sheet pb-3">
             <p style={{ fontSize: "9pt", letterSpacing: "0.08em", textTransform: "uppercase" }}>
               NotAQuote.FYI · {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
@@ -405,95 +460,109 @@ function CompareCarsReady() {
               {situationSentence(driver, list.teenOnParentPolicy, false)}{" "}
               {added ? "The big number is what adding your teen costs a year with each car." : "Yearly estimates for each car."}
             </p>
+            {answer ? <p style={{ fontWeight: 600, marginTop: "4pt" }}>{answer}</p> : null}
           </div>
           <div className="no-print grid gap-4 border-b border-border px-5 pt-5 pb-4 sm:px-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <h2 id="cars-heading" className="text-xl font-semibold tracking-tight">
+              <h2 id="cars-heading" tabIndex={-1} className="text-xl font-semibold tracking-tight outline-none">
                 Your cars{" "}
                 <span className="text-base font-normal text-muted-foreground" data-testid="car-count">
                   {list.cars.length} of {COMPARE_LIMIT}
                 </span>
               </h2>
-              <button type="button" className="btn btn-primary" onClick={() => setPickerOpen(true)} disabled={full}>
-                <Plus className="size-4" aria-hidden="true" /> Add a car
-              </button>
+              {full ? (
+                <p className="text-sm text-muted-foreground">
+                  {COMPARE_LIMIT} of {COMPARE_LIMIT}: remove one to add another
+                </p>
+              ) : (
+                <button type="button" className="btn btn-primary" onClick={() => setPickerOpen(true)}>
+                  <Plus className="size-4" aria-hidden="true" /> Add a car
+                </button>
+              )}
             </div>
             <details key={list.cars.length === 0 ? "empty" : "some"} open={list.cars.length === 0} className="group grid gap-3">
-              <summary className="flex cursor-pointer list-none items-center gap-2 text-sm font-medium">
+              <summary className="flex min-h-10 cursor-pointer list-none items-center gap-2 text-sm font-medium">
                 <ChevronDown className="size-4 -rotate-90 transition-transform group-open:rotate-0" aria-hidden="true" />
                 {list.cars.length === 0 ? "Popular cars, one tap each" : "Add popular cars"}
               </summary>
-              <div className="mt-3 grid gap-3">
-              <div className="flex flex-wrap items-center gap-2 text-sm">
-                <label htmlFor="quick-year" className="text-muted-foreground">
-                  Model year
-                </label>
-                <select
-                  id="quick-year"
-                  className="field-select min-h-8 w-auto py-0.5 text-sm"
-                  value={quickYear}
-                  onChange={(event) => setQuickYear(Number(event.target.value))}
-                >
-                  {years.map((year) => (
-                    <option key={year} value={year}>
-                      {year}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              {QUICK_GROUPS.map((group) => {
-                const picks = catalog
-                  ? group.cars.flatMap((car) => {
-                      const pick = resolveCar(catalog, quickYear, car)
-                      return pick ? [pick] : []
-                    })
-                  : []
-                const listed = new Set(list.cars.map((car) => carKey(car)))
-                const remaining = picks.filter((pick) => !listed.has(carKey(pick)))
-                return (
-                  <div key={group.id} className="grid gap-1.5">
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm font-semibold">{group.label}</p>
-                      {group.id === "first" && remaining.length > 1 ? (
-                        <button
-                          type="button"
-                          className="text-sm font-medium text-primary underline-offset-2 hover:underline disabled:opacity-50"
-                          onClick={() => add(remaining)}
-                          disabled={full}
-                          data-testid="add-all-first-cars"
-                        >
-                          Add all {Math.min(remaining.length, COMPARE_LIMIT - list.cars.length)}
-                        </button>
-                      ) : null}
-                    </div>
-                    <div className="scroll-row -mx-1 px-1 pb-1 sm:flex-wrap">
-                      {picks.length === 0 ? (
-                        <span className="text-sm text-muted-foreground">
-                          {catalog ? `None listed for ${quickYear}.` : "Loading the list of cars…"}
-                        </span>
-                      ) : (
-                        picks.map((pick) => {
-                          const inList = listed.has(carKey(pick))
-                          return (
-                            <button
-                              key={carKey(pick)}
-                              type="button"
-                              className="chip shrink-0"
-                              aria-pressed={inList}
-                              disabled={!inList && full}
-                              onClick={() => (inList ? save(removeCar(list, carKey(pick))) : add([pick]))}
-                              title={inList ? "In your list. Tap to remove." : undefined}
-                            >
-                              {inList ? <CheckMark /> : <Plus className="size-3.5" aria-hidden="true" />}
-                              {pick.make} {pick.model}
-                            </button>
-                          )
-                        })
-                      )}
-                    </div>
+              <div className="mt-3 grid gap-4">
+                <div className="grid gap-1 text-sm">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <label htmlFor="quick-year" className="font-medium">
+                      Model year
+                    </label>
+                    <select
+                      id="quick-year"
+                      className="field-select min-h-9 w-auto py-0.5 text-sm"
+                      value={quickYear}
+                      onChange={(event) => setQuickYear(Number(event.target.value))}
+                    >
+                      {years.map((year) => (
+                        <option key={year} value={year}>
+                          {year}
+                        </option>
+                      ))}
+                    </select>
                   </div>
-                )
-              })}
+                  <p className="text-muted-foreground">
+                    We start at 2022, about the age of a typical first car. Change it anytime.
+                  </p>
+                </div>
+                {starterRemaining.length > 1 ? (
+                  <div className="flex flex-wrap items-center gap-3 rounded-2xl bg-sun-soft p-3 text-sm">
+                    <p className="flex-1">
+                      Not sure where to start? Add a mix of everyday cars, a sporty one, an electric one, a Jeep, and a pickup.
+                    </p>
+                    <button
+                      type="button"
+                      className="btn"
+                      onClick={() => add(starterRemaining)}
+                      disabled={full}
+                      data-testid="add-all-first-cars"
+                    >
+                      <Plus className="size-4" aria-hidden="true" /> Add a starter list of{" "}
+                      {Math.min(starterRemaining.length, COMPARE_LIMIT - list.cars.length)}
+                    </button>
+                  </div>
+                ) : null}
+                {QUICK_GROUPS.map((group) => {
+                  const picks = catalog
+                    ? group.cars.flatMap((car) => {
+                        const pick = resolveCar(catalog, quickYear, car)
+                        return pick ? [pick] : []
+                      })
+                    : []
+                  return (
+                    <div key={group.id} className="grid gap-1.5">
+                      <p className="text-sm font-semibold">{group.label}</p>
+                      <div className="scroll-row -mx-1 px-1 pb-1 sm:flex-wrap">
+                        {picks.length === 0 ? (
+                          <span className="text-sm text-muted-foreground">
+                            {catalog ? `None listed for ${quickYear}.` : "Loading the list of cars…"}
+                          </span>
+                        ) : (
+                          picks.map((pick) => {
+                            const inList = listedKeys.has(carKey(pick))
+                            return (
+                              <button
+                                key={carKey(pick)}
+                                type="button"
+                                className="chip shrink-0"
+                                aria-pressed={inList}
+                                disabled={!inList && full}
+                                onClick={() => (inList ? save(removeCar(list, carKey(pick))) : add([pick]))}
+                                title={inList ? "In your list. Tap to remove." : undefined}
+                              >
+                                {inList ? <CheckMark /> : <Plus className="size-3.5" aria-hidden="true" />}
+                                {pick.make} {pick.model}
+                              </button>
+                            )
+                          })
+                        )}
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
             </details>
             {message ? (
@@ -508,15 +577,15 @@ function CompareCarsReady() {
               <div className="no-print flex flex-wrap items-end gap-x-5 gap-y-3 border-b border-border px-5 py-3 sm:px-6">
                 <div className="grid gap-1">
                   <label htmlFor="max-yearly" className="field-label">
-                    {added ? "Only show extra under" : "Only show under"}
+                    {added ? "Hide cars that add more than" : "Hide cars over"}
                   </label>
                   <div className="relative">
                     <span className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-muted-foreground">$</span>
                     <input
                       id="max-yearly"
-                      className="field-input min-h-10 w-40 pr-16 pl-7"
+                      className="field-input min-h-10 w-44 pr-16 pl-7"
                       inputMode="numeric"
-                      placeholder={added ? "1,000" : "3,000"}
+                      placeholder={added ? "e.g. 1,000" : "e.g. 3,000"}
                       value={maxText}
                       onChange={(event) => setMaxText(event.target.value)}
                     />
@@ -525,11 +594,12 @@ function CompareCarsReady() {
                     </span>
                   </div>
                 </div>
-                <label className="flex min-h-10 cursor-pointer items-center gap-2 text-sm font-medium">
+                <label className={cn("flex min-h-10 items-center gap-2 text-sm font-medium", starredCount === 0 ? "text-muted-foreground" : "cursor-pointer")}>
                   <input
                     type="checkbox"
                     className="size-4 accent-[var(--primary)]"
-                    checked={starredOnly}
+                    checked={starredOnly && starredCount > 0}
+                    disabled={starredCount === 0}
                     onChange={(event) => setStarredOnly(event.target.checked)}
                   />
                   Only starred ({starredCount})
@@ -556,13 +626,19 @@ function CompareCarsReady() {
                 </div>
                 <div className="ml-auto flex flex-wrap gap-2">
                   <button type="button" className="btn" onClick={download} data-testid="download-csv">
-                    <Download className="size-4" aria-hidden="true" /> Spreadsheet (CSV)
+                    <Download className="size-4" aria-hidden="true" /> Download spreadsheet (CSV)
                   </button>
                   <button type="button" className="btn" onClick={() => window.print()}>
-                    <Printer className="size-4" aria-hidden="true" /> Print
+                    <Printer className="size-4" aria-hidden="true" /> Print this list
                   </button>
                 </div>
               </div>
+
+              {answer ? (
+                <p className="no-print border-b border-border px-5 py-3 text-base font-medium sm:px-6" data-testid="compare-answer">
+                  {answer}
+                </p>
+              ) : null}
 
               {hidden > 0 ? (
                 <p className="no-print border-b border-border bg-sun-soft px-5 py-2 text-sm sm:px-6" role="status">
@@ -581,162 +657,171 @@ function CompareCarsReady() {
               ) : null}
 
               {/* Wide screens: a real table. */}
-              <div className="hidden overflow-x-auto sm:block print:block">
-                <table className="compare-table w-full border-collapse text-left text-sm" data-testid="compare-table">
+              <div className="hidden sm:block print:block">
+                <table className="compare-table w-full table-fixed border-collapse text-left text-sm" data-testid="compare-table">
                   <caption className="sr-only">
                     Estimated yearly insurance cost for each car, for the same driver. Column headers sort the table.
                   </caption>
                   <thead>
-                    <tr className="border-b border-border text-sm text-muted-foreground">
-                      <th scope="col" className="w-10 py-2.5 pl-4">
+                    <tr className="text-sm text-muted-foreground">
+                      <th scope="col" className="sticky top-0 z-10 w-14 border-b border-border bg-card py-2.5 pl-3">
                         <span className="sr-only">Starred</span>
                       </th>
-                      <SortHeader label="Car" sortKey="car" sort={sort} onSort={setSort} className="min-w-44" />
-                      <SortHeader label={added ? "Extra for your teen" : "A year"} sortKey="yearly" sort={sort} onSort={setSort} align="right" />
-                      <SortHeader label="A month" sortKey="monthly" sort={sort} onSort={setSort} align="right" className="hidden md:table-cell print:table-cell" />
+                      <SortHeader label="Car" sortKey="car" sort={sort} onSort={setSort} />
+                      <SortHeader label={added ? "Extra a year" : "A year"} sortKey="yearly" sort={sort} onSort={setSort} align="right" className="w-28" />
                       <SortHeader
-                        label={added ? "Whole policy a year" : "Where quotes would land"}
-                        sortKey={added ? "policy" : "range"}
+                        label={added ? "Extra a month" : "A month"}
+                        sortKey="monthly"
                         sort={sort}
                         onSort={setSort}
-                        className="min-w-44"
+                        align="right"
+                        className="hidden w-28 pr-5 xl:table-cell print:table-cell"
                       />
-                      <SortHeader
-                        label="Why"
-                        sortKey="reason"
-                        sort={sort}
-                        onSort={setSort}
-                        className="hidden xl:table-cell print:table-cell"
-                      />
-                      <th scope="col" className="no-print w-12 py-2.5 pr-4">
+                      <SortHeader label={added ? "Whole policy" : "Compared"} sortKey={added ? "policy" : "range"} sort={sort} onSort={setSort} className="w-44 pl-4" />
+                      <th scope="col" className="sticky top-0 z-10 hidden w-36 border-b border-border bg-card py-2.5 pr-3 font-medium xl:table-cell print:table-cell">
+                        vs. the cheapest
+                      </th>
+                      <th scope="col" className="no-print sticky top-0 z-10 w-14 border-b border-border bg-card py-2.5 pr-4">
                         <span className="sr-only">Remove</span>
+                      </th>
+                      <th scope="col" className="hidden w-40 border-b border-border py-2.5 font-medium print:table-cell">
+                        Notes
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {visible.map((row) => (
-                      <Fragment key={row.key}>
-                        <tr
-                          className={cn("border-b border-border/70 align-middle transition-colors hover:bg-muted/40", row.starred && "bg-star/10 hover:bg-star/15")}
-                          data-testid="compare-row"
-                        >
-                          <td className="py-3 pl-3">
-                            <StarButton row={row} onToggle={() => save(toggleStar(list, row.key))} />
-                          </td>
-                          <td className="py-3 pr-3">
-                            <button
-                              type="button"
-                              className="grid text-left"
-                              aria-expanded={openRow === row.key}
-                              onClick={() => setOpenRow(openRow === row.key ? null : row.key)}
-                            >
-                              <span className="font-medium hover:underline">{row.name}</span>
-                              <span className="text-xs text-muted-foreground">{row.trim}</span>
-                              <span className="mt-0.5 text-xs text-muted-foreground xl:hidden print:hidden">{sentenceCase(row.reason)}</span>
-                            </button>
-                          </td>
-                          <td className="money py-3 pr-3 text-right whitespace-nowrap">
-                            <span className="inline-flex items-center gap-2">
-                              {headlineAmount(row) === lowest ? (
-                                <span className="tag bg-down-soft text-down">
+                    {visible.map((row) => {
+                      const lowest = cheapest !== null && visible.length > 1 && row.key === cheapest.key
+                      const version = versionWords(row)
+                      return (
+                        <Fragment key={row.key}>
+                          <tr
+                            className={cn(
+                              "border-b border-border/70 align-middle transition-colors hover:bg-muted/40",
+                              row.starred && "bg-star/10 hover:bg-star/15",
+                            )}
+                            data-testid="compare-row"
+                          >
+                            <td className="py-3 pl-3">
+                              <StarButton row={row} pop={popKey === row.key} onToggle={() => star(row)} />
+                            </td>
+                            <td className="py-3 pr-3">
+                              <button
+                                type="button"
+                                className="grid w-full min-w-0 text-left"
+                                aria-expanded={openRow === row.key}
+                                data-focus-key={row.key}
+                                onClick={() => setOpenRow(openRow === row.key ? null : row.key)}
+                              >
+                                <span className="line-clamp-2 font-medium hover:underline">{row.name}</span>
+                                {version ? <span className="truncate text-xs text-muted-foreground">{version}</span> : null}
+                              </button>
+                            </td>
+                            <td className="money py-3 pr-3 text-right whitespace-nowrap">
+                              <span className="block text-lg leading-tight font-semibold">{mainAmount(row)}</span>
+                              <span className="block text-xs text-muted-foreground xl:hidden print:hidden">
+                                {monthAmount(row)} a month
+                              </span>
+                              {lowest ? (
+                                <span className="tag mt-1 bg-down-soft text-down">
                                   <Trophy className="size-3.5" aria-hidden="true" /> Lowest
                                 </span>
                               ) : null}
-                              <span className="text-lg font-semibold">{mainAmount(row)}</span>
-                            </span>
-                          </td>
-                          <td className="money hidden py-3 pr-4 text-right text-muted-foreground md:table-cell print:table-cell">
-                            {monthAmount(row)}
-                          </td>
-                          <td className="py-3 pr-4">
-                            {scale ? (
-                              <RangeBar low={row.low} likely={row.likely} high={row.high} min={scale.min} max={scale.max} />
-                            ) : null}
-                            <span className="money mt-1.5 block text-sm text-muted-foreground">
-                              {added ? `${formatDollars(row.likely)} (${formatDollars(row.low)}–${formatDollars(row.high)})` : `${formatDollars(row.low)}–${formatDollars(row.high)}`}
-                            </span>
-                          </td>
-                          <td className="hidden max-w-60 min-w-44 py-3 pr-3 text-sm leading-snug text-muted-foreground xl:table-cell print:table-cell">
-                            {sentenceCase(row.reason)}
-                          </td>
-                          <td className="no-print py-3 pr-4 text-right">
-                            <button
-                              type="button"
-                              className="icon-btn"
-                              aria-label={`Remove ${row.name}`}
-                              onClick={() => save(removeCar(list, row.key))}
-                            >
-                              <X className="size-4" />
-                            </button>
-                          </td>
-                        </tr>
-                        {openRow === row.key ? (
-                          <tr className="no-print border-b border-border bg-muted/50">
-                            <td />
-                            <td colSpan={6} className="py-3 pr-4">
-                              <RowDetails row={row} />
                             </td>
+                            <td className="money hidden py-3 pr-5 text-right text-muted-foreground xl:table-cell print:table-cell">
+                              {monthAmount(row)}
+                            </td>
+                            <td className="py-3 pr-4 pl-4">
+                              <span className="print-exact block h-2.5 w-full rounded-full bg-muted" aria-hidden="true">
+                                <span
+                                  className={cn("block h-full rounded-full", lowest ? "bg-down" : "bg-primary/70")}
+                                  style={{ width: `${Math.max(4, (headlineAmount(row) / topAmount) * 100)}%` }}
+                                />
+                              </span>
+                              <span className="money mt-1.5 block truncate text-xs text-muted-foreground">
+                                {added ? `Whole policy about ${estimateDollars(row.likely)}` : rangeWords(row.low, row.high)}
+                              </span>
+                            </td>
+                            <td className="hidden py-3 pr-3 text-sm text-muted-foreground xl:table-cell print:table-cell">
+                              {gapWords(row) ?? "The cheapest here"}
+                            </td>
+                            <td className="no-print py-3 pr-4 text-right">
+                              <button
+                                type="button"
+                                className="icon-btn"
+                                aria-label={`Remove ${row.name}`}
+                                onClick={() => remove(row, visible)}
+                              >
+                                <X className="size-4" />
+                              </button>
+                            </td>
+                            <td className="hidden border-l border-border print:table-cell" />
                           </tr>
-                        ) : null}
-                      </Fragment>
-                    ))}
+                          {openRow === row.key ? (
+                            <tr className="no-print border-b border-border bg-muted/50">
+                              <td />
+                              <td colSpan={6} className="py-3 pr-4">
+                                <RowDetails row={row} gap={gapWords(row)} />
+                              </td>
+                            </tr>
+                          ) : null}
+                        </Fragment>
+                      )
+                    })}
                   </tbody>
                 </table>
               </div>
 
-              {/* Phones: one card per car. */}
+              {/* Phones: two compact lines per car. */}
               <ul className="grid gap-0 sm:hidden print:hidden" data-testid="compare-cards">
-                {visible.map((row) => (
-                  <li key={row.key} className={cn("border-b border-border/70 px-4 py-4", row.starred && "bg-star/10")}>
-                    <div className="flex items-start gap-2">
-                      <StarButton row={row} onToggle={() => save(toggleStar(list, row.key))} />
-                      <button
-                        type="button"
-                        className="grid min-w-0 flex-1 text-left"
-                        aria-expanded={openRow === row.key}
-                        onClick={() => setOpenRow(openRow === row.key ? null : row.key)}
-                      >
-                        <span className="font-medium">{row.name}</span>
-                        <span className="truncate text-xs text-muted-foreground">{row.trim}</span>
-                      </button>
-                      <div className="money text-right">
-                        <p className="text-xl leading-tight font-semibold">{mainAmount(row)}</p>
-                        <p className="text-sm text-muted-foreground">{added ? "extra a year" : "a year"}</p>
-                      </div>
-                      <button type="button" className="icon-btn -mr-2" aria-label={`Remove ${row.name}`} onClick={() => save(removeCar(list, row.key))}>
-                        <X className="size-4" />
-                      </button>
-                    </div>
-                    <div className="mt-2 pl-11">
-                      {scale ? <RangeBar low={row.low} likely={row.likely} high={row.high} min={scale.min} max={scale.max} /> : null}
-                      {headlineAmount(row) === lowest ? (
-                        <p className="mt-2">
-                          <span className="tag bg-down-soft text-down">
-                            <Trophy className="size-3.5" aria-hidden="true" /> Lowest
+                {visible.map((row) => {
+                  const lowest = cheapest !== null && visible.length > 1 && row.key === cheapest.key
+                  const version = versionWords(row)
+                  return (
+                    <li key={row.key} className={cn("border-b border-border/70 px-3 py-2", row.starred && "bg-star/10")}>
+                      <div className="flex items-center gap-1">
+                        <StarButton row={row} pop={popKey === row.key} onToggle={() => star(row)} />
+                        <button
+                          type="button"
+                          className="grid min-h-11 min-w-0 flex-1 content-center text-left"
+                          aria-expanded={openRow === row.key}
+                          data-focus-key={row.key}
+                          onClick={() => setOpenRow(openRow === row.key ? null : row.key)}
+                        >
+                          <span className="truncate font-medium">{row.name}</span>
+                          <span className="truncate text-xs text-muted-foreground">
+                            {lowest ? "Lowest · " : ""}
+                            {added ? `whole policy about ${estimateDollars(row.likely)}` : `${monthAmount(row)} a month`}
+                            {version ? ` · ${version}` : ""}
                           </span>
-                        </p>
-                      ) : null}
-                      <p className="mt-1.5 text-sm text-muted-foreground">
-                        {added ? `Whole policy about ${formatDollars(row.likely)}, ` : `About ${formatDollars(row.monthly)} a month, `}
-                        {rangeWords(row.low, row.high)}. {sentenceCase(row.reason)}.
-                      </p>
+                        </button>
+                        <div className="money pl-2 text-right">
+                          <p className={cn("text-lg leading-tight font-semibold", lowest && "text-down")}>{mainAmount(row)}</p>
+                          <p className="text-xs text-muted-foreground">{added ? "extra a year" : "a year"}</p>
+                        </div>
+                      </div>
                       {openRow === row.key ? (
-                        <div className="mt-3">
-                          <RowDetails row={row} />
+                        <div className="mt-2 grid gap-3 pb-2 pl-11">
+                          <RowDetails row={row} gap={gapWords(row)} />
+                          <button type="button" className="btn justify-self-start" onClick={() => remove(row, visible)}>
+                            <Trash2 className="size-4" aria-hidden="true" /> Remove from list
+                          </button>
                         </div>
                       ) : null}
-                    </div>
-                  </li>
-                ))}
+                    </li>
+                  )
+                })}
               </ul>
 
               {visible.length === 0 ? (
-                <p className="px-5 py-10 text-center text-sm text-muted-foreground">No cars match your filters. Try a higher amount, or show them all.</p>
+                <p className="px-5 py-10 text-center text-sm text-muted-foreground">
+                  No cars match your filters. Try a higher amount, or show them all.
+                </p>
               ) : null}
 
               <div className="grid gap-3 px-5 py-5 text-sm leading-relaxed sm:px-6">
                 <p className="text-muted-foreground">
-                  <span className="no-print">Tap a car to see how we got its number. </span>
+                  <span className="no-print">Tap a car to see why it costs what it does. </span>
                   {start ? startLine(start) : null}
                 </p>
                 {driverNote ? (
@@ -775,6 +860,9 @@ function CompareCarsReady() {
                     type="button"
                     className="btn btn-quiet text-muted-foreground"
                     onClick={() => {
+                      setRemoved({ name: starredCount > 0 ? "the unstarred cars" : "every car", before: list, key: "" })
+                      window.clearTimeout(removedTimer.current)
+                      removedTimer.current = window.setTimeout(() => setRemoved(null), 8000)
                       save(clearCars(list, starredCount > 0))
                       setOpenRow(null)
                     }}
@@ -792,8 +880,8 @@ function CompareCarsReady() {
               </span>
               <p className="text-lg font-semibold">No cars yet</p>
               <p className="max-w-sm text-sm text-muted-foreground">
-                Tap a popular car above, or use Add a car to find any model. Every car is priced for the same driver, so
-                it&apos;s a fair comparison.
+                Add the starter list above, tap a few popular cars, or use Add a car to find any model. Every car is priced
+                for the same driver, so it&apos;s a fair comparison.
               </p>
             </div>
           )}
@@ -801,6 +889,18 @@ function CompareCarsReady() {
       </div>
 
       <DisclaimerText className="no-print mt-10 max-w-3xl" />
+
+      {removed ? (
+        <div
+          className="no-print pop-in fixed inset-x-0 bottom-4 z-40 mx-auto flex w-fit max-w-[calc(100vw-2rem)] items-center gap-3 rounded-full bg-foreground py-2 pr-2 pl-5 text-sm text-background shadow-lg"
+          role="status"
+        >
+          <span>Removed {removed.name}.</span>
+          <button type="button" className="btn min-h-9 border-background bg-background py-1 text-foreground" onClick={undoRemove}>
+            Undo
+          </button>
+        </div>
+      ) : null}
 
       <CarPicker
         key={pickerOpen ? "open" : "closed"}
@@ -829,26 +929,6 @@ function CompareCarsReady() {
   )
 }
 
-/** Shorter words for the table's "Why" column, so a long list stays easy to scan. */
-const SHORT_REASONS: Record<string, string> = {
-  "more at-fault crash claims": "more at-fault claims",
-  "fewer at-fault crash claims": "fewer at-fault claims",
-  "higher repair costs": "pricier repairs",
-  "lower repair costs": "cheaper repairs",
-  "about average claims": "about average",
-  "newer car, costs more to replace": "newer, costs more to replace",
-  "older car, cheaper to replace": "older, cheaper to replace",
-}
-
-/** "more at-fault crash claims, higher repair costs" to "More at-fault claims, pricier repairs". */
-function sentenceCase(text: string): string {
-  const short = text
-    .split(", ")
-    .map((part) => SHORT_REASONS[part] ?? part)
-    .join(", ")
-  return short.charAt(0).toUpperCase() + short.slice(1)
-}
-
 function CheckMark() {
   return (
     <svg viewBox="0 0 16 16" className="size-3.5" aria-hidden="true">
@@ -857,13 +937,13 @@ function CheckMark() {
   )
 }
 
-function StarButton({ row, onToggle }: { row: CompareRow; onToggle: () => void }) {
+function StarButton({ row, pop, onToggle }: { row: CompareRow; pop: boolean; onToggle: () => void }) {
   return (
     <button
       type="button"
-      className={cn("icon-btn star-btn", row.starred ? "text-star hover:text-star" : "")}
+      className={cn("icon-btn star-btn", row.starred ? "text-star hover:text-star" : "", pop && "star-pop")}
       aria-pressed={row.starred}
-      aria-label={row.starred ? `Unstar ${row.name}` : `Star ${row.name}`}
+      aria-label={`Star ${row.name}`}
       onClick={onToggle}
     >
       <Star className={cn("size-5", row.starred && "fill-current")} />
@@ -891,13 +971,13 @@ function SortHeader({
   return (
     <th
       scope="col"
-      className={cn("py-1.5 pr-3 font-medium", align === "right" && "text-right", className)}
+      className={cn("sticky top-0 z-10 border-b border-border bg-card py-1.5 pr-3 font-medium", align === "right" && "text-right", className)}
       aria-sort={active ? (sort.direction === "asc" ? "ascending" : "descending") : "none"}
     >
       <button
         type="button"
         className={cn(
-          "inline-flex min-h-8 items-center gap-1 rounded-md px-1 whitespace-nowrap hover:text-foreground",
+          "inline-flex min-h-9 items-center gap-1 rounded-md px-1 whitespace-nowrap hover:text-foreground",
           active && "text-foreground",
           align === "right" && "flex-row-reverse",
         )}
@@ -911,9 +991,13 @@ function SortHeader({
   )
 }
 
-function RowDetails({ row }: { row: CompareRow }) {
+function RowDetails({ row, gap }: { row: CompareRow; gap: string | null }) {
   return (
     <div className="grid gap-2 text-sm leading-relaxed">
+      <p>
+        <span className="font-semibold">Why: </span>
+        {reasonWords(row.reason)}.{gap ? ` ${gap}.` : ""}
+      </p>
       <p>{row.summary}</p>
       <p className="text-muted-foreground">{row.rangeNote}</p>
       <p>
@@ -922,4 +1006,3 @@ function RowDetails({ row }: { row: CompareRow }) {
     </div>
   )
 }
-

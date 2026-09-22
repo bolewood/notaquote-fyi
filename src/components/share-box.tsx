@@ -1,12 +1,17 @@
 "use client"
 
 import { recordCount } from "@/lib/counts"
-import { Link2 } from "lucide-react"
+import { Link2, Send } from "lucide-react"
 import { useState } from "react"
 
+/** On a phone or tablet with a share sheet, "Send this to…" opens it; everywhere else we copy the link. */
+function canUseShareSheet(): boolean {
+  return typeof navigator !== "undefined" && typeof navigator.share === "function" && window.matchMedia("(pointer: coarse)").matches
+}
+
 /**
- * Copy a share link. The link holds choices, never prices. What someone pays
- * now goes in only if they tick the box (and the box only appears when there
+ * Share a link. The link holds choices, never prices. What someone pays
+ * now goes in only if they check the box (and the box only appears when there
  * is a premium to share).
  */
 export function ShareBox({
@@ -22,10 +27,15 @@ export function ShareBox({
   const [includePremium, setIncludePremium] = useState(false)
   const [url, setUrl] = useState<string | null>(null)
   const [status, setStatus] = useState<string | null>(null)
+  const [sheet] = useState(canUseShareSheet)
+
+  function link(): string {
+    return new URL(buildPath(premiumAvailable && includePremium), window.location.origin).toString()
+  }
 
   function copy() {
     recordCount("share_link_copy")
-    const next = new URL(buildPath(premiumAvailable && includePremium), window.location.origin).toString()
+    const next = link()
     setUrl(next)
     const clipboard = navigator.clipboard
     if (!clipboard?.writeText) {
@@ -38,15 +48,31 @@ export function ShareBox({
     )
   }
 
+  function send() {
+    recordCount("share_link_copy")
+    const next = link()
+    navigator.share({ title: "NotAQuote.FYI", text: `Here's ${what}. It's a ballpark, not a quote.`, url: next }).then(
+      () => setStatus(null),
+      // Closed the sheet, or it didn't work: fall back to copying.
+      () => copy(),
+    )
+  }
+
   return (
     <div className="grid gap-2">
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-        <button type="button" className="btn" onClick={copy} data-testid="copy-share-link">
-          <Link2 className="size-4" />
-          Copy a share link
+        {sheet ? (
+          <button type="button" className="btn" onClick={send} data-testid="send-share-link">
+            <Send className="size-4" aria-hidden="true" />
+            Send this to…
+          </button>
+        ) : null}
+        <button type="button" className={sheet ? "btn btn-quiet" : "btn"} onClick={copy} data-testid="copy-share-link">
+          <Link2 className="size-4" aria-hidden="true" />
+          {sheet ? "Copy link" : "Copy a share link"}
         </button>
         {premiumAvailable ? (
-          <label className="flex cursor-pointer items-center gap-2 text-sm">
+          <label className="flex min-h-10 cursor-pointer items-center gap-2 text-sm">
             <input
               type="checkbox"
               className="size-4 accent-[var(--primary)]"
@@ -73,7 +99,7 @@ export function ShareBox({
       ) : (
         <p className="text-sm text-muted-foreground">
           The link carries your choices, never prices.
-          {premiumAvailable ? " What you pay stays out unless you tick the box." : ""}
+          {premiumAvailable ? " What you pay stays out unless you check the box." : ""}
         </p>
       )}
     </div>

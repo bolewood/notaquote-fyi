@@ -5,6 +5,8 @@ import { RecordTrustView } from "@/components/record-trust-view"
 import { TrustArticle } from "@/components/trust-article"
 import { DATA_UPDATED, MODEL_VERSION, SOURCE_COUNT } from "@/lib/copy"
 import { estimate, FACTOR_BUNDLE, formatDollars, typicalStart } from "@/lib/factor-engine"
+import { estimateDollars, rangeDollars } from "@/lib/format"
+import { HelpWantedList } from "@/components/help-wanted-list"
 import { DEFAULT_SCENARIO, stateName } from "@/lib/scenario"
 import { suggestFixUrl } from "@/lib/suggest-fix"
 import { ChevronDown } from "lucide-react"
@@ -31,11 +33,12 @@ export default function MethodologyPage() {
   const start = typicalStart(DEFAULT_SCENARIO)
   const example = start ? estimate(start, DEFAULT_SCENARIO) : null
   const counts = basisCounts()
+  const total = counts.sourced + counts.indicative + counts.assumed
   const state = stateName(DEFAULT_SCENARIO.state)
 
   return (
     <TrustArticle
-      title="Here's how we got this"
+      title="How we work out the numbers"
       lead="Every number on this site comes from one small piece of math that runs in your browser. It's simple on purpose, so anyone can check it."
     >
       <RecordTrustView />
@@ -61,10 +64,10 @@ export default function MethodologyPage() {
         <div className="grid gap-0.5">
           <span className="text-sm text-muted-foreground">A range</span>
           <span className="money text-xl font-semibold">
-            {example ? `${formatDollars(example.low)}–${formatDollars(example.high)}` : "a range"}
+            {example ? rangeDollars(example.low, example.high) : "a range"}
           </span>
           <span className="text-sm text-muted-foreground">
-            {example ? `our best guess: ${formatDollars(example.likely)}` : "with a best guess"}
+            {example ? `our best guess: ${estimateDollars(example.likely)}` : "with a best guess"}
           </span>
         </div>
       </div>
@@ -87,7 +90,7 @@ export default function MethodologyPage() {
         since 2023, so we bring it up to today with the government&apos;s price index for car insurance.
       </p>
       <p>
-        We treat that average as the price for a middle-aged driver with a clean record, living in the suburbs, with an
+        We treat that average as the price for a middle-aged driver with no at-fault accidents, living in the suburbs, with an
         average car and a $1,000 deductible (the part of a repair bill you pay yourself). Then we adjust from there.
         Because it&apos;s an average across everyone, starting from it makes the range wider.{" "}
         <Link href="/sources#state-baselines">See the starting price for every state</Link>.
@@ -96,12 +99,13 @@ export default function MethodologyPage() {
       <h2>2. A few adjustments</h2>
       <p>
         Each thing that matters moves the price up or down by a percentage. A 16–18-year-old on their own policy, for
-        example, costs almost three times what a 40–64-year-old does. One at-fault accident adds about half.
+        example, costs almost three times what a 40–64-year-old does. One at-fault accident adds about half (+52%).
       </p>
       <p>
-        Most of these come from state insurance departments that publish real prices from many companies for the same
-        sample drivers, changing one thing at a time. That&apos;s the best public evidence there is, and it&apos;s sitting
-        in PDFs and web tools that few people ever open.
+        The best evidence comes from state insurance departments that publish real prices from many companies for the
+        same sample drivers, changing one thing at a time. It&apos;s sitting in PDFs and web tools that few people ever
+        open. Of our {total} adjustments, {counts.sourced} come straight from those published prices, {counts.indicative}{" "}
+        are worked out from public data less directly, and {counts.assumed} are still our best guess.
       </p>
       <p>
         Some adjustments only touch part of the bill. About half of a full-coverage bill is liability; the rest fixes your
@@ -129,15 +133,16 @@ export default function MethodologyPage() {
       <p>We label every adjustment one of three ways, right next to the number:</p>
       <ul className="bullets">
         <li>
-          <strong>From public prices or rules</strong> ({counts.sourced} adjustments). Taken from a state&apos;s published
-          price survey or rules, with the source linked.
+          <strong>From published prices</strong> ({counts.sourced} of {total}). Taken from a state&apos;s published price
+          survey or rules, with the source linked. When those prices come from another state, we say which one, since
+          yours may differ.
         </li>
         <li>
-          <strong>From public data, roughly</strong> ({counts.indicative}). Worked out from public data, but less directly,
-          so the range is a little wider.
+          <strong>Worked out from public data</strong> ({counts.indicative} of {total}). Less direct, so the range is a
+          little wider.
         </li>
         <li>
-          <strong>Our estimate, help wanted</strong> ({counts.assumed}). We couldn&apos;t find a public source yet, so we
+          <strong>Our best guess</strong> ({counts.assumed} of {total}). We couldn&apos;t find a public source yet, so we
           made a careful guess and widened the range. These are the best places to help.
         </li>
       </ul>
@@ -159,16 +164,19 @@ export default function MethodologyPage() {
           <strong>We can&apos;t see every discount</strong>, like safe-driving apps or paying in full.
         </li>
         <li>
-          <strong>We don&apos;t sell anything.</strong> No leads, no ads, and nothing you type leaves your browser.
+          <strong>We don&apos;t sell anything.</strong> No leads and no ads.
         </li>
       </ul>
 
       <h2>How you can help</h2>
       <p>
-        {counts.assumed} of our adjustments are still our own estimates. If your state&apos;s insurance department publishes
-        sample prices (many do, often as a PDF called a &ldquo;rate comparison guide&rdquo;), that could turn a guess into a
-        sourced number for everyone.
+        {counts.assumed} of our adjustments are still our best guess. If your state&apos;s insurance department publishes
+        sample prices (many do, often as a PDF called a &ldquo;rate comparison guide&rdquo;), it could turn a guess into a
+        sourced number for everyone. These five would help the most:
       </p>
+      <div className="rounded-2xl bg-sun-soft p-5">
+        <HelpWantedList compact />
+      </div>
       <p className="flex flex-wrap gap-3">
         <a href={suggestFixUrl({ kind: "factor" })} rel="noreferrer" className="btn btn-primary plain">
           Suggest a better number
@@ -180,7 +188,8 @@ export default function MethodologyPage() {
 
       <h2>Every number the math uses</h2>
       <p>
-        Here&apos;s the full list, with how sure we are about each one. The worked details are in the{" "}
+        Here&apos;s the full list, with how sure we are about each one. Each change is measured from the row marked
+        &ldquo;Measured from here&rdquo;. The worked details are in the{" "}
         <a href="https://github.com/bolewood/notaquote-fyi/blob/main/data/factors/README.md" rel="noreferrer">
           factors notes on GitHub
         </a>
@@ -198,9 +207,9 @@ export default function MethodologyPage() {
 
       <h2>Saving and sharing</h2>
       <p>
-        Your choices are kept in this browser, so the pages remember them. Nothing is sent to us. A share link carries your
-        choices, never prices, after the &ldquo;#&rdquo; in the address, which browsers don&apos;t send to any server. What
-        you pay goes in only if you tick the box. Whoever opens the link gets the numbers worked out fresh.{" "}
+        Your choices are kept in this browser, so the pages remember them. A share link carries your choices, never
+        prices, after the &ldquo;#&rdquo; in the address, which browsers don&apos;t send to any server. What you pay goes in
+        only if you check the box. Whoever opens the link gets the numbers worked out fresh.{" "}
         <Link href="/privacy">More about privacy</Link>.
       </p>
 

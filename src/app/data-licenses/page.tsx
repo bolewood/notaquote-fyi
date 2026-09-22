@@ -4,6 +4,7 @@ import { RecordTrustView } from "@/components/record-trust-view"
 import { TrustArticle } from "@/components/trust-article"
 import { DATA_UPDATED, longDate } from "@/lib/copy"
 import { STATE_BASELINE_ATTRIBUTION } from "@/lib/state-baselines"
+import { STATE_RULES_CHECKED_ON } from "@/lib/state-rules"
 import { GITHUB_REPO_URL } from "@/lib/suggest-fix"
 import { CATALOG_RETRIEVED_ON, FUEL_ECONOMY_CATALOG_URL, NHTSA_CATALOG_URL } from "@/lib/catalog-meta"
 
@@ -38,20 +39,24 @@ export default function DataLicensesPage() {
           . Use it for anything; just give credit.
         </li>
       </ul>
-      <p>The outside sources below keep their own terms. Everything here was last updated {DATA_UPDATED}.</p>
+      <p>
+        The outside sources below keep their own terms. The adjustments and the typical state prices were last updated{" "}
+        {DATA_UPDATED}; the state rules were last checked {longDate(STATE_RULES_CHECKED_ON)}; and the list of cars was last
+        pulled {longDate(CATALOG_RETRIEVED_ON)}.
+      </p>
 
       <h2>The list of cars</h2>
       <p>
         It comes from two U.S. government datasets, both public:{" "}
         <a href={NHTSA_CATALOG_URL} rel="noreferrer">
-          NHTSA&apos;s vehicle listing
+          the National Highway Traffic Safety Administration&apos;s vehicle listing
         </a>{" "}
         (model names, as carmakers report them) and{" "}
         <a href={FUEL_ECONOMY_CATALOG_URL} rel="noreferrer">
           FuelEconomy.gov&apos;s vehicle file
         </a>{" "}
         (versions, size class, and whether a car is gas, hybrid, or electric). We keep only passenger cars, trucks, and
-        SUVs, and only the fields we need, as of {longDate(CATALOG_RETRIEVED_ON)}. We store no VINs and no
+        SUVs, and only the fields we need. We store no VINs and no
         fuel-economy figures.
       </p>
 
@@ -62,7 +67,7 @@ export default function DataLicensesPage() {
       <p>
         We use three numbers per state from the National Association of Insurance Commissioners&apos; 2022/2023 Auto
         Insurance Database Report (the 2023 full-coverage average, the liability average, and the average spent per
-        insured car), with their permission and with credit. Wherever one appears, it&apos;s labeled &ldquo;
+        insured car), as facts, with credit. Wherever one appears, it&apos;s labeled &ldquo;
         {STATE_BASELINE_ATTRIBUTION}.&rdquo; We don&apos;t copy the report&apos;s text or tables, and the report itself
         isn&apos;t in this project. To bring a 2023 figure up to today, we use the Bureau of Labor Statistics&apos; price
         index for car insurance, which is public domain.
@@ -71,8 +76,8 @@ export default function DataLicensesPage() {
       <h2>Car claims</h2>
       <p>
         We keep the Highway Loss Data Institute&apos;s published results for the car models we price, with credit and a
-        link to IIHS. IIHS allows limited noncommercial, educational use, and we&apos;re confirming with them that this
-        project&apos;s use is fine. If it isn&apos;t, that data can be switched off in one place.
+        link to the Insurance Institute for Highway Safety (IIHS). We&apos;ve asked IIHS for permission to use this data
+        and are waiting to hear back. If they say no, we&apos;ll take it out.
       </p>
 
       <h2>Everything else</h2>

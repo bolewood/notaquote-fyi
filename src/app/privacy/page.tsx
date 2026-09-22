@@ -13,7 +13,7 @@ export default function PrivacyPage() {
   return (
     <TrustArticle
       title="Privacy"
-      lead={`The short version: everything you type stays in your browser. There's no account, no tracking, and nothing to sell. ${PUBLISHER} publishes this site and never sees your answers.`}
+      lead={`The short version: what you type stays on your device, except a VIN if you choose to look one up. There's no account, no tracking, and nothing to sell. ${PUBLISHER} publishes this site and never sees your answers.`}
     >
       <h2>What we don&apos;t ask for</h2>
       <p>
@@ -30,8 +30,8 @@ export default function PrivacyPage() {
 
       <h2>The one exception: looking up a VIN</h2>
       <p>
-        Only if you use it. If you type a VIN (the 17-character ID on your car), your browser sends it straight to NHTSA,
-        the federal highway safety agency, whose free decoder tells us the car. It doesn&apos;t pass through us, and we
+        Only if you use it. If you type a VIN (vehicle identification number, the 17-character ID on your car), your browser sends it straight to the National Highway Traffic Safety Administration (NHTSA),
+        whose free decoder tells your browser which car it is. It doesn&apos;t pass through us, and we
         don&apos;t keep it: the box clears afterward and the VIN isn&apos;t saved anywhere.
       </p>
 
@@ -45,13 +45,13 @@ export default function PrivacyPage() {
       <h2>Share links</h2>
       <p>
         A share link puts your choices after the &ldquo;#&rdquo; in the web address. Browsers never send that part to any
-        server, so it doesn&apos;t reach us, our host, or any log. When you open a link, the page reads it and then removes
+        server, so that part never reaches us or our host. When you open a link, the page reads it and then removes
         it from the address bar.
       </p>
       <ul className="bullets">
         <li>A link never includes prices. The numbers are worked out fresh when it&apos;s opened.</li>
         <li>
-          What you pay goes in only if you tick &ldquo;Include what I pay now&rdquo;, and it&apos;s never saved on the other
+          What you pay goes in only if you check &ldquo;Include what I pay now&rdquo;, and it&apos;s never saved on the other
           person&apos;s device. Compare links never include it.
         </li>
         <li>Opening a shared list never replaces your own list unless you choose to.</li>

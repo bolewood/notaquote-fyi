@@ -133,14 +133,22 @@ export function StateRulesTable() {
 }
 
 function StateNote({ rule }: { rule: StateRule }) {
-  const upcoming = upcomingChanges(rule)
-  const defaultText = noFaultDefaultText(rule)
   return (
     <details id={`state-note-${rule.state}`} className="disclosure scroll-mt-4">
       <summary>
         {stateName(rule.state)}
         <ChevronDown className="size-4" aria-hidden="true" />
       </summary>
+      <StateNoteBody rule={rule} />
+    </details>
+  )
+}
+
+/** One state's summary, what's good to know, what we couldn't confirm, and every page we used. */
+export function StateNoteBody({ rule }: { rule: StateRule }) {
+  const upcoming = upcomingChanges(rule)
+  const defaultText = noFaultDefaultText(rule)
+  return (
       <div className="grid gap-2 pb-4">
       {rule.note ? <p>{rule.note}</p> : null}
       {defaultText ? <p>No-fault is your choice here. {defaultText}</p> : null}
@@ -217,6 +225,5 @@ function StateNote({ rule }: { rule: StateRule }) {
           </a>
         </p>
       </div>
-    </details>
   )
 }

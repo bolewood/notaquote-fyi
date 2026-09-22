@@ -59,6 +59,8 @@ export function CarPicker({
   const [vinText, setVinText] = useState("")
   const [vinMessage, setVinMessage] = useState<string | null>(null)
   const [vinPending, setVinPending] = useState(false)
+  /** The highlighted row in the list, moved with the arrow keys. */
+  const [active, setActive] = useState(0)
   const headingId = useId()
 
   useEffect(() => {
@@ -134,6 +136,7 @@ export function CarPicker({
   }
 
   const list = parsed.text ? hits : popular
+  const activeIndex = Math.min(active, Math.max(0, list.length - 1))
   const suggested = model ? defaultTrim(model.trims) : null
 
   return (
@@ -235,18 +238,41 @@ export function CarPicker({
                     autoComplete="off"
                     spellCheck={false}
                     value={query}
-                    onChange={(event) => setQuery(event.target.value)}
+                    role="combobox"
+                    aria-expanded={list.length > 0}
+                    aria-controls={`${headingId}-list`}
+                    aria-autocomplete="list"
+                    aria-activedescendant={list[activeIndex] ? `${headingId}-option-${activeIndex}` : undefined}
+                    onChange={(event) => {
+                      setQuery(event.target.value)
+                      setActive(0)
+                    }}
                     onKeyDown={(event) => {
-                      if (event.key === "Enter" && hits[0]) {
+                      if (event.key === "ArrowDown" || event.key === "ArrowUp") {
                         event.preventDefault()
-                        chooseModel(hits[0])
+                        if (list.length === 0) return
+                        const step = event.key === "ArrowDown" ? 1 : -1
+                        const nextIndex = (activeIndex + step + list.length) % list.length
+                        setActive(nextIndex)
+                        document.getElementById(`${headingId}-option-${nextIndex}`)?.scrollIntoView({ block: "nearest" })
+                      } else if (event.key === "Home" && list.length > 0 && !query) {
+                        event.preventDefault()
+                        setActive(0)
+                      } else if (event.key === "Enter" && list[activeIndex]) {
+                        event.preventDefault()
+                        chooseModel(list[activeIndex])
                       }
                     }}
                   />
                 </div>
               </div>
             </div>
-            <div className="flex-1 overflow-y-auto px-4 py-3" aria-live="polite">
+            <p className="sr-only" aria-live="polite">
+              {catalogStatus === "ready" && parsed.text
+                ? `${list.length === 1 ? "1 match" : `${list.length} matches`} for ${searchYear}. Use the up and down arrows to choose.`
+                : ""}
+            </p>
+            <div className="flex-1 overflow-y-auto px-4 py-3">
               {catalogStatus === "loading" ? (
                 <p className="py-6 text-center text-sm text-muted-foreground">Loading the list of cars…</p>
               ) : catalogStatus === "failed" ? (
@@ -260,24 +286,29 @@ export function CarPicker({
               ) : (
                 <>
                   <p className="eyebrow mb-2">{parsed.text ? `${list.length === 30 ? "Top matches" : "Matches"} for ${searchYear}` : `Popular ${searchYear} cars`}</p>
-                  <ul className="grid gap-1">
-                    {list.map((hit) => (
-                      <li key={`${hit.make}|${hit.model}`}>
-                        <button
-                          type="button"
-                          className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left hover:bg-muted"
-                          onClick={() => chooseModel(hit)}
-                        >
-                          <span className="flex-1">
-                            <span className="font-medium">
-                              {hit.make} {hit.model}
-                            </span>
-                            <span className="ml-2 text-sm text-muted-foreground">
-                              {hit.trims.length === 1 ? "1 version" : `${hit.trims.length} versions`}
-                            </span>
+                  <ul className="grid gap-1" role="listbox" id={`${headingId}-list`} aria-label="Cars">
+                    {list.map((hit, index) => (
+                      <li
+                        key={`${hit.make}|${hit.model}`}
+                        id={`${headingId}-option-${index}`}
+                        role="option"
+                        aria-selected={index === activeIndex}
+                        className={cn(
+                          "flex min-h-11 w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-left hover:bg-muted",
+                          index === activeIndex && "bg-muted ring-1 ring-primary/30",
+                        )}
+                        onClick={() => chooseModel(hit)}
+                        onMouseMove={() => setActive(index)}
+                      >
+                        <span className="flex-1">
+                          <span className="font-medium">
+                            {hit.make} {hit.model}
                           </span>
-                          <ChevronRight className="size-4 text-muted-foreground" />
-                        </button>
+                          <span className="ml-2 text-sm text-muted-foreground">
+                            {hit.trims.length === 1 ? "1 version" : `${hit.trims.length} versions`}
+                          </span>
+                        </span>
+                        <ChevronRight className="size-4 text-muted-foreground" aria-hidden="true" />
                       </li>
                     ))}
                   </ul>
@@ -287,7 +318,7 @@ export function CarPicker({
             {allowVin ? (
               <div className="grid gap-1.5 border-t border-border px-4 py-3">
                 <label htmlFor={`${headingId}-vin`} className="field-label">
-                  Or look it up by VIN (optional)
+                  Or look it up by VIN, the vehicle identification number (optional)
                 </label>
                 <div className="flex gap-2">
                   <input

@@ -6,9 +6,9 @@ import { TrustArticle } from "@/components/trust-article"
 import { NHTSA_CATALOG_URL, FUEL_ECONOMY_CATALOG_URL, CATALOG_RETRIEVED_ON } from "@/lib/catalog-meta"
 import { longDate, SOURCE_COUNT } from "@/lib/copy"
 import { FACTOR_BUNDLE } from "@/lib/factor-engine"
-import { citationLabel, derivedFieldLabel, NAIC_PARAPHRASE, SOURCE_MANIFEST } from "@/lib/source-manifest"
 import { formatVerifiedDate, fullySourcedStateRules, sourcedStateRules, STATE_RULES, STATE_RULES_CHECKED_ON } from "@/lib/state-rules"
-import { CONTRIBUTING_URL, suggestFixUrl } from "@/lib/suggest-fix"
+import { CONTRIBUTING_URL, GITHUB_REPO_URL, suggestFixUrl } from "@/lib/suggest-fix"
+import { StatePicker } from "@/components/state-picker"
 import { ChevronDown, HandHeart } from "lucide-react"
 
 export const metadata: Metadata = {
@@ -92,24 +92,24 @@ export default function SourcesPage() {
   return (
     <TrustArticle
       title="Sources"
-      lead={`Every number on this site comes from a public source you can open yourself. Here are all ${SOURCE_COUNT}, what we use each one for, and when we last checked it.`}
+      lead={`Every number here either comes from a public source you can open, or says it's our best guess. Here are all ${SOURCE_COUNT} sources, what we use each one for, and when we last checked it.`}
       wide
     >
       <RecordTrustView />
       <div className="max-w-2xl space-y-4">
         <p>
-          Where we couldn&apos;t find a source, we say so right next to the number, call it our estimate, and widen the
-          range. You&apos;ll also find the typical price for every state and every state&apos;s legal minimum below.
+          Where we couldn&apos;t find a source, we say so right next to the number and widen the range. Further down, pick
+          your state to see its typical price and the least insurance its law asks for.
         </p>
         <nav aria-label="On this page" className="flex flex-wrap gap-2 text-sm">
           <a href="#where-numbers-come-from" className="chip plain">
             Where the numbers come from
           </a>
           <a href="#state-baselines" className="chip plain">
-            Typical price by state
+            Your state
           </a>
-          <a href="#state-rules" className="chip plain">
-            State minimums
+          <a href="#all-states" className="chip plain">
+            All states
           </a>
         </nav>
       </div>
@@ -142,8 +142,8 @@ export default function SourcesPage() {
       <section className="mt-8 max-w-2xl" aria-label="State laws">
         <h3>State laws</h3>
         <p className="mt-1">
-          Each state&apos;s minimum coverage comes from its own statute or insurance department. All {rulesCount} rows link
-          to theirs. <a href="#state-rules">See every state</a>.
+          Each state&apos;s minimum coverage comes from its own statute or insurance department. All 50 states and DC link to
+          theirs. <a href="#state-baselines">See your state</a>.
         </p>
       </section>
 
@@ -171,66 +171,48 @@ export default function SourcesPage() {
         </div>
       </aside>
 
-      <h2 id="state-baselines">Typical price by state</h2>
-      <StateBaselinesTable />
-
-      <h2 id="state-rules">State minimums</h2>
-      <div className="max-w-2xl space-y-4">
-        <p>
-          The least insurance each state asks you to carry. These are legal minimums, not a price and not advice about how
-          much coverage to buy.
-        </p>
-        <p>
-          {rulesCount === STATE_RULES.length ? `All ${rulesCount}` : `${rulesCount} of ${STATE_RULES.length}`} rows (every
-          state and DC) link to a statute or government page, and{" "}
-          {fullySourcedStateRules().length} have all three dollar limits. Each row shows the date we checked it; the newest
-          check was {formatVerifiedDate(STATE_RULES_CHECKED_ON)}. Where we couldn&apos;t confirm something, the cell says
-          &ldquo;Not confirmed yet&rdquo; and the state&apos;s notes say why.
-        </p>
-      </div>
-      <StateRulesTable />
-
-      <h2 id="full-list">The fine print on each source</h2>
-      <p className="max-w-2xl">
-        For anyone who wants the details: who owns each source, what we&apos;re allowed to do with it, how we got it, and
-        exactly which fields we took. A source with nothing taken is listed so you know we looked.
+      <h2 id="state-baselines">Your state</h2>
+      <p id="state-rules" className="max-w-2xl">
+        The typical price is what an average driver paid for one car in 2023. The minimums are the least insurance the law
+        asks you to carry: not a price, and not advice about how much to buy.
       </p>
-      <details className="disclosure max-w-2xl">
+      <div className="max-w-2xl">
+        <StatePicker />
+      </div>
+
+      <h2 id="all-states">All states</h2>
+      <p className="max-w-2xl">
+        {rulesCount === STATE_RULES.length ? "All 50 states and DC link" : `${rulesCount} of ${STATE_RULES.length} rows link`}{" "}
+        to a statute or government page, and {fullySourcedStateRules().length} have all three dollar limits. The newest check
+        was {formatVerifiedDate(STATE_RULES_CHECKED_ON)}. Where we couldn&apos;t confirm something, it says &ldquo;Not
+        confirmed yet&rdquo; and the state&apos;s notes say why.
+      </p>
+      <details className="disclosure">
         <summary>
-          Show the full source list
+          Typical price for every state
           <ChevronDown className="size-4" aria-hidden="true" />
         </summary>
-        <div className="grid gap-5 pb-4 text-sm">
-          <p>{NAIC_PARAPHRASE}</p>
-          {SOURCE_MANIFEST.map((row) => (
-            <section key={row.id} id={`manifest-${row.id}`} className="grid min-w-0 gap-2 break-words" data-testid="manifest-row">
-              <h3 className="!mt-0 text-sm font-semibold break-words">
-                {row.url ? (
-                  <a href={row.url} rel="noreferrer">
-                    {citationLabel(row)}
-                  </a>
-                ) : (
-                  citationLabel(row)
-                )}
-              </h3>
-              <dl className="grid gap-1 sm:grid-cols-[9rem_1fr] sm:gap-x-4">
-                <dt className="font-medium">Owner</dt>
-                <dd>{row.owner}</dd>
-                <dt className="font-medium">How we can use it</dt>
-                <dd data-testid="manifest-license">{row.licenseNote}</dd>
-                <dt className="font-medium">How we got it</dt>
-                <dd>{row.accessMethod}</dd>
-                <dt className="font-medium">How often we check</dt>
-                <dd>{row.refreshCadence}</dd>
-                <dt className="font-medium">Last checked</dt>
-                <dd>{longDate(row.lastChecked)}</dd>
-                <dt className="font-medium">What we took</dt>
-                <dd>{derivedFieldLabel(row) === "None" ? "Nothing" : derivedFieldLabel(row)}</dd>
-              </dl>
-            </section>
-          ))}
+        <div className="pb-4">
+          <StateBaselinesTable />
         </div>
       </details>
+      <details className="disclosure">
+        <summary>
+          Minimums and notes for every state
+          <ChevronDown className="size-4" aria-hidden="true" />
+        </summary>
+        <div className="pb-4">
+          <StateRulesTable />
+        </div>
+      </details>
+
+      <p className="max-w-2xl text-sm text-muted-foreground">
+        Want the full detail on each source (who owns it, the terms, and exactly which fields we took)? It&apos;s in the{" "}
+        <a href={`${GITHUB_REPO_URL}/blob/main/src/data/source-manifest.json`} rel="noreferrer">
+          source list on GitHub
+        </a>
+        .
+      </p>
     </TrustArticle>
   )
 }

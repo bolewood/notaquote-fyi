@@ -358,7 +358,8 @@
     color: var(--foreground);
     background: var(--muted);
   }
-  .tab[aria-selected="true"] {
+  .tab[aria-selected="true"],
+  .tab[data-selected="true"] {
     background: var(--foreground);
     color: var(--background);
   }
@@ -399,6 +400,10 @@
     gap: 0.35rem;
     overflow-x: auto;
     scrollbar-width: none;
+    scroll-snap-type: x proximity;
+  }
+  .scroll-row > * {
+    scroll-snap-align: start;
   }
   .scroll-row::-webkit-scrollbar {
     display: none;
@@ -462,12 +467,36 @@
   }
 }
 
-.star-btn[aria-pressed="true"] svg {
-  animation: star-pop 320ms ease-out;
-}
+
 
 .print-only {
   display: none;
+}
+
+/* On a phone the tabs scroll sideways: fade the right edge so it's clear there's more. */
+@media (max-width: 639px) {
+  .tab-scroller .scroll-row {
+    mask-image: linear-gradient(to right, black calc(100% - 2.5rem), transparent);
+    padding-right: 2.5rem;
+  }
+}
+
+/* Bigger tap targets on touch screens. */
+@media (pointer: coarse) {
+  .icon-btn {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+  .chip,
+  .btn,
+  .tab {
+    min-height: 2.75rem;
+  }
+}
+
+/* A star that was just tapped gets a little bounce (only then, not on every redraw). */
+.star-pop svg {
+  animation: star-pop 320ms ease-out;
 }
 
 @media print {
@@ -515,8 +544,19 @@
   }
 
   .compare-table thead th {
+    position: static !important;
     border-bottom: 1.5pt solid black !important;
     color: black !important;
+  }
+
+  .print-exact,
+  .compare-table tr {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .star-btn[aria-pressed="false"] {
+    visibility: hidden;
   }
 
   .print-sheet {

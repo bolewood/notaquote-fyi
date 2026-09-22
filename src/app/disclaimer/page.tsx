@@ -27,12 +27,16 @@ export default function DisclaimerPage() {
           date shown on the <Link href="/sources#state-rules">Sources</Link> page. It&apos;s a floor, not a suggestion.
         </li>
         <li>
-          <strong>Liability only</strong> pays for damage you cause to others (up to $100k per person, $300k per crash,
-          $100k property). It doesn&apos;t fix your own car.
+          <strong>Liability only</strong> pays for damage you cause to others, up to $100,000/$300,000/$100,000 (per
+          person / per crash / property). It doesn&apos;t fix your own car.
         </li>
         <li>
           <strong>Full coverage</strong> adds collision and comprehensive, which fix or replace your own car after a crash,
           theft, or storm.
+        </li>
+        <li>
+          <strong>Full coverage, higher limits</strong> is full coverage with more liability protection, up to
+          $250,000/$500,000/$250,000.
         </li>
       </ul>
       <p>We don&apos;t push anyone toward more or less coverage. That&apos;s your call. Try both on the <Link href="/">What-if page</Link> to see the trade-off.</p>
@@ -40,7 +44,7 @@ export default function DisclaimerPage() {
       <h2>Who we are</h2>
       <p>
         {PUBLISHER} publishes NotAQuote.FYI as a free, open-source tool. We&apos;re not an insurance company, agent, or
-        broker. We don&apos;t sell leads, and we never pass your info to anyone. Spot something wrong?{" "}
+        broker, and we don&apos;t sell leads or ads. Spot something wrong?{" "}
         <Link href="/corrections">Tell us</Link>.
       </p>
     </TrustArticle>

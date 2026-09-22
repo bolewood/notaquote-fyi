@@ -53,6 +53,18 @@ npx tsx --test src/lib/suggest-fix.test.ts
 
 If you add a new test file, add its path to the `test` script in `package.json`. Tests aren't discovered automatically.
 
+## Five numbers that need a source
+
+These are the site's best guesses today, and a state insurance department's rate comparison guide (sample prices from many companies for the same drivers) could turn each into a sourced number. They're also listed on the site's Help page, each with a prefilled issue.
+
+1. **Deductible.** How a $500 or $2,000 deductible changes the price. Look for sample prices at two deductibles for the same driver and car.
+2. **Car's age.** How much less an older car costs to insure. Look for the same car at two model years, with collision and comprehensive.
+3. **Good-student discount.** Look for a young driver priced with and without it.
+4. **Adding a teen outside California.** Look for a family priced before and after adding a 16- or 17-year-old to the parents' policy.
+5. **Two or more at-fault accidents.** Look for a driver priced with no at-fault accidents and with two.
+
+The list lives in `src/lib/help-wanted.ts`; update it when one of these gets a source.
+
 ## The golden rule: every number needs a source
 
 If a number changes what someone sees, it needs a public source that anyone can open, plus the date someone checked it. If we can't source a number yet, we say so plainly, label it as an assumption, and let the range get wider. We don't hide a guess behind a precise-looking figure.

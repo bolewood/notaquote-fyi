@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation"
 import { cn } from "cn"
 
 const MAIN = [
-  { href: "/", label: "What if" },
+  { href: "/", label: "What-if" },
   { href: "/compare", label: "Compare cars" },
 ]
 

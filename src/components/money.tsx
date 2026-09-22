@@ -1,12 +1,8 @@
+import { estimateDollars, rangeWords } from "@/lib/format"
 import { formatDollars } from "@/lib/pricing"
 import { cn } from "cn"
 
-export { formatDollars }
-
-/** "roughly $1,500–$2,300" */
-export function rangeWords(low: number, high: number): string {
-  return `roughly ${formatDollars(low)}–${formatDollars(high)}`
-}
+export { formatDollars, rangeWords }
 
 /**
  * A range drawn on a shared scale: a soft band from low to high and a dot at
@@ -39,9 +35,9 @@ export function RangeBar({
   const mark = tone === "sun" ? "bg-sun-ink" : tone === "muted" ? "bg-muted-foreground" : "bg-primary"
   return (
     <div
-      className={cn("relative h-3 w-full rounded-full bg-muted", className)}
+      className={cn("print-exact relative h-3 w-full rounded-full bg-muted", className)}
       role="img"
-      aria-label={`${rangeWords(low, high)}, most likely about ${formatDollars(likely)} a year`}
+      aria-label={`${rangeWords(low, high)}, most likely about ${estimateDollars(likely)} a year`}
     >
       <span
         className={cn("absolute inset-y-0 rounded-full", band)}
@@ -52,18 +48,5 @@ export function RangeBar({
         style={{ left: `${dot}%` }}
       />
     </div>
-  )
-}
-
-/** Which way a change goes, in words and color. The amount itself is in the headline. */
-export function DeltaBadge({ amount, className }: { amount: number; className?: string }) {
-  const tone =
-    amount > 0 ? "bg-up-soft text-up" : amount < 0 ? "bg-down-soft text-down" : "bg-muted text-muted-foreground"
-  const words = amount > 0 ? "Costs more" : amount < 0 ? "Costs less" : "About the same"
-  return (
-    <span className={cn("inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-sm font-semibold", tone, className)}>
-      <span aria-hidden="true">{amount > 0 ? "↑" : amount < 0 ? "↓" : "="}</span>
-      {words}
-    </span>
   )
 }

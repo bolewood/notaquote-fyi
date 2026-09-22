@@ -15,16 +15,16 @@ export function TrustStrip() {
         </Link>
       </li>
       <li>
-        <Link href="/privacy" className={item}>
-          <LockKeyhole className="size-4 text-sun-ink" aria-hidden="true" />
-          No sign-up. Nothing leaves your browser.
-        </Link>
-      </li>
-      <li>
         <a href={GITHUB_REPO_URL} rel="noreferrer" className={item}>
           <Code2 className="size-4 text-sun-ink" aria-hidden="true" />
           Open source
         </a>
+      </li>
+      <li>
+        <Link href="/privacy" className={item}>
+          <LockKeyhole className="size-4 shrink-0 text-sun-ink" aria-hidden="true" />
+          No sign-up. What you type stays on your device (except a VIN, if you look one up).
+        </Link>
       </li>
     </ul>
   )

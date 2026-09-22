@@ -1,5 +1,5 @@
 import type { Estimate, StartKind } from "@/lib/factor-engine"
-import { basisWords, sourceLinks } from "@/lib/pricing"
+import { basisLabel, sourceLinks } from "@/lib/pricing"
 import { suggestFixUrl } from "@/lib/suggest-fix"
 import { cn } from "cn"
 import Link from "next/link"
@@ -9,11 +9,14 @@ export function HowWeGotThis({
   estimate,
   startKind,
   startNote,
+  state,
 }: {
   estimate: Estimate
   startKind: StartKind
   /** One plain line about where the numbers start (see startLine). */
   startNote?: string
+  /** The state being priced, to say when a number comes from another state's prices. */
+  state: string
 }) {
   return (
     <div className="grid gap-3 text-sm leading-relaxed">
@@ -30,7 +33,7 @@ export function HowWeGotThis({
                   <span className="sr-only">to</span> {step.to}
                 </p>
                 <p className="text-muted-foreground">
-                  <span className={cn(ours && "font-medium text-sun-ink")}>{basisWords(step.basis)}</span>
+                  <span className={cn(ours && "font-medium text-sun-ink")}>{basisLabel(step.basis, step.sources, state)}</span>
                   {ours ? (
                     <>
                       {" · "}

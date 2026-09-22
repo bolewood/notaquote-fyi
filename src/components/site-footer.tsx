@@ -6,7 +6,7 @@ const GROUPS: { heading: string; links: { href: string; label: string; external?
   {
     heading: "Use it",
     links: [
-      { href: "/", label: "What if" },
+      { href: "/", label: "What-if" },
       { href: "/compare", label: "Compare cars" },
     ],
   },
@@ -44,7 +44,7 @@ export function SiteFooter() {
             NotAQuote<span className="text-muted-foreground">.FYI</span>
           </p>
           <p className="max-w-xs leading-relaxed text-muted-foreground">
-            Free and open source, from {PUBLISHER}. Your choices stay in this browser.
+            Free and open source, from {PUBLISHER}. Not an insurance company, and nothing to sell.
           </p>
           <p className="text-muted-foreground">Data updated {DATA_UPDATED}.</p>
         </div>

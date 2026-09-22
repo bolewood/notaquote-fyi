@@ -15,17 +15,17 @@ import {
   YearsField,
 } from "@/components/driver-fields"
 import { HowWeGotThis, VehicleFixLink } from "@/components/how-we-got-this"
-import { formatDollars, RangeBar, rangeWords } from "@/components/money"
+import { RangeBar } from "@/components/money"
+import { HomeSkeleton, STARTER_ICONS, TABS, type Tab } from "@/components/page-skeleton"
 import { ShareBox } from "@/components/share-box"
-import { TrustStrip } from "@/components/trust-strip"
 import { carName, modelTrims, resolveCar, WHAT_IF_CARS } from "@/lib/car-search"
 import { vehicleFacts } from "@/lib/catalog-class"
 import { catalogYears, trimRecord, type VehiclePick } from "@/lib/catalog"
 import { DATA_UPDATED, PREMIUM_HINT } from "@/lib/copy"
 import { recordCount, recordMountedCount } from "@/lib/counts"
 import type { Estimate, StartKind } from "@/lib/factor-engine"
+import { differenceWords, dollars, estimateDollars, rangeWords, signedDollars } from "@/lib/format"
 import {
-  basisWords,
   changeChip,
   changedKeys,
   priceNow,
@@ -33,6 +33,7 @@ import {
   sameVehicle,
   startingPoint,
   startLine,
+  startShort,
   vehicleMatchWords,
   type ChangeKey,
   type ChangePart,
@@ -40,16 +41,17 @@ import {
 } from "@/lib/pricing"
 import {
   coverageAssumption,
+  hasPhysicalDamage,
   situationSentence,
   STARTERS,
   shortVehicleLabel,
+  stateName,
   withTeenFlag,
   type Scenario,
+  type StateCode,
   type Starter,
-  type StarterTab,
 } from "@/lib/scenario"
 import { encodeSharePath, SHARE_INVALID_NOTE, shareArrivalNotes } from "@/lib/share-link"
-import { PageSkeleton } from "@/components/page-skeleton"
 import { readShareArrival, useClearShareFromAddress, useMounted } from "@/lib/use-share-arrival"
 import {
   adoptSharedSituation,
@@ -62,26 +64,82 @@ import {
 import { useCatalog } from "@/lib/use-catalog"
 import { useSituation } from "@/lib/use-stored"
 import { cn } from "cn"
-import { ArrowRight, ArrowUp, Car, ChevronDown, Gauge, HandHeart, MapPin, Printer, RotateCcw, Shield, UserPlus, X, Zap } from "lucide-react"
+import { ArrowRight, ArrowUp, Car, ChevronDown, HandHeart, Printer, RotateCcw, X } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useMemo, useRef, useState } from "react"
 
-type Tab = StarterTab | "more"
+const UNDER_26 = ["16-18", "19-21", "22-25"]
+const UNDER_22 = ["16-18", "19-21"]
 
-const STARTER_ICONS: Record<Starter["id"], typeof Car> = {
-  "adding-teen": UserPlus,
-  "thinking-ev": Zap,
-  moving: MapPin,
-  "higher-deductible": Shield,
+/** One line under the tabs, so every tab starts the same way. */
+const TAB_INTRO: Record<Tab, string> = {
+  car: "Tap a car to see what it would cost to insure instead.",
+  driver: "See what a new or younger driver would do to the bill.",
+  move: "Pick a state to see what the same car and driver would cost there.",
+  coverage: "See what more or less coverage would do to the price.",
+  more: "See what your miles and driving record do to the price.",
 }
 
-const TABS: { id: Tab; label: string; icon: typeof Car }[] = [
-  { id: "car", label: "Another car", icon: Car },
-  { id: "driver", label: "New driver", icon: UserPlus },
-  { id: "move", label: "Moving", icon: MapPin },
-  { id: "coverage", label: "Coverage", icon: Shield },
-  { id: "more", label: "Miles and record", icon: Gauge },
-]
+/** What the result area suggests before anything has changed, per tab. */
+const TAB_EMPTY: Record<Tab, { title: string; body: string }> = {
+  car: {
+    title: "Pick a car to see the difference",
+    body: "Try the Tesla Model Y. You'll see what it does to your yearly bill, and why.",
+  },
+  driver: {
+    title: "Add a driver to see the difference",
+    body: "Tap “Add a new 16-year-old driver” to see what a teen adds to the bill.",
+  },
+  move: {
+    title: "Pick a state to see the difference",
+    body: "The same car and driver can cost very different amounts from one state to the next.",
+  },
+  coverage: {
+    title: "Change your coverage to see the difference",
+    body: "Try a $2,000 deductible: you'd pay more of a repair bill yourself, and less each year.",
+  },
+  more: {
+    title: "Change your miles or record to see the difference",
+    body: "Try one at-fault accident to see how much it adds.",
+  },
+}
+
+type Preset = { label: string; change: Partial<Scenario> }
+
+/** Three nearby or common states, never the one you're in. */
+const MOVE_CANDIDATES: StateCode[] = ["TX", "FL", "CA", "CO", "NY", "AZ"]
+
+function presetsFor(tab: Tab, now: Scenario): Preset[] {
+  switch (tab) {
+    case "car":
+      return []
+    case "driver":
+      return [
+        { label: "Add a new 16-year-old driver", change: { age: "16-18", yearsLicensed: "under-1" } },
+        { label: "A 19–21-year-old, on their own policy", change: { age: "19-21", yearsLicensed: "1-3" } },
+        { label: "A 22–25-year-old driver", change: { age: "22-25", yearsLicensed: "4-9" } },
+      ]
+    case "move":
+      return MOVE_CANDIDATES.filter((code) => code !== now.state)
+        .slice(0, 3)
+        .map((code) => ({ label: `Moving to ${stateName(code)}`, change: { state: code } }))
+    case "coverage":
+      return [
+        {
+          label: "$2,000 deductible",
+          change: { deductible: 2000, coverage: hasPhysicalDamage(now.coverage) ? now.coverage : "full" },
+        },
+        { label: "Liability only", change: { coverage: "standard" } },
+        { label: "Higher limits", change: { coverage: "high" } },
+      ]
+    case "more":
+      return [
+        { label: "One at-fault accident", change: { incidents: "one" } },
+        { label: "Under 7,500 miles a year", change: { mileage: "under-7500" } },
+        { label: "Bundled with home or renters", change: { householdPolicy: true } },
+      ]
+  }
+}
 
 function readInitial() {
   const decoded = readShareArrival()
@@ -140,10 +198,37 @@ function diffFrom(now: Scenario, next: Scenario): Partial<Scenario> {
   return changes
 }
 
-/** Waits for the browser (saved choices, share link) before drawing, so nothing flashes. */
+/**
+ * The changes worth showing: ones that can move the price for this driver
+ * and coverage. (Years licensed doesn't count under 26, a deductible needs
+ * own-car coverage, and so on.)
+ */
+function visibleChanges(keys: readonly ChangeKey[], next: Scenario): ChangeKey[] {
+  return keys.filter((key) => {
+    if (key === "yearsLicensed") return !UNDER_26.includes(next.age)
+    if (key === "goodStudent") return UNDER_26.includes(next.age)
+    if (key === "driverTraining") return UNDER_22.includes(next.age)
+    if (key === "deductible" || key === "loanLease") return hasPhysicalDamage(next.coverage)
+    return true
+  })
+}
+
+/** "a 2025 Tesla Model Y", "a new 16-year-old", or the chip's own words. */
+function changePhrase(key: ChangeKey, now: Scenario, next: Scenario): string {
+  if (key === "vehicle") return shortVehicleLabel(next)
+  if (key === "age" && next.age === "16-18" && now.age !== "16-18") return "a new 16-year-old"
+  return lowerFirst(changeChip(key, next))
+}
+
+function presetPressed(preset: Preset, now: Scenario, next: Scenario): boolean {
+  const entries = Object.entries(preset.change) as [keyof Scenario, Scenario[keyof Scenario]][]
+  return entries.every(([key, value]) => next[key] === value) && entries.some(([key, value]) => now[key] !== value)
+}
+
+/** Waits for the browser (saved choices, share link) before drawing numbers, so nothing flashes. */
 export function Calculator() {
   const mounted = useMounted()
-  if (!mounted) return <PageSkeleton label="Loading your situation" />
+  if (!mounted) return <HomeSkeleton />
   return <CalculatorReady />
 }
 
@@ -163,6 +248,7 @@ function CalculatorReady() {
   )
   const next = useMemo(() => withTeenFlag({ ...now, ...changes }), [now, changes])
   const changed = changedKeys(now, next)
+  const shown = visibleChanges(changed, next)
   const [tab, setTab] = useState<Tab>("car")
   const [notes, setNotes] = useState(initial.notes)
   const [picker, setPicker] = useState<null | "now" | "next">(null)
@@ -170,13 +256,25 @@ function CalculatorReady() {
   const [period, setPeriod] = useState<PremiumPeriod>("year")
   const premiumText = premiumDraft ?? (situation.premium === null ? "" : String(situation.premium))
   const premium = premiumStatus(premiumText, period)
-  const premiumInvalid = premium.kind === "invalid"
+  const premiumInvalid = premium.kind === "invalid" || premium.kind === "too-high"
   const whatIfRef = useRef<HTMLElement>(null)
+  const resultHeadingRef = useRef<HTMLHeadingElement>(null)
   const resultRef = useRef<HTMLDivElement>(null)
 
-  /** After a quick pick, bring the answer into view if it's off screen (it often is on a phone). */
-  function showResult() {
-    requestAnimationFrame(() => resultRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }))
+  /**
+   * After a quick pick, make sure the answer is in view. If it already is,
+   * leave everything (and your focus) where it is. If not, move focus to the
+   * answer's heading, which brings it into view.
+   */
+  function revealResult() {
+    window.setTimeout(() => {
+      const target = resultHeadingRef.current ?? resultRef.current
+      if (!target) return
+      const box = target.getBoundingClientRect()
+      if (box.top >= 0 && box.bottom <= window.innerHeight) return
+      target.focus({ preventScroll: true })
+      target.scrollIntoView({ behavior: "smooth", block: "center" })
+    }, 60)
   }
 
   useEffect(() => {
@@ -197,6 +295,7 @@ function CalculatorReady() {
   const startKind: StartKind = situation.premium !== null ? "yours" : "typical"
   const start = startingPoint(situation, nowFacts)
   const startNote = start ? startLine(start) : undefined
+  const state = stateName(now.state)
 
   /**
    * Save the situation in this browser. A shared situation becomes the
@@ -250,7 +349,7 @@ function CalculatorReady() {
   function onPremium(text: string, nextPeriod: PremiumPeriod = period) {
     setPremiumDraft(text)
     const status = premiumStatus(text, nextPeriod)
-    if (status.kind !== "invalid" && status.annual !== situation.premium) {
+    if (status.kind !== "invalid" && status.kind !== "too-high" && status.annual !== situation.premium) {
       recordCount("adjustment")
       saveSituation({ ...situation, premium: status.annual }, true)
     }
@@ -258,23 +357,20 @@ function CalculatorReady() {
 
   const nowCar: VehiclePick = { year: now.year, make: now.make, model: now.model, trim: now.trim }
   const nextCar: VehiclePick = { year: next.year, make: next.make, model: next.model, trim: next.trim }
+  const presets = presetsFor(tab, now)
+  const premiumMessage =
+    premium.kind === "too-high"
+      ? "That's more than we can work with. Check the number, or leave it empty."
+      : premium.kind === "invalid"
+        ? "Enter a dollar amount, like 1,800. Or leave it empty."
+        : premium.kind === "low-monthly"
+          ? "That looks low even for a month. Double-check it?"
+          : PREMIUM_HINT
+  const changesLabel = shown.length > 1 ? `Your changes: ${shown.map((key) => changePhrase(key, now, next)).join(" + ")}` : null
 
   return (
     <>
       <div className="no-print">
-        <section className="max-w-3xl pt-8 sm:pt-12">
-          <h1 className="text-3xl leading-tight font-semibold tracking-tight text-balance sm:text-[2.6rem]">
-            What would a new car, a teen driver, or a move do to your car insurance?
-          </h1>
-          <p className="mt-3 max-w-2xl text-lg leading-relaxed text-pretty text-muted-foreground">
-            Change one thing and see roughly what you&apos;d pay, worked out from public data. It&apos;s free, there&apos;s
-            nothing to sign up for, and nothing you type leaves your browser.
-          </p>
-          <div className="mt-5">
-            <TrustStrip />
-          </div>
-        </section>
-
         {notes.length > 0 ? (
           <div className="mt-6 flex items-start gap-3 rounded-2xl bg-primary/[0.06] px-4 py-3" data-testid="share-notice">
             <div className="grid flex-1 gap-1 text-sm">
@@ -308,13 +404,14 @@ function CalculatorReady() {
             </button>
           </div>
         ) : null}
+
         <div className="mt-8 grid items-start gap-5 lg:mt-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-6">
           {/* What if */}
           <section
             ref={whatIfRef}
             id="what-if"
             aria-labelledby="what-if-heading"
-            className="card scroll-mt-4 overflow-hidden"
+            className="card scroll-mt-4 overflow-hidden lg:col-start-1 lg:row-start-1"
           >
             <div className="bg-sun-soft px-5 pt-5 pb-3 sm:px-6">
               <h2 id="what-if-heading" className="text-xl font-semibold tracking-tight">
@@ -327,100 +424,104 @@ function CalculatorReady() {
                 </a>
               </p>
               <p className="mt-1 hidden text-sm text-muted-foreground lg:block">
-                Change one thing. We&apos;ll show the difference from your situation now.
+                Change one thing, or a few. We&apos;ll show the difference from your situation now.
               </p>
             </div>
 
-            <div role="tablist" aria-label="What to change" className="scroll-row border-b border-border bg-sun-soft px-3 pb-3 sm:px-5">
-              {TABS.map((item) => {
-                const Icon = item.icon
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    role="tab"
-                    id={`tab-${item.id}`}
-                    aria-selected={tab === item.id}
-                    aria-controls={`panel-${item.id}`}
-                    tabIndex={tab === item.id ? 0 : -1}
-                    className="tab"
-                    onClick={() => setTab(item.id)}
-                    onKeyDown={(event) => tabKey(event, tab, setTab)}
-                  >
-                    <Icon className="size-4" aria-hidden="true" />
-                    {item.label}
-                  </button>
-                )
-              })}
+            <div className="tab-scroller border-b border-border bg-sun-soft">
+              <div role="tablist" aria-label="What to change" className="scroll-row px-3 pb-3 sm:px-5">
+                {TABS.map((item) => {
+                  const Icon = item.icon
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      role="tab"
+                      id={`tab-${item.id}`}
+                      aria-selected={tab === item.id}
+                      aria-controls={`panel-${item.id}`}
+                      tabIndex={tab === item.id ? 0 : -1}
+                      className="tab"
+                      onClick={() => setTab(item.id)}
+                      onKeyDown={(event) => tabKey(event, tab, setTab)}
+                    >
+                      <Icon className="size-4" aria-hidden="true" />
+                      {item.label}
+                    </button>
+                  )
+                })}
+              </div>
             </div>
 
-            <div role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`} tabIndex={0} className="px-5 py-5 sm:px-6">
+            <div role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`} tabIndex={0} className="grid gap-4 px-5 py-5 sm:px-6">
+              <p className="text-sm text-muted-foreground">{TAB_INTRO[tab]}</p>
               {tab === "car" ? (
-                <div className="grid gap-4">
-                  <p className="text-sm text-muted-foreground">Tap a car to see what it would cost to insure instead.</p>
-                  <div className="flex flex-wrap gap-2" data-testid="what-if-cars">
-                    {WHAT_IF_CARS.map((car) => {
-                      const pick = catalog ? resolveCar(catalog, car.year, car) : car.trim ? { ...car, trim: car.trim } : null
-                      const pressed = pick !== null && sameVehicle(pick, nextCar) && !sameVehicle(pick, nowCar)
-                      return (
-                        <button
-                          key={`${car.make}-${car.model}`}
-                          type="button"
-                          className="chip"
-                          aria-pressed={pressed}
-                          disabled={pick === null}
-                          onClick={() => {
-                            if (!pick) return
-                            patchNext(pick)
-                            showResult()
-                          }}
-                        >
-                          {car.year} {car.make} {car.model}
-                        </button>
-                      )
-                    })}
-                    <button type="button" className="chip border-dashed text-primary" onClick={() => setPicker("next")}>
-                      Search every car…
-                    </button>
-                  </div>
+                <div className="flex flex-wrap gap-2" data-testid="what-if-cars">
+                  {WHAT_IF_CARS.map((car) => {
+                    const pick = catalog ? resolveCar(catalog, car.year, car) : car.trim ? { ...car, trim: car.trim } : null
+                    const pressed = pick !== null && sameVehicle(pick, nextCar) && !sameVehicle(pick, nowCar)
+                    return (
+                      <button
+                        key={`${car.make}-${car.model}`}
+                        type="button"
+                        className="chip"
+                        aria-pressed={pressed}
+                        disabled={pick === null}
+                        onClick={() => {
+                          if (!pick) return
+                          patchNext(pick)
+                          revealResult()
+                        }}
+                      >
+                        {car.year} {car.make} {car.model}
+                      </button>
+                    )
+                  })}
+                  <button type="button" className="chip border-dashed text-primary" onClick={() => setPicker("next")}>
+                    Search every car…
+                  </button>
                 </div>
-              ) : null}
+              ) : (
+                <div className="flex flex-wrap gap-2" data-testid={`what-if-presets-${tab}`}>
+                  {presets.map((preset) => (
+                    <button
+                      key={preset.label}
+                      type="button"
+                      className="chip"
+                      aria-pressed={presetPressed(preset, now, next)}
+                      onClick={() => {
+                        patchNext(preset.change)
+                        revealResult()
+                      }}
+                    >
+                      {preset.label}
+                    </button>
+                  ))}
+                </div>
+              )}
               {tab === "driver" ? (
-                <div className="grid gap-4">
-                  <div className="flex flex-wrap gap-2">
-                    <button
-                      type="button"
-                      className="chip"
-                      aria-pressed={next.age === "16-18" && now.age !== "16-18"}
-                      onClick={() => patchNext({ age: "16-18", yearsLicensed: "under-1" })}
-                    >
-                      Add our new 16-year-old
-                    </button>
-                    <button
-                      type="button"
-                      className="chip"
-                      aria-pressed={next.age === "19-21" && now.age !== "19-21"}
-                      onClick={() => patchNext({ age: "19-21", yearsLicensed: "1-3" })}
-                    >
-                      A 19–21-year-old instead
-                    </button>
-                  </div>
+                <>
                   <div className="grid gap-4 sm:grid-cols-2">
-                    <AgeField scenario={next} onChange={patchNext} idPrefix="next" label="What if the driver were" />
-                    <YearsField scenario={next} onChange={patchNext} idPrefix="next" />
+                    <AgeField scenario={next} onChange={patchNext} idPrefix="next" />
+                    {UNDER_26.includes(next.age) ? null : <YearsField scenario={next} onChange={patchNext} idPrefix="next" />}
                     {next.age === "16-18" && now.age !== "16-18" ? (
                       <div className="grid gap-1.5 sm:col-span-2">
                         <PolicyField value={situation.teenOnParentPolicy} onChange={setPolicy} idPrefix="next" />
                         <p className="text-sm leading-snug text-muted-foreground">
                           {situation.teenOnParentPolicy
-                            ? "We price your whole policy after adding them, on the car in your situation now."
+                            ? `We price your whole policy after adding them, with the ${shortVehicleLabel(next)}.`
                             : "We price the teen alone, on their own policy."}
                         </p>
                       </div>
                     ) : null}
+                    {next.age === "19-21" && now.age !== "19-21" ? (
+                      <p className="text-sm leading-snug text-muted-foreground sm:col-span-2">
+                        We price a 19–21-year-old on their own policy. Staying on a parent&apos;s policy usually costs less.
+                      </p>
+                    ) : null}
                   </div>
                   <DiscountFields scenario={next} onChange={patchNext} idPrefix="next" />
-                </div>
+                </>
               ) : null}
               {tab === "move" ? (
                 <div className="grid gap-4 sm:grid-cols-2">
@@ -442,22 +543,28 @@ function CalculatorReady() {
               ) : null}
             </div>
 
-            <div ref={resultRef} className="scroll-mb-4 border-t border-border px-5 py-6 sm:px-6" aria-live="polite">
+            <p className="sr-only" aria-live="polite" data-testid="what-if-announce">
+              {result && !premiumInvalid ? result.headline : ""}
+            </p>
+            <div ref={resultRef} className="scroll-mb-4 border-t border-border px-5 py-6 sm:px-6">
               {result && premiumInvalid ? (
                 <p className="py-4 text-center text-sm text-muted-foreground" data-testid="what-if-waiting">
                   Finish typing what you pay now (or clear it), and the difference shows here.
                 </p>
               ) : result ? (
                 <WhatIfResult
+                  headingRef={resultHeadingRef}
                   mode={result.mode}
                   parts={result.parts}
                   headline={result.headline}
-                  delta={result.deltaRounded}
+                  changesLabel={changesLabel}
+                  delta={result.delta}
                   current={result.current}
                   next={result.next}
                   startKind={startKind}
                   startNote={startNote}
-                  chips={changed.map((key) => ({ key, label: changeChip(key, next) }))}
+                  state={stateName(next.state)}
+                  chips={shown.map((key) => ({ key, label: changeChip(key, next) }))}
                   onUndo={undo}
                   onReset={() => setChanges({})}
                   onKeep={keepWhatIf}
@@ -481,24 +588,28 @@ function CalculatorReady() {
                   <span className="grid size-10 place-items-center rounded-full bg-sun-soft text-sun-ink" aria-hidden="true">
                     <ArrowUp className="size-5" />
                   </span>
-                  <p className="text-lg font-semibold">Pick something above to see the difference</p>
-                  <p className="max-w-sm text-sm text-muted-foreground">
-                    Try the Tesla Model Y. You&apos;ll see what it does to your yearly bill, and why.
-                  </p>
+                  <p className="text-lg font-semibold">{TAB_EMPTY[tab].title}</p>
+                  <p className="max-w-sm text-sm text-muted-foreground">{TAB_EMPTY[tab].body}</p>
                 </div>
               )}
             </div>
           </section>
 
           {/* Now */}
-          <section id="now" aria-labelledby="now-heading" className="card scroll-mt-4 p-5 sm:p-6">
+          <section id="now" aria-labelledby="now-heading" className="card scroll-mt-4 p-5 sm:p-6 lg:col-start-2 lg:row-span-2 lg:row-start-1">
             <h2 id="now-heading" className="text-xl font-semibold tracking-tight">
               Your situation now
             </h2>
             <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{situationSentence(now, false)}</p>
 
             {nowEstimate ? (
-              <NowFigure estimate={nowEstimate} startKind={startKind} startNote={startNote} waiting={premiumInvalid} />
+              <NowFigure
+                estimate={nowEstimate}
+                startKind={startKind}
+                startShortLine={start ? startShort(start, state) : undefined}
+                shared={linked !== null && linked.premium !== null}
+                waiting={premiumInvalid}
+              />
             ) : null}
 
             <div className="mt-5 grid gap-4">
@@ -543,7 +654,7 @@ function CalculatorReady() {
                       className="field-input pl-7"
                       inputMode="decimal"
                       autoComplete="off"
-                      placeholder="1,800"
+                      placeholder="e.g. 1,800"
                       value={premiumText}
                       aria-invalid={premiumInvalid || undefined}
                       aria-errormessage={premiumInvalid ? "premium-hint" : undefined}
@@ -568,9 +679,15 @@ function CalculatorReady() {
                     ))}
                   </select>
                 </div>
-                <p id="premium-hint" className={cn("text-sm leading-snug", premiumInvalid ? "text-destructive" : "text-muted-foreground")}>
-                  {premiumInvalid ? "Enter a dollar amount, like 1,800. Or leave it empty." : PREMIUM_HINT}
-                  {premium.annual !== null && period !== "year" ? ` That's ${formatDollars(premium.annual)} a year.` : ""}
+                <p
+                  id="premium-hint"
+                  className={cn(
+                    "text-sm leading-snug",
+                    premiumInvalid ? "text-destructive" : premium.kind === "low-monthly" ? "text-sun-ink" : "text-muted-foreground",
+                  )}
+                >
+                  {premiumMessage}
+                  {premium.annual !== null && period !== "year" ? ` That's ${dollars(premium.annual)} a year.` : ""}
                 </p>
                 {premium.kind === "maybe-monthly" ? (
                   <p className="flex flex-wrap items-center gap-x-2 text-sm leading-snug" data-testid="premium-monthly-hint">
@@ -590,71 +707,69 @@ function CalculatorReady() {
               </div>
 
               <div className="-mb-1">
-              <details className="disclosure">
-                <summary>
-                  More about the driver and coverage
-                  <ChevronDown className="size-4" aria-hidden="true" />
-                </summary>
-                <div className="grid gap-3 pb-4">
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    <DeductibleField scenario={now} onChange={patchNow} idPrefix="now" />
-                    <RecordField scenario={now} onChange={patchNow} idPrefix="now" />
-                    <MileageField scenario={now} onChange={patchNow} idPrefix="now" />
-                    <YearsField scenario={now} onChange={patchNow} idPrefix="now" />
-                  </div>
-                  <DiscountFields scenario={now} onChange={patchNow} idPrefix="now" />
-                  <p className="text-sm leading-snug text-muted-foreground">
-                    We don&apos;t ask about credit. Many insurers use it, so your real quote could move up or down because of it.
-                  </p>
-                </div>
-              </details>
-
-              {nowEstimate ? (
                 <details className="disclosure">
                   <summary>
-                    Here&apos;s how we got this
+                    More about the driver and coverage
                     <ChevronDown className="size-4" aria-hidden="true" />
                   </summary>
-                  <div className="pb-2">
-                    <HowWeGotThis estimate={nowEstimate} startKind={startKind} />
+                  <div className="grid gap-3 pb-4">
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <DeductibleField scenario={now} onChange={patchNow} idPrefix="now" />
+                      <RecordField scenario={now} onChange={patchNow} idPrefix="now" />
+                      <MileageField scenario={now} onChange={patchNow} idPrefix="now" />
+                      <YearsField scenario={now} onChange={patchNow} idPrefix="now" />
+                    </div>
+                    <DiscountFields scenario={now} onChange={patchNow} idPrefix="now" />
+                    <p className="text-sm leading-snug text-muted-foreground">
+                      We don&apos;t ask about credit. Many insurers use it, so your real quote could move up or down because
+                      of it.
+                    </p>
                   </div>
                 </details>
-              ) : null}
+
+                {nowEstimate && !result ? (
+                  <details className="disclosure">
+                    <summary>
+                      Here&apos;s how we got this
+                      <ChevronDown className="size-4" aria-hidden="true" />
+                    </summary>
+                    <div className="pb-2">
+                      <HowWeGotThis estimate={nowEstimate} startKind={startKind} startNote={startNote} state={state} />
+                    </div>
+                  </details>
+                ) : null}
               </div>
+            </div>
+          </section>
+
+          <section aria-labelledby="starters-heading" className="mt-6 lg:col-start-1 lg:row-start-2 lg:mt-2">
+            <h2 id="starters-heading" className="text-xl font-semibold tracking-tight">
+              Or start with a question other families ask
+            </h2>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              {STARTERS.map((item) => {
+                const Icon = STARTER_ICONS[item.id]
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className="card group grid grid-cols-[auto_1fr] content-start gap-x-3 gap-y-1 p-4 text-left transition-[border-color,transform] hover:-translate-y-0.5 hover:border-primary/50"
+                    onClick={() => tryStarter(item)}
+                    data-testid={`starter-${item.id}`}
+                  >
+                    <span className="row-span-2 grid size-9 place-items-center rounded-full bg-sun-soft text-sun-ink" aria-hidden="true">
+                      <Icon className="size-[1.1rem]" />
+                    </span>
+                    <span className="font-semibold">{item.title}</span>
+                    <span className="text-sm leading-snug text-muted-foreground">{item.story}</span>
+                  </button>
+                )
+              })}
             </div>
           </section>
         </div>
 
-        <section aria-labelledby="starters-heading" className="mt-16">
-          <h2 id="starters-heading" className="text-xl font-semibold tracking-tight">
-            Or start with a question other families ask
-          </h2>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {STARTERS.map((item) => {
-              const Icon = STARTER_ICONS[item.id]
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  className="card group grid grid-cols-[auto_1fr] content-start gap-x-3 gap-y-1 p-4 text-left transition-[border-color,transform] hover:-translate-y-0.5 hover:border-primary/50 sm:grid-cols-1 sm:gap-2 sm:p-5"
-                  onClick={() => tryStarter(item)}
-                  data-testid={`starter-${item.id}`}
-                >
-                  <span className="row-span-2 grid size-9 place-items-center rounded-full bg-sun-soft text-sun-ink sm:row-span-1" aria-hidden="true">
-                    <Icon className="size-[1.1rem]" />
-                  </span>
-                  <span className="font-semibold sm:mt-1">{item.title}</span>
-                  <span className="text-sm leading-snug text-muted-foreground">{item.story}</span>
-                  <span className="mt-1 hidden items-center gap-1 text-sm font-medium text-primary sm:inline-flex">
-                    Try it <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
-                  </span>
-                </button>
-              )
-            })}
-          </div>
-        </section>
-
-        <section className="mt-6 flex flex-col items-start gap-4 rounded-3xl bg-foreground px-6 py-7 text-background sm:flex-row sm:items-center sm:px-8">
+        <section className="mt-10 flex flex-col items-start gap-4 rounded-3xl bg-foreground px-6 py-7 text-background sm:flex-row sm:items-center sm:px-8">
           <div className="flex-1">
             <h2 className="text-xl font-semibold tracking-tight">Shopping for a first car?</h2>
             <p className="mt-1 max-w-xl text-base text-background/80">
@@ -710,8 +825,9 @@ function CalculatorReady() {
       <PrintSummary
         situation={situation}
         nowEstimate={nowEstimate}
-        result={result ? { headline: result.headline, next: result.next } : null}
-        nextName={changed.length > 0 ? situationSentence(next, situation.teenOnParentPolicy) : null}
+        ownNumber={startKind === "yours" && (nowEstimate?.steps.length ?? 0) === 0}
+        result={result ? { headline: result.headline, next: result.next, parts: result.parts } : null}
+        changes={shown.map((key) => changeChip(key, next))}
       />
 
       <CarPicker
@@ -729,7 +845,7 @@ function CalculatorReady() {
           else {
             patchNext(pick)
             setTab("car")
-            showResult()
+            revealResult()
           }
         }}
       />
@@ -740,32 +856,31 @@ function CalculatorReady() {
 function NowFigure({
   estimate,
   startKind,
-  startNote,
+  startShortLine,
+  shared,
   waiting,
 }: {
   estimate: Estimate
   startKind: StartKind
-  startNote?: string
+  startShortLine?: string
+  /** The premium came from a shared link: it's the sender's, not the visitor's. */
+  shared: boolean
   /** The premium field has text we can't read yet: dim the old figures. */
   waiting: boolean
 }) {
   const ownNumber = startKind === "yours" && estimate.steps.length === 0
   return (
-    <div
-      className={cn("mt-5 transition-opacity", waiting && "opacity-35")}
-      data-testid="now-figure"
-      aria-hidden={waiting || undefined}
-    >
+    <div className={cn("mt-5 transition-opacity", waiting && "opacity-35")} data-testid="now-figure" aria-hidden={waiting || undefined}>
       <p className="flex flex-wrap items-baseline gap-x-2">
         <span className="money text-[2.6rem] leading-none font-semibold tracking-tight" data-testid="now-yearly">
-          {formatDollars(estimate.likely)}
+          {ownNumber ? dollars(estimate.likely) : estimateDollars(estimate.likely)}
         </span>
         <span className="text-base text-muted-foreground">a year</span>
       </p>
       <p className="mt-2 text-sm text-muted-foreground">
         {ownNumber
-          ? `What you pay now, about ${formatDollars(estimate.monthly)} a month.`
-          : `About ${formatDollars(estimate.monthly)} a month. Real quotes: ${rangeWords(estimate.low, estimate.high)} a year.`}
+          ? `${shared ? "What the sender pays now" : "What you pay now"}.`
+          : `Real quotes: ${rangeWords(estimate.low, estimate.high)} a year.`}
       </p>
       {ownNumber ? null : (
         <RangeBar
@@ -777,37 +892,28 @@ function NowFigure({
           max={Math.round(estimate.high * 1.05)}
         />
       )}
-      {startKind === "typical" && startNote ? (
+      {startKind === "typical" && startShortLine ? (
         <p className="mt-3 text-sm leading-snug text-muted-foreground" data-testid="start-note">
-          {startNote}
+          {startShortLine}
         </p>
       ) : null}
     </div>
   )
 }
 
-/**
- * The engine's headline, split so the number can be the big thing:
- * "Switching to a 2025 Tesla Model Y: about +$630 a year." becomes the
- * label, the amount, and anything after it ("on a policy that costs $1,720 now").
- * Headlines without an amount (a state we have no price for) stay whole.
- */
-function splitHeadline(headline: string): { label: string; amount: string; rest: string } | null {
-  const match = /^(.+?): (?:about )?((?:[+−]?\$[\d,]+ a year)|the same)(.*)\.$/.exec(headline)
-  if (!match) return null
-  return { label: match[1], amount: match[2], rest: match[3].replace(/^,\s*/, "").trim() }
-}
-
 function WhatIfResult({
+  headingRef,
   mode,
   parts,
   compareHref,
   headline,
+  changesLabel,
   delta,
   current,
   next,
   startKind,
   startNote,
+  state,
   chips,
   onUndo,
   onReset,
@@ -816,15 +922,19 @@ function WhatIfResult({
   nextCarName,
   versionPicker,
 }: {
+  headingRef: React.RefObject<HTMLHeadingElement | null>
   mode: WhatIfMode
   parts: ChangePart[]
   compareHref: string
   headline: string
+  /** "Your changes: 2025 Tesla Model Y + a new 16-year-old", when there's more than one. */
+  changesLabel: string | null
   delta: number
   current: Estimate
   next: Estimate
   startKind: StartKind
   startNote?: string
+  state: string
   chips: { key: ChangeKey; label: string }[]
   onUndo: (key: ChangeKey) => void
   onReset: () => void
@@ -836,44 +946,48 @@ function WhatIfResult({
   const min = Math.round(Math.min(current.low, next.low) * 0.92)
   const max = Math.round(Math.max(current.high, next.high) * 1.04)
   const ownNumber = startKind === "yours" && current.steps.length === 0
-  const split = splitHeadline(headline)
-  const direction = mode === "teen-own" ? "neutral" : delta > 0 ? "up" : delta < 0 ? "down" : "same"
+  const nowWords = ownNumber ? dollars(current.likely) : estimateDollars(current.likely)
+  // A move to a state we have no price for has no amount: show the engine's sentence whole.
+  const hasAmount = headline.includes(": about")
+  const label = changesLabel ?? (hasAmount ? headline.slice(0, headline.indexOf(": about")) : null)
+  const rounded = Math.round(delta / 10) * 10
+  const direction = mode === "teen-own" ? "neutral" : rounded > 0 ? "up" : rounded < 0 ? "down" : "same"
   const tone = direction === "up" ? "text-up" : direction === "down" ? "text-down" : "text-foreground"
-  const monthlyDelta = Math.round(Math.abs(delta) / 12)
   return (
     <div className="pop-in grid gap-6" key={headline}>
-      <div className="grid gap-1.5">
-        <p className="sr-only" data-testid="what-if-headline">
-          {headline}
-        </p>
-        {split ? (
-          <div aria-hidden="true" className="grid gap-1">
-            <p className="text-base font-medium text-muted-foreground">{split.label}</p>
-            <p className={cn("flex flex-wrap items-baseline gap-x-2 text-4xl leading-tight font-semibold tracking-tight sm:text-[2.75rem]", tone)}>
-              {split.amount === "the same" ? (
-                <span>About the same</span>
-              ) : (
-                <>
-                  <span className="text-lg font-medium text-muted-foreground">about</span>
-                  <span className="money">{split.amount.replace(/ a year$/, "")}</span>
-                </>
-              )}
-              {split.amount === "the same" ? null : <span className="text-lg font-medium text-muted-foreground">a year</span>}
-            </p>
-            {split.rest ? (
-              <p className="text-sm text-muted-foreground">{`${split.rest.charAt(0).toUpperCase()}${split.rest.slice(1)}.`}</p>
-            ) : direction === "up" || direction === "down" ? (
-              <p className="text-sm text-muted-foreground">
-                About {direction === "up" ? "+" : "−"}
-                {formatDollars(monthlyDelta)} a month.
-              </p>
-            ) : null}
-          </div>
-        ) : (
-          <p aria-hidden="true" className="text-2xl leading-snug font-semibold tracking-tight text-balance">
-            {headline}
+      <div className="grid gap-1">
+        {label ? <p className="text-base font-medium text-muted-foreground">{label}</p> : null}
+        <h3 ref={headingRef} tabIndex={-1} className="outline-none" data-testid="what-if-headline" aria-label={headline}>
+          {!hasAmount ? (
+            <span className="block text-2xl leading-snug font-semibold tracking-tight text-balance">{headline}</span>
+          ) : mode === "teen-own" ? (
+            <span className="flex flex-wrap items-baseline gap-x-2 text-4xl leading-tight font-semibold tracking-tight sm:text-[2.75rem]">
+              <span className="text-lg font-medium text-muted-foreground">about</span>
+              <span className="money">{estimateDollars(next.likely)}</span>
+              <span className="text-lg font-medium text-muted-foreground">a year</span>
+            </span>
+          ) : direction === "same" ? (
+            <span className="block text-4xl leading-tight font-semibold tracking-tight">About the same</span>
+          ) : (
+            <span className={cn("flex flex-wrap items-baseline gap-x-2 text-4xl leading-tight font-semibold tracking-tight sm:text-[2.75rem]", tone)}>
+              <span className="text-lg font-medium text-muted-foreground">about</span>
+              <span className="money">{dollars(Math.abs(rounded))}</span>
+              <span>{direction === "up" ? "more" : "less"}</span>
+              <span className="text-lg font-medium text-muted-foreground">a year</span>
+            </span>
+          )}
+        </h3>
+        {hasAmount ? (
+          <p className="text-sm text-muted-foreground">
+            {mode === "teen-own"
+              ? `For their own policy, on top of your ${nowWords}.`
+              : mode === "teen-added"
+                ? `On a policy that costs ${ownNumber ? "" : "about "}${nowWords} now.`
+                : direction === "same"
+                  ? "Within $10 either way."
+                  : `About ${differenceWords(delta, "month")}.`}
           </p>
-        )}
+        ) : null}
       </div>
 
       {parts.length > 1 || (parts.length === 1 && vehicleChanged) ? (
@@ -889,7 +1003,7 @@ function WhatIfResult({
                     part.amount > 0 ? "text-up" : part.amount < 0 ? "text-down" : "text-muted-foreground",
                   )}
                 >
-                  {signedTen(part.amount)}
+                  {signedDollars(part.amount)}
                 </span>
               </li>
             ))}
@@ -905,7 +1019,7 @@ function WhatIfResult({
           <div className="flex flex-wrap items-baseline justify-between gap-x-3">
             <dt className="text-sm text-muted-foreground">{mode === "teen-own" ? "Your policy" : "Now"}</dt>
             <dd className="money text-sm text-muted-foreground">
-              <span className="text-base font-semibold text-foreground">{formatDollars(current.likely)}</span> a year
+              <span className="text-base font-semibold text-foreground">{nowWords}</span> a year
               {ownNumber ? null : <span> · {rangeWords(current.low, current.high)}</span>}
             </dd>
           </div>
@@ -917,29 +1031,29 @@ function WhatIfResult({
               {mode === "teen-own" ? "Their own policy" : mode === "teen-added" ? "With your teen" : "With this change"}
             </dt>
             <dd className="money text-sm text-muted-foreground" data-testid="what-if-yearly">
-              <span className="text-lg font-semibold text-foreground">{formatDollars(next.likely)}</span> a year ·{" "}
+              <span className="text-lg font-semibold text-foreground">{estimateDollars(next.likely)}</span> a year ·{" "}
               {rangeWords(next.low, next.high)}
             </dd>
           </div>
           <RangeBar low={next.low} likely={next.likely} high={next.high} min={min} max={max} tone="sun" />
         </div>
-        <p className="text-sm text-muted-foreground">
-          The dot is our best guess. The bar shows where most real quotes would land.
-        </p>
+        <p className="text-sm text-muted-foreground">The dot is our best guess. The bar shows where most real quotes would land.</p>
       </dl>
       {versionPicker}
 
-      <div className="flex flex-wrap items-center gap-2">
-        <span className="text-sm text-muted-foreground">You changed:</span>
-        {chips.map((chip) => (
-          <span key={chip.key} className="inline-flex items-center gap-1 rounded-full bg-sun-soft py-1 pr-1 pl-3 text-sm font-medium">
-            {chip.label}
-            <button type="button" className="icon-btn size-7" aria-label={`Undo ${chip.label}`} onClick={() => onUndo(chip.key)}>
-              <X className="size-3.5" />
-            </button>
-          </span>
-        ))}
-      </div>
+      {chips.length > 0 ? (
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-sm text-muted-foreground">You changed:</span>
+          {chips.map((chip) => (
+            <span key={chip.key} className="inline-flex items-center gap-1 rounded-full bg-sun-soft py-1 pr-1 pl-3 text-sm font-medium">
+              {chip.label}
+              <button type="button" className="icon-btn size-7" aria-label={`Undo ${chip.label}`} onClick={() => onUndo(chip.key)}>
+                <X className="size-3.5" />
+              </button>
+            </span>
+          ))}
+        </div>
+      ) : null}
 
       <div className="flex flex-wrap gap-2">
         {vehicleChanged ? (
@@ -962,7 +1076,7 @@ function WhatIfResult({
           <ChevronDown className="size-4" aria-hidden="true" />
         </summary>
         <div className="grid gap-3 pb-4">
-          <HowWeGotThis estimate={next} startKind={startKind} startNote={startNote} />
+          <HowWeGotThis estimate={next} startKind={startKind} startNote={startNote} state={state} />
           {vehicleChanged ? (
             <p>
               <VehicleFixLink carName={nextCarName} shown={vehicleMatchWords(next.vehicle)} />
@@ -972,13 +1086,6 @@ function WhatIfResult({
       </details>
     </div>
   )
-}
-
-/** "+$120" or "−$90", rounded to the nearest $10 like every sentence on the page. */
-function signedTen(amount: number): string {
-  const rounded = Math.round(amount / 10) * 10
-  if (rounded === 0) return "about the same"
-  return `${rounded > 0 ? "+" : "−"}${formatDollars(Math.abs(rounded))}`
 }
 
 /** Version (trim) and model year for a picked car, as small selects. */
@@ -1043,16 +1150,20 @@ function VersionPicker({
   )
 }
 
+/** The printed page: your situation, then only what changed. */
 function PrintSummary({
   situation,
   nowEstimate,
+  ownNumber,
   result,
-  nextName,
+  changes,
 }: {
   situation: Situation
   nowEstimate: Estimate | null
-  result: { headline: string; next: Estimate } | null
-  nextName: string | null
+  /** The figure is what they typed: print it as is, with no range. */
+  ownNumber: boolean
+  result: { headline: string; next: Estimate; parts: ChangePart[] } | null
+  changes: string[]
 }) {
   const printed = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
   return (
@@ -1064,29 +1175,32 @@ function PrintSummary({
       <h2 style={{ fontSize: "12pt", fontWeight: 650, marginTop: "12pt" }}>Your situation now</h2>
       <p>{situationSentence(situation.scenario, false)}</p>
       {nowEstimate ? (
-        <p>
-          <strong>About {formatDollars(nowEstimate.likely)} a year</strong> ({rangeWords(nowEstimate.low, nowEstimate.high)}).{" "}
-          {nowEstimate.summary}
-        </p>
-      ) : null}
-      {result && nextName ? (
-        <>
-          <h2 style={{ fontSize: "12pt", fontWeight: 650, marginTop: "12pt" }}>What if</h2>
-          <p>{nextName}</p>
+        ownNumber ? (
           <p>
-            <strong>About {formatDollars(result.next.likely)} a year</strong> ({rangeWords(result.next.low, result.next.high)}).{" "}
-            {result.next.summary}
+            <strong>{dollars(nowEstimate.likely)} a year</strong>, what you pay now.
           </p>
-          <p>{result.next.rangeNote}</p>
-          {result.next.steps.length > 0 ? (
+        ) : (
+          <p>
+            <strong>About {estimateDollars(nowEstimate.likely)} a year</strong> ({rangeWords(nowEstimate.low, nowEstimate.high)}).
+          </p>
+        )
+      ) : null}
+      {result && changes.length > 0 ? (
+        <>
+          <h2 style={{ fontSize: "12pt", fontWeight: 650, marginTop: "12pt" }}>What if: {changes.join(", ")}</h2>
+          <p>
+            <strong>About {estimateDollars(result.next.likely)} a year</strong> ({rangeWords(result.next.low, result.next.high)}).
+          </p>
+          {result.parts.length > 0 ? (
             <ul style={{ margin: "6pt 0 0 14pt", listStyle: "disc" }}>
-              {result.next.steps.map((step) => (
-                <li key={`${step.group}-${step.title}`}>
-                  {step.title}: {step.from} → {step.to}. {basisWords(step.basis)}.
+              {result.parts.map((part) => (
+                <li key={part.label}>
+                  {part.label}: {signedDollars(part.amount)}
                 </li>
               ))}
             </ul>
           ) : null}
+          <p style={{ marginTop: "6pt" }}>{result.next.rangeNote}</p>
         </>
       ) : null}
       <p style={{ marginTop: "14pt", borderTop: "0.75pt solid #999", paddingTop: "8pt" }}>
@@ -1096,3 +1210,4 @@ function PrintSummary({
     </div>
   )
 }
+

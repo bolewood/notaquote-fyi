@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { HelpWantedList } from "@/components/help-wanted-list"
 import { TrustArticle } from "@/components/trust-article"
 import { CONTRIBUTING_URL, ISSUES_URL, suggestFixUrl, type FixKind } from "@/lib/suggest-fix"
 import { ArrowUpRight, Bug, Car, Landmark, Percent } from "lucide-react"
@@ -78,6 +79,14 @@ export default function CorrectionsPage() {
         <strong>Your report is public.</strong> Please leave out what you pay, your VIN, your policy number, and anything
         else about you. We never add those to the form for you.
       </p>
+
+      <h2>Five numbers that need a source</h2>
+      <p>
+        These are our best guesses today. Many state insurance departments publish a &ldquo;rate comparison guide&rdquo;
+        with sample prices from many companies. If yours shows one of these, a link turns a guess into a sourced number for
+        everyone.
+      </p>
+      <HelpWantedList />
 
       <h2>What helps most</h2>
       <p>
