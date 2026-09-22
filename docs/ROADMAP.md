@@ -37,6 +37,18 @@ NotAQuote.FYI should make one kind of question easy: *"What would happen to my i
 ### 6. Community feedback loop
 - Replace the disabled Supabase corrections queue with "Suggest a fix" links that open a prefilled GitHub issue for the exact number, state, or vehicle in question. There's no backend to run, and everything happens in the open.
 
+## Status (September 22, 2026)
+
+Workstreams 1–6 are built and reviewed. What's left is ongoing data work, which is exactly where contributors can help:
+
+- Find public sources for the numbers that are still our best guesses (see "Five numbers that need a source" in CONTRIBUTING.md).
+- Add more states' rate-comparison guides, so factors rest on more than a handful of states.
+- Refresh the NAIC figures and the price-index trend when new editions come out.
+- HLDI vehicle data: permission requested from IIHS on September 22, 2026. If they say no, switch it off with `useHldiModels`.
+
 ## Launch switches (owner decisions)
-- Make the GitHub repository public.
-- Remove `noindex` once the owner is happy with the data.
+- Make the GitHub repository public (the "Suggest a fix" links need it).
+- Create the issue labels the forms use: `data`, `factors`, `state-rules`, `vehicles`.
+- Turn on private vulnerability reporting (SECURITY.md points to it).
+- Confirm contact@bolewood.com is monitored (CODE_OF_CONDUCT.md uses it).
+- Remove `noindex` (in `next.config.ts` and `src/app/robots.ts`) once the owner is happy with the data.
