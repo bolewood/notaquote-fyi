@@ -47,8 +47,9 @@ Workstreams 1–6 are built and reviewed. What's left is ongoing data work, whic
 - HLDI vehicle data: permission requested from IIHS on September 22, 2026. If they say no, switch it off with `useHldiModels`.
 
 ## Launch switches (owner decisions)
-- Make the GitHub repository public (the "Suggest a fix" links need it).
-- Create the issue labels the forms use: `data`, `factors`, `state-rules`, `vehicles`.
-- Turn on private vulnerability reporting (SECURITY.md points to it).
-- Confirm contact@bolewood.com is monitored (CODE_OF_CONDUCT.md uses it).
-- Remove `noindex` (in `next.config.ts` and `src/app/robots.ts`) once the owner is happy with the data.
+- [x] Make the GitHub repository public.
+- [x] Create the issue labels the forms use: `data`, `factors`, `state-rules`, `vehicles`.
+- [x] Turn on private vulnerability reporting.
+- [x] Set up contact@bolewood.com (a Google Group that accepts outside mail).
+- [x] Open starter issues for the five numbers that need a source ([good first issues](https://github.com/bolewood/notaquote-fyi/labels/good%20first%20issue)).
+- [ ] Remove `noindex` (in `next.config.ts` and `src/app/robots.ts`) after sharing privately with friends.
