@@ -39,7 +39,7 @@ Other scripts: `npm test`, `npm run lint`, `npm run typecheck`, and `npm run bui
 
 The idea is simple, and the goal is that every piece of it can be checked:
 
-1. **A starting point.** If you tell us what you pay now, we start from your real number. If you don't, we start from a typical premium for your state: roughly what drivers there pay in a year, taken from a public source. (Those state figures are still being gathered. Until a state has one, the site tells you plainly what it's starting from.)
+1. **A starting point.** If you tell us what you pay now, we start from your real number. If you don't, we start from a typical premium for your state: roughly what drivers there pay in a year, taken from a public source. (We now have one for every state and DC: NAIC's 2023 average for liability plus collision and comprehensive, listed on the Sources page. The calculator doesn't start from it yet; until it does, the site tells you plainly what it's starting from.)
 2. **Factors.** Each thing that changes the price, like the driver's age, the car, the deductible (the part of a claim you pay yourself), or the coverage level, is a multiplier. Each multiplier should cite a public source and the date it was checked.
 3. **A range, not a price.** Where we're less sure, the range gets wider. Real quotes can land above or below it.
 
@@ -51,11 +51,11 @@ Every dollar figure should come from one set of math that runs in your browser a
 | --- | --- |
 | `src/app/` | The pages. The calculator is `page.tsx`; the rest are the explainer pages (methodology, sources, privacy, and so on). |
 | `src/components/` | The building blocks of the interface. |
-| `src/lib/` | The logic: the factor engine (`factor-engine.ts`), state rules (`state-rules.ts`), scenario options (`scenario.ts`), the vehicle catalog, share links, "Suggest a fix" links (`suggest-fix.ts`), and the tests (`*.test.ts`). |
+| `src/lib/` | The logic: the factor engine (`factor-engine.ts`), state rules (`state-rules.ts`), typical premium by state (`state-baselines.ts`), scenario options (`scenario.ts`), the vehicle catalog, share links, "Suggest a fix" links (`suggest-fix.ts`), and the tests (`*.test.ts`). |
 | `src/data/` | The factor bundle and the list of sources, as JSON. |
 | `public/catalog/` | The vehicle catalog, built from NHTSA and FuelEconomy.gov data. |
 | `scripts/` | The script that rebuilds the vehicle catalog (`npm run catalog:build`). |
-| `data/` | Research notes and assumption logs for each kind of data. |
+| `data/` | Research notes for each kind of data, plus two data files you can edit directly: the state minimums (`data/state-rules/state-rules.json`, 50 states and DC, each with sources and a check date) and the typical premium by state (`data/state-baselines/state-baselines.json`). |
 | `docs/` | The [roadmap](docs/ROADMAP.md) and the [voice guide](docs/VOICE.md) for anything a visitor reads. |
 | `.github/` | Issue forms, the pull request template, and CI. |
 

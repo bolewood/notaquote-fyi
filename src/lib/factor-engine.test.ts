@@ -49,7 +49,7 @@ test("bundles are safe to ship without a cleared baseline", () => {
   assert.equal(DATA_BUNDLE_VERSION, FACTOR_BUNDLE_VERSION)
   assert.equal(FACTOR_BUNDLE_VERSION, "factors-2026-09-21")
   assert.equal(COPY_MANIFEST, MANIFEST_VERSION)
-  assert.equal(MANIFEST_VERSION, "manifest-2026-09-21")
+  assert.match(MANIFEST_VERSION, /^manifest-\d{4}-\d{2}-\d{2}$/)
 })
 
 test("the engine does not emit dollars when no premium is entered", () => {
@@ -194,16 +194,17 @@ test("factor values are not the sample display weights", () => {
   assert.equal(source.includes("sampleWeight"), false)
 })
 
-test("NAIC manifest rows cite the publications and store no figures", () => {
+test("NAIC manifest rows cite the publications, and only the final report is used", () => {
   const [supplement, report] = naicPublicationRows()
   assert.equal(supplement.catalogCode, "AUT-PB 2023")
   assert.equal(supplement.publicationDate, "June 2025")
-  assert.match(supplement.licenseNote, /Not cleared/)
+  assert.match(supplement.licenseNote, /Not used/)
   assert.deepEqual(supplement.derivedFields, [])
   assert.equal(report.catalogCode, "AUT-PB 2022-2023")
   assert.equal(report.publicationDate, "December 2025")
-  assert.match(report.licenseNote, /Not cleared/)
-  assert.deepEqual(report.derivedFields, [])
+  assert.match(report.licenseNote, /Used with credit/)
+  assert.match(report.licenseNote, /Source: NAIC, 2022\/2023 Auto Insurance Database Report, 2023 data/)
+  assert.ok(report.derivedFields.length > 0)
   assert.match(NAIC_PARAPHRASE, /car-years/)
   assert.equal(/naic estimate/i.test(NAIC_PARAPHRASE), false)
   assert.equal(NAIC_PARAPHRASE.includes("$"), false)

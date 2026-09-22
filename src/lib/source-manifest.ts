@@ -3,7 +3,7 @@ import manifestFile from "@/data/source-manifest.json"
 export const MANIFEST_VERSION = manifestFile.version
 
 export const NAIC_PARAPHRASE =
-  "The June 2025 supplement and the December 2025 report describe statewide written-premium statistics. Average expenditure, in those publications, divides liability, collision, and comprehensive premium by liability car-years. A combined average adds the three coverage-level averages and describes a policy that carries all three. The publications say the figures leave out the driver, the vehicle, the limits, the deductible, and the state’s tort and traffic setting. They are not a price for one person and one car. This bundle stores none of those figures, and the planning range is not produced from them."
+  "NAIC’s 2022/2023 Auto Insurance Database Report (December 2025) describes statewide written-premium statistics. Average expenditure divides liability, collision, and comprehensive premium by liability car-years. The combined average premium adds the three coverage-level averages and describes a policy that carries all three. NAIC says the figures leave out the driver, the vehicle, the limits, the deductible, and the state’s tort and traffic setting, so they are not a price for one person and one car. We store the 2023 per-state figures, with credit, as a typical starting point for each state. The planning range doesn’t use them yet."
 
 export type ManifestRow = {
   id: string
@@ -48,7 +48,7 @@ export function citationLabel(row: ManifestRow): string {
 }
 
 export function assertManifestSafe(): void {
-  if (MANIFEST_VERSION !== "manifest-2026-09-21") {
+  if (!/^manifest-\d{4}-\d{2}-\d{2}$/.test(MANIFEST_VERSION)) {
     throw new Error(`Unexpected manifest version ${MANIFEST_VERSION}`)
   }
 
@@ -82,13 +82,13 @@ export function assertManifestSafe(): void {
   const supplement = manifestRow("naic-aut-pb-2023")
   const report = manifestRow("naic-aut-pb-2022-2023")
   if (!supplement || !report) throw new Error("NAIC publication rows are missing")
+  if (!/not used/i.test(supplement.licenseNote) || supplement.derivedFields.length !== 0) {
+    throw new Error(`${supplement.id} must say it is not used and store no fields`)
+  }
+  if (!/used with credit/i.test(report.licenseNote) || report.derivedFields.length === 0) {
+    throw new Error(`${report.id} must say it is used with credit and list its fields`)
+  }
   for (const row of [supplement, report]) {
-    if (!/not cleared/i.test(row.licenseNote)) {
-      throw new Error(`${row.id} is not marked not cleared`)
-    }
-    if (row.derivedFields.length !== 0) {
-      throw new Error(`${row.id} has derived fields`)
-    }
     if (!row.catalogCode || !row.publicationDate || !row.url) {
       throw new Error(`${row.id} is missing a citation field`)
     }
@@ -105,7 +105,7 @@ export function assertManifestSafe(): void {
 
   const trend = manifestRow("bls-cpi-mv-insurance")
   if (!trend || trend.derivedFields.length !== 0) {
-    throw new Error("BLS row must store no derived index")
+    throw new Error("BLS row must not feed a derived figure")
   }
   if (!/not applied/i.test(trend.licenseNote)) {
     throw new Error("BLS row must say the series is not applied")

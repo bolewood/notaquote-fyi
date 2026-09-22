@@ -3,6 +3,7 @@ import { RecordTrustView } from "@/components/record-trust-view"
 import { TrustArticle } from "@/components/trust-article"
 import { formatCatalogDate } from "@/lib/catalog"
 import { DATA_BUNDLE_VERSION, MANIFEST_VERSION } from "@/lib/copy"
+import { STATE_BASELINE_ATTRIBUTION } from "@/lib/state-baselines"
 import { STATE_RULES_VERSION } from "@/lib/state-rules"
 import { GITHUB_REPO_URL } from "@/lib/suggest-fix"
 import {
@@ -64,9 +65,16 @@ export default function DataLicensesPage() {
         weights. Those weights are not the factor engine.
       </p>
       <p>
-        NAIC, HLDI, SERFF, and publisher premium tables are not in this
-        repository. The NAIC rows in the manifest say not cleared and store no
-        figures. IIHS/HLDI is a citation link. BLS CPI is not applied.
+        We use one number per state from NAIC&rsquo;s 2022/2023 Auto Insurance
+        Database Report: the 2023 combined average premium, plus the liability
+        average and average expenditure from the same year. Numbers like these
+        are facts, and the project owner approved using them for this
+        non-commercial project, with credit. Wherever one appears, it&rsquo;s
+        labeled &ldquo;{STATE_BASELINE_ATTRIBUTION}.&rdquo; We don&rsquo;t copy
+        the report&rsquo;s text or tables, and the report itself isn&rsquo;t in
+        this repository. HLDI, SERFF, and publisher premium tables aren&rsquo;t
+        here either. IIHS/HLDI is a citation link. The BLS price index is
+        recorded next to the state figures but not applied.
       </p>
       <p>
         IIHS/HLDI material is not copied. Nothing on this site is a

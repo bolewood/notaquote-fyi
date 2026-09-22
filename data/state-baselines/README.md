@@ -2,7 +2,9 @@
 
 If you don't tell us what you pay now, we need somewhere to start. This is that starting point: one typical yearly premium for each state and DC, from a public source you can check yourself.
 
-The data lives in `src/data/state-baselines.json` (it sits next to the other data the app bundles). `src/lib/state-baselines.ts` reads it, and `stateBaseline("OH")` returns Ohio's figure with its source. Nothing in the pricing engine uses it yet. Wiring it in is a separate piece of work.
+The data lives in `state-baselines.json` in this folder. `src/lib/state-baselines.ts` reads it, checks it when it loads (all 51 codes, no extras, positive numbers, `annual` equal to the rounded exact figure), and `stateBaseline("OH")` returns Ohio's figure with its source. The Sources page lists every state. The pricing engine doesn't use these yet. Wiring them in is a separate piece of work.
+
+Wherever a figure is shown, label it: **Source: NAIC, 2022/2023 Auto Insurance Database Report, 2023 data** (exported as `STATE_BASELINE_ATTRIBUTION`).
 
 Version `state-baselines-2026-09-22`, checked 22 September 2026.
 
@@ -28,6 +30,8 @@ Two other figures from the same report and year are stored alongside, in case th
 - `averageExpenditure`: Table 4, printed page 24. Total premium divided by all insured cars, including cars with liability only. NAIC calls it an estimate of what consumers spent on average. It's lower than the combined premium because many cars don't carry collision or comprehensive.
 
 The countrywide figures from the same tables are stored as `countrywide`. They're NAIC's own national numbers, not an average of the state rows.
+
+**Why 1,438 in NAIC's text and 1,439 here?** NAIC's summary says the countrywide combined average premium was "$1,438". Table 5 prints it as 1,438.60. NAIC's text drops the cents; we round to the nearest dollar, so `annual` is 1,439. The exact figure, 1438.6, is stored next to it. If you compare a state against a whole-dollar figure quoted elsewhere, expect the same one-dollar difference whenever the cents are 50 or more.
 
 ## What these numbers are not
 
@@ -60,7 +64,7 @@ August 2026 ÷ the 2023 average is about 1.18. That's a rough national multiplie
 - **One measure for everyone.** We picked the combined average premium because it matches a clear kind of policy (liability plus collision plus comprehensive) and is available for all 51 jurisdictions in the same year. The expenditure figure mixes liability-only and full-coverage cars, so it's harder to explain as "a typical policy."
 - **The final report, not the preview.** NAIC published a preliminary 2023 supplement in June 2025 (https://content.naic.org/sites/default/files/aut-db_1.pdf). The full report revised many 2023 values (California's expenditure went from 1,223.16 to 1,225.02, for example). We use the full report throughout. If you spot-check against the June 2025 supplement, some numbers won't match. That's expected.
 - **Rounding.** `annual` rounds half up to whole dollars. The exact printed figure stays next to it.
-- **Copyright.** The report says "© 2025 National Association of Insurance Commissioners. All rights reserved" and asks for written permission to reproduce it. We store only per-state numbers, which are facts, with credit and a link to NAIC. We don't copy its text or tables, and the PDF isn't in this repository (a test makes sure of that). If NAIC asks us to handle this differently, we will. The project owner may also want to ask NAIC for permission. Earlier versions of this project kept NAIC figures out entirely for this reason. This version takes the "facts with credit" view on purpose.
+- **Copyright and permission.** The report says "© 2025 National Association of Insurance Commissioners. All rights reserved" and asks for written permission to reproduce it. We store only per-state numbers, which are facts, with credit and a link to NAIC. We don't copy its text or tables, and the PDF isn't in this repository (a test makes sure of that). The project owner reviewed this and approved using the per-state figures for this non-commercial project. Earlier versions kept NAIC figures out entirely; the source manifest (`src/data/source-manifest.json`) now marks the December 2025 report "Used with credit" and the June 2025 supplement "Not used". If NAIC asks us to handle this differently, we will.
 
 ## Updating
 

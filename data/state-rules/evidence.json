@@ -70,25 +70,31 @@
     ],
     "AR": [
       {
-        "label": "A.C.A. 27-22-104",
+        "label": "Arkansas Insurance Department, Consumers FAQ: \"What coverages are mandatory?\"",
+        "url": "https://insurance.arkansas.gov/consumer-assistance/consumer-services/consumers-faq/",
+        "supports": "biPerPerson, biPerAccident, pd",
+        "quote": "The minimum liability you are required to carry by law is $25,000 per person for bodily injury, $50,000 per accident and $25,000 to cover property damage to other's property."
+      },
+      {
+        "label": "A.C.A. 27-22-104 (Lexis public access, search for the section)",
         "url": "https://advance.lexis.com/container?config=00JAA3ZTU0NTIzYy0zZDEyLTRhYmQtYmRmMS1iMWIxNDgxYWMxZTQKAFBvZENhdGFsb2cubRW4ifTiwi5vLw6cI1uX",
         "supports": "biPerPerson, biPerAccident, pd, insuranceRequired",
         "quote": "Not less than twenty-five thousand dollars ($25,000) for bodily injury or death of one (1) person ... fifty thousand dollars ($50,000) ... twenty-five thousand dollars ($25,000) for the damage to or destruction of property of others"
       },
       {
-        "label": "A.C.A. 23-89-403",
+        "label": "A.C.A. 23-89-403 (Lexis public access, search for the section)",
         "url": "https://advance.lexis.com/container?config=00JAA3ZTU0NTIzYy0zZDEyLTRhYmQtYmRmMS1iMWIxNDgxYWMxZTQKAFBvZENhdGFsb2cubRW4ifTiwi5vLw6cI1uX",
         "supports": "umRequired, umLimits",
         "quote": "shall be delivered ... unless coverage is provided therein ... [not] applicable when any insured named in the policy has rejected the coverage in writing"
       },
       {
-        "label": "A.C.A. 23-89-209",
+        "label": "A.C.A. 23-89-209 (Lexis public access, search for the section)",
         "url": "https://advance.lexis.com/container?config=00JAA3ZTU0NTIzYy0zZDEyLTRhYmQtYmRmMS1iMWIxNDgxYWMxZTQKAFBvZENhdGFsb2cubRW4ifTiwi5vLw6cI1uX",
         "supports": "uimRequired",
         "quote": "unless the insured has the opportunity, which he or she may reject in writing, to purchase underinsured motorist coverage"
       },
       {
-        "label": "A.C.A. 23-89-202 and 23-89-203",
+        "label": "A.C.A. 23-89-202 and 23-89-203 (Lexis public access, search for the section)",
         "url": "https://advance.lexis.com/container?config=00JAA3ZTU0NTIzYy0zZDEyLTRhYmQtYmRmMS1iMWIxNDgxYWMxZTQKAFBvZENhdGFsb2cubRW4ifTiwi5vLw6cI1uX",
         "supports": "pipRequired, pipAmount",
         "quote": "shall provide minimum medical and hospital benefits ... up to an aggregate of five thousand dollars ($5,000) per person ... The named insured shall have the right to reject in writing"
@@ -777,19 +783,19 @@
     "MT": [
       {
         "label": "MCA 61-6-103(1)(b)",
-        "url": "https://leg.mt.gov/bills/mca/title_0610/chapter_0060/part_0010/section_0030/0610-0060-0010-0030.html",
+        "url": "https://mca.legmt.gov/bills/mca/title_0610/chapter_0060/part_0010/section_0030/0610-0060-0010-0030.html",
         "supports": "biPerPerson, biPerAccident, pd",
         "quote": "$25,000 because of bodily injury to or death of one person ... $50,000 ... $20,000 because of injury to or destruction of property of others"
       },
       {
         "label": "MCA 61-6-301(1)",
-        "url": "https://leg.mt.gov/bills/mca/title_0610/chapter_0060/part_0030/section_0010/0610-0060-0030-0010.html",
+        "url": "https://mca.legmt.gov/bills/mca/title_0610/chapter_0060/part_0030/section_0010/0610-0060-0030-0010.html",
         "supports": "insuranceRequired",
         "quote": "an owner of a motor vehicle that is registered and operated in Montana ... shall continuously provide insurance against loss resulting from liability"
       },
       {
         "label": "MCA 33-23-201",
-        "url": "https://leg.mt.gov/bills/mca/title_0330/chapter_0230/part_0020/section_0010/0330-0230-0020-0010.html",
+        "url": "https://mca.legmt.gov/bills/mca/title_0330/chapter_0230/part_0020/section_0010/0330-0230-0020-0010.html",
         "supports": "umRequired, umLimits",
         "quote": "may not be delivered or issued ... unless coverage is provided ... in limits for bodily injury or death set forth in 61-6-103 ... The named insured has the right to reject the coverage."
       },
@@ -936,6 +942,12 @@
         "url": "https://www.nysenate.gov/legislation/laws/VAT/311",
         "supports": "biPerPerson, biPerAccident, pd",
         "quote": "twenty-five thousand dollars because of bodily injuries to and fifty thousand dollars because of death of one person ... a limit of ten thousand dollars because of injury to or destruction of property"
+      },
+      {
+        "label": "NY Department of Financial Services, \"How much auto insurance must I carry?\" (plain-language fallback)",
+        "url": "https://www.dfs.ny.gov/faqs/consumer-auto/how-much-auto-insurance-must-i-carry",
+        "supports": "biPerPerson, biPerAccident, pd, pipAmount",
+        "quote": "a minimum amount of liability insurance of $25,000 for bodily injury to one person, $50,000 for bodily injury to all persons, and $10,000 for property damage in any one accident. Mandatory \"no-fault\" coverage of $50,000 is also required."
       },
       {
         "label": "N.Y. Veh. & Traf. Law 312",
@@ -1198,7 +1210,7 @@
         "quote": "$25,000 for each injury or death per accident. $50,000 for total injuries or deaths per accident. $25,000 for property damage per accident."
       },
       {
-        "label": "T.C.A. 56-7-1201 (official Tennessee Code, LexisNexis public access)",
+        "label": "T.C.A. 56-7-1201 (Lexis public access, search for the section)",
         "url": "https://advance.lexis.com/container?config=014CJAA5ZGVhZjA3NS02MmMzLTRlZWQtOGJjNC00YzQ1MmZlNzc2YWYKAFBvZENhdGFsb2e9zYpNUjTRaIWVfyrur9ud",
         "supports": "umRequired, umLimits",
         "quote": "(3) However, any named insured may reject in writing the uninsured motorist coverage completely or select lower limits of the coverage but not less than the minimum coverage"

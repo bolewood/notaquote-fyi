@@ -1,17 +1,22 @@
 import assert from "node:assert/strict"
 import test from "node:test"
-import baselineFile from "@/data/state-baselines.json"
+import baselineFile from "../../data/state-baselines/state-baselines.json"
 import { STATES } from "./scenario"
 import {
   allStateBaselines,
   baselineTrendInputs,
   countrywideBaseline,
+  STATE_BASELINE_ATTRIBUTION,
   STATE_BASELINE_DATA_YEAR,
   STATE_BASELINE_SOURCES,
   STATE_BASELINES_CHECKED_ON,
   STATE_BASELINES_VERSION,
   stateBaseline,
+  validateBaselineFile,
 } from "./state-baselines"
+
+type FileShape = Parameters<typeof validateBaselineFile>[0]
+const clone = (): FileShape => JSON.parse(JSON.stringify(baselineFile)) as FileShape
 
 test("there is one baseline for each of the 50 states and DC", () => {
   const baselines = allStateBaselines()
@@ -78,4 +83,37 @@ test("the price trend is recorded but not applied", () => {
   assert.match(trend.latest.period, /^\d{4}-\d{2}$/)
   assert.ok(trend.dataYearAverage.value > 0 && trend.latest.value > 0)
   assert.match(trend.series.name, /CUUR0000SETE/)
+})
+
+test("the attribution names the source and data year", () => {
+  assert.equal(STATE_BASELINE_ATTRIBUTION, "Source: NAIC, 2022/2023 Auto Insurance Database Report, 2023 data")
+  assert.match(STATE_BASELINE_ATTRIBUTION, new RegExp(String(STATE_BASELINE_DATA_YEAR)))
+})
+
+test("a broken baselines file fails loudly at load time", () => {
+  assert.doesNotThrow(() => validateBaselineFile(clone()))
+
+  const missing = clone()
+  delete (missing.states as Record<string, unknown>).OH
+  assert.throws(() => validateBaselineFile(missing), /missing states OH/)
+
+  const extra = clone()
+  ;(extra.states as Record<string, unknown>).PR = extra.states.OH
+  assert.throws(() => validateBaselineFile(extra), /unknown state codes PR/)
+
+  const negative = clone()
+  negative.states.OH.combinedAveragePremium = -1
+  assert.throws(() => validateBaselineFile(negative), /OH "combinedAveragePremium" must be a positive number/)
+
+  const unrounded = clone()
+  unrounded.states.OH.annual = 999
+  assert.throws(() => validateBaselineFile(unrounded), /OH "annual" is 999/)
+
+  const badSource = clone()
+  badSource.states.OH.sourceId = "nope"
+  assert.throws(() => validateBaselineFile(badSource), /unknown "sourceId"/)
+
+  const badVersion = clone()
+  badVersion.version = "state-baselines-2020-01-01"
+  assert.throws(() => validateBaselineFile(badVersion), /"version" must be/)
 })

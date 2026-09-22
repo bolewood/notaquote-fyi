@@ -10,10 +10,11 @@ import {
   CATALOG_YEAR_MIN,
 } from "@/lib/catalog-meta"
 import {
+  fullySourcedStateRules,
   sourcedStateRules,
   STATE_RULES_VERSION,
-  unsourcedStateRules,
 } from "@/lib/state-rules"
+import { STATE_BASELINE_ATTRIBUTION, STATE_BASELINES_VERSION } from "@/lib/state-baselines"
 
 export const metadata: Metadata = {
   title: "Model version",
@@ -42,12 +43,34 @@ export default function ModelVersionPage() {
         </div>
       </dl>
       <h2 className="text-base font-semibold">Changelog</h2>
+      <section aria-labelledby="changelog-state-data" className="grid gap-2">
+        <h3 id="changelog-state-data" className="font-medium">
+          State rules {STATE_RULES_VERSION} and state baselines {STATE_BASELINES_VERSION}
+        </h3>
+        <p>
+          Every state and DC now has a minimum-coverage row with at least one
+          source link and its own check date ({sourcedStateRules().length} rows;{" "}
+          {fullySourcedStateRules().length} with all three liability figures).
+          Where we couldn&rsquo;t confirm something, the row says so instead of
+          guessing. The table now shows medical payments coverage, marks
+          &ldquo;choice&rdquo; no-fault states as your choice, and lists changes
+          already passed into law with their start dates.
+        </p>
+        <p>
+          Adds a typical yearly premium for each state: NAIC&rsquo;s 2023 combined
+          average premium (liability, collision, and comprehensive). The project
+          owner approved using these per-state figures, with credit.{" "}
+          {STATE_BASELINE_ATTRIBUTION}. The calculator doesn&rsquo;t use them yet,
+          and the model and factor bundle are unchanged. Source manifest{" "}
+          {MANIFEST_VERSION} records the change.
+        </p>
+      </section>
       <section aria-labelledby="changelog-020" className="grid gap-2">
         <h3 id="changelog-020" className="font-medium">
           0.2.0
         </h3>
         <p>
-          Adds the factor engine and source manifest {MANIFEST_VERSION}. Data
+          Adds the factor engine and source manifest manifest-2026-09-21. Data
           bundle {DATA_BUNDLE_VERSION}. The formula is midpoint = base ×
           geography × driver × coverage × vehicle × trend × lawful sensitivity.
           The general base is not cleared, so the engine emits no dollar range
@@ -55,7 +78,9 @@ export default function ModelVersionPage() {
           not applied. Credit stays locked at 1.00. A thin factor or a weak trim
           widens the range. The opening screen still shows the labeled sample
           from 0.1.0-sample. Those sample weights are not this model. No premium
-          figure from NAIC, HLDI, SERFF, or a publisher was added.
+          figure from NAIC, HLDI, SERFF, or a publisher was added. (NAIC
+          per-state figures were added later, in state baselines{" "}
+          {STATE_BASELINES_VERSION}. See the newest entry.)
         </p>
       </section>
       <section aria-labelledby="changelog-comparisons" className="grid gap-2">
@@ -72,16 +97,19 @@ export default function ModelVersionPage() {
       </section>
       <section aria-labelledby="changelog-state-rules" className="grid gap-2">
         <h3 id="changelog-state-rules" className="font-medium">
-          State rules {STATE_RULES_VERSION}
+          State rules state-rules-2026-09-21
         </h3>
         <p>
-          Adds a state_rules table for 50 states and the District of Columbia.{" "}
-          {sourcedStateRules().length} rows cite a statute or
-          insurance-department page opened on 21 September 2026.{" "}
-          {unsourcedStateRules().length} rows have no source URL and no dollar
-          minimum. Credit is unreviewed and the factor is 1.00 on every row.
-          The reviewer field is unsigned. California marks uninsured and underinsured motorist coverage required unless a named insured deletes it in writing. Texas marks personal injury protection and uninsured and underinsured motorist coverage required unless a named insured rejects it in writing. The sample model at that point was 0.1.0-sample. No premium baseline was added. Standard liability,
-          full coverage, and high limits stay 100/300/100 and 250/500/250.
+          Adds a state_rules table for 50 states and the District of Columbia. 6
+          rows cite a statute or insurance-department page opened on 21 September
+          2026. 45 rows have no source URL and no dollar minimum. Credit is
+          unreviewed and the factor is 1.00 on every row. California marks
+          uninsured and underinsured motorist coverage required unless a named
+          insured deletes it in writing. Texas marks personal injury protection
+          and uninsured and underinsured motorist coverage required unless a
+          named insured rejects it in writing. The sample model at that point was
+          0.1.0-sample. No premium baseline was added. Standard liability, full
+          coverage, and high limits stay 100/300/100 and 250/500/250.
         </p>
       </section>
       <section aria-labelledby="changelog-catalog" className="grid gap-2">

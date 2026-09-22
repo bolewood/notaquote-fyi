@@ -96,10 +96,29 @@ Longer research notes belong in the matching `data/*/assumptions.md` file.
 
 ### A state rule (minimum coverage and required coverages)
 
-1. Find the rule on the state's own insurance department site or in the statute.
-2. Find the state's entry in the state rules data, and add the source link and the date you checked it along with the rule itself.
-3. Run `npm test`.
-4. Add your notes to `data/state-rules/assumptions.md`, especially anything unusual (a coverage that's required unless you turn it down in writing, a change taking effect on a future date, and so on).
+Every state's row lives in one file, `data/state-rules/state-rules.json`. [`data/state-rules/README.md`](data/state-rules/README.md) explains each field and the judgment calls behind the current rows.
+
+1. **Find the source.** Use the statute on the state legislature's site, or the state insurance department or DMV page. Note the exact page and today's date.
+2. **Edit the row.** Find the object with your state's `"state"` code and change what's wrong:
+   - Dollar limits: `biPerPerson`, `biPerAccident`, `pd`, and `combinedSingleLimit` if the state names one. Whole dollars, no commas (`25000`).
+   - Coverage marks: `pipRequired`, `medPayRequired`, `umRequired`, `uimRequired`. Use `true`, `false`, `"required-unless-written-rejection"`, `"required-unless-written-deletion"`, `"required-unless-rejected"`, or `null`.
+   - `noFault`: `true`, `false`, or `"choice"`. For `"choice"`, set `noFaultDefault` to what applies if you don't pick (`true`, `false`, or `null`). Otherwise `noFaultDefault` stays `null`.
+   - `sources`: add `{ "label": "...", "url": "https://..." }`. Put the best source for the dollar limits first.
+   - `note`: one to three plain sentences for visitors ([docs/VOICE.md](docs/VOICE.md)).
+   - `uncertain`: anything you couldn't confirm. **If you can't confirm a figure, set it to `null` and say why here.** That's always a valid edit.
+   - `effective`: when the rule took effect, and any recent change.
+   - `scheduledChanges`: a law that's passed but not in effect yet, as `{ "from": "YYYY-MM-DD", "biPerPerson": ..., "biPerAccident": ..., "pd": ..., "summary": "...", "sourceUrl": "https://..." }`. Once that date arrives, a test fails until you apply the new figures to the row and remove the entry.
+3. **Add a quote.** In `data/state-rules/evidence.json`, give your state the same sources in the same order, each with a short `quote` (a sentence or two) from the page.
+4. **Update the dates.** Set the row's `checkedOn` to today (`YYYY-MM-DD`). At the top of `state-rules.json`, set `checkedOn` to the newest row date and `version` to `state-rules-` plus that date. Set the `version` at the top of `evidence.json` to match.
+5. **Run the tests:**
+
+   ```bash
+   npx tsx --test src/lib/state-rules.test.ts
+   ```
+
+   A bad value fails with a message naming the row and field. If you changed a row listed under "PINNED SPOT CHECKS" in that test file on purpose, update the pinned value there too and say why in your pull request. Then run the full set: `npm run lint && npm run typecheck && npm test && npm run build`.
+6. **Look at it.** Run `npm run dev` and open [http://127.0.0.1:41731/sources#state-note-OH](http://127.0.0.1:41731/sources#state-note-OH) (use your state's code). Check the table row, the note, "Details and sources", and the "State minimum" line in the calculator for that state.
+7. **Say what changed.** In the pull request, link the source and add anything unusual to `data/state-rules/README.md`.
 
 ### A vehicle
 
@@ -113,7 +132,8 @@ Every data file carries a version string. Share links record two of them, the mo
 | --- | --- |
 | Factors | `"version"` in `src/data/model-factors.json` |
 | Source list | `"version"` in `src/data/source-manifest.json` |
-| State rules | The version string in the state rules data |
+| State rules | `"version"` and `"checkedOn"` in `data/state-rules/state-rules.json` (see the steps above) |
+| Typical premium by state | `"version"` and `"checkedOn"` in `data/state-baselines/state-baselines.json` |
 | Vehicle catalog | Written for you by `npm run catalog:build` |
 | How the engine does its math | `MODEL_VERSION` in `src/lib/copy.ts` |
 
