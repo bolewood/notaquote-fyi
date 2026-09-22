@@ -1,0 +1,270 @@
+{
+  "_readme": "Which HLDI vehicle families we keep (popular US vehicles and common teen cars), how catalog model names map to HLDI names, and which HLDI class average stands in for each EPA-based class. Families are HLDI model names, compacted, with body, cab, drive, and powertrain words removed. Run `npm run factors:build -- --hldi-full <losses.csv>` to re-pick the subset from a full HLDI download.",
+  "families": {
+    "Acura": [
+      "mdx",
+      "rdx",
+      "integra"
+    ],
+    "Audi": [
+      "q5",
+      "q3",
+      "a4"
+    ],
+    "BMW": [
+      "3series",
+      "5series",
+      "x1",
+      "x3",
+      "x5"
+    ],
+    "Buick": [
+      "encoregx",
+      "envision",
+      "enclave",
+      "envista"
+    ],
+    "Cadillac": [
+      "escalade",
+      "xt5"
+    ],
+    "Chevrolet": [
+      "silverado1500",
+      "equinox",
+      "trax",
+      "tahoe",
+      "traverse",
+      "colorado",
+      "malibu",
+      "trailblazer",
+      "blazer",
+      "camaro",
+      "corvette",
+      "suburban1500"
+    ],
+    "Chrysler": [
+      "pacifica"
+    ],
+    "Dodge": [
+      "durango",
+      "hornet"
+    ],
+    "Ford": [
+      "f150",
+      "f150lightning",
+      "explorer",
+      "escape",
+      "bronco",
+      "broncosport",
+      "maverick",
+      "ranger",
+      "mustang",
+      "mustangmache",
+      "expedition",
+      "edge"
+    ],
+    "GMC": [
+      "sierra1500",
+      "terrain",
+      "acadia",
+      "yukon",
+      "canyon"
+    ],
+    "Honda": [
+      "crv",
+      "civic",
+      "civicsi",
+      "accord",
+      "hrv",
+      "pilot",
+      "odyssey",
+      "passport",
+      "ridgeline"
+    ],
+    "Hyundai": [
+      "tucson",
+      "elantra",
+      "santafe",
+      "palisade",
+      "kona",
+      "venue",
+      "ioniq5",
+      "ioniq6",
+      "sonata",
+      "santacruz"
+    ],
+    "Jeep": [
+      "grandcherokee",
+      "grandcherokeel",
+      "wrangler",
+      "compass",
+      "gladiator"
+    ],
+    "Kia": [
+      "sportage",
+      "telluride",
+      "sorento",
+      "forte",
+      "soul",
+      "seltos",
+      "niro",
+      "ev6",
+      "k5",
+      "carnival"
+    ],
+    "Land Rover": [
+      "rangerover",
+      "rangeroversport",
+      "rangerovervelar",
+      "rangeroverevoque",
+      "defender90",
+      "defender110",
+      "defender130"
+    ],
+    "Lexus": [
+      "rx350",
+      "rx350h",
+      "rx450h",
+      "rx500h",
+      "nx250",
+      "nx350",
+      "nx450",
+      "es250",
+      "es300h",
+      "es350",
+      "tx350",
+      "tx500h"
+    ],
+    "Mazda": [
+      "cx5",
+      "cx30",
+      "cx50",
+      "cx90",
+      "3"
+    ],
+    "Mercedes-Benz": [
+      "glcclass",
+      "gleclass",
+      "cclass"
+    ],
+    "Mini": [
+      "cooper"
+    ],
+    "Mitsubishi": [
+      "outlander"
+    ],
+    "Nissan": [
+      "rogue",
+      "altima",
+      "sentra",
+      "kicks",
+      "versa",
+      "pathfinder",
+      "frontier",
+      "murano",
+      "leaf"
+    ],
+    "Ram": [
+      "1500",
+      "1500classic"
+    ],
+    "Subaru": [
+      "outback",
+      "forester",
+      "crosstrek",
+      "impreza",
+      "ascent",
+      "legacy"
+    ],
+    "Tesla": [
+      "modely",
+      "model3",
+      "models",
+      "modelx",
+      "cybertruck"
+    ],
+    "Toyota": [
+      "rav4",
+      "rav4prime",
+      "camry",
+      "corolla",
+      "corollacross",
+      "highlander",
+      "grandhighlander",
+      "tacoma",
+      "tundra",
+      "4runner",
+      "prius",
+      "priusprime",
+      "sienna",
+      "bz4x",
+      "venza"
+    ],
+    "Volkswagen": [
+      "tiguan",
+      "jetta",
+      "atlas",
+      "atlascrosssport",
+      "id4",
+      "taos"
+    ]
+  },
+  "aliases": {
+    "mazda|mazda3": "3",
+    "chevrolet|silverado": "silverado1500",
+    "gmc|sierra": "sierra1500",
+    "mini|hardtop": "cooper",
+    "bmw|228i": "2series",
+    "bmw|230i": "2series",
+    "bmw|330i": "3series",
+    "bmw|330e": "3series",
+    "bmw|430i": "4series",
+    "bmw|530i": "5series",
+    "bmw|540i": "5series",
+    "bmw|sdrive28i": "x1",
+    "bmw|xdrive28i": "x1",
+    "chevrolet|equinoxev": "equinox",
+    "chevrolet|blazerev": "blazer",
+    "chevrolet|suburban": "suburban1500"
+  },
+  "classes": {
+    "small-car": "Smallcar 4-door",
+    "midsize-car": "Midsizecar 4-door",
+    "large-car": "Midsizecar 4-door",
+    "two-seater": "Midsize sports car",
+    "small-suv": "Small SUV",
+    "large-suv": "Large SUV",
+    "suv": "Midsize SUV",
+    "small-pickup": "All small pickups",
+    "large-pickup": "All large pickups",
+    "minivan": "Very large Minivan",
+    "van": "Very large van",
+    "special-purpose": "Midsize SUV"
+  },
+  "electricClassCells": {
+    "small-car": [
+      "Four-door cars",
+      "Small"
+    ],
+    "midsize-car": [
+      "Four-door cars",
+      "Midsize"
+    ],
+    "small-suv": [
+      "SUVs",
+      "Small"
+    ],
+    "large-suv": [
+      "SUVs",
+      "Large"
+    ],
+    "suv": [
+      "SUVs",
+      "Midsize"
+    ],
+    "large-pickup": [
+      "Pickups",
+      "Large"
+    ]
+  }
+}

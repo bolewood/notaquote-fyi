@@ -1,212 +1,319 @@
 import assert from "node:assert/strict"
-import { readFileSync, readdirSync, statSync } from "node:fs"
+import { readdirSync, readFileSync, statSync } from "node:fs"
 import path from "node:path"
 import test from "node:test"
-import { AGE_WEIGHT } from "./sample-range"
-import { MOLLY } from "./scenario"
+import type { VehicleCatalog } from "./catalog"
+import { vehicleFacts, type VehicleFacts } from "./catalog-class"
 import {
   assertFactorBundleSafe,
-  factorSnapshot,
+  compareVehicles,
+  estimate,
+  FACTOR_BUNDLE,
   FACTOR_BUNDLE_VERSION,
+  factorSnapshot,
+  matchVehicleRows,
+  publishedFactorGroups,
   runFactorEngine,
+  selectionKeys,
+  vehicleRelativity,
+  whatIf,
   type PremiumAnchor,
+  type StartingPoint,
 } from "./factor-engine"
-import {
-  assertManifestSafe,
-  MANIFEST_VERSION,
-  NAIC_PARAPHRASE,
-  naicPublicationRows,
-} from "./source-manifest"
-import { DATA_BUNDLE_VERSION, DISCLAIMER, MANIFEST_VERSION as COPY_MANIFEST, MODEL_VERSION, SAMPLE_RANGE_HEADING } from "./copy"
+import type { FactorBundle } from "./factor-types"
+import { DATA_BUNDLE_VERSION, MODEL_VERSION } from "./copy"
+import { JAYDEN, MOLLY, type Scenario } from "./scenario"
 
-const VERBATIM_DISCLAIMER =
-  "THIS IS NOT A QUOTE. NotAQuote.FYI is an independent educational estimate tool, not an insurance company, agency, broker, producer, or lead-generation service. Actual premiums are set by licensed insurers after underwriting and may vary materially."
+const catalog = JSON.parse(readFileSync("public/catalog/vehicle-catalog.json", "utf8")) as VehicleCatalog
 
-function anchorFor(scenario: typeof MOLLY, amount: number): PremiumAnchor {
-  return { amount, snapshot: factorSnapshot(scenario) }
+function car(year: number, make: string, model: string, trim: string): VehicleFacts {
+  const trims = catalog.vehicles[String(year)]?.[make]?.[model] ?? []
+  assert.ok(trims.some((item) => item.name === trim), `${year} ${make} ${model} ${trim}`)
+  return vehicleFacts(catalog, { year, make, model, trim })
 }
 
-function engine(
-  scenario: typeof MOLLY,
-  anchor: PremiumAnchor | null,
-  trim: "high" | "limited" | "unresolved" | null = "high",
-) {
-  return runFactorEngine({
-    scenario,
-    anchor,
-    trimConfidence: trim,
-    catalogStatus: "ready",
-    stale: false,
-  })
+function on(scenario: Scenario, vehicle: VehicleFacts): Scenario {
+  return { ...scenario, year: vehicle.year, make: vehicle.make, model: vehicle.model, trim: vehicle.trim }
 }
 
-test("bundles are safe to ship without a cleared baseline", () => {
+const F150 = car(2023, "Ford", "F-150", "F150 Pickup 4WD")
+const MODEL_Y = car(2025, "Tesla", "Model Y", "Model Y Long Range AWD")
+const RAV4 = car(2023, "Toyota", "RAV4", "RAV4")
+const RAV4_HYBRID = car(2023, "Toyota", "RAV4", "RAV4 Hybrid AWD")
+const LIGHTNING = car(2023, "Ford", "F-150", "F-150 Lightning 4WD")
+const RANGE_ROVER = car(2023, "Land Rover", "Range Rover", "New Range Rover")
+const CIVIC = car(2024, "Honda", "Civic", "Civic 4Dr")
+
+const MOLLY_F150 = on(MOLLY, F150)
+const YOURS: StartingPoint = { annual: 1800, scenario: MOLLY_F150, vehicle: F150, kind: "yours" }
+
+const JARGON = /\b(anchor|baseline|thin|lawful|sensitivity|cleared|relativit|counsel|family|factor engine)\b/i
+
+test("bundle versions line up and the guardrails pass", () => {
   assertFactorBundleSafe()
-  assertManifestSafe()
-  assert.equal(DISCLAIMER, VERBATIM_DISCLAIMER)
-  assert.equal(SAMPLE_RANGE_HEADING, "Sample range. Baseline not cleared.")
-  assert.equal(MODEL_VERSION, "0.2.0")
   assert.equal(DATA_BUNDLE_VERSION, FACTOR_BUNDLE_VERSION)
-  assert.equal(FACTOR_BUNDLE_VERSION, "factors-2026-09-21")
-  assert.equal(COPY_MANIFEST, MANIFEST_VERSION)
-  assert.equal(MANIFEST_VERSION, "manifest-2026-09-21")
+  assert.equal(FACTOR_BUNDLE_VERSION, "factors-2026-09-22")
+  assert.equal(MODEL_VERSION, "0.2.0")
 })
 
-test("the engine does not emit dollars when no premium is entered", () => {
-  const result = engine(MOLLY, null)
-  assert.equal(result.dollars, null)
-  assert.equal(result.baselineCleared, false)
-  assert.equal(result.trendApplied, false)
-  assert.equal(result.creditFactor, 1)
-  assert.match(result.explanation, /did not emit a dollar range/)
-  assert.match(result.explanation, /labeled sample/)
-  assert.match(result.explanation, /not this engine's output/)
-  assert.match(result.explanation, /40–64/)
-  assert.match(result.explanation, /Illinois/)
-  assert.match(result.explanation, /full coverage/)
-  assert.match(result.explanation, /F-150/)
-  assert.equal(result.confidence, "low")
-  assert.match(result.confidenceDetail, /baseline is not cleared/i)
+test("the guardrails reject unsourced or unlabeled cells", () => {
+  const copy = () => JSON.parse(JSON.stringify(FACTOR_BUNDLE)) as FactorBundle
+  const noSource = copy()
+  noSource.groups["driver-age"].cells["26-39"].sources = []
+  assert.throws(() => assertFactorBundleSafe(noSource), /needs a source/)
+  const unknownSource = copy()
+  unknownSource.groups["driver-age"].cells["26-39"].sources = ["made-up"]
+  assert.throws(() => assertFactorBundleSafe(unknownSource), /unknown source/)
+  const quietGuess = copy()
+  quietGuess.groups["annual-mileage"].cells["under-7500"].derivation = "Seems right."
+  assert.throws(() => assertFactorBundleSafe(quietGuess), /estimate/)
+  const narrowGuess = copy()
+  const cell = narrowGuess.groups["annual-mileage"].cells["under-7500"]
+  cell.low = cell.value
+  cell.high = cell.value
+  assert.throws(() => assertFactorBundleSafe(narrowGuess), /widen/)
+  const credit = copy()
+  credit.groups.credit = { title: "Credit", appliesTo: "whole", note: "", cells: {} }
+  assert.throws(() => assertFactorBundleSafe(credit), /credit/)
 })
 
-test("changing age, state, coverage, or vehicle updates the no-dollar explanation", () => {
-  const base = engine(MOLLY, null).explanation
-  const older = engine({ ...MOLLY, age: "65+" }, null).explanation
-  const texas = engine({ ...MOLLY, state: "TX" }, null).explanation
-  const standard = engine({ ...MOLLY, coverage: "standard" }, null).explanation
-  const rav4 = engine(
-    { ...MOLLY, make: "Toyota", model: "RAV4", trim: "RAV4" },
-    null,
-  ).explanation
-  assert.notEqual(base, older)
-  assert.match(older, /65\+/)
-  assert.notEqual(base, texas)
-  assert.match(texas, /Texas/)
-  assert.notEqual(base, standard)
-  assert.match(standard, /standard liability/)
-  assert.notEqual(base, rav4)
-  assert.match(rav4, /RAV4/)
-  for (const text of [base, older, texas, standard, rav4]) {
-    assert.match(text, /did not emit a dollar range/)
-  }
+test("your own premium comes back unchanged when nothing changes", () => {
+  const result = estimate(YOURS, MOLLY_F150, { vehicle: F150 })
+  assert.equal(result.likely, 1800)
+  assert.equal(result.monthly, 150)
+  assert.equal(result.steps.length, 0)
+  assert.ok(result.low < result.likely && result.likely < result.high)
+  assert.match(result.summary, /\$1,800 a year you told us you pay now/)
 })
 
-test("an entered premium is the base, and age names the driver family", () => {
-  const anchor = anchorFor(MOLLY, 1800)
-  const entered = engine(MOLLY, anchor)
-  assert.equal(entered.dollars?.likely, 1800)
-  assert.equal(entered.dollars?.low, 1296)
-  assert.equal(entered.dollars?.high, 2466)
-  assert.equal(entered.dollars?.monthly, 150)
-  assert.match(entered.explanation, /No factor family has changed/)
-  assert.match(entered.explanation, /base for this scenario only/)
-  assert.match(entered.explanation, /Trend is not applied/)
-
-  const aged = engine({ ...MOLLY, age: "16-18" }, anchor)
-  assert.equal(aged.dollars?.likely, 2952)
-  assert.ok(aged.dollars && aged.dollars.low < aged.dollars.likely)
-  assert.ok(aged.dollars && aged.dollars.likely < aged.dollars.high)
-  assert.match(aged.explanation, /Driver factor changed/)
-  assert.match(aged.explanation, /moved from the amount entered/)
-  assert.equal(aged.familiesChanged.includes("driver"), true)
-  assert.notEqual(aged.dollars?.likely, entered.dollars?.likely)
+test("arithmetic is exact: one sourced change moves the premium by its factor", () => {
+  const younger = estimate(YOURS, { ...MOLLY_F150, age: "26-39" }, { vehicle: F150 })
+  const factor = FACTOR_BUNDLE.groups["driver-age"].cells["26-39"].value
+  // 1,800 × factor ÷ 100, rounded half up.
+  assert.equal(younger.likely, Math.floor((1800 * factor * 2 + 100) / 200))
+  assert.equal(younger.steps.length, 1)
+  assert.equal(younger.steps[0].group, "driver-age")
+  assert.equal(younger.steps[0].basis, "sourced")
+  assert.ok(younger.low < younger.likely && younger.likely < younger.high)
 })
 
-test("state, coverage, and vehicle name their factor families", () => {
-  const anchor = anchorFor(MOLLY, 1800)
-  const state = engine({ ...MOLLY, state: "TX" }, anchor)
-  assert.equal(state.dollars?.likely, 1800)
-  assert.match(state.explanation, /Geography factor changed/)
-  assert.match(state.explanation, /stays on the amount entered/)
-  assert.match(state.explanation, /geography factor is thin/)
-
-  const coverage = engine({ ...MOLLY, coverage: "standard" }, anchor)
-  assert.equal(coverage.dollars?.likely, 1404)
-  assert.match(coverage.explanation, /Coverage factor changed/)
-
-  const vehicle = engine(
-    { ...MOLLY, make: "Toyota", model: "RAV4", trim: "RAV4" },
-    anchor,
+test("the teen checkbox does not stack on the 16–18 age band", () => {
+  const teen = { ...MOLLY_F150, age: "16-18" as const, yearsLicensed: "under-1" as const }
+  const flagged = estimate(YOURS, { ...teen, teen: true }, { vehicle: F150 })
+  const unflagged = estimate(YOURS, { ...teen, teen: false }, { vehicle: F150 })
+  assert.equal(flagged.likely, unflagged.likely)
+  assert.equal(selectionKeys(teen)["driving-experience"], "not-used", "age already covers a new driver")
+  const senior = { ...MOLLY_F150, age: "65+" as const }
+  assert.equal(
+    estimate(YOURS, { ...senior, teen: true, goodStudent: true, driverTraining: true }, { vehicle: F150 }).likely,
+    estimate(YOURS, senior, { vehicle: F150 }).likely,
+    "teen, good-student, and driver-training switches do nothing for a 65+ driver",
   )
-  assert.equal(vehicle.dollars?.likely, 1622)
-  assert.match(vehicle.explanation, /Vehicle factor changed/)
 })
 
-test("a weak trim lowers confidence and widens the range", () => {
-  const anchor = anchorFor(MOLLY, 1800)
-  const strong = engine(MOLLY, anchor, "high")
-  const limited = engine(MOLLY, anchor, "limited")
-  const unresolved = engine(MOLLY, anchor, "unresolved")
-  assert.equal(strong.confidence, "low")
-  assert.equal(limited.confidence, "lower")
-  assert.equal(unresolved.confidence, "lower")
-  assert.match(limited.confidenceDetail, /lower/)
-  assert.match(limited.explanation, /trim match is limited/)
-  const span = (result: ReturnType<typeof engine>) =>
-    (result.dollars?.high ?? 0) - (result.dollars?.low ?? 0)
-  assert.ok(span(limited) > span(strong))
-  assert.ok(span(unresolved) > span(limited))
+test("what if I bought a Tesla Model Y?", () => {
+  const next = on(MOLLY_F150, MODEL_Y)
+  const result = whatIf(YOURS, MOLLY_F150, next, { currentVehicle: F150, nextVehicle: MODEL_Y })
+  assert.equal(result.current.likely, 1800)
+  assert.equal(result.delta, result.next.likely - 1800)
+  assert.equal(result.deltaRounded % 10, 0)
+  assert.match(result.headline, /^Switching to a 2025 Tesla Model Y: about [+−]\$[\d,]+ a year\.$|^Switching to a 2025 Tesla Model Y: about the same\.$/)
+  assert.equal(result.next.vehicle.level, "model")
+  assert.ok(result.next.vehicle.rows.every((row) => row.family === "modely" && row.powertrain === "electric"))
+  assert.ok(result.next.vehicle.rows.every((row) => row.drive === "4wd"), "AWD Model Y uses HLDI's 4WD series")
+  assert.notEqual(result.next.likely, estimate(YOURS, on(MOLLY_F150, RAV4), { vehicle: RAV4 }).likely)
 })
 
-test("an unclassified vehicle is a thin factor and widens the range further", () => {
-  const anchor = anchorFor(MOLLY, 1800)
-  const known = engine(MOLLY, anchor)
-  const other = engine(
-    { ...MOLLY, make: "Polestar", model: "2", trim: "Long range" },
-    anchor,
+test("a comparison table of 15 cars for the same driver keeps order and stays sane", () => {
+  const picks: [number, string, string][] = [
+    [2025, "Tesla", "Model Y"],
+    [2023, "Toyota", "RAV4"],
+    [2024, "Honda", "Civic"],
+    [2024, "Honda", "CR-V"],
+    [2024, "Toyota", "Corolla"],
+    [2024, "Toyota", "Camry"],
+    [2024, "Hyundai", "Elantra"],
+    [2024, "Mazda", "CX-5"],
+    [2024, "Subaru", "Outback"],
+    [2024, "Kia", "Soul"],
+    [2024, "Nissan", "Sentra"],
+    [2023, "Ford", "F-150"],
+    [2024, "Chevrolet", "Equinox"],
+    [2024, "Jeep", "Wrangler"],
+    [2018, "Honda", "Fit"],
+  ]
+  const vehicles = picks.map(([year, make, model]) => {
+    const trims = catalog.vehicles[String(year)]?.[make]?.[model] ?? []
+    assert.ok(trims.length > 0, `${year} ${make} ${model}`)
+    return vehicleFacts(catalog, { year, make, model, trim: trims[0].name })
+  })
+  const teenDriver: Scenario = { ...JAYDEN, state: "IL" }
+  const rows = compareVehicles(YOURS, teenDriver, vehicles)
+  assert.equal(rows.length, 15)
+  rows.forEach((row, index) => {
+    assert.equal(row.vehicle, vehicles[index])
+    assert.ok(row.estimate.low >= 1 && row.estimate.low < row.estimate.likely && row.estimate.likely < row.estimate.high)
+    assert.ok(row.estimate.steps.some((step) => step.group === "driver-age"))
+  })
+  const levels = rows.map((row) => row.estimate.vehicle.level)
+  assert.ok(levels.filter((level) => level === "model").length >= 12, levels.join(","))
+  assert.equal(rows[14].estimate.vehicle.level, "class", "the Fit is not in HLDI 2022–24, so its class stands in")
+  assert.ok(new Set(rows.map((row) => row.estimate.likely)).size > 8, "cars differ")
+})
+
+test("vehicle rows: Lightning, hybrids, Range Rover, and Civic match the right HLDI series", () => {
+  const lightning = matchVehicleRows(LIGHTNING)
+  assert.ok(lightning.length > 0)
+  assert.ok(lightning.every((row) => row.family === "f150lightning"))
+  const f150 = matchVehicleRows(F150)
+  assert.ok(f150.length > 0 && f150.every((row) => row.family === "f150" && row.powertrain === "combustion" && row.drive === "4wd"))
+  const hybrid = matchVehicleRows(RAV4_HYBRID)
+  assert.ok(hybrid.length > 0 && hybrid.every((row) => row.family === "rav4" && row.powertrain === "hybrid"))
+  const rav4 = matchVehicleRows(RAV4)
+  assert.ok(rav4.length > 0 && rav4.every((row) => row.powertrain === "combustion" && row.drive === "2wd"))
+  const rangeRover = matchVehicleRows(RANGE_ROVER)
+  assert.ok(rangeRover.length > 0 && rangeRover.every((row) => row.family === "rangerover" && /Luxury SUVs/.test(row.hldiClass)))
+  const civic = matchVehicleRows(CIVIC)
+  assert.ok(civic.length > 0 && civic.every((row) => row.family === "civic"))
+})
+
+test("vehicle factors move only their own share of the premium", () => {
+  const liabilityOnly = { ...MOLLY_F150, coverage: "standard" as const }
+  const start: StartingPoint = { annual: 1000, scenario: liabilityOnly, vehicle: RAV4, kind: "yours" }
+  const rr = vehicleRelativity(RANGE_ROVER)
+  const rav = vehicleRelativity(RAV4)
+  const result = estimate(start, on(liabilityOnly, RANGE_ROVER), { vehicle: RANGE_ROVER })
+  // Liability only: the ratio is the liability relativities alone (exact fractions).
+  const expected = (1000 * Number(rr.liability.num) * Number(rav.liability.den)) /
+    (Number(rr.liability.den) * Number(rav.liability.num))
+  assert.equal(result.likely, Math.round(expected), `${result.likely} vs ${expected}`)
+  assert.ok(rr.physicalHundredths > rav.physicalHundredths * 2, "the Range Rover's damage losses are far higher")
+  const full = estimate({ ...start, scenario: MOLLY_F150 }, on(MOLLY_F150, RANGE_ROVER), { vehicle: RANGE_ROVER })
+  assert.ok(full.likely > result.likely + 500, "with collision and comprehensive the Range Rover costs much more")
+})
+
+test("deductible and vehicle age only matter with collision and comprehensive", () => {
+  const liabilityOnly = { ...MOLLY_F150, coverage: "standard" as const }
+  const start: StartingPoint = { annual: 900, scenario: liabilityOnly, vehicle: F150, kind: "yours" }
+  assert.equal(estimate(start, { ...liabilityOnly, deductible: 500 }, { vehicle: F150 }).likely, 900)
+  const lower = estimate(YOURS, { ...MOLLY_F150, deductible: 500 }, { vehicle: F150 })
+  assert.ok(lower.likely > 1800)
+  assert.equal(lower.steps[0].basis, "assumed")
+})
+
+test("the range is wider when more of the change is assumed", () => {
+  const sourced = estimate(YOURS, { ...MOLLY_F150, region: "rural" }, { vehicle: F150 })
+  const assumedToo = estimate(YOURS, { ...MOLLY_F150, region: "rural", mileage: "under-7500" }, { vehicle: F150 })
+  assert.ok(assumedToo.spread.down > sourced.spread.down)
+  assert.ok(assumedToo.spread.up > sourced.spread.up)
+  assert.match(assumedToo.rangeNote, /yearly mileage is our own estimate/)
+
+  const typical = estimate(
+    { annual: 1800, scenario: MOLLY_F150, vehicle: "average", kind: "typical", label: "a typical yearly price in Illinois" },
+    MOLLY_F150,
+    { vehicle: F150 },
   )
-  assert.match(other.explanation, /vehicle factor is thin|geography and vehicle factors are thin/)
-  const knownSpan = (known.dollars?.high ?? 0) - (known.dollars?.low ?? 0)
-  const otherSpan = (other.dollars?.high ?? 0) - (other.dollars?.low ?? 0)
-  assert.ok(otherSpan > knownSpan)
+  assert.ok(typical.spread.down > 1000 && typical.spread.up > 1000, "a typical start is much less certain than your own premium")
+  assert.match(typical.summary, /typical yearly price in Illinois/)
+
+  const unknown = vehicleFacts(null, { year: 2024, make: "Nobody", model: "Mystery", trim: "" })
+  const mystery = estimate(YOURS, { ...MOLLY_F150, make: "Nobody", model: "Mystery", trim: "" }, { vehicle: unknown })
+  assert.equal(mystery.vehicle.level, "unknown")
+  assert.match(mystery.rangeNote, /couldn't tell what kind of vehicle/)
+})
+
+test("changing state uses typical state prices when given, and widens a lot when not", () => {
+  const texas = { ...MOLLY_F150, state: "TX" as const }
+  const withPrices = estimate(YOURS, texas, { vehicle: F150, stateAnnual: { IL: 1500, TX: 1800 } })
+  assert.equal(withPrices.likely, 2160)
+  const without = estimate(YOURS, texas, { vehicle: F150 })
+  assert.equal(without.likely, 1800)
+  assert.ok(without.spread.up > withPrices.spread.up)
+  assert.match(without.rangeNote, /don't have a typical price for the new state/)
 })
 
 test("the engine never prints zero or a negative dollar", () => {
-  const amounts = [1, 2, 5, 1800]
-  const scenarios = [
-    MOLLY,
-    { ...MOLLY, age: "65+" as const, coverage: "state-minimum" as const, region: "rural" as const, year: 2008 },
-    { ...MOLLY, coverage: "high" as const, incidents: "two-or-more" as const, age: "16-18" as const },
-    { ...MOLLY, goodStudent: true, mileage: "under-7500" as const, year: 2010, region: "rural" as const },
+  const scenarios: Scenario[] = [
+    MOLLY_F150,
+    { ...MOLLY_F150, age: "65+", coverage: "state-minimum", region: "rural", year: 2008 },
+    { ...MOLLY_F150, coverage: "high", incidents: "two-or-more", age: "16-18" },
+    { ...MOLLY_F150, goodStudent: true, mileage: "under-7500", year: 2010, region: "rural" },
   ]
-  for (const amount of amounts) {
-    const anchor = anchorFor(MOLLY, amount)
+  for (const annual of [1, 2, 5, 1800]) {
     for (const scenario of scenarios) {
-      const result = engine(scenario, anchor, "unresolved")
-      const dollars = result.dollars
-      assert.ok(dollars)
-      assert.ok(dollars.low >= 1, `low ${dollars.low}`)
-      assert.ok(dollars.likely >= 1, `likely ${dollars.likely}`)
-      assert.ok(dollars.high >= 1, `high ${dollars.high}`)
-      assert.ok(dollars.monthly >= 1, `monthly ${dollars.monthly}`)
-      assert.ok(dollars.low < dollars.likely && dollars.likely < dollars.high)
+      const result = estimate({ ...YOURS, annual }, scenario, { trimConfidence: "unresolved" })
+      assert.ok(result.low >= 1 && result.low < result.likely && result.likely < result.high, `${annual}`)
+      assert.ok(result.monthly >= 1)
     }
   }
 })
 
-test("factor values are not the sample display weights", () => {
-  assert.notEqual(AGE_WEIGHT["16-18"], 1.64)
-  assert.notEqual(AGE_WEIGHT["19-21"], 1.36)
-  assert.notEqual(AGE_WEIGHT["22-25"], 1.15)
-  const source = readFileSync(new URL("./factor-engine.ts", import.meta.url), "utf8")
-  assert.equal(source.includes("SAMPLE_BASE"), false)
-  assert.equal(source.includes("2400"), false)
-  assert.equal(source.includes("sampleWeight"), false)
+test("everything the page shows is plain language", () => {
+  const results = [
+    estimate(YOURS, { ...MOLLY_F150, age: "16-18", mileage: "over-15000", incidents: "one" }, { vehicle: F150, trimConfidence: "limited" }),
+    estimate(YOURS, on(MOLLY_F150, MODEL_Y), { vehicle: MODEL_Y }),
+    estimate({ annual: 1500, scenario: MOLLY_F150, vehicle: "average", kind: "typical" }, MOLLY_F150),
+  ]
+  for (const result of results) {
+    assert.doesNotMatch(result.summary, JARGON)
+    assert.doesNotMatch(result.rangeNote, JARGON)
+  }
+  const engine = runFactorEngine({
+    scenario: MOLLY_F150,
+    anchor: null,
+    trimConfidence: "high",
+    catalogStatus: "ready",
+    stale: false,
+  })
+  assert.doesNotMatch(engine.explanation, JARGON)
+  assert.doesNotMatch(engine.confidenceDetail, JARGON)
+  for (const group of publishedFactorGroups()) {
+    assert.doesNotMatch(group.family, JARGON)
+    assert.doesNotMatch(group.note, JARGON)
+  }
 })
 
-test("NAIC manifest rows cite the publications and store no figures", () => {
-  const [supplement, report] = naicPublicationRows()
-  assert.equal(supplement.catalogCode, "AUT-PB 2023")
-  assert.equal(supplement.publicationDate, "June 2025")
-  assert.match(supplement.licenseNote, /Not cleared/)
-  assert.deepEqual(supplement.derivedFields, [])
-  assert.equal(report.catalogCode, "AUT-PB 2022-2023")
-  assert.equal(report.publicationDate, "December 2025")
-  assert.match(report.licenseNote, /Not cleared/)
-  assert.deepEqual(report.derivedFields, [])
-  assert.match(NAIC_PARAPHRASE, /car-years/)
-  assert.equal(/naic estimate/i.test(NAIC_PARAPHRASE), false)
-  assert.equal(NAIC_PARAPHRASE.includes("$"), false)
+test("the older calculator API still works", () => {
+  const none = runFactorEngine({ scenario: MOLLY, anchor: null, trimConfidence: "high", catalogStatus: "ready", stale: false })
+  assert.equal(none.dollars, null)
+  assert.equal(none.baselineCleared, false)
+  assert.equal(none.creditFactor, 1)
+  assert.equal(none.confidence, "low")
+
+  const anchor: PremiumAnchor = { amount: 1800, snapshot: factorSnapshot(MOLLY) }
+  const same = runFactorEngine({ scenario: MOLLY, anchor, trimConfidence: "high", catalogStatus: "ready", stale: false })
+  assert.equal(same.dollars?.likely, 1800)
+  assert.deepEqual(same.familiesChanged, [])
+
+  const aged = runFactorEngine({
+    scenario: { ...MOLLY, age: "16-18" },
+    anchor,
+    trimConfidence: "limited",
+    catalogStatus: "ready",
+    stale: false,
+  })
+  assert.ok((aged.dollars?.likely ?? 0) > 1800)
+  assert.deepEqual(aged.familiesChanged, ["driver"])
+  assert.equal(aged.confidence, "lower")
+
+  const moved = runFactorEngine({
+    scenario: { ...MOLLY, state: "TX", coverage: "standard" },
+    anchor,
+    trimConfidence: "high",
+    catalogStatus: "ready",
+    stale: false,
+  })
+  assert.deepEqual(moved.familiesChanged, ["geography", "coverage"])
+})
+
+test("published tables show every group with its basis in plain words", () => {
+  const groups = publishedFactorGroups()
+  assert.ok(groups.length >= 14)
+  const age = groups.find((group) => group.family === "Driver age")
+  assert.ok(age)
+  assert.equal(age.rows.find((row) => row.key === "40–64")?.confidence, "Starting point")
+  assert.equal(age.rows.find((row) => row.key === "26–39")?.confidence, "From public prices or rules")
+  assert.ok(groups.some((group) => group.family === "Credit" && /don't ask about credit/.test(group.note)))
 })
 
 test("the repository has no premium-report PDF", () => {

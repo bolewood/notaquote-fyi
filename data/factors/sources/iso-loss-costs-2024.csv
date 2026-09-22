@@ -1,0 +1,5 @@
+coverage,year,claim_frequency_per_100,claim_severity,locator,url
+bodily injury liability,2024,0.80,28278,"Table 'Private Passenger Auto Insurance Losses, 2015-2024', row 2024, Liability: Bodily injury, Claim frequency and Claim severity. Frequency is claims per 100 earned car years; severity includes loss adjustment expenses; excludes Massachusetts and most no-fault states. Source line: ISO, a Verisk Analytics business.",https://www.iii.org/fact-statistic/facts-statistics-auto-insurance
+property damage liability,2024,2.50,6770,"Same table, row 2024, Liability: Property damage. Excludes Massachusetts, Michigan and New Jersey.",https://www.iii.org/fact-statistic/facts-statistics-auto-insurance
+collision,2024,4.16,5489,"Same table, row 2024, Physical damage: Collision. Based on coverage with a $500 deductible; excludes Massachusetts, Michigan and Puerto Rico.",https://www.iii.org/fact-statistic/facts-statistics-auto-insurance
+comprehensive,2024,3.95,2306,"Same table, row 2024, Physical damage: Comprehensive. Excludes wind and water losses; includes glass.",https://www.iii.org/fact-statistic/facts-statistics-auto-insurance

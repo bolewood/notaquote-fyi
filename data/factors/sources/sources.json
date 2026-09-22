@@ -1,0 +1,58 @@
+{
+  "sources": [
+    {
+      "id": "ok-2026",
+      "title": "Auto Insurance Rate Comparison (Updated September 2026)",
+      "publisher": "Oklahoma Insurance Department",
+      "url": "https://www.oid.ok.gov/wp-content/uploads/2026/09/PPA-Rate-Comparisons-9-1-2026.pdf",
+      "dataYear": "2026 (PDF dated 1 September 2026)",
+      "checkedOn": "2026-09-22",
+      "terms": "No copyright or terms-of-use statement on the page or PDF. State government consumer publication. Landing page: https://www.oid.ok.gov/consumers/insurance-basics/auto-insurance-rate-comparison/"
+    },
+    {
+      "id": "nd-2026",
+      "title": "2026 Auto Insurance Cost Comparison Survey",
+      "publisher": "North Dakota Insurance & Securities Department",
+      "url": "https://www.insurance.nd.gov/sites/default/files/documents/Consumers/Auto/2026%20Auto%20Insurance%20Cost%20Survey.pdf",
+      "dataYear": "2026 (rates from 1 January 2026)",
+      "checkedOn": "2026-09-22",
+      "terms": "No copyright or terms-of-use statement found. State government consumer publication. Example #4 is left out because its company labels do not match the figures (see data/factors/sources/README.md)."
+    },
+    {
+      "id": "dc-2024",
+      "title": "2024 Automobile Insurance Premium Comparison: Sample Profiles (6 month policy)",
+      "publisher": "District of Columbia Department of Insurance, Securities and Banking",
+      "url": "https://disb.dc.gov/sites/default/files/dc/sites/disb/publication/attachments/2024_auto_premium_comparison_8-15-2024_website.pdf",
+      "dataYear": "2024 (company rate dates from November 2022 to August 2024); the newest edition as of the check date",
+      "checkedOn": "2026-09-22",
+      "terms": "No copyright statement in the PDF. The site footer links general DC government terms. The page calls the figures samples for illustration."
+    },
+    {
+      "id": "nc-sdip-2026",
+      "title": "Safe Driver Incentive Plan (insurance points)",
+      "publisher": "North Carolina Department of Insurance",
+      "url": "https://www.ncdoi.gov/consumers/auto-and-vehicle-insurance/safe-driver-incentive-plan",
+      "dataYear": "Current as of the check date",
+      "checkedOn": "2026-09-22",
+      "terms": "No terms-of-use statement on the page. State government consumer page. The page says the plan \"was created by state law\"."
+    },
+    {
+      "id": "iso-via-iii-2024",
+      "title": "Facts + Statistics: Auto insurance, table 'Private Passenger Auto Insurance Losses, 2015-2024' (source line: ISO, a Verisk Analytics business)",
+      "publisher": "Insurance Information Institute (data from ISO)",
+      "url": "https://www.iii.org/fact-statistic/facts-statistics-auto-insurance",
+      "dataYear": "2024",
+      "checkedOn": "2026-09-22",
+      "terms": "The page's NAIC tables carry 'Further reprint or distribution strictly prohibited without written permission of NAIC'. We use none of those. The ISO table has no reprint line; we keep only the eight 2024 figures we use, with attribution."
+    },
+    {
+      "id": "hldi-2022-24",
+      "title": "Insurance losses by make and model, 2022–24 models",
+      "publisher": "Highway Loss Data Institute (IIHS-HLDI)",
+      "url": "https://www.iihs.org/research-areas/auto-insurance/insurance-losses-by-make-and-model",
+      "dataYear": "2022–24 models, claims through early 2025",
+      "checkedOn": "2026-09-22",
+      "terms": "Source: www.iihs.org. IIHS allows limited noncommercial, educational, and personal use with citation, and asks for written permission (legal@iihs.org) for repetitive use or redistribution. We keep only a subset for popular vehicles. The owner should decide whether to ask for permission; see data/factors/README.md."
+    }
+  ]
+}

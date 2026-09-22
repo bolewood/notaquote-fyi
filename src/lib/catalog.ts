@@ -9,6 +9,10 @@ export { UNRESOLVED_TRIM_NAME } from "@/lib/catalog-match"
 export type CatalogTrim = {
   name: string
   confidence: TrimConfidence
+  /** Index into VehicleCatalog.vehicleClasses: the EPA VClass for this trim. */
+  c?: number
+  /** EPA atvType codes for this trim (see VehicleCatalog.powertrains). */
+  p?: string
 }
 
 export type CatalogSource = {
@@ -25,6 +29,10 @@ export type VehicleCatalog = {
   yearMin: number
   yearMax: number
   terms: string
+  /** EPA VClass names from FuelEconomy.gov, referenced by CatalogTrim.c. */
+  vehicleClasses?: string[]
+  /** Legend for CatalogTrim.p codes. */
+  powertrains?: Record<string, string>
   sources: CatalogSource[]
   vehicles: Record<string, Record<string, Record<string, CatalogTrim[]>>>
 }
