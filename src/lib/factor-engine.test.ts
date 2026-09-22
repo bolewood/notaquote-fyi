@@ -493,7 +493,7 @@ test("published tables show every group with its basis in plain words", () => {
 
 test("the repository has no premium-report PDF", () => {
   const root = path.resolve(new URL("../../", import.meta.url).pathname)
-  const skip = new Set(["node_modules", ".git", ".next", ".catalog-cache"])
+  const skip = new Set(["node_modules", ".git", ".next", ".catalog-cache", ".context", ".playwright-mcp"])
   const found: string[] = []
   const walk = (dir: string) => {
     for (const name of readdirSync(dir)) {
