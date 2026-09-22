@@ -190,3 +190,28 @@ export function readCompare(storage: Pick<Storage, "getItem">): CompareList | nu
 export function writeCompare(storage: Pick<Storage, "setItem">, list: CompareList): void {
   storage.setItem(COMPARE_STORAGE_KEY, compareSnapshot(list))
 }
+
+/**
+ * What to say after "Compare more cars" brought cars over from a what-if:
+ * which ones arrived, and which didn't fit because the list was full.
+ */
+export function carryNote(
+  after: CompareList,
+  cars: readonly Omit<ComparedCar, "starred">[],
+  name: (car: Omit<ComparedCar, "starred">) => string,
+): string {
+  const listed = new Set(after.cars.map((car) => carKey(car)))
+  const arrived = cars.filter((car) => listed.has(carKey(car))).map(name)
+  const missing = cars.filter((car) => !listed.has(carKey(car))).map(name)
+  const join = (names: string[]) =>
+    names.length <= 1 ? (names[0] ?? "") : `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`
+  const parts = [
+    arrived.length > 0
+      ? `We brought over the driver from your what-if, and the ${join(arrived)}.`
+      : "We brought over the driver from your what-if.",
+  ]
+  if (missing.length > 0) {
+    parts.push(`Your list was full, so the ${join(missing)} didn't fit. Remove a car to make room.`)
+  }
+  return parts.join(" ")
+}

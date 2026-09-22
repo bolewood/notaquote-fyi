@@ -36,6 +36,7 @@ import {
 } from "./scenario"
 import type { Situation } from "./situation"
 import type { TrimConfidence } from "./catalog-match"
+import { differenceWords } from "./format"
 
 export { formatDollars, TYPICAL_START_ATTRIBUTION }
 
@@ -61,7 +62,13 @@ export function addsTeen(now: Scenario, next: Scenario, teenOnParentPolicy: bool
   return teenOnParentPolicy && next.age === "16-18" && now.age !== "16-18"
 }
 
-/** The plain line about where the numbers start. */
+/** One short line about where the numbers start, for the top of a card. */
+export function startShort(start: StartingPoint, state: string): string {
+  if (start.kind === "yours") return `We start from the ${formatDollars(Math.round(start.annual))} a year you pay now, then adjust for what's different.`
+  return `We start from the typical ${state} price, about ${formatDollars(roundTen(start.annual))} a year today, then adjust for your car and driver.`
+}
+
+/** The full line about where the numbers start, with its source. */
 export function startLine(start: StartingPoint): string {
   if (start.kind === "yours") return `We started from the ${formatDollars(Math.round(start.annual))} a year you pay now.`
   return start.attribution ?? `We started from ${start.label ?? "a typical yearly price for your state"}. ${TYPICAL_START_ATTRIBUTION}.`
@@ -78,10 +85,9 @@ export function priceNow(
   return estimate(start, situation.scenario, { vehicle: nowVehicle, trimConfidence })
 }
 
-function amountWords(deltaRounded: number): string {
-  return deltaRounded === 0
-    ? "about the same"
-    : `about ${deltaRounded > 0 ? "+" : "−"}${formatDollars(Math.abs(deltaRounded))} a year`
+function amountWords(delta: number): string {
+  const words = differenceWords(delta)
+  return words === "about the same" ? words : `about ${words}`
 }
 
 /** One piece of a what-if's difference: "Newer car: +$120". */
@@ -151,7 +157,7 @@ export function priceWhatIf(
   const delta = added.after.likely - current.likely
   const deltaRounded = roundTen(delta)
   const onlyTheTeen = changedKeys(now, parent).every((key) => key === "goodStudent" || key === "driverTraining")
-  const headline = onlyTheTeen ? added.headline : `With those changes and your teen: ${amountWords(deltaRounded)}.`
+  const headline = onlyTheTeen ? added.headline : `With those changes and your teen: ${amountWords(delta)}.`
   const others = explainChange(start, now, nowVehicle, parent, nextVehicle)
   const parts = [...others.parts, { label: "Adding your teen", amount: added.after.likely - others.last }]
   return { current, next: added.after, delta, deltaRounded, headline, mode: "teen-added", parts }
@@ -166,10 +172,10 @@ export function carDifference(from: VehicleRelativity, to: VehicleRelativity, ha
   const words: string[] = []
   const damage = hasDamageCover ? to.physicalHundredths - from.physicalHundredths : 0
   const liability = to.liabilityHundredths - from.liabilityHundredths
-  if (damage >= 8) words.push("higher repair costs")
-  if (damage <= -8) words.push("lower repair costs")
-  if (liability >= 6) words.push("more at-fault crash claims")
-  if (liability <= -6) words.push("fewer at-fault crash claims")
+  if (damage >= 8) words.push(REASON.pricierRepairs)
+  if (damage <= -8) words.push(REASON.cheaperRepairs)
+  if (liability >= 6) words.push(REASON.moreClaims)
+  if (liability <= -6) words.push(REASON.fewerClaims)
   return words.length > 0 ? words.join(", ") : "similar claims"
 }
 
@@ -396,6 +402,17 @@ export function changeChip(key: ChangeKey, next: Scenario): string {
 // ---------------------------------------------------------------------------
 // Why a car costs what it does
 
+/** One short vocabulary for why a car costs what it does, used on the page, in print, and in the spreadsheet. */
+export const REASON = {
+  pricierRepairs: "pricier repairs",
+  cheaperRepairs: "cheaper repairs",
+  moreClaims: "more at-fault claims",
+  fewerClaims: "fewer at-fault claims",
+  newer: "newer, costs more to replace",
+  older: "older, cheaper to replace",
+  average: "about average",
+} as const
+
 /**
  * A short phrase for why a car sits where it does, from the engine's vehicle
  * factors: "higher repair costs", "fewer at-fault crash claims".
@@ -415,22 +432,22 @@ export function vehicleReasonParts(vehicle: VehicleRelativity, hasDamageCover: b
   const parts: { size: number; words: string }[] = []
   const damage = hasDamageCover ? vehicle.physicalHundredths - 100 : 0
   const liability = vehicle.liabilityHundredths - 100
-  if (damage >= 10) parts.push({ size: damage, words: "higher repair costs" })
-  if (damage <= -10) parts.push({ size: -damage, words: "lower repair costs" })
-  if (liability >= 8) parts.push({ size: liability, words: "more at-fault crash claims" })
-  if (liability <= -8) parts.push({ size: -liability, words: "fewer at-fault crash claims" })
+  if (damage >= 10) parts.push({ size: damage, words: REASON.pricierRepairs })
+  if (damage <= -10) parts.push({ size: -damage, words: REASON.cheaperRepairs })
+  if (liability >= 8) parts.push({ size: liability, words: REASON.moreClaims })
+  if (liability <= -8) parts.push({ size: -liability, words: REASON.fewerClaims })
   parts.sort((left, right) => right.size - left.size)
   const words = parts.map((part) => part.words)
   const age = modelYear === undefined ? null : vehicleAgeKey(modelYear)
-  if (hasDamageCover && (age === "0-3" || age === "4-7")) words.push("newer car, costs more to replace")
-  if (hasDamageCover && age === "13-plus") words.push("older car, cheaper to replace")
+  if (hasDamageCover && (age === "0-3" || age === "4-7")) words.push(REASON.newer)
+  if (hasDamageCover && age === "13-plus") words.push(REASON.older)
   if (vehicle.level === "class") words.push(`no data for this exact model, so we used the ${vehicle.label} average`)
   return words
 }
 
 export function vehicleReason(vehicle: VehicleRelativity, hasDamageCover: boolean, modelYear?: number): string {
   const words = vehicleReasonParts(vehicle, hasDamageCover, modelYear)
-  return words.length > 0 ? words.join(", ") : "about average claims"
+  return words.length > 0 ? words.join(", ") : REASON.average
 }
 
 /**
@@ -443,7 +460,7 @@ export function distinctReasons(lists: readonly string[][]): string[] {
   return lists.map((list) => {
     const kept = list.filter((phrase) => !shared.has(phrase))
     if (kept.length > 0) return kept.join(", ")
-    return "about average claims"
+    return REASON.average
   })
 }
 
@@ -476,4 +493,35 @@ export function sourceLinks(ids: readonly string[]): SourceLink[] {
 
 export function basisWords(basis: keyof typeof BASIS_WORDS): string {
   return BASIS_WORDS[basis]
+}
+
+/** Which state's published prices a source is. */
+const SURVEY_STATES: Record<string, string> = {
+  "ca-2026": "California",
+  "tx-2025": "Texas",
+  "ok-2026": "Oklahoma",
+  "dc-2024": "District of Columbia",
+  "nd-2026": "North Dakota",
+  "co-2023": "Colorado",
+  "nc-sdip-2026": "North Carolina",
+}
+
+function possessive(name: string): string {
+  return `${name}'s`
+}
+
+/**
+ * How we know a step, and, when its prices come from other states, which
+ * ones: "From published prices (based on California's published prices;
+ * Illinois may differ)".
+ */
+export function basisLabel(basis: keyof typeof BASIS_WORDS, sourceIds: readonly string[], state: string): string {
+  const words = BASIS_WORDS[basis]
+  const states = [...new Set(sourceIds.flatMap((id) => (SURVEY_STATES[id] ? [SURVEY_STATES[id]] : [])))]
+  if (basis === "reference" || states.length === 0 || states.includes(state)) return words
+  const named =
+    states.length === 1
+      ? possessive(states[0])
+      : `${states.slice(0, -1).map(possessive).join(", ")}${states.length > 2 ? "," : ""} and ${possessive(states[states.length - 1])}`
+  return `${words} (based on ${named} published prices; ${state} may differ)`
 }

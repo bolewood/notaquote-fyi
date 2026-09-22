@@ -2,7 +2,7 @@ import assert from "node:assert/strict"
 import { readFileSync } from "node:fs"
 import test from "node:test"
 import type { VehicleCatalog } from "./catalog"
-import { runVinLookup, selectionAfterVin } from "./vin-lookup"
+import { runVinLookup, selectionAfterVin, VIN_UNREACHABLE } from "./vin-lookup"
 
 const VIN = "1FTEW1EP5PFA12345"
 
@@ -270,6 +270,7 @@ test("a failed decode leaves the picker unchanged and still discards the VIN", a
       },
     })
     assert.equal(thrown.ok, false)
+    assert.equal(thrown.ok ? "" : thrown.message, VIN_UNREACHABLE, "a network failure isn't blamed on the VIN")
     assert.equal(JSON.stringify(thrown).includes(VIN), false)
     assert.equal(spies.hits.length, 0)
   } finally {
@@ -304,4 +305,14 @@ test("vehicle and VIN modules do not reference storage or analytics sinks", () =
   assert.match(tray, /localStorage/)
   assert.doesNotMatch(tray, /vin/i)
   assert.doesNotMatch(tray, /analytics|gtag|plausible|document\.cookie|sessionStorage/)
+})
+
+test("a VIN for a model year we don't list says which years we do", async () => {
+  const result = await runVinLookup(VIN, {
+    catalog,
+    fetchImpl: async () =>
+      new Response(JSON.stringify({ Results: [{ ErrorCode: "0", Make: "FORD", Model: "F-150", ModelYear: "2001" }] })),
+  })
+  assert.equal(result.ok, false)
+  assert.match(result.ok ? "" : result.message, /^That VIN is for a 2001 model\. We only list model years \d{4}–\d{4}, so your car is unchanged\.$/)
 })

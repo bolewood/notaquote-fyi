@@ -263,7 +263,7 @@ The typical price stands for a 40–64-year-old in a suburb, on an average car a
 
 "Liability" and "Damage" are the vehicle's calibrated factors for each part of the premium (1.00 = average vehicle). Figures are the likely yearly price, with the range in brackets. The last column is the whole household's policy after adding a 16-year-old to the 45-year-old's policy on that car: the increase, and the new total. Reproduce with `npx tsx scripts/example-table.ts`; a test checks this table matches.
 
-Starting point: Illinois's average full-coverage cost in 2023 was $1,257 (NAIC). Car insurance prices nationally have risen about 18% since then (government price index, August 2026), so we start from about $1,490.
+Starting point: Illinois's average full-coverage cost in 2023 was $1,257, according to the National Association of Insurance Commissioners (NAIC). Car insurance prices nationally have risen about 18% since then (government price index, August 2026), so we start from about $1,490.
 
 | 2024 vehicle | HLDI row used | Liability | Damage | 45-year-old | 16-year-old, own policy | Adding a 16-year-old to the 45-year-old's policy |
 | --- | --- | --- | --- | --- | --- | --- |

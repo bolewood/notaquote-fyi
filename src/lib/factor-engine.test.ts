@@ -128,7 +128,7 @@ test("what if I bought a Tesla Model Y?", () => {
   assert.equal(result.current.likely, 1800)
   assert.equal(result.delta, result.next.likely - 1800)
   assert.equal(result.deltaRounded % 10, 0)
-  assert.match(result.headline, /^Switching to a 2025 Tesla Model Y: about [+−]\$[\d,]+ a year\.$|^Switching to a 2025 Tesla Model Y: about the same\.$/)
+  assert.match(result.headline, /^Switching to a 2025 Tesla Model Y: about \$[\d,]+ (more|less) a year\.$|^Switching to a 2025 Tesla Model Y: about the same\.$/)
   assert.equal(result.next.vehicle.level, "model")
   assert.ok(result.next.vehicle.rows.every((row) => row.family === "modely" && row.powertrain === "electric"))
   assert.ok(result.next.vehicle.rows.every((row) => row.drive === "4wd"), "AWD Model Y uses HLDI's 4WD series")
@@ -261,7 +261,7 @@ test("changing state uses typical state prices when given, and widens a lot when
 test("what-if headlines for a move", () => {
   const texas = { ...MOLLY_F150, state: "TX" as const }
   const move = whatIf(YOURS, MOLLY_F150, texas, { currentVehicle: F150, nextVehicle: F150 })
-  assert.match(move.headline, /^Moving to Texas: about [+−]\$[\d,]+ a year\.$/)
+  assert.match(move.headline, /^Moving to Texas: about \$[\d,]+ (more|less) a year\.$/)
   const unknown = whatIf(YOURS, MOLLY_F150, texas, { currentVehicle: F150, nextVehicle: F150, stateAnnual: { IL: 1257 } })
   assert.equal(unknown.headline, "We don't have a typical price for Texas yet, so we can't say how moving changes your price.")
   assert.doesNotMatch(unknown.headline, /about the same/)
@@ -293,7 +293,7 @@ test("a typical start comes from the state's NAIC figure", () => {
   const illinois = typicalStart({ ...MOLLY_F150, state: "IL" })
   assert.equal(
     illinois?.attribution,
-    "Illinois's average full-coverage cost in 2023 was $1,257 (NAIC). Car insurance prices nationally have risen about 18% since then (government price index, August 2026), so we start from about $1,490.",
+    "Illinois's average full-coverage cost in 2023 was $1,257, according to the National Association of Insurance Commissioners (NAIC). Car insurance prices nationally have risen about 18% since then (government price index, August 2026), so we start from about $1,490.",
   )
   // The trend widens a typical start's range; a premium you enter is never trended.
   const withTrend = estimate(illinois!, { ...MOLLY_F150, state: "IL" }, { vehicle: F150 })
@@ -318,7 +318,7 @@ test("a trim name sold as gas and hybrid is priced as gas and widens the range",
   // The 2024 Mazda CX-90 4WD is listed as a mild hybrid and a plug-in; we price the hybrid and say so.
   const cx90 = car(2024, "Mazda", "CX-90", "CX-90 4WD")
   assert.equal(cx90.powertrain, "hybrid")
-  assert.match(estimate(YOURS, on(MOLLY_F150, cx90), { vehicle: cx90 }).rangeNote, /We priced it as a mild hybrid, using HLDI's figures for the gas version/)
+  assert.match(estimate(YOURS, on(MOLLY_F150, cx90), { vehicle: cx90 }).rangeNote, /We priced it as a mild hybrid, using the Highway Loss Data Institute's figures for the gas version/)
 })
 
 test("body style: plain rows unless the trim names a body", () => {
@@ -486,8 +486,8 @@ test("published tables show every group with its basis in plain words", () => {
   assert.ok(groups.length >= 14)
   const age = groups.find((group) => group.family === "Driver's age")
   assert.ok(age)
-  assert.equal(age.rows.find((row) => row.key === "40–64")?.confidence, "Starting point")
-  assert.equal(age.rows.find((row) => row.key === "26–39")?.confidence, "From public prices or rules")
+  assert.equal(age.rows.find((row) => row.key === "40–64")?.confidence, "Measured from here")
+  assert.equal(age.rows.find((row) => row.key === "26–39")?.confidence, "From published prices")
   assert.ok(groups.some((group) => group.family === "Credit" && /don't ask about credit/.test(group.note)))
 })
 
@@ -569,7 +569,7 @@ test("a teen added to a parent's policy is the whole household's premium", () =>
   assert.equal(added.increase, added.after.likely - added.before.likely)
   assert.match(
     added.headline,
-    /^Adding your teen to your policy: about \+\$[\d,]+ a year on a policy that costs \$[\d,]+ now\.$/,
+    /^Adding your teen to your policy: about \$[\d,]+ more a year, on a policy that costs about \$[\d,]+ now\.$/,
   )
   assert.throws(
     () => compareVehicles(start, { ...EXAMPLE_ADULT, age: "16-18" }, [accord], { teenOnParentPolicy: true }),
@@ -616,7 +616,7 @@ test("sporty mainstream cars get room above, with a note", () => {
   const camry = car(2024, "Toyota", "Camry", "Camry")
   const camryNote = estimate(YOURS, on(MOLLY_F150, camry), { vehicle: camry }).rangeNote
   assert.doesNotMatch(camryNote, /Sporty/)
-  assert.match(camryNote, /higher than any mainstream car we checked against real prices/)
+  assert.match(camryNote, /run a bit above the cars we could check against real prices/)
 })
 
 test("teenOnParentPolicy refuses a change of car or state", () => {

@@ -71,4 +71,7 @@ test("the premium field: empty, unreadable, fine, or suspiciously low for a year
   assert.deepEqual(premiumStatus("1,800", "year"), { kind: "ok", annual: 1800 })
   assert.deepEqual(premiumStatus("150", "year"), { kind: "maybe-monthly", annual: 150 })
   assert.deepEqual(premiumStatus("150", "month"), { kind: "ok", annual: 1800 })
+  assert.deepEqual(premiumStatus("250,000", "year"), { kind: "too-high", annual: null })
+  assert.deepEqual(premiumStatus("20,000", "month"), { kind: "too-high", annual: null })
+  assert.deepEqual(premiumStatus("5", "month"), { kind: "low-monthly", annual: 60 })
 })

@@ -111,16 +111,27 @@ export function adoptSharedSituation(shared: Situation, own: Situation | null): 
 export type PremiumStatus =
   | { kind: "empty"; annual: null }
   | { kind: "invalid"; annual: null }
+  /** A readable number, but more than we can work with. Not used, like any unreadable entry. */
+  | { kind: "too-high"; annual: null }
   | { kind: "ok"; annual: number }
   /** Under $200 a year: probably a monthly amount typed as yearly. */
   | { kind: "maybe-monthly"; annual: number }
+  /** Under $20 a month: low even for a month. Used, with a gentle check. */
+  | { kind: "low-monthly"; annual: number }
 
-/** Read the premium field for the page: empty, unreadable, fine, or suspiciously low. */
+/** Read the premium field for the page: empty, unreadable, too high, fine, or suspiciously low. */
 export function premiumStatus(text: string, period: PremiumPeriod): PremiumStatus {
   if (text.trim() === "") return { kind: "empty", annual: null }
   const annual = parsePremium(text, period)
-  if (annual === null) return { kind: "invalid", annual: null }
+  if (annual === null) {
+    const cleaned = text.trim().replace(/[$,\s]/g, "")
+    const perYear = PREMIUM_PERIODS.find((item) => item.id === period)?.perYear ?? 1
+    const readable = /^\d+(\.\d{1,2})?$/.test(cleaned)
+    if (readable && Number(cleaned) * perYear > PREMIUM_MAX) return { kind: "too-high", annual: null }
+    return { kind: "invalid", annual: null }
+  }
   if (period === "year" && annual < 200) return { kind: "maybe-monthly", annual }
+  if (period === "month" && annual < 240) return { kind: "low-monthly", annual }
   return { kind: "ok", annual }
 }
 

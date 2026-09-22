@@ -5,6 +5,8 @@ import type { VehicleCatalog } from "./catalog"
 import { vehicleFacts } from "./catalog-class"
 import { vehicleRelativity } from "./factor-engine"
 import {
+  basisLabel,
+  startShort,
   changeChip,
   changedKeys,
   parentFor,
@@ -51,7 +53,7 @@ test("the Model Y question in one call: the engine's headline, from the situatio
   const next: Scenario = { ...NOW, ...MODEL_Y }
   const result = priceWhatIf(DEFAULT_SITUATION, vehicleFacts(catalog, NOW), next, vehicleFacts(catalog, next))
   assert.ok(result)
-  assert.match(result!.headline, /^Switching to a 2025 Tesla Model Y: about [+−]\$[\d,]+ a year\.$|about the same\.$/)
+  assert.match(result!.headline, /^Switching to a 2025 Tesla Model Y: about \$[\d,]+ (more|less) a year\.$|about the same\.$/)
   assert.equal(result!.delta, result!.next.likely - result!.current.likely)
 })
 
@@ -79,7 +81,7 @@ test("adding a teen on the What-if page prices the whole household's policy", ()
   const facts = vehicleFacts(catalog, NOW)
   const result = priceWhatIf({ ...DEFAULT_SITUATION, premium: 1800 }, facts, next, facts)
   assert.ok(result && result.delta > 0)
-  assert.match(result!.headline, /^Adding your teen to your policy: about \+\$[\d,]+ a year on a policy that costs \$1,800 now\.$/)
+  assert.match(result!.headline, /^Adding your teen to your policy: about \$[\d,]+ more a year, on a policy that costs about \$1,800 now\.$/)
   assert.match(result!.next.rangeNote, /whole household/)
 })
 
@@ -106,7 +108,7 @@ test("adding a teen and changing the car at once goes through the engine's teen 
   const next: Scenario = { ...NOW, ...MODEL_Y, age: "16-18", yearsLicensed: "under-1", teen: true }
   const result = priceWhatIf(DEFAULT_SITUATION, vehicleFacts(catalog, NOW), next, vehicleFacts(catalog, next))
   assert.ok(result)
-  assert.match(result!.headline, /^With those changes and your teen: about [+−]\$[\d,]+ a year\.$/)
+  assert.match(result!.headline, /^With those changes and your teen: about \$[\d,]+ (more|less) a year\.$/)
   const own = priceWhatIf(
     { ...DEFAULT_SITUATION, teenOnParentPolicy: false },
     vehicleFacts(catalog, NOW),
@@ -121,16 +123,16 @@ test("the why phrase is short and plain, and says when we used a class average",
   const reason = vehicleReason(civic, true, 2022)
   assert.ok(reason.length < 80)
   assert.doesNotMatch(reason, /relativity|HLDI|factor/i)
-  assert.equal(vehicleReason({ ...civic, liabilityHundredths: 100, physicalHundredths: 100 }, true, 2016), "about average claims")
-  assert.equal(vehicleReason({ ...civic, physicalHundredths: 130, liabilityHundredths: 100 }, true, 2016), "higher repair costs")
-  assert.equal(vehicleReason({ ...civic, physicalHundredths: 130, liabilityHundredths: 100 }, false, 2016), "about average claims", "repair costs don't matter without damage cover")
+  assert.equal(vehicleReason({ ...civic, liabilityHundredths: 100, physicalHundredths: 100 }, true, 2016), "about average")
+  assert.equal(vehicleReason({ ...civic, physicalHundredths: 130, liabilityHundredths: 100 }, true, 2016), "pricier repairs")
+  assert.equal(vehicleReason({ ...civic, physicalHundredths: 130, liabilityHundredths: 100 }, false, 2016), "about average", "repair costs don't matter without damage cover")
   assert.equal(
     vehicleReason({ ...civic, liabilityHundredths: 100, physicalHundredths: 100 }, true, 2016),
-    "about average claims",
+    "about average",
     "an 8–12-year-old car is what a typical start assumes",
   )
-  assert.match(vehicleReason({ ...civic, liabilityHundredths: 100, physicalHundredths: 100 }, true, 2024), /newer car, costs more to replace/)
-  assert.match(vehicleReason({ ...civic, liabilityHundredths: 100, physicalHundredths: 100 }, true, 2008), /older car, cheaper to replace/)
+  assert.match(vehicleReason({ ...civic, liabilityHundredths: 100, physicalHundredths: 100 }, true, 2024), /newer, costs more to replace/)
+  assert.match(vehicleReason({ ...civic, liabilityHundredths: 100, physicalHundredths: 100 }, true, 2008), /older, cheaper to replace/)
   assert.deepEqual(vehicleReasonParts({ ...civic, liabilityHundredths: 100, physicalHundredths: 100 }, false, 2024), [], "age doesn't matter without damage cover")
   assert.match(vehicleReason({ ...civic, level: "class", label: "small SUV" }, true, 2024), /used the small SUV average/)
   assert.match(vehicleReason({ ...civic, level: "unknown" }, true, 2024), /don't know this car/)
@@ -141,14 +143,14 @@ test("the why phrase is short and plain, and says when we used a class average",
 test("phrases every car shares are dropped from the compare table", () => {
   assert.deepEqual(
     distinctReasons([
-      ["higher repair costs", "newer car, costs more to replace"],
-      ["fewer at-fault crash claims", "newer car, costs more to replace"],
-      ["newer car, costs more to replace"],
+      ["pricier repairs", "newer, costs more to replace"],
+      ["fewer at-fault claims", "newer, costs more to replace"],
+      ["newer, costs more to replace"],
     ]),
-    ["higher repair costs", "fewer at-fault crash claims", "about average claims"],
+    ["pricier repairs", "fewer at-fault claims", "about average"],
   )
-  assert.deepEqual(distinctReasons([["newer car, costs more to replace"]]), ["newer car, costs more to replace"])
-  assert.deepEqual(distinctReasons([[], []]), ["about average claims", "about average claims"])
+  assert.deepEqual(distinctReasons([["newer, costs more to replace"]]), ["newer, costs more to replace"])
+  assert.deepEqual(distinctReasons([[], []]), ["about average", "about average"])
 })
 
 test("a what-if is explained as the difference, and the pieces add up to it", () => {
@@ -170,7 +172,7 @@ test("a what-if is explained as the difference, and the pieces add up to it", ()
 
   const same = vehicleRelativity(nowFacts)
   assert.equal(carDifference(same, same, true), "similar claims")
-  assert.equal(carDifference(same, { ...same, physicalHundredths: same.physicalHundredths + 20 }, true), "higher repair costs")
+  assert.equal(carDifference(same, { ...same, physicalHundredths: same.physicalHundredths + 20 }, true), "pricier repairs")
 })
 
 test("adding a teen is explained as the other changes plus the teen", () => {
@@ -189,4 +191,17 @@ test("a teen on their own policy is a separate bill, not a replacement", () => {
   assert.equal(result?.mode, "teen-own")
   assert.match(result!.headline, /^Their own policy: about \$[\d,]+0 a year, on top of your \$[\d,]+0\.$/)
   assert.deepEqual(result!.parts, [])
+})
+
+test("a step's source says which state's prices it's based on, when that isn't yours", () => {
+  assert.equal(basisLabel("sourced", ["ca-2026"], "Illinois"), "From published prices (based on California's published prices; Illinois may differ)")
+  assert.equal(basisLabel("sourced", ["ca-2026", "tx-2025"], "Illinois"), "From published prices (based on California's and Texas's published prices; Illinois may differ)")
+  assert.equal(basisLabel("sourced", ["ca-2026"], "California"), "From published prices")
+  assert.equal(basisLabel("assumed", [], "Illinois"), "Our best guess")
+  assert.equal(basisLabel("indicative", ["hldi-2022-24"], "Illinois"), "Worked out from public data")
+})
+
+test("the short start line names the state and a rounded price", () => {
+  const start = startingPoint(DEFAULT_SITUATION, vehicleFacts(catalog, NOW))!
+  assert.match(startShort(start, "Illinois"), /^We start from the typical Illinois price, about \$[\d,]+0 a year today, then adjust for your car and driver\.$/)
 })

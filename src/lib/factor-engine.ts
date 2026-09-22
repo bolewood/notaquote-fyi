@@ -43,6 +43,7 @@ import type {
   VehicleLossRow,
 } from "@/lib/factor-types"
 import { MODEL_VERSION } from "@/lib/copy"
+import { differenceWords, monthlyDollars, percentRangeWords, percentWords } from "@/lib/format"
 import { BASELINE_STATE_CODES, stateBaseline, STATE_BASELINE_ATTRIBUTION } from "@/lib/state-baselines"
 import {
   hasPhysicalDamage,
@@ -196,16 +197,16 @@ const PLAIN_NOTES: Record<string, string> = {
   "driver-training": "For drivers under 22 who took a driver's ed course.",
   "multi-policy": "Home or renters insurance with the same company.",
   area:
-    "Compared with a small town or the country, the least expensive kind of place. A typical state price already assumes the suburbs, so moving from the suburbs to the city costs less than this column suggests.",
+    "Measured from a small town or the country, the least expensive kind of place. A typical state price already assumes the suburbs, so going from the suburbs to the city costs less than this column suggests.",
   "liability-limits":
-    "How much the policy pays for damage you cause to others. This only moves the liability part of the bill.",
+    "The most the policy pays for damage you cause to others, per person / per crash / property. This only moves the liability part of the bill.",
   deductible:
     "The part of a repair bill you pay yourself before insurance pays the rest. This only moves the part that fixes your own car.",
   "loan-lease": "Lenders usually ask for extra coverage. This only moves the part that fixes your own car.",
   "vehicle-age":
-    "Newer cars cost more to fix or replace. This only moves the part that fixes your own car.",
+    "Newer cars cost more to fix or replace. Measured from a car 0–3 years old; a typical state price already assumes an 8–12-year-old car. This only moves the part that fixes your own car.",
   "premium-split":
-    "Not adjustments, but shares. About half of a full-coverage bill pays for damage you cause to others, and the rest fixes your own car.",
+    "Not an adjustment, but a share. About half of a full-coverage bill pays for damage you cause to others, and the rest fixes your own car. The finer splits are in the notes on GitHub.",
   range: "Not adjustments. Each one says how much lower or higher a real price could be when that thing is part of the estimate.",
 }
 
@@ -225,16 +226,21 @@ const PLAIN_LABELS: Record<string, Record<string, string>> = {
   "multi-policy": { no: "Not bundled", yes: "Bundled" },
   area: { urban: "City", suburban: "Suburbs", rural: "Small town or country" },
   "liability-limits": {
-    "100-300-100": "$100k / $300k / $100k",
+    "100-300-100": "$100,000/$300,000/$100,000",
     "state-minimum": "Your state's minimum",
-    "250-500-250": "$250k / $500k / $250k",
+    "250-500-250": "$250,000/$500,000/$250,000",
+  },
+  "driving-record": {
+    clean: "No at-fault accidents",
+    one: "One at-fault accident",
+    "two-or-more": "Two or more at-fault accidents",
   },
   "loan-lease": { no: "Owned outright", yes: "Loan or lease" },
   "vehicle-age": {
-    "0-3": "nearly new (0–3 years)",
-    "4-7": "4–7 years",
-    "8-12": "8–12 years",
-    "13-plus": "13 years or more",
+    "0-3": "0–3 years old",
+    "4-7": "4–7 years old",
+    "8-12": "8–12 years old",
+    "13-plus": "13 or more years old",
   },
   "annual-mileage": {
     "7500-15000": "7,500–15,000 miles a year",
@@ -903,8 +909,8 @@ export function typicalStart(target: Scenario, options: DriverOptions = {}): Sta
   const percent = ratio ? Math.round((Number(ratio.num) / Number(ratio.den) - 1) * 100) : 0
   const rounded = Math.round(annual / 10) * 10
   const attribution = ratio && trend
-    ? `${state}'s average full-coverage cost in ${baseline.dataYear} was ${formatDollars(baseline.annual)} (NAIC). Car insurance prices nationally have risen about ${percent}% since then (government price index, ${periodWords(trend.latestPeriod)}), so we start from about ${formatDollars(rounded)}.`
-    : `${state}'s average full-coverage cost in ${baseline.dataYear} was ${formatDollars(baseline.annual)} (NAIC).`
+    ? `${state}'s average full-coverage cost in ${baseline.dataYear} was ${formatDollars(baseline.annual)}, according to the National Association of Insurance Commissioners (NAIC). Car insurance prices nationally have risen about ${percent}% since then (government price index, ${periodWords(trend.latestPeriod)}), so we start from about ${formatDollars(rounded)}.`
+    : `${state}'s average full-coverage cost in ${baseline.dataYear} was ${formatDollars(baseline.annual)}, according to the National Association of Insurance Commissioners (NAIC).`
   return {
     annual,
     scenario: typicalScenario(target),
@@ -1073,6 +1079,10 @@ function estimateAny(start: StartingPoint, target: Scenario, options: EstimateOp
     // Two starting-point cells (for example "not used under 22" and "10+
     // years") are the same number; there is nothing to explain.
     if (before.cell.basis === "reference" && after.cell.basis === "reference") continue
+    // Without collision and comprehensive, a change to the part that fixes
+    // your own car moves nothing, so it isn't listed. Its range still counts
+    // below (weighted by that part, which is zero), so the numbers don't change.
+    const listed = !(after.appliesTo === "physical" && !hasPhysicalDamage(target.coverage))
     const weight =
       after.appliesTo === "whole"
         ? rat(1)
@@ -1082,6 +1092,7 @@ function estimateAny(start: StartingPoint, target: Scenario, options: EstimateOp
     spreads.push({ down: beforeSpread.down, up: beforeSpread.up, weight })
     spreads.push({ down: afterSpread.down, up: afterSpread.up, weight })
     const basis = weakerBasis(before.cell.basis, after.cell.basis)
+    if (!listed) continue
     steps.push({
       group: after.group,
       title: plainTitle(after.group),
@@ -1258,7 +1269,7 @@ function summarySentence(start: StartingPoint, steps: ChangeStep[], likely: numb
       : `We started from ${startWords(start)}. Nothing here differs from that starting point.`
   }
   const changed = joinWords(steps.map((step) => lowerFirst(step.title)))
-  return `We started from ${startWords(start)} and adjusted for the ${changed}. That comes to about ${formatDollars(roundTen(likely))} a year (about ${formatDollars(Math.max(1, Math.round(likely / 12)))} a month).`
+  return `We started from ${startWords(start)} and adjusted for the ${changed}. That comes to about ${formatDollars(roundTen(likely))} a year (about ${monthlyDollars(likely)} a month).`
 }
 
 /** Our HLDI loss data covers these model years (from the bundle). */
@@ -1321,11 +1332,11 @@ function rangeSentence(
             : "gas"
     parts.push(
       target.hybridOnGasRows
-        ? "That name is sold in more than one version. We priced it as a mild hybrid, using HLDI's figures for the gas version, so the range is a little wider."
+        ? "That name is sold in more than one version. We priced it as a mild hybrid, using the Highway Loss Data Institute's figures for the gas version, so the range is a little wider."
         : `That name is sold in more than one version. We priced the ${version} one, so the range is a little wider.`,
     )
   } else if (vehicleChanged && target.hybridOnGasRows) {
-    parts.push("HLDI has no separate figures for this hybrid, so we used the gas version's.")
+    parts.push("The claims data has no separate figures for this hybrid, so we used the gas version's.")
   }
   if (vehicleChanged && target.valueRisk) {
     parts.push("Expensive and electric cars can cost more or less to insure than their repair records suggest, so the range is wider.")
@@ -1333,7 +1344,7 @@ function rangeSentence(
   if (vehicleChanged && target.sporty && target.sportsCar) {
     parts.push("Sporty cars often cost more to insure than their repair records suggest, so the range reaches higher.")
   } else if (vehicleChanged && target.sporty) {
-    parts.push("This car's repair costs are higher than any mainstream car we checked against real prices, so the range reaches higher.")
+    parts.push("This car's repair claims run a bit above the cars we could check against real prices, so the range reaches higher.")
   }
   if (start.trended) {
     parts.push("We brought the 2023 state price up to today with a national price index, which is only a rough guide.")
@@ -1436,10 +1447,7 @@ export function whatIf(
     }
   }
   const label = options.label ?? whatIfLabel(current, next)
-  const amount =
-    deltaRounded === 0
-      ? "about the same"
-      : `about ${deltaRounded > 0 ? "+" : "−"}${formatDollars(Math.abs(deltaRounded))} a year`
+  const amount = deltaRounded === 0 ? "about the same" : `about ${differenceWords(delta)}`
   return { current: now, next: then, delta, deltaRounded, headline: `${label}: ${amount}.` }
 }
 
@@ -1452,7 +1460,7 @@ export type TeenAdded = {
   increase: number
   /** increase rounded to the nearest $10. */
   increaseRounded: number
-  /** "Adding your teen to your policy: about +$X a year on a policy that costs $Y now." */
+  /** "Adding your teen to your policy: about $X more a year, on a policy that costs about $Y now." */
   headline: string
 }
 
@@ -1482,7 +1490,7 @@ export function teenAddedToPolicy(
     after,
     increase,
     increaseRounded,
-    headline: `Adding your teen to your policy: about +${formatDollars(increaseRounded)} a year on a policy that costs ${formatDollars(now)} now.`,
+    headline: `Adding your teen to your policy: about ${differenceWords(increase)}, on a policy that costs about ${formatDollars(now)} now.`,
   }
 }
 
@@ -1675,33 +1683,24 @@ export type PublishedFactorGroup = {
 }
 
 export const BASIS_WORDS: Record<FactorBasis, string> = {
-  reference: "Starting point",
-  sourced: "From public prices or rules",
-  indicative: "From public data, roughly",
-  assumed: "Our estimate, help wanted",
+  reference: "Measured from here",
+  sourced: "From published prices",
+  indicative: "Worked out from public data",
+  assumed: "Our best guess",
 }
 
-/** Hundredths as a plain change: "+29%", "8% less", or "no change". */
+/** Hundredths as a plain change: "+29%", "−8%", or "no change". */
 export function changeWords(hundredthsValue: number): string {
-  const percent = hundredthsValue - 100
-  if (percent === 0) return "no change"
-  return percent > 0 ? `+${percent}%` : `${-percent}% less`
+  return percentWords(hundredthsValue - 100)
 }
 
 export function formatHundredths(value: number): string {
   return (value / bundle.scale).toFixed(2)
 }
 
-/** A range of hundredths as plain percentages: "+57% to +81%", "6% to 12% less", "8% less to 16% more". */
+/** A range of hundredths as plain percentages: "−5% to +16%". */
 export function rangePercentWords(low: number, high: number): string {
-  const lowPct = low - 100
-  const highPct = high - 100
-  if (lowPct === highPct) return changeWords(low)
-  if (lowPct === 0) return `up to +${highPct}%`
-  if (highPct === 0) return `up to ${-lowPct}% less`
-  if (lowPct > 0) return `+${lowPct}% to +${highPct}%`
-  if (highPct < 0) return `${-highPct}% to ${-lowPct}% less`
-  return `${-lowPct}% less to ${highPct}% more`
+  return percentRangeWords(low - 100, high - 100)
 }
 
 function publishedRow(cell: FactorCell, label: string = cell.label): PublishedFactorRow {
@@ -1717,21 +1716,39 @@ function publishedRow(cell: FactorCell, label: string = cell.label): PublishedFa
   }
 }
 
-/** Shares and range cells aren't adjustments: show them as plain percentages. */
-function publishedShare(cell: FactorCell): PublishedFactorRow {
-  const isRange = cell.value === 100 && cell.low <= 100 && cell.high >= 100 && cell.low !== cell.high
+/** Range cells aren't adjustments: each says how much lower or higher a real price could be. */
+function publishedRangeCell(cell: FactorCell, label: string): PublishedFactorRow {
   return {
-    ...publishedRow(cell),
-    change: isRange ? "—" : `${cell.value}%`,
-    range: isRange
-      ? cell.low === 100
-        ? `up to ${cell.high - 100}% higher`
-        : cell.high === 100
-          ? `up to ${100 - cell.low}% lower`
-          : `${100 - cell.low}% lower to ${cell.high - 100}% higher`
-      : cell.low === cell.high
-        ? `${cell.value}%`
-        : `${cell.low}%–${cell.high}%`,
+    ...publishedRow(cell, label),
+    change: "—",
+    range: cell.low === cell.high ? "—" : percentRangeWords(cell.low - 100, cell.high - 100),
+  }
+}
+
+/** Plain names for the range cells (the data file keeps its own). */
+const RANGE_LABELS: Record<string, string> = {
+  "typical-start": "Starting from a typical state price, not yours",
+  "vehicle-model": "How closely real prices follow a car's claims",
+  "vehicle-value": "Luxury and electric cars",
+  "vehicle-model-years": "A model year outside the claims data",
+  "vehicle-mixed-powertrain": "A name sold as both gas and hybrid",
+  "vehicle-sporty": "Sporty cars, or ones with pricey repairs",
+  "vehicle-luxury-class": "A luxury car we price by its kind, not its model",
+  "vehicle-class": "A car we price by its kind, not its model",
+  "vehicle-unknown": "A car we don't recognize",
+  "vehicle-unknown-luxury": "A luxury or sports car we don't recognize",
+  "trim-limited": "Only partly sure which version of the car",
+  "trim-unresolved": "Not sure which version of the car",
+  "state-unknown": "Moving to a state without a typical price",
+  "state-typical": "Moving between two states",
+}
+
+/** The liability share of a full-coverage bill, as a plain percentage. */
+function publishedShareRow(cell: FactorCell): PublishedFactorRow {
+  return {
+    ...publishedRow(cell, "The part of a full-coverage bill that pays for damage you cause"),
+    change: `${cell.value}%`,
+    range: cell.low === cell.high ? "—" : `${cell.low}%–${cell.high}%`,
   }
 }
 
@@ -1740,9 +1757,12 @@ const PUBLISHED_ORDER = [...GROUP_IDS, "premium-split", "range"] as const
 export function publishedFactorGroups(): PublishedFactorGroup[] {
   const groups: PublishedFactorGroup[] = PUBLISHED_ORDER.map((id) => {
     const item = group(id)
-    const rows = Object.entries(item.cells).map(([key, cell]) =>
-      id === "premium-split" || id === "range" ? publishedShare(cell) : publishedRow(cell, plainLabel(id, key)),
-    )
+    const rows =
+      id === "range"
+        ? Object.entries(item.cells).map(([key, cell]) => publishedRangeCell(cell, RANGE_LABELS[key] ?? cell.label))
+        : id === "premium-split"
+          ? [publishedShareRow(item.cells.liability)]
+          : Object.entries(item.cells).map(([key, cell]) => publishedRow(cell, plainLabel(id, key)))
     return { family: plainTitle(id), note: PLAIN_NOTES[id] ?? item.note, rows }
   })
   const classRows = (rows: Record<string, VehicleClassRow>) =>

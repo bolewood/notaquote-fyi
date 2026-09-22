@@ -161,11 +161,11 @@ export function coverageAssumption(coverage: CoverageId, state: StateCode): stri
     case "state-minimum":
       return stateMinimumAssumption(state)
     case "standard":
-      return "Liability pays for damage you cause to others (up to $100k per person, $300k per crash, $100k property). Doesn't fix your own car."
+      return "Liability only pays for damage you cause to others, up to $100,000/$300,000/$100,000 (per person / per crash / property). It doesn't fix your own car."
     case "full":
-      return "Liability for damage you cause to others, plus collision and comprehensive, which fix or replace your own car after a crash, theft, or storm."
+      return "Liability for damage you cause to others, up to $100,000/$300,000/$100,000 (per person / per crash / property), plus collision and comprehensive, which fix or replace your own car after a crash, theft, or storm."
     case "high":
-      return "Full coverage with more liability protection (up to $250k per person, $500k per crash, $250k property)."
+      return "Full coverage with higher liability limits: up to $250,000/$500,000/$250,000 (per person / per crash / property)."
   }
 }
 

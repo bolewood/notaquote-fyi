@@ -58,6 +58,25 @@ export const TRUCKS_AND_FUN: readonly QuickCar[] = [
   { make: "Hyundai", model: "Ioniq 5" },
 ]
 
+/**
+ * "Add a starter list": a mix, so the spread tells a story. Everyday
+ * first cars next to a sporty one, an electric one, a Jeep, and a pickup.
+ */
+export const STARTER_MIX: readonly QuickCar[] = [
+  { make: "Honda", model: "Civic", trim: "Civic 4Dr" },
+  { make: "Toyota", model: "Corolla", trim: "Corolla" },
+  { make: "Toyota", model: "Camry" },
+  { make: "Mazda", model: "3", trim: "3 4-Door 2WD" },
+  { make: "Subaru", model: "Crosstrek" },
+  { make: "Honda", model: "HR-V" },
+  { make: "Toyota", model: "RAV4", trim: "RAV4" },
+  { make: "Subaru", model: "Outback" },
+  { make: "Ford", model: "Mustang", trim: "Mustang" },
+  { make: "Tesla", model: "Model 3", trim: "Model 3 Long Range AWD" },
+  { make: "Jeep", model: "Wrangler" },
+  { make: "Toyota", model: "Tacoma" },
+]
+
 /** The cars offered on the What-if page, one click each. */
 export const WHAT_IF_CARS: readonly (QuickCar & { year: number })[] = [
   { year: 2025, make: "Tesla", model: "Model Y", trim: "Model Y Long Range AWD" },

@@ -1,5 +1,6 @@
 import { compactName, type TrimConfidence } from "./catalog-match"
 import {
+  catalogYears,
   coercePick,
   trimRecord,
   type VehicleCatalog,
@@ -122,6 +123,10 @@ function findModel(
   )
 }
 
+/** The lookup itself failed: a network problem or NHTSA being busy, not the VIN. */
+export const VIN_UNREACHABLE =
+  "We couldn't reach the VIN lookup. Check your connection and try again, or pick your car from the list. Your car is unchanged."
+
 export async function runVinLookup(
   rawVin: string,
   input: {
@@ -149,20 +154,23 @@ export async function runVinLookup(
   try {
     const response = await input.fetchImpl(`${NHTSA_DECODE}${vin}?format=json`)
     if (!response.ok) {
-      return {
-        ok: false,
-        message: "We couldn't find that VIN. Your car is unchanged.",
-      }
+      return { ok: false, message: VIN_UNREACHABLE }
     }
     payload = await response.json()
   } catch {
-    return {
-      ok: false,
-      message: "We couldn't find that VIN. Your car is unchanged.",
-    }
+    return { ok: false, message: VIN_UNREACHABLE }
   }
 
   const decoded = readDecode(payload)
+  const years = catalogYears(input.catalog)
+  const first = Math.min(...years)
+  const last = Math.max(...years)
+  if (decoded && Number.isFinite(decoded.year) && (decoded.year < first || decoded.year > last)) {
+    return {
+      ok: false,
+      message: `That VIN is for a ${decoded.year} model. We only list model years ${first}–${last}, so your car is unchanged.`,
+    }
+  }
   if (!decoded || OUTSIDE_SNAPSHOT.test(decoded.vehicleType)) {
     return {
       ok: false,

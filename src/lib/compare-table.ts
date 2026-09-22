@@ -6,6 +6,7 @@
 import type { VehiclePick } from "./catalog"
 import { carKey } from "./car-search"
 import type { Estimate } from "./factor-engine"
+import { rangeEnds } from "./format"
 import { vehicleMatchWords } from "./pricing"
 
 /**
@@ -163,8 +164,8 @@ export const CSV_COLUMNS: Record<CompareMode, readonly string[]> = {
     "Version",
     "Starred",
     "Extra a year for your teen ($)",
+    "Extra a month for your teen ($)",
     "Whole policy a year, with your teen ($)",
-    "Whole policy a month ($)",
     "Whole policy range, low ($)",
     "Whole policy range, high ($)",
     "Why (compared with an average car)",
@@ -192,24 +193,84 @@ export type CsvNotes = {
   versions: string
 }
 
-/** Rows in the order given (sort them first), then a few notes at the bottom. */
+/** Rounded the way the page shows them: yearly to $10, monthly to $5, ranges to $50. */
+function tens(amount: number): number {
+  return Math.round(amount / 10) * 10
+}
+
+function fives(yearly: number): number {
+  return Math.max(5, Math.round(yearly / 12 / 5) * 5)
+}
+
+/** "Pricier repairs, more at-fault claims" (the page's words, first letter up). */
+export function reasonWords(reason: string): string {
+  return reason.charAt(0).toUpperCase() + reason.slice(1)
+}
+
+/**
+ * Who it's for and "not a quote" first, then one row per car in the order
+ * given (sort them first), then where the numbers start and the data date.
+ * Amounts are rounded the way the page shows them.
+ */
 export function toCsv(rows: readonly CompareRow[], notes: CsvNotes, mode: CompareMode = "own"): string {
-  const lines = [CSV_COLUMNS[mode].map(csvCell).join(",")]
+  const lines = [
+    [csvCell("Driver"), csvCell(notes.driver)].join(","),
+    [csvCell("Please note"), csvCell(notes.disclaimer)].join(","),
+    "",
+    CSV_COLUMNS[mode].map(csvCell).join(","),
+  ]
   for (const row of rows) {
+    const range = rangeEnds(row.low, row.high)
     const cells =
       mode === "added"
-        ? [row.name, row.trim, row.starred, row.extra ?? "", row.likely, row.monthly, row.low, row.high, row.reason]
-        : [row.name, row.trim, row.starred, row.likely, row.monthly, row.low, row.high, row.reason]
+        ? [
+            row.name,
+            row.trim,
+            row.starred,
+            row.extra === null ? "" : tens(row.extra),
+            row.extra === null ? "" : fives(row.extra),
+            tens(row.likely),
+            range.low,
+            range.high,
+            reasonWords(row.reason),
+          ]
+        : [row.name, row.trim, row.starred, tens(row.likely), fives(row.likely), range.low, range.high, reasonWords(row.reason)]
     lines.push(cells.map(csvCell).join(","))
   }
   lines.push("")
-  lines.push([csvCell("Driver"), csvCell(notes.driver)].join(","))
   lines.push([csvCell("Starting point"), csvCell(notes.start)].join(","))
   lines.push([csvCell("Data"), csvCell(notes.versions)].join(","))
-  lines.push([csvCell("Please note"), csvCell(notes.disclaimer)].join(","))
   lines.push([csvCell("Made with"), csvCell("NotAQuote.FYI, free and open source: notaquote.fyi")].join(","))
   // The byte-order mark tells Excel the file is UTF-8, so "16–18" and "→" read right.
   return `\uFEFF${lines.join("\r\n")}\r\n`
+}
+
+/**
+ * How much more each car costs than the cheapest one in view (by the main
+ * number), and which car that is. The cheapest car gets 0.
+ */
+export function gapsToCheapest(rows: readonly CompareRow[]): { gaps: Map<string, number>; cheapest: CompareRow | null } {
+  if (rows.length === 0) return { gaps: new Map(), cheapest: null }
+  const cheapest = rows.reduce((best, row) => (headlineAmount(row) < headlineAmount(best) ? row : best))
+  return {
+    gaps: new Map(rows.map((row) => [row.key, headlineAmount(row) - headlineAmount(cheapest)])),
+    cheapest,
+  }
+}
+
+/**
+ * One line that answers the question: the cheapest car in view against the
+ * priciest, e.g. "For a 16–18-year-old in Illinois, a 2022 Subaru Crosstrek
+ * costs about $350 a year less to add than a 2022 Kia Forte."
+ */
+export function compareAnswer(rows: readonly CompareRow[], mode: CompareMode, who: string): string | null {
+  if (rows.length < 2) return null
+  const sorted = [...rows].sort((left, right) => headlineAmount(left) - headlineAmount(right) || left.order - right.order)
+  const low = sorted[0]
+  const high = sorted[sorted.length - 1]
+  const gap = tens(headlineAmount(high) - headlineAmount(low))
+  if (gap === 0) return `${who}, these cars cost about the same to ${mode === "added" ? "add" : "insure"}.`
+  return `${who}, a ${low.name} costs about $${gap.toLocaleString("en-US")} a year less to ${mode === "added" ? "add" : "insure"} than a ${high.name}.`
 }
 
 export function csvFilename(today: Date = new Date()): string {

@@ -7,6 +7,7 @@ import {
   addCars,
   addSharedCars,
   carryFromWhatIf,
+  carryNote,
   defaultCompareFor,
   clearCars,
   COMPARE_LIMIT,
@@ -129,4 +130,20 @@ test("adding a shared list keeps your own cars and driver, and brings the sender
   const merged = addSharedCars(own, shared)
   assert.equal(merged.driver.state, own.driver.state)
   assert.deepEqual(merged.cars.map((car) => `${car.model}:${car.starred}`), ["Corolla:false", "Civic:true"])
+})
+
+test("after Compare more cars, we say what arrived and what didn't fit", () => {
+  const name = (car: { year: number; make: string; model: string }) => `${car.year} ${car.make} ${car.model}`
+  const camry = { year: 2020, make: "Toyota", model: "Camry", trim: "Camry" }
+  const mustang = { year: 2025, make: "Ford", model: "Mustang", trim: "Mustang" }
+  const list = { ...DEFAULT_COMPARE, cars: [{ ...camry, starred: false }, { ...mustang, starred: false }] }
+  assert.equal(
+    carryNote(list, [camry, mustang], name),
+    "We brought over the driver from your what-if, and the 2020 Toyota Camry and 2025 Ford Mustang.",
+  )
+  const full = { ...DEFAULT_COMPARE, cars: [{ ...camry, starred: false }] }
+  assert.equal(
+    carryNote(full, [camry, mustang], name),
+    "We brought over the driver from your what-if, and the 2020 Toyota Camry. Your list was full, so the 2025 Ford Mustang didn't fit. Remove a car to make room.",
+  )
 })

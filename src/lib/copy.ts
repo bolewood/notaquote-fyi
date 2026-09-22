@@ -1,6 +1,7 @@
 import factorBundle from "@/data/model-factors.json"
 import sourceManifest from "@/data/source-manifest.json"
 import { CATALOG_VERSION } from "./catalog-meta"
+import { longDate } from "./format"
 
 export const PUBLISHER = "Bolewood Group, LLC"
 
@@ -20,14 +21,7 @@ export const DISCLAIMER =
 export const PREMIUM_HINT =
   "If you know it, we'll start from your real number. It stays on your device."
 
-const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-
-/** "2026-09-22" as "September 22, 2026". */
-export function longDate(iso: string): string {
-  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso)
-  if (!match) return iso
-  return `${MONTHS[Number(match[2]) - 1]} ${Number(match[3])}, ${match[1]}`
-}
+export { longDate }
 
 /** When the numbers were last checked, in words: "September 22, 2026". */
 export const DATA_UPDATED = longDate(factorBundle.checkedOn)

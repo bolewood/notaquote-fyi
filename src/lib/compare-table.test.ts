@@ -5,10 +5,12 @@ import type { VehicleCatalog } from "./catalog"
 import { vehicleFacts } from "./catalog-class"
 import {
   buildRows,
+  compareAnswer,
   csvCell,
   csvFilename,
   DEFAULT_SORT,
   filterRows,
+  gapsToCheapest,
   headlineAmount,
   nextSort,
   parseMaxYearly,
@@ -152,28 +154,34 @@ test("every range bar shares one scale", () => {
   assert.equal(scaleFor([]), null)
 })
 
-test("the CSV has one line per row in the shown order, then plain notes, and no formulas", () => {
+test("the CSV starts with who and not-a-quote, then one line per row in the shown order, rounded like the page, and no formulas", () => {
   const rows = sortRows(ownRows(), DEFAULT_SORT)
   const notes = {
     driver: "A 16–18-year-old driver on their own policy in the Illinois suburbs with full coverage.",
-    start: "Illinois's average full-coverage cost in 2023 was $1,257 (NAIC).",
+    start: "Illinois's average full-coverage cost in 2023 was $1,257, according to the National Association of Insurance Commissioners (NAIC).",
     disclaimer: "This is an estimate to help you plan, not a quote.",
-    versions: "Model 0.2.0",
+    versions: "Updated September 22, 2026",
   }
   const csv = toCsv(rows, notes)
   assert.equal(csv.charCodeAt(0), 0xfeff, "starts with a byte-order mark so Excel reads UTF-8")
   const lines = csv.slice(1).trimEnd().split("\r\n")
-  assert.equal(lines[0], "Car,Version,Starred,Yearly estimate ($),Monthly estimate ($),\"Range, low ($)\",\"Range, high ($)\",Why (compared with an average car)")
+  assert.match(lines[0], /^Driver,A 16–18-year-old/)
+  assert.match(lines[1], /^Please note,"This is an estimate to help you plan, not a quote\."/)
+  assert.equal(lines[2], "")
+  assert.equal(lines[3], 'Car,Version,Starred,Yearly estimate ($),Monthly estimate ($),"Range, low ($)","Range, high ($)",Why (compared with an average car)')
   for (const [index, row] of rows.entries()) {
-    assert.ok(lines[index + 1].startsWith(`${row.name},${row.trim},${row.starred ? "Yes" : ""},${row.likely},${row.monthly},${row.low},${row.high},`))
+    const cells = lines[index + 4].split(",")
+    assert.equal(cells[0], row.name)
+    assert.equal(Number(cells[3]) % 10, 0, "yearly rounds to $10")
+    assert.equal(Number(cells[4]) % 5, 0, "monthly rounds to $5")
+    assert.equal(Number(cells[5]) % 50, 0, "range rounds to $50")
+    assert.ok(Math.abs(Number(cells[3]) - row.likely) <= 5)
   }
-  assert.equal(lines[rows.length + 1], "")
-  assert.match(csv, /Starting point,"Illinois's average full-coverage cost in 2023 was \$1,257 \(NAIC\)\."/)
-  assert.match(csv, /Please note,"This is an estimate to help you plan, not a quote\."/)
+  assert.match(csv, /Starting point,"Illinois's average full-coverage cost in 2023 was \$1,257, according to/)
   assert.doesNotMatch(csv, /\bnull\b|undefined/)
 
   const added = toCsv(sortRows(addedRows(), DEFAULT_SORT), notes, "added")
-  assert.match(added.slice(1).split("\r\n")[0], /^Car,Version,Starred,Extra a year for your teen \(\$\),"Whole policy a year, with your teen \(\$\)"/)
+  assert.match(added.slice(1).split("\r\n")[3], /^Car,Version,Starred,Extra a year for your teen \(\$\),Extra a month for your teen \(\$\),"Whole policy a year, with your teen \(\$\)"/)
 
   assert.equal(csvCell("=HYPERLINK(1)"), "'=HYPERLINK(1)")
   assert.equal(csvCell("+1"), "'+1")
@@ -181,4 +189,16 @@ test("the CSV has one line per row in the shown order, then plain notes, and no 
   assert.equal(csvCell(1234), "1234")
   assert.equal(csvCell(true), "Yes")
   assert.equal(csvFilename(new Date("2026-09-22T12:00:00Z")), "notaquote-car-comparison-2026-09-22.csv")
+})
+
+test("each car's gap to the cheapest, and a one-line answer", () => {
+  const rows = ownRows()
+  const { gaps, cheapest } = gapsToCheapest(rows)
+  assert.ok(cheapest)
+  assert.equal(gaps.get(cheapest!.key), 0)
+  for (const row of rows) assert.ok((gaps.get(row.key) ?? -1) >= 0)
+  const answer = compareAnswer(rows, "own", "For a 16–18-year-old in Illinois")
+  assert.match(answer ?? "", /^For a 16–18-year-old in Illinois, a 2022 .+ costs about \$[\d,]+0 a year less to insure than a 2022 .+\.$/)
+  assert.equal(compareAnswer(rows.slice(0, 1), "own", "For you"), null)
+  assert.match(compareAnswer(addedRows(), "added", "For a 16–18-year-old in Illinois") ?? "", /less to add than/)
 })
