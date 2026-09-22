@@ -25,7 +25,7 @@ export default function ModelVersionPage() {
               The made-up sample figures are gone. Every dollar on the site now comes from one set of math, starting from
               what you pay (if you tell us) or a typical price for your state. The home page answers &ldquo;what if I
               changed one thing?&rdquo;, and the new Compare page prices up to 15 cars for the same driver, with sorting,
-              stars, a spreadsheet, and share links that never carry prices.
+              stars, a spreadsheet, and share links that carry your choices, not our estimates.
             </p>
           ),
         },
@@ -51,7 +51,7 @@ export default function ModelVersionPage() {
           body: (
             <p>
               At first it only worked from a premium you entered; the typical state prices came the next day. Share links
-              remember which version of the math made them, never a price. If you open a link made with older math, the
+              remember which version of the math made them, and carry your choices, not our estimates. If you open a link made with older math, the
               page says so and works the numbers out with today&apos;s.
             </p>
           ),

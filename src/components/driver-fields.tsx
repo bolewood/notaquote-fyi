@@ -2,6 +2,7 @@
 
 import { CheckField, Segmented, SelectField } from "@/components/fields"
 import {
+  ageChange,
   AGE_BANDS,
   COVERAGE_PACKAGES,
   coverageAssumption,
@@ -43,7 +44,7 @@ export function AgeField({ scenario, onChange, idPrefix, label = "Driver's age" 
       onChange={(value) => {
         if (!isAgeBand(value)) return
         // A brand-new teen driver is usually newly licensed too.
-        onChange(value === "16-18" && scenario.age !== "16-18" ? { age: value, yearsLicensed: "under-1" } : { age: value })
+        onChange(ageChange(scenario, value))
       }}
     />
   )

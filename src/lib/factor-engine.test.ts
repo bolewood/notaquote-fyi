@@ -635,3 +635,21 @@ test("the range note is short points, each said once, with plurals right", () =>
   assert.equal(assumed.rangeNote, note)
   assert.ok(assumed.rangePoints.every((point) => point.length < 160), "each point is short")
 })
+
+test("two cars outside the claims years get one sentence", () => {
+  const old = vehicleFacts(catalog, { year: 2020, make: "Toyota", model: "Camry", trim: "Camry" })
+  const next = vehicleFacts(catalog, { year: 2025, make: "Tesla", model: "Model Y", trim: "Model Y Long Range AWD" })
+  const start: StartingPoint = { annual: 1800, scenario: { ...MOLLY, year: 2020, make: "Toyota", model: "Camry", trim: "Camry" }, vehicle: old, kind: "yours" }
+  const result = estimate(start, { ...MOLLY, year: 2025, make: "Tesla", model: "Model Y", trim: "Model Y Long Range AWD" }, { vehicle: next })
+  const claims = result.rangePoints.filter((point) => point.startsWith("Our claims data covers"))
+  assert.equal(claims.length, 1)
+  assert.match(claims[0], /so we used 2022 for the 2020 and 2024 for the 2025\.$/)
+})
+
+test("the liability weight reads as a share, not a change", () => {
+  const classes = publishedFactorGroups().find((group) => group.family.startsWith("Kinds of cars"))
+  const row = classes?.rows.find((item) => item.key.startsWith("We count about half"))
+  assert.ok(row)
+  assert.match(row!.change, /^\d+%$/)
+  assert.match(classes!.note, /isn't one of the 26 adjustments/)
+})

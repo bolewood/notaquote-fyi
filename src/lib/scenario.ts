@@ -169,6 +169,21 @@ export function coverageAssumption(coverage: CoverageId, state: StateCode): stri
   }
 }
 
+const UNDER_26_AGES: readonly AgeBand[] = ["16-18", "19-21", "22-25"]
+
+/**
+ * What changes when the driver's age changes. A brand-new teen driver is
+ * usually newly licensed too; going from under 26 to 26 or older resets years
+ * licensed to the default, so a "new driver" setting doesn't linger unseen.
+ */
+export function ageChange(scenario: Pick<Scenario, "age" | "yearsLicensed">, age: AgeBand): Partial<Scenario> {
+  if (age === "16-18" && scenario.age !== "16-18") return { age, yearsLicensed: "under-1" }
+  if (UNDER_26_AGES.includes(scenario.age) && !UNDER_26_AGES.includes(age)) {
+    return { age, yearsLicensed: DEFAULT_SCENARIO.yearsLicensed }
+  }
+  return { age }
+}
+
 /** Keep the old `teen` field in step with the age band. The engine ignores it. */
 export function withTeenFlag(scenario: Scenario): Scenario {
   const teen = scenario.age === "16-18"

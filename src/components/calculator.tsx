@@ -131,7 +131,6 @@ function presetsFor(tab: Tab, now: Scenario): Preset[] {
         },
         { label: "Liability only", change: { coverage: "standard" } },
         { label: "Full coverage, higher limits", change: { coverage: "high" } },
-        { label: "Bundled with home or renters", change: { householdPolicy: true } },
       ]
     case "more":
       return [

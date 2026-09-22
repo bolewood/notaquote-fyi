@@ -966,11 +966,21 @@ function CompareCarsReady() {
               className="btn min-h-11 px-3"
               aria-expanded={filterOpen}
               aria-controls="max-yearly"
-              onClick={() => setFilterOpen((open) => !open)}
+              onClick={() => {
+                const opening = !filterOpen
+                setFilterOpen(opening)
+                if (opening) {
+                  window.setTimeout(() => {
+                    const field = document.getElementById("max-yearly")
+                    field?.scrollIntoView({ behavior: "smooth", block: "center" })
+                    field?.focus({ preventScroll: true })
+                  }, 30)
+                }
+              }}
             >
               Filter
             </button>
-            <button type="button" className="btn btn-primary min-h-11 px-3" onClick={shareList}>
+            <button type="button" className="btn btn-primary min-h-11 min-w-11 px-3" onClick={shareList}>
               <Send className="size-4" aria-hidden="true" />
               <span className="sr-only">Share this list</span>
             </button>

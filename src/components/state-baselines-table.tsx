@@ -19,8 +19,8 @@ export function StateBaselinesTable() {
     <div className="grid gap-3">
       <p className="max-w-2xl">
         What an average driver in each state paid in 2023 for one car with full coverage (liability, collision, and
-        comprehensive), and for liability alone. It&rsquo;s a starting point, not your price: a teen driver, a newer car, or
-        higher limits cost more. When you don&rsquo;t tell us what you pay, the calculator starts from your state&rsquo;s
+        comprehensive), and for liability alone. It&apos;s a starting point, not your price: a teen driver, a newer car, or
+        higher limits cost more. When you don&apos;t tell us what you pay, the What-if page starts from your state&apos;s
         full-coverage figure, brought up to today. Nationally, it was {dollars(national.annual)}.
       </p>
       <div className="overflow-x-auto">

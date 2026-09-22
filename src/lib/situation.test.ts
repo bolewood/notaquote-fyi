@@ -1,6 +1,6 @@
 import assert from "node:assert/strict"
 import test from "node:test"
-import { DEFAULT_SCENARIO } from "./scenario"
+import { ageChange, DEFAULT_SCENARIO } from "./scenario"
 import {
   adoptSharedSituation,
   DEFAULT_SITUATION,
@@ -74,4 +74,11 @@ test("the premium field: empty, unreadable, fine, or suspiciously low for a year
   assert.deepEqual(premiumStatus("250,000", "year"), { kind: "too-high", annual: null })
   assert.deepEqual(premiumStatus("20,000", "month"), { kind: "too-high", annual: null })
   assert.deepEqual(premiumStatus("5", "month"), { kind: "low-monthly", annual: 60 })
+})
+
+test("moving the driver from under 26 to 26 or older resets years licensed", () => {
+  assert.deepEqual(ageChange({ age: "16-18", yearsLicensed: "under-1" }, "40-64"), { age: "40-64", yearsLicensed: DEFAULT_SCENARIO.yearsLicensed })
+  assert.deepEqual(ageChange({ age: "40-64", yearsLicensed: "10+" }, "16-18"), { age: "16-18", yearsLicensed: "under-1" })
+  assert.deepEqual(ageChange({ age: "40-64", yearsLicensed: "4-9" }, "26-39"), { age: "26-39" })
+  assert.deepEqual(ageChange({ age: "16-18", yearsLicensed: "under-1" }, "19-21"), { age: "19-21" })
 })

@@ -1276,12 +1276,20 @@ function summarySentence(start: StartingPoint, steps: ChangeStep[], likely: numb
   return `We started from ${startWords(start)} and adjusted for the ${changed}. That comes to about ${formatDollars(roundTen(likely))} a year (about ${monthlyDollars(likely)} a month).`
 }
 
-/** Our HLDI claims data covers these model years (from the bundle). */
-function outsideYearsSentence(modelYear: number): string {
+/**
+ * Our HLDI claims data covers these model years (from the bundle). One
+ * sentence for every car outside them: "Our claims data covers 2022–2024
+ * models, so we used 2022 for the 2020 and 2024 for the 2025."
+ */
+function outsideYearsSentence(modelYears: readonly number[]): string {
   const first = bundle.vehicle.yearMin
   const last = bundle.vehicle.yearMax
-  const nearest = modelYear > last ? last : first
-  return `Our claims data covers ${first}–${last} models, so for a ${modelYear} we used the closest year (${nearest}).`
+  const nearest = (year: number) => (year > last ? last : first)
+  const years = [...new Set(modelYears)].sort((left, right) => left - right)
+  if (years.length === 1) {
+    return `Our claims data covers ${first}–${last} models, so for a ${years[0]} we used the closest year (${nearest(years[0])}).`
+  }
+  return `Our claims data covers ${first}–${last} models, so we used ${joinWords(years.map((year) => `${nearest(year)} for the ${year}`))}.`
 }
 
 /**
@@ -1313,6 +1321,7 @@ function rangePoints(
     add(`Our figures for ${joinWords(assumed.map((step) => `the ${lowerFirst(step.title)}`))} are our best guesses, with no public source yet.`)
   }
   const vehicleChanged = steps.some((step) => step.group === "vehicle")
+  const outside: number[] = []
   if (vehicleChanged) {
     for (const [relativity, modelYear] of [
       [origin, start.scenario.year],
@@ -1324,10 +1333,9 @@ function rangePoints(
       if (relativity.level === "unknown") {
         add("We couldn't tell what kind of vehicle that is, so we treated it as an average one.")
       }
-      if (relativity.level === "model" && relativity.outsideYears) {
-        add(outsideYearsSentence(modelYear))
-      }
+      if (relativity.level === "model" && relativity.outsideYears) outside.push(modelYear)
     }
+    if (outside.length > 0) add(outsideYearsSentence(outside))
   }
   if (steps.some((step) => step.group === "state" && step.basis === "assumed")) {
     add(`We don't have a typical price for ${stateName(scenario.state)} yet, so the range is much wider.`)
@@ -1780,12 +1788,19 @@ export function publishedFactorGroups(): PublishedFactorGroup[] {
     Object.values(rows).flatMap((row) => [publishedRow(row.liability), publishedRow(row.physical)])
   groups.push({
     family: "Kinds of cars, when we don't have the exact model",
-    note: "From HLDI's insurance claims, compared with the average car. We use these when we don't have claims for the exact model.",
+    note: "From HLDI's insurance claims, compared with the average car. We use these when we don't have claims for the exact model. The last row is how much of a car's liability record we count; it isn't one of the 26 adjustments.",
     rows: [
       ...classRows(bundle.vehicle.classes),
       ...classRows(bundle.vehicle.luxuryClasses),
       ...classRows(bundle.vehicle.electricClasses),
-      publishedRow(bundle.vehicle.liabilityWeight),
+      {
+        ...publishedRow(bundle.vehicle.liabilityWeight, `We count about half (${bundle.vehicle.liabilityWeight.value}%) of a car's liability claims record`),
+        change: `${bundle.vehicle.liabilityWeight.value}%`,
+        range:
+          bundle.vehicle.liabilityWeight.low === bundle.vehicle.liabilityWeight.high
+            ? "—"
+            : `${bundle.vehicle.liabilityWeight.low}%–${bundle.vehicle.liabilityWeight.high}%`,
+      },
     ],
   })
   groups.push({

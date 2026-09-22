@@ -145,17 +145,22 @@ function StateNote({ rule }: { rule: StateRule }) {
 }
 
 /** One state's summary, what's good to know, what we couldn't confirm, and every page we used. */
+/** The notes are written by the state-rules work; the site says "per crash" everywhere. */
+function plain(text: string): string {
+  return text.replace(/per accident/g, "per crash")
+}
+
 export function StateNoteBody({ rule }: { rule: StateRule }) {
   const upcoming = upcomingChanges(rule)
   const defaultText = noFaultDefaultText(rule)
   return (
       <div className="grid gap-2 pb-4">
-      {rule.note ? <p>{rule.note}</p> : null}
+      {rule.note ? <p>{plain(rule.note)}</p> : null}
       {defaultText ? <p>No-fault is your choice here. {defaultText}</p> : null}
       {upcoming.map((change) => (
         <p key={change.from}>
           <span className="font-medium">Coming {formatVerifiedDate(change.from)}:</span>{" "}
-          {change.summary}{" "}
+          {plain(change.summary)}{" "}
           <a href={change.sourceUrl} rel="noreferrer">
             Source
           </a>
@@ -163,12 +168,12 @@ export function StateNoteBody({ rule }: { rule: StateRule }) {
       ))}
       {rule.goodToKnow ? (
         <p>
-          <span className="font-medium">Good to know:</span> {rule.goodToKnow}
+          <span className="font-medium">Good to know:</span> {plain(rule.goodToKnow)}
         </p>
       ) : null}
       {rule.uncertain ? (
         <p>
-          <span className="font-medium">What we couldn&rsquo;t confirm:</span> {rule.uncertain}
+          <span className="font-medium">What we couldn&rsquo;t confirm:</span> {plain(rule.uncertain)}
         </p>
       ) : null}
         <dl className="grid gap-2 rounded-2xl bg-muted/60 p-4 text-sm">
@@ -181,13 +186,13 @@ export function StateNoteBody({ rule }: { rule: StateRule }) {
           {rule.pipAmount ? (
             <div>
               <dt className="font-medium">Personal injury protection</dt>
-              <dd>{rule.pipAmount}</dd>
+              <dd>{plain(rule.pipAmount)}</dd>
             </div>
           ) : null}
           {rule.umLimits ? (
             <div>
               <dt className="font-medium">Uninsured and underinsured motorist</dt>
-              <dd>{rule.umLimits}</dd>
+              <dd>{plain(rule.umLimits)}</dd>
             </div>
           ) : null}
           {/* The effective-date notes cite laws in shorthand ("P.A. 102-982, eff. 7-1-23"); they stay in the data and
