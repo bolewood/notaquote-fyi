@@ -1082,7 +1082,7 @@ function PrintSummary({
             <ul style={{ margin: "6pt 0 0 14pt", listStyle: "disc" }}>
               {result.next.steps.map((step) => (
                 <li key={`${step.group}-${step.title}`}>
-                  {step.title}: {step.from} → {step.to} ({basisWords(step.basis).toLowerCase()})
+                  {step.title}: {step.from} → {step.to}. {basisWords(step.basis)}.
                 </li>
               ))}
             </ul>

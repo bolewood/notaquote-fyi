@@ -482,7 +482,7 @@ function CompareCarsReady() {
                               aria-pressed={inList}
                               disabled={!inList && full}
                               onClick={() => (inList ? save(removeCar(list, carKey(pick))) : add([pick]))}
-                              title={inList ? "In your list. Click to remove." : undefined}
+                              title={inList ? "In your list. Tap to remove." : undefined}
                             >
                               {inList ? <CheckMark /> : <Plus className="size-3.5" aria-hidden="true" />}
                               {pick.make} {pick.model}
@@ -606,7 +606,7 @@ function CompareCarsReady() {
                         sortKey="reason"
                         sort={sort}
                         onSort={setSort}
-                        className="hidden lg:table-cell print:table-cell"
+                        className="hidden xl:table-cell print:table-cell"
                       />
                       <th scope="col" className="no-print w-12 py-2.5 pr-4">
                         <span className="sr-only">Remove</span>
@@ -632,6 +632,7 @@ function CompareCarsReady() {
                             >
                               <span className="font-medium hover:underline">{row.name}</span>
                               <span className="text-xs text-muted-foreground">{row.trim}</span>
+                              <span className="mt-0.5 text-xs text-muted-foreground xl:hidden print:hidden">{sentenceCase(row.reason)}</span>
                             </button>
                           </td>
                           <td className="money py-3 pr-3 text-right whitespace-nowrap">
@@ -655,7 +656,7 @@ function CompareCarsReady() {
                               {added ? `${formatDollars(row.likely)} (${formatDollars(row.low)}–${formatDollars(row.high)})` : `${formatDollars(row.low)}–${formatDollars(row.high)}`}
                             </span>
                           </td>
-                          <td className="hidden max-w-60 min-w-44 py-3 pr-3 text-sm leading-snug text-muted-foreground lg:table-cell print:table-cell">
+                          <td className="hidden max-w-60 min-w-44 py-3 pr-3 text-sm leading-snug text-muted-foreground xl:table-cell print:table-cell">
                             {sentenceCase(row.reason)}
                           </td>
                           <td className="no-print py-3 pr-4 text-right">

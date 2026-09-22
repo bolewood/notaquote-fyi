@@ -1,8 +1,20 @@
 # NotAQuote.FYI
 
-A free, open-source calculator for planning what car insurance might cost. It's being built to answer questions like *"What happens to my insurance if I buy a Tesla Model Y?"* and *"Show my 15-year-old a table of 15 cars and let them narrow it down."* It gives you a ballpark range, not a quote, shows where its numbers come from, and lets anyone fix a number that's wrong.
+A free, open-source way to see what a new car, a teen driver, or a move would do to your car insurance. It answers questions like *"What happens to my insurance if I buy a Tesla Model Y?"* and *"Show my 15-year-old a table of 15 cars and let them narrow it down."* You get a ballpark range, not a quote, worked out from public data in your browser, with every number linked to where it came from.
 
-> **This is early.** The calculator works, but a lot of its numbers are still being sourced. Where we don't have a public source yet, the site says so and the range gets wider. The [roadmap](docs/ROADMAP.md) lays out what's done and what's next, and it's a good place to find something to help with.
+> **Still young.** It works today, and every number has a public source or says plainly that it's our estimate (and widens the range). About half of the adjustments are still our own careful estimates. The [roadmap](docs/ROADMAP.md) says what's next, and it's a good place to find something to help with.
+
+## What you can do with it
+
+**Ask a what-if.** Pick a car, add a teen driver, move to another state, or change your coverage, and see the difference from what you pay now, piece by piece.
+
+![The What-if page: switching from a 2020 Toyota Camry to a 2025 Tesla Model Y costs about $630 more a year, with the pieces that make up the difference and a range for each figure.](docs/images/what-if-model-y.png)
+
+**Compare up to 15 cars.** Price them all for the same driver, sort them, star the favorites, filter by budget, and take the list with you as a spreadsheet or a printout.
+
+![The Compare page: 15 popular first cars priced for a teen added to a parent's policy, lowest first, with two starred.](docs/images/compare-cars.png)
+
+**See how we got it.** Every estimate shows its starting price, each adjustment, and the public source behind it. The site's How it works and Sources pages list every number and every source.
 
 ## Why it exists
 
@@ -37,13 +49,13 @@ Other scripts: `npm test`, `npm run lint`, `npm run typecheck`, and `npm run bui
 
 ## How the numbers work
 
-The idea is simple, and the goal is that every piece of it can be checked:
+Your starting price × a few adjustments = a range. That's the whole idea, and every piece of it can be checked:
 
-1. **A starting point.** If you tell us what you pay now, we start from your real number. If you don't, we start from a typical premium for your state: roughly what drivers there pay in a year, taken from a public source. We have one for every state and DC: NAIC's 2023 average for liability plus collision and comprehensive, used with credit and moved forward to today with the government's price index for car insurance. The site says which one it started from.
-2. **Factors.** Each thing that changes the price, like the driver's age, the car, the deductible (the part of a claim you pay yourself), or the coverage level, is a multiplier. Each multiplier should cite a public source and the date it was checked.
+1. **A starting price.** If you tell us what you pay now, we start from your real number. If you don't, we start from a typical price for your state: NAIC's 2023 average for full coverage (liability plus collision and comprehensive), used with credit and brought up to today with the government's price index for car insurance. We have one for every state and DC. The site says which one it started from.
+2. **A few adjustments.** Each thing that changes the price, like the driver's age, the car, the deductible (the part of a claim you pay yourself), or the coverage, moves it up or down by a percentage. Each one cites a public source and the date it was checked, or is labeled as our estimate.
 3. **A range, not a price.** Where we're less sure, the range gets wider. Real quotes can land above or below it.
 
-Every dollar figure should come from one set of math that runs in your browser and has a version number, so you can tell when it changes. We're partway through that switch; the [roadmap](docs/ROADMAP.md) has the details. The site's methodology and sources pages show the factors, where they came from, and which version of the data you're looking at.
+Every dollar figure on the site comes from one set of math that runs in your browser (`src/lib/factor-engine.ts`). The site's How it works and Sources pages show every adjustment, where it came from, and when the data was last updated.
 
 ## What's where
 

@@ -495,8 +495,8 @@
 
   .card {
     box-shadow: none !important;
-    border-color: #bbb !important;
-    break-inside: avoid;
+    border: none !important;
+    border-radius: 0 !important;
   }
 
   a {

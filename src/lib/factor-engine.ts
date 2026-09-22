@@ -1142,7 +1142,7 @@ function estimateAny(start: StartingPoint, target: Scenario, options: EstimateOp
     }
     steps.push({
       group: "vehicle",
-      title: "Car",
+      title: "Car model",
       from: describeVehicle(startVehicle),
       to: describeVehicle(targetVehicle),
       basis: weakerBasis(from.vehicle.basis, to.vehicle.basis),
@@ -1678,7 +1678,7 @@ export const BASIS_WORDS: Record<FactorBasis, string> = {
   reference: "Starting point",
   sourced: "From public prices or rules",
   indicative: "From public data, roughly",
-  assumed: "Our estimate (help wanted)",
+  assumed: "Our estimate, help wanted",
 }
 
 /** Hundredths as a plain change: "+29%", "8% less", or "no change". */

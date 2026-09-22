@@ -64,7 +64,7 @@ export function PolicyField({
       legend="Whose policy?"
       value={value ? "added" : "own"}
       options={[
-        { value: "added", label: "Added to my policy" },
+        { value: "added", label: "On my policy" },
         { value: "own", label: "Their own policy" },
       ]}
       onChange={(next) => onChange(next === "added")}
