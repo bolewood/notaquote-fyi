@@ -9,16 +9,25 @@
  * field ids below must stay in sync with the YAML files. The test file
  * checks that for you.
  *
- * Privacy: an issue is public. These links must never carry a premium, a
- * VIN, or anything personal. Only the field ids listed here are accepted,
- * and any value that looks like a dollar amount, a VIN, an email address, or
- * a phone number is dropped rather than sent. Page links keep only the path,
- * because share links put scenario inputs (including an optional premium) in
- * the query string. Callers should pass descriptive labels ("Deductible
- * adjustment", "Texas minimum liability", "2025 Tesla Model Y"), never a
- * visitor's own numbers. Render these links with rel="noreferrer" so the
- * browser doesn't send the current page address (which may be a share link)
- * to GitHub.
+ * Privacy: an issue is public, so these links must never carry a premium, a
+ * VIN, or anything personal. Only ever pass the site's own labels and values
+ * ("Deductible adjustment", "Texas minimum liability", "2025 Tesla Model Y",
+ * "1.25"), never anything the visitor typed. Write liability minimums as
+ * "30/60/15", not "$30,000/$60,000/$15,000": values with a dollar sign are
+ * dropped.
+ *
+ * The checks below are a safety net, not a guarantee. Only the field ids
+ * listed here are sent. A value is dropped if it contains a dollar sign
+ * followed by a digit (fullwidth and small dollar signs included), something
+ * shaped like a VIN (even with spaces or dashes), an email address, or ten or
+ * more digits in a row. Page links keep only the path, because share links
+ * put scenario inputs (including an optional premium) in the query string.
+ * The checks can't catch a bare number like "1850", a name, or a street
+ * address, which is why callers must not pass visitor input at all. The tests
+ * pin down these limits.
+ *
+ * Render these links with rel="noreferrer" so the browser doesn't send the
+ * current page address (which may be a share link) to GitHub.
  */
 
 export const GITHUB_REPO_URL = "https://github.com/bolewood/notaquote-fyi"
@@ -68,18 +77,38 @@ export const FIELD_MAX = 300
 
 const TITLE_MAX = 120
 
+// Checked after NFKC normalization, which turns fullwidth "＄" and small "﹩"
+// into "$" and fullwidth digits into ASCII digits.
 const DOLLAR_AMOUNT = /\$\s*\d/
-const VIN_LIKE = /\b[A-HJ-NPR-Z0-9]{17}\b/i
 const EMAIL_LIKE = /[^\s@]+@[^\s@]+\.[^\s@]+/
 const PHONE_LIKE = /(?:\d[\s().-]*){10,}/
+// VIN characters: letters and digits except I, O, and Q.
+const VIN_RUN = /[A-HJ-NPR-Z0-9]{17,}/gi
 
-/** True when a value looks like it could carry money or personal details. */
+/**
+ * True when the value holds a run of 17 or more VIN characters, ignoring
+ * spaces and dashes, with at least three digits. Real VINs always carry
+ * digits; the digit rule keeps ordinary words from tripping it.
+ */
+export function containsVinLike(value: string): boolean {
+  const squeezed = value.normalize("NFKC").replace(/[\s-]+/g, "")
+  for (const match of squeezed.matchAll(VIN_RUN)) {
+    if ((match[0].match(/\d/g) ?? []).length >= 3) return true
+  }
+  return false
+}
+
+/**
+ * True when a value looks like it could carry money or personal details.
+ * A safety net, not a guarantee: see the note at the top of this file.
+ */
 export function looksPersonal(value: string): boolean {
+  const normalized = value.normalize("NFKC")
   return (
-    DOLLAR_AMOUNT.test(value) ||
-    VIN_LIKE.test(value) ||
-    EMAIL_LIKE.test(value) ||
-    PHONE_LIKE.test(value)
+    DOLLAR_AMOUNT.test(normalized) ||
+    containsVinLike(normalized) ||
+    EMAIL_LIKE.test(normalized) ||
+    PHONE_LIKE.test(normalized)
   )
 }
 
@@ -129,7 +158,10 @@ export function cleanSourceUrl(value: unknown): string | null {
   url.hash = ""
   const href = url.toString()
   // Long digit runs are normal in URLs, so skip the phone check here.
-  if (DOLLAR_AMOUNT.test(href) || VIN_LIKE.test(href) || EMAIL_LIKE.test(href)) return null
+  const normalized = href.normalize("NFKC")
+  if (DOLLAR_AMOUNT.test(normalized) || containsVinLike(href) || EMAIL_LIKE.test(normalized)) {
+    return null
+  }
   return href.length > FIELD_MAX ? null : href
 }
 

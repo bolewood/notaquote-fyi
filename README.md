@@ -15,7 +15,7 @@ It is not an insurance company, agent, or broker, and it doesn't sell anything o
 ## Your privacy
 
 - **No account, and nothing to sign up for.**
-- **Your inputs stay in your browser.** The math runs on your device. We don't have a server that sees your answers.
+- **Your inputs stay in your browser.** The math runs on your device. We don't collect or store your answers.
 - **One exception, and only if you use it:** if you type in a VIN, your browser sends it straight to NHTSA's free vehicle decoder to look up the car. We don't keep it.
 - **No cookies, ad trackers, or analytics scripts.**
 - **Saved comparisons stay on your device.** Share links do include the inputs for that scenario (including your current premium, if you entered one), so share them the way you'd share any personal note.
@@ -39,11 +39,11 @@ Other scripts: `npm test`, `npm run lint`, `npm run typecheck`, and `npm run bui
 
 The idea is simple, and the goal is that every piece of it can be checked:
 
-1. **A starting point.** If you tell us what you pay now, we start from your real number. If you don't, we start from a typical premium for your state, taken from a public source. (Those state figures are still being gathered. Until a state has one, the site tells you plainly what it's starting from.)
+1. **A starting point.** If you tell us what you pay now, we start from your real number. If you don't, we start from a typical premium for your state: roughly what drivers there pay in a year, taken from a public source. (Those state figures are still being gathered. Until a state has one, the site tells you plainly what it's starting from.)
 2. **Factors.** Each thing that changes the price, like the driver's age, the car, the deductible (the part of a claim you pay yourself), or the coverage level, is a multiplier. Each multiplier should cite a public source and the date it was checked.
 3. **A range, not a price.** Where we're less sure, the range gets wider. Real quotes can land above or below it.
 
-Every dollar figure is meant to come from one versioned engine that runs in your browser. We're partway through that switch; the [roadmap](docs/ROADMAP.md) has the details. The site's methodology and sources pages show the factors, where they came from, and which version of the data you're looking at.
+Every dollar figure is meant to come from one set of math, with a version number so you can tell when it changes, running in your browser. We're partway through that switch; the [roadmap](docs/ROADMAP.md) has the details. The site's methodology and sources pages show the factors, where they came from, and which version of the data you're looking at.
 
 ## What's where
 
@@ -67,6 +67,7 @@ You don't need to write code to help.
 - **Your state's rules are missing or wrong?** [Report a state rule](https://github.com/bolewood/notaquote-fyi/issues/new?template=2-state-rule.yml). A link to your state insurance department or the statute is perfect.
 - **A car is missing or in the wrong group?** [Report a vehicle](https://github.com/bolewood/notaquote-fyi/issues/new?template=3-vehicle.yml).
 - **Something's broken?** [Report a bug](https://github.com/bolewood/notaquote-fyi/issues/new?template=4-bug.yml).
+- **Just have a question?** [Ask it](https://github.com/bolewood/notaquote-fyi/issues/new?template=5-question.yml).
 - **Want to send a fix?** Start with [CONTRIBUTING.md](CONTRIBUTING.md). The one rule to remember: every number needs a public source and the date you checked it.
 
 Everyone taking part agrees to the [Code of Conduct](CODE_OF_CONDUCT.md). To report a security problem privately, see [SECURITY.md](SECURITY.md).

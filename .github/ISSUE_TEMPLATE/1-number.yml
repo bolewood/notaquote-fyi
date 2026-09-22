@@ -1,5 +1,5 @@
 name: A number looks wrong
-description: A factor or adjustment seems off, is out of date, or needs a better source.
+description: A multiplier or adjustment on the site seems off, is out of date, or needs a better source.
 title: "Number looks wrong: "
 labels: ["data", "factors"]
 body:
@@ -37,10 +37,8 @@ body:
     id: source_url
     attributes:
       label: Source link
-      description: A public page that backs this up. State insurance departments, statutes, and government datasets are best.
+      description: Best if you have one. No link? Send it anyway, and someone may find one.
       placeholder: "https://"
-    validations:
-      required: true
   - type: input
     id: source_checked
     attributes:

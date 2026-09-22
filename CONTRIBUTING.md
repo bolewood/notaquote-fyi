@@ -12,7 +12,7 @@ Please read the [Code of Conduct](CODE_OF_CONDUCT.md) first. The short version: 
 
 ## Get it running (about 5 minutes)
 
-You'll need [Node.js](https://nodejs.org/) 20.9 or newer (CI uses Node 24) and npm, which comes with Node.
+You'll need [Node.js](https://nodejs.org/) 20.9 or newer (CI checks both 20.9 and 24) and npm, which comes with Node.
 
 ```bash
 git clone https://github.com/bolewood/notaquote-fyi.git
@@ -88,7 +88,7 @@ Longer research notes belong in the matching `data/*/assumptions.md` file.
 
 ### A factor (a number that moves the estimate up or down)
 
-1. If you're not sure the change is right, open a ["A number looks wrong"](https://github.com/bolewood/notaquote-fyi/issues/new?template=1-number.yml) issue first so we can talk it through.
+1. If you're not sure the change is right, use the ["A number looks wrong"](https://github.com/bolewood/notaquote-fyi/issues/new?template=1-number.yml) form first so we can talk it through.
 2. Edit the factor in `src/data/model-factors.json`, with its source as described above.
 3. Bump the file's version string (see [Versions](#versions) below).
 4. Run `npm test`. If a test expects the old number, update the test, and say why in your pull request.
@@ -97,8 +97,8 @@ Longer research notes belong in the matching `data/*/assumptions.md` file.
 ### A state rule (minimum coverage and required coverages)
 
 1. Find the rule on the state's own insurance department site or in the statute.
-2. Edit that state's row in `src/lib/state-rules.ts`. Each row carries its own source link and the date it was checked. Fill those in, not just the numbers.
-3. Bump the state-rules version string.
+2. Find the state's entry in the state rules data, and add the source link and the date you checked it along with the rule itself.
+3. Run `npm test`.
 4. Add your notes to `data/state-rules/assumptions.md`, especially anything unusual (a coverage that's required unless you turn it down in writing, a change taking effect on a future date, and so on).
 
 ### A vehicle
@@ -107,13 +107,13 @@ The vehicle catalog is generated from NHTSA vPIC and FuelEconomy.gov by `scripts
 
 ### Versions
 
-Every data file carries a version string, and share links record which versions produced a result. That's how someone can tell when the numbers behind a link have changed. So when you change data, bump its version to include today's date:
+Every data file carries a version string. Share links record two of them, the model version and the factor-bundle version, so someone opening an old link can tell when the math or the factors behind it have changed. So when you change data, bump its version to include today's date:
 
 | What you changed | Where the version lives |
 | --- | --- |
 | Factors | `"version"` in `src/data/model-factors.json` |
 | Source list | `"version"` in `src/data/source-manifest.json` |
-| State rules | `STATE_RULES_VERSION` in `src/lib/state-rules.ts` |
+| State rules | The version string in the state rules data |
 | Vehicle catalog | Written for you by `npm run catalog:build` |
 | How the engine does its math | `MODEL_VERSION` in `src/lib/copy.ts` |
 
@@ -127,7 +127,7 @@ These are promises the site makes, so they're rules for every change:
 - No analytics scripts, tracking pixels, cookies, or third-party scripts.
 - Never put a premium, a VIN, or anything personal in a URL that leaves the site.
 
-To add a "Suggest a fix" link beside a number, use the helper in `src/lib/suggest-fix.ts`. It opens a prefilled GitHub issue and drops anything that looks personal:
+To add a "Suggest a fix" link beside a number, use the helper in `src/lib/suggest-fix.ts`. It opens a prefilled GitHub issue. It also drops values that look like a dollar amount, a VIN, an email address, or a phone number, but that's a safety net, not a guarantee: only ever pass the site's own labels and values, never anything the visitor typed. Write liability minimums as "30/60/15", since values with a dollar sign are dropped.
 
 ```tsx
 import { suggestFixUrl } from "@/lib/suggest-fix"
@@ -144,7 +144,7 @@ import { suggestFixUrl } from "@/lib/suggest-fix"
 </a>
 ```
 
-Pass descriptive labels, never the visitor's own numbers. If you add a field to an issue form, add its `id` to `FIX_TEMPLATES` too. The tests check that the two match.
+If you rename or remove a field in an issue form, update `FIX_TEMPLATES` to match. The tests catch a mismatch.
 
 ## Words on the site
 
@@ -158,7 +158,7 @@ Anything a visitor reads should follow [docs/VOICE.md](docs/VOICE.md): plain wor
 - **Fill in the checklist** in the pull request template.
 - **Expect questions.** Review is about getting the numbers right, not about you. If a reviewer asks for a source, that's the project working as intended.
 
-Not sure where to start? Look for issues labeled [`good first issue`](https://github.com/bolewood/notaquote-fyi/labels/good%20first%20issue) or [`help wanted`](https://github.com/bolewood/notaquote-fyi/labels/help%20wanted), or open an issue and ask.
+Not sure where to start? Look for issues labeled [`good first issue`](https://github.com/bolewood/notaquote-fyi/labels/good%20first%20issue) or [`help wanted`](https://github.com/bolewood/notaquote-fyi/labels/help%20wanted), or [ask a question](https://github.com/bolewood/notaquote-fyi/issues/new?template=5-question.yml).
 
 ## Licensing your contribution
 

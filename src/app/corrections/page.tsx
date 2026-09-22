@@ -81,7 +81,7 @@ export default function CorrectionsPage() {
         about you. We never add those to the form for you.
       </p>
 
-      <h2 className="mt-2 text-lg font-semibold tracking-tight">What makes a report really helpful</h2>
+      <h2 className="mt-2 text-lg font-semibold tracking-tight">What helps most</h2>
       <p>
         A link. The best sources are ones anyone can open: your state insurance
         department&apos;s website, the law itself, or a government dataset. Tell

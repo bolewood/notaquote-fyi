@@ -9,11 +9,11 @@ The tables, factors, and notes that NotAQuote.FYI contributors research and asse
 That covers, for example:
 
 - the factor bundle and source manifest in `src/data/`
-- the state-rules table in `src/lib/state-rules.ts`
+- the state rule values and their sources (the values and citations only, not the code around them)
 - the research notes and assumption logs in `data/`
 - our selection and arrangement of the vehicle catalog in `public/catalog/`
 
-If you're not sure which license a file falls under, open an issue and ask.
+If you're not sure which license a file falls under, [ask us](https://github.com/bolewood/notaquote-fyi/issues/new?template=5-question.yml).
 
 A credit line like this is plenty:
 

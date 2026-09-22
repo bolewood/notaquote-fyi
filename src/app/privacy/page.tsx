@@ -67,12 +67,10 @@ export default function PrivacyPage() {
         fingerprint. Pages send a noindex, nofollow request to crawlers.
       </p>
       <p>
-        The corrections form asks for a state, a page on this site, a source
-        URL, and one category: wrong minimum, stale source, vehicle mapping,
-        display error, or other. It does not ask for a name, an email address,
-        a phone number, a carrier, a premium, or a written note. When the queue
-        is not configured, the form stays disabled and does not save a row.
-        This page does not publish a contact address.
+        To report a problem, the Help make this better page sends you to a
+        form on GitHub. Nothing is sent from this site. You see the whole
+        report and decide whether to post it. Reports are public, so leave out
+        your premium, your VIN, and anything about you.
       </p>
       <CountLedgerPanel />
       <p>

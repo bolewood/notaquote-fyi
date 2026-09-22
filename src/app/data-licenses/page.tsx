@@ -4,6 +4,7 @@ import { TrustArticle } from "@/components/trust-article"
 import { formatCatalogDate } from "@/lib/catalog"
 import { DATA_BUNDLE_VERSION, MANIFEST_VERSION } from "@/lib/copy"
 import { STATE_RULES_VERSION } from "@/lib/state-rules"
+import { GITHUB_REPO_URL } from "@/lib/suggest-fix"
 import {
   CATALOG_RETRIEVED_ON,
   CATALOG_TERMS,
@@ -20,6 +21,22 @@ export default function DataLicensesPage() {
   return (
     <TrustArticle title="Data licenses">
       <RecordTrustView />
+      <p>
+        This project is open source. The code is free to use under the{" "}
+        <a href={`${GITHUB_REPO_URL}/blob/main/LICENSE`} className="underline underline-offset-4">
+          MIT license
+        </a>
+        . The data we put together ourselves, like the factors, the state rule
+        values, and our research notes, is free to reuse under{" "}
+        <a
+          href={`${GITHUB_REPO_URL}/blob/main/DATA-LICENSE.md`}
+          className="underline underline-offset-4"
+        >
+          CC BY 4.0
+        </a>
+        , as long as you give credit. The outside sources below keep their own
+        terms.
+      </p>
       <p>
         The factor bundle is {DATA_BUNDLE_VERSION}. The source manifest is{" "}
         {MANIFEST_VERSION}. The vehicle catalog bundle is {CATALOG_VERSION},

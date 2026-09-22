@@ -2,10 +2,12 @@ import assert from "node:assert/strict"
 import test from "node:test"
 import { existsSync, readFileSync } from "node:fs"
 import path from "node:path"
+import { fileURLToPath } from "node:url"
 import {
   cleanPagePath,
   cleanSourceUrl,
   cleanValue,
+  containsVinLike,
   FIELD_MAX,
   FIX_KINDS,
   FIX_TEMPLATES,
@@ -13,7 +15,8 @@ import {
   suggestFixUrl,
 } from "./suggest-fix"
 
-const TEMPLATE_DIR = path.join(process.cwd(), ".github", "ISSUE_TEMPLATE")
+const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..")
+const TEMPLATE_DIR = path.join(REPO_ROOT, ".github", "ISSUE_TEMPLATE")
 
 function params(url: string): URLSearchParams {
   return new URL(url).searchParams
@@ -117,6 +120,51 @@ test("dollar amounts, VINs, emails, and phone numbers are dropped, never sent", 
   assert.equal(cleanValue("call 555-123-4567"), null)
   assert.equal(cleanValue(vin.toLowerCase()), null)
   assert.equal(cleanValue("$ 900"), null)
+})
+
+test("fullwidth and small dollar signs are caught too", () => {
+  assert.equal(cleanValue("＄1850"), null)
+  assert.equal(cleanValue("﹩1850"), null)
+  assert.equal(cleanValue("＄１８５０"), null)
+})
+
+test("VINs are caught with spaces, dashes, or lowercase, but ordinary words are not", () => {
+  const vin = "1HGBH41JXMN109186"
+  assert.equal(containsVinLike(vin), true)
+  assert.equal(containsVinLike("1HGBH 41JXM N109186"), true)
+  assert.equal(containsVinLike("1HG-BH41-JXMN-109186"), true)
+  assert.equal(containsVinLike(`my car is ${vin.toLowerCase()}`), true)
+  assert.equal(cleanValue("1HGBH 41JXM N109186"), null)
+
+  assert.equal(containsVinLike("2025 Tesla Model Y Long Range AWD"), false)
+  assert.equal(containsVinLike("Uninsured motorist coverage required unless rejected"), false)
+  assert.equal(cleanValue("2025 Tesla Model Y Long Range AWD"), "2025 Tesla Model Y Long Range AWD")
+})
+
+test("liability minimums pass when written as 30/60/15, and are dropped with dollar signs", () => {
+  assert.equal(cleanValue("30/60/15"), "30/60/15")
+  assert.equal(cleanValue("$25,000/$50,000/$25,000"), null)
+  const url = suggestFixUrl({
+    kind: "state-rule",
+    title: "Texas minimum liability",
+    fields: { state: "Texas", rule: "Minimum liability limits", shown: "30/60/25" },
+  })
+  assert.equal(params(url).get("shown"), "30/60/25")
+})
+
+test("known limits: the filter is a safety net, so callers must never pass visitor input", () => {
+  // These are NOT caught. They are pinned here so nobody mistakes the filter
+  // for a guarantee. If one of these starts being dropped, update the note in
+  // suggest-fix.ts and CONTRIBUTING.md.
+  for (const value of [
+    "1850 a year",
+    "1,850",
+    "USD 1850",
+    "John Smith, 12 Elm St",
+    "Policy #ABC123456789",
+  ]) {
+    assert.equal(cleanValue(value), value, `expected "${value}" to pass the filter`)
+  }
 })
 
 test("a share link used as the page keeps only the path, so the premium stays out", () => {
