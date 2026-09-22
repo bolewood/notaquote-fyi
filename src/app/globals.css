@@ -10,22 +10,22 @@
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
   --font-heading: var(--font-sans);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
   --color-range-low: var(--range-low);
   --color-range-likely: var(--range-likely);
   --color-range-high: var(--range-high);
+  --color-sun: var(--sun);
+  --color-sun-soft: var(--sun-soft);
+  --color-sun-ink: var(--sun-ink);
+  --color-up: var(--up);
+  --color-up-soft: var(--up-soft);
+  --color-down: var(--down);
+  --color-down-soft: var(--down-soft);
+  --color-star: var(--star);
   --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -52,80 +52,51 @@
 }
 
 :root {
-  --background: oklch(0.975 0.008 85);
-  --foreground: oklch(0.25 0.015 70);
-  --card: oklch(0.985 0.006 85);
-  --card-foreground: oklch(0.25 0.015 70);
-  --popover: oklch(0.985 0.006 85);
-  --popover-foreground: oklch(0.25 0.015 70);
-  --primary: oklch(0.38 0.09 255);
-  --primary-foreground: oklch(0.98 0.005 85);
-  --range-low: oklch(0.46 0.11 255);
-  --range-likely: oklch(0.46 0.12 62);
-  --range-high: oklch(0.46 0.12 25);
-  --secondary: oklch(0.94 0.01 85);
-  --secondary-foreground: oklch(0.25 0.015 70);
-  --muted: oklch(0.94 0.01 85);
-  --muted-foreground: oklch(0.4 0.015 70);
-  --accent: oklch(0.93 0.012 85);
-  --accent-foreground: oklch(0.25 0.015 70);
-  --destructive: oklch(0.45 0.12 25);
-  --border: oklch(0.86 0.012 85);
-  --input: oklch(0.86 0.012 85);
-  --ring: oklch(0.38 0.09 255);
+  --background: oklch(0.982 0.008 80);
+  --foreground: oklch(0.24 0.025 255);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.24 0.025 255);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.24 0.025 255);
+  --primary: oklch(0.4 0.11 255);
+  --primary-foreground: oklch(0.99 0.004 85);
+  --range-low: oklch(0.5 0.11 250);
+  --range-likely: oklch(0.42 0.11 255);
+  --range-high: oklch(0.5 0.13 35);
+  --secondary: oklch(0.95 0.012 80);
+  --secondary-foreground: oklch(0.24 0.025 255);
+  --muted: oklch(0.955 0.01 80);
+  --muted-foreground: oklch(0.45 0.02 255);
+  --accent: oklch(0.95 0.03 70);
+  --accent-foreground: oklch(0.3 0.05 50);
+  --destructive: oklch(0.5 0.16 28);
+  --border: oklch(0.89 0.012 80);
+  --input: oklch(0.84 0.014 80);
+  --ring: oklch(0.45 0.12 255);
+  --sun: oklch(0.72 0.15 62);
+  --sun-soft: oklch(0.965 0.035 78);
+  --sun-ink: oklch(0.45 0.12 50);
+  --up: oklch(0.5 0.16 30);
+  --up-soft: oklch(0.965 0.025 30);
+  --down: oklch(0.46 0.11 155);
+  --down-soft: oklch(0.965 0.03 155);
+  --star: oklch(0.74 0.16 78);
   --chart-1: oklch(0.46 0.11 255);
   --chart-2: oklch(0.46 0.12 62);
   --chart-3: oklch(0.46 0.12 25);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --radius: 0.375rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-}
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --radius: 0.625rem;
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
+  }
+  /* One visible focus ring for everything you can click or type in. */
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
   }
   html {
     @apply font-sans;
@@ -136,50 +107,414 @@
   }
 }
 
-.preset-button:focus-visible {
-  outline: 2px solid var(--foreground) !important;
-  outline-offset: 2px !important;
+/* ------------------------------------------------------------------ */
+/* Building blocks                                                     */
+
+@layer components {
+  .card {
+    border: 1px solid color-mix(in oklch, var(--border), transparent 25%);
+    background: var(--card);
+    border-radius: calc(var(--radius) * 1.8);
+    box-shadow:
+      0 1px 2px oklch(0.24 0.025 255 / 0.04),
+      0 12px 32px -18px oklch(0.24 0.025 255 / 0.16);
+  }
+
+  /* A fold-out section: a quiet line above, no box. */
+  .disclosure {
+    border-top: 1px solid var(--border);
+  }
+  .disclosure > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    min-height: 3rem;
+    padding: 0.75rem 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+  }
+  .disclosure > summary::-webkit-details-marker {
+    display: none;
+  }
+  .disclosure > summary:hover {
+    color: var(--primary);
+  }
+  .disclosure > summary > svg {
+    flex-shrink: 0;
+    color: var(--muted-foreground);
+    transition: transform 160ms ease;
+  }
+  .disclosure[open] > summary > svg {
+    transform: rotate(180deg);
+  }
+
+  /* A small, readable label: "Lowest", "Our estimate". */
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    border-radius: 999px;
+    padding: 0.2rem 0.6rem;
+    font-size: 0.8rem;
+    font-weight: 650;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  /* Long-form pages: comfortable reading, one type scale. */
+  .prose-page {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--foreground);
+  }
+  .prose-page > * + * {
+    margin-top: 1rem;
+  }
+  .prose-page h2 {
+    margin-top: 2.75rem;
+    font-size: 1.35rem;
+    line-height: 1.3;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    scroll-margin-top: 1rem;
+  }
+  .prose-page h3 {
+    margin-top: 1.75rem;
+    font-size: 1.05rem;
+    font-weight: 650;
+  }
+  .prose-page h2 + *,
+  .prose-page h3 + * {
+    margin-top: 0.5rem;
+  }
+  .prose-page ul.bullets {
+    list-style: disc;
+    padding-left: 1.25rem;
+  }
+  .prose-page ul.bullets > li + li {
+    margin-top: 0.5rem;
+  }
+  .prose-page a:not(.btn):not(.plain) {
+    color: var(--primary);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+  .prose-page a:not(.btn):not(.plain):hover {
+    text-decoration-thickness: 2px;
+  }
+  .prose-page .lead {
+    font-size: 1.15rem;
+    line-height: 1.65;
+    color: var(--muted-foreground);
+  }
+
+  .eyebrow {
+    font-size: 0.75rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.5rem;
+    padding: 0.5rem 0.95rem;
+    border-radius: 999px;
+    border: 1px solid var(--input);
+    background: var(--card);
+    color: var(--foreground);
+    font-size: 0.9rem;
+    font-weight: 550;
+    line-height: 1.2;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      background-color 120ms,
+      border-color 120ms,
+      color 120ms;
+  }
+  .btn:hover {
+    background: var(--muted);
+  }
+  .btn:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .btn-primary {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+  .btn-primary:hover {
+    background: color-mix(in oklch, var(--primary), black 14%);
+  }
+  .btn-quiet {
+    border-color: transparent;
+    background: transparent;
+    color: var(--primary);
+    padding-inline: 0.6rem;
+  }
+  .btn-quiet:hover {
+    background: var(--muted);
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.5rem;
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    border: 1px solid var(--input);
+    background: var(--card);
+    color: var(--foreground);
+    font-size: 0.875rem;
+    font-weight: 520;
+    line-height: 1.2;
+    text-align: left;
+    cursor: pointer;
+    transition:
+      background-color 120ms,
+      border-color 120ms,
+      transform 80ms;
+  }
+  .chip:hover {
+    border-color: var(--primary);
+    background: color-mix(in oklch, var(--primary), white 94%);
+  }
+  .chip:active {
+    transform: translateY(1px);
+  }
+  .chip[aria-pressed="true"] {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+  .chip:disabled {
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
+
+
+  .field-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted-foreground);
+  }
+  .field-select,
+  .field-input {
+    width: 100%;
+    min-height: 2.6rem;
+    border-radius: calc(var(--radius) * 1.1);
+    border: 1px solid var(--input);
+    background-color: var(--card);
+    color: var(--foreground);
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+  .field-select {
+    appearance: none;
+    padding-right: 2.2rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2345506a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.7rem center;
+    text-overflow: ellipsis;
+    cursor: pointer;
+  }
+  .field-select:disabled {
+    background-color: var(--muted);
+    color: var(--muted-foreground);
+    cursor: default;
+  }
+  .field-input::placeholder {
+    color: color-mix(in oklch, var(--muted-foreground), white 30%);
+  }
+
+  .tab {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.4rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: 560;
+    color: var(--muted-foreground);
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .tab:hover {
+    color: var(--foreground);
+    background: var(--muted);
+  }
+  .tab[aria-selected="true"],
+  .tab[data-selected="true"] {
+    background: var(--foreground);
+    color: var(--background);
+  }
+
+  .icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    flex-shrink: 0;
+    border-radius: 999px;
+    color: var(--muted-foreground);
+    cursor: pointer;
+  }
+  .icon-btn:hover {
+    background: var(--muted);
+    color: var(--foreground);
+  }
+
+  .link {
+    color: var(--primary);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+  .link:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  .money {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+
+  .scroll-row {
+    display: flex;
+    gap: 0.35rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+  }
+  .scroll-row > * {
+    scroll-snap-align: start;
+  }
+  .scroll-row::-webkit-scrollbar {
+    display: none;
+  }
 }
 
-.comparison-sheet {
-  position: fixed;
-  inset: auto 0 0 0;
-  width: 100%;
+.picker-dialog {
+  width: min(40rem, calc(100vw - 1.5rem));
   max-width: none;
-  max-height: 85vh;
-  margin: 0;
-  overflow: auto;
-  border: 0;
-  border-top: 1px solid var(--border);
-  background: var(--background);
-  color: var(--foreground);
-  padding: 1rem 1rem 1.5rem;
-}
-
-.comparison-sheet::backdrop {
-  background: oklch(0.25 0.015 70 / 0.35);
-}
-
-.worksheet {
-  display: grid;
-  gap: 1rem;
-  margin-top: 2.5rem;
+  height: min(40rem, calc(100dvh - 2rem));
+  margin: auto;
+  padding: 0;
   border: 1px solid var(--border);
-  background: white;
-  padding: 1.5rem 1rem 2rem;
+  border-radius: calc(var(--radius) * 1.8);
+  background: var(--card);
   color: var(--foreground);
-  font-size: 0.875rem;
-  line-height: 1.5;
+  box-shadow: 0 24px 60px -20px oklch(0.24 0.025 255 / 0.45);
 }
 
-.write-line {
-  height: 2rem;
-  border-bottom: 1px solid var(--foreground);
+.picker-dialog::backdrop {
+  background: oklch(0.24 0.025 255 / 0.4);
+}
+
+@media (max-width: 639px) {
+  .picker-dialog {
+    width: 100vw;
+    height: 88dvh;
+    margin: auto 0 0 0;
+    border-radius: calc(var(--radius) * 1.8) calc(var(--radius) * 1.8) 0 0;
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.pop-in {
+  animation: pop-in 220ms ease-out;
+}
+
+/* A little bounce when you star a car. */
+@keyframes star-pop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.35) rotate(-8deg);
+  }
+  70% {
+    transform: scale(0.92);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+
+
+.print-only {
+  display: none;
+}
+
+/* On a phone the tabs scroll sideways: fade the right edge so it's clear there's more. */
+@media (max-width: 639px) {
+  .tab-scroller .scroll-row {
+    mask-image: linear-gradient(to right, black calc(100% - 2.5rem), transparent);
+    padding-right: 2.5rem;
+  }
+}
+
+/* Bigger tap targets on touch screens. */
+@media (pointer: coarse) {
+  .icon-btn {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+  .chip,
+  .btn,
+  .tab,
+  .field-select,
+  .field-input {
+    min-height: 2.75rem;
+  }
+  /* Pair with inline-flex items-center in the markup. */
+  .tap-target {
+    min-height: 2.75rem;
+  }
+}
+
+/* Phones on the Compare page: leave room under the footer for the bottom bar. */
+@media (max-width: 639px) {
+  body:has([data-testid="compare-bottom-bar"]) > footer {
+    padding-bottom: 4.5rem;
+  }
+}
+
+/* A star that was just tapped gets a little bounce (only then, not on every redraw). */
+.star-pop svg {
+  animation: star-pop 320ms ease-out;
 }
 
 @media print {
   @page {
-    margin: 0.6in;
+    margin: 0.5in;
   }
 
   body > header,
@@ -189,26 +524,57 @@
     display: none !important;
   }
 
+  .print-only {
+    display: block !important;
+  }
+
+  html,
   body {
-    background: white;
-    color: black;
+    background: white !important;
+    color: black !important;
+    font-size: 10.5pt;
   }
 
-  .worksheet {
-    margin: 0;
-    border: 0;
-    padding: 0;
-    color: black;
-    background: white;
+  .card {
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
   }
 
-  .worksheet a {
-    color: inherit;
-    text-decoration: none;
+  a {
+    color: inherit !important;
+    text-decoration: none !important;
   }
 
-  .write-line {
-    border-bottom-color: black;
+  .compare-table tr {
+    break-inside: avoid;
+  }
+
+  .compare-table th,
+  .compare-table td {
+    padding-top: 0.3rem !important;
+    padding-bottom: 0.3rem !important;
+  }
+
+  .compare-table thead th {
+    position: static !important;
+    border-bottom: 1.5pt solid black !important;
+    color: black !important;
+  }
+
+  .print-exact,
+  .compare-table tr {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .star-btn[aria-pressed="false"] {
+    visibility: hidden;
+  }
+
+  .print-sheet {
+    font-size: 10.5pt;
+    line-height: 1.45;
   }
 }
 

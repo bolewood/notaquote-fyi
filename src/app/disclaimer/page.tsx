@@ -1,45 +1,51 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 import { RecordTrustView } from "@/components/record-trust-view"
 import { TrustArticle } from "@/components/trust-article"
-import {
-  DISCLAIMER,
-  PUBLISHER,
-  STATE_MINIMUM_COUNSEL_LABEL,
-  STATE_MINIMUM_COUNSEL_NOTICE,
-} from "@/lib/copy"
+import { DISCLAIMER, PUBLISHER } from "@/lib/copy"
 
 export const metadata: Metadata = {
-  title: "Disclaimer",
+  title: "Not a quote",
 }
 
 export default function DisclaimerPage() {
   return (
-    <TrustArticle title="Disclaimer" closingDisclaimer={false}>
+    <TrustArticle title="This is not a quote" lead={DISCLAIMER} closingDisclaimer={false}>
       <RecordTrustView />
-      <p className="text-base leading-7">{DISCLAIMER}</p>
+      <h2>What the numbers are</h2>
       <p>
-        With no current premium entered, the dollars are a labeled sample. The
-        baseline is not cleared. When a current annual premium is entered, the
-        factor engine uses that amount as the base for that scenario only. Those
-        figures are still a planning range. They are not a premium from an
-        insurer, and they are not an offer of coverage.
+        Every dollar figure here is a ballpark worked out from public data: a typical price for your state (or what you tell
+        us you pay), adjusted for the driver, the car, the coverage, and where the car is kept. Real quotes can land well
+        above or below it. Every insurance company prices things its own way, and they use things we don&apos;t ask about,
+        like your credit and your exact address. <Link href="/methodology">Here&apos;s how we got the numbers</Link>.
       </p>
+
+      <h2>What the coverage choices mean</h2>
+      <ul className="bullets">
+        <li>
+          <strong>State minimum</strong> is the least liability coverage your state&apos;s law allows, as we found it on the
+          date shown on the <Link href="/sources#state-rules">Sources</Link> page. It&apos;s a floor, not a suggestion.
+        </li>
+        <li>
+          <strong>Liability only</strong> pays for damage you cause to others, up to $100,000/$300,000/$100,000 (per
+          person / per crash / property). It doesn&apos;t fix your own car.
+        </li>
+        <li>
+          <strong>Full coverage</strong> adds collision and comprehensive, which fix or replace your own car after a crash,
+          theft, or storm.
+        </li>
+        <li>
+          <strong>Full coverage, higher limits</strong> is full coverage with more liability protection, up to
+          $250,000/$500,000/$250,000.
+        </li>
+      </ul>
+      <p>We don&apos;t push anyone toward more or less coverage. That&apos;s your call. Try both on the <Link href="/">What-if page</Link> to see the trade-off.</p>
+
+      <h2>Who we are</h2>
       <p>
-        Package names on the calculator are assumptions with the limits written
-        next to them. A state-minimum dollar amount is shown only when that
-        state’s row has a source URL. A row with no source URL says the sourced
-        table has no figure yet. Standard liability stays 100/300/100. Full
-        coverage stays 100/300/100 plus comprehensive and collision. High limits
-        stay 250/500/250 plus comprehensive and collision.
-      </p>
-      <p>
-        <span className="font-medium">{STATE_MINIMUM_COUNSEL_LABEL}</span>{" "}
-        {STATE_MINIMUM_COUNSEL_NOTICE}
-      </p>
-      <p>
-        {PUBLISHER} publishes this educational tool. This page does not provide a
-        street address, a phone number, or an email address. Counsel has not
-        signed this wording for a public launch.
+        {PUBLISHER} publishes NotAQuote.FYI as a free, open-source tool. We&apos;re not an insurance company, agent, or
+        broker, and we don&apos;t sell leads or ads. Spot something wrong?{" "}
+        <Link href="/corrections">Tell us</Link>.
       </p>
     </TrustArticle>
   )

@@ -1,0 +1,51 @@
+name: A number looks wrong
+description: An adjustment on the site seems off, is out of date, or needs a better source.
+title: "Number looks wrong: "
+labels: ["data", "factors"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for checking our work. Every number on the site should come from a public source, so the most useful thing you can give us is a link that backs up the right one.
+
+        **This issue is public.** Please don't include your own premium, your VIN, a policy number, your name, or your address.
+  - type: input
+    id: factor
+    attributes:
+      label: Which number?
+      description: A short name is plenty.
+      placeholder: "e.g. one at-fault accident, or the $2,000 deductible"
+    validations:
+      required: true
+  - type: input
+    id: page
+    attributes:
+      label: Where did you see it?
+      description: The page on the site, if you remember.
+      placeholder: "e.g. the What-if page, or How it works"
+  - type: input
+    id: shown
+    attributes:
+      label: What the site says
+      placeholder: "e.g. +52% for one accident, or +$530 for the Tesla"
+  - type: input
+    id: suggested
+    attributes:
+      label: What you think it should be
+      placeholder: "e.g. closer to +40%"
+  - type: input
+    id: source_url
+    attributes:
+      label: Source link
+      description: Best if you have one. No link? Send it anyway, and someone may find one.
+      placeholder: "https://"
+  - type: input
+    id: source_checked
+    attributes:
+      label: When did you check the source?
+      placeholder: "e.g. September 21, 2026"
+  - type: textarea
+    id: details
+    attributes:
+      label: Anything else?
+      description: Where on the source page to look, how you'd work out the number, or anything we should know.

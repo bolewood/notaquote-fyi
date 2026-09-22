@@ -97,3 +97,14 @@ Omitted truck examples (not a complete list):
 - 2008 Ford F-450
 
 Terms: Retrieved 21 September 2026. NHTSA vPIC (https://vpic.nhtsa.dot.gov/api/) is the manufacturer-submitted vehicle listing. Callers are subject to NHTSA’s automated rate control. This snapshot requests passenger car, truck, and multipurpose passenger vehicle models only and stores no VINs. FuelEconomy.gov vehicles.csv (https://www.fueleconomy.gov/feg/epadata/vehicles.csv) is the DOE and EPA fuel-economy file, described at https://www.fueleconomy.gov/feg/ws/index.shtml. This snapshot keeps year, make, base model, and model name. It does not keep fuel-cost or economy figures. Both are U.S. government public datasets, copied in this reduced form. Names the sources did not print were not added as trims.
+
+
+## EPA class and powertrain
+
+Attached on 2026-09-22 by `npx tsx scripts/build-vehicle-catalog.ts --enrich`. No rows were added or removed; NHTSA was not called.
+
+- Trim rows: 18680
+- Trim rows with an EPA vehicle class (VClass): 17449
+- Trim rows with an EPA powertrain type (atvType): 3847
+- Rows without either are the "Trim not resolved" rows and FuelEconomy names that no longer appear in vehicles.csv.
+- EPA vehicle classes kept: 24

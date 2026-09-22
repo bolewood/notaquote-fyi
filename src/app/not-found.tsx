@@ -8,16 +8,22 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <TrustArticle title="That page is not in this version.">
-      <p>
-        The calculator is on the home page. It opens on a sample range for one
-        driver and one vehicle.
-      </p>
-      <p>
-        <Link href="/" className="underline underline-offset-4">
-          Back to the calculator
+    <TrustArticle
+      title="We couldn't find that page"
+      lead="It may have moved, or the link lost a piece on the way. Here's where most people are headed."
+      closingDisclaimer={false}
+    >
+      <div className="flex flex-wrap gap-3">
+        <Link href="/" className="btn btn-primary">
+          Try a what-if
         </Link>
-      </p>
+        <Link href="/compare" className="btn">
+          Compare cars
+        </Link>
+        <Link href="/methodology" className="btn btn-quiet">
+          How it works
+        </Link>
+      </div>
     </TrustArticle>
   )
 }

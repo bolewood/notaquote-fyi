@@ -1,4 +1,3 @@
-import { CATALOG_DEFAULTS } from "./catalog-defaults"
 import { stateMinimumAssumption } from "./state-rules"
 
 export const AGE_BANDS = [
@@ -11,35 +10,35 @@ export const AGE_BANDS = [
 ] as const
 
 export const YEARS_LICENSED = [
-  { id: "under-1", label: "Under 1" },
-  { id: "1-3", label: "1–3" },
-  { id: "4-9", label: "4–9" },
-  { id: "10+", label: "10+" },
+  { id: "under-1", label: "Under a year" },
+  { id: "1-3", label: "1–3 years" },
+  { id: "4-9", label: "4–9 years" },
+  { id: "10+", label: "10 years or more" },
 ] as const
 
 export const INCIDENTS = [
-  { id: "clean", label: "Clean" },
-  { id: "one", label: "One" },
-  { id: "two-or-more", label: "Two or more" },
+  { id: "clean", label: "No at-fault accidents" },
+  { id: "one", label: "One at-fault accident" },
+  { id: "two-or-more", label: "Two or more at-fault accidents" },
 ] as const
 
 export const MILEAGE_BANDS = [
-  { id: "under-7500", label: "Under 7,500" },
-  { id: "7500-15000", label: "7,500–15,000" },
-  { id: "over-15000", label: "Over 15,000" },
+  { id: "under-7500", label: "Under 7,500 miles a year" },
+  { id: "7500-15000", label: "7,500–15,000 miles a year" },
+  { id: "over-15000", label: "Over 15,000 miles a year" },
 ] as const
 
 export const REGIONS = [
-  { id: "urban", label: "Urban" },
-  { id: "suburban", label: "Suburban" },
-  { id: "rural", label: "Rural" },
+  { id: "urban", label: "City" },
+  { id: "suburban", label: "Suburbs" },
+  { id: "rural", label: "Small town or country" },
 ] as const
 
 export const COVERAGE_PACKAGES = [
   { id: "state-minimum", label: "State minimum" },
-  { id: "standard", label: "Standard liability" },
+  { id: "standard", label: "Liability only" },
   { id: "full", label: "Full coverage" },
-  { id: "high", label: "High limits" },
+  { id: "high", label: "Full coverage, higher limits" },
 ] as const
 
 export const DEDUCTIBLES = [500, 1000, 2000] as const
@@ -106,7 +105,6 @@ export type Region = (typeof REGIONS)[number]["id"]
 export type CoverageId = (typeof COVERAGE_PACKAGES)[number]["id"]
 export type Deductible = (typeof DEDUCTIBLES)[number]
 export type StateCode = (typeof STATES)[number]["code"]
-export type PersonaId = "molly" | "jayden" | "ava"
 
 export type Scenario = {
   age: AgeBand
@@ -128,90 +126,6 @@ export type Scenario = {
   trim: string
 }
 
-export const MOLLY: Scenario = {
-  age: "40-64",
-  yearsLicensed: "10+",
-  incidents: "clean",
-  mileage: "7500-15000",
-  teen: false,
-  goodStudent: false,
-  driverTraining: false,
-  householdPolicy: true,
-  loanLease: false,
-  state: "IL",
-  region: "urban",
-  coverage: "full",
-  deductible: 1000,
-  year: CATALOG_DEFAULTS.molly.year,
-  make: CATALOG_DEFAULTS.molly.make,
-  model: CATALOG_DEFAULTS.molly.model,
-  trim: CATALOG_DEFAULTS.molly.trim,
-}
-
-export const JAYDEN: Scenario = {
-  age: "16-18",
-  yearsLicensed: "under-1",
-  incidents: "clean",
-  mileage: "7500-15000",
-  teen: true,
-  goodStudent: true,
-  driverTraining: true,
-  householdPolicy: true,
-  loanLease: false,
-  state: "TX",
-  region: "suburban",
-  coverage: "full",
-  deductible: 1000,
-  year: CATALOG_DEFAULTS.jayden.year,
-  make: CATALOG_DEFAULTS.jayden.make,
-  model: CATALOG_DEFAULTS.jayden.model,
-  trim: CATALOG_DEFAULTS.jayden.trim,
-}
-
-export const AVA: Scenario = {
-  age: "26-39",
-  yearsLicensed: "4-9",
-  incidents: "clean",
-  mileage: "7500-15000",
-  teen: false,
-  goodStudent: false,
-  driverTraining: false,
-  householdPolicy: false,
-  loanLease: false,
-  state: "CA",
-  region: "urban",
-  coverage: "full",
-  deductible: 1000,
-  year: CATALOG_DEFAULTS.ava.year,
-  make: CATALOG_DEFAULTS.ava.make,
-  model: CATALOG_DEFAULTS.ava.model,
-  trim: CATALOG_DEFAULTS.ava.trim,
-}
-
-export const PRESETS: Record<PersonaId, Scenario> = {
-  molly: MOLLY,
-  jayden: JAYDEN,
-  ava: AVA,
-}
-
-export const PERSONA_DETAILS: Record<
-  PersonaId,
-  { name: string; summary: string }
-> = {
-  molly: {
-    name: "Molly",
-    summary: "40–64 · Illinois urban · F-150 · household policy",
-  },
-  jayden: {
-    name: "Jayden",
-    summary: "16–18 · teen · good student · driver training · RAV4",
-  },
-  ava: {
-    name: "Ava",
-    summary: "26–39 · California urban · Model Y · credit unreviewed",
-  },
-}
-
 const STATE_NAMES = new Map(STATES.map((state) => [state.code, state.name]))
 
 export function stateName(code: StateCode): string {
@@ -224,44 +138,159 @@ export function vehicleLabel(scenario: Pick<Scenario, "year" | "make" | "model" 
   return `${name}, ${scenario.trim}`
 }
 
+/** "2025 Tesla Model Y", without the trim. */
+export function shortVehicleLabel(scenario: Pick<Scenario, "year" | "make" | "model">): string {
+  return `${scenario.year} ${scenario.make} ${scenario.model}`
+}
+
 export function regionLabel(id: Region): string {
   return REGIONS.find((region) => region.id === id)?.label ?? id
+}
+
+export function coverageLabel(id: CoverageId): string {
+  return COVERAGE_PACKAGES.find((item) => item.id === id)?.label ?? id
 }
 
 export function hasPhysicalDamage(coverage: CoverageId): boolean {
   return coverage === "full" || coverage === "high"
 }
 
+/** One plain sentence about what a coverage choice includes. */
 export function coverageAssumption(coverage: CoverageId, state: StateCode): string {
   switch (coverage) {
     case "state-minimum":
       return stateMinimumAssumption(state)
     case "standard":
-      return "Standard liability. Assumption: 100/300/100. No comprehensive or collision."
+      return "Liability only pays for damage you cause to others, up to $100,000/$300,000/$100,000 (per person / per crash / property). It doesn't fix your own car."
     case "full":
-      return "Full coverage. Assumption: 100/300/100, plus comprehensive and collision."
+      return "Liability for damage you cause to others, up to $100,000/$300,000/$100,000 (per person / per crash / property), plus collision and comprehensive, which fix or replace your own car after a crash, theft, or storm."
     case "high":
-      return "High limits. Assumption: 250/500/250, plus comprehensive and collision."
+      return "Full coverage with higher liability limits: up to $250,000/$500,000/$250,000 (per person / per crash / property)."
   }
 }
 
-export function scenarioIdentity(
-  scenario: Scenario,
-  persona: PersonaId | null,
-): string {
-  const who =
-    persona === null ? "Custom scenario" : PERSONA_DETAILS[persona].name
-  const place =
-    persona === "molly"
-      ? "Illinois, urban stand-in for Springfield"
-      : `${stateName(scenario.state)}, ${regionLabel(scenario.region).toLowerCase()}`
-  const vehicle = vehicleLabel(scenario)
-  const coverage = coverageAssumption(scenario.coverage, scenario.state)
-  const deductible = hasPhysicalDamage(scenario.coverage)
-    ? `$${scenario.deductible.toLocaleString("en-US")} deductible`
-    : "Deductible not applied"
+const UNDER_26_AGES: readonly AgeBand[] = ["16-18", "19-21", "22-25"]
 
-  return `${who} · ${place} · ${vehicle} · ${coverage} · ${deductible}`
+/**
+ * What changes when the driver's age changes. A brand-new teen driver is
+ * usually newly licensed too; going from under 26 to 26 or older resets years
+ * licensed to the default, so a "new driver" setting doesn't linger unseen.
+ */
+export function ageChange(scenario: Pick<Scenario, "age" | "yearsLicensed">, age: AgeBand): Partial<Scenario> {
+  if (age === "16-18" && scenario.age !== "16-18") return { age, yearsLicensed: "under-1" }
+  if (UNDER_26_AGES.includes(scenario.age) && !UNDER_26_AGES.includes(age)) {
+    return { age, yearsLicensed: DEFAULT_SCENARIO.yearsLicensed }
+  }
+  return { age }
+}
+
+/** Keep the old `teen` field in step with the age band. The engine ignores it. */
+export function withTeenFlag(scenario: Scenario): Scenario {
+  const teen = scenario.age === "16-18"
+  return scenario.teen === teen ? scenario : { ...scenario, teen }
+}
+
+/** "in the Illinois suburbs", "in a city in Texas", "in small-town or rural Ohio" */
+export function placeWords(state: StateCode, region: Region): string {
+  const name = stateName(state)
+  if (region === "urban") return `in a city in ${name}`
+  if (region === "suburban") return `in the ${name} suburbs`
+  return `in small-town or rural ${name}`
+}
+
+/** One sentence about the situation: who, where, what car, what coverage. */
+export function situationSentence(scenario: Scenario, teenOnParentPolicy: boolean, withCar = true): string {
+  const age = AGE_BANDS.find((band) => band.id === scenario.age)?.label ?? scenario.age
+  const who =
+    scenario.age === "16-18"
+      ? `A ${age}-year-old driver ${teenOnParentPolicy ? "added to a parent's policy" : "on their own policy"}`
+      : `A ${age}-year-old driver`
+  const car = withCar ? `, a ${shortVehicleLabel(scenario)},` : ""
+  const coverage = coverageLabel(scenario.coverage).toLowerCase()
+  return `${who} ${placeWords(scenario.state, scenario.region)}${car} with ${coverage}.`
+}
+
+// ---------------------------------------------------------------------------
+// Common questions, one click each. Each one changes something about the
+// visitor's own situation, so it works whatever they've set up.
+
+export type StarterId = "adding-teen" | "thinking-ev" | "moving" | "higher-deductible"
+
+export type StarterTab = "car" | "driver" | "move" | "coverage"
+
+export type Starter = {
+  id: StarterId
+  /** Short, in the visitor's own words. */
+  title: string
+  /** One line of story. */
+  story: string
+  /** Which part of the What-if card it opens. */
+  tab: StarterTab
+  /** What changes, given the situation now. */
+  change: (now: Scenario) => Partial<Scenario>
+  /** For a teen starter: price them as added to the parent's policy. */
+  teenOnParentPolicy?: boolean
+}
+
+const PARENT: Scenario = {
+  age: "40-64",
+  yearsLicensed: "10+",
+  incidents: "clean",
+  mileage: "7500-15000",
+  teen: false,
+  goodStudent: false,
+  driverTraining: false,
+  householdPolicy: false,
+  loanLease: false,
+  state: "IL",
+  region: "suburban",
+  coverage: "full",
+  deductible: 1000,
+  year: 2020,
+  make: "Toyota",
+  model: "Camry",
+  trim: "Camry",
+}
+
+/** What the page opens on before the visitor changes anything. */
+export const DEFAULT_SCENARIO: Scenario = PARENT
+
+export const STARTERS: readonly Starter[] = [
+  {
+    id: "adding-teen",
+    title: "Adding our 16-year-old",
+    story: "They just got their license. What does adding them to our policy do to the bill?",
+    tab: "driver",
+    change: () => ({ age: "16-18", yearsLicensed: "under-1", teen: true }),
+    teenOnParentPolicy: true,
+  },
+  {
+    id: "thinking-ev",
+    title: "Thinking about an electric car",
+    story: "What if we traded our car for a Tesla Model Y?",
+    tab: "car",
+    change: () => ({ year: 2025, make: "Tesla", model: "Model Y", trim: "Model Y Long Range AWD" }),
+  },
+  {
+    id: "moving",
+    title: "Moving to another state",
+    story: "Would insurance cost more or less if we moved to Colorado?",
+    tab: "move",
+    change: (now) => ({ state: now.state === "CO" ? "TX" : "CO" }),
+  },
+  {
+    id: "higher-deductible",
+    title: "Raising the deductible",
+    story: "Would a $2,000 deductible save enough to be worth it?",
+    tab: "coverage",
+    change: (now) => ({ deductible: now.deductible === 2000 ? 1000 : 2000, coverage: hasPhysicalDamage(now.coverage) ? now.coverage : "full" }),
+  },
+]
+
+export function starter(id: StarterId): Starter {
+  const found = STARTERS.find((item) => item.id === id)
+  if (!found) throw new Error(`Unknown starter ${id}`)
+  return found
 }
 
 export function isAgeBand(value: string): value is AgeBand {

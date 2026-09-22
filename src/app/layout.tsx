@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     template: "%s · NotAQuote.FYI",
   },
   description:
-    "A sample planning range for personal auto insurance. This is not a quote. The baseline is not cleared.",
+    "What would your car insurance cost with a different car, a new teen driver, or a move? A free, open-source estimate to help you plan. Not a quote.",
   robots: {
     index: false,
     follow: false,

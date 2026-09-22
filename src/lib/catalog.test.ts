@@ -24,7 +24,7 @@ import {
 import { DISCLAIMER } from "./copy"
 
 const VERBATIM_DISCLAIMER =
-  "THIS IS NOT A QUOTE. NotAQuote.FYI is an independent educational estimate tool, not an insurance company, agency, broker, producer, or lead-generation service. Actual premiums are set by licensed insurers after underwriting and may vary materially."
+  "This is an estimate to help you plan, not a quote. We don't sell insurance, and we never pass your info to anyone. Only an insurer can give you a real price."
 
 const catalog = JSON.parse(
   readFileSync("public/catalog/vehicle-catalog.json", "utf8"),

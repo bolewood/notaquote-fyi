@@ -1,5 +1,6 @@
 import { compactName, type TrimConfidence } from "./catalog-match"
 import {
+  catalogYears,
   coercePick,
   trimRecord,
   type VehicleCatalog,
@@ -122,6 +123,10 @@ function findModel(
   )
 }
 
+/** The lookup itself failed: a network problem or NHTSA being busy, not the VIN. */
+export const VIN_UNREACHABLE =
+  "We couldn't reach the VIN lookup. Check your connection and try again, or pick your car from the list. Your car is unchanged."
+
 export async function runVinLookup(
   rawVin: string,
   input: {
@@ -134,14 +139,14 @@ export async function runVinLookup(
   if (!VIN_PATTERN.test(vin)) {
     return {
       ok: false,
-      message: "Enter a 17-character VIN, or leave this blank. Nothing was sent.",
+      message: "A VIN is 17 letters and numbers. Check it and try again. Nothing was sent.",
     }
   }
   if (!input.catalog) {
     return {
       ok: false,
       message:
-        "The vehicle catalog is not loaded, so the VIN was not applied. The VIN was discarded.",
+        "The list of cars hasn't loaded yet, so we couldn't use the VIN. We didn't keep it.",
     }
   }
 
@@ -149,26 +154,29 @@ export async function runVinLookup(
   try {
     const response = await input.fetchImpl(`${NHTSA_DECODE}${vin}?format=json`)
     if (!response.ok) {
-      return {
-        ok: false,
-        message: "That VIN did not decode. The year, make, model, and trim controls are unchanged.",
-      }
+      return { ok: false, message: VIN_UNREACHABLE }
     }
     payload = await response.json()
   } catch {
-    return {
-      ok: false,
-      message: "That VIN did not decode. The year, make, model, and trim controls are unchanged.",
-    }
+    return { ok: false, message: VIN_UNREACHABLE }
   }
 
   const decoded = readDecode(payload)
+  const years = catalogYears(input.catalog)
+  const first = Math.min(...years)
+  const last = Math.max(...years)
+  if (decoded && Number.isFinite(decoded.year) && (decoded.year < first || decoded.year > last)) {
+    return {
+      ok: false,
+      message: `That VIN is for a ${decoded.year} model. We only list model years ${first}–${last}, so your car is unchanged.`,
+    }
+  }
   if (!decoded || OUTSIDE_SNAPSHOT.test(decoded.vehicleType)) {
     return {
       ok: false,
       message: decoded
-        ? "NHTSA decoded a vehicle this snapshot does not include. The controls are unchanged."
-        : "That VIN did not decode. The year, make, model, and trim controls are unchanged.",
+        ? "That VIN is for a vehicle we don't list yet. Your car is unchanged."
+        : "We couldn't find that VIN. Your car is unchanged.",
     }
   }
 
@@ -178,7 +186,7 @@ export async function runVinLookup(
     return {
       ok: false,
       message:
-        "NHTSA decoded a vehicle this snapshot does not include. The controls are unchanged.",
+        "That VIN is for a vehicle we don't list yet. Your car is unchanged.",
     }
   }
 
@@ -204,7 +212,7 @@ export async function runVinLookup(
     return {
       ok: false,
       message:
-        "NHTSA decoded a vehicle this snapshot does not include. The controls are unchanged.",
+        "That VIN is for a vehicle we don't list yet. Your car is unchanged.",
     }
   }
 
@@ -212,10 +220,10 @@ export async function runVinLookup(
   const native = record?.confidence ?? chosen.confidence
   const confidence: TrimConfidence = hinted ? native : native === "high" ? "limited" : native
   const message = hinted
-    ? "Filled from NHTSA. The VIN was discarded."
+    ? "Found it. We didn't keep the VIN."
     : decoded.trimHint
-      ? `NHTSA named “${decoded.trimHint}”. That trim is not in the snapshot, so confidence on the selected row is limited. The VIN was discarded.`
-      : "Filled from NHTSA. No trim name came back, so confidence on the selected row is limited. The VIN was discarded."
+      ? `We picked the closest version to “${decoded.trimHint}”. We didn't keep the VIN.`
+      : "We picked the closest version. We didn't keep the VIN."
 
   return {
     ok: true,

@@ -1,359 +1,223 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 import { FactorTables } from "@/components/factor-tables"
 import { RecordTrustView } from "@/components/record-trust-view"
 import { TrustArticle } from "@/components/trust-article"
-import { CATALOG_VERSION } from "@/lib/catalog-meta"
-import { DATA_BUNDLE_VERSION, MANIFEST_VERSION, MODEL_VERSION } from "@/lib/copy"
-import {
-  FACTOR_CHANGELOG,
-  FACTOR_EFFECTIVE_DATE,
-  FACTOR_FORMULA,
-} from "@/lib/factor-engine"
-import { formatCatalogDate } from "@/lib/catalog"
-import { NAIC_PARAPHRASE } from "@/lib/source-manifest"
-import { STATE_RULES_VERSION } from "@/lib/state-rules"
-import {
-  AGE_WEIGHT,
-  COVERAGE_WEIGHT,
-  DEDUCTIBLE_WEIGHT,
-  FLAG_WEIGHT,
-  formatDollars,
-  INCIDENT_WEIGHT,
-  MILEAGE_WEIGHT,
-  OTHER_STATE_WEIGHT,
-  OTHER_VEHICLE_WEIGHT,
-  PRESET_STATE_WEIGHT,
-  REGION_WEIGHT,
-  SAMPLE_BASE_ANNUAL,
-  SPREAD_BASE_HIGH,
-  SPREAD_BASE_LOW,
-  SPREAD_MODEL_Y_HIGH,
-  SPREAD_NEW_DRIVER_HIGH,
-  SPREAD_NEW_DRIVER_LOW,
-  SPREAD_ONE_INCIDENT_HIGH,
-  SPREAD_OTHER_STATE_HIGH,
-  SPREAD_REPEAT_INCIDENT_HIGH,
-  SPREAD_REPEAT_INCIDENT_LOW,
-  SPREAD_STATE_MINIMUM_HIGH,
-  SPREAD_UNCLEARED_HIGH,
-  SPREAD_UNCLEARED_LOW,
-  VEHICLE_WEIGHT,
-  YEAR_WEIGHT_MID,
-  YEAR_WEIGHT_OLDER,
-  YEAR_WEIGHT_RECENT,
-  YEARS_WEIGHT,
-} from "@/lib/sample-range"
+import { DATA_UPDATED, MODEL_VERSION, SOURCE_COUNT } from "@/lib/copy"
+import { estimate, FACTOR_BUNDLE, formatDollars, typicalStart } from "@/lib/factor-engine"
+import { estimateDollars, rangeDollars } from "@/lib/format"
+import { HelpWantedList } from "@/components/help-wanted-list"
+import { DEFAULT_SCENARIO, stateName } from "@/lib/scenario"
+import { suggestFixUrl } from "@/lib/suggest-fix"
+import { ChevronDown } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "Methodology",
+  title: "How it works",
+  description: "Here's how we got the numbers: a starting price, a few adjustments, and a range. Every piece has a public source, or says it doesn't.",
 }
 
-const FLAG_LABELS: Record<keyof typeof FLAG_WEIGHT, string> = {
-  teen: "Teen driver, when checked",
-  goodStudent: "Good student, when checked",
-  driverTraining: "Driver training, when checked",
-  householdPolicy: "Household policy, when checked",
-  loanLease: "Loan or lease, when checked",
+/** How many of the adjustments come from a public source, and how many are our own estimate. */
+function basisCounts() {
+  const counts = { sourced: 0, indicative: 0, assumed: 0 }
+  for (const [id, group] of Object.entries(FACTOR_BUNDLE.groups)) {
+    if (id === "range" || id === "premium-split") continue
+    for (const cell of Object.values(group.cells)) {
+      if (cell.basis !== "reference") counts[cell.basis] += 1
+    }
+  }
+  return counts
 }
 
 export default function MethodologyPage() {
+  // A worked example, from the same math the site runs: the page's default situation.
+  const start = typicalStart(DEFAULT_SCENARIO)
+  const example = start ? estimate(start, DEFAULT_SCENARIO) : null
+  const counts = basisCounts()
+  const total = counts.sourced + counts.indicative + counts.assumed
+  const state = stateName(DEFAULT_SCENARIO.state)
+
   return (
-    <TrustArticle title="Methodology">
+    <TrustArticle
+      title="How we work out the numbers"
+      lead="Every number on this site comes from one small piece of math that runs in your browser. It's simple on purpose, so anyone can check it."
+    >
       <RecordTrustView />
+
+      <h2>The whole idea, in one line</h2>
+      <div className="grid gap-2 rounded-2xl bg-card p-5 shadow-[0_1px_2px_oklch(0.24_0.025_255/0.05)] ring-1 ring-border sm:grid-cols-[1fr_auto_1fr_auto_1fr] sm:items-center sm:gap-3">
+        <div className="grid gap-0.5">
+          <span className="text-sm text-muted-foreground">Your starting price</span>
+          <span className="money text-xl font-semibold">{start ? `about ${formatDollars(Math.round(start.annual / 10) * 10)}` : "Your price"}</span>
+          <span className="text-sm text-muted-foreground">what you pay, or typical for your state</span>
+        </div>
+        <span className="text-2xl font-light text-muted-foreground sm:text-center" aria-label="times">
+          ×
+        </span>
+        <div className="grid gap-0.5">
+          <span className="text-sm text-muted-foreground">A few adjustments</span>
+          <span className="text-xl font-semibold">driver, car, place, coverage</span>
+          <span className="text-sm text-muted-foreground">each one a percentage up or down</span>
+        </div>
+        <span className="text-2xl font-light text-muted-foreground sm:text-center" aria-label="equals">
+          =
+        </span>
+        <div className="grid gap-0.5">
+          <span className="text-sm text-muted-foreground">A range</span>
+          <span className="money text-xl font-semibold">
+            {example ? rangeDollars(example.low, example.high) : "a range"}
+          </span>
+          <span className="text-sm text-muted-foreground">
+            {example ? `our best guess: ${estimateDollars(example.likely)}` : "with a best guess"}
+          </span>
+        </div>
+      </div>
+      {example ? (
+        <p className="text-sm text-muted-foreground">
+          That example is the page&apos;s starting situation: a 40–64-year-old in the {state} suburbs with a 2020 Toyota Camry
+          and full coverage.
+        </p>
+      ) : null}
+
+      <h2>1. A starting price</h2>
       <p>
-        NotAQuote.FYI is a planning calculator for one driver and one vehicle.
-        The home page opens on a finished sample scenario. The calculation is
-        not paid placement. Nothing in the range is a carrier ranking, a
-        coverage recommendation, or an offer to bind a policy.
-      </p>
-      <h2 className="text-base font-semibold">Working formula</h2>
-      <p>
-        The factor engine uses this formula: {FACTOR_FORMULA}. The general base
-        is not cleared, so the engine does not emit a dollar range from it. A
-        current annual premium, when the visitor enters one, is the base for
-        that scenario only. Trend is not applied. BLS CPI is not in the bundle.
-        The lawful sensitivity factor is credit, locked at 1.00. There is no
-        credit control. For a California scenario the page says the credit rule
-        is unreviewed.
+        If you tell us what you pay now, we start from your real number. It stays on your device, and it&apos;s the most
+        accurate starting point there is.
       </p>
       <p>
-        Bundle {DATA_BUNDLE_VERSION}, effective {formatCatalogDate(FACTOR_EFFECTIVE_DATE)}.{" "}
-        {FACTOR_CHANGELOG} Manifest {MANIFEST_VERSION}. Low, likely, and high stay
-        a range. A thin factor or a weak trim widens that range. Confidence stays
-        low while the baseline is not cleared, and it is lower when the trim match
-        is limited or unresolved.
-      </p>
-      <p>{NAIC_PARAPHRASE}</p>
-      <FactorTables />
-      <h2 className="text-base font-semibold">Sample display, not the model</h2>
-      <p>
-        With no current premium entered, the home page still shows a labeled
-        sample so the first paint has figures. The words are “Sample range.
-        Baseline not cleared.” Those figures come from the sample display weights
-        below, starting at an arbitrary {formatDollars(SAMPLE_BASE_ANNUAL)}. That
-        amount is not a published premium. The factor engine did not produce the
-        sample. The weights are not the model.
+        If you don&apos;t, we start from what drivers in your state paid on average in 2023 for <strong>full coverage</strong>:
+        liability (which pays for damage you cause to others) plus collision and comprehensive (which fix or replace your
+        own car). That figure comes from the National Association of Insurance Commissioners (NAIC). Prices have gone up
+        since 2023, so we bring it up to today with the government&apos;s price index for car insurance.
       </p>
       <p>
-        Low and high are a wide band around that likely figure because the
-        baseline is not cleared. The bar under the numbers is modeled
-        uncertainty with three markers. It is not a histogram of policies.
-        Licensed rating data would be more precise. This tool does not claim
-        otherwise.
+        We treat that average as the price for a middle-aged driver with no at-fault accidents, living in the suburbs, with an
+        average car and a $1,000 deductible (the part of a repair bill you pay yourself). Then we adjust from there.
+        Because it&apos;s an average across everyone, starting from it makes the range wider.{" "}
+        <Link href="/sources#state-baselines">See the starting price for every state</Link>.
       </p>
-      <h2 className="text-base font-semibold">How the band widens</h2>
-      <ul className="list-disc space-y-1 pl-5">
+
+      <h2>2. A few adjustments</h2>
+      <p>
+        Each thing that matters moves the price up or down by a percentage. A 16–18-year-old on their own policy, for
+        example, costs almost three times what a 40–64-year-old does. One at-fault accident adds about half (+52%).
+      </p>
+      <p>
+        The best evidence comes from state insurance departments that publish real prices from many companies for the
+        same sample drivers, changing one thing at a time. It&apos;s sitting in PDFs and web tools that few people ever
+        open. Of our {total} adjustments, {counts.sourced} come straight from those published prices, {counts.indicative}{" "}
+        are worked out from public data less directly, and {counts.assumed} are still our best guess.
+      </p>
+      <p>
+        Some adjustments only touch part of the bill. About half of a full-coverage bill is liability; the rest fixes your
+        own car. So the deductible, the car&apos;s age, and a loan only move the second part, and liability limits only move
+        the first.
+      </p>
+
+      <h3>The car</h3>
+      <p>
+        The Highway Loss Data Institute (HLDI) publishes how each model&apos;s insurance claims compare with the average car.
+        A car that costs more to repair raises the part of the bill that fixes your own car. A car whose drivers cause more
+        crashes raises the liability part, though only partly, because insurers do the same. When we don&apos;t have a model,
+        we use the average for its kind of car (small SUV, midsize car, and so on) and widen the range. That&apos;s the
+        &ldquo;Why&rdquo; you see when you tap a car on the Compare page.
+      </p>
+
+      <h2>3. A range, not a price</h2>
+      <p>
+        Two companies can quote the same driver very different prices. So every estimate is a range, roughly where most
+        companies would land, with our best guess marked in the middle. The more we had to estimate ourselves, the wider it
+        gets. Real quotes can still land outside it.
+      </p>
+
+      <h2>What&apos;s sourced, and what&apos;s our estimate</h2>
+      <p>We label every adjustment one of three ways, right next to the number:</p>
+      <ul className="bullets">
         <li>
-          Start at {SPREAD_BASE_LOW} times the likely figure through{" "}
-          {SPREAD_BASE_HIGH} times it.
+          <strong>From published prices</strong> ({counts.sourced} of {total}). Taken from a state&apos;s published price
+          survey or rules, with the source linked. When those prices come from another state, we say which one, since
+          yours may differ.
         </li>
         <li>
-          Because the baseline is not cleared, subtract {SPREAD_UNCLEARED_LOW}{" "}
-          from the low ratio and add {SPREAD_UNCLEARED_HIGH} to the high ratio.
+          <strong>Worked out from public data</strong> ({counts.indicative} of {total}). Less direct, so the range is a
+          little wider.
         </li>
         <li>
-          Age 16–18 or under 1 year licensed: subtract {SPREAD_NEW_DRIVER_LOW}{" "}
-          from the low ratio and add {SPREAD_NEW_DRIVER_HIGH} to the high ratio.
-        </li>
-        <li>One incident: add {SPREAD_ONE_INCIDENT_HIGH} to the high ratio.</li>
-        <li>
-          Two or more incidents: subtract {SPREAD_REPEAT_INCIDENT_LOW} from the
-          low ratio and add {SPREAD_REPEAT_INCIDENT_HIGH} to the high ratio.
-        </li>
-        <li>
-          A state other than Illinois, Texas, or California: add{" "}
-          {SPREAD_OTHER_STATE_HIGH} to the high ratio. Those three states are
-          the only ones with a sample geography weight other than the flat{" "}
-          {OTHER_STATE_WEIGHT.toFixed(2)}.
-        </li>
-        <li>
-          State-minimum package: add {SPREAD_STATE_MINIMUM_HIGH} to the high
-          ratio. The sample weights do not use a statutory dollar amount. A
-          sourced minimum changes the coverage line, not this sample range.
-        </li>
-        <li>
-          Tesla Model Y: add {SPREAD_MODEL_Y_HIGH} to the high ratio as a sample
-          for repair-cost uncertainty. This is not a loss table.
+          <strong>Our best guess</strong> ({counts.assumed} of {total}). We couldn&apos;t find a public source yet, so we
+          made a careful guess and widened the range. These are the best places to help.
         </li>
       </ul>
-      <p>
-        Figures from the sample baseline are rounded to the nearest ten dollars.
-        The monthly planning midpoint is the sample likely figure divided by 12,
-        rounded to the nearest dollar.
-      </p>
-      <h2 className="text-base font-semibold">Sample display weights, not the model</h2>
-      <p>
-        An unchecked flag contributes 1. A deductible contributes 1 when the
-        package has no comprehensive or collision. Model years 2022 and newer
-        use {YEAR_WEIGHT_RECENT.toFixed(2)}. Years 2019 through 2021 use{" "}
-        {YEAR_WEIGHT_MID.toFixed(2)}. Years 2018 and earlier use{" "}
-        {YEAR_WEIGHT_OLDER.toFixed(2)}.
-      </p>
-      <WeightTable
-        caption="Age band sample display weights"
-        rows={Object.entries(AGE_WEIGHT).map(([key, weight]) => ({ key, weight }))}
-      />
-      <WeightTable
-        caption="Years licensed sample display weights"
-        rows={Object.entries(YEARS_WEIGHT).map(([key, weight]) => ({
-          key,
-          weight,
-        }))}
-      />
-      <WeightTable
-        caption="Incident sample display weights"
-        rows={Object.entries(INCIDENT_WEIGHT).map(([key, weight]) => ({
-          key,
-          weight,
-        }))}
-      />
-      <WeightTable
-        caption="Mileage sample display weights"
-        rows={Object.entries(MILEAGE_WEIGHT).map(([key, weight]) => ({
-          key,
-          weight,
-        }))}
-      />
-      <WeightTable
-        caption="Flag sample display weights"
-        rows={(
-          Object.entries(FLAG_WEIGHT) as [keyof typeof FLAG_WEIGHT, number][]
-        ).map(([key, weight]) => ({
-          key: FLAG_LABELS[key],
-          weight,
-        }))}
-      />
-      <WeightTable
-        caption="Preset state sample display weights"
-        rows={[
-          ...Object.entries(PRESET_STATE_WEIGHT).map(([key, weight]) => ({
-            key,
-            weight: weight ?? OTHER_STATE_WEIGHT,
-          })),
-          { key: "Any other state", weight: OTHER_STATE_WEIGHT },
-        ]}
-      />
-      <WeightTable
-        caption="Region class sample display weights"
-        rows={Object.entries(REGION_WEIGHT).map(([key, weight]) => ({
-          key,
-          weight,
-        }))}
-      />
-      <WeightTable
-        caption="Coverage sample display weights"
-        rows={Object.entries(COVERAGE_WEIGHT).map(([key, weight]) => ({
-          key,
-          weight,
-        }))}
-      />
-      <WeightTable
-        caption="Deductible sample display weights, physical damage only"
-        rows={Object.entries(DEDUCTIBLE_WEIGHT).map(([key, weight]) => ({
-          key: `$${Number(key).toLocaleString("en-US")}`,
-          weight,
-        }))}
-      />
-      <WeightTable
-        caption="Vehicle sample display weights"
-        rows={[
-          ...Object.entries(VEHICLE_WEIGHT).map(([key, weight]) => ({
-            key,
-            weight,
-          })),
-          { key: "Any other catalog vehicle", weight: OTHER_VEHICLE_WEIGHT },
-        ]}
-      />
-      <h2 className="text-base font-semibold">Coverage assumptions</h2>
-      <ul className="list-disc space-y-1 pl-5">
+
+      <h2>What we don&apos;t do</h2>
+      <ul className="bullets">
         <li>
-          State minimum: the liability amounts in that state’s sourced row,
-          plus required personal injury protection, uninsured motorist, or
-          underinsured motorist coverage only where that row says they are
-          required. A row with no source URL does not show a dollar minimum.
-          The page says the sourced table has no figure yet. No comprehensive
-          or collision. This is not coverage advice.
+          <strong>We don&apos;t ask about credit.</strong> Many insurers use it where the law allows, so your real quote
+          could move up or down because of it.
         </li>
         <li>
-          Standard liability: 100/300/100. No comprehensive or collision.
+          <strong>We don&apos;t use gender or marital status.</strong> Where a survey gives both, we average them.
         </li>
         <li>
-          Full coverage: 100/300/100, plus comprehensive and collision.
+          <strong>We don&apos;t know your address or your history with an insurer.</strong> Only your state, and whether the
+          car is kept in a city, the suburbs, or a small town.
         </li>
         <li>
-          High limits: 250/500/250, plus comprehensive and collision.
+          <strong>We can&apos;t see every discount</strong>, like safe-driving apps or paying in full.
         </li>
-        <li>Deductible choices: $500, $1,000, and $2,000. The opening deductible is $1,000.</li>
+        <li>
+          <strong>We don&apos;t sell anything.</strong> No leads and no ads.
+        </li>
       </ul>
-      <h2 className="text-base font-semibold">Presets</h2>
+
+      <h2>How you can help</h2>
       <p>
-        Molly opens the page: age 40–64, 10 or more years licensed, clean
-        record, 7,500–15,000 miles, household policy, Illinois urban as a
-        stand-in for Springfield, 2023 Ford F-150, full coverage, $1,000
-        deductible. Jayden is 16–18, under 1 year licensed, clean, 7,500–15,000
-        miles, the same mileage band as Molly, teen driver, good student, driver
-        training, household policy, Texas suburban, 2023 Toyota RAV4, full
-        coverage. Ava is 26–39, 4–9 years licensed, clean, 7,500–15,000 miles,
-        no driver flags, California urban, 2023 Tesla Model Y Long Range, full
-        coverage, credit rules unreviewed and the credit factor held at 1.00.
-        Those driver bands are planning assumptions for the preset, not a record
-        of a person.
+        {counts.assumed} of our adjustments are still our best guess. If your state&apos;s insurance department publishes
+        sample prices (many do, often as a PDF called a &ldquo;rate comparison guide&rdquo;), it could turn a guess into a
+        sourced number for everyone. These five would help the most. Four are our best guesses; the fifth rests on one
+        state&apos;s prices.
       </p>
-      <p>
-        Year, make, model, and trim read a snapshot of NHTSA vPIC and
-        FuelEconomy.gov. The trim name is the FuelEconomy.gov model string.
-        When that string joins the NHTSA model cleanly, trim confidence is
-        strong. When the names only partly agree, trim confidence is limited
-        and the confidence line says lower. When no FuelEconomy.gov trim joined
-        the NHTSA model, the trim says it is not resolved. No trim name was
-        added by hand. Honda Civic and Hyundai Ioniq 5 N are in the snapshot.
-        An optional VIN is sent from the browser to NHTSA and then discarded.
-        The sample weights above are not the factor engine. A weak trim does not
-        change those sample weights. It does widen a range the engine produced
-        from an entered premium, and it lowers confidence.
+      <div className="rounded-2xl bg-sun-soft p-5">
+        <HelpWantedList compact />
+      </div>
+      <p className="flex flex-wrap gap-3">
+        <a href={suggestFixUrl({ kind: "factor" })} rel="noreferrer" className="btn btn-primary plain">
+          Suggest a better number
+        </a>
+        <Link href="/corrections" className="btn plain">
+          Other ways to help
+        </Link>
       </p>
-      <h2 className="text-base font-semibold">Optional current premium</h2>
+
+      <h2>Every number the math uses</h2>
       <p>
-        An empty field leaves the labeled sample. The factor engine emits no
-        dollars in that case. An annual amount from 1 to 100,000 is the base for
-        the open scenario. The likely figure starts at the amount entered. If a
-        driver, geography, coverage, or vehicle input then changes, the engine
-        applies the versioned factors and names that factor family. If the
-        arithmetic would show zero or a negative dollar, a display floor holds
-        the low, likely, high, and monthly midpoint above zero. That floor is not
-        a premium.         Clearing the field returns to the labeled sample. Choosing
-        Molly, Jayden, or Ava clears the open field. The amount is the
-        visitor&apos;s anchor for that scenario, not a cleared baseline. Saving the
-        scenario keeps the amount in this browser&apos;s local storage. A share
-        link may include it only as that anchor. This page does not send it to
-        a server or to analytics. Reloading an address that is not a share link
-        clears the open field.
+        Here&apos;s the full list, with how sure we are about each one. Each change is measured from the row marked
+        &ldquo;Measured from here&rdquo;. The worked details are in the{" "}
+        <a href="https://github.com/bolewood/notaquote-fyi/blob/main/data/factors/README.md" rel="noreferrer">
+          factors notes on GitHub
+        </a>
+        , and all {SOURCE_COUNT} sources are on the <Link href="/sources">Sources</Link> page.
       </p>
-      <h2 className="text-base font-semibold">Comparisons, share links, and the worksheet</h2>
+      <details className="disclosure">
+        <summary>
+          Show every adjustment
+          <ChevronDown className="size-4" aria-hidden="true" />
+        </summary>
+        <div className="pb-4">
+          <FactorTables />
+        </div>
+      </details>
+
+      <h2>Saving and sharing</h2>
       <p>
-        Save keeps the open scenario in this browser. Molly and Jayden are two
-        scenarios, each with one driver and one car. Refresh keeps the saved
-        list. There is no account and no server profile. Remove deletes that
-        scenario from this browser.
+        Your choices are kept in this browser, so the pages remember them. The link carries your choices, not our
+        estimates. It includes what you pay only if you check the box. It all sits after the &ldquo;#&rdquo; in the
+        address, which browsers don&apos;t send to any server, and whoever opens the link gets the numbers worked out
+        fresh.{" "}
+        <Link href="/privacy">More about privacy</Link>.
       </p>
-      <p>
-        A share link encodes the inputs and the model and data-bundle versions.
-        It does not encode a finished low, likely, or high figure. Opening the
-        link shows the disclaimer and recalculates. If the model version in the
-        link is not the model on this page, the page says so and still
-        recalculates on the current model. The optional premium is included only
-        as the visitor&apos;s anchor, and the page still says it is not a cleared
-        baseline.
-      </p>
-      <p>
-        Print uses the browser&apos;s print dialog. The worksheet lists the
-        assumptions, coverage limits, source dates, model version, and
-        data-bundle version, repeats the disclaimer, and leaves blank lines for
-        a licensed professional&apos;s figure. It has no partner mark and no code
-        that opens another site.
-      </p>
-      <h2 className="text-base font-semibold">Version</h2>
-      <p>
-        Model {MODEL_VERSION}. Data bundle {DATA_BUNDLE_VERSION}. Manifest{" "}
-        {MANIFEST_VERSION}. Catalog {CATALOG_VERSION}. State rules{" "}
-        {STATE_RULES_VERSION}. The model version page is the changelog.
+
+      <p className="text-sm text-muted-foreground">
+        Data updated {DATA_UPDATED}. Math version {MODEL_VERSION}. <Link href="/model-version">What&apos;s changed</Link>
       </p>
     </TrustArticle>
-  )
-}
-
-function WeightTable({
-  caption,
-  rows,
-}: {
-  caption: string
-  rows: { key: string; weight: number }[]
-}) {
-  return (
-    <div className="overflow-x-auto">
-      <table className="w-full border-collapse text-left">
-        <caption className="py-2 text-left font-medium">{caption}</caption>
-        <thead>
-          <tr className="border-b border-border">
-            <th scope="col" className="py-1 pr-3 font-medium">
-              Key
-            </th>
-            <th scope="col" className="py-1 font-medium">
-              Sample display weight
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row) => (
-            <tr key={row.key} className="border-b border-border">
-              <th scope="row" className="py-1 pr-3 font-normal">
-                {row.key}
-              </th>
-              <td className="py-1 font-mono">{row.weight.toFixed(2)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
   )
 }

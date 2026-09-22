@@ -1,0 +1,485 @@
+{
+  "_readme": "Which HLDI vehicle families we keep (popular US vehicles and common teen cars), how catalog model names map to HLDI names, and which HLDI class average stands in for each EPA-based class. Families are HLDI model names, compacted, with body, cab, drive, and powertrain words removed. Run `npm run factors:build -- --hldi-full <losses.csv>` to re-pick the subset from a full HLDI download. Set useHldiModels to false (or delete sources/hldi-2022-24.csv) to stop using per-model HLDI rows; every vehicle then uses its class average.",
+  "useHldiModels": true,
+  "families": {
+    "Acura": [
+      "mdx",
+      "rdx",
+      "integra"
+    ],
+    "Audi": [
+      "q5",
+      "q3",
+      "a4"
+    ],
+    "BMW": [
+      "3series",
+      "5series",
+      "x1",
+      "x3",
+      "x5",
+      "2series",
+      "4series",
+      "i4",
+      "i5",
+      "m2",
+      "m235xi",
+      "m240i",
+      "m240xi",
+      "m3",
+      "m340i",
+      "m340xi",
+      "m4",
+      "m440i",
+      "m440xi",
+      "m8",
+      "m850xi"
+    ],
+    "Buick": [
+      "encoregx",
+      "envision",
+      "enclave",
+      "envista"
+    ],
+    "Cadillac": [
+      "escalade",
+      "xt5"
+    ],
+    "Chevrolet": [
+      "silverado1500",
+      "equinox",
+      "trax",
+      "tahoe",
+      "traverse",
+      "colorado",
+      "malibu",
+      "trailblazer",
+      "blazer",
+      "camaro",
+      "corvette",
+      "suburban1500"
+    ],
+    "Chrysler": [
+      "pacifica"
+    ],
+    "Dodge": [
+      "durango",
+      "hornet"
+    ],
+    "Ford": [
+      "f150",
+      "f150lightning",
+      "explorer",
+      "escape",
+      "bronco",
+      "broncosport",
+      "maverick",
+      "ranger",
+      "mustang",
+      "mustangmache",
+      "expedition",
+      "edge"
+    ],
+    "GMC": [
+      "sierra1500",
+      "terrain",
+      "acadia",
+      "yukon",
+      "canyon"
+    ],
+    "Honda": [
+      "crv",
+      "civic",
+      "civicsi",
+      "accord",
+      "hrv",
+      "pilot",
+      "odyssey",
+      "passport",
+      "ridgeline"
+    ],
+    "Hyundai": [
+      "tucson",
+      "elantra",
+      "santafe",
+      "palisade",
+      "kona",
+      "venue",
+      "ioniq5",
+      "ioniq6",
+      "sonata",
+      "santacruz"
+    ],
+    "Jeep": [
+      "grandcherokee",
+      "grandcherokeel",
+      "wrangler",
+      "compass",
+      "gladiator"
+    ],
+    "Kia": [
+      "sportage",
+      "telluride",
+      "sorento",
+      "forte",
+      "soul",
+      "seltos",
+      "niro",
+      "ev6",
+      "k5",
+      "carnival"
+    ],
+    "Land Rover": [
+      "rangerover",
+      "rangeroversport",
+      "rangerovervelar",
+      "rangeroverevoque",
+      "defender90",
+      "defender110",
+      "defender130"
+    ],
+    "Lexus": [
+      "rx350",
+      "rx350h",
+      "rx450h",
+      "rx500h",
+      "nx250",
+      "nx350",
+      "nx450",
+      "es250",
+      "es300h",
+      "es350",
+      "tx350",
+      "tx500h"
+    ],
+    "Mazda": [
+      "cx5",
+      "cx30",
+      "cx50",
+      "cx90",
+      "3"
+    ],
+    "Mercedes-Benz": [
+      "glcclass",
+      "gleclass",
+      "cclass",
+      "claclassamg",
+      "glaclassamg",
+      "gleclassamg",
+      "gclassamg",
+      "glsclassamg",
+      "amgglb",
+      "amgslclass",
+      "amggleclass"
+    ],
+    "Mini": [
+      "cooper"
+    ],
+    "Mitsubishi": [
+      "outlander"
+    ],
+    "Nissan": [
+      "rogue",
+      "altima",
+      "sentra",
+      "kicks",
+      "versa",
+      "pathfinder",
+      "frontier",
+      "murano",
+      "leaf"
+    ],
+    "Ram": [
+      "1500",
+      "1500classic"
+    ],
+    "Subaru": [
+      "outback",
+      "forester",
+      "crosstrek",
+      "impreza",
+      "ascent",
+      "legacy"
+    ],
+    "Tesla": [
+      "modely",
+      "model3",
+      "models",
+      "modelx",
+      "cybertruck"
+    ],
+    "Toyota": [
+      "rav4",
+      "rav4prime",
+      "camry",
+      "corolla",
+      "corollacross",
+      "highlander",
+      "grandhighlander",
+      "tacoma",
+      "tundra",
+      "4runner",
+      "prius",
+      "priusprime",
+      "sienna",
+      "bz4x",
+      "venza"
+    ],
+    "Volkswagen": [
+      "tiguan",
+      "jetta",
+      "atlas",
+      "atlascrosssport",
+      "id4",
+      "taos"
+    ],
+    "Porsche": [
+      "911carrera",
+      "911targa",
+      "911turbo",
+      "boxster",
+      "cayman",
+      "taycan",
+      "macan",
+      "cayenne"
+    ]
+  },
+  "aliases": {
+    "mazda|mazda3": "3",
+    "chevrolet|silverado": "silverado1500",
+    "gmc|sierra": "sierra1500",
+    "mini|hardtop": "cooper",
+    "bmw|228i": "2series",
+    "bmw|230i": "2series",
+    "bmw|330i": "3series",
+    "bmw|330e": "3series",
+    "bmw|430i": "4series",
+    "bmw|530i": "5series",
+    "bmw|540i": "5series",
+    "bmw|sdrive28i": "x1",
+    "bmw|xdrive28i": "x1",
+    "chevrolet|equinoxev": "equinox",
+    "chevrolet|blazerev": "blazer",
+    "chevrolet|suburban": "suburban1500",
+    "porsche|718boxster": "boxster",
+    "porsche|718cayman": "cayman"
+  },
+  "classes": {
+    "small-car": "Smallcar 4-door",
+    "midsize-car": "Midsizecar 4-door",
+    "large-car": "Midsizecar 4-door",
+    "two-seater": "Midsize sports car",
+    "small-suv": "Small SUV",
+    "large-suv": "Large SUV",
+    "suv": "Midsize SUV",
+    "small-pickup": "All small pickups",
+    "large-pickup": "All large pickups",
+    "minivan": "Very large Minivan",
+    "van": "Very large van",
+    "special-purpose": "Midsize SUV"
+  },
+  "electricClassCells": {
+    "small-car": [
+      "Four-door cars",
+      "Small"
+    ],
+    "midsize-car": [
+      "Four-door cars",
+      "Midsize"
+    ],
+    "small-suv": [
+      "SUVs",
+      "Small"
+    ],
+    "large-suv": [
+      "SUVs",
+      "Large"
+    ],
+    "suv": [
+      "SUVs",
+      "Midsize"
+    ],
+    "large-pickup": [
+      "Pickups",
+      "Large"
+    ]
+  },
+  "_luxuryMakes": "Makes with more than half of their rows in HLDI's 2022-24 table filed under HLDI's own Luxury cars, Luxury SUVs, or Sports cars classes. Row counts (luxury or sports rows / all rows): Acura 5/7, Alfa Romeo 6/6, Aston Martin 1/1, Audi 42/42, BMW 67/67, Bentley 4/4, Buick 4/7, Cadillac 20/20, Ferrari 1/1, Genesis 7/7, Infiniti 9/9, Jaguar 6/6, Lamborghini 2/2, Land Rover 10/10, Lexus 34/34, Lincoln 9/9, Lucid 2/2, Maserati 3/3, Mercedes-Benz 39/44, Polestar 2/2, Porsche 14/14, Rolls Royce 2/2, Tesla 6/7, Volvo 13/15. Makes HLDI does not list (for example McLaren or Lotus) are not included.",
+  "luxuryMakes": [
+    "Acura",
+    "Alfa Romeo",
+    "Aston Martin",
+    "Audi",
+    "BMW",
+    "Bentley",
+    "Buick",
+    "Cadillac",
+    "Ferrari",
+    "Genesis",
+    "Infiniti",
+    "Jaguar",
+    "Lamborghini",
+    "Land Rover",
+    "Lexus",
+    "Lincoln",
+    "Lucid",
+    "Maserati",
+    "Mercedes-Benz",
+    "Polestar",
+    "Porsche",
+    "Rolls Royce",
+    "Tesla",
+    "Volvo"
+  ],
+  "luxuryClasses": {
+    "small-car": "Midsize luxury car",
+    "midsize-car": "Midsize luxury car",
+    "large-car": "Large luxury car",
+    "two-seater": "Large sports car",
+    "small-suv": "Small luxury SUV",
+    "suv": "Midsize luxury SUV",
+    "large-suv": "Large luxury SUV",
+    "special-purpose": "Midsize luxury SUV"
+  },
+  "_luxuryClasses": "HLDI publishes no small luxury car average, so small luxury cars use the midsize one. Luxury two-seaters use HLDI's large sports car average. Pickups, minivans, and vans from luxury makes use the regular class averages.",
+  "luxurySportsClasses": {
+    "small-car": "Midsize sports car",
+    "midsize-car": "Midsize sports car",
+    "large-car": "Large sports car",
+    "two-seater": "Midsize sports car"
+  },
+  "_luxurySportsClasses": "Luxury-make two-doors and convertibles without their own row use HLDI's sports-car averages instead of the luxury sedan averages. The Porsche 911, Boxster, and Cayman are all in HLDI's sports-car classes.",
+  "_calibration": "The 12 vehicles California's 2026 survey prices for its Standard single-driver profiles (APS2026ProfilesExhibit-2.xlsx, sheets Standard and Vehicles), with the HLDI 2022-24 rows that stand for each. CA lists 2023 models. Where CA doesn't name the drive or trim, we take every matching HLDI row. The Tacoma is CA's SR Access Cab; HLDI's 2022-24 table has only double-cab Tacomas, so the 2WD double cab stands in.",
+  "calibration": {
+    "Subaru Crosstrek": {
+      "make": "Subaru",
+      "series": [
+        "Subaru Crosstrek station wagon 4WD with EyeSight"
+      ]
+    },
+    "Honda Civic": {
+      "make": "Honda",
+      "series": [
+        "Honda Civic"
+      ]
+    },
+    "Honda Accord": {
+      "make": "Honda",
+      "series": [
+        "Honda Accord"
+      ]
+    },
+    "Toyota Tacoma": {
+      "make": "Toyota",
+      "series": [
+        "Toyota Tacoma double cab pickup"
+      ]
+    },
+    "Toyota Prius": {
+      "make": "Toyota",
+      "series": [
+        "Toyota Prius hybrid"
+      ]
+    },
+    "Tesla Model 3": {
+      "make": "Tesla",
+      "series": [
+        "Tesla Model 3 electric 4dr",
+        "Tesla Model 3 electric 4dr 4WD"
+      ]
+    },
+    "Ford F-150": {
+      "make": "Ford",
+      "series": [
+        "Ford F-150"
+      ]
+    },
+    "BMW 340i": {
+      "make": "BMW",
+      "series": [
+        "BMW M340i 4dr"
+      ]
+    },
+    "Toyota RAV4": {
+      "make": "Toyota",
+      "series": [
+        "Toyota RAV4 4dr",
+        "Toyota RAV4 4dr 4WD"
+      ]
+    },
+    "Tesla Model S": {
+      "make": "Tesla",
+      "series": [
+        "Tesla Model S 4dr electric 4WD"
+      ]
+    },
+    "Chevy Silverado": {
+      "make": "Chevrolet",
+      "series": [
+        "Chevrolet Silverado 1500"
+      ]
+    },
+    "BMW 530i": {
+      "make": "BMW",
+      "series": [
+        "BMW 5 series 4dr"
+      ]
+    }
+  },
+  "calibrationProfiles": {
+    "2512": {
+      "V1": "Subaru Crosstrek",
+      "V2": "Honda Civic",
+      "V3": "Honda Accord",
+      "V4": "Toyota Tacoma"
+    },
+    "2522": {
+      "V1": "Honda Accord",
+      "V2": "Toyota Prius",
+      "V3": "Tesla Model 3",
+      "V4": "Ford F-150"
+    },
+    "2532": {
+      "V1": "Honda Accord",
+      "V2": "BMW 340i",
+      "V3": "Ford F-150",
+      "V4": "Toyota RAV4"
+    },
+    "2542": {
+      "V1": "Honda Accord",
+      "V2": "Tesla Model S",
+      "V3": "Chevy Silverado",
+      "V4": "BMW 530i"
+    }
+  },
+  "_luxuryValue": "Which makes get the car-value term on the damage part. It was fitted on BMW and Tesla only (the only luxury makes in California's calibration), so applying it elsewhere is our judgment. Full strength: makes priced like BMW and Tesla or above. Half strength (the square root of the term, with a wider range): makes whose cars mostly cost less than a comparable BMW. Polestar gets full strength because its cars are priced like a Tesla Model 3. Alfa Romeo gets half strength: its Giulia and Stelvio are priced like BMW's 3 Series and X3, but it sells few cars and we have no price evidence for it, so we don't give it the full term. Buick and Mini get no term: HLDI files some of their models as luxury, but their prices are mainstream.",
+  "luxuryValueFull": [
+    "BMW",
+    "Mercedes-Benz",
+    "Audi",
+    "Porsche",
+    "Tesla",
+    "Land Rover",
+    "Jaguar",
+    "Maserati",
+    "Lucid",
+    "Rivian",
+    "Polestar",
+    "Bentley",
+    "Rolls Royce",
+    "Ferrari",
+    "Lamborghini",
+    "McLaren",
+    "Aston Martin"
+  ],
+  "luxuryValueHalf": [
+    "Lexus",
+    "Acura",
+    "Volvo",
+    "Genesis",
+    "Infiniti",
+    "Cadillac",
+    "Lincoln",
+    "Alfa Romeo"
+  ]
+}

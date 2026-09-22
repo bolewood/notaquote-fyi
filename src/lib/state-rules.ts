@@ -1,13 +1,47 @@
 /**
- * Versioned state_rules table. Figures appear only when this file cites a
- * statute or insurance-department page opened on lastVerified. A blank source
- * URL means the dollars stay null. This is source research, not a legal
- * conclusion, and it is not a premium baseline.
+ * State minimum rules: the least car insurance each state (and DC) asks a
+ * driver to carry. The data lives in data/state-rules/state-rules.json so a
+ * contributor can fix a row without touching code. Every figure has a source
+ * link and the date it was checked. A figure we could not confirm stays null,
+ * and the row's `uncertain` field says what is missing.
+ *
+ * These are minimums, not advice. They are not a premium figure either.
+ * How the table was built: data/state-rules/README.md.
  */
 
-export const STATE_RULES_VERSION = "state-rules-2026-09-21"
+import rulesFile from "../../data/state-rules/state-rules.json"
 
-export const STATE_RULES_CHECKED_ON = "2026-09-21"
+/** The policy must include the coverage unless you delete it in writing. */
+export const REQUIRED_UNLESS_WRITTEN_DELETION = "required-unless-written-deletion" as const
+
+/** The policy must include the coverage unless you reject it in writing. */
+export const REQUIRED_UNLESS_WRITTEN_REJECTION = "required-unless-written-rejection" as const
+
+/**
+ * The policy must include the coverage unless you reject it. The statute
+ * doesn't say the first rejection has to be in writing (insurers usually ask
+ * for a signed form anyway).
+ */
+export const REQUIRED_UNLESS_REJECTED = "required-unless-rejected" as const
+
+/**
+ * What a minimum policy in the state must include.
+ * true: you must carry it. false: you don't have to (an insurer may still
+ * have to offer it). The three string values: it comes with the policy unless
+ * you turn it down. null: we couldn't confirm it from a primary source yet.
+ */
+export type RequirementFlag =
+  | boolean
+  | typeof REQUIRED_UNLESS_WRITTEN_DELETION
+  | typeof REQUIRED_UNLESS_WRITTEN_REJECTION
+  | typeof REQUIRED_UNLESS_REJECTED
+  | null
+
+/** You pick no-fault or ordinary fault rules. The row's noFaultDefault says what you get if you don't pick. */
+export const NO_FAULT_CHOICE = "choice" as const
+
+/** true: no-fault. false: ordinary fault rules. "choice": you pick. null: not confirmed. */
+export type NoFaultValue = boolean | typeof NO_FAULT_CHOICE | null
 
 export const CREDIT_BUCKET = "unreviewed" as const
 
@@ -15,234 +49,234 @@ export const CREDIT_FACTOR = 1
 
 export type CreditBucket = typeof CREDIT_BUCKET
 
-/** The opened page says the policy must include the coverage unless a named insured deletes it in writing. */
-export const REQUIRED_UNLESS_WRITTEN_DELETION = "required-unless-written-deletion" as const
+export type StateRuleSource = {
+  label: string
+  url: string
+}
 
-/** The opened page says the insurer may not issue the policy unless the coverage is provided, and a written rejection removes it. */
-export const REQUIRED_UNLESS_WRITTEN_REJECTION = "required-unless-written-rejection" as const
-
-export type RequirementFlag =
-  | boolean
-  | typeof REQUIRED_UNLESS_WRITTEN_DELETION
-  | typeof REQUIRED_UNLESS_WRITTEN_REJECTION
-  | null
-
-export type StateRule = {
-  state: string
+/** A change in the law that takes effect on a future date. */
+export type ScheduledChange = {
+  /** YYYY-MM-DD. Usually "policies issued or renewed on or after" this date. */
+  from: string
   biPerPerson: number | null
   biPerAccident: number | null
   pd: number | null
+  summary: string
+  sourceUrl: string
+}
+
+export type StateRule = {
+  state: string
+  /** false only where most drivers are not required to buy a policy (New Hampshire). */
+  insuranceRequired: boolean | null
+  biPerPerson: number | null
+  biPerAccident: number | null
+  pd: number | null
+  /** A single combined limit the state accepts instead of split limits, if it names one. */
+  combinedSingleLimit: number | null
   pipRequired: RequirementFlag
-  noFault: boolean | null
+  pipAmount: string | null
+  noFault: NoFaultValue
+  /** Only for "choice" states: true if no-fault applies when you don't pick, false if fault rules do, null if unconfirmed. */
+  noFaultDefault: boolean | null
   umRequired: RequirementFlag
   uimRequired: RequirementFlag
+  medPayRequired: RequirementFlag
+  umLimits: string | null
+  /** Effective dates and recent changes, in plain words. */
+  effective: string | null
+  /** Future changes already in law. A test fails once one takes effect, as a reminder to update the row. */
+  scheduledChanges: readonly ScheduledChange[]
+  /** We don't ask about credit. Kept at 1.00 on every row. */
   creditBucket: CreditBucket
   creditFactor: typeof CREDIT_FACTOR
+  /** The best primary source for the liability limits. */
   sourceUrl: string | null
+  sources: readonly StateRuleSource[]
+  /** Every source URL for the row. Same list as `sources`, kept for older callers. */
   pagesOpened: readonly string[]
+  checkedOn: string | null
+  /** Same as checkedOn, kept for older callers. */
   lastVerified: string | null
-  reviewer: string | null
+  /** One to three plain sentences for visitors. */
   note: string | null
+  /** A helpful caveat that isn't a gap in our research (shown as "Good to know"). */
+  goodToKnow: string | null
+  /** What we could not confirm from a primary source, if anything. */
+  uncertain: string | null
 }
 
-const CA_STATUTE =
-  "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=16056."
-const CA_DMV = "https://www.dmv.ca.gov/portal/vehicle-registration/insurance-requirements/"
-const CA_UM =
-  "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=11580.2"
-
-const TX_LIABILITY = "https://statutes.capitol.texas.gov/Docs/TN/htm/TN.601.htm"
-const TX_UM_PIP =
-  "https://statutes.capitol.texas.gov/?artSec=1952.101&chapter=IN.1952&code=IN&tab=1"
-
-const FL_PD = "https://www.flsenate.gov/Laws/Statutes/2026/324.022"
-const FL_NO_FAULT = "https://www.flsenate.gov/Laws/Statutes/2026/627.730"
-const FL_PIP = "https://www.flsenate.gov/Laws/Statutes/2026/627.736"
-
-const NY_DFS = "https://www.dfs.ny.gov/faqs/consumer-auto/how-much-auto-insurance-must-i-carry"
-
-const PA_FAQ = "https://www.pa.gov/agencies/dmv/faqs/motor-vehicle-faqs/insurance-law-faqs"
-const PA_CHAPTER = "https://www.legis.state.pa.us/WU01/LI/LI/CT/HTM/75/00.017..HTM"
-
-const IL_LIABILITY =
-  "https://www.ilga.gov/Documents/legislation/ilcs/documents/062500050K7-203.htm"
-const IL_UM = "https://www.ilga.gov/legislation/ilcs/documents/021500050K143a.htm"
-
-type SourcedRule = Pick<
+export type RawRule = Omit<
   StateRule,
-  | "biPerPerson"
-  | "biPerAccident"
-  | "pd"
-  | "pipRequired"
-  | "noFault"
-  | "umRequired"
-  | "uimRequired"
-  | "sourceUrl"
-  | "pagesOpened"
-  | "note"
+  "creditBucket" | "creditFactor" | "sourceUrl" | "pagesOpened" | "lastVerified"
 >
 
-const SOURCED: Record<string, SourcedRule> = {
-  CA: {
-    biPerPerson: 30000,
-    biPerAccident: 60000,
-    pd: 15000,
-    pipRequired: null,
-    noFault: null,
-    umRequired: REQUIRED_UNLESS_WRITTEN_DELETION,
-    uimRequired: REQUIRED_UNLESS_WRITTEN_DELETION,
-    sourceUrl: CA_STATUTE,
-    pagesOpened: [CA_STATUTE, CA_DMV, CA_UM],
-    note: "Checked 21 September 2026. Vehicle Code section 16056(a)(2) states $30,000 because of bodily injury to or death of one person, $60,000 because of bodily injury to or death of two or more persons, and $15,000 because of injury to or destruction of property, for a policy or bond issued or renewed on or after January 1, 2025. Paragraph (a)(1) states $15,000, $30,000, and $5,000. Paragraph (d) states a further increase for a policy or bond issued or renewed on or after January 1, 2035. This row uses paragraph (a)(2) only. The California DMV insurance-requirements page states the same $30,000, $60,000, and $15,000 figures and cites Insurance Code section 11580.1(b). Insurance Code section 11580.2 says no bodily-injury liability policy shall be issued or delivered unless it contains uninsured-motorist coverage, and that a named insured may delete that coverage by written agreement. The same page says an uninsured motor vehicle includes an underinsured motor vehicle. This row marks both required unless deleted in writing. It does not add a separate dollar limit for that coverage. The pages opened do not state a required personal-injury-protection amount or a no-fault rule. Credit stays unreviewed. This is source research, not a legal conclusion.",
-  },
-  TX: {
-    biPerPerson: 30000,
-    biPerAccident: 60000,
-    pd: 25000,
-    pipRequired: REQUIRED_UNLESS_WRITTEN_REJECTION,
-    noFault: null,
-    umRequired: REQUIRED_UNLESS_WRITTEN_REJECTION,
-    uimRequired: REQUIRED_UNLESS_WRITTEN_REJECTION,
-    sourceUrl: TX_LIABILITY,
-    pagesOpened: [TX_LIABILITY, TX_UM_PIP],
-    note: "Checked 21 September 2026. Transportation Code section 601.072(a-1) states $30,000 for bodily injury to or death of one person in one collision, $60,000 for two or more persons, and $25,000 for property damage, effective January 1, 2011. Subsection (b) says the coverage may exclude the first $250, $500, and $250. Those amounts are not subtracted here. Insurance Code section 1952.101 says an insurer may not issue an automobile liability policy unless it provides uninsured or underinsured motorist coverage, and that the coverage does not apply if a named insured rejects it in writing. Section 1952.152 says the same for personal injury protection. This row marks those coverages required unless rejected in writing. No no-fault flag was recorded. Credit stays unreviewed. This is source research, not a legal conclusion.",
-  },
-  FL: {
-    biPerPerson: null,
-    biPerAccident: null,
-    pd: 10000,
-    pipRequired: true,
-    noFault: true,
-    umRequired: null,
-    uimRequired: null,
-    sourceUrl: FL_PD,
-    pagesOpened: [FL_PD, FL_NO_FAULT, FL_PIP],
-    note: "Checked 21 September 2026. Section 324.022 states $10,000 because of damage to, or destruction of, property of others in any one crash. It also says that requirement may be met by a policy of at least $30,000 for combined property-damage liability and bodily-injury liability. This row does not treat that combined amount as a bodily-injury minimum, so the bodily-injury fields stay blank. Section 627.730 names sections 627.730 through 627.7405 the Florida Motor Vehicle No-Fault Law. Section 627.736 states required personal injury protection to a limit of $10,000 in medical and disability benefits and $5,000 in death benefits. This check did not open an uninsured-motorist section, so those flags are not recorded. Credit stays unreviewed. This is source research, not a legal conclusion.",
-  },
-  NY: {
-    biPerPerson: 25000,
-    biPerAccident: 50000,
-    pd: 10000,
-    pipRequired: true,
-    noFault: true,
-    umRequired: true,
-    uimRequired: false,
-    sourceUrl: NY_DFS,
-    pagesOpened: [NY_DFS],
-    note: "Checked 21 September 2026. The Department of Financial Services page “How much auto insurance must I carry?” states liability insurance of $25,000 for bodily injury to one person, $50,000 for bodily injury to all persons, and $10,000 for property damage in any one accident. It states mandatory no-fault coverage of $50,000. It says the law requires uninsured motorists coverage for bodily injury, subject to the same minimums. It says supplementary uninsured/underinsured motorists coverage can also be purchased, and that an insurer must offer specified higher limits. This row marks personal injury protection, no-fault, and uninsured motorist coverage required. It does not mark underinsured motorist coverage required. The Vehicle and Traffic Law section 311 page did not load on this check, so the row cites the department page that opened, not a statute text. Credit stays unreviewed. This is source research, not a legal conclusion.",
-  },
-  PA: {
-    biPerPerson: 15000,
-    biPerAccident: 30000,
-    pd: 5000,
-    pipRequired: true,
-    noFault: null,
-    umRequired: false,
-    uimRequired: false,
-    sourceUrl: PA_FAQ,
-    pagesOpened: [PA_FAQ, PA_CHAPTER],
-    note: "Checked 21 September 2026. The PennDOT insurance-law FAQ states $15,000 for injury or death of one person in an accident, $30,000 for injury or death of more than one person, and $5,000 for damage to property of another person. Title 75 section 1702, on the chapter page opened the same day, defines financial responsibility with those same three amounts. Section 1711(a) says an insurer issuing or delivering liability policies shall include a medical benefit in the amount of $5,000. This row marks personal injury protection required. It does not mark a no-fault flag. Section 1731(a) says purchase of uninsured motorist and underinsured motorist coverages is optional. This row does not mark them required. Credit stays unreviewed. This is source research, not a legal conclusion.",
-  },
-  IL: {
-    biPerPerson: 25000,
-    biPerAccident: 50000,
-    pd: 20000,
-    pipRequired: null,
-    noFault: null,
-    umRequired: true,
-    uimRequired: null,
-    sourceUrl: IL_LIABILITY,
-    pagesOpened: [IL_LIABILITY, IL_UM],
-    note: "Checked 21 September 2026. 625 ILCS 5/7-203 states a limit of not less than $25,000 because of bodily injury to or death of any one person in any one motor vehicle crash, $50,000 because of bodily injury to or death of two or more persons, and $20,000 because of injury to or destruction of property. The page says the changes made by the 98th General Assembly apply to policies issued or renewed on or after January 1, 2015, and cites Public Act 102-982, effective July 1, 2023. 215 ILCS 5/143a says a bodily-injury liability policy shall not be renewed, delivered, or issued for delivery unless uninsured-motorist coverage is provided in the limits set forth in section 7-203. This row marks uninsured motorist coverage required. The same section says uninsured-motorist property-damage coverage is made available and that the absence of a premium payment is proof it was not accepted. Underinsured motorist coverage, personal injury protection, and no-fault were not recorded from the pages opened. Credit stays unreviewed. This is source research, not a legal conclusion.",
-  },
+type RawFile = {
+  version: string
+  checkedOn: string
+  states: RawRule[]
 }
 
-function blankRule(state: string): StateRule {
-  return {
-    state,
-    biPerPerson: null,
-    biPerAccident: null,
-    pd: null,
-    pipRequired: null,
-    noFault: null,
-    umRequired: null,
-    uimRequired: null,
-    creditBucket: CREDIT_BUCKET,
-    creditFactor: CREDIT_FACTOR,
-    sourceUrl: null,
-    pagesOpened: [],
-    lastVerified: null,
-    reviewer: null,
-    note: null,
-  }
-}
+const FLAG_VALUES: readonly unknown[] = [
+  true,
+  false,
+  null,
+  REQUIRED_UNLESS_WRITTEN_DELETION,
+  REQUIRED_UNLESS_WRITTEN_REJECTION,
+  REQUIRED_UNLESS_REJECTED,
+]
 
-const STATE_CODES = [
-  "AL",
-  "AK",
-  "AZ",
-  "AR",
-  "CA",
-  "CO",
-  "CT",
-  "DE",
-  "DC",
-  "FL",
-  "GA",
-  "HI",
-  "ID",
-  "IL",
-  "IN",
-  "IA",
-  "KS",
-  "KY",
-  "LA",
-  "ME",
-  "MD",
-  "MA",
-  "MI",
-  "MN",
-  "MS",
-  "MO",
-  "MT",
-  "NE",
-  "NV",
-  "NH",
-  "NJ",
-  "NM",
-  "NY",
-  "NC",
-  "ND",
-  "OH",
-  "OK",
-  "OR",
-  "PA",
-  "RI",
-  "SC",
-  "SD",
-  "TN",
-  "TX",
-  "UT",
-  "VT",
-  "VA",
-  "WA",
-  "WV",
-  "WI",
-  "WY",
+const DOLLAR_FIELDS = ["biPerPerson", "biPerAccident", "pd", "combinedSingleLimit"] as const
+const FLAG_FIELDS = ["pipRequired", "umRequired", "uimRequired", "medPayRequired"] as const
+const TEXT_FIELDS = ["pipAmount", "umLimits", "effective", "note", "goodToKnow", "uncertain"] as const
+const REQUIRED_FIELDS = [
+  "state",
+  "insuranceRequired",
+  ...DOLLAR_FIELDS,
+  ...FLAG_FIELDS,
+  "noFault",
+  "noFaultDefault",
+  ...TEXT_FIELDS,
+  "scheduledChanges",
+  "sources",
+  "checkedOn",
 ] as const
 
-export const STATE_RULES: readonly StateRule[] = STATE_CODES.map((state) => {
-  const sourced = SOURCED[state]
-  if (!sourced) return blankRule(state)
-  return {
-    state,
-    ...sourced,
-    creditBucket: CREDIT_BUCKET,
-    creditFactor: CREDIT_FACTOR,
-    lastVerified: STATE_RULES_CHECKED_ON,
-    reviewer: null,
+function isIncludedUnlessDeclined(value: RequirementFlag): boolean {
+  return (
+    value === REQUIRED_UNLESS_WRITTEN_DELETION ||
+    value === REQUIRED_UNLESS_WRITTEN_REJECTION ||
+    value === REQUIRED_UNLESS_REJECTED
+  )
+}
+
+function isDollars(value: unknown): value is number | null {
+  return value === null || (typeof value === "number" && Number.isInteger(value) && value > 0)
+}
+
+/** A real calendar date written as YYYY-MM-DD. */
+export function isIsoDate(value: unknown): value is string {
+  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false
+  const [year, month, day] = value.split("-").map(Number)
+  const date = new Date(Date.UTC(year, month - 1, day))
+  return date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day
+}
+
+function describe(value: unknown): string {
+  return value === undefined ? "missing" : JSON.stringify(value)
+}
+
+/** Throws with a clear message when a contributor's edit breaks the shape of one row. */
+export function validateRawRule(raw: RawRule): void {
+  const row = raw as unknown as Record<string, unknown>
+  const where = `data/state-rules/state-rules.json, row ${typeof row.state === "string" ? row.state : "(no state code)"}`
+
+  for (const key of REQUIRED_FIELDS) {
+    if (!(key in row)) throw new Error(`${where}: missing field "${key}" (use null if it's unknown)`)
   }
-})
+  if (typeof raw.state !== "string" || !/^[A-Z]{2}$/.test(raw.state)) {
+    throw new Error(`${where}: "state" must be a two-letter code like "OH", got ${describe(row.state)}`)
+  }
+  for (const key of DOLLAR_FIELDS) {
+    if (!isDollars(row[key])) {
+      throw new Error(`${where}: "${key}" must be a positive whole number of dollars or null, got ${describe(row[key])}`)
+    }
+  }
+  for (const key of FLAG_FIELDS) {
+    if (!FLAG_VALUES.includes(row[key])) {
+      throw new Error(
+        `${where}: "${key}" must be true, false, null, "${REQUIRED_UNLESS_WRITTEN_REJECTION}", "${REQUIRED_UNLESS_WRITTEN_DELETION}", or "${REQUIRED_UNLESS_REJECTED}", got ${describe(row[key])}`,
+      )
+    }
+  }
+  for (const key of TEXT_FIELDS) {
+    if (row[key] !== null && typeof row[key] !== "string") {
+      throw new Error(`${where}: "${key}" must be text or null, got ${describe(row[key])}`)
+    }
+  }
+  if (![true, false, null, NO_FAULT_CHOICE].includes(raw.noFault as never)) {
+    throw new Error(`${where}: "noFault" must be true, false, "choice", or null, got ${describe(row.noFault)}`)
+  }
+  if (raw.noFaultDefault !== null && typeof raw.noFaultDefault !== "boolean") {
+    throw new Error(`${where}: "noFaultDefault" must be true, false, or null, got ${describe(row.noFaultDefault)}`)
+  }
+  if (raw.noFault !== NO_FAULT_CHOICE && raw.noFaultDefault !== null) {
+    throw new Error(`${where}: "noFaultDefault" is only for rows where "noFault" is "choice". Set it to null.`)
+  }
+  if (raw.insuranceRequired !== null && typeof raw.insuranceRequired !== "boolean") {
+    throw new Error(`${where}: "insuranceRequired" must be true, false, or null, got ${describe(row.insuranceRequired)}`)
+  }
+  if (raw.checkedOn !== null && !isIsoDate(raw.checkedOn)) {
+    throw new Error(`${where}: "checkedOn" must be a real date written YYYY-MM-DD, got ${describe(row.checkedOn)}`)
+  }
+  if (!Array.isArray(raw.sources)) throw new Error(`${where}: "sources" must be a list`)
+  raw.sources.forEach((source, index) => {
+    if (!source || typeof source.label !== "string" || source.label.length === 0) {
+      throw new Error(`${where}: source ${index + 1} needs a "label"`)
+    }
+    if (typeof source.url !== "string" || !/^https:\/\//.test(source.url)) {
+      throw new Error(`${where}: source ${index + 1} needs an https "url", got ${describe(source.url)}`)
+    }
+  })
+  if (!Array.isArray(raw.scheduledChanges)) throw new Error(`${where}: "scheduledChanges" must be a list (use [] for none)`)
+  raw.scheduledChanges.forEach((change, index) => {
+    const at = `${where}: scheduled change ${index + 1}`
+    if (!isIsoDate(change.from)) throw new Error(`${at}: "from" must be a date written YYYY-MM-DD`)
+    for (const key of ["biPerPerson", "biPerAccident", "pd"] as const) {
+      if (!isDollars(change[key])) throw new Error(`${at}: "${key}" must be a positive whole number or null`)
+    }
+    if (!change.summary) throw new Error(`${at}: needs a "summary"`)
+    if (typeof change.sourceUrl !== "string" || !/^https:\/\//.test(change.sourceUrl)) {
+      throw new Error(`${at}: needs an https "sourceUrl"`)
+    }
+  })
+  const hasFigure = DOLLAR_FIELDS.some((key) => raw[key] !== null)
+  if (hasFigure && (raw.sources.length === 0 || raw.checkedOn === null)) {
+    throw new Error(`${where}: a dollar figure needs at least one source and a "checkedOn" date`)
+  }
+}
+
+/** Throws when the file as a whole is inconsistent: bad version, duplicate rows, or dates out of step. */
+export function validateRulesFile(data: RawFile): void {
+  const where = "data/state-rules/state-rules.json"
+  if (!isIsoDate(data.checkedOn)) throw new Error(`${where}: top-level "checkedOn" must be YYYY-MM-DD`)
+  if (data.version !== `state-rules-${data.checkedOn}`) {
+    throw new Error(`${where}: "version" must be "state-rules-${data.checkedOn}" to match "checkedOn", got ${describe(data.version)}`)
+  }
+  const seen = new Set<string>()
+  let newest: string | null = null
+  for (const raw of data.states) {
+    validateRawRule(raw)
+    if (seen.has(raw.state)) throw new Error(`${where}: ${raw.state} appears more than once`)
+    seen.add(raw.state)
+    if (raw.checkedOn !== null) {
+      if (raw.checkedOn > data.checkedOn) {
+        throw new Error(`${where}, row ${raw.state}: "checkedOn" ${raw.checkedOn} is after the file's "checkedOn" ${data.checkedOn}. Bump the file date and version too.`)
+      }
+      if (newest === null || raw.checkedOn > newest) newest = raw.checkedOn
+    }
+  }
+  if (newest !== null && newest !== data.checkedOn) {
+    throw new Error(`${where}: top-level "checkedOn" is ${data.checkedOn}, but the newest row was checked ${newest}. They should match.`)
+  }
+}
+
+const file = rulesFile as RawFile
+validateRulesFile(file)
+
+export const STATE_RULES_VERSION: string = file.version
+
+/** The newest check date across all rows. Rows carry their own checkedOn too. */
+export const STATE_RULES_CHECKED_ON: string = file.checkedOn
+
+export const STATE_RULES: readonly StateRule[] = file.states.map((raw) => ({
+  ...raw,
+  creditBucket: CREDIT_BUCKET,
+  creditFactor: CREDIT_FACTOR,
+  sourceUrl: raw.sources[0]?.url ?? null,
+  pagesOpened: [...new Set(raw.sources.map((source) => source.url))],
+  lastVerified: raw.checkedOn,
+}))
 
 const BY_STATE = new Map(STATE_RULES.map((rule) => [rule.state, rule]))
 
@@ -250,17 +284,50 @@ export function stateRule(state: string): StateRule | undefined {
   return BY_STATE.get(state)
 }
 
+/** Rows with at least one source. */
 export function sourcedStateRules(): StateRule[] {
   return STATE_RULES.filter((rule) => rule.sourceUrl !== null)
 }
 
+/** Rows with no source yet. */
 export function unsourcedStateRules(): StateRule[] {
   return STATE_RULES.filter((rule) => rule.sourceUrl === null)
 }
 
+/** Rows where all three liability figures (or a combined limit) are confirmed. */
+export function fullySourcedStateRules(): StateRule[] {
+  return STATE_RULES.filter(
+    (rule) =>
+      rule.sourceUrl !== null &&
+      ((rule.biPerPerson !== null && rule.biPerAccident !== null && rule.pd !== null) ||
+        rule.combinedSingleLimit !== null),
+  )
+}
+
+/** Today's date as YYYY-MM-DD in UTC. */
+export function todayIso(now: Date = new Date()): string {
+  return now.toISOString().slice(0, 10)
+}
+
+/** Scheduled changes that haven't taken effect yet, soonest first. */
+export function upcomingChanges(rule: StateRule, today: string = todayIso()): ScheduledChange[] {
+  return rule.scheduledChanges
+    .filter((change) => change.from > today)
+    .sort((a, b) => a.from.localeCompare(b.from))
+}
+
+/** Scheduled changes whose date has arrived. Each one means a row needs updating. */
+export function overdueChanges(today: string = todayIso()): { state: string; change: ScheduledChange }[] {
+  return STATE_RULES.flatMap((rule) =>
+    rule.scheduledChanges
+      .filter((change) => change.from <= today)
+      .map((change) => ({ state: rule.state, change })),
+  )
+}
+
 export function formatVerifiedDate(iso: string): string {
   const [year, month, day] = iso.split("-").map(Number)
-  return new Intl.DateTimeFormat("en-GB", {
+  return new Intl.DateTimeFormat("en-US", {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -276,82 +343,111 @@ export function formatLiabilityDollars(amount: number): string {
   })
 }
 
+/** "25/50/25" style shorthand, in thousands. Null when a figure is missing. */
+export function liabilityShorthand(rule: Pick<StateRule, "biPerPerson" | "biPerAccident" | "pd">): string | null {
+  if (rule.biPerPerson === null || rule.biPerAccident === null || rule.pd === null) return null
+  const k = (amount: number) => String(Math.round(amount / 1000))
+  return `${k(rule.biPerPerson)}/${k(rule.biPerAccident)}/${k(rule.pd)}`
+}
+
 export function liabilityCell(rule: StateRule, amount: number | null): string {
-  if (rule.sourceUrl === null) return "No figure yet"
-  if (amount === null) return "No figure in the sourced row"
+  if (rule.sourceUrl === null) return "Not checked yet"
+  if (amount === null) return "None set"
   return formatLiabilityDollars(amount)
 }
 
+/** Table text for a coverage requirement. */
 export function flagCell(value: RequirementFlag): string {
   if (value === true) return "Required"
-  if (value === false) return "Not marked required"
-  if (value === REQUIRED_UNLESS_WRITTEN_DELETION) return "Required unless deleted in writing"
-  if (value === REQUIRED_UNLESS_WRITTEN_REJECTION) return "Required unless rejected in writing"
-  return "Not recorded"
+  if (value === false) return "Not required"
+  if (value === REQUIRED_UNLESS_WRITTEN_DELETION || value === REQUIRED_UNLESS_WRITTEN_REJECTION) {
+    return "Included unless you decline in writing"
+  }
+  if (value === REQUIRED_UNLESS_REJECTED) return "Included unless you decline"
+  return "Not confirmed yet"
 }
 
-function requirementClause(value: RequirementFlag, name: string): string | null {
-  if (value === true) return `Required ${name} is included in this assumption.`
-  if (value === REQUIRED_UNLESS_WRITTEN_DELETION) {
-    return `${name.charAt(0).toUpperCase()}${name.slice(1)} is required unless a named insured deletes it in writing.`
-  }
-  if (value === REQUIRED_UNLESS_WRITTEN_REJECTION) {
-    return `${name.charAt(0).toUpperCase()}${name.slice(1)} is required unless a named insured rejects it in writing.`
-  }
+/** Table text for the no-fault column. No-fault is a system, not a coverage you buy. */
+export function noFaultCell(value: NoFaultValue): string {
+  if (value === true) return "Yes"
+  if (value === false) return "No"
+  if (value === NO_FAULT_CHOICE) return "Your choice"
+  return "Not confirmed yet"
+}
+
+/** Plain words for what happens in a choice state if you don't pick. */
+export function noFaultDefaultText(rule: Pick<StateRule, "noFault" | "noFaultDefault">): string | null {
+  if (rule.noFault !== NO_FAULT_CHOICE) return null
+  if (rule.noFaultDefault === true) return "If you don't choose, no-fault rules apply."
+  if (rule.noFaultDefault === false) return "If you don't choose, ordinary fault rules apply."
+  return "We haven't confirmed which rules apply if you don't choose."
+}
+
+const NO_PHYSICAL =
+  "This doesn't include comprehensive or collision, which pay to fix your own car."
+
+function coverageClause(value: RequirementFlag, name: string, optionalPolicy: boolean): string | null {
+  if (value === true) return optionalPolicy ? `It must also include ${name}.` : `You also need ${name}.`
+  if (value === REQUIRED_UNLESS_REJECTED) return `Your policy includes ${name} unless you turn it down.`
+  if (isIncludedUnlessDeclined(value)) return `Your policy includes ${name} unless you turn it down in writing.`
+  if (value === null) return `We haven't confirmed whether ${name} is included.`
   return null
 }
 
-const NO_PHYSICAL = "No comprehensive or collision. This is not coverage advice."
+function liabilitySentence(rule: StateRule): string {
+  if (rule.biPerPerson !== null && rule.biPerAccident !== null && rule.pd !== null) {
+    return `${formatLiabilityDollars(rule.biPerPerson)} per person and ${formatLiabilityDollars(rule.biPerAccident)} per crash for injuries you cause, plus ${formatLiabilityDollars(rule.pd)} for property damage.`
+  }
+  if (rule.combinedSingleLimit !== null) {
+    return `${formatLiabilityDollars(rule.combinedSingleLimit)} of liability coverage for injuries and property damage combined.`
+  }
+  const named: string[] = []
+  if (rule.biPerPerson !== null) named.push(`${formatLiabilityDollars(rule.biPerPerson)} per person for injuries you cause`)
+  if (rule.biPerAccident !== null) named.push(`${formatLiabilityDollars(rule.biPerAccident)} per crash for injuries`)
+  if (rule.pd !== null) named.push(`${formatLiabilityDollars(rule.pd)} for property damage`)
+  if (named.length === 0) return "We haven't confirmed a dollar minimum for this state yet."
+  const missingInjury = rule.biPerPerson === null || rule.biPerAccident === null
+  return `${named.join(", ")}.${missingInjury ? " There's no general injury-liability minimum here." : ""}`
+}
 
+/**
+ * A few plain sentences describing the state minimum, for the calculator's
+ * "State minimum" choice.
+ */
 export function stateMinimumAssumption(state: string): string {
   const rule = stateRule(state)
-  if (!rule || rule.sourceUrl === null || rule.lastVerified === null) {
-    return `State minimum. The sourced table has no figure yet. ${NO_PHYSICAL}`
+  if (!rule || rule.sourceUrl === null || rule.checkedOn === null) {
+    return `State minimum. We haven't confirmed this state's minimum yet. ${NO_PHYSICAL}`
   }
 
+  const optionalPolicy = rule.insuranceRequired === false
   const parts: string[] = []
-  if (
-    rule.biPerPerson !== null &&
-    rule.biPerAccident !== null &&
-    rule.pd !== null
-  ) {
-    parts.push(
-      `Assumption: ${formatLiabilityDollars(rule.biPerPerson)} bodily injury per person, ${formatLiabilityDollars(rule.biPerAccident)} bodily injury per accident, ${formatLiabilityDollars(rule.pd)} property damage.`,
-    )
+  const liability = liabilitySentence(rule)
+  if (optionalPolicy) {
+    parts.push("Most drivers here aren't required to buy insurance.")
+    parts.push(`If you buy a policy, it must include ${liability}`)
   } else {
-    const named: string[] = []
-    if (rule.biPerPerson !== null) {
-      named.push(`${formatLiabilityDollars(rule.biPerPerson)} bodily injury per person`)
-    }
-    if (rule.biPerAccident !== null) {
-      named.push(`${formatLiabilityDollars(rule.biPerAccident)} bodily injury per accident`)
-    }
-    if (rule.pd !== null) {
-      named.push(`${formatLiabilityDollars(rule.pd)} property damage`)
-    }
-    if (named.length === 0) {
-      parts.push("The sourced table has no figure yet.")
-    } else {
-      parts.push(`Assumption: ${named.join(", ")}.`)
-      if (rule.biPerPerson === null || rule.biPerAccident === null) {
-        parts.push("The sourced table has no bodily-injury figure.")
-      }
-      if (rule.pd === null) {
-        parts.push("The sourced table has no property-damage figure.")
-      }
-    }
+    parts.push(liability)
   }
 
+  const sameMotoristRule = rule.umRequired === rule.uimRequired
   for (const clause of [
-    requirementClause(rule.pipRequired, "personal injury protection"),
-    rule.noFault ? "The sourced row marks no-fault as required." : null,
-    requirementClause(rule.umRequired, "uninsured motorist coverage"),
-    requirementClause(rule.uimRequired, "underinsured motorist coverage"),
+    coverageClause(rule.pipRequired, "personal injury protection (PIP)", optionalPolicy),
+    coverageClause(rule.medPayRequired, "medical payments coverage", optionalPolicy),
+    sameMotoristRule
+      ? coverageClause(rule.umRequired, "uninsured and underinsured motorist coverage", optionalPolicy)
+      : coverageClause(rule.umRequired, "uninsured motorist coverage", optionalPolicy),
+    sameMotoristRule
+      ? null
+      : coverageClause(rule.uimRequired, "underinsured motorist coverage", optionalPolicy),
   ]) {
     if (clause) parts.push(clause)
   }
 
-  parts.push(`Checked ${formatVerifiedDate(rule.lastVerified)}.`)
+  if (rule.noFault === NO_FAULT_CHOICE) {
+    parts.push(`You choose whether no-fault rules apply. ${noFaultDefaultText(rule)}`)
+  }
+
   parts.push(NO_PHYSICAL)
-  return `State minimum. ${parts.join(" ")}`
+  return `State minimum: ${parts.join(" ")}`
 }

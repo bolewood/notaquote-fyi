@@ -1,125 +1,95 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 import { RecordTrustView } from "@/components/record-trust-view"
 import { TrustArticle } from "@/components/trust-article"
-import { DATA_BUNDLE_VERSION, MANIFEST_VERSION, MODEL_VERSION } from "@/lib/copy"
-import { formatCatalogDate } from "@/lib/catalog"
-import {
-  CATALOG_RETRIEVED_ON,
-  CATALOG_VERSION,
-  CATALOG_YEAR_MAX,
-  CATALOG_YEAR_MIN,
-} from "@/lib/catalog-meta"
-import {
-  sourcedStateRules,
-  STATE_RULES_VERSION,
-  unsourcedStateRules,
-} from "@/lib/state-rules"
+import { DATA_UPDATED, longDate, MODEL_VERSION } from "@/lib/copy"
+import { CATALOG_RETRIEVED_ON, CATALOG_YEAR_MAX, CATALOG_YEAR_MIN } from "@/lib/catalog-meta"
+import { fullySourcedStateRules, sourcedStateRules, STATE_RULES_CHECKED_ON } from "@/lib/state-rules"
 
 export const metadata: Metadata = {
-  title: "Model version",
+  title: "What's changed",
+  description: "Every change to the math or the data, in plain words.",
 }
 
+type Day = { date: string; items: { title: string; body: React.ReactNode }[] }
+
 export default function ModelVersionPage() {
+  const days: Day[] = [
+    {
+      date: longDate(STATE_RULES_CHECKED_ON),
+      items: [
+        {
+          title: "One set of math, what-ifs, and comparing cars",
+          body: (
+            <p>
+              The made-up sample figures are gone. Every dollar on the site now comes from one set of math, starting from
+              what you pay (if you tell us) or a typical price for your state. The home page answers &ldquo;what if I
+              changed one thing?&rdquo;, and the new Compare page prices up to 15 cars for the same driver, with sorting,
+              stars, a spreadsheet, and share links that carry your choices, not our estimates.
+            </p>
+          ),
+        },
+        {
+          title: "Every state's minimums, and a typical price for each state",
+          body: (
+            <p>
+              All 50 states and DC now have their legal minimum coverage, each with at least one source link and its own
+              check date ({fullySourcedStateRules().length} of the {sourcedStateRules().length} with all three dollar limits).
+              Where we couldn&apos;t confirm something, the row says so instead of guessing. We also added a typical yearly
+              price for each state, from the National Association of Insurance Commissioners&apos; 2023 figures, used with
+              credit. The math starts from it when you don&apos;t enter what you pay.
+            </p>
+          ),
+        },
+      ],
+    },
+    {
+      date: longDate(CATALOG_RETRIEVED_ON),
+      items: [
+        {
+          title: "The first version of the math",
+          body: (
+            <p>
+              At first it only worked from a premium you entered; the typical state prices came the next day. Share links
+              remember which version of the math made them, and carry your choices, not our estimates. If you open a link made with older math, the
+              page says so and works the numbers out with today&apos;s.
+            </p>
+          ),
+        },
+        {
+          title: "The list of cars",
+          body: (
+            <p>
+              A list of cars from two government datasets, covering model years {CATALOG_YEAR_MIN} through{" "}
+              {CATALOG_YEAR_MAX}. An optional VIN is looked up by your browser and not kept.
+            </p>
+          ),
+        },
+      ],
+    },
+  ]
   return (
-    <TrustArticle title="Model version">
+    <TrustArticle
+      title="What's changed"
+      lead={`Every change to the math or the data gets an entry here, newest first. The data was last updated ${DATA_UPDATED}, and the math is version ${MODEL_VERSION}.`}
+    >
       <RecordTrustView />
-      <dl className="grid gap-3">
-        <div>
-          <dt className="font-medium">Model</dt>
-          <dd className="font-mono">{MODEL_VERSION}</dd>
-        </div>
-        <div>
-          <dt className="font-medium">Data bundle</dt>
-          <dd className="font-mono">{DATA_BUNDLE_VERSION}</dd>
-        </div>
-        <div>
-          <dt className="font-medium">Manifest</dt>
-          <dd className="font-mono">{MANIFEST_VERSION}</dd>
-        </div>
-        <div>
-          <dt className="font-medium">Catalog</dt>
-          <dd className="font-mono">{CATALOG_VERSION}</dd>
-        </div>
-      </dl>
-      <h2 className="text-base font-semibold">Changelog</h2>
-      <section aria-labelledby="changelog-020" className="grid gap-2">
-        <h3 id="changelog-020" className="font-medium">
-          0.2.0
-        </h3>
-        <p>
-          Adds the factor engine and source manifest {MANIFEST_VERSION}. Data
-          bundle {DATA_BUNDLE_VERSION}. The formula is midpoint = base ×
-          geography × driver × coverage × vehicle × trend × lawful sensitivity.
-          The general base is not cleared, so the engine emits no dollar range
-          until a current annual premium is entered for that scenario. Trend is
-          not applied. Credit stays locked at 1.00. A thin factor or a weak trim
-          widens the range. The opening screen still shows the labeled sample
-          from 0.1.0-sample. Those sample weights are not this model. No premium
-          figure from NAIC, HLDI, SERFF, or a publisher was added.
-        </p>
-      </section>
-      <section aria-labelledby="changelog-comparisons" className="grid gap-2">
-        <h3 id="changelog-comparisons" className="font-medium">
-          Still {MODEL_VERSION}
-        </h3>
-        <p>
-          Saved comparisons, share links, and the print worksheet do not change
-          the factors. A saved optional premium stays in this browser. A share
-          link records model {MODEL_VERSION} and data bundle {DATA_BUNDLE_VERSION}.
-          It does not freeze a dollar result. Opening a link that names another
-          model version says so, and this page recomputes on {MODEL_VERSION}.
-        </p>
-      </section>
-      <section aria-labelledby="changelog-state-rules" className="grid gap-2">
-        <h3 id="changelog-state-rules" className="font-medium">
-          State rules {STATE_RULES_VERSION}
-        </h3>
-        <p>
-          Adds a state_rules table for 50 states and the District of Columbia.{" "}
-          {sourcedStateRules().length} rows cite a statute or
-          insurance-department page opened on 21 September 2026.{" "}
-          {unsourcedStateRules().length} rows have no source URL and no dollar
-          minimum. Credit is unreviewed and the factor is 1.00 on every row.
-          The reviewer field is unsigned. California marks uninsured and underinsured motorist coverage required unless a named insured deletes it in writing. Texas marks personal injury protection and uninsured and underinsured motorist coverage required unless a named insured rejects it in writing. The sample model at that point was 0.1.0-sample. No premium baseline was added. Standard liability,
-          full coverage, and high limits stay 100/300/100 and 250/500/250.
-        </p>
-      </section>
-      <section aria-labelledby="changelog-catalog" className="grid gap-2">
-        <h3 id="changelog-catalog" className="font-medium">
-          Catalog {CATALOG_VERSION}
-        </h3>
-        <p>
-          Adds the vehicle catalog snapshot retrieved{" "}
-          {formatCatalogDate(CATALOG_RETRIEVED_ON)}, covering model years{" "}
-          {CATALOG_YEAR_MIN} through {CATALOG_YEAR_MAX}. Year, make, model, and
-          trim read that snapshot in the browser. Trim confidence is limited or
-          unresolved when the NHTSA and FuelEconomy.gov names do not join
-          cleanly. An optional VIN is decoded in the browser against NHTSA and
-          discarded. The sample model at that point was 0.1.0-sample. No premium
-          baseline was added.
-        </p>
-      </section>
-      <section aria-labelledby="changelog-010" className="grid gap-2">
-        <h3 id="changelog-010" className="font-medium">
-          0.1.0-sample
-        </h3>
-        <p>
-          Adds sample display weights so Molly, Jayden, and Ava move a labeled
-          sample range. The baseline is not cleared. There is no rating engine
-          and no statutory dollar minimum. The vehicle catalog was not in this
-          model entry. The credit factor is locked at 1.00. Trend is not applied.
-        </p>
-        <p>
-          An optional current annual premium can replace the sample baseline for
-          the open page. That amount is not stored. A sample display floor holds
-          the range above zero when the arithmetic would print zero or a negative
-          dollar. That floor is not a premium. Jayden uses the same 7,500–15,000
-          mileage band as Molly.
-        </p>
-      </section>
+      <ol className="grid gap-0 border-l-2 border-border pl-6">
+        {days.map((day) => (
+          <li key={day.date} className="relative grid gap-4 pb-10 last:pb-0">
+            <span className="absolute top-2 -left-[1.95rem] size-3 rounded-full bg-sun ring-4 ring-background" aria-hidden="true" />
+            <h2 className="!mt-0 text-sm font-semibold tracking-wide text-muted-foreground uppercase">{day.date}</h2>
+            {day.items.map((item) => (
+              <section key={item.title} className="grid gap-1">
+                <h3 className="!mt-0 text-lg">{item.title}</h3>
+                {item.body}
+              </section>
+            ))}
+          </li>
+        ))}
+      </ol>
       <p>
-        A later version that changes a weight will add a row here and will keep
-        the previous version readable. This page is the public changelog.
+        Spot a change that isn&apos;t here? <Link href="/corrections">Tell us</Link>.
       </p>
     </TrustArticle>
   )

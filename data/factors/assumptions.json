@@ -1,0 +1,168 @@
+{
+  "_readme": "Factors we could not source yet. Every entry is our own estimate, in hundredths (100 = 1.00), with a deliberately wide low/high so the range widens when it is used. To replace one with a sourced figure, add the source under data/factors/sources/, derive it in src/lib/factor-derivation.ts, and delete the entry here. See data/factors/README.md.",
+  "driving-record": {
+    "two-or-more": {
+      "label": "Two or more at-fault accidents",
+      "value": 240,
+      "low": 170,
+      "high": 340,
+      "why": "Two North Carolina 3-point accidents would total 6 points; the NC page does not list the surcharge for 6 points, so we added two single-accident surcharges (1 + 0.70 + 0.70). The low end is one accident; the high end is the largest surcharge on the NC table (12 points, +340%)."
+    }
+  },
+  "good-student": {
+    "yes": {
+      "label": "Good-student discount (under 26)",
+      "value": 92,
+      "low": 85,
+      "high": 100,
+      "why": "Many insurers offer a discount for a B average or better."
+    }
+  },
+  "driver-training": {
+    "yes": {
+      "label": "Driver-training discount (under 22)",
+      "value": 95,
+      "low": 90,
+      "high": 100,
+      "why": "Many insurers offer a discount for completing driver education."
+    }
+  },
+  "liability-limits": {
+    "250-500-250": {
+      "label": "Higher limits (250/500/250)",
+      "value": 115,
+      "low": 105,
+      "high": 130,
+      "why": "Higher limits cost more for the liability part of the premium."
+    }
+  },
+  "deductible": {
+    "500": {
+      "label": "$500 deductible",
+      "value": 108,
+      "low": 102,
+      "high": 118,
+      "why": "A lower deductible raises the collision and comprehensive part of the premium."
+    },
+    "2000": {
+      "label": "$2,000 deductible",
+      "value": 88,
+      "low": 80,
+      "high": 95,
+      "why": "A higher deductible lowers the collision and comprehensive part of the premium."
+    }
+  },
+  "loan-lease": {
+    "yes": {
+      "label": "Loan or lease (gap coverage)",
+      "value": 105,
+      "low": 100,
+      "high": 112,
+      "why": "Lenders usually require collision and comprehensive, and many drivers add gap coverage."
+    }
+  },
+  "vehicle-age": {
+    "4-7": {
+      "label": "Vehicle 4–7 years old",
+      "value": 88,
+      "low": 78,
+      "high": 97,
+      "why": "Older cars are worth less, so collision and comprehensive cost less."
+    },
+    "8-12": {
+      "label": "Vehicle 8–12 years old",
+      "value": 75,
+      "low": 60,
+      "high": 90,
+      "why": "Older cars are worth less, so collision and comprehensive cost less."
+    },
+    "13-plus": {
+      "label": "Vehicle 13 or more years old",
+      "value": 62,
+      "low": 45,
+      "high": 80,
+      "why": "Older cars are worth less, so collision and comprehensive cost less."
+    }
+  },
+  "premium-split": {
+    "liability": {
+      "label": "Share of a full-coverage premium that is liability",
+      "spreadLow": 45,
+      "spreadHigh": 65,
+      "why": "The value comes from ISO loss costs; the low/high around it is our estimate of how much the split varies by driver, car, and state."
+    }
+  },
+  "range": {
+    "vehicle-model": {
+      "label": "How closely a company's price follows HLDI losses for a model",
+      "value": 100,
+      "low": 92,
+      "high": 108,
+      "why": "Insurers rate vehicles with their own symbols. Those follow loss experience, but not exactly."
+    },
+    "vehicle-model-years": {
+      "label": "Model year outside HLDI's years",
+      "value": 100,
+      "low": 90,
+      "high": 111,
+      "why": "HLDI's results are for 2022–24 models; an older or newer design may differ."
+    },
+    "trim-limited": {
+      "label": "Car version only partly matched",
+      "value": 100,
+      "low": 95,
+      "high": 106,
+      "why": "We are not sure which version of the car it is."
+    },
+    "trim-unresolved": {
+      "label": "Car version not found",
+      "value": 100,
+      "low": 92,
+      "high": 110,
+      "why": "We could not find which version of the car it is."
+    },
+    "state-unknown": {
+      "label": "Moving to a state without a typical price",
+      "value": 100,
+      "low": 65,
+      "high": 155,
+      "why": "Average prices differ a lot between states."
+    },
+    "state-typical": {
+      "label": "Moving between states with typical prices",
+      "value": 100,
+      "low": 90,
+      "high": 111,
+      "why": "A state's typical price moves differently for different drivers."
+    },
+    "vehicle-mixed-powertrain": {
+      "label": "One trim name sold as gas and as hybrid",
+      "value": 100,
+      "low": 92,
+      "high": 110,
+      "why": "FuelEconomy.gov lists some trim names (for example the 2024 Honda CR-V FWD) with both gas and hybrid versions. We price the gas one unless the name says hybrid, and widen the range because yours could be either."
+    }
+  },
+  "vehicle": {
+    "liability-weight": {
+      "label": "How much of a vehicle's liability losses we pass on",
+      "value": 52,
+      "low": 26,
+      "high": 79,
+      "why": "Frozen at 0.52 on 22 September 2026 so that adding vehicles can't move it silently. It was chosen as the largest share of HLDI's liability results that keeps the middle 90% of the vehicles we kept then inside ISO's liability symbol band (surcharges up to 25 percent, discounts up to 20 percent, as reported by Insurance Journal in 2004). The derivation recomputes that check every build and reports it next to this value. We looked for a public insurer liability symbol table (SERFF filings, the Massachusetts residual market manual) and didn't find one; Massachusetts' vehicle rating groups apply to physical damage only."
+    }
+  },
+  "typical-start": {
+    "trend-spread": {
+      "label": "Price change since the typical price's year",
+      "low": -5,
+      "high": 5,
+      "why": "The government index is national and covers all car insurance; one state's full-coverage price may have moved a bit more or less. We widen the range by 5 points either way."
+    },
+    "fleet-age-band": {
+      "label": "Vehicle age of the typical price",
+      "band": "8-12",
+      "why": "S&P Global Mobility put the average age of US cars and light trucks at 12.5 years in 2023, which sits on the line between our 8-12 and 13-plus bands. NAIC's collision and comprehensive averages only count cars that carry those coverages, and those cars are newer than the whole fleet, so we use the 8-12 band."
+    }
+  }
+}

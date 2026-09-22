@@ -1,59 +1,89 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 import { RecordTrustView } from "@/components/record-trust-view"
 import { TrustArticle } from "@/components/trust-article"
-import { formatCatalogDate } from "@/lib/catalog"
-import { DATA_BUNDLE_VERSION, MANIFEST_VERSION } from "@/lib/copy"
-import { STATE_RULES_VERSION } from "@/lib/state-rules"
-import {
-  CATALOG_RETRIEVED_ON,
-  CATALOG_TERMS,
-  CATALOG_VERSION,
-  FUEL_ECONOMY_CATALOG_URL,
-  NHTSA_CATALOG_URL,
-} from "@/lib/catalog-meta"
+import { DATA_UPDATED, longDate } from "@/lib/copy"
+import { STATE_BASELINE_ATTRIBUTION } from "@/lib/state-baselines"
+import { STATE_RULES_CHECKED_ON } from "@/lib/state-rules"
+import { GITHUB_REPO_URL } from "@/lib/suggest-fix"
+import { CATALOG_RETRIEVED_ON, FUEL_ECONOMY_CATALOG_URL, NHTSA_CATALOG_URL } from "@/lib/catalog-meta"
 
 export const metadata: Metadata = {
   title: "Data licenses",
+  description: "What you can reuse, and on what terms: MIT for the code, CC BY 4.0 for the data we compile.",
 }
 
 export default function DataLicensesPage() {
   return (
-    <TrustArticle title="Data licenses">
+    <TrustArticle
+      title="Data licenses"
+      lead="This project is open source, and you're welcome to reuse it. Here's what you can take, and whose terms apply."
+    >
       <RecordTrustView />
+
+      <h2>What we made</h2>
+      <ul className="bullets">
+        <li>
+          <strong>The code</strong> is free to use under the{" "}
+          <a href={`${GITHUB_REPO_URL}/blob/main/LICENSE`} rel="noreferrer">
+            MIT license
+          </a>
+          .
+        </li>
+        <li>
+          <strong>The data we put together</strong>, like the adjustments, the state rules, and our research notes, is free
+          to reuse under{" "}
+          <a href={`${GITHUB_REPO_URL}/blob/main/DATA-LICENSE.md`} rel="noreferrer">
+            CC BY 4.0
+          </a>
+          . Use it for anything; just give credit.
+        </li>
+      </ul>
       <p>
-        The factor bundle is {DATA_BUNDLE_VERSION}. The source manifest is{" "}
-        {MANIFEST_VERSION}. The vehicle catalog bundle is {CATALOG_VERSION},
-        retrieved {formatCatalogDate(CATALOG_RETRIEVED_ON)}. The state-rules table
-        is {STATE_RULES_VERSION}. It cites public statute and insurance-department
-        pages. It is not a premium baseline. Rows without a source URL have no
-        dollar minimum. There is no cleared dollar baseline.
+        The outside sources below keep their own terms. The adjustments and the typical state prices were last updated{" "}
+        {DATA_UPDATED}; the state rules were last checked {longDate(STATE_RULES_CHECKED_ON)}; and the list of cars was last
+        pulled {longDate(CATALOG_RETRIEVED_ON)}.
       </p>
-      <p>{CATALOG_TERMS}</p>
+
+      <h2>The list of cars</h2>
       <p>
-        Source URLs:{" "}
-        <a href={NHTSA_CATALOG_URL} className="underline underline-offset-4">
-          NHTSA vPIC
+        It comes from two U.S. government datasets, both public:{" "}
+        <a href={NHTSA_CATALOG_URL} rel="noreferrer">
+          the National Highway Traffic Safety Administration&apos;s vehicle listing
         </a>{" "}
-        and{" "}
-        <a href={FUEL_ECONOMY_CATALOG_URL} className="underline underline-offset-4">
-          FuelEconomy.gov vehicles.csv
-        </a>
-        .
+        (model names, as carmakers report them) and{" "}
+        <a href={FUEL_ECONOMY_CATALOG_URL} rel="noreferrer">
+          FuelEconomy.gov&apos;s vehicle file
+        </a>{" "}
+        (versions, size class, and whether a car is gas, hybrid, or electric). We keep only passenger cars, trucks, and
+        SUVs, and only the fields we need. We store no VINs and no
+        fuel-economy figures.
       </p>
+
+      <h2>State rules</h2>
+      <p>Each state&apos;s minimums come from public statutes and insurance-department pages, each one cited.</p>
+
+      <h2>Typical price by state</h2>
       <p>
-        The factor bundle is original planning arithmetic. It was not derived
-        from a rate filing, a loss table, or a published premium average. The
-        labeled sample on the opening screen uses a separate set of display
-        weights. Those weights are not the factor engine.
+        We use three numbers per state from the National Association of Insurance Commissioners&apos; 2022/2023 Auto
+        Insurance Database Report (the 2023 full-coverage average, the liability average, and the average spent per
+        insured car), as facts, with credit. Wherever one appears, it&apos;s labeled &ldquo;
+        {STATE_BASELINE_ATTRIBUTION}.&rdquo; We don&apos;t copy the report&apos;s text or tables, and the report itself
+        isn&apos;t in this project. To bring a 2023 figure up to today, we use the Bureau of Labor Statistics&apos; price
+        index for car insurance, which is public domain.
       </p>
+
+      <h2>Car claims</h2>
       <p>
-        NAIC, HLDI, SERFF, and publisher premium tables are not in this
-        repository. The NAIC rows in the manifest say not cleared and store no
-        figures. IIHS/HLDI is a citation link. BLS CPI is not applied.
+        We keep the Highway Loss Data Institute&apos;s published results for the car models we price, with credit and a
+        link to the Insurance Institute for Highway Safety (IIHS). We&apos;ve asked IIHS for permission to use this data
+        and are waiting to hear back. If they say no, we&apos;ll take it out.
       </p>
+
+      <h2>Everything else</h2>
       <p>
-        IIHS/HLDI material is not copied. Nothing on this site is a
-        redistribution of a restricted report.
+        The adjustments are worked out from the public sources on the <Link href="/sources">Sources</Link> page. Where we
+        couldn&apos;t find a source, the adjustment says it&apos;s our estimate.
       </p>
     </TrustArticle>
   )
