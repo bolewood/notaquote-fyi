@@ -8,18 +8,22 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <TrustArticle title="We couldn't find that page">
-      <p>It may have moved, or the link may be missing a piece.</p>
-      <p>
-        <Link href="/" className="link">
+    <TrustArticle
+      title="We couldn't find that page"
+      lead="It may have moved, or the link lost a piece on the way. Here's where most people are headed."
+      closingDisclaimer={false}
+    >
+      <div className="flex flex-wrap gap-3">
+        <Link href="/" className="btn btn-primary">
           Try a what-if
-        </Link>{" "}
-        or{" "}
-        <Link href="/compare" className="link">
-          compare cars
         </Link>
-        .
-      </p>
+        <Link href="/compare" className="btn">
+          Compare cars
+        </Link>
+        <Link href="/methodology" className="btn btn-quiet">
+          How it works
+        </Link>
+      </div>
     </TrustArticle>
   )
 }

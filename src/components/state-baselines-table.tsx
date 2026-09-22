@@ -4,7 +4,6 @@ import {
   countrywideBaseline,
   STATE_BASELINE_ATTRIBUTION,
   STATE_BASELINE_SOURCES,
-  STATE_BASELINES_VERSION,
 } from "@/lib/state-baselines"
 
 const NAMES = new Map<string, string>(STATES.map((state) => [state.code, state.name]))
@@ -18,19 +17,18 @@ export function StateBaselinesTable() {
   const national = countrywideBaseline()
   return (
     <div className="grid gap-3">
-      <p>
-        For each state, this is roughly what an average driver paid for one car
-        with liability, collision, and comprehensive coverage in 2023. It&rsquo;s a
-        starting point, not your price. A teen driver, a new car, or higher
-        limits will cost more. The calculator doesn&rsquo;t use these numbers yet.
-        Nationally, the figure was {dollars(national.annual)}.
+      <p className="max-w-2xl">
+        What an average driver in each state paid in 2023 for one car with full coverage (liability, collision, and
+        comprehensive), and for liability alone. It&rsquo;s a starting point, not your price: a teen driver, a newer car, or
+        higher limits cost more. When you don&rsquo;t tell us what you pay, the calculator starts from your state&rsquo;s
+        full-coverage figure, brought up to today. Nationally, it was {dollars(national.annual)}.
       </p>
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse text-left">
-          <caption className="py-2 text-left font-medium">
-            Typical yearly premium by state ({STATE_BASELINES_VERSION}).{" "}
+        <table className="w-full max-w-2xl border-collapse text-left text-sm">
+          <caption className="py-2 text-left text-sm text-muted-foreground">
+            Average yearly cost by state, 2023.{" "}
             {naic ? (
-              <a href={naic.url} className="underline underline-offset-4" rel="noreferrer">
+              <a href={naic.url} rel="noreferrer">
                 {STATE_BASELINE_ATTRIBUTION}
               </a>
             ) : (
@@ -39,26 +37,26 @@ export function StateBaselinesTable() {
             .
           </caption>
           <thead>
-            <tr className="border-b border-border">
+            <tr className="border-b border-border text-muted-foreground">
               <th scope="col" className="py-2 pr-3 font-medium">
                 State
               </th>
-              <th scope="col" className="py-2 pr-3 font-medium">
-                Full coverage, per year
+              <th scope="col" className="py-2 pr-3 text-right font-medium">
+                Full coverage, a year
               </th>
-              <th scope="col" className="py-2 pr-3 font-medium">
-                Liability only, per year
+              <th scope="col" className="py-2 pr-3 text-right font-medium">
+                Liability only, a year
               </th>
             </tr>
           </thead>
           <tbody>
             {allStateBaselines().map((row) => (
-              <tr key={row.state} id={`state-baseline-${row.state}`} className="border-b border-border">
-                <th scope="row" className="py-2 pr-3 font-medium">
+              <tr key={row.state} id={`state-baseline-${row.state}`} className="border-b border-border/60">
+                <th scope="row" className="py-1.5 pr-3 font-normal">
                   {NAMES.get(row.state) ?? row.state}
                 </th>
-                <td className="py-2 pr-3 whitespace-nowrap">{dollars(row.annual)}</td>
-                <td className="py-2 pr-3 whitespace-nowrap">{dollars(row.liabilityOnly)}</td>
+                <td className="py-1.5 pr-3 text-right whitespace-nowrap tabular-nums">{dollars(row.annual)}</td>
+                <td className="py-1.5 pr-3 text-right whitespace-nowrap text-muted-foreground tabular-nums">{dollars(row.liabilityOnly)}</td>
               </tr>
             ))}
           </tbody>

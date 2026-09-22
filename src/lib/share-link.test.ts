@@ -140,7 +140,8 @@ test("an older model in the link is named, and frozen dollars are ignored", () =
   assert.deepEqual(decoded.scenario, JAYDEN)
 
   const notes = shareArrivalNotes(decoded).join(" ")
-  assert.match(notes, /older version of our math \(0\.1\.0-sample\)/)
+  assert.match(notes, /improved our math since this link was made/)
+  assert.doesNotMatch(notes, /0\.1\.0/)
   assert.match(notes, /ignored them/)
   assert.doesNotMatch(notes, /\$10|\$20/)
   assert.doesNotMatch(notes, /anchor|baseline|cleared/i)

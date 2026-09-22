@@ -15,15 +15,17 @@ import {
   YearsField,
 } from "@/components/driver-fields"
 import { HowWeGotThis, VehicleFixLink } from "@/components/how-we-got-this"
-import { DeltaBadge, formatDollars, RangeBar, rangeWords } from "@/components/money"
+import { formatDollars, RangeBar, rangeWords } from "@/components/money"
 import { ShareBox } from "@/components/share-box"
+import { TrustStrip } from "@/components/trust-strip"
 import { carName, modelTrims, resolveCar, WHAT_IF_CARS } from "@/lib/car-search"
 import { vehicleFacts } from "@/lib/catalog-class"
 import { catalogYears, trimRecord, type VehiclePick } from "@/lib/catalog"
-import { DATA_BUNDLE_VERSION, MODEL_VERSION, PREMIUM_HINT } from "@/lib/copy"
+import { DATA_UPDATED, PREMIUM_HINT } from "@/lib/copy"
 import { recordCount, recordMountedCount } from "@/lib/counts"
 import type { Estimate, StartKind } from "@/lib/factor-engine"
 import {
+  basisWords,
   changeChip,
   changedKeys,
   priceNow,
@@ -37,6 +39,7 @@ import {
   type WhatIfMode,
 } from "@/lib/pricing"
 import {
+  coverageAssumption,
   situationSentence,
   STARTERS,
   shortVehicleLabel,
@@ -59,18 +62,25 @@ import {
 import { useCatalog } from "@/lib/use-catalog"
 import { useSituation } from "@/lib/use-stored"
 import { cn } from "cn"
-import { ArrowRight, Car, ChevronDown, MapPin, Printer, RotateCcw, Shield, Sparkles, UserPlus, X } from "lucide-react"
+import { ArrowRight, ArrowUp, Car, ChevronDown, Gauge, HandHeart, MapPin, Printer, RotateCcw, Shield, UserPlus, X, Zap } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useMemo, useRef, useState } from "react"
 
 type Tab = StarterTab | "more"
 
+const STARTER_ICONS: Record<Starter["id"], typeof Car> = {
+  "adding-teen": UserPlus,
+  "thinking-ev": Zap,
+  moving: MapPin,
+  "higher-deductible": Shield,
+}
+
 const TABS: { id: Tab; label: string; icon: typeof Car }[] = [
-  { id: "car", label: "Car", icon: Car },
-  { id: "driver", label: "Driver", icon: UserPlus },
+  { id: "car", label: "Another car", icon: Car },
+  { id: "driver", label: "New driver", icon: UserPlus },
   { id: "move", label: "Moving", icon: MapPin },
   { id: "coverage", label: "Coverage", icon: Shield },
-  { id: "more", label: "Miles and record", icon: Sparkles },
+  { id: "more", label: "Miles and record", icon: Gauge },
 ]
 
 function readInitial() {
@@ -114,6 +124,10 @@ function tabKey(event: React.KeyboardEvent<HTMLButtonElement>, current: Tab, cho
   event.preventDefault()
   choose(target)
   document.getElementById(`tab-${target}`)?.focus()
+}
+
+function lowerFirst(text: string): string {
+  return text.charAt(0).toLowerCase() + text.slice(1)
 }
 
 /** Only the inputs that differ from now, so a what-if follows later changes to "now". */
@@ -248,19 +262,21 @@ function CalculatorReady() {
   return (
     <>
       <div className="no-print">
-        <section className="max-w-3xl pt-6 sm:pt-8">
-          <p className="eyebrow text-sun-ink">Car insurance, in plain numbers</p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-            What would happen to your car insurance if…
+        <section className="max-w-3xl pt-8 sm:pt-12">
+          <h1 className="text-3xl leading-tight font-semibold tracking-tight text-balance sm:text-[2.6rem]">
+            What would a new car, a teen driver, or a move do to your car insurance?
           </h1>
-          <p className="mt-2 max-w-2xl text-base leading-relaxed text-pretty text-muted-foreground sm:text-lg">
-            …you bought a different car, added a teen driver, or moved? Change one thing and see roughly what it does to the
-            price. No sign-up, and nothing you type leaves your device.
+          <p className="mt-3 max-w-2xl text-lg leading-relaxed text-pretty text-muted-foreground">
+            Change one thing and see roughly what you&apos;d pay, worked out from public data. It&apos;s free, there&apos;s
+            nothing to sign up for, and nothing you type leaves your browser.
           </p>
+          <div className="mt-5">
+            <TrustStrip />
+          </div>
         </section>
 
         {notes.length > 0 ? (
-          <div className="mt-5 flex items-start gap-3 rounded-xl border border-border bg-card px-4 py-3" data-testid="share-notice">
+          <div className="mt-6 flex items-start gap-3 rounded-2xl bg-primary/[0.06] px-4 py-3" data-testid="share-notice">
             <div className="grid flex-1 gap-1 text-sm">
               {notes.map((note) => (
                 <p key={note}>{note}</p>
@@ -274,10 +290,10 @@ function CalculatorReady() {
         {stored.error ? <p className="mt-4 text-sm">{stored.error}</p> : null}
 
         {linked ? (
-          <div className="mt-3 flex flex-wrap items-center gap-3 rounded-xl border border-sun bg-sun-soft px-4 py-3 text-sm">
+          <div className="mt-3 flex flex-wrap items-center gap-3 rounded-2xl bg-sun-soft px-4 py-3 text-sm">
             <p className="flex-1">
-              You&apos;re looking at someone else&apos;s situation. If you change anything, it becomes yours
-              {linked.premium !== null ? ", without what they pay" : ""}.
+              You&apos;re looking at someone else&apos;s situation. Change anything and it becomes yours
+              {linked.premium !== null ? " (without what they pay)" : ""}.
             </p>
             <button
               type="button"
@@ -292,7 +308,7 @@ function CalculatorReady() {
             </button>
           </div>
         ) : null}
-        <div className="mt-5 grid items-start gap-5 lg:mt-6 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-6">
+        <div className="mt-8 grid items-start gap-5 lg:mt-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-6">
           {/* What if */}
           <section
             ref={whatIfRef}
@@ -300,23 +316,22 @@ function CalculatorReady() {
             aria-labelledby="what-if-heading"
             className="card scroll-mt-4 overflow-hidden"
           >
-            <div className="border-b border-border bg-sun-soft px-5 pt-5 pb-4 sm:px-6">
+            <div className="bg-sun-soft px-5 pt-5 pb-3 sm:px-6">
               <h2 id="what-if-heading" className="text-xl font-semibold tracking-tight">
                 What if…
               </h2>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Change one thing, and we&apos;ll show the difference from your situation now.
-              </p>
-              <p className="mt-2 text-sm lg:hidden">
-                <span className="text-muted-foreground">Now: </span>
-                {situationSentence(now, false)}{" "}
+              <p className="mt-1 text-sm text-muted-foreground lg:hidden">
+                Compared with now: {lowerFirst(situationSentence(now, false))}{" "}
                 <a href="#now" className="link whitespace-nowrap">
                   Change
                 </a>
               </p>
+              <p className="mt-1 hidden text-sm text-muted-foreground lg:block">
+                Change one thing. We&apos;ll show the difference from your situation now.
+              </p>
             </div>
 
-            <div role="tablist" aria-label="What to change" className="scroll-row border-b border-border px-3 py-2 sm:flex-wrap sm:px-4">
+            <div role="tablist" aria-label="What to change" className="scroll-row border-b border-border bg-sun-soft px-3 pb-3 sm:px-5">
               {TABS.map((item) => {
                 const Icon = item.icon
                 return (
@@ -342,7 +357,7 @@ function CalculatorReady() {
             <div role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`} tabIndex={0} className="px-5 py-5 sm:px-6">
               {tab === "car" ? (
                 <div className="grid gap-4">
-                  <p className="text-sm font-medium">Try another car:</p>
+                  <p className="text-sm text-muted-foreground">Tap a car to see what it would cost to insure instead.</p>
                   <div className="flex flex-wrap gap-2" data-testid="what-if-cars">
                     {WHAT_IF_CARS.map((car) => {
                       const pick = catalog ? resolveCar(catalog, car.year, car) : car.trim ? { ...car, trim: car.trim } : null
@@ -364,7 +379,7 @@ function CalculatorReady() {
                         </button>
                       )
                     })}
-                    <button type="button" className="chip border-dashed" onClick={() => setPicker("next")}>
+                    <button type="button" className="chip border-dashed text-primary" onClick={() => setPicker("next")}>
                       Search every car…
                     </button>
                   </div>
@@ -379,7 +394,7 @@ function CalculatorReady() {
                       aria-pressed={next.age === "16-18" && now.age !== "16-18"}
                       onClick={() => patchNext({ age: "16-18", yearsLicensed: "under-1" })}
                     >
-                      Add a new 16-year-old driver
+                      Add our new 16-year-old
                     </button>
                     <button
                       type="button"
@@ -387,7 +402,7 @@ function CalculatorReady() {
                       aria-pressed={next.age === "19-21" && now.age !== "19-21"}
                       onClick={() => patchNext({ age: "19-21", yearsLicensed: "1-3" })}
                     >
-                      A 19–21-year-old driver
+                      A 19–21-year-old instead
                     </button>
                   </div>
                   <div className="grid gap-4 sm:grid-cols-2">
@@ -396,7 +411,7 @@ function CalculatorReady() {
                     {next.age === "16-18" && now.age !== "16-18" ? (
                       <div className="grid gap-1.5 sm:col-span-2">
                         <PolicyField value={situation.teenOnParentPolicy} onChange={setPolicy} idPrefix="next" />
-                        <p className="text-xs leading-snug text-muted-foreground">
+                        <p className="text-sm leading-snug text-muted-foreground">
                           {situation.teenOnParentPolicy
                             ? "We price your whole policy after adding them, on the car in your situation now."
                             : "We price the teen alone, on their own policy."}
@@ -427,9 +442,9 @@ function CalculatorReady() {
               ) : null}
             </div>
 
-            <div ref={resultRef} className="scroll-mb-4 border-t border-border bg-background/60 px-5 py-5 sm:px-6" aria-live="polite">
+            <div ref={resultRef} className="scroll-mb-4 border-t border-border px-5 py-6 sm:px-6" aria-live="polite">
               {result && premiumInvalid ? (
-                <p className="py-2 text-center text-sm text-muted-foreground" data-testid="what-if-waiting">
+                <p className="py-4 text-center text-sm text-muted-foreground" data-testid="what-if-waiting">
                   Finish typing what you pay now (or clear it), and the difference shows here.
                 </p>
               ) : result ? (
@@ -462,9 +477,14 @@ function CalculatorReady() {
                   }
                 />
               ) : (
-                <div className="grid gap-1 py-2 text-center" data-testid="what-if-empty">
-                  <p className="text-base font-medium">Pick a car or change anything above.</p>
-                  <p className="text-sm text-muted-foreground">We&apos;ll show what it does to your yearly price, right here.</p>
+                <div className="grid justify-items-center gap-2 py-6 text-center" data-testid="what-if-empty">
+                  <span className="grid size-10 place-items-center rounded-full bg-sun-soft text-sun-ink" aria-hidden="true">
+                    <ArrowUp className="size-5" />
+                  </span>
+                  <p className="text-lg font-semibold">Pick something above to see the difference</p>
+                  <p className="max-w-sm text-sm text-muted-foreground">
+                    Try the Tesla Model Y. You&apos;ll see what it does to your yearly bill, and why.
+                  </p>
                 </div>
               )}
             </div>
@@ -475,7 +495,7 @@ function CalculatorReady() {
             <h2 id="now-heading" className="text-xl font-semibold tracking-tight">
               Your situation now
             </h2>
-            <p className="mt-1 text-sm text-muted-foreground">{situationSentence(now, false)}</p>
+            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{situationSentence(now, false)}</p>
 
             {nowEstimate ? (
               <NowFigure estimate={nowEstimate} startKind={startKind} startNote={startNote} waiting={premiumInvalid} />
@@ -505,9 +525,12 @@ function CalculatorReady() {
                 <StateField scenario={now} onChange={patchNow} idPrefix="now" />
                 <RegionField scenario={now} onChange={patchNow} idPrefix="now" />
                 <CoverageField scenario={now} onChange={patchNow} idPrefix="now" showNote={false} />
+                <p className="col-span-2 -mt-1 text-sm leading-snug text-muted-foreground">
+                  {coverageAssumption(now.coverage, now.state)}
+                </p>
               </div>
 
-              <div className="grid gap-1.5 rounded-xl bg-muted/70 p-3.5">
+              <div className="grid gap-1.5 rounded-2xl bg-muted/70 p-4">
                 <label htmlFor="premium" className="text-sm font-semibold">
                   What do you pay now?{" "}
                   <span className="font-normal text-muted-foreground">(Optional.)</span>
@@ -545,12 +568,12 @@ function CalculatorReady() {
                     ))}
                   </select>
                 </div>
-                <p id="premium-hint" className={cn("text-xs leading-snug", premiumInvalid ? "text-destructive" : "text-muted-foreground")}>
+                <p id="premium-hint" className={cn("text-sm leading-snug", premiumInvalid ? "text-destructive" : "text-muted-foreground")}>
                   {premiumInvalid ? "Enter a dollar amount, like 1,800. Or leave it empty." : PREMIUM_HINT}
                   {premium.annual !== null && period !== "year" ? ` That's ${formatDollars(premium.annual)} a year.` : ""}
                 </p>
                 {premium.kind === "maybe-monthly" ? (
-                  <p className="flex flex-wrap items-center gap-x-2 text-xs leading-snug" data-testid="premium-monthly-hint">
+                  <p className="flex flex-wrap items-center gap-x-2 text-sm leading-snug" data-testid="premium-monthly-hint">
                     That&apos;s low for a year. Is it what you pay each month?
                     <button
                       type="button"
@@ -566,12 +589,13 @@ function CalculatorReady() {
                 ) : null}
               </div>
 
-              <details className="group rounded-xl border border-border">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-2 px-3.5 py-3 text-sm font-medium">
+              <div className="-mb-1">
+              <details className="disclosure">
+                <summary>
                   More about the driver and coverage
-                  <ChevronDown className="size-4 transition-transform group-open:rotate-180" aria-hidden="true" />
+                  <ChevronDown className="size-4" aria-hidden="true" />
                 </summary>
-                <div className="grid gap-3 border-t border-border px-3.5 py-3.5">
+                <div className="grid gap-3 pb-4">
                   <div className="grid gap-3 sm:grid-cols-2">
                     <DeductibleField scenario={now} onChange={patchNow} idPrefix="now" />
                     <RecordField scenario={now} onChange={patchNow} idPrefix="now" />
@@ -579,52 +603,63 @@ function CalculatorReady() {
                     <YearsField scenario={now} onChange={patchNow} idPrefix="now" />
                   </div>
                   <DiscountFields scenario={now} onChange={patchNow} idPrefix="now" />
-                  <p className="text-xs leading-snug text-muted-foreground">
+                  <p className="text-sm leading-snug text-muted-foreground">
                     We don&apos;t ask about credit. Many insurers use it, so your real quote could move up or down because of it.
                   </p>
                 </div>
               </details>
 
               {nowEstimate ? (
-                <details className="group rounded-xl border border-border">
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-2 px-3.5 py-3 text-sm font-medium">
+                <details className="disclosure">
+                  <summary>
                     Here&apos;s how we got this
-                    <ChevronDown className="size-4 transition-transform group-open:rotate-180" aria-hidden="true" />
+                    <ChevronDown className="size-4" aria-hidden="true" />
                   </summary>
-                  <div className="border-t border-border px-3.5 py-3.5">
+                  <div className="pb-2">
                     <HowWeGotThis estimate={nowEstimate} startKind={startKind} />
                   </div>
                 </details>
               ) : null}
+              </div>
             </div>
           </section>
         </div>
 
-        <section aria-labelledby="starters-heading" className="mt-10">
-          <h2 id="starters-heading" className="text-lg font-semibold">
-            Or start with a common question
+        <section aria-labelledby="starters-heading" className="mt-16">
+          <h2 id="starters-heading" className="text-xl font-semibold tracking-tight">
+            Or start with a question other families ask
           </h2>
-          <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {STARTERS.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                className="card grid content-start gap-1 p-4 text-left transition-colors hover:border-primary"
-                onClick={() => tryStarter(item)}
-                data-testid={`starter-${item.id}`}
-              >
-                <span className="font-semibold">{item.title}</span>
-                <span className="text-sm leading-snug text-muted-foreground">{item.story}</span>
-              </button>
-            ))}
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {STARTERS.map((item) => {
+              const Icon = STARTER_ICONS[item.id]
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  className="card group grid grid-cols-[auto_1fr] content-start gap-x-3 gap-y-1 p-4 text-left transition-[border-color,transform] hover:-translate-y-0.5 hover:border-primary/50 sm:grid-cols-1 sm:gap-2 sm:p-5"
+                  onClick={() => tryStarter(item)}
+                  data-testid={`starter-${item.id}`}
+                >
+                  <span className="row-span-2 grid size-9 place-items-center rounded-full bg-sun-soft text-sun-ink sm:row-span-1" aria-hidden="true">
+                    <Icon className="size-[1.1rem]" />
+                  </span>
+                  <span className="font-semibold sm:mt-1">{item.title}</span>
+                  <span className="text-sm leading-snug text-muted-foreground">{item.story}</span>
+                  <span className="mt-1 hidden items-center gap-1 text-sm font-medium text-primary sm:inline-flex">
+                    Try it <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+                  </span>
+                </button>
+              )
+            })}
           </div>
         </section>
 
-        <section className="mt-6 flex flex-col items-start gap-4 rounded-2xl bg-foreground px-5 py-6 text-background sm:flex-row sm:items-center sm:px-7">
+        <section className="mt-6 flex flex-col items-start gap-4 rounded-3xl bg-foreground px-6 py-7 text-background sm:flex-row sm:items-center sm:px-8">
           <div className="flex-1">
-            <h2 className="text-lg font-semibold">Shopping for a first car?</h2>
-            <p className="mt-1 text-sm text-background/75">
-              Put up to 15 cars side by side for the same driver. Sort them, star the favorites, and narrow it down together.
+            <h2 className="text-xl font-semibold tracking-tight">Shopping for a first car?</h2>
+            <p className="mt-1 max-w-xl text-base text-background/80">
+              Put up to 15 cars side by side for the same driver. Sort them, star the favorites, and narrow it down
+              together. Then take the spreadsheet with you.
             </p>
           </div>
           <Link href="/compare" className="btn border-background bg-background text-foreground hover:bg-background/90">
@@ -632,7 +667,7 @@ function CalculatorReady() {
           </Link>
         </section>
 
-        <section className="mt-8 grid gap-4 border-t border-border pt-6 sm:grid-cols-[1fr_auto] sm:items-start">
+        <section className="mt-12 grid gap-4 sm:grid-cols-[1fr_auto] sm:items-start">
           <ShareBox
             what="this what-if"
             premiumAvailable={situation.premium !== null && linked === null}
@@ -651,7 +686,25 @@ function CalculatorReady() {
             <Printer className="size-4" aria-hidden="true" /> Print this
           </button>
         </section>
-        <DisclaimerText className="mt-6 max-w-3xl" />
+
+        <section className="mt-12 grid gap-2 border-t border-border pt-8 sm:grid-cols-[auto_1fr] sm:gap-4">
+          <span className="grid size-9 place-items-center rounded-full bg-sun-soft text-sun-ink" aria-hidden="true">
+            <HandHeart className="size-[1.1rem]" />
+          </span>
+          <div className="grid max-w-3xl gap-3">
+            <p className="text-base leading-relaxed">
+              <span className="font-semibold">Built in the open, from public data.</span>{" "}
+              <span className="text-muted-foreground">
+                If a number looks off, or you know your state&apos;s rate guide, you can help make this better for the next
+                family.
+              </span>{" "}
+              <Link href="/corrections" className="link whitespace-nowrap">
+                Here&apos;s how
+              </Link>
+            </p>
+            <DisclaimerText />
+          </div>
+        </section>
       </div>
 
       <PrintSummary
@@ -699,20 +752,20 @@ function NowFigure({
   const ownNumber = startKind === "yours" && estimate.steps.length === 0
   return (
     <div
-      className={cn("mt-4 rounded-xl bg-primary/[0.06] px-4 py-4 transition-opacity", waiting && "opacity-35")}
+      className={cn("mt-5 transition-opacity", waiting && "opacity-35")}
       data-testid="now-figure"
       aria-hidden={waiting || undefined}
     >
       <p className="flex flex-wrap items-baseline gap-x-2">
-        <span className="money text-4xl font-semibold tracking-tight" data-testid="now-yearly">
+        <span className="money text-[2.6rem] leading-none font-semibold tracking-tight" data-testid="now-yearly">
           {formatDollars(estimate.likely)}
         </span>
         <span className="text-base text-muted-foreground">a year</span>
       </p>
-      <p className="mt-0.5 text-sm text-muted-foreground">
+      <p className="mt-2 text-sm text-muted-foreground">
         {ownNumber
-          ? `What you pay now (about ${formatDollars(estimate.monthly)} a month).`
-          : `About ${formatDollars(estimate.monthly)} a month, ${rangeWords(estimate.low, estimate.high)} a year.`}
+          ? `What you pay now, about ${formatDollars(estimate.monthly)} a month.`
+          : `About ${formatDollars(estimate.monthly)} a month. Real quotes: ${rangeWords(estimate.low, estimate.high)} a year.`}
       </p>
       {ownNumber ? null : (
         <RangeBar
@@ -725,12 +778,24 @@ function NowFigure({
         />
       )}
       {startKind === "typical" && startNote ? (
-        <p className="mt-3 text-xs leading-snug text-muted-foreground" data-testid="start-note">
+        <p className="mt-3 text-sm leading-snug text-muted-foreground" data-testid="start-note">
           {startNote}
         </p>
       ) : null}
     </div>
   )
+}
+
+/**
+ * The engine's headline, split so the number can be the big thing:
+ * "Switching to a 2025 Tesla Model Y: about +$630 a year." becomes the
+ * label, the amount, and anything after it ("on a policy that costs $1,720 now").
+ * Headlines without an amount (a state we have no price for) stay whole.
+ */
+function splitHeadline(headline: string): { label: string; amount: string; rest: string } | null {
+  const match = /^(.+?): (?:about )?((?:[+−]?\$[\d,]+ a year)|the same)(.*)\.$/.exec(headline)
+  if (!match) return null
+  return { label: match[1], amount: match[2], rest: match[3].replace(/^,\s*/, "").trim() }
 }
 
 function WhatIfResult({
@@ -771,66 +836,103 @@ function WhatIfResult({
   const min = Math.round(Math.min(current.low, next.low) * 0.92)
   const max = Math.round(Math.max(current.high, next.high) * 1.04)
   const ownNumber = startKind === "yours" && current.steps.length === 0
+  const split = splitHeadline(headline)
+  const direction = mode === "teen-own" ? "neutral" : delta > 0 ? "up" : delta < 0 ? "down" : "same"
+  const tone = direction === "up" ? "text-up" : direction === "down" ? "text-down" : "text-foreground"
+  const monthlyDelta = Math.round(Math.abs(delta) / 12)
   return (
-    <div className="pop-in grid gap-4" key={headline}>
-      <div className="grid gap-2">
-        <p className="eyebrow">The difference</p>
-        <p className="text-2xl leading-snug font-semibold tracking-tight text-balance" data-testid="what-if-headline">
+    <div className="pop-in grid gap-6" key={headline}>
+      <div className="grid gap-1.5">
+        <p className="sr-only" data-testid="what-if-headline">
           {headline}
         </p>
-        {mode === "teen-own" ? null : (
-          <div>
-            <DeltaBadge amount={delta} />
+        {split ? (
+          <div aria-hidden="true" className="grid gap-1">
+            <p className="text-base font-medium text-muted-foreground">{split.label}</p>
+            <p className={cn("flex flex-wrap items-baseline gap-x-2 text-4xl leading-tight font-semibold tracking-tight sm:text-[2.75rem]", tone)}>
+              {split.amount === "the same" ? (
+                <span>About the same</span>
+              ) : (
+                <>
+                  <span className="text-lg font-medium text-muted-foreground">about</span>
+                  <span className="money">{split.amount.replace(/ a year$/, "")}</span>
+                </>
+              )}
+              {split.amount === "the same" ? null : <span className="text-lg font-medium text-muted-foreground">a year</span>}
+            </p>
+            {split.rest ? (
+              <p className="text-sm text-muted-foreground">{`${split.rest.charAt(0).toUpperCase()}${split.rest.slice(1)}.`}</p>
+            ) : direction === "up" || direction === "down" ? (
+              <p className="text-sm text-muted-foreground">
+                About {direction === "up" ? "+" : "−"}
+                {formatDollars(monthlyDelta)} a month.
+              </p>
+            ) : null}
           </div>
+        ) : (
+          <p aria-hidden="true" className="text-2xl leading-snug font-semibold tracking-tight text-balance">
+            {headline}
+          </p>
         )}
       </div>
 
-      {parts.length > 0 ? (
-        <div className="grid gap-1.5" data-testid="what-if-parts">
-          <p className="text-sm font-medium">What makes the difference</p>
-          <ul className="grid gap-1 text-sm">
+      {parts.length > 1 || (parts.length === 1 && vehicleChanged) ? (
+        <div className="grid gap-2" data-testid="what-if-parts">
+          <p className="text-sm font-semibold">What makes the difference</p>
+          <ul className="grid text-sm">
             {parts.map((part) => (
-              <li key={part.label} className="flex items-baseline justify-between gap-4 border-b border-dashed border-border pb-1">
+              <li key={part.label} className="flex items-baseline justify-between gap-4 border-b border-border/70 py-1.5 last:border-b-0">
                 <span>{part.label}</span>
-                <span className={cn("money font-medium whitespace-nowrap", part.amount > 0 ? "text-up" : part.amount < 0 ? "text-down" : "text-muted-foreground")}>
+                <span
+                  className={cn(
+                    "money font-semibold whitespace-nowrap",
+                    part.amount > 0 ? "text-up" : part.amount < 0 ? "text-down" : "text-muted-foreground",
+                  )}
+                >
                   {signedTen(part.amount)}
                 </span>
               </li>
             ))}
           </ul>
-          <p className="text-xs text-muted-foreground">Each piece is rounded to the nearest $10, so they may not add up exactly.</p>
+          {parts.length > 1 ? (
+            <p className="text-xs text-muted-foreground">Each piece is rounded to the nearest $10, so they may not add up exactly.</p>
+          ) : null}
         </div>
       ) : null}
 
-      <dl className="grid gap-3">
+      <dl className="grid gap-4 rounded-2xl bg-muted/60 p-4">
         <div className="grid gap-1.5">
-          <div className="flex items-baseline justify-between gap-3">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-3">
             <dt className="text-sm text-muted-foreground">{mode === "teen-own" ? "Your policy" : "Now"}</dt>
-            <dd className="money text-sm">
-              <span className="text-base font-semibold">{formatDollars(current.likely)}</span> a year
-              {ownNumber ? null : <span className="text-muted-foreground"> · {rangeWords(current.low, current.high)}</span>}
+            <dd className="money text-sm text-muted-foreground">
+              <span className="text-base font-semibold text-foreground">{formatDollars(current.likely)}</span> a year
+              {ownNumber ? null : <span> · {rangeWords(current.low, current.high)}</span>}
             </dd>
           </div>
           {ownNumber ? null : <RangeBar low={current.low} likely={current.likely} high={current.high} min={min} max={max} tone="muted" />}
         </div>
         <div className="grid gap-1.5">
-          <div className="flex items-baseline justify-between gap-3">
-            <dt className="text-sm font-medium">{mode === "teen-own" ? "Their own policy" : mode === "teen-added" ? "With your teen" : "What if"}</dt>
-            <dd className="money text-sm" data-testid="what-if-yearly">
-              <span className="text-lg font-semibold">{formatDollars(next.likely)}</span> a year
-              <span className="text-muted-foreground"> · {rangeWords(next.low, next.high)}</span>
+          <div className="flex flex-wrap items-baseline justify-between gap-x-3">
+            <dt className="text-sm font-semibold">
+              {mode === "teen-own" ? "Their own policy" : mode === "teen-added" ? "With your teen" : "With this change"}
+            </dt>
+            <dd className="money text-sm text-muted-foreground" data-testid="what-if-yearly">
+              <span className="text-lg font-semibold text-foreground">{formatDollars(next.likely)}</span> a year ·{" "}
+              {rangeWords(next.low, next.high)}
             </dd>
           </div>
           <RangeBar low={next.low} likely={next.likely} high={next.high} min={min} max={max} tone="sun" />
-          <p className="text-xs text-muted-foreground">About {formatDollars(next.monthly)} a month.</p>
         </div>
+        <p className="text-sm text-muted-foreground">
+          The dot is our best guess. The bar shows where most real quotes would land.
+        </p>
       </dl>
       {versionPicker}
 
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-sm text-muted-foreground">Changed:</span>
+        <span className="text-sm text-muted-foreground">You changed:</span>
         {chips.map((chip) => (
-          <span key={chip.key} className="inline-flex items-center gap-1 rounded-full bg-sun-soft py-1 pr-1 pl-3 text-sm">
+          <span key={chip.key} className="inline-flex items-center gap-1 rounded-full bg-sun-soft py-1 pr-1 pl-3 text-sm font-medium">
             {chip.label}
             <button type="button" className="icon-btn size-7" aria-label={`Undo ${chip.label}`} onClick={() => onUndo(chip.key)}>
               <X className="size-3.5" />
@@ -840,34 +942,34 @@ function WhatIfResult({
       </div>
 
       <div className="flex flex-wrap gap-2">
-        <button type="button" className="btn" onClick={onReset}>
-          <RotateCcw className="size-4" aria-hidden="true" /> Start over
-        </button>
-        <button type="button" className="btn btn-quiet" onClick={onKeep}>
-          Make this my situation now
-        </button>
         {vehicleChanged ? (
           // A full page load, so the Compare page reads the cars from the address before anything else.
-          <a href={compareHref} className="btn btn-quiet">
+          <a href={compareHref} className="btn btn-primary">
             Compare more cars <ArrowRight className="size-4" aria-hidden="true" />
           </a>
         ) : null}
+        <button type="button" className="btn" onClick={onKeep}>
+          Keep this as my situation
+        </button>
+        <button type="button" className="btn btn-quiet" onClick={onReset}>
+          <RotateCcw className="size-4" aria-hidden="true" /> Start over
+        </button>
       </div>
 
-      <details className="group rounded-xl border border-border bg-card">
-        <summary className="flex cursor-pointer list-none items-center justify-between gap-2 px-3.5 py-3 text-sm font-medium">
-          {mode === "teen-own" ? "Here's how we got their price" : "More about the new number"}
-          <ChevronDown className="size-4 transition-transform group-open:rotate-180" aria-hidden="true" />
+      <details className="disclosure -mb-2">
+        <summary>
+          {mode === "teen-own" ? "Here's how we got their price" : "Here's how we got this"}
+          <ChevronDown className="size-4" aria-hidden="true" />
         </summary>
-        <div className="border-t border-border px-3.5 py-3.5">
+        <div className="grid gap-3 pb-4">
           <HowWeGotThis estimate={next} startKind={startKind} startNote={startNote} />
+          {vehicleChanged ? (
+            <p>
+              <VehicleFixLink carName={nextCarName} shown={vehicleMatchWords(next.vehicle)} />
+            </p>
+          ) : null}
         </div>
       </details>
-      {vehicleChanged ? (
-        <p className="-mt-1 text-sm">
-          <VehicleFixLink carName={nextCarName} shown={vehicleMatchWords(next.vehicle)} />
-        </p>
-      ) : null}
     </div>
   )
 }
@@ -952,36 +1054,45 @@ function PrintSummary({
   result: { headline: string; next: Estimate } | null
   nextName: string | null
 }) {
+  const printed = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
   return (
-    <div className="print-only">
-      <h1 style={{ fontSize: "18pt", fontWeight: 600 }}>NotAQuote.FYI: what-if summary</h1>
-      <p>Printed {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}.</p>
-      <h2 style={{ fontSize: "13pt", fontWeight: 600, marginTop: "12pt" }}>Your situation now</h2>
+    <div className="print-only print-sheet">
+      <p style={{ fontSize: "9pt", letterSpacing: "0.08em", textTransform: "uppercase" }}>NotAQuote.FYI · {printed}</p>
+      <h1 style={{ fontSize: "20pt", fontWeight: 650, margin: "4pt 0 12pt" }}>
+        {result ? result.headline : "Your car insurance, roughly"}
+      </h1>
+      <h2 style={{ fontSize: "12pt", fontWeight: 650, marginTop: "12pt" }}>Your situation now</h2>
       <p>{situationSentence(situation.scenario, false)}</p>
       {nowEstimate ? (
-        <>
-          <p>
-            About {formatDollars(nowEstimate.likely)} a year ({rangeWords(nowEstimate.low, nowEstimate.high)}).
-          </p>
-          <p>{nowEstimate.summary}</p>
-        </>
+        <p>
+          <strong>About {formatDollars(nowEstimate.likely)} a year</strong> ({rangeWords(nowEstimate.low, nowEstimate.high)}).{" "}
+          {nowEstimate.summary}
+        </p>
       ) : null}
       {result && nextName ? (
         <>
-          <h2 style={{ fontSize: "13pt", fontWeight: 600, marginTop: "12pt" }}>What if</h2>
+          <h2 style={{ fontSize: "12pt", fontWeight: 650, marginTop: "12pt" }}>What if</h2>
           <p>{nextName}</p>
-          <p style={{ fontWeight: 600 }}>{result.headline}</p>
           <p>
-            About {formatDollars(result.next.likely)} a year ({rangeWords(result.next.low, result.next.high)}).
+            <strong>About {formatDollars(result.next.likely)} a year</strong> ({rangeWords(result.next.low, result.next.high)}).{" "}
+            {result.next.summary}
           </p>
-          <p>{result.next.summary}</p>
           <p>{result.next.rangeNote}</p>
+          {result.next.steps.length > 0 ? (
+            <ul style={{ margin: "6pt 0 0 14pt", listStyle: "disc" }}>
+              {result.next.steps.map((step) => (
+                <li key={`${step.group}-${step.title}`}>
+                  {step.title}: {step.from} → {step.to} ({basisWords(step.basis).toLowerCase()})
+                </li>
+              ))}
+            </ul>
+          ) : null}
         </>
       ) : null}
-      <p style={{ marginTop: "12pt" }}>
-        Model {MODEL_VERSION}, data {DATA_BUNDLE_VERSION}. Sources and method: notaquote.fyi/methodology
+      <p style={{ marginTop: "14pt", borderTop: "0.75pt solid #999", paddingTop: "8pt" }}>
+        Data updated {DATA_UPDATED}. Every source, and how the math works: notaquote.fyi/methodology
       </p>
-      <DisclaimerText className="mt-3 text-black" />
+      <DisclaimerText className="mt-2 text-black" />
     </div>
   )
 }

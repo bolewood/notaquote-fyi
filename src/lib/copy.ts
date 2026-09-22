@@ -19,3 +19,21 @@ export const DISCLAIMER =
 /** Said once, near the premium field. */
 export const PREMIUM_HINT =
   "If you know it, we'll start from your real number. It stays on your device."
+
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
+/** "2026-09-22" as "September 22, 2026". */
+export function longDate(iso: string): string {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso)
+  if (!match) return iso
+  return `${MONTHS[Number(match[2]) - 1]} ${Number(match[3])}, ${match[1]}`
+}
+
+/** When the numbers were last checked, in words: "September 22, 2026". */
+export const DATA_UPDATED = longDate(factorBundle.checkedOn)
+
+/**
+ * How many public sources the numbers come from: every source the factors
+ * cite, plus the two government datasets behind the list of cars.
+ */
+export const SOURCE_COUNT = new Set([...factorBundle.sources.map((source) => source.id), "nhtsa-vpic", "fueleconomy"]).size

@@ -148,17 +148,26 @@ export function scaleFor(rows: readonly CompareRow[]): { min: number; max: numbe
 // CSV
 
 export const CSV_COLUMNS: Record<CompareMode, readonly string[]> = {
-  own: ["Car", "Version", "Starred", "Yearly estimate ($)", "Monthly ($)", "Low ($)", "High ($)", "Why"],
+  own: [
+    "Car",
+    "Version",
+    "Starred",
+    "Yearly estimate ($)",
+    "Monthly estimate ($)",
+    "Range, low ($)",
+    "Range, high ($)",
+    "Why (compared with an average car)",
+  ],
   added: [
     "Car",
     "Version",
     "Starred",
-    "Extra a year for the teen ($)",
-    "Whole policy a year, with the teen ($)",
+    "Extra a year for your teen ($)",
+    "Whole policy a year, with your teen ($)",
     "Whole policy a month ($)",
-    "Whole policy low ($)",
-    "Whole policy high ($)",
-    "Why",
+    "Whole policy range, low ($)",
+    "Whole policy range, high ($)",
+    "Why (compared with an average car)",
   ],
 }
 
@@ -179,7 +188,7 @@ export type CsvNotes = {
   start: string
   /** The disclaimer, once. */
   disclaimer: string
-  /** Model and data versions. */
+  /** When the data was updated, in words, and the math version. */
   versions: string
 }
 
@@ -196,8 +205,9 @@ export function toCsv(rows: readonly CompareRow[], notes: CsvNotes, mode: Compar
   lines.push("")
   lines.push([csvCell("Driver"), csvCell(notes.driver)].join(","))
   lines.push([csvCell("Starting point"), csvCell(notes.start)].join(","))
+  lines.push([csvCell("Data"), csvCell(notes.versions)].join(","))
   lines.push([csvCell("Please note"), csvCell(notes.disclaimer)].join(","))
-  lines.push([csvCell("Versions"), csvCell(notes.versions)].join(","))
+  lines.push([csvCell("Made with"), csvCell("NotAQuote.FYI, free and open source: notaquote.fyi")].join(","))
   // The byte-order mark tells Excel the file is UTF-8, so "16–18" and "→" read right.
   return `\uFEFF${lines.join("\r\n")}\r\n`
 }

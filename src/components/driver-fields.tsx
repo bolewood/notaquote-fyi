@@ -131,7 +131,7 @@ export function DeductibleField({ scenario, onChange, idPrefix }: Props) {
       hint={
         applies
           ? "The part of a repair bill you pay yourself before insurance pays the rest."
-          : "Only matters with full coverage, which pays to fix your own car."
+          : "Only matters with full coverage, the kind that fixes your own car."
       }
     />
   )
@@ -212,7 +212,7 @@ export function DiscountFields({ scenario, onChange, idPrefix }: Props) {
       <CheckField
         id={`${idPrefix}-loan`}
         label="Car has a loan or lease"
-        note="Lenders usually require extra coverage."
+        note="Lenders usually ask for full coverage."
         checked={scenario.loanLease}
         disabled={!hasPhysicalDamage(scenario.coverage)}
         onChange={(loanLease) => onChange({ loanLease })}

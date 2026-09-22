@@ -311,11 +311,11 @@ export function CarPicker({
                     {vinPending ? "Looking…" : "Look up"}
                   </button>
                 </div>
-                <p id={`${headingId}-vin-hint`} className="text-xs leading-snug text-muted-foreground">
-                  Your browser sends the VIN straight to NHTSA&apos;s free decoder. We don&apos;t keep it.
+                <p id={`${headingId}-vin-hint`} className="text-sm leading-snug text-muted-foreground">
+                  It&apos;s on your registration or insurance card. Your browser sends it straight to NHTSA&apos;s free decoder, and we don&apos;t keep it.
                 </p>
                 {vinMessage ? (
-                  <p role="status" className="text-xs leading-snug">
+                  <p role="status" className="text-sm leading-snug font-medium">
                     {vinMessage}
                   </p>
                 ) : null}

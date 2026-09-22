@@ -163,7 +163,7 @@ test("the CSV has one line per row in the shown order, then plain notes, and no 
   const csv = toCsv(rows, notes)
   assert.equal(csv.charCodeAt(0), 0xfeff, "starts with a byte-order mark so Excel reads UTF-8")
   const lines = csv.slice(1).trimEnd().split("\r\n")
-  assert.equal(lines[0], "Car,Version,Starred,Yearly estimate ($),Monthly ($),Low ($),High ($),Why")
+  assert.equal(lines[0], "Car,Version,Starred,Yearly estimate ($),Monthly estimate ($),\"Range, low ($)\",\"Range, high ($)\",Why (compared with an average car)")
   for (const [index, row] of rows.entries()) {
     assert.ok(lines[index + 1].startsWith(`${row.name},${row.trim},${row.starred ? "Yes" : ""},${row.likely},${row.monthly},${row.low},${row.high},`))
   }
@@ -173,7 +173,7 @@ test("the CSV has one line per row in the shown order, then plain notes, and no 
   assert.doesNotMatch(csv, /\bnull\b|undefined/)
 
   const added = toCsv(sortRows(addedRows(), DEFAULT_SORT), notes, "added")
-  assert.match(added.slice(1).split("\r\n")[0], /^Car,Version,Starred,Extra a year for the teen \(\$\),"Whole policy a year, with the teen \(\$\)"/)
+  assert.match(added.slice(1).split("\r\n")[0], /^Car,Version,Starred,Extra a year for your teen \(\$\),"Whole policy a year, with your teen \(\$\)"/)
 
   assert.equal(csvCell("=HYPERLINK(1)"), "'=HYPERLINK(1)")
   assert.equal(csvCell("+1"), "'+1")

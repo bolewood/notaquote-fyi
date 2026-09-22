@@ -33,7 +33,7 @@ export function ShareBox({
       return
     }
     void clipboard.writeText(next).then(
-      () => setStatus(`Link copied. Anyone who opens it sees ${what}, worked out fresh.`),
+      () => setStatus(`Link copied. Whoever opens it sees ${what}, worked out fresh.`),
       () => setStatus("Copy the link below."),
     )
   }
@@ -71,8 +71,8 @@ export function ShareBox({
           {url}
         </p>
       ) : (
-        <p className="text-xs text-muted-foreground">
-          The link holds your choices, not any prices.
+        <p className="text-sm text-muted-foreground">
+          The link carries your choices, never prices.
           {premiumAvailable ? " What you pay stays out unless you tick the box." : ""}
         </p>
       )}

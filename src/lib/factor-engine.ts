@@ -165,6 +165,94 @@ function cellOf(groupId: string, key: string): FactorCell {
   return found
 }
 
+/**
+ * The words a visitor sees for each group and cell. The data file keeps its
+ * own labels for the people who maintain it; the page uses these, which read
+ * like a person talking ("Car's age: 8–12 years → nearly new").
+ */
+const PLAIN_TITLES: Record<string, string> = {
+  "driver-age": "Driver's age",
+  "driving-experience": "Years licensed",
+  "driving-record": "Driving record",
+  "annual-mileage": "Miles driven",
+  "good-student": "Good-student discount",
+  "driver-training": "Driver-training discount",
+  "multi-policy": "Bundling with home or renters",
+  area: "Where the car is kept",
+  "liability-limits": "Liability limits",
+  deductible: "Deductible",
+  "loan-lease": "Loan or lease",
+  "vehicle-age": "Car's age",
+  "premium-split": "How a full-coverage bill splits",
+  range: "What widens the range",
+}
+
+const PLAIN_NOTES: Record<string, string> = {
+  "driver-age": "The age of the main driver. Teens cost the most, and it falls steadily until middle age.",
+  "driving-experience": "Only counts from age 26. For younger drivers, their age already says they're new.",
+  "driving-record": "At-fault accidents in the last three years.",
+  "annual-mileage": "How far the car is driven in a year.",
+  "good-student": "For drivers under 26, usually with a B average or better.",
+  "driver-training": "For drivers under 22 who took a driver's ed course.",
+  "multi-policy": "Home or renters insurance with the same company.",
+  area:
+    "Compared with a small town or the country, the least expensive kind of place. A typical state price already assumes the suburbs, so moving from the suburbs to the city costs less than this column suggests.",
+  "liability-limits":
+    "How much the policy pays for damage you cause to others. This only moves the liability part of the bill.",
+  deductible:
+    "The part of a repair bill you pay yourself before insurance pays the rest. This only moves the part that fixes your own car.",
+  "loan-lease": "Lenders usually ask for extra coverage. This only moves the part that fixes your own car.",
+  "vehicle-age":
+    "Newer cars cost more to fix or replace. This only moves the part that fixes your own car.",
+  "premium-split":
+    "Not adjustments, but shares. About half of a full-coverage bill pays for damage you cause to others, and the rest fixes your own car.",
+  range: "Not adjustments. Each one says how much lower or higher a real price could be when that thing is part of the estimate.",
+}
+
+const PLAIN_LABELS: Record<string, Record<string, string>> = {
+  "driver-age": {
+    "16-18-added": "16–18, added to a parent's policy (the whole household's bill)",
+  },
+  "driving-experience": {
+    "10+": "10 years or more",
+    "1-3": "1–3 years (age 26 and up)",
+    "4-9": "4–9 years (age 26 and up)",
+    "under-1": "Under a year (age 26 and up)",
+    "not-used": "Doesn't apply under 26",
+  },
+  "good-student": { no: "No", yes: "Yes (under 26)" },
+  "driver-training": { no: "No", yes: "Yes (under 22)" },
+  "multi-policy": { no: "Not bundled", yes: "Bundled" },
+  area: { urban: "City", suburban: "Suburbs", rural: "Small town or country" },
+  "liability-limits": {
+    "100-300-100": "$100k / $300k / $100k",
+    "state-minimum": "Your state's minimum",
+    "250-500-250": "$250k / $500k / $250k",
+  },
+  "loan-lease": { no: "Owned outright", yes: "Loan or lease" },
+  "vehicle-age": {
+    "0-3": "nearly new (0–3 years)",
+    "4-7": "4–7 years",
+    "8-12": "8–12 years",
+    "13-plus": "13 years or more",
+  },
+  "annual-mileage": {
+    "7500-15000": "7,500–15,000 miles a year",
+    "under-7500": "Under 7,500 miles a year",
+    "over-15000": "Over 15,000 miles a year",
+  },
+}
+
+/** A group's name as the page says it. */
+export function plainTitle(groupId: string): string {
+  return PLAIN_TITLES[groupId] ?? group(groupId).title
+}
+
+/** A cell's label as the page says it. */
+export function plainLabel(groupId: string, key: string): string {
+  return PLAIN_LABELS[groupId]?.[key] ?? cellOf(groupId, key).label
+}
+
 const YOUNG: readonly AgeBand[] = ["16-18", "19-21"]
 const UNDER_26: readonly AgeBand[] = ["16-18", "19-21", "22-25"]
 
@@ -902,7 +990,7 @@ const GROUP_FAMILY: Record<GroupId, "driver" | "geography" | "coverage" | "vehic
 }
 
 function describeVehicle(facts: VehicleFacts | "average"): string {
-  if (facts === "average") return "an average vehicle"
+  if (facts === "average") return "an average car"
   return vehicleLabel({ year: facts.year, make: facts.make, model: facts.model, trim: "" })
 }
 
@@ -996,9 +1084,9 @@ function estimateAny(start: StartingPoint, target: Scenario, options: EstimateOp
     const basis = weakerBasis(before.cell.basis, after.cell.basis)
     steps.push({
       group: after.group,
-      title: group(after.group).title,
-      from: before.cell.label,
-      to: after.cell.label,
+      title: plainTitle(after.group),
+      from: plainLabel(before.group, before.key),
+      to: plainLabel(after.group, after.key),
       basis,
       sources: [...new Set([...before.cell.sources, ...after.cell.sources])],
     })
@@ -1013,7 +1101,7 @@ function estimateAny(start: StartingPoint, target: Scenario, options: EstimateOp
     spreads.push({ down: spread.down, up: spread.up, weight: rat(1) })
     steps.push({
       group: "liability-limits",
-      title: "Collision and comprehensive",
+      title: "Coverage for your own car (collision and comprehensive)",
       from: hadDamage ? "Included" : "Not included",
       to: hasDamage ? "Included" : "Not included",
       basis: split.basis,
@@ -1054,7 +1142,7 @@ function estimateAny(start: StartingPoint, target: Scenario, options: EstimateOp
     }
     steps.push({
       group: "vehicle",
-      title: "Vehicle",
+      title: "Car",
       from: describeVehicle(startVehicle),
       to: describeVehicle(targetVehicle),
       basis: weakerBasis(from.vehicle.basis, to.vehicle.basis),
@@ -1199,7 +1287,7 @@ function rangeSentence(
   const assumed = steps.filter((step) => step.basis === "assumed" && step.group !== "vehicle" && step.group !== "state")
   if (assumed.length > 0) {
     parts.push(
-      `It's wider because our figure for ${joinWords(assumed.map((step) => lowerFirst(step.title)))} is our own estimate. We haven't found a published source for it yet.`,
+      `It's wider because our figure for ${joinWords(assumed.map((step) => lowerFirst(step.title)))} is our own estimate. We haven't found a public source for it yet.`,
     )
   }
   const vehicleChanged = steps.some((step) => step.group === "vehicle")
@@ -1248,25 +1336,27 @@ function rangeSentence(
     parts.push("This car's repair costs are higher than any mainstream car we checked against real prices, so the range reaches higher.")
   }
   if (start.trended) {
-    parts.push("We moved the typical price forward to today using a national price index, which is rough.")
+    parts.push("We brought the 2023 state price up to today with a national price index, which is only a rough guide.")
   }
   if (scenario.age === "16-18" && options.teenOnParentPolicy) {
     parts.push(
-      "This is your whole household's policy after adding your teen, not the teen's own price. It's a rough figure from one California comparison of two families, so the range is wide.",
+      scenario.state === "CA"
+        ? "This is your whole household's policy after adding your teen, not the teen's own price. It comes from one California comparison of two families, so the range is wide."
+        : "This is your whole household's policy after adding your teen, not the teen's own price. We have little data on adding teens, so this range is wide.",
     )
   } else if (scenario.age === "16-18") {
     parts.push(
-      "This prices your teen as the only driver on their own policy. Adding a teen to a parent's policy usually costs less than this.",
+      "This prices your teen as the only driver on their own policy. Adding a teen to a parent's policy usually costs less.",
     )
   } else if (scenario.age === "19-21") {
     parts.push(
-      "This prices a young driver as the only driver on their own policy. Staying on a parent's policy usually costs less than this.",
+      "This prices a young driver as the only driver on their own policy. Staying on a parent's policy usually costs less.",
     )
   }
   if (trim === "limited" || trim === "unresolved") {
     parts.push("We couldn't pin down the exact version of the car, which widens the range a little.")
   }
-  if (parts.length === 0) return "This is your own number, so there's no range yet. Change something to see an estimate."
+  if (parts.length === 0) return "This is your own number, so there's no range. Change something to see an estimate."
   return parts.join(" ")
 }
 
@@ -1602,19 +1692,46 @@ export function formatHundredths(value: number): string {
   return (value / bundle.scale).toFixed(2)
 }
 
-function publishedRow(cell: FactorCell): PublishedFactorRow {
+/** A range of hundredths as plain percentages: "+57% to +81%", "6% to 12% less", "8% less to 16% more". */
+export function rangePercentWords(low: number, high: number): string {
+  const lowPct = low - 100
+  const highPct = high - 100
+  if (lowPct === highPct) return changeWords(low)
+  if (lowPct === 0) return `up to +${highPct}%`
+  if (highPct === 0) return `up to ${-lowPct}% less`
+  if (lowPct > 0) return `+${lowPct}% to +${highPct}%`
+  if (highPct < 0) return `${-highPct}% to ${-lowPct}% less`
+  return `${-lowPct}% less to ${highPct}% more`
+}
+
+function publishedRow(cell: FactorCell, label: string = cell.label): PublishedFactorRow {
   return {
-    key: cell.label,
+    key: label,
     value: formatHundredths(cell.value),
     change: changeWords(cell.value),
     confidence: BASIS_WORDS[cell.basis],
-    range:
-      cell.low === cell.high
-        ? formatHundredths(cell.value)
-        : `${formatHundredths(cell.low)}–${formatHundredths(cell.high)}`,
+    range: cell.low === cell.high ? "—" : rangePercentWords(cell.low, cell.high),
     basis: cell.basis,
     sources: cell.sources,
     derivation: cell.derivation,
+  }
+}
+
+/** Shares and range cells aren't adjustments: show them as plain percentages. */
+function publishedShare(cell: FactorCell): PublishedFactorRow {
+  const isRange = cell.value === 100 && cell.low <= 100 && cell.high >= 100 && cell.low !== cell.high
+  return {
+    ...publishedRow(cell),
+    change: isRange ? "—" : `${cell.value}%`,
+    range: isRange
+      ? cell.low === 100
+        ? `up to ${cell.high - 100}% higher`
+        : cell.high === 100
+          ? `up to ${100 - cell.low}% lower`
+          : `${100 - cell.low}% lower to ${cell.high - 100}% higher`
+      : cell.low === cell.high
+        ? `${cell.value}%`
+        : `${cell.low}%–${cell.high}%`,
   }
 }
 
@@ -1623,13 +1740,16 @@ const PUBLISHED_ORDER = [...GROUP_IDS, "premium-split", "range"] as const
 export function publishedFactorGroups(): PublishedFactorGroup[] {
   const groups: PublishedFactorGroup[] = PUBLISHED_ORDER.map((id) => {
     const item = group(id)
-    return { family: item.title, note: item.note, rows: Object.values(item.cells).map(publishedRow) }
+    const rows = Object.entries(item.cells).map(([key, cell]) =>
+      id === "premium-split" || id === "range" ? publishedShare(cell) : publishedRow(cell, plainLabel(id, key)),
+    )
+    return { family: plainTitle(id), note: PLAIN_NOTES[id] ?? item.note, rows }
   })
   const classRows = (rows: Record<string, VehicleClassRow>) =>
     Object.values(rows).flatMap((row) => [publishedRow(row.liability), publishedRow(row.physical)])
   groups.push({
-    family: "Vehicle class averages",
-    note: bundle.vehicle.note,
+    family: "Kinds of cars, when we don't have the exact model",
+    note: "From HLDI's insurance claims, compared with the average car. We use these when we don't have claims for the exact model.",
     rows: [
       ...classRows(bundle.vehicle.classes),
       ...classRows(bundle.vehicle.luxuryClasses),

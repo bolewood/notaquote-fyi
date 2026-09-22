@@ -299,7 +299,7 @@ test("a typical start comes from the state's NAIC figure", () => {
   const withTrend = estimate(illinois!, { ...MOLLY_F150, state: "IL" }, { vehicle: F150 })
   const withoutTrend = estimate({ ...illinois!, trended: false }, { ...MOLLY_F150, state: "IL" }, { vehicle: F150 })
   assert.ok(withTrend.spread.up > withoutTrend.spread.up)
-  assert.match(withTrend.rangeNote, /moved the typical price forward/)
+  assert.match(withTrend.rangeNote, /brought the 2023 state price up to today/)
   assert.equal(estimate(YOURS, MOLLY_F150, { vehicle: F150 }).likely, 1800)
   assert.equal(TYPICAL_START_ATTRIBUTION, "Source: NAIC, 2022/2023 Auto Insurance Database Report, 2023 data")
   assert.deepEqual(typicalScenario(target), start.scenario)
@@ -397,7 +397,7 @@ test("teens: own policy by default, and a rough figure for adding them to a pare
   const teen = { ...MOLLY_F150, age: "16-18" as const, yearsLicensed: "under-1" as const }
   const own = estimate(YOURS, teen, { vehicle: F150 })
   const added = estimate(YOURS, teen, { vehicle: F150, teenOnParentPolicy: true })
-  assert.match(own.rangeNote, /only driver on their own policy\. Adding a teen to a parent's policy usually costs less than this\./)
+  assert.match(own.rangeNote, /only driver on their own policy\. Adding a teen to a parent's policy usually costs less\./)
   assert.match(added.rangeNote, /whole household's policy after adding your teen, not the teen's own price/)
   assert.ok(added.likely < own.likely)
   assert.equal(added.steps.find((step) => step.group === "driver-age")?.basis, "indicative")
@@ -484,7 +484,7 @@ test("the older calculator API still works", () => {
 test("published tables show every group with its basis in plain words", () => {
   const groups = publishedFactorGroups()
   assert.ok(groups.length >= 14)
-  const age = groups.find((group) => group.family === "Driver age")
+  const age = groups.find((group) => group.family === "Driver's age")
   assert.ok(age)
   assert.equal(age.rows.find((row) => row.key === "40–64")?.confidence, "Starting point")
   assert.equal(age.rows.find((row) => row.key === "26–39")?.confidence, "From public prices or rules")

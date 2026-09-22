@@ -327,7 +327,7 @@ export function overdueChanges(today: string = todayIso()): { state: string; cha
 
 export function formatVerifiedDate(iso: string): string {
   const [year, month, day] = iso.split("-").map(Number)
-  return new Intl.DateTimeFormat("en-GB", {
+  return new Intl.DateTimeFormat("en-US", {
     day: "numeric",
     month: "long",
     year: "numeric",

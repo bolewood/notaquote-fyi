@@ -354,28 +354,25 @@ export function decodeShareSearch(
 }
 
 /** What to tell someone who opened a shared link, in plain words. */
-export function shareArrivalNotes(
-  link: ShareLinkOk,
-  current: ShareCurrent = { modelVersion: MODEL_VERSION, bundleVersion: DATA_BUNDLE_VERSION },
-): string[] {
+export function shareArrivalNotes(link: ShareLinkOk): string[] {
   const notes = [
-    "You opened a shared link. The link holds the choices, not the prices, so we worked out every number fresh.",
+    "Someone shared this with you. Links carry choices, not prices, so every number here is worked out fresh.",
   ]
   if (link.modelMismatch) {
     notes.push(
-      `This link was made with an older version of our math (${link.linkedModel}). These numbers use today's version (${current.modelVersion}), so they may differ from what the sender saw.`,
+      "We've improved our math since this link was made, so these numbers may differ from what the sender saw.",
     )
   } else if (link.bundleMismatch) {
-    notes.push("Our data has been updated since this link was made, so the numbers may differ a little from what the sender saw.")
+    notes.push("We've updated our data since this link was made, so the numbers may differ a little from what the sender saw.")
   }
   if (link.ignoredFrozenDollars) {
-    notes.push("The link had dollar amounts in it. We ignored them and worked the numbers out again.")
+    notes.push("The link had dollar amounts in it. We ignored them and worked the numbers out ourselves.")
   }
   if (link.anchorAmount !== null) {
-    notes.push("The sender included what they pay now, so we started from that.")
+    notes.push("The sender included what they pay now, so we started from their number.")
   }
   return notes
 }
 
 export const SHARE_INVALID_NOTE =
-  "We couldn't read that shared link, so we opened the page with its usual starting point."
+  "We couldn't read that shared link, so we opened the page as usual."

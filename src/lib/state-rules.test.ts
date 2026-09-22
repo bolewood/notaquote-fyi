@@ -315,7 +315,7 @@ test("pinned: special cases", () => {
 test("pinned: the California state-minimum line", () => {
   assert.equal(
     stateMinimumAssumption("CA"),
-    "State minimum: $30,000 per person and $60,000 per accident for injuries you cause, plus $15,000 for property damage. Your policy includes uninsured and underinsured motorist coverage unless you turn it down in writing. Checked 22 September 2026. This doesn't include comprehensive or collision, which pay to fix your own car.",
+    "State minimum: $30,000 per person and $60,000 per accident for injuries you cause, plus $15,000 for property damage. Your policy includes uninsured and underinsured motorist coverage unless you turn it down in writing. Checked September 22, 2026. This doesn't include comprehensive or collision, which pay to fix your own car.",
   )
   const nh = stateMinimumAssumption("NH")
   assert.match(nh, /If you buy a policy, it must include \$25,000 per person/)

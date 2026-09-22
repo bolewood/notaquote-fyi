@@ -47,7 +47,7 @@ import {
   toggleStar,
   type CompareList,
 } from "@/lib/compare-list"
-import { DATA_BUNDLE_VERSION, DISCLAIMER, MODEL_VERSION } from "@/lib/copy"
+import { DATA_UPDATED, DISCLAIMER, MODEL_VERSION } from "@/lib/copy"
 import { recordCount, recordMountedCount } from "@/lib/counts"
 import { typicalStart } from "@/lib/factor-engine"
 import {
@@ -68,9 +68,9 @@ import { DEFAULT_SITUATION } from "@/lib/situation"
 import { useCatalog } from "@/lib/use-catalog"
 import { useCompareList, useSituation } from "@/lib/use-stored"
 import { cn } from "cn"
-import { ArrowDown, ArrowUp, ArrowUpDown, ChevronDown, Download, Plus, Printer, Star, Trash2, X } from "lucide-react"
+import { ArrowDown, ArrowUp, ArrowUpDown, ChevronDown, Download, Plus, Printer, Star, Trash2, Trophy, X } from "lucide-react"
 import Link from "next/link"
-import { Fragment, useEffect, useMemo, useState } from "react"
+import { Fragment, useEffect, useMemo, useRef, useState } from "react"
 
 const QUICK_GROUPS: { id: string; label: string; cars: readonly QuickCar[] }[] = [
   { id: "first", label: "Popular first cars", cars: FIRST_CARS },
@@ -159,6 +159,7 @@ function CompareCarsReady() {
   const [quickYear, setQuickYear] = useState(2022)
   const [openRow, setOpenRow] = useState<string | null>(null)
   const [message, setMessage] = useState<string | null>(null)
+  const messageTimer = useRef<number | undefined>(undefined)
 
   useEffect(() => {
     recordMountedCount("compare_session")
@@ -168,6 +169,13 @@ function CompareCarsReady() {
     window.addEventListener("beforeprint", onPrint)
     return () => window.removeEventListener("beforeprint", onPrint)
   }, [])
+
+  /** A short note that clears itself, so it doesn't linger after it's read. */
+  function say(text: string) {
+    setMessage(text)
+    window.clearTimeout(messageTimer.current)
+    messageTimer.current = window.setTimeout(() => setMessage(null), 5000)
+  }
 
   function save(next: CompareList) {
     stored.write({ ...next, driver: withTeenFlag(next.driver) })
@@ -185,9 +193,8 @@ function CompareCarsReady() {
       for (let index = 0; index < result.added; index += 1) recordCount("compare_add")
       save(result.list)
     }
-    if (result.skipped === "full") setMessage(`That's ${COMPARE_LIMIT} cars, the most a list can hold. Remove one to add another.`)
-    else if (result.skipped === "duplicate" && result.added === 0) setMessage("That car is already in your list.")
-    else if (result.added > 1) setMessage(`Added ${result.added} cars.`)
+    if (result.skipped === "full") say(`That's ${COMPARE_LIMIT} cars, the most a list can hold. Remove one to add another.`)
+    else if (result.skipped === "duplicate" && result.added === 0) say("That car is already in your list.")
     else setMessage(null)
   }
 
@@ -230,7 +237,7 @@ function CompareCarsReady() {
         driver: situationSentence(driver, list.teenOnParentPolicy, false),
         start: start ? startLine(start) : "",
         disclaimer: DISCLAIMER,
-        versions: `Model ${MODEL_VERSION}, data ${DATA_BUNDLE_VERSION}`,
+        versions: `Updated ${DATA_UPDATED} (math version ${MODEL_VERSION})`,
       },
       mode,
     )
@@ -255,19 +262,18 @@ function CompareCarsReady() {
   return (
     <>
       <div className="no-print">
-        <section className="max-w-3xl pt-6 sm:pt-8">
-          <p className="eyebrow text-sun-ink">Compare cars</p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+        <section className="max-w-3xl pt-8 sm:pt-12">
+          <h1 className="text-3xl leading-tight font-semibold tracking-tight text-balance sm:text-[2.6rem]">
             Which car costs the least to insure?
           </h1>
-          <p className="mt-2 max-w-2xl text-base leading-relaxed text-pretty text-muted-foreground sm:text-lg">
-            Add up to {COMPARE_LIMIT} cars. We&apos;ll price each one for the same driver, so you can sort them, star the
-            favorites, and narrow it down together.
+          <p className="mt-3 max-w-2xl text-lg leading-relaxed text-pretty text-muted-foreground">
+            Add up to {COMPARE_LIMIT} cars and we&apos;ll price each one for the same driver. Sort them, star the favorites,
+            and narrow the list down together.
           </p>
         </section>
 
         {notes.length > 0 ? (
-          <div className="mt-5 flex items-start gap-3 rounded-xl border border-border bg-card px-4 py-3" data-testid="share-notice">
+          <div className="mt-6 flex items-start gap-3 rounded-2xl bg-primary/[0.06] px-4 py-3" data-testid="share-notice">
             <div className="grid flex-1 gap-1 text-sm">
               {notes.map((note) => (
                 <p key={note}>{note}</p>
@@ -279,10 +285,10 @@ function CompareCarsReady() {
           </div>
         ) : null}
         {askToMerge && linked ? (
-          <div className="mt-3 grid gap-3 rounded-xl border border-sun bg-sun-soft px-4 py-3 text-sm" data-testid="merge-choice">
+          <div className="mt-3 grid gap-3 rounded-2xl bg-sun-soft px-4 py-3 text-sm" data-testid="merge-choice">
             <p>
-              You&apos;re looking at a shared list of {linked.cars.length} {linked.cars.length === 1 ? "car" : "cars"}. You also
-              have your own list of {stored.value?.cars.length}. What would you like to do?
+              Someone shared a list of {linked.cars.length} {linked.cars.length === 1 ? "car" : "cars"} with you. You already
+              have a list of {stored.value?.cars.length}. What would you like to do?
             </p>
             <div className="flex flex-wrap gap-2">
               <button type="button" className="btn btn-primary" onClick={() => save(linked)}>
@@ -302,7 +308,7 @@ function CompareCarsReady() {
 
       <div className="mt-6 grid items-start gap-5 lg:mt-8 lg:grid-cols-[minmax(0,4fr)_minmax(0,9fr)] lg:gap-6 print:mt-0 print:block">
         {/* Driver */}
-        <section aria-labelledby="driver-heading" className="card no-print p-5 lg:sticky lg:top-4">
+        <section aria-labelledby="driver-heading" className="card no-print p-5 sm:p-6 lg:sticky lg:top-4">
           <div className="flex items-start justify-between gap-3">
             <h2 id="driver-heading" className="text-lg font-semibold">
               Who&apos;s driving?
@@ -320,7 +326,7 @@ function CompareCarsReady() {
           <p className="mt-1 text-sm text-muted-foreground lg:hidden" data-testid="driver-summary">
             {situationSentence(driver, list.teenOnParentPolicy, false)}
           </p>
-          <p className="mt-1 hidden text-sm text-muted-foreground lg:block">Every car in the list is priced for this driver.</p>
+          <p className="mt-1 hidden text-sm text-muted-foreground lg:block">Every car in your list is priced for this driver.</p>
           <div id="driver-form" className={cn("mt-4 gap-3 lg:grid", driverOpen ? "grid" : "hidden")}>
             <div className="grid grid-cols-2 gap-3 lg:grid-cols-1 xl:grid-cols-2">
               <AgeField scenario={driver} onChange={patchDriver} idPrefix="driver" />
@@ -340,12 +346,12 @@ function CompareCarsReady() {
               <RegionField scenario={driver} onChange={patchDriver} idPrefix="driver" />
               <CoverageField scenario={driver} onChange={patchDriver} idPrefix="driver" showNote={false} />
             </div>
-            <details className="group rounded-xl border border-border">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-2 px-3.5 py-3 text-sm font-medium">
+            <details className="disclosure">
+              <summary>
                 More about the driver
-                <ChevronDown className="size-4 transition-transform group-open:rotate-180" aria-hidden="true" />
+                <ChevronDown className="size-4" aria-hidden="true" />
               </summary>
-              <div className="grid gap-3 border-t border-border px-3.5 py-3.5">
+              <div className="grid gap-3 pb-3">
                 <DeductibleField scenario={driver} onChange={patchDriver} idPrefix="driver" />
                 <RecordField scenario={driver} onChange={patchDriver} idPrefix="driver" />
                 <MileageField scenario={driver} onChange={patchDriver} idPrefix="driver" />
@@ -353,7 +359,7 @@ function CompareCarsReady() {
                 <DiscountFields scenario={driver} onChange={patchDriver} idPrefix="driver" />
               </div>
             </details>
-            <div className="rounded-xl bg-muted/70 p-3.5 text-sm leading-snug">
+            <div className="rounded-2xl bg-muted/70 p-4 text-sm leading-snug">
               {canUsePremium ? (
                 <label className="flex cursor-pointer items-start gap-2.5">
                   <input
@@ -380,8 +386,8 @@ function CompareCarsReady() {
               )}
               {mode === "added" ? (
                 <p className="mt-2 text-muted-foreground">
-                  Each car is priced as the car on your policy, with your teen added as a driver. The main number is what
-                  adding them costs.
+                  We price each car as the one on your policy, with your teen added as a driver. The big number is what
+                  adding them costs each year.
                 </p>
               ) : null}
             </div>
@@ -390,19 +396,22 @@ function CompareCarsReady() {
 
         {/* Cars */}
         <section aria-labelledby="cars-heading" className="card min-w-0 overflow-hidden">
-          <div className="print-only px-5 pt-5">
-            <p style={{ fontSize: "16pt", fontWeight: 600 }}>NotAQuote.FYI: comparing cars</p>
+          <div className="print-only print-sheet pb-3">
+            <p style={{ fontSize: "9pt", letterSpacing: "0.08em", textTransform: "uppercase" }}>
+              NotAQuote.FYI · {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+            </p>
+            <p style={{ fontSize: "20pt", fontWeight: 650, margin: "4pt 0 4pt" }}>Which car costs the least to insure?</p>
             <p>
-              {situationSentence(driver, list.teenOnParentPolicy, false)} Printed{" "}
-              {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}.
+              {situationSentence(driver, list.teenOnParentPolicy, false)}{" "}
+              {added ? "The big number is what adding your teen costs a year with each car." : "Yearly estimates for each car."}
             </p>
           </div>
           <div className="no-print grid gap-4 border-b border-border px-5 pt-5 pb-4 sm:px-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <h2 id="cars-heading" className="text-lg font-semibold">
+              <h2 id="cars-heading" className="text-xl font-semibold tracking-tight">
                 Your cars{" "}
                 <span className="text-base font-normal text-muted-foreground" data-testid="car-count">
-                  ({list.cars.length} of {COMPARE_LIMIT})
+                  {list.cars.length} of {COMPARE_LIMIT}
                 </span>
               </h2>
               <button type="button" className="btn btn-primary" onClick={() => setPickerOpen(true)} disabled={full}>
@@ -416,9 +425,8 @@ function CompareCarsReady() {
               </summary>
               <div className="mt-3 grid gap-3">
               <div className="flex flex-wrap items-center gap-2 text-sm">
-                <span className="font-medium">Quick add</span>
                 <label htmlFor="quick-year" className="text-muted-foreground">
-                  model year
+                  Model year
                 </label>
                 <select
                   id="quick-year"
@@ -445,11 +453,11 @@ function CompareCarsReady() {
                 return (
                   <div key={group.id} className="grid gap-1.5">
                     <div className="flex items-center gap-2">
-                      <p className="text-xs font-semibold text-muted-foreground">{group.label}</p>
+                      <p className="text-sm font-semibold">{group.label}</p>
                       {group.id === "first" && remaining.length > 1 ? (
                         <button
                           type="button"
-                          className="text-xs font-medium text-primary underline-offset-2 hover:underline disabled:opacity-50"
+                          className="text-sm font-medium text-primary underline-offset-2 hover:underline disabled:opacity-50"
                           onClick={() => add(remaining)}
                           disabled={full}
                           data-testid="add-all-first-cars"
@@ -489,7 +497,7 @@ function CompareCarsReady() {
               </div>
             </details>
             {message ? (
-              <p className="text-sm" role="status">
+              <p className="pop-in rounded-xl bg-sun-soft px-3 py-2 text-sm" role="status">
                 {message}
               </p>
             ) : null}
@@ -579,22 +587,22 @@ function CompareCarsReady() {
                     Estimated yearly insurance cost for each car, for the same driver. Column headers sort the table.
                   </caption>
                   <thead>
-                    <tr className="border-b border-border text-xs text-muted-foreground">
+                    <tr className="border-b border-border text-sm text-muted-foreground">
                       <th scope="col" className="w-10 py-2.5 pl-4">
                         <span className="sr-only">Starred</span>
                       </th>
                       <SortHeader label="Car" sortKey="car" sort={sort} onSort={setSort} className="min-w-44" />
-                      <SortHeader label={added ? "Extra for your teen" : "Yearly"} sortKey="yearly" sort={sort} onSort={setSort} align="right" />
-                      <SortHeader label={added ? "A month" : "Monthly"} sortKey="monthly" sort={sort} onSort={setSort} align="right" className="hidden md:table-cell print:table-cell" />
+                      <SortHeader label={added ? "Extra for your teen" : "A year"} sortKey="yearly" sort={sort} onSort={setSort} align="right" />
+                      <SortHeader label="A month" sortKey="monthly" sort={sort} onSort={setSort} align="right" className="hidden md:table-cell print:table-cell" />
                       <SortHeader
-                        label={added ? "Whole policy, a year" : "Range"}
+                        label={added ? "Whole policy a year" : "Where quotes would land"}
                         sortKey={added ? "policy" : "range"}
                         sort={sort}
                         onSort={setSort}
                         className="min-w-44"
                       />
                       <SortHeader
-                        label="Why (vs. an average car)"
+                        label="Why"
                         sortKey="reason"
                         sort={sort}
                         onSort={setSort}
@@ -609,13 +617,13 @@ function CompareCarsReady() {
                     {visible.map((row) => (
                       <Fragment key={row.key}>
                         <tr
-                          className={cn("border-b border-border align-middle", row.starred && "bg-star/10")}
+                          className={cn("border-b border-border/70 align-middle transition-colors hover:bg-muted/40", row.starred && "bg-star/10 hover:bg-star/15")}
                           data-testid="compare-row"
                         >
-                          <td className="py-2.5 pl-4">
+                          <td className="py-3 pl-3">
                             <StarButton row={row} onToggle={() => save(toggleStar(list, row.key))} />
                           </td>
-                          <td className="py-2.5 pr-3">
+                          <td className="py-3 pr-3">
                             <button
                               type="button"
                               className="grid text-left"
@@ -626,27 +634,31 @@ function CompareCarsReady() {
                               <span className="text-xs text-muted-foreground">{row.trim}</span>
                             </button>
                           </td>
-                          <td className="money py-2.5 pr-3 text-right whitespace-nowrap">
-                            <span className="text-base font-semibold">{mainAmount(row)}</span>
-                            {headlineAmount(row) === lowest ? (
-                              <span className="ml-1.5 rounded-full bg-down-soft px-1.5 py-0.5 text-[0.7rem] font-semibold text-down">
-                                Lowest
-                              </span>
-                            ) : null}
+                          <td className="money py-3 pr-3 text-right whitespace-nowrap">
+                            <span className="inline-flex items-center gap-2">
+                              {headlineAmount(row) === lowest ? (
+                                <span className="tag bg-down-soft text-down">
+                                  <Trophy className="size-3.5" aria-hidden="true" /> Lowest
+                                </span>
+                              ) : null}
+                              <span className="text-lg font-semibold">{mainAmount(row)}</span>
+                            </span>
                           </td>
-                          <td className="money hidden py-2.5 pr-3 text-right text-muted-foreground md:table-cell print:table-cell">
+                          <td className="money hidden py-3 pr-4 text-right text-muted-foreground md:table-cell print:table-cell">
                             {monthAmount(row)}
                           </td>
-                          <td className="py-2.5 pr-3">
+                          <td className="py-3 pr-4">
                             {scale ? (
                               <RangeBar low={row.low} likely={row.likely} high={row.high} min={scale.min} max={scale.max} />
                             ) : null}
-                            <span className="money mt-1 block text-xs text-muted-foreground">
-                              {added ? `About ${formatDollars(row.likely)} (${formatDollars(row.low)}–${formatDollars(row.high)})` : `${formatDollars(row.low)}–${formatDollars(row.high)}`}
+                            <span className="money mt-1.5 block text-sm text-muted-foreground">
+                              {added ? `${formatDollars(row.likely)} (${formatDollars(row.low)}–${formatDollars(row.high)})` : `${formatDollars(row.low)}–${formatDollars(row.high)}`}
                             </span>
                           </td>
-                          <td className="hidden max-w-64 min-w-48 py-2.5 pr-3 text-sm leading-snug lg:table-cell print:table-cell">{row.reason}</td>
-                          <td className="no-print py-2.5 pr-4 text-right">
+                          <td className="hidden max-w-60 min-w-44 py-3 pr-3 text-sm leading-snug text-muted-foreground lg:table-cell print:table-cell">
+                            {sentenceCase(row.reason)}
+                          </td>
+                          <td className="no-print py-3 pr-4 text-right">
                             <button
                               type="button"
                               className="icon-btn"
@@ -674,7 +686,7 @@ function CompareCarsReady() {
               {/* Phones: one card per car. */}
               <ul className="grid gap-0 sm:hidden print:hidden" data-testid="compare-cards">
                 {visible.map((row) => (
-                  <li key={row.key} className={cn("border-b border-border px-4 py-3.5", row.starred && "bg-star/10")}>
+                  <li key={row.key} className={cn("border-b border-border/70 px-4 py-4", row.starred && "bg-star/10")}>
                     <div className="flex items-start gap-2">
                       <StarButton row={row} onToggle={() => save(toggleStar(list, row.key))} />
                       <button
@@ -687,8 +699,8 @@ function CompareCarsReady() {
                         <span className="truncate text-xs text-muted-foreground">{row.trim}</span>
                       </button>
                       <div className="money text-right">
-                        <p className="text-lg leading-tight font-semibold">{mainAmount(row)}</p>
-                        <p className="text-xs text-muted-foreground">{added ? "extra a year" : `${formatDollars(row.monthly)} a month`}</p>
+                        <p className="text-xl leading-tight font-semibold">{mainAmount(row)}</p>
+                        <p className="text-sm text-muted-foreground">{added ? "extra a year" : "a year"}</p>
                       </div>
                       <button type="button" className="icon-btn -mr-2" aria-label={`Remove ${row.name}`} onClick={() => save(removeCar(list, row.key))}>
                         <X className="size-4" />
@@ -696,10 +708,16 @@ function CompareCarsReady() {
                     </div>
                     <div className="mt-2 pl-11">
                       {scale ? <RangeBar low={row.low} likely={row.likely} high={row.high} min={scale.min} max={scale.max} /> : null}
-                      <p className="mt-1.5 text-xs text-muted-foreground">
-                        {headlineAmount(row) === lowest ? <span className="mr-1 font-semibold text-down">Lowest.</span> : null}
-                        {added ? `Whole policy about ${formatDollars(row.likely)}, ` : ""}
-                        {rangeWords(row.low, row.high)} · {row.reason}
+                      {headlineAmount(row) === lowest ? (
+                        <p className="mt-2">
+                          <span className="tag bg-down-soft text-down">
+                            <Trophy className="size-3.5" aria-hidden="true" /> Lowest
+                          </span>
+                        </p>
+                      ) : null}
+                      <p className="mt-1.5 text-sm text-muted-foreground">
+                        {added ? `Whole policy about ${formatDollars(row.likely)}, ` : `About ${formatDollars(row.monthly)} a month, `}
+                        {rangeWords(row.low, row.high)}. {sentenceCase(row.reason)}.
                       </p>
                       {openRow === row.key ? (
                         <div className="mt-3">
@@ -712,18 +730,33 @@ function CompareCarsReady() {
               </ul>
 
               {visible.length === 0 ? (
-                <p className="px-5 py-8 text-center text-sm text-muted-foreground">No cars match your filters.</p>
+                <p className="px-5 py-10 text-center text-sm text-muted-foreground">No cars match your filters. Try a higher amount, or show them all.</p>
               ) : null}
 
-              <div className="grid gap-3 px-5 py-4 text-sm sm:px-6">
-                {driverNote ? <p className="text-muted-foreground">{driverNote}</p> : null}
-                <p className="text-xs text-muted-foreground">
-                  {start ? startLine(start) : null}{" "}
-                  <span className="no-print">Click a car to see how we got its number.</span>{" "}
-                  <Link href="/methodology" className="link no-print">
-                    Here&apos;s how it all works
-                  </Link>
+              <div className="grid gap-3 px-5 py-5 text-sm leading-relaxed sm:px-6">
+                <p className="text-muted-foreground">
+                  <span className="no-print">Tap a car to see how we got its number. </span>
+                  {start ? startLine(start) : null}
                 </p>
+                {driverNote ? (
+                  <details className="disclosure no-print">
+                    <summary>
+                      Why the ranges are wide
+                      <ChevronDown className="size-4" aria-hidden="true" />
+                    </summary>
+                    <p className="pb-2 text-muted-foreground">
+                      {driverNote}{" "}
+                      <Link href="/methodology" className="link">
+                        Here&apos;s how it all works
+                      </Link>
+                    </p>
+                  </details>
+                ) : null}
+                {driverNote ? <p className="print-only">{driverNote}</p> : null}
+                <div className="print-only">
+                  <p>Data updated {DATA_UPDATED}. Every source: notaquote.fyi/sources</p>
+                  <DisclaimerText className="mt-1 text-black" />
+                </div>
                 <div className="no-print flex flex-wrap items-start justify-between gap-3 border-t border-border pt-4">
                   <ShareBox
                     what="this list of cars"
@@ -752,18 +785,21 @@ function CompareCarsReady() {
               </div>
             </>
           ) : (
-            <div className="grid justify-items-center gap-2 px-6 py-12 text-center" data-testid="compare-empty">
+            <div className="grid justify-items-center gap-2 px-6 py-14 text-center" data-testid="compare-empty">
+              <span className="grid size-10 place-items-center rounded-full bg-sun-soft text-sun-ink" aria-hidden="true">
+                <Plus className="size-5" />
+              </span>
               <p className="text-lg font-semibold">No cars yet</p>
               <p className="max-w-sm text-sm text-muted-foreground">
-                Tap a car above to add it, or search for any car. Every one is priced for the same driver, so it&apos;s a fair
-                comparison.
+                Tap a popular car above, or use Add a car to find any model. Every car is priced for the same driver, so
+                it&apos;s a fair comparison.
               </p>
             </div>
           )}
         </section>
       </div>
 
-      <DisclaimerText className="mt-8 max-w-3xl" />
+      <DisclaimerText className="no-print mt-10 max-w-3xl" />
 
       <CarPicker
         key={pickerOpen ? "open" : "closed"}
@@ -792,6 +828,26 @@ function CompareCarsReady() {
   )
 }
 
+/** Shorter words for the table's "Why" column, so a long list stays easy to scan. */
+const SHORT_REASONS: Record<string, string> = {
+  "more at-fault crash claims": "more at-fault claims",
+  "fewer at-fault crash claims": "fewer at-fault claims",
+  "higher repair costs": "pricier repairs",
+  "lower repair costs": "cheaper repairs",
+  "about average claims": "about average",
+  "newer car, costs more to replace": "newer, costs more to replace",
+  "older car, cheaper to replace": "older, cheaper to replace",
+}
+
+/** "more at-fault crash claims, higher repair costs" to "More at-fault claims, pricier repairs". */
+function sentenceCase(text: string): string {
+  const short = text
+    .split(", ")
+    .map((part) => SHORT_REASONS[part] ?? part)
+    .join(", ")
+  return short.charAt(0).toUpperCase() + short.slice(1)
+}
+
 function CheckMark() {
   return (
     <svg viewBox="0 0 16 16" className="size-3.5" aria-hidden="true">
@@ -804,12 +860,12 @@ function StarButton({ row, onToggle }: { row: CompareRow; onToggle: () => void }
   return (
     <button
       type="button"
-      className={cn("icon-btn", row.starred ? "text-star hover:text-star" : "")}
+      className={cn("icon-btn star-btn", row.starred ? "text-star hover:text-star" : "")}
       aria-pressed={row.starred}
       aria-label={row.starred ? `Unstar ${row.name}` : `Star ${row.name}`}
       onClick={onToggle}
     >
-      <Star className={cn("size-[1.15rem]", row.starred && "fill-current")} />
+      <Star className={cn("size-5", row.starred && "fill-current")} />
     </button>
   )
 }
