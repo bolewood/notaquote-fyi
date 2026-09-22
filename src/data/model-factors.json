@@ -34,6 +34,33 @@
       "terms": "No copyright statement in the PDF. The site footer links general DC government terms. The page calls the figures samples for illustration."
     },
     {
+      "id": "tx-2025",
+      "title": "HelpInsure.com auto sample rates (data call: Commissioner's Bulletin B-0005-25)",
+      "publisher": "Texas Department of Insurance and the Office of Public Insurance Counsel",
+      "url": "https://www.helpinsure.com/auto.html",
+      "dataYear": "2025 (rates in effect 1 June 2025; still the live data on the check date)",
+      "checkedOn": "2026-09-22",
+      "terms": "No copyright or terms-of-use statement for the sample-rate data found. State government publication. Figures were read from the site's own data call, POST https://www.helpinsure.com/api/autoResults; the exact request bodies are recorded in data/factors/sources/README.md."
+    },
+    {
+      "id": "ca-2026",
+      "title": "2026 Automobile Premium Survey (comparison tool)",
+      "publisher": "California Department of Insurance",
+      "url": "https://interactive.web.insurance.ca.gov/apex_extprd/f?p=111:11",
+      "dataYear": "2026 (rates effective 1 January 2026)",
+      "checkedOn": "2026-09-22",
+      "terms": "Pages show 'Copyright © California Department of Insurance' and 'This is not an insurance premium quote.' No other terms found. Profiles: https://www.insurance.ca.gov/01-consumers/105-type/9-compare-prem/upload/APS2026ProfilesExhibit-2.xlsx"
+    },
+    {
+      "id": "co-2023",
+      "title": "Private Passenger Automobile Premium Comparison Report",
+      "publisher": "Colorado Division of Insurance",
+      "url": "https://www.dora.state.co.us/pls/real/Ins_Survey_Reports.Report_Selection_Criteria?p_report_id=AUTO",
+      "dataYear": "The page says both 'current as of July 2023' and 'effective July 1, 2022'",
+      "checkedOn": "2026-09-22",
+      "terms": "Footer: '© State of Colorado'. No specific terms for the data found. Landing page: https://doi.colorado.gov/for-consumers/consumer-resources/premium-comparison-reports-auto/homeowners-insurance"
+    },
+    {
       "id": "nc-sdip-2026",
       "title": "Safe Driver Incentive Plan (insurance points)",
       "publisher": "North Carolina Department of Insurance",
@@ -69,15 +96,16 @@
       "cells": {
         "16-18": {
           "label": "16–18",
-          "value": 451,
-          "low": 321,
-          "high": 541,
-          "basis": "indicative",
+          "value": 287,
+          "low": 257,
+          "high": 381,
+          "basis": "sourced",
           "sources": [
+            "tx-2025",
             "ok-2026"
           ],
-          "derivation": "Oklahoma 2026, Scenario A (age 16, single, drives to school, under 7,500 miles) ÷ Scenario D (age 55, married, commutes, 12,000 miles). Same company, city, and sex; median 4.507 (middle half of companies 3.210–5.409; 351%) over 200 comparisons. Rough because the two profiles also differ in marital status, use, and mileage. The teen is the only driver on their own policy; adding a teen to a parent's policy is priced differently.",
-          "n": 200
+          "derivation": "Texas 2025 (HelpInsure sample rates, liability only), age 18 ÷ age 30, single, same company, ZIP, car, use, and credit; male and female; median 2.591 (middle half of companies 2.347–3.406; 159%) over 360 comparisons. Times the 26–39 factor above, because 30 is in that band. The site shows ages as bands (16–24, 25–64, 65+); TDI's data call rates them at 18, 30, and 65. The teen is the only driver on their own policy; adding a teen to a parent's policy is priced differently. For comparison, Oklahoma 2026's 16-year-old ÷ 55-year-old (who also differ in marital status, use, and mileage) is median 4.507 (middle half of companies 3.210–5.409; 351%) over 200 comparisons.",
+          "n": 560
         },
         "19-21": {
           "label": "19–21",
@@ -128,23 +156,24 @@
         },
         "65+": {
           "label": "65+",
-          "value": 104,
-          "low": 92,
-          "high": 117,
+          "value": 105,
+          "low": 95,
+          "high": 116,
           "basis": "sourced",
           "sources": [
             "dc-2024",
+            "tx-2025",
             "ok-2026"
           ],
-          "derivation": "District of Columbia 2024, age 66 ÷ age 39 (same company and group; state-minimum coverage), median 0.939 (middle half of companies 0.839–1.028; -6%) over 87 comparisons, times the 26–39 factor above.",
-          "n": 287
+          "derivation": "Median of two senior-versus-adult comparisons, times the 26–39 factor above (both adult ages are in that band). District of Columbia 2024, age 66 ÷ age 39 (same company and group; state-minimum coverage): median 0.939 (middle half of companies 0.839–1.028; -6%), 87 comparisons. Texas 2025, age 65 ÷ age 30 (single male, and married): median 0.950 (middle half of companies 0.900–1.000; -5%), 360 comparisons.",
+          "n": 647
         }
       }
     },
     "driving-experience": {
       "title": "Years licensed",
       "appliesTo": "whole",
-      "note": "Only used from age 22. For younger drivers the age factor already covers being new.",
+      "note": "Only used from age 26. For younger drivers the age factor already covers being new.",
       "cells": {
         "10+": {
           "label": "Licensed 10 or more years",
@@ -156,44 +185,48 @@
           "derivation": "The starting point for years licensed.",
           "n": null
         },
-        "under-1": {
-          "label": "Licensed under 1 year (age 22 and up)",
-          "value": 120,
-          "low": 105,
-          "high": 138,
-          "basis": "assumed",
-          "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. Newly licensed adults usually pay more than experienced drivers of the same age.",
-          "n": null
-        },
         "1-3": {
-          "label": "Licensed 1–3 years (age 22 and up)",
-          "value": 110,
-          "low": 100,
-          "high": 122,
-          "basis": "assumed",
-          "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. A smaller version of the new-driver effect.",
-          "n": null
+          "label": "Licensed 1–3 years (age 26 and up)",
+          "value": 227,
+          "low": 184,
+          "high": 273,
+          "basis": "indicative",
+          "sources": [
+            "ca-2026"
+          ],
+          "derivation": "Licensed 2 years ÷ 13 years (Basic, liability only): median 2.271 (middle half of companies 1.842–2.735; 127%), 103 comparisons. California 2026, same company, place, car, record, and mileage; California profiles give years licensed but no age (its rules make years licensed a main rating factor), so a newly licensed California driver may also be younger. Rough for that reason. We only use this factor from age 26, so it doesn't pile on top of the young-driver age factors.",
+          "n": 103
         },
         "4-9": {
-          "label": "Licensed 4–9 years (age 22 and up)",
-          "value": 102,
-          "low": 100,
-          "high": 106,
+          "label": "Licensed 4–9 years (age 26 and up)",
+          "value": 134,
+          "low": 124,
+          "high": 155,
+          "basis": "indicative",
+          "sources": [
+            "ca-2026"
+          ],
+          "derivation": "Licensed 4 and 7 years ÷ 13 years (Basic liability-only and Standard full-coverage profiles): median 1.340 (middle half of companies 1.236–1.551; 34%), 494 comparisons. California 2026, same company, place, car, record, and mileage; California profiles give years licensed but no age (its rules make years licensed a main rating factor), so a newly licensed California driver may also be younger. Rough for that reason. We only use this factor from age 26, so it doesn't pile on top of the young-driver age factors.",
+          "n": 494
+        },
+        "under-1": {
+          "label": "Licensed under 1 year (age 26 and up)",
+          "value": 227,
+          "low": 184,
+          "high": 328,
           "basis": "assumed",
           "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. Some insurers keep a small new-driver charge for several years.",
+          "derivation": "Our estimate. No public source yet; help wanted. No survey we found prices a driver licensed under a year. It should cost at least as much as 1–3 years, so we use the 1–3 year factor and widen the top by a fifth.",
           "n": null
         },
         "not-used": {
-          "label": "Not used under 22",
+          "label": "Not used under 26",
           "value": 100,
           "low": 100,
           "high": 100,
           "basis": "reference",
           "sources": [],
-          "derivation": "For drivers under 22 the age factor already covers being a new driver, so years licensed is not counted again.",
+          "derivation": "For drivers under 26 the age factor already covers being a new driver, so years licensed is not counted again.",
           "n": null
         }
       }
@@ -215,15 +248,17 @@
         },
         "one": {
           "label": "One at-fault accident",
-          "value": 170,
-          "low": 140,
-          "high": 170,
-          "basis": "indicative",
+          "value": 152,
+          "low": 138,
+          "high": 166,
+          "basis": "sourced",
           "sources": [
+            "ca-2026",
+            "tx-2025",
             "nc-sdip-2026"
           ],
-          "derivation": "North Carolina's Safe Driver Incentive Plan, set by state law, adds 40% for an at-fault accident with $2,300 or less of property damage (1 point), 55% for $2,300–$3,850 (2 points), and 70% for $3,850 or more or bodily injury over $1,800 (3 points). Typical claims today are above $3,850, so we use 70%, with 40% as the low edge. Rough because other states' insurers set their own surcharges.",
-          "n": 3
+          "derivation": "Median of three states. California 2026, one at-fault accident ÷ clean, same company, place, car, and years licensed (single-driver profiles, liability-only and full coverage): median 1.411 (middle half of companies 1.268–1.542; 41%), 1091 comparisons; California's clean profiles include its required Good Driver discount, so this includes losing it. Texas 2025, one at-fault accident ÷ clean (liability only): median 1.521 (middle half of companies 1.379–1.658; 52%), 180 comparisons. North Carolina's Safe Driver Incentive Plan, set by state law: 40% for a small accident, 55% for a medium one, and 70% for $3,850 or more of damage or an injury; we count it as a median of 70% (typical claims are above $3,850) with 40% as the low edge.",
+          "n": 1274
         },
         "two-or-more": {
           "label": "Two or more at-fault accidents",
@@ -254,23 +289,28 @@
         },
         "under-7500": {
           "label": "Under 7,500 miles a year",
-          "value": 94,
-          "low": 85,
-          "high": 100,
-          "basis": "assumed",
-          "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. Low-mileage drivers usually pay somewhat less.",
-          "n": null
+          "value": 92,
+          "low": 88,
+          "high": 94,
+          "basis": "sourced",
+          "sources": [
+            "ca-2026"
+          ],
+          "derivation": "California 2026, 5,000–7,500 miles ÷ 7,600–10,000 miles, same company, car, record, and years licensed, Los Angeles: median 0.924 (middle half of companies 0.884–0.941; -8%), 360 comparisons.",
+          "n": 360
         },
         "over-15000": {
           "label": "Over 15,000 miles a year",
           "value": 108,
-          "low": 100,
-          "high": 120,
-          "basis": "assumed",
-          "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. High-mileage drivers usually pay somewhat more.",
-          "n": null
+          "low": 104,
+          "high": 115,
+          "basis": "indicative",
+          "sources": [
+            "ca-2026",
+            "tx-2025"
+          ],
+          "derivation": "Median of two rough comparisons. California 2026, 12,500–16,000 miles ÷ 7,600–10,000 miles, Los Angeles: median 1.168 (middle half of companies 1.089–1.213; 17%), 360 comparisons (only part of that band is over 15,000). Texas 2025, commuting 18,000 miles ÷ pleasure use 10,000 miles: median 1.000 (middle half of companies 1.000–1.084; 0%), 180 comparisons (use changes too).",
+          "n": 540
         }
       }
     },
@@ -345,13 +385,15 @@
         },
         "yes": {
           "label": "Bundled with a home or renters policy",
-          "value": 92,
+          "value": 90,
           "low": 85,
           "high": 100,
-          "basis": "assumed",
-          "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. Most large insurers discount bundled policies.",
-          "n": null
+          "basis": "sourced",
+          "sources": [
+            "ca-2026"
+          ],
+          "derivation": "California 2026, the same married household with and without a multi-policy discount (profiles 2555, 2565, 2592; full coverage), same company and place: median 0.900 (middle half of companies 0.854–1.000; -10%), 353 comparisons.",
+          "n": 353
         }
       }
     },
@@ -362,26 +404,35 @@
       "cells": {
         "urban": {
           "label": "Urban",
-          "value": 107,
-          "low": 98,
-          "high": 117,
+          "value": 129,
+          "low": 112,
+          "high": 144,
           "basis": "sourced",
           "sources": [
             "ok-2026",
-            "nd-2026"
+            "nd-2026",
+            "tx-2025",
+            "ca-2026",
+            "co-2023"
           ],
-          "derivation": "Same company and driver, city versus rural area. Oklahoma 2026: Oklahoma City and Tulsa versus Woodward and McAlester, all 10 profiles, median 1.163 (middle half of companies 1.079–1.272; 16%) over 800 comparisons. North Dakota 2026: Fargo versus \"Remainder of State\", Examples 1–3 and 5–12, median 0.987 (middle half of companies 0.886–1.070; -1%) over 228 comparisons. Value is the median of the two state medians.",
-          "n": 1028
+          "derivation": "Same company and driver, city versus rural area, in five states; value is the median of the five state medians. Oklahoma 2026, Oklahoma City and Tulsa ÷ Woodward and McAlester: median 1.163 (middle half of companies 1.079–1.272; 16%), 800 comparisons. North Dakota 2026, Fargo ÷ \"Remainder of State\" (Examples 1–3, 5–12): median 0.987 (middle half of companies 0.886–1.070; -1%), 228. Texas 2025, Houston and Dallas ÷ Plainview and Alpine: median 2.014 (middle half of companies 1.750–2.379; 101%), 2132. California 2026, Los Angeles Central ÷ Alturas: median 1.704 (middle half of companies 1.500–1.948; 70%), 2103. Colorado 2023, Denver and Colorado Springs ÷ Sterling, Alamosa, and Craig: median 1.286 (middle half of companies 1.122–1.436; 29%), 4344.",
+          "n": 9607
         },
         "suburban": {
           "label": "Suburban",
-          "value": 103,
-          "low": 100,
-          "high": 107,
-          "basis": "assumed",
-          "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. Halfway (on a multiplying scale) between the sourced rural and urban factors. The surveys we use compare cities with rural areas, not suburbs.",
-          "n": null
+          "value": 107,
+          "low": 91,
+          "high": 122,
+          "basis": "sourced",
+          "sources": [
+            "tx-2025",
+            "ca-2026",
+            "co-2023",
+            "ok-2026",
+            "nd-2026"
+          ],
+          "derivation": "Same company and driver, suburb versus city in the same state, in the three states that publish both (median of the three state medians), times the urban factor above. Texas 2025, Plano ÷ Houston and Dallas: median 0.829 (middle half of companies 0.762–0.893; -17%), 1066 comparisons. California 2026, Irvine ÷ Los Angeles Central: median 0.804 (middle half of companies 0.732–0.893; -20%), 2101. Colorado 2023, Highlands Ranch ÷ Denver and Colorado Springs: median 0.860 (middle half of companies 0.796–0.903; -14%), 1448.",
+          "n": 14222
         },
         "rural": {
           "label": "Rural",
@@ -412,13 +463,15 @@
         },
         "state-minimum": {
           "label": "State-minimum liability limits",
-          "value": 80,
-          "low": 65,
-          "high": 95,
-          "basis": "assumed",
-          "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. Lower limits cost less for the liability part of the premium. How much depends a lot on the state.",
-          "n": null
+          "value": 87,
+          "low": 79,
+          "high": 90,
+          "basis": "sourced",
+          "sources": [
+            "tx-2025"
+          ],
+          "derivation": "Texas 2025, 30/60/25 (the Texas minimum) ÷ 100/300/100, liability only, same company, ZIP, and driver: median 0.870 (middle half of companies 0.792–0.902; -13%), 165 comparisons. Minimums differ by state, so the real difference in your state may be bigger or smaller.",
+          "n": 165
         },
         "250-500-250": {
           "label": "Higher limits (250/500/250)",
@@ -594,15 +647,18 @@
         "typical-start": {
           "label": "Starting from a typical price instead of your own",
           "value": 100,
-          "low": 77,
+          "low": 79,
           "high": 127,
           "basis": "sourced",
           "sources": [
             "ok-2026",
-            "nd-2026"
+            "nd-2026",
+            "tx-2025",
+            "ca-2026",
+            "co-2023"
           ],
-          "derivation": "How far companies' prices sit from the middle company for the same driver, car, and place: each premium ÷ the median premium for that profile and place (groups of 5 or more companies). Oklahoma 2026 and North Dakota 2026; median of the two states' 25th and 75th percentiles; 2140 premiums.",
-          "n": 2140
+          "derivation": "How far companies' prices sit from the middle company for the same driver, car, and place: each premium ÷ the median premium for that profile and place (groups of 5 or more companies). Oklahoma 2026, North Dakota 2026, Texas 2025, California 2026, and Colorado 2023; median of the five states' 25th and 75th percentiles; 16282 premiums.",
+          "n": 16282
         },
         "vehicle-model": {
           "label": "How closely a company's price follows HLDI losses for a model",

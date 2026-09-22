@@ -27,6 +27,31 @@ Columns: `source_id, state, data_year, url, locator, territory, carrier, profile
 - The profiles are minimum required coverage. The source doesn't mention collision or comprehensive.
 - The four Chubb companies have identical rows, and two Liberty companies do too. We keep them as published, so those groups count more than once.
 
+### tx-2025: Texas HelpInsure.com (TDI and OPIC)
+
+- Read from the site's own data call, `POST https://www.helpinsure.com/api/autoResults`, one request per ZIP and profile (75 in all, two seconds apart). The locator names the saved response and the record's `RPTG_INSR_ID` and `PLANKEY_ID`. `AUTO_SAMPLE_RATE_AMT` is already yearly. Rates in effect 1 June 2025 (Commissioner's Bulletin B-0005-25), still the live data on 22 September 2026.
+- **Liability only.** TDI asks companies for bodily-injury and property-damage liability rates only.
+- The base profile (`tx-base`) is a single man, age band 25–64, average credit, a 2024 Camry, commuting 18,000 miles, clean, 30/60/25. Each other profile changes one thing (its name says what); `tx-age18_female` and `tx-age65_married` change two. The request body for each is: `{"gender":"1","maritalStatus":"1","personAge":"2","creditScore":"2","vehicleType":"1","autoUsageType":"2","accident":"0","speeding":"0","coverageLimit":"1"}` plus `county` and `zip`, with the one field changed (`personAge` 1 or 3, `accident` 1 with `speeding` left out as the site does, `coverageLimit` 2 or 3, `gender` 2, `maritalStatus` 2, `creditScore` 1 or 3, `vehicleType` 2, `autoUsageType` 1, `speeding` 1).
+- The site labels ages as bands (16–24, 25–64, 65+) and credit as Poor/Average/Good. TDI's data call rates the ages at 18, 30, and 65, and credit as above-average, average, and below-average risk. Matching them up is our reading; the site doesn't say so.
+- One company (Colonial County Mutual through Titan) came back twice in every response with identical premiums. We kept one copy.
+- The carrier name includes the managing agency when TDI names one, because several agencies write through the same company.
+
+### ca-2026: California Department of Insurance
+
+- Read from the survey tool at https://interactive.web.insurance.ca.gov/apex_extprd/f?p=111:11 by choosing the type, location, years licensed, mileage, record, and vehicle, as a visitor would (198 submissions, two seconds apart). Profile definitions are in CDI's exhibit, `APS2026ProfilesExhibit-2.xlsx`. Figures are yearly, effective 1 January 2026.
+- Profile ids follow CDI's: the first three digits are years licensed and coverage (110–114 Basic liability-only Camry at 2, 4, 7, 13, 25 years; 251–254 Standard full-coverage Accord at 4, 7, 13, 25 years), the fourth is mileage (1: 5,000–7,500; 2: 7,600–10,000; 3: 12,500–16,000), and the letter is the record (A clean, B ticket, C at-fault accident, D both). Married households: 1152, 1192, 2555, 2565, 2592, with M meaning "No Violations (With Multi-Policy Discount)".
+- **Companies left out of every comparison**, because CDI's footnotes say they priced different coverage from the profile: Nations Ins Co, KnightBrook Ins Co, Qualitas Ins Co, Anchor General Ins Co, Federal Ins Co (CHUBB), First Acceptance Ins Co, Inc., and Incline Natl Ins Co. They're still in the file, as published.
+- California requires a Good Driver discount for clean drivers, and several footnotes say the clean profiles include it. So California's accident factor includes losing that discount.
+- Mileage variants were only fetched for Los Angeles.
+
+### co-2023: Colorado Division of Insurance
+
+- **Six-month** premiums, doubled. The page says both "current as of July 2023" and "effective July 1, 2022".
+- Four drivers (A: 25, male, single; B: 25, female, single; C: 45, male, married; D: 72, female, married, pleasure use) on three plans (1: 25/50/15, $1,000 deductibles; 2: 50/100/25, $500; 3: 100/300/50, $500).
+- "$0" means the company gave no rate for that plan, driver, and place. Those are skipped.
+- Three Chubb companies are printed with an unexplained " *"; we kept the names as printed. Their figures match three other Chubb companies.
+- We use Colorado only for city, suburb, and rural comparisons and for how far companies' prices spread.
+
 ## nc-sdip-2026.csv
 
 The North Carolina Department of Insurance's "Safe Driver Incentive Plan (Insurance Points)" table: points, the "% of Rate Increase", and what earns them, in the page's words.

@@ -173,8 +173,29 @@ const CARRIER_ALIASES: Record<string, string> = {
   "EQU+27:95ITY INSURANCE COMPANY": "EQUITY INSURANCE COMPANY",
 }
 
+/**
+ * Companies whose own footnotes say they priced different coverage from the
+ * survey's profile. Left out of every comparison from that survey.
+ */
+export const EXCLUDED_CARRIERS: Record<string, string[]> = {
+  // California 2026 footnotes (APS2026Footnotes.xlsx): other limits or
+  // deductibles, a combined single limit, the highest available limit, or
+  // mileage rated below the profile's range.
+  "ca-2026": [
+    "Nations Ins Co",
+    "KnightBrook Ins Co",
+    "Qualitas Ins Co",
+    "Anchor General Ins Co",
+    "Federal Ins Co (CHUBB)",
+    "First Acceptance Ins Co, Inc.",
+    "Incline Natl Ins Co",
+  ],
+}
+
 function premiums(files: FactorFiles, sourceId: string): Premium[] {
-  return parseCsv(need(files, `sources/${sourceId}-premiums.csv`)).map((row) => {
+  const excluded = new Set(EXCLUDED_CARRIERS[sourceId] ?? [])
+  const rows = parseCsv(need(files, `sources/${sourceId}-premiums.csv`)).filter((row) => !excluded.has(row.carrier))
+  return rows.map((row) => {
     const annual = Number(row.annual_premium)
     if (!Number.isFinite(annual) || annual <= 0) throw new Error(`${sourceId}: bad premium ${row.annual_premium}`)
     return {
@@ -387,44 +408,57 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
   const ok = premiums(files, "ok-2026")
   const nd = premiums(files, "nd-2026")
   const dc = premiums(files, "dc-2024")
+  const tx = premiums(files, "tx-2025")
+  const ca = premiums(files, "ca-2026")
+  const co = premiums(files, "co-2023")
+  const same = (profiles: string[]): [string, string][] => profiles.map((profile) => [profile, profile])
+  const cross = (tops: string[], bottoms: string[]): [string, string][] =>
+    tops.flatMap((top) => bottoms.map((bottom): [string, string] => [top, bottom]))
+  const profilesOf = (rows: Premium[]) => [...new Set(rows.map((row) => row.profile))].sort()
 
-  // --- Area: same company, same profile, city versus rural area.
+  // --- Area: same company, same profile, city (or suburb) versus rural area.
+  const TX_URBAN = ["Houston 77036 (Harris County)", "Dallas 75216 (Dallas County)"]
+  const TX_SUBURB = ["Plano 75023 (Collin County)"]
+  const TX_RURAL = ["Plainview 79072 (Hale County)", "Alpine 79830 (Brewster County)"]
+  const CA_URBAN = ["Los Angeles Los Angeles - Central"]
+  const CA_SUBURB = ["Orange Irvine"]
+  const CA_RURAL = ["Modoc Alturas"]
+  const CO_URBAN = ["Denver (80205)", "Colorado Springs (80903)"]
+  const CO_SUBURB = ["Highlands Ranch (80126)"]
+  const CO_RURAL = ["Sterling (80751)", "Alamosa (81101)", "Craig (81625)"]
   const okArea = summarize(
-    ratios(
-      ok,
-      ["A", "B", "C", "D", "E"].flatMap((letter) => okPairs(letter, letter)),
-      [
-        ["OKLAHOMA CITY", "WOODWARD"],
-        ["OKLAHOMA CITY", "McALESTER"],
-        ["TULSA", "WOODWARD"],
-        ["TULSA", "McALESTER"],
-      ],
-    ),
+    ratios(ok, same(profilesOf(ok)), cross(["OKLAHOMA CITY", "TULSA"], ["WOODWARD", "McALESTER"])),
   )
-  const ndArea = summarize(
-    ratios(
-      nd,
-      ND_PROFILES.map((profile) => [profile, profile]),
-      [["Fargo", "Remainder of State"]],
-    ),
-  )
-  const urban = combine([okArea, ndArea])
-  const urbanCell = cellFrom(
-    "Urban",
-    urban,
-    "sourced",
-    ["ok-2026", "nd-2026"],
-    `Same company and driver, city versus rural area. Oklahoma 2026: Oklahoma City and Tulsa versus Woodward and McAlester, all 10 profiles, ${pct(okArea)} over ${okArea.n} comparisons. North Dakota 2026: Fargo versus "Remainder of State", Examples 1–3 and 5–12, ${pct(ndArea)} over ${ndArea.n} comparisons. Value is the median of the two state medians.`,
-  )
-  const suburbanEntry = guess("area", "suburban")
-  const suburbanValue = Math.round(Math.sqrt(urbanCell.value * 100))
+  const ndArea = summarize(ratios(nd, same(ND_PROFILES), [["Fargo", "Remainder of State"]]))
+  const txArea = summarize(ratios(tx, same(profilesOf(tx)), cross(TX_URBAN, TX_RURAL)))
+  const caArea = summarize(ratios(ca, same(profilesOf(ca)), cross(CA_URBAN, CA_RURAL)))
+  const coArea = summarize(ratios(co, same(profilesOf(co)), cross(CO_URBAN, CO_RURAL)))
+  // Suburbs are compared with the city in the same state (only Texas,
+  // California, and Colorado publish all three), then scaled by the urban
+  // factor, so suburban and urban come from consistent comparisons.
+  const txSuburb = summarize(ratios(tx, same(profilesOf(tx)), cross(TX_SUBURB, TX_URBAN)))
+  const caSuburb = summarize(ratios(ca, same(profilesOf(ca)), cross(CA_SUBURB, CA_URBAN)))
+  const coSuburb = summarize(ratios(co, same(profilesOf(co)), cross(CO_SUBURB, CO_URBAN)))
+  const urbanSummary = combine([okArea, ndArea, txArea, caArea, coArea])
   const area: FactorGroup = {
     title: "Area",
     appliesTo: "whole",
     note: "Where the car is kept. Rural is the starting point.",
     cells: {
-      urban: urbanCell,
-      suburban: assumed(suburbanEntry, suburbanValue, 100, urbanCell.value),
+      urban: cellFrom(
+        "Urban",
+        urbanSummary,
+        "sourced",
+        ["ok-2026", "nd-2026", "tx-2025", "ca-2026", "co-2023"],
+        `Same company and driver, city versus rural area, in five states; value is the median of the five state medians. Oklahoma 2026, Oklahoma City and Tulsa ÷ Woodward and McAlester: ${pct(okArea)}, ${okArea.n} comparisons. North Dakota 2026, Fargo ÷ "Remainder of State" (Examples 1–3, 5–12): ${pct(ndArea)}, ${ndArea.n}. Texas 2025, Houston and Dallas ÷ Plainview and Alpine: ${pct(txArea)}, ${txArea.n}. California 2026, Los Angeles Central ÷ Alturas: ${pct(caArea)}, ${caArea.n}. Colorado 2023, Denver and Colorado Springs ÷ Sterling, Alamosa, and Craig: ${pct(coArea)}, ${coArea.n}.`,
+      ),
+      suburban: cellFrom(
+        "Suburban",
+        chain(combine([txSuburb, caSuburb, coSuburb]), urbanSummary),
+        "sourced",
+        ["tx-2025", "ca-2026", "co-2023", "ok-2026", "nd-2026"],
+        `Same company and driver, suburb versus city in the same state, in the three states that publish both (median of the three state medians), times the urban factor above. Texas 2025, Plano ÷ Houston and Dallas: ${pct(txSuburb)}, ${txSuburb.n} comparisons. California 2026, Irvine ÷ Los Angeles Central: ${pct(caSuburb)}, ${caSuburb.n}. Colorado 2023, Highlands Ranch ÷ Denver and Colorado Springs: ${pct(coSuburb)}, ${coSuburb.n}.`,
+      ),
       rural: reference("Rural", "The starting point for area. Other areas are compared with it."),
     },
   }
@@ -435,12 +469,46 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
   const okBD = summarize(ratios(ok, okPairs("B", "D"), "same"))
   const dc25 = summarize(ratios(dc, dcPairs(25, 39), "same"))
   const dc66 = summarize(ratios(dc, dcPairs(66, 39), "same"))
+  const tx18 = summarize(
+    ratios(
+      tx,
+      [
+        ["tx-age18", "tx-base"],
+        ["tx-age18_female", "tx-female"],
+      ],
+      "same",
+    ),
+  )
+  const tx65 = summarize(
+    ratios(
+      tx,
+      [
+        ["tx-age65", "tx-base"],
+        ["tx-age65_married", "tx-married"],
+      ],
+      "same",
+    ),
+  )
   const age2539 = cellFrom(
     "26–39",
     okCD,
     "sourced",
     ["ok-2026"],
     `Oklahoma 2026, Scenario C (age 36) ÷ Scenario D (age 55): both married, 18-mile round-trip commute, 12,000 miles, same car and coverage. Same company, city, and sex; ${pct(okCD)} over ${okCD.n} comparisons.`,
+  )
+  const age1618 = cellFrom(
+    "16–18",
+    chain(tx18, okCD),
+    "sourced",
+    ["tx-2025", "ok-2026"],
+    `Texas 2025 (HelpInsure sample rates, liability only), age 18 ÷ age 30, single, same company, ZIP, car, use, and credit; male and female; ${pct(tx18)} over ${tx18.n} comparisons. Times the 26–39 factor above, because 30 is in that band. The site shows ages as bands (16–24, 25–64, 65+); TDI's data call rates them at 18, 30, and 65. The teen is the only driver on their own policy; adding a teen to a parent's policy is priced differently. For comparison, Oklahoma 2026's 16-year-old ÷ 55-year-old (who also differ in marital status, use, and mileage) is ${pct(okAD)} over ${okAD.n} comparisons.`,
+  )
+  const age1921 = cellFrom(
+    "19–21",
+    okBD,
+    "indicative",
+    ["ok-2026"],
+    `Oklahoma 2026, Scenario B (age 21, single) ÷ Scenario D (age 55, married); same commute, mileage, car, and coverage. Same company, city, and sex; ${pct(okBD)} over ${okBD.n} comparisons. Rough because marital status also differs.`,
   )
   const age2225 = cellFrom(
     "22–25",
@@ -449,26 +517,13 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
     ["dc-2024", "ok-2026"],
     `District of Columbia 2024, age 25 ÷ age 39 (same company, same group: married, single female, single male; state-minimum coverage), ${pct(dc25)} over ${dc25.n} comparisons, times the 26–39 factor above (age 39 is in that band).`,
   )
+  const senior = combine([dc66, tx65])
   const age65 = cellFrom(
     "65+",
-    chain(dc66, okCD),
+    chain(senior, okCD),
     "sourced",
-    ["dc-2024", "ok-2026"],
-    `District of Columbia 2024, age 66 ÷ age 39 (same company and group; state-minimum coverage), ${pct(dc66)} over ${dc66.n} comparisons, times the 26–39 factor above.`,
-  )
-  const age1618 = cellFrom(
-    "16–18",
-    okAD,
-    "indicative",
-    ["ok-2026"],
-    `Oklahoma 2026, Scenario A (age 16, single, drives to school, under 7,500 miles) ÷ Scenario D (age 55, married, commutes, 12,000 miles). Same company, city, and sex; ${pct(okAD)} over ${okAD.n} comparisons. Rough because the two profiles also differ in marital status, use, and mileage. The teen is the only driver on their own policy; adding a teen to a parent's policy is priced differently.`,
-  )
-  const age1921 = cellFrom(
-    "19–21",
-    okBD,
-    "indicative",
-    ["ok-2026"],
-    `Oklahoma 2026, Scenario B (age 21, single) ÷ Scenario D (age 55, married); same commute, mileage, car, and coverage. Same company, city, and sex; ${pct(okBD)} over ${okBD.n} comparisons. Rough because marital status also differs.`,
+    ["dc-2024", "tx-2025", "ok-2026"],
+    `Median of two senior-versus-adult comparisons, times the 26–39 factor above (both adult ages are in that band). District of Columbia 2024, age 66 ÷ age 39 (same company and group; state-minimum coverage): ${pct(dc66)}, ${dc66.n} comparisons. Texas 2025, age 65 ÷ age 30 (single male, and married): ${pct(tx65)}, ${tx65.n} comparisons.`,
   )
   const driverAge: FactorGroup = {
     title: "Driver age",
@@ -491,14 +546,18 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
     if (!row) throw new Error(`NC SDIP row ${points} missing`)
     return Number(row.surcharge_percent)
   }
-  const oneAccident: FactorCell = {
-    label: "One at-fault accident",
-    value: 100 + surcharge("3"),
-    low: 100 + surcharge("1"),
-    high: 100 + surcharge("3"),
-    basis: "indicative",
-    sources: ["nc-sdip-2026"],
-    derivation: `North Carolina's Safe Driver Incentive Plan, set by state law, adds ${surcharge("1")}% for an at-fault accident with $2,300 or less of property damage (1 point), ${surcharge("2")}% for $2,300–$3,850 (2 points), and ${surcharge("3")}% for $3,850 or more or bodily injury over $1,800 (3 points). Typical claims today are above $3,850, so we use ${surcharge("3")}%, with ${surcharge("1")}% as the low edge. Rough because other states' insurers set their own surcharges.`,
+  // California's single-driver profiles: Basic (liability only, Camry) and
+  // Standard (full coverage, Accord), clean (A) versus one at-fault accident (C).
+  const CA_SINGLE = ["1102", "1112", "1122", "1132", "1142", "2512", "2522", "2532", "2542"]
+  const caProfile = (code: string, letter: string) => (code.startsWith("25") ? `ca-${code}${letter}_${code.startsWith("251") ? "V3" : "V1"}` : `ca-${code}${letter}`)
+  const caAccident = summarize(
+    ratios(ca, CA_SINGLE.map((code) => [caProfile(code, "C"), caProfile(code, "A")]), "same"),
+  )
+  const txAccident = summarize(ratios(tx, [["tx-accident", "tx-base"]], "same"))
+  const ncAccident: Summary = {
+    median: 1 + surcharge("3") / 100,
+    p25: 1 + surcharge("1") / 100,
+    p75: 1 + surcharge("3") / 100,
     n: 3,
   }
   const drivingRecord: FactorGroup = {
@@ -507,12 +566,109 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
     note: "At-fault accidents in the last three years.",
     cells: {
       clean: reference("Clean", "The starting point for driving record."),
-      one: oneAccident,
+      one: cellFrom(
+        "One at-fault accident",
+        combine([caAccident, txAccident, ncAccident]),
+        "sourced",
+        ["ca-2026", "tx-2025", "nc-sdip-2026"],
+        `Median of three states. California 2026, one at-fault accident ÷ clean, same company, place, car, and years licensed (single-driver profiles, liability-only and full coverage): ${pct(caAccident)}, ${caAccident.n} comparisons; California's clean profiles include its required Good Driver discount, so this includes losing it. Texas 2025, one at-fault accident ÷ clean (liability only): ${pct(txAccident)}, ${txAccident.n} comparisons. North Carolina's Safe Driver Incentive Plan, set by state law: ${surcharge("1")}% for a small accident, ${surcharge("2")}% for a medium one, and ${surcharge("3")}% for $3,850 or more of damage or an injury; we count it as a median of ${surcharge("3")}% (typical claims are above $3,850) with ${surcharge("1")}% as the low edge.`,
+      ),
       "two-or-more": assumed(guess("driving-record", "two-or-more")),
     },
   }
 
-  // --- The rest of the driver and coverage groups: reference plus assumptions.
+  // --- Years licensed (California rates by years licensed, not age).
+  const caYears = (codes: [string, string][]) =>
+    summarize(ratios(ca, codes.map(([top, bottom]) => [caProfile(top, "A"), caProfile(bottom, "A")]), "same"))
+  const years13 = caYears([["1102", "1132"]])
+  const years49 = caYears([
+    ["1112", "1132"],
+    ["1122", "1132"],
+    ["2512", "2532"],
+    ["2522", "2532"],
+  ])
+  const yearsWords = "California 2026, same company, place, car, record, and mileage; California profiles give years licensed but no age (its rules make years licensed a main rating factor), so a newly licensed California driver may also be younger. Rough for that reason. We only use this factor from age 26, so it doesn't pile on top of the young-driver age factors."
+  const experienceSourced: Record<string, FactorCell> = {
+    "1-3": cellFrom(
+      "Licensed 1–3 years (age 26 and up)",
+      years13,
+      "indicative",
+      ["ca-2026"],
+      `Licensed 2 years ÷ 13 years (Basic, liability only): ${pct(years13)}, ${years13.n} comparisons. ${yearsWords}`,
+    ),
+    "4-9": cellFrom(
+      "Licensed 4–9 years (age 26 and up)",
+      years49,
+      "indicative",
+      ["ca-2026"],
+      `Licensed 4 and 7 years ÷ 13 years (Basic liability-only and Standard full-coverage profiles): ${pct(years49)}, ${years49.n} comparisons. ${yearsWords}`,
+    ),
+  }
+
+  // --- Mileage (California, Los Angeles only; clean single drivers).
+  const LA = "Los Angeles Los Angeles - Central"
+  const caMileage = (top: string, bottom: string) =>
+    summarize(
+      ratios(
+        ca.filter((row) => row.territory === LA),
+        ["110", "111", "112", "113", "114", "251", "252", "253", "254"].map((stem): [string, string] => [
+          caProfile(`${stem}${top}`, "A"),
+          caProfile(`${stem}${bottom}`, "A"),
+        ]),
+        "same",
+      ),
+    )
+  const lowMiles = caMileage("1", "2")
+  const highMiles = caMileage("3", "2")
+  const txPleasure = summarize(ratios(tx, [["tx-base", "tx-pleasure"]], "same"))
+  const mileageSourced: Record<string, FactorCell> = {
+    "under-7500": cellFrom(
+      "Under 7,500 miles a year",
+      lowMiles,
+      "sourced",
+      ["ca-2026"],
+      `California 2026, 5,000–7,500 miles ÷ 7,600–10,000 miles, same company, car, record, and years licensed, Los Angeles: ${pct(lowMiles)}, ${lowMiles.n} comparisons.`,
+    ),
+    "over-15000": cellFrom(
+      "Over 15,000 miles a year",
+      combine([highMiles, txPleasure]),
+      "indicative",
+      ["ca-2026", "tx-2025"],
+      `Median of two rough comparisons. California 2026, 12,500–16,000 miles ÷ 7,600–10,000 miles, Los Angeles: ${pct(highMiles)}, ${highMiles.n} comparisons (only part of that band is over 15,000). Texas 2025, commuting 18,000 miles ÷ pleasure use 10,000 miles: ${pct(txPleasure)}, ${txPleasure.n} comparisons (use changes too).`,
+    ),
+  }
+
+  // --- Bundling (California married profiles with and without a multi-policy discount).
+  const bundle = summarize(
+    ratios(
+      ca,
+      ["2555", "2565", "2592"].map((code): [string, string] => [`ca-${code}M`, `ca-${code}A`]),
+      "same",
+    ),
+  )
+  const bundleSourced: Record<string, FactorCell> = {
+    yes: cellFrom(
+      "Bundled with a home or renters policy",
+      bundle,
+      "sourced",
+      ["ca-2026"],
+      `California 2026, the same married household with and without a multi-policy discount (profiles 2555, 2565, 2592; full coverage), same company and place: ${pct(bundle)}, ${bundle.n} comparisons.`,
+    ),
+  }
+
+  // --- Liability limits (Texas, liability-only sample rates).
+  const txMinimum = summarize(ratios(tx, [["tx-base", "tx-limits100"]], "same"))
+  const limitsSourced: Record<string, FactorCell> = {
+    "state-minimum": cellFrom(
+      "State-minimum liability limits",
+      txMinimum,
+      "sourced",
+      ["tx-2025"],
+      `Texas 2025, 30/60/25 (the Texas minimum) ÷ 100/300/100, liability only, same company, ZIP, and driver: ${pct(txMinimum)}, ${txMinimum.n} comparisons. Minimums differ by state, so the real difference in your state may be bigger or smaller.`,
+    ),
+  }
+
+  // --- The rest: a reference, sourced cells, and assumptions for the gaps.
   const assumedGroup = (
     id: string,
     title: string,
@@ -520,20 +676,34 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
     note: string,
     referenceKey: string,
     referenceLabel: string,
+    sourced: Record<string, FactorCell> = {},
   ): FactorGroup => {
     const cells: Record<string, FactorCell> = {
       [referenceKey]: reference(referenceLabel, `The starting point for ${title.toLowerCase()}.`),
+      ...sourced,
     }
-    for (const [key, entry] of Object.entries(assumptions[id] ?? {})) cells[key] = assumed(entry)
+    for (const [key, entry] of Object.entries(assumptions[id] ?? {})) {
+      if (key in sourced) throw new Error(`${id}.${key} is sourced; delete its assumption`)
+      // Entries without a value are filled in below from a related factor.
+      if (entry.value !== null) cells[key] = assumed(entry)
+    }
+    if (id === "driving-experience") {
+      // Nobody publishes a price for under a year of experience. It should
+      // cost at least as much as 1–3 years, so we start from that factor and
+      // only widen the top.
+      const oneToThree = cells["1-3"]
+      const entry = assumptions[id]?.["under-1"]
+      if (!oneToThree || !entry) throw new Error("driving-experience needs 1-3 and an under-1 assumption")
+      cells["under-1"] = assumed(entry, oneToThree.value, oneToThree.low, Math.round(oneToThree.high * 1.2))
+    }
     if (id === "driving-experience") {
       cells["not-used"] = reference(
-        "Not used under 22",
-        "For drivers under 22 the age factor already covers being a new driver, so years licensed is not counted again.",
+        "Not used under 26",
+        "For drivers under 26 the age factor already covers being a new driver, so years licensed is not counted again.",
       )
     }
     return { title, appliesTo, note, cells }
   }
-
   // --- Premium split from ISO loss costs.
   const iso = parseCsv(need(files, "sources/iso-loss-costs-2024.csv"))
   const lossCost = (coverage: string) => {
@@ -699,7 +869,7 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
   const unknownSpread = summarize(allCombined)
 
   // --- Range cells.
-  const typicalSummary = combine([summarize(dispersion(ok)), summarize(dispersion(nd))])
+  const typicalSummary = combine([ok, nd, tx, ca, co].map((rows) => summarize(dispersion(rows))))
   const rangeAssumption = (key: string) => assumed(guess("range", key))
   const range: FactorGroup = {
     title: "How wide the range is",
@@ -712,8 +882,8 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
         low: toHundredths(typicalSummary.p25),
         high: toHundredths(typicalSummary.p75),
         basis: "sourced",
-        sources: ["ok-2026", "nd-2026"],
-        derivation: `How far companies' prices sit from the middle company for the same driver, car, and place: each premium ÷ the median premium for that profile and place (groups of 5 or more companies). Oklahoma 2026 and North Dakota 2026; median of the two states' 25th and 75th percentiles; ${typicalSummary.n} premiums.`,
+        sources: ["ok-2026", "nd-2026", "tx-2025", "ca-2026", "co-2023"],
+        derivation: `How far companies' prices sit from the middle company for the same driver, car, and place: each premium ÷ the median premium for that profile and place (groups of 5 or more companies). Oklahoma 2026, North Dakota 2026, Texas 2025, California 2026, and Colorado 2023; median of the five states' 25th and 75th percentiles; ${typicalSummary.n} premiums.`,
         n: typicalSummary.n,
       },
       "vehicle-model": rangeAssumption("vehicle-model"),
@@ -751,9 +921,10 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
       "driving-experience",
       "Years licensed",
       "whole",
-      "Only used from age 22. For younger drivers the age factor already covers being new.",
+      "Only used from age 26. For younger drivers the age factor already covers being new.",
       "10+",
       "Licensed 10 or more years",
+      experienceSourced,
     ),
     "driving-record": drivingRecord,
     "annual-mileage": assumedGroup(
@@ -763,6 +934,7 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
       "Miles driven a year.",
       "7500-15000",
       "7,500–15,000 miles a year",
+      mileageSourced,
     ),
     "good-student": assumedGroup("good-student", "Good student", "whole", "Drivers under 26.", "no", "No good-student discount"),
     "driver-training": assumedGroup(
@@ -773,7 +945,7 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
       "no",
       "No driver-training discount",
     ),
-    "multi-policy": assumedGroup("multi-policy", "Bundling", "whole", "Home or renters policy with the same company.", "no", "Not bundled"),
+    "multi-policy": assumedGroup("multi-policy", "Bundling", "whole", "Home or renters policy with the same company.", "no", "Not bundled", bundleSourced),
     area,
     "liability-limits": assumedGroup(
       "liability-limits",
@@ -782,6 +954,7 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
       "How much the policy pays others. Moves only the liability share.",
       "100-300-100",
       "100/300/100 limits",
+      limitsSourced,
     ),
     deductible: assumedGroup(
       "deductible",

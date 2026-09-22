@@ -1,54 +1,148 @@
 {
   "_readme": "Factors we could not source yet. Every entry is our own estimate, in hundredths (100 = 1.00), with a deliberately wide low/high so the range widens when it is used. To replace one with a sourced figure, add the source under data/factors/sources/, derive it in src/lib/factor-derivation.ts, and delete the entry here. See data/factors/README.md.",
   "driving-experience": {
-    "under-1": { "label": "Licensed under 1 year (age 22 and up)", "value": 120, "low": 105, "high": 138, "why": "Newly licensed adults usually pay more than experienced drivers of the same age." },
-    "1-3": { "label": "Licensed 1–3 years (age 22 and up)", "value": 110, "low": 100, "high": 122, "why": "A smaller version of the new-driver effect." },
-    "4-9": { "label": "Licensed 4–9 years (age 22 and up)", "value": 102, "low": 100, "high": 106, "why": "Some insurers keep a small new-driver charge for several years." }
+    "under-1": {
+      "label": "Licensed under 1 year (age 26 and up)",
+      "value": null,
+      "low": null,
+      "high": null,
+      "why": "No survey we found prices a driver licensed under a year. It should cost at least as much as 1–3 years, so we use the 1–3 year factor and widen the top by a fifth."
+    }
   },
   "driving-record": {
-    "two-or-more": { "label": "Two or more at-fault accidents", "value": 240, "low": 170, "high": 340, "why": "Two North Carolina 3-point accidents would total 6 points; the NC page does not list the surcharge for 6 points, so we added two single-accident surcharges (1 + 0.70 + 0.70). The low end is one accident; the high end is the largest surcharge on the NC table (12 points, +340%)." }
-  },
-  "annual-mileage": {
-    "under-7500": { "label": "Under 7,500 miles a year", "value": 94, "low": 85, "high": 100, "why": "Low-mileage drivers usually pay somewhat less." },
-    "over-15000": { "label": "Over 15,000 miles a year", "value": 108, "low": 100, "high": 120, "why": "High-mileage drivers usually pay somewhat more." }
+    "two-or-more": {
+      "label": "Two or more at-fault accidents",
+      "value": 240,
+      "low": 170,
+      "high": 340,
+      "why": "Two North Carolina 3-point accidents would total 6 points; the NC page does not list the surcharge for 6 points, so we added two single-accident surcharges (1 + 0.70 + 0.70). The low end is one accident; the high end is the largest surcharge on the NC table (12 points, +340%)."
+    }
   },
   "good-student": {
-    "yes": { "label": "Good-student discount (under 26)", "value": 92, "low": 85, "high": 100, "why": "Many insurers offer a discount for a B average or better." }
+    "yes": {
+      "label": "Good-student discount (under 26)",
+      "value": 92,
+      "low": 85,
+      "high": 100,
+      "why": "Many insurers offer a discount for a B average or better."
+    }
   },
   "driver-training": {
-    "yes": { "label": "Driver-training discount (under 22)", "value": 95, "low": 90, "high": 100, "why": "Many insurers offer a discount for completing driver education." }
-  },
-  "multi-policy": {
-    "yes": { "label": "Bundled with a home or renters policy", "value": 92, "low": 85, "high": 100, "why": "Most large insurers discount bundled policies." }
-  },
-  "area": {
-    "suburban": { "label": "Suburban", "value": null, "low": null, "high": null, "why": "Halfway (on a multiplying scale) between the sourced rural and urban factors. The surveys we use compare cities with rural areas, not suburbs." }
+    "yes": {
+      "label": "Driver-training discount (under 22)",
+      "value": 95,
+      "low": 90,
+      "high": 100,
+      "why": "Many insurers offer a discount for completing driver education."
+    }
   },
   "liability-limits": {
-    "state-minimum": { "label": "State-minimum liability limits", "value": 80, "low": 65, "high": 95, "why": "Lower limits cost less for the liability part of the premium. How much depends a lot on the state." },
-    "250-500-250": { "label": "Higher limits (250/500/250)", "value": 115, "low": 105, "high": 130, "why": "Higher limits cost more for the liability part of the premium." }
+    "250-500-250": {
+      "label": "Higher limits (250/500/250)",
+      "value": 115,
+      "low": 105,
+      "high": 130,
+      "why": "Higher limits cost more for the liability part of the premium."
+    }
   },
   "deductible": {
-    "500": { "label": "$500 deductible", "value": 108, "low": 102, "high": 118, "why": "A lower deductible raises the collision and comprehensive part of the premium." },
-    "2000": { "label": "$2,000 deductible", "value": 88, "low": 80, "high": 95, "why": "A higher deductible lowers the collision and comprehensive part of the premium." }
+    "500": {
+      "label": "$500 deductible",
+      "value": 108,
+      "low": 102,
+      "high": 118,
+      "why": "A lower deductible raises the collision and comprehensive part of the premium."
+    },
+    "2000": {
+      "label": "$2,000 deductible",
+      "value": 88,
+      "low": 80,
+      "high": 95,
+      "why": "A higher deductible lowers the collision and comprehensive part of the premium."
+    }
   },
   "loan-lease": {
-    "yes": { "label": "Loan or lease (gap coverage)", "value": 105, "low": 100, "high": 112, "why": "Lenders usually require collision and comprehensive, and many drivers add gap coverage." }
+    "yes": {
+      "label": "Loan or lease (gap coverage)",
+      "value": 105,
+      "low": 100,
+      "high": 112,
+      "why": "Lenders usually require collision and comprehensive, and many drivers add gap coverage."
+    }
   },
   "vehicle-age": {
-    "4-7": { "label": "Vehicle 4–7 years old", "value": 88, "low": 78, "high": 97, "why": "Older cars are worth less, so collision and comprehensive cost less." },
-    "8-12": { "label": "Vehicle 8–12 years old", "value": 75, "low": 60, "high": 90, "why": "Older cars are worth less, so collision and comprehensive cost less." },
-    "13-plus": { "label": "Vehicle 13 or more years old", "value": 62, "low": 45, "high": 80, "why": "Older cars are worth less, so collision and comprehensive cost less." }
+    "4-7": {
+      "label": "Vehicle 4–7 years old",
+      "value": 88,
+      "low": 78,
+      "high": 97,
+      "why": "Older cars are worth less, so collision and comprehensive cost less."
+    },
+    "8-12": {
+      "label": "Vehicle 8–12 years old",
+      "value": 75,
+      "low": 60,
+      "high": 90,
+      "why": "Older cars are worth less, so collision and comprehensive cost less."
+    },
+    "13-plus": {
+      "label": "Vehicle 13 or more years old",
+      "value": 62,
+      "low": 45,
+      "high": 80,
+      "why": "Older cars are worth less, so collision and comprehensive cost less."
+    }
   },
   "premium-split": {
-    "liability": { "label": "Share of a full-coverage premium that is liability", "spreadLow": 45, "spreadHigh": 65, "why": "The value comes from ISO loss costs; the low/high around it is our estimate of how much the split varies by driver, car, and state." }
+    "liability": {
+      "label": "Share of a full-coverage premium that is liability",
+      "spreadLow": 45,
+      "spreadHigh": 65,
+      "why": "The value comes from ISO loss costs; the low/high around it is our estimate of how much the split varies by driver, car, and state."
+    }
   },
   "range": {
-    "vehicle-model": { "label": "How closely a company's price follows HLDI losses for a model", "value": 100, "low": 92, "high": 108, "why": "Insurers rate vehicles with their own symbols. Those follow loss experience, but not exactly." },
-    "vehicle-model-years": { "label": "Model year outside HLDI's years", "value": 100, "low": 90, "high": 111, "why": "HLDI's results are for 2022–24 models; an older or newer design may differ." },
-    "trim-limited": { "label": "Car version only partly matched", "value": 100, "low": 95, "high": 106, "why": "We are not sure which version of the car it is." },
-    "trim-unresolved": { "label": "Car version not found", "value": 100, "low": 92, "high": 110, "why": "We could not find which version of the car it is." },
-    "state-unknown": { "label": "Moving to a state without a typical price", "value": 100, "low": 65, "high": 155, "why": "Average prices differ a lot between states." },
-    "state-typical": { "label": "Moving between states with typical prices", "value": 100, "low": 90, "high": 111, "why": "A state's typical price moves differently for different drivers." }
+    "vehicle-model": {
+      "label": "How closely a company's price follows HLDI losses for a model",
+      "value": 100,
+      "low": 92,
+      "high": 108,
+      "why": "Insurers rate vehicles with their own symbols. Those follow loss experience, but not exactly."
+    },
+    "vehicle-model-years": {
+      "label": "Model year outside HLDI's years",
+      "value": 100,
+      "low": 90,
+      "high": 111,
+      "why": "HLDI's results are for 2022–24 models; an older or newer design may differ."
+    },
+    "trim-limited": {
+      "label": "Car version only partly matched",
+      "value": 100,
+      "low": 95,
+      "high": 106,
+      "why": "We are not sure which version of the car it is."
+    },
+    "trim-unresolved": {
+      "label": "Car version not found",
+      "value": 100,
+      "low": 92,
+      "high": 110,
+      "why": "We could not find which version of the car it is."
+    },
+    "state-unknown": {
+      "label": "Moving to a state without a typical price",
+      "value": 100,
+      "low": 65,
+      "high": 155,
+      "why": "Average prices differ a lot between states."
+    },
+    "state-typical": {
+      "label": "Moving between states with typical prices",
+      "value": 100,
+      "low": 90,
+      "high": 111,
+      "why": "A state's typical price moves differently for different drivers."
+    }
   }
 }

@@ -65,10 +65,10 @@ test("the guardrails reject unsourced or unlabeled cells", () => {
   unknownSource.groups["driver-age"].cells["26-39"].sources = ["made-up"]
   assert.throws(() => assertFactorBundleSafe(unknownSource), /unknown source/)
   const quietGuess = copy()
-  quietGuess.groups["annual-mileage"].cells["under-7500"].derivation = "Seems right."
+  quietGuess.groups.deductible.cells["500"].derivation = "Seems right."
   assert.throws(() => assertFactorBundleSafe(quietGuess), /estimate/)
   const narrowGuess = copy()
-  const cell = narrowGuess.groups["annual-mileage"].cells["under-7500"]
+  const cell = narrowGuess.groups.deductible.cells["500"]
   cell.low = cell.value
   cell.high = cell.value
   assert.throws(() => assertFactorBundleSafe(narrowGuess), /widen/)
@@ -212,10 +212,10 @@ test("deductible and vehicle age only matter with collision and comprehensive", 
 
 test("the range is wider when more of the change is assumed", () => {
   const sourced = estimate(YOURS, { ...MOLLY_F150, region: "rural" }, { vehicle: F150 })
-  const assumedToo = estimate(YOURS, { ...MOLLY_F150, region: "rural", mileage: "under-7500" }, { vehicle: F150 })
+  const assumedToo = estimate(YOURS, { ...MOLLY_F150, region: "rural", deductible: 500 }, { vehicle: F150 })
   assert.ok(assumedToo.spread.down > sourced.spread.down)
   assert.ok(assumedToo.spread.up > sourced.spread.up)
-  assert.match(assumedToo.rangeNote, /yearly mileage is our own estimate/)
+  assert.match(assumedToo.rangeNote, /deductible is our own estimate/)
 
   const typical = estimate(
     { annual: 1800, scenario: MOLLY_F150, vehicle: "average", kind: "typical", label: "a typical yearly price in Illinois" },

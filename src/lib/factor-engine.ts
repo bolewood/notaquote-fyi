@@ -171,7 +171,7 @@ export type Selection = { group: GroupId; key: string; appliesTo: AppliesTo; cel
 /**
  * The factor key each group uses for a scenario. Some groups only apply to
  * some drivers, so that nothing is counted twice:
- * - Years licensed only applies from age 22. For younger drivers the age
+ * - Years licensed only applies from age 26. For younger drivers the age
  *   factor already reflects a new driver, so it stays at the reference.
  * - Good student applies to drivers under 26; driver training to drivers
  *   under 22.
@@ -184,7 +184,7 @@ export function selectionKeys(scenario: Scenario): Record<GroupId, string> {
   const damage = hasPhysicalDamage(scenario.coverage)
   return {
     "driver-age": scenario.age,
-    "driving-experience": YOUNG.includes(scenario.age) ? "not-used" : scenario.yearsLicensed,
+    "driving-experience": UNDER_26.includes(scenario.age) ? "not-used" : scenario.yearsLicensed,
     "driving-record": scenario.incidents,
     "annual-mileage": scenario.mileage,
     "good-student": scenario.goodStudent && UNDER_26.includes(scenario.age) ? "yes" : "no",

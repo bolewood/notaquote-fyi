@@ -51,36 +51,78 @@ test("spot check: age 26–39 from Oklahoma, recomputed by hand", () => {
   assert.equal(committed.groups["driver-age"].cells["26-39"].value, Math.round(median(ratios) * 100))
 })
 
-test("spot check: urban area from Oklahoma and North Dakota, recomputed by hand", () => {
+type Row = Record<string, string>
+
+/** Same company, same profile: premium in one place ÷ premium in another. */
+function placeRatios(rows: Row[], tops: string[], bottoms: string[]): number[] {
+  const price = new Map(rows.map((row) => [`${row.carrier}|${row.territory}|${row.profile_id}`, Number(row.annual_premium)]))
+  const out: number[] = []
+  for (const row of rows) {
+    if (!tops.includes(row.territory)) continue
+    for (const bottom of bottoms) {
+      const other = price.get(`${row.carrier}|${bottom}|${row.profile_id}`)
+      if (other) out.push(Number(row.annual_premium) / other)
+    }
+  }
+  return out
+}
+
+/** Same company and place: one profile's premium ÷ another's. */
+function profileRatios(rows: Row[], pairs: [string, string][]): number[] {
+  const price = new Map(rows.map((row) => [`${row.carrier}|${row.territory}|${row.profile_id}`, Number(row.annual_premium)]))
+  const out: number[] = []
+  for (const row of rows) {
+    for (const [top, bottom] of pairs) {
+      if (row.profile_id !== top) continue
+      const other = price.get(`${row.carrier}|${row.territory}|${bottom}`)
+      if (other) out.push(Number(row.annual_premium) / other)
+    }
+  }
+  return out
+}
+
+const CA_FOOTNOTED = new Set([
+  "Nations Ins Co",
+  "KnightBrook Ins Co",
+  "Qualitas Ins Co",
+  "Anchor General Ins Co",
+  "Federal Ins Co (CHUBB)",
+  "First Acceptance Ins Co, Inc.",
+  "Incline Natl Ins Co",
+])
+
+test("spot check: urban area from five states, recomputed by hand", () => {
   const ok = rows("ok-2026-premiums.csv").map((row) => ({
     ...row,
     carrier: row.carrier === "EQU+27:95ITY INSURANCE COMPANY" ? "EQUITY INSURANCE COMPANY" : row.carrier,
   }))
-  const okPrice = new Map(ok.map((row) => [`${row.carrier}|${row.territory}|${row.profile_id}`, Number(row.annual_premium)]))
-  const okRatios: number[] = []
-  for (const row of ok) {
-    if (row.territory !== "OKLAHOMA CITY" && row.territory !== "TULSA") continue
-    for (const rural of ["WOODWARD", "McALESTER"]) {
-      const other = okPrice.get(`${row.carrier}|${rural}|${row.profile_id}`)
-      if (other) okRatios.push(Number(row.annual_premium) / other)
-    }
-  }
   const nd = rows("nd-2026-premiums.csv")
-  const ndPrice = new Map(nd.map((row) => [`${row.carrier}|${row.territory}|${row.profile_id}`, Number(row.annual_premium)]))
-  const ndRatios: number[] = []
-  for (const row of nd) {
-    if (row.territory !== "Fargo") continue
-    const other = ndPrice.get(`${row.carrier}|Remainder of State|${row.profile_id}`)
-    if (other) ndRatios.push(Number(row.annual_premium) / other)
-  }
-  assert.equal(okRatios.length, 800)
-  const value = Math.round(((median(okRatios) + median(ndRatios)) / 2) * 100)
-  assert.equal(committed.groups.area.cells.urban.value, value)
+  const tx = rows("tx-2025-premiums.csv")
+  const ca = rows("ca-2026-premiums.csv").filter((row) => !CA_FOOTNOTED.has(row.carrier))
+  const co = rows("co-2023-premiums.csv")
+  const medians = [
+    median(placeRatios(ok, ["OKLAHOMA CITY", "TULSA"], ["WOODWARD", "McALESTER"])),
+    median(placeRatios(nd, ["Fargo"], ["Remainder of State"])),
+    median(placeRatios(tx, ["Houston 77036 (Harris County)", "Dallas 75216 (Dallas County)"], ["Plainview 79072 (Hale County)", "Alpine 79830 (Brewster County)"])),
+    median(placeRatios(ca, ["Los Angeles Los Angeles - Central"], ["Modoc Alturas"])),
+    median(placeRatios(co, ["Denver (80205)", "Colorado Springs (80903)"], ["Sterling (80751)", "Alamosa (81101)", "Craig (81625)"])),
+  ]
+  assert.equal(committed.groups.area.cells.urban.value, Math.round(median(medians) * 100))
 })
 
-test("spot check: one at-fault accident and the premium split", () => {
+test("spot check: one at-fault accident from three states, recomputed by hand", () => {
+  const tx = rows("tx-2025-premiums.csv")
+  const ca = rows("ca-2026-premiums.csv").filter((row) => !CA_FOOTNOTED.has(row.carrier))
+  const caPairs: [string, string][] = ["1102", "1112", "1122", "1132", "1142"].map((code) => [`ca-${code}C`, `ca-${code}A`])
+  caPairs.push(["ca-2512C_V3", "ca-2512A_V3"])
+  for (const code of ["2522", "2532", "2542"]) caPairs.push([`ca-${code}C_V1`, `ca-${code}A_V1`])
   const sdip = rows("nc-sdip-2026.csv")
-  assert.equal(committed.groups["driving-record"].cells.one.value, 100 + Number(sdip.find((row) => row.points === "3")?.surcharge_percent))
+  const nc = 1 + Number(sdip.find((row) => row.points === "3")?.surcharge_percent) / 100
+  const medians = [median(profileRatios(ca, caPairs)), median(profileRatios(tx, [["tx-accident", "tx-base"]])), nc]
+  assert.equal(committed.groups["driving-record"].cells.one.value, Math.round(median(medians) * 100))
+})
+
+test("spot check: the premium split from ISO", () => {
   const iso = rows("iso-loss-costs-2024.csv")
   const cost = (coverage: string) => {
     const row = iso.find((item) => item.coverage === coverage)
@@ -118,7 +160,7 @@ test("HLDI rows are copied faithfully and named consistently", () => {
 
 test("every source file is listed and every row keeps a locator", () => {
   const listed = new Set(committed.sources.map((source) => source.id))
-  for (const id of ["ok-2026", "nd-2026", "dc-2024", "nc-sdip-2026", "iso-via-iii-2024", "hldi-2022-24"]) {
+  for (const id of ["ok-2026", "nd-2026", "dc-2024", "tx-2025", "ca-2026", "co-2023", "nc-sdip-2026", "iso-via-iii-2024", "hldi-2022-24"]) {
     assert.ok(listed.has(id), id)
   }
   for (const name of readdirSync(path.join(DATA, "sources"))) {

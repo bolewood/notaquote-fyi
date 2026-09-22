@@ -28,6 +28,33 @@
       "terms": "No copyright statement in the PDF. The site footer links general DC government terms. The page calls the figures samples for illustration."
     },
     {
+      "id": "tx-2025",
+      "title": "HelpInsure.com auto sample rates (data call: Commissioner's Bulletin B-0005-25)",
+      "publisher": "Texas Department of Insurance and the Office of Public Insurance Counsel",
+      "url": "https://www.helpinsure.com/auto.html",
+      "dataYear": "2025 (rates in effect 1 June 2025; still the live data on the check date)",
+      "checkedOn": "2026-09-22",
+      "terms": "No copyright or terms-of-use statement for the sample-rate data found. State government publication. Figures were read from the site's own data call, POST https://www.helpinsure.com/api/autoResults; the exact request bodies are recorded in data/factors/sources/README.md."
+    },
+    {
+      "id": "ca-2026",
+      "title": "2026 Automobile Premium Survey (comparison tool)",
+      "publisher": "California Department of Insurance",
+      "url": "https://interactive.web.insurance.ca.gov/apex_extprd/f?p=111:11",
+      "dataYear": "2026 (rates effective 1 January 2026)",
+      "checkedOn": "2026-09-22",
+      "terms": "Pages show 'Copyright © California Department of Insurance' and 'This is not an insurance premium quote.' No other terms found. Profiles: https://www.insurance.ca.gov/01-consumers/105-type/9-compare-prem/upload/APS2026ProfilesExhibit-2.xlsx"
+    },
+    {
+      "id": "co-2023",
+      "title": "Private Passenger Automobile Premium Comparison Report",
+      "publisher": "Colorado Division of Insurance",
+      "url": "https://www.dora.state.co.us/pls/real/Ins_Survey_Reports.Report_Selection_Criteria?p_report_id=AUTO",
+      "dataYear": "The page says both 'current as of July 2023' and 'effective July 1, 2022'",
+      "checkedOn": "2026-09-22",
+      "terms": "Footer: '© State of Colorado'. No specific terms for the data found. Landing page: https://doi.colorado.gov/for-consumers/consumer-resources/premium-comparison-reports-auto/homeowners-insurance"
+    },
+    {
       "id": "nc-sdip-2026",
       "title": "Safe Driver Incentive Plan (insurance points)",
       "publisher": "North Carolina Department of Insurance",
