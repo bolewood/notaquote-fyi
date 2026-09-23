@@ -70,6 +70,15 @@ export default function PrivacyPage() {
         in this browser and never sent. Each one records that something happened, never what you chose or any amount.
       </p>
 
+      <h2>AI assistants</h2>
+      <p>
+        An AI assistant can&apos;t run this page, so there&apos;s a small read-only service it can ask instead (see{" "}
+        <a href="/llms.txt">notaquote.fyi/llms.txt</a>). Unlike the page, that does reach our host. It only takes a
+        state, a few choices like an age band or coverage level, and car names. It turns away what you pay, a VIN, a ZIP
+        code, a name, or anything else personal. We don&apos;t store what it asks, and our host keeps only its standard
+        request logs.
+      </p>
+
       <h2>Telling us about a problem</h2>
       <p>
         The <Link href="/corrections">&ldquo;Tell us&rdquo;</Link> links open a form on GitHub, filled in with the

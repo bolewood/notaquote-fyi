@@ -206,6 +206,17 @@ export default function MethodologyPage() {
         </div>
       </details>
 
+      <h2 id="ai-assistants">For AI assistants</h2>
+      <p>
+        Using an AI assistant to help, say to pick a few cars for a new driver? Ask it to read{" "}
+        <a href="/llms.txt">notaquote.fyi/llms.txt</a> first. That page shows it how to get the same numbers you see here, from
+        the same math, and asks it to show ranges, not single prices.
+      </p>
+      <p>
+        The assistant only sends a state, a few choices like an age band or a coverage level, and car names. There&apos;s no
+        way for it to send what you pay, a VIN, or anything else personal, and we don&apos;t keep what it asks.
+      </p>
+
       <h2>Saving and sharing</h2>
       <p>
         Your choices are kept in this browser, so the pages remember them. The link carries your choices, not our

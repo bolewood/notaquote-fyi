@@ -2,7 +2,7 @@ import Link from "next/link"
 import { DATA_UPDATED, PUBLISHER } from "@/lib/copy"
 import { GITHUB_REPO_URL } from "@/lib/suggest-fix"
 
-const GROUPS: { heading: string; links: { href: string; label: string; external?: boolean }[] }[] = [
+const GROUPS: { heading: string; links: { href: string; label: string; external?: boolean; plain?: boolean }[] }[] = [
   {
     heading: "Use it",
     links: [
@@ -16,6 +16,7 @@ const GROUPS: { heading: string; links: { href: string; label: string; external?
       { href: "/methodology", label: "How it works" },
       { href: "/sources", label: "Sources" },
       { href: "/model-version", label: "What's changed" },
+      { href: "/llms.txt", label: "For AI assistants", plain: true },
     ],
   },
   {
@@ -55,8 +56,8 @@ export function SiteFooter() {
               <ul className="grid gap-1.5">
                 {group.links.map((link) => (
                   <li key={link.href}>
-                    {link.external ? (
-                      <a href={link.href} rel="noreferrer" className="rounded-sm text-muted-foreground hover:text-foreground hover:underline">
+                    {link.external || link.plain ? (
+                      <a href={link.href} rel={link.external ? "noreferrer" : undefined} className="rounded-sm text-muted-foreground hover:text-foreground hover:underline">
                         {link.label}
                       </a>
                     ) : (
