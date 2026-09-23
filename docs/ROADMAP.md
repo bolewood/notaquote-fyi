@@ -52,4 +52,10 @@ Workstreams 1–6 are built and reviewed. What's left is ongoing data work, whic
 - [x] Turn on private vulnerability reporting.
 - [x] Set up contact@bolewood.com (a Google Group that accepts outside mail).
 - [x] Open starter issues for the five numbers that need a source ([good first issues](https://github.com/bolewood/notaquote-fyi/labels/good%20first%20issue)).
-- [ ] Remove `noindex` (in `next.config.ts` and `src/app/robots.ts`) after sharing privately with friends.
+- [x] Open the site to search engines (September 23, 2026).
+
+## Keeping it fresh
+The data is refreshed once a year. The recipe is [DATA-REFRESH.md](DATA-REFRESH.md), a GitHub Action opens the reminder issue every September 22, and [CHANGELOG.md](../CHANGELOG.md) records what changed.
+
+## Backlog
+- SEO pass: page titles and descriptions, social preview images, structured data, and Search Console setup. See the GitHub issue.

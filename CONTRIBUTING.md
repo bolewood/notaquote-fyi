@@ -143,7 +143,7 @@ Every data file carries a version string. Share links record two of them, the mo
 
 | What you changed | Where the version lives |
 | --- | --- |
-| Factors | `"version"` in `src/data/model-factors.json` |
+| Factors | `DERIVATION_VERSION` (with `EFFECTIVE_DATE` and `CHECKED_ON`) in `src/lib/factor-derivation.ts`, then `npm run factors:build` writes `src/data/model-factors.json` |
 | Source list | `"version"` in `src/data/source-manifest.json` |
 | State rules | `"version"` and `"checkedOn"` in `data/state-rules/state-rules.json` (see the steps above) |
 | Typical premium by state | `"version"` and `"checkedOn"` in `data/state-baselines/state-baselines.json` |
@@ -151,6 +151,8 @@ Every data file carries a version string. Share links record two of them, the mo
 | How the engine does its math | `MODEL_VERSION` in `src/lib/copy.ts` |
 
 Follow the pattern already in the file (for example `factors-2026-09-21` becomes `factors-2026-10-02`). If you're unsure, say so in the pull request and a maintainer will help.
+
+If your change moves a number people see, add a line to [CHANGELOG.md](CHANGELOG.md). The once-a-year refresh of every source is in [docs/DATA-REFRESH.md](docs/DATA-REFRESH.md).
 
 ## Privacy rules for code
 

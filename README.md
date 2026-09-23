@@ -72,6 +72,8 @@ Your starting price × a few adjustments = a range. That's the whole idea, and e
 
 Every dollar figure on the site comes from one set of math that runs in your browser (`src/lib/factor-engine.ts`). The site's How it works and Sources pages show every adjustment, where it came from, and when the data was last updated.
 
+The data is refreshed once a year, every September ([the recipe](docs/DATA-REFRESH.md)), and every change is recorded in the [changelog](CHANGELOG.md).
+
 ## What's where
 
 | Path | What's in it |
@@ -83,7 +85,7 @@ Every dollar figure on the site comes from one set of math that runs in your bro
 | `public/catalog/` | The vehicle catalog, built from NHTSA and FuelEconomy.gov data. |
 | `scripts/` | The script that rebuilds the vehicle catalog (`npm run catalog:build`). |
 | `data/` | Research notes for each kind of data, plus two data files you can edit directly: the state minimums (`data/state-rules/state-rules.json`, 50 states and DC, each with sources and a check date) and the typical premium by state (`data/state-baselines/state-baselines.json`). |
-| `docs/` | The [voice guide](docs/VOICE.md) for anything a visitor reads, the [roadmap](docs/ROADMAP.md), and the README screenshots. |
+| `docs/` | The [voice guide](docs/VOICE.md) for anything a visitor reads, the [roadmap](docs/ROADMAP.md), the yearly [data refresh recipe](docs/DATA-REFRESH.md), and the README screenshots. |
 | `.github/` | Issue forms, the pull request template, and CI. |
 
 ## How to help

@@ -1,0 +1,81 @@
+name: Data upkeep
+
+# Two reminders so the data doesn't quietly go stale:
+# - Every September 22, open the "Annual data refresh" issue with the checklist.
+# - On the 1st of every month, run the tests. They include date tripwires (for
+#   example, a state law that has taken effect without its row being updated).
+#   If they fail, open an issue so someone notices.
+
+on:
+  schedule:
+    - cron: "0 15 22 9 *" # September 22, 15:00 UTC
+    - cron: "0 15 1 * *" # 1st of each month, 15:00 UTC
+  workflow_dispatch:
+    inputs:
+      task:
+        description: "What to run"
+        type: choice
+        options: [annual-issue, freshness-check]
+        default: freshness-check
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  annual-issue:
+    if: github.event.schedule == '0 15 22 9 *' || (github.event_name == 'workflow_dispatch' && inputs.task == 'annual-issue')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - name: Open the annual refresh issue (once per year)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          year=$(date -u +%Y)
+          title="Annual data refresh ($year)"
+          if gh issue list --state all --search "\"$title\" in:title" --json title --jq '.[].title' | grep -Fxq "$title"; then
+            echo "Already opened: $title"
+            exit 0
+          fi
+          sed "s/data-refresh-YEAR/data-refresh-$year/" .github/data-refresh-issue.md > /tmp/body.md
+          gh issue create --title "$title" --body-file /tmp/body.md --label data
+
+  freshness-check:
+    if: github.event.schedule == '0 15 1 * *' || (github.event_name == 'workflow_dispatch' && inputs.task == 'freshness-check')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          cache: npm
+      - run: npm ci
+      - name: Run the tests (including date tripwires)
+        id: tests
+        shell: bash # adds pipefail, so a failing test isn't hidden by tee
+        run: npm test 2>&1 | tee /tmp/test.log
+        continue-on-error: true
+      - name: Open an issue if something went stale
+        if: steps.tests.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="Monthly data check failed"
+          if gh issue list --state open --search "\"$title\" in:title" --json title --jq '.[].title' | grep -Fxq "$title"; then
+            echo "An open issue already exists."
+            exit 1
+          fi
+          {
+            echo "The monthly test run failed on $(date -u +%Y-%m-%d). Often this is a date tripwire: a scheduled state law change has taken effect and the row needs updating (see data/state-rules/README.md, \"Scheduled changes\")."
+            echo
+            echo "Run log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            echo
+            echo '```'
+            grep -E "✖|not ok|Error|assert" /tmp/test.log | head -40
+            echo '```'
+          } > /tmp/body.md
+          gh issue create --title "$title" --body-file /tmp/body.md --label data
+          exit 1

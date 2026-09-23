@@ -2,7 +2,7 @@
 
 If you don't tell us what you pay now, we need somewhere to start. This is that starting point: one typical yearly premium for each state and DC, from a public source you can check yourself.
 
-The data lives in `state-baselines.json` in this folder. `src/lib/state-baselines.ts` reads it, checks it when it loads (all 51 codes, no extras, positive numbers, `annual` equal to the rounded exact figure), and `stateBaseline("OH")` returns Ohio's figure with its source. The Sources page lists every state. The pricing engine doesn't use these yet. Wiring them in is a separate piece of work.
+The data lives in `state-baselines.json` in this folder. `src/lib/state-baselines.ts` reads it, checks it when it loads (all 51 codes, no extras, positive numbers, `annual` equal to the rounded exact figure), and `stateBaseline("OH")` returns Ohio's figure with its source. The Sources page lists every state, and the pricing engine uses these as the typical starting price when a visitor doesn't enter their own premium (see `typicalStart()` in `src/lib/factor-engine.ts`).
 
 Wherever a figure is shown, label it: **Source: NAIC, 2022/2023 Auto Insurance Database Report, 2023 data** (exported as `STATE_BASELINE_ATTRIBUTION`).
 
@@ -40,7 +40,7 @@ The countrywide figures from the same tables are stored as `countrywide`. They'r
 - **State-to-state comparisons are rough.** NAIC warns that "direct comparisons between state results should be treated with a high degree of caution," because states differ in coverages, laws, and how data is reported. NAIC's liability figures include no-fault coverage, for example, so states with big required no-fault benefits (like Michigan or New York) look pricier on liability.
 - **They're per car, per year.** Not per household, and not per six-month policy.
 
-## Adjusting for time (recorded, not applied)
+## Adjusting for time
 
 The Bureau of Labor Statistics tracks how car insurance prices change in its Consumer Price Index, series **CUUR0000SETE** (motor vehicle insurance, U.S. city average, not seasonally adjusted). The file stores:
 
@@ -51,7 +51,7 @@ The Bureau of Labor Statistics tracks how car insurance prices change in its Con
 
 Source: https://data.bls.gov/timeseries/CUUR0000SETE, fetched through the BLS public API. BLS published no October 2025 value because of the 2025 lapse in appropriations.
 
-August 2026 ÷ the 2023 average is about 1.18. That's a rough national multiplier for how much insurance prices moved since the data year. It's national, not state by state, and it tracks price changes for the same coverage, not changes in what people buy. **Nothing applies it today.** If the engine starts using it, that should be a visible, versioned choice.
+August 2026 ÷ the 2023 average is about 1.18. That's a rough national multiplier for how much insurance prices moved since the data year. It's national, not state by state, and it tracks price changes for the same coverage, not changes in what people buy. The engine applies it to typical starting prices only (never to a premium a visitor enters), labeled as rough, with a little extra room in the range. `npm run factors:build` reads these values from this file. To move the trend forward, update the latest month here and rebuild; see [docs/DATA-REFRESH.md](../../docs/DATA-REFRESH.md).
 
 ## How we checked the numbers
 
