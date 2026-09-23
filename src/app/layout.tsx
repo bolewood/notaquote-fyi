@@ -27,14 +27,6 @@ export const metadata: Metadata = {
       "text/plain": [{ url: "/llms.txt", title: "For AI assistants" }],
     },
   },
-  robots: {
-    index: false,
-    follow: false,
-    googleBot: {
-      index: false,
-      follow: false,
-    },
-  },
 }
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
