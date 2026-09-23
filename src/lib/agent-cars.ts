@@ -136,9 +136,21 @@ export function describeCar(catalog: VehicleCatalog, pick: VehiclePick): CarSumm
   }
 }
 
-/** Words in a version name that mark a special edition, a hybrid, or a sporty version. */
+/**
+ * Words in a version (or model) name that mark a special edition, a hybrid,
+ * or a performance version: "GT3", "Golf R", "X5 M", "M50i", "330e".
+ */
 const SPECIAL_WORDS =
-  /\b(hybrid|hev|phev|plug in|electric|ev|4xe|prime|performance|dark horse|rubicon|trd|wilderness|lightning|zr2|raptor|tremor|gt|gts|rs|srt|amg|nismo|shelby|trx|jcw|john cooper works|type r|convertible|cabriolet|cabrio|roadster|spyder|coupe|cal rt|extended|woodland|platinum|ffv)\b/
+  /\b(hybrid|hev|phev|plug in|electric|ev|4xe|prime|performance|dark horse|rubicon|trd|wilderness|lightning|zr2|raptor|tremor|gt|gt2|gt3|gt4|gts|rs|r|m|srt|amg|nismo|shelby|trx|jcw|john cooper works|type r|competition|turbo|targa|sdrive\d*[a-z]*|convertible|cabriolet|cabrio|roadster|spyder|coupe|cal rt|extended|woodland|platinum|ffv|m\d+[a-z]*|[a-z]*\d+e)\b/g
+
+/** The special words in a name, for comparing with what someone typed. */
+function specialWords(name: string): string[] {
+  return [...normalizeName(name).matchAll(SPECIAL_WORDS)].map((match) => match[0])
+}
+
+function isSpecial(name: string): boolean {
+  return specialWords(name).length > 0
+}
 
 /**
  * The version we pick when a name doesn't say which: a plain, mainstream
@@ -152,7 +164,7 @@ export function mainstreamTrim(trims: readonly CatalogTrim[]): CatalogTrim | nul
   if (trims.length === 0) return null
   const score = (trim: CatalogTrim) =>
     (trim.confidence === "high" ? 0 : trim.confidence === "limited" ? 2 : 4) +
-    (SPECIAL_WORDS.test(normalizeName(trim.name)) ? 1 : 0)
+    (isSpecial(trim.name) ? 1 : 0)
   return [...trims].sort((left, right) => score(left) - score(right) || left.name.length - right.name.length || left.name.localeCompare(right.name))[0]
 }
 
@@ -218,6 +230,7 @@ const ALIASES: [RegExp, string][] = [
   [/(?<!mustang )\bmach e\b/g, "mustang mach e"],
   [/\bvette\b/g, "corvette"],
   [/\bgr 86\b/g, "gr86"],
+  [/\btesla (y|3|s|x)\b/g, "tesla model $1"],
 ]
 
 function applyAliases(text: string): string {
@@ -240,6 +253,7 @@ const VERSION_WORDS = new Set([
   "pro", "off", "road", "trail", "crew", "cab", "supercrew", "supercab", "quad", "double", "bed", "short", "box", "offroad",
   "sr", "sr5", "le", "xle", "xse", "se", "sel", "sle", "slt", "lt", "ls", "ltz", "lx", "ex", "exl", "l", "s", "sv", "sl", "gt",
   "rs", "ss", "st", "si", "rt", "gl", "gls", "glx", "xl", "xlt", "limited", "titanium", "adventure", "base", "plus",
+  "unlimited", "line", "1500", "2500", "3500",
 ])
 
 function looksLikeVersion(word: string): boolean {
@@ -315,7 +329,9 @@ function matchModel(catalog: VehicleCatalog, year: number, make: string | null, 
       break
     }
     if (make && typed.length >= 2) {
-      const starts = rows.filter((row) => row.modelCompact.startsWith(typed)).sort((left, right) => left.modelCompact.length - right.modelCompact.length)
+      const starts = rows
+        .filter((row) => row.modelCompact.startsWith(typed))
+        .sort((left, right) => Number(isSpecial(left.model)) - Number(isSpecial(right.model)) || left.modelCompact.length - right.modelCompact.length)
       if (starts.length > 0) result = { rows: starts, exact: false, used: count }
     }
   }
@@ -483,7 +499,10 @@ export function resolveCarInput(
   if (rest.length > 0) {
     const matching = trimsMatching(trims, rest)
     if (matching.length > 0) {
-      trimName = mainstreamTrim(matching)?.name ?? null
+      // "Camry LE" is the Camry LE, not the Camry Hybrid LE: only take a special version when its words were typed.
+      const typed = new Set(rest)
+      const plain = matching.filter((trim) => specialWords(trim.name).every((word) => typed.has(word) || word.split(" ").every((part) => typed.has(part))))
+      trimName = mainstreamTrim(plain.length > 0 ? plain : matching)?.name ?? null
     } else if (rest.length <= 3 && rest.every(looksLikeVersion)) {
       versionNote = `We don't list versions by that name for the ${understood}, so we used the usual one.`
       allUsed = false
@@ -594,11 +613,16 @@ export function searchCars(catalog: VehicleCatalog, year: number, text: string, 
 }
 
 export const POPULAR_GROUPS = [
-  { id: "firstCars", preset: "popular:first-cars", label: "Popular first cars", cars: FIRST_CARS },
-  { id: "suvs", preset: "popular:suvs", label: "Popular SUVs", cars: POPULAR_SUVS },
-  { id: "trucksAndFun", preset: "popular:trucks-and-fun", label: "Trucks and fun ones", cars: TRUCKS_AND_FUN },
-  { id: "starterMix", preset: "popular:starter-mix", label: "A starter mix: everyday cars, a sporty one, an electric one, a Jeep, and a pickup", cars: STARTER_MIX },
+  { id: "firstCars", preset: "popular:first-cars", words: "first cars", label: "Popular first cars", cars: FIRST_CARS },
+  { id: "suvs", preset: "popular:suvs", words: "SUVs", label: "Popular SUVs", cars: POPULAR_SUVS },
+  { id: "trucksAndFun", preset: "popular:trucks-and-fun", words: "trucks and fun ones", label: "Trucks and fun ones", cars: TRUCKS_AND_FUN },
+  { id: "starterMix", preset: "popular:starter-mix", words: "a starter mix", label: "A starter mix: everyday cars, a sporty one, an electric one, a Jeep, and a pickup", cars: STARTER_MIX },
 ] as const
+
+/** A preset in words: "popular:suvs" as "SUVs". */
+export function presetWords(preset: string): string {
+  return POPULAR_GROUPS.find((group) => group.preset === preset)?.words ?? preset
+}
 
 export const PRESET_NAMES: readonly string[] = POPULAR_GROUPS.map((group) => group.preset)
 
@@ -641,7 +665,7 @@ export function carLabel(pick: VehiclePick, sameNameInList = false): string {
   const name = `${pick.year} ${pick.make} ${pick.model}`
   const trim = shownTrim(pick.trim)
   if (!trim) return name
-  const special = SPECIAL_WORDS.test(normalizeName(trim))
+  const special = isSpecial(trim)
   if (!special && !sameNameInList) return name
   const model = compactName(pick.model)
   const words = trim.split(/\s+/)

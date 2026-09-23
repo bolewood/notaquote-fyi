@@ -18,7 +18,7 @@ import {
   VERSIONS,
   WHATIF_PARAMS,
 } from "./agent-api"
-import { PRESET_NAMES } from "./agent-cars"
+import { PRESET_NAMES, presetWords } from "./agent-cars"
 import { DISCLAIMER } from "./copy"
 import { COMPARE_LIMIT } from "./compare-list"
 import { FACTOR_BUNDLE, FACTOR_FORMULA, formatDollars, publishedFactorGroups } from "./factor-engine"
@@ -210,7 +210,7 @@ export function readyLinks(): string {
     const lines = PRESETS.flatMap((preset) =>
       (["added", "own"] as const).map((policy) => {
         const link = apiUrl("/compare", [["state", state.code], ["age", "16-18"], ["policy", policy], ["coverage", DEFAULT_SCENARIO.coverage], ["cars", preset]])
-        return `- ${preset.slice("popular:".length).replace(/-/g, " ")}, teen ${policy === "added" ? "added to a parent's policy" : "on their own policy"}: ${link}`
+        return `- ${presetWords(preset)}, teen ${policy === "added" ? "added to a parent's policy" : "on their own policy"}: ${link}`
       }),
     )
     return `### ${state.name} (${state.code})

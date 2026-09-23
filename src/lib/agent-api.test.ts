@@ -561,3 +561,38 @@ test("llms-full.txt has ready links for every state", () => {
   for (const path of links.filter((_, index) => index % 17 === 0)) ok(call(path))
   assert.match(ready, /### Texas \(TX\)/)
 })
+
+// ---------------------------------------------------------------------------
+// Second review
+
+test("related links keep years licensed when it isn't the default", () => {
+  const compare = ok(handleCompare(catalog, q("state=OH&age=30&years=1-3&cars=2022-honda-civic-4dr")))
+  assert.ok(compare.related.length > 0)
+  for (const link of compare.related) {
+    assert.match(link.url, /years=1-3/)
+    assert.equal(ok(call(link.url)).driver.years, "1-3")
+  }
+  const whatIf = ok(handleWhatIf(catalog, q("age=30&years=4-9&toDeductible=500")))
+  for (const link of whatIf.related) assert.match(link.url, /years=4-9/)
+  const plain = ok(handleCompare(catalog, q("state=OH&age=30&cars=2022-honda-civic-4dr")))
+  for (const link of plain.related) assert.doesNotMatch(link.url, /years=/)
+})
+
+test("presets read as words", () => {
+  const body = ok(handleCompare(catalog, q("cars=popular:first-cars")))
+  const descriptions = body.related.map((link: Body) => link.description).join(" ")
+  assert.match(descriptions, /list of SUVs/)
+  assert.match(descriptions, /trucks and fun ones/)
+  assert.match(llmsFullText(), /- SUVs, teen added/)
+})
+
+test("performance and hybrid versions aren't picked unless asked for", () => {
+  assert.equal(resolves("2022 VW Golf").pick.model, "Golf GTI")
+  assert.equal(resolves("2022 Porsche 911").pick.trim, "911 Carrera")
+  assert.equal(resolves("2022 BMW X5").pick.trim, "X5 xDrive40i")
+  assert.equal(resolves("2022 Toyota Camry LE").pick.trim, "Camry LE/SE")
+  assert.equal(resolves("2022 Toyota Camry Hybrid LE").pick.trim, "Camry Hybrid LE")
+  assert.equal(resolves("2022 Tesla Y").pick.model, "Model Y")
+  assert.equal(resolves("2022 Jeep Wrangler Unlimited").pick.model, "Wrangler")
+  assert.equal(resolves("2022 Ram 1500").pick.model, "1500")
+})

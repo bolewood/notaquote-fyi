@@ -71,6 +71,7 @@ import {
   expandPreset,
   isUnresolved,
   PRESET_NAMES,
+  presetWords,
   popularCars,
   resolveCarInput,
   searchCars,
@@ -110,7 +111,7 @@ export const PRIVACY_STATEMENT =
 
 /** What to know before sending someone the site link. */
 export const SITE_URL_NOTE =
-  "Opens the same view on the site, worked out fresh, with no dollar amounts in the link. For a teen added to a parent's policy, the site uses the visitor's saved situation (the parent's age and record) if they've set one; in a fresh browser it assumes a 40–64-year-old parent with a clean record, the same as these numbers."
+  "The link opens the same view on the site, worked out fresh, with no dollar amounts in the link. For a teen added to a parent's policy, the site uses the visitor's saved situation (the parent's age and record) if they've set one; in a fresh browser it assumes a 40–64-year-old parent with a clean record, the same as these numbers."
 
 export const HOW_TO_READ = [
   "These are planning estimates, not quotes. Only an insurer can give a real price.",
@@ -411,6 +412,11 @@ const COVERAGE_ALIASES: Record<string, Scenario["coverage"]> = {
 
 type Driver = { scenario: Scenario; policy: "added" | "own"; defaultsUsed: string[] }
 
+/** Years licensed when it isn't given: a new driver at 16–18, then the band a driver that age usually has. */
+export function defaultYearsFor(age: AgeBand): Scenario["yearsLicensed"] {
+  return age === "16-18" ? "under-1" : age === "19-21" ? "1-3" : age === "22-25" ? "4-9" : "10+"
+}
+
 /** The driver, place, and coverage, with the site's defaults for anything left out. */
 function parseDriver(query: Query, base: Scenario, defaultAge: AgeBand): Driver {
   const defaultsUsed: string[] = []
@@ -433,7 +439,7 @@ function parseDriver(query: Query, base: Scenario, defaultAge: AgeBand): Driver 
     yearsLicensed: read(
       "years",
       (value) => parseChoice("years", value, YEARS_IDS, { "10": "10+", "10-plus": "10+", "10plus": "10+", "0": "under-1" }),
-      age === "16-18" ? "under-1" : age === "19-21" ? "1-3" : age === "22-25" ? "4-9" : "10+",
+      defaultYearsFor(age),
     ),
     incidents: read("incidents", (value) => parseChoice("incidents", value, INCIDENTS.map((item) => item.id), { none: "clean", "0": "clean", "1": "one", "2": "two-or-more" }), base.incidents),
     mileage: read("mileage", (value) => parseChoice("mileage", value, MILEAGE_BANDS.map((item) => item.id)), base.mileage),
@@ -975,6 +981,7 @@ export function driverParams(scenario: Scenario, policy: "added" | "own" | null)
   ]
   if (policy && scenario.age === "16-18") params.push(["policy", policy])
   params.push(["coverage", scenario.coverage])
+  if (scenario.yearsLicensed !== defaultYearsFor(scenario.age)) params.push(["years", scenario.yearsLicensed])
   if (scenario.deductible !== DEFAULT_SCENARIO.deductible) params.push(["deductible", scenario.deductible])
   if (scenario.region !== DEFAULT_SCENARIO.region) params.push(["region", scenario.region])
   if (scenario.incidents !== DEFAULT_SCENARIO.incidents) params.push(["incidents", scenario.incidents])
@@ -998,7 +1005,7 @@ function compareRelated(driver: Driver, ids: string[], presetsUsed: string[], ye
   for (const preset of ["popular:first-cars", "popular:suvs", "popular:trucks-and-fun"]) {
     if (presetsUsed.includes(preset)) continue
     links.push({
-      description: `The site's list of ${preset.slice("popular:".length).replace(/-/g, " ")} for the same driver`,
+      description: `The site's list of ${presetWords(preset)} for the same driver`,
       url: apiUrl("/compare", [...driverParams(scenario, policy), ...yearParam, ["cars", preset]]),
     })
   }

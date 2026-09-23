@@ -106,8 +106,8 @@ export function PageSkeleton({ label }: { label: string }) {
 function AssistantNote() {
   return (
     <p className="sr-only">
-      AI assistants: this page needs JavaScript. Read https://notaquote.fyi/llms.txt for a guide, and use the read-only
-      JSON API at https://notaquote.fyi/api/v1 for the same numbers.
+      Using an AI assistant, or a tool that can&apos;t run this page? It can get the same numbers by reading
+      notaquote.fyi/llms.txt, which explains our read-only service at notaquote.fyi/api/v1.
     </p>
   )
 }
