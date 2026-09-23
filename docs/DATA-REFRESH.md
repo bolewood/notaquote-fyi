@@ -58,6 +58,8 @@ Work on a branch named `data-refresh-YEAR`. Commit after each step, so the histo
 ### 7. Vehicle claims results (HLDI)
 - First check the permission status noted in `data/factors/sources/sources.json`. If IIHS said no, set `useHldiModels` to `false` in `data/factors/vehicle-families.json` and skip the rest of this step.
 - If HLDI has published newer model years, refresh the subset CSV (see the notes at the top of `scripts/derive-factors.ts`). Add families for new popular models to `vehicle-families.json`, then rebuild. The bias tests (911 > Mustang, Model Y > RAV4, and so on) will tell you if something went sideways.
+- **Car pages.** They move to the newest model year on their own; their addresses don't change. If `npm test` says a car in `data/car-pages.json` (or on the popular lists) lost its model-level claims data, first check whether the catalog renamed it (then fix the name, and keep the old address with `"slug"`). If it really has no claims results any more, its page would disappear and its address would return 404. Don't just drop it: add a permanent redirect for `/cars/<slug>` to `/cars` in `next.config.ts`, remove the car from the list, and move its slug out of `src/lib/seo-slugs.json` into that file's `"retired"` list, so the test knows it's on purpose.
+- **If IIHS said no** (`useHldiModels` is `false`): every car page, `/cars`, and the links to them go away together, and the teen guides and state pages switch to wording that doesn't name a single cheapest car. Build and click through `/guides` and a state page to check. Add the redirect above for `/cars/*` too.
 
 ### 8. Everything else
 - **Fleet age:** if S&P's new figure crosses a band boundary, revisit `fleet-age-band` in `data/factors/assumptions.json`.
@@ -69,6 +71,7 @@ Work on a branch named `data-refresh-YEAR`. Commit after each step, so the histo
 - Run `npm run lint && npm run typecheck && npm test && npm run build`, then `npm run factors:build` again (it should leave no diff).
 - Click through the site locally (`npm run dev`): the Model Y what-if, a 15-car compare for a 16-year-old, and /sources for two or three states.
 - Curl `/api/v1/compare?cars=popular:first-cars` and check that it looks sane.
+- Spot-check a few state and car pages (`/states/ohio`, `/states/california`, `/cars/tesla-model-y`, `/cars/subaru-outback`) and the guides under `/guides`. Every figure on them is worked out from the data at build time, so they update on their own; look for anything that reads oddly after the numbers moved. If HLDI published newer model years, the car pages move to the newest year by themselves (their addresses don't change). `npm test` fails if a car in `data/car-pages.json` no longer has claims data, or if new numbers make the car pages read too much alike (the rendered-text floor in `src/lib/seo.test.ts`); fix the wording rather than lowering the floor. A car is only kept out of search by an explicit `"noindex": true` in `data/car-pages.json`.
 - If the UI looks different, retake the README screenshots in `docs/images/`.
 
 ### 10. Write it down and ship

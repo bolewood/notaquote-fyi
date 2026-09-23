@@ -12,7 +12,7 @@
     "start": "next start --hostname 127.0.0.1 --port 41731",
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
-    "test": "tsx --test src/lib/catalog-match.test.ts src/lib/catalog.test.ts src/lib/catalog-class.test.ts src/lib/vin-lookup.test.ts src/lib/state-rules.test.ts src/lib/state-baselines.test.ts src/lib/factor-engine.test.ts src/lib/factor-derivation.test.ts src/lib/share-link.test.ts src/lib/compare-list.test.ts src/lib/counts.test.ts src/lib/suggest-fix.test.ts src/lib/situation.test.ts src/lib/car-search.test.ts src/lib/pricing.test.ts src/lib/compare-table.test.ts src/lib/format.test.ts src/lib/help-wanted.test.ts src/lib/agent-api.test.ts",
+    "test": "tsx --test src/lib/catalog-match.test.ts src/lib/catalog.test.ts src/lib/catalog-class.test.ts src/lib/vin-lookup.test.ts src/lib/state-rules.test.ts src/lib/state-baselines.test.ts src/lib/factor-engine.test.ts src/lib/factor-derivation.test.ts src/lib/share-link.test.ts src/lib/compare-list.test.ts src/lib/counts.test.ts src/lib/suggest-fix.test.ts src/lib/situation.test.ts src/lib/car-search.test.ts src/lib/pricing.test.ts src/lib/compare-table.test.ts src/lib/format.test.ts src/lib/help-wanted.test.ts src/lib/agent-api.test.ts src/lib/seo.test.ts",
     "catalog:build": "tsx scripts/build-vehicle-catalog.ts",
     "factors:build": "tsx scripts/derive-factors.ts"
   },

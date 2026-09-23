@@ -193,6 +193,7 @@ Answers depend only on the inputs and the data versions, so they're cached for a
 - Every source: ${url("/sources")}
 - The code and data: https://github.com/bolewood/notaquote-fyi
 - The site: ${url("/")} (What-if) and ${url("/compare")} (Compare cars)
+- Pages for people: one per state (${url("/states")}, like ${url("/states/ohio")}), one per popular car (${url("/cars")}, like ${url("/cars/toyota-rav4")}), and guides (${url("/guides")}). They're human-readable summaries for one typical driver; for anyone's own question, use the API above.
 `
 }
 

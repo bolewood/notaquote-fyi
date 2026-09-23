@@ -58,6 +58,11 @@ export function rangeWords(low: number, high: number): string {
   return `roughly ${rangeDollars(low, high)}`
 }
 
+/** Two yearly figures this close read as "about the same": under $50, or under 3%. */
+export function aboutTheSame(delta: number, base: number): boolean {
+  return Math.abs(delta) < 50 || Math.abs(delta) < Math.abs(base) * 0.03
+}
+
 /** A yearly difference in a sentence: "$630 more a year", "$90 less a year", or "about the same". */
 export function differenceWords(delta: number, per: "year" | "month" = "year"): string {
   const rounded = per === "year" ? shownYearly(delta) : Math.sign(delta) * shownMonthly(Math.abs(delta))

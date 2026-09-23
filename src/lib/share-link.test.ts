@@ -195,3 +195,20 @@ test("the What-if page's hand-off to Compare is marked, so it isn't treated as s
   const shared = decodeShareSearch(encodeSharePath({ page: "/compare", scenario: MOLLY, teenOnParentPolicy: false, cars: [CARS[0]] }))
   assert.equal(shared.status === "ok" && shared.via, null)
 })
+
+test("links from the site's own pages are marked, and say where they came from", () => {
+  const fromPage = decodeShareSearch(
+    encodeSharePath({ page: "/", scenario: MOLLY, teenOnParentPolicy: true, next: { ...MOLLY, age: "16-18", yearsLicensed: "under-1" }, via: "page" }),
+  )
+  assert.equal(fromPage.status, "ok")
+  if (fromPage.status !== "ok") return
+  assert.equal(fromPage.via, "page")
+  assert.match(shareArrivalNotes(fromPage)[0], /from the page you came from/)
+  assert.doesNotMatch(shareArrivalNotes(fromPage).join(" "), /Someone shared/)
+
+  const add = decodeShareSearch(encodeSharePath({ page: "/compare", scenario: MOLLY, teenOnParentPolicy: true, cars: [CARS[0]], via: "add" }))
+  assert.equal(add.status === "ok" && add.via, "add")
+  // Anything else in "via" is ignored, not trusted.
+  const odd = decodeShareSearch(`${encodeSharePath({ page: "/compare", scenario: MOLLY, teenOnParentPolicy: true, cars: [CARS[0]] })}&via=elsewhere`)
+  assert.equal(odd.status === "ok" && odd.via, null)
+})

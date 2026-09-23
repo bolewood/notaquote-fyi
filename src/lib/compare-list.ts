@@ -199,17 +199,25 @@ export function carryNote(
   after: CompareList,
   cars: readonly Omit<ComparedCar, "starred">[],
   name: (car: Omit<ComparedCar, "starred">) => string,
+  /** False when only cars came over (a car page's "Add it to a comparison"), not a driver. */
+  withDriver = true,
 ): string {
   const listed = new Set(after.cars.map((car) => carKey(car)))
   const arrived = cars.filter((car) => listed.has(carKey(car))).map(name)
   const missing = cars.filter((car) => !listed.has(carKey(car))).map(name)
   const join = (names: string[]) =>
     names.length <= 1 ? (names[0] ?? "") : `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`
-  const parts = [
-    arrived.length > 0
-      ? `We brought over the driver from your what-if, and the ${join(arrived)}.`
-      : "We brought over the driver from your what-if.",
-  ]
+  const parts = withDriver
+    ? [
+        arrived.length > 0
+          ? `We brought over the driver from your what-if, and the ${join(arrived)}.`
+          : "We brought over the driver from your what-if.",
+      ]
+    : arrived.length === 0
+      ? []
+      : after.cars.length > arrived.length
+        ? [`The ${join(arrived)} ${arrived.length === 1 ? "is" : "are"} on your list, priced for the same driver as the rest.`]
+        : [`The ${join(arrived)} ${arrived.length === 1 ? "is" : "are"} on your list. Check who's driving, then add more cars to compare.`]
   if (missing.length > 0) {
     parts.push(`Your list was full, so the ${join(missing)} didn't fit. Remove a car to make room.`)
   }

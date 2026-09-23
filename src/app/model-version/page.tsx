@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { pageMetadata } from "@/lib/site-meta"
 import Link from "next/link"
 import { RecordTrustView } from "@/components/record-trust-view"
 import { TrustArticle } from "@/components/trust-article"
@@ -6,15 +7,33 @@ import { DATA_UPDATED, longDate, MODEL_VERSION } from "@/lib/copy"
 import { CATALOG_RETRIEVED_ON, CATALOG_YEAR_MAX, CATALOG_YEAR_MIN } from "@/lib/catalog-meta"
 import { fullySourcedStateRules, sourcedStateRules, STATE_RULES_CHECKED_ON } from "@/lib/state-rules"
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "What's changed",
-  description: "Every change to the math or the data, in plain words.",
-}
+  description: "Every change to the math or the data, in plain words, newest first.",
+  path: "/model-version",
+})
 
 type Day = { date: string; items: { title: string; body: React.ReactNode }[] }
 
 export default function ModelVersionPage() {
   const days: Day[] = [
+    {
+      date: longDate("2026-09-23"),
+      items: [
+        {
+          title: "A page for every state, popular cars, and two guides",
+          body: (
+            <p>
+              Each state and DC now has <Link href="/states">its own page</Link>: the typical price there, how it compares
+              with the neighbors, the least insurance the law asks for, and what a new teen driver adds. About 120 popular
+              cars have <Link href="/cars">a page</Link> too, with why each costs what it does, and there are two{" "}
+              <Link href="/guides">guides</Link> for families with a new driver. The numbers come from the same math as the
+              rest of the site; nothing about the math changed.
+            </p>
+          ),
+        },
+      ],
+    },
     {
       date: longDate(STATE_RULES_CHECKED_ON),
       items: [

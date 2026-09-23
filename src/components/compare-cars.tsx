@@ -68,6 +68,7 @@ import { AGE_BANDS, situationSentence, shortVehicleLabel, stateName, withTeenFla
 import { encodeSharePath, SHARE_INVALID_NOTE, shareArrivalNotes } from "@/lib/share-link"
 import { readShareArrival, useClearShareFromAddress, useMounted } from "@/lib/use-share-arrival"
 import { DEFAULT_SITUATION } from "@/lib/situation"
+import { useCarPagePath } from "@/lib/use-car-page-path"
 import { useCatalog } from "@/lib/use-catalog"
 import { useCompareList, useSituation } from "@/lib/use-stored"
 import { cn } from "cn"
@@ -94,23 +95,34 @@ const SORT_LABELS: Record<SortKey, string> = {
 type Arrival = {
   /** A list someone shared, shown until the visitor decides what to do with it. */
   shared: CompareList | null
-  /** Cars handed over from the What-if page, added to the visitor's own list. */
-  carry: { driver: Scenario; teenOnParentPolicy: boolean; cars: CompareList["cars"] } | null
+  /** A guide's cars for a new teen: shown for a teen in the visitor's own state, like a shared list. */
+  teenCars: CompareList["cars"] | null
+  /**
+   * Cars handed over from the What-if page (with its driver), or from a car
+   * page (driver null: keep the visitor's own), added to the visitor's own list.
+   */
+  carry: { driver: Scenario | null; teenOnParentPolicy: boolean | null; cars: CompareList["cars"] } | null
   notes: string[]
   present: boolean
 }
 
 function readArrival(): Arrival {
   const decoded = readShareArrival()
-  if (decoded.status === "absent") return { shared: null, carry: null, notes: [], present: false }
-  if (decoded.status === "invalid" || !decoded.cars) return { shared: null, carry: null, notes: [SHARE_INVALID_NOTE], present: true }
+  if (decoded.status === "absent") return { shared: null, teenCars: null, carry: null, notes: [], present: false }
+  if (decoded.status === "invalid" || !decoded.cars) return { shared: null, teenCars: null, carry: null, notes: [SHARE_INVALID_NOTE], present: true }
+  if (decoded.via === "teen") return { shared: null, teenCars: decoded.cars, carry: null, notes: [], present: true }
   if (decoded.via === "whatif") {
     return {
       shared: null,
+      teenCars: null,
       carry: { driver: decoded.scenario, teenOnParentPolicy: decoded.teenOnParentPolicy, cars: decoded.cars },
       notes: [],
       present: true,
     }
+  }
+  if (decoded.via === "add") {
+    // A car page's "Add it to a comparison": only the car counts; the visitor keeps their own driver.
+    return { shared: null, teenCars: null, carry: { driver: null, teenOnParentPolicy: null, cars: decoded.cars }, notes: [], present: true }
   }
   const shared: CompareList = {
     driver: decoded.scenario,
@@ -118,7 +130,7 @@ function readArrival(): Arrival {
     useMyPremium: false,
     cars: decoded.cars,
   }
-  return { shared, carry: null, notes: shareArrivalNotes(decoded), present: true }
+  return { shared, teenCars: null, carry: null, notes: shareArrivalNotes(decoded), present: true }
 }
 
 /** "2022 Honda Civic" and "Civic 4Dr": show the version only when it adds something. */
@@ -150,12 +162,23 @@ function CompareCarsReady() {
   const catalogLoad = useCatalog()
   const catalog = catalogLoad.catalog
 
-  const [linked, setLinked] = useState<CompareList | null>(initial.shared)
-  const [carried] = useState(() =>
-    initial.carry
-      ? carryFromWhatIf(stored.value ?? defaultCompareFor(situationStore.value), initial.carry.driver, initial.carry.teenOnParentPolicy, initial.carry.cars)
-      : null,
-  )
+  const [linked, setLinked] = useState<CompareList | null>(() => {
+    if (!initial.teenCars) return initial.shared
+    // A new 16-year-old added to the visitor's policy, where they live (their list's or situation's state).
+    const base = stored.value?.driver ?? situationStore.value?.scenario ?? DEFAULT_SITUATION.scenario
+    return {
+      driver: withTeenFlag({ ...base, age: "16-18", yearsLicensed: "under-1" }),
+      teenOnParentPolicy: true,
+      useMyPremium: false,
+      cars: initial.teenCars,
+    }
+  })
+  const [carried] = useState(() => {
+    if (!initial.carry) return null
+    const base = stored.value ?? defaultCompareFor(situationStore.value)
+    const { driver, teenOnParentPolicy, cars } = initial.carry
+    return driver && teenOnParentPolicy !== null ? carryFromWhatIf(base, driver, teenOnParentPolicy, cars) : addCars(base, cars).list
+  })
   const write = stored.write
   useEffect(() => {
     // The What-if page handed over its cars: they're the visitor's own, so keep them.
@@ -169,7 +192,13 @@ function CompareCarsReady() {
   const [driverOpen, setDriverOpen] = useState(false)
 
   const [notes, setNotes] = useState(() =>
-    carried && initial.carry ? [carryNote(carried, initial.carry.cars, (car) => shortVehicleLabel(car))] : initial.notes,
+    initial.teenCars
+      ? [
+          `These are the cars from the guide, priced for a new 16-year-old added to your policy in ${stateName(linked?.driver.state ?? DEFAULT_SITUATION.scenario.state)}. Nothing of yours changes until you choose.`,
+        ]
+      : carried && initial.carry
+      ? [carryNote(carried, initial.carry.cars, (car) => shortVehicleLabel(car), initial.carry.driver !== null)]
+      : initial.notes,
   )
   const [sort, setSort] = useState<SortState>(DEFAULT_SORT)
   const [maxText, setMaxText] = useState("")
@@ -1090,6 +1119,7 @@ function SortHeader({
 }
 
 function RowDetails({ row, gap }: { row: CompareRow; gap: string | null }) {
+  const page = useCarPagePath(row.car.make, row.car.model)
   return (
     <div className="grid gap-2 text-sm leading-relaxed">
       <p>
@@ -1105,6 +1135,13 @@ function RowDetails({ row, gap }: { row: CompareRow; gap: string | null }) {
           ))}
         </ul>
       </div>
+      {page ? (
+        <p>
+          <Link href={page} className="link">
+            More about the {row.car.make} {row.car.model}
+          </Link>
+        </p>
+      ) : null}
       <p>
         <VehicleFixLink carName={row.name} shown={row.vehicleShown} />
       </p>

@@ -1,4 +1,7 @@
 import type { Metadata } from "next"
+import Link from "next/link"
+import { JsonLdScript } from "@/components/json-ld"
+import { pageMetadata, stateDatasetsJsonLd } from "@/lib/site-meta"
 import { RecordTrustView } from "@/components/record-trust-view"
 import { StateBaselinesTable } from "@/components/state-baselines-table"
 import { StateRulesTable } from "@/components/state-rules-table"
@@ -11,10 +14,11 @@ import { CONTRIBUTING_URL, GITHUB_REPO_URL, suggestFixUrl } from "@/lib/suggest-
 import { StatePicker } from "@/components/state-picker"
 import { ChevronDown, HandHeart } from "lucide-react"
 
-export const metadata: Metadata = {
-  title: "Sources",
-  description: "Every public source behind the numbers, what we use it for, and when we last checked it.",
-}
+export const metadata: Metadata = pageMetadata({
+  title: "Sources: where every number comes from",
+  description: "Every public source behind the numbers, what we use it for, and when we last checked it, plus each state's typical price and minimum coverage.",
+  path: "/sources",
+})
 
 type Listed = { id: string; publisher: string; title: string; url: string; checked: string; usedFor: string }
 
@@ -96,6 +100,7 @@ export default function SourcesPage() {
       wide
     >
       <RecordTrustView />
+      <JsonLdScript data={stateDatasetsJsonLd()} />
       <div className="max-w-2xl space-y-4">
         <p>
           Where we couldn&apos;t find a source, we say so right next to the number and widen the range. Further down, pick
@@ -174,7 +179,8 @@ export default function SourcesPage() {
       <h2 id="state-baselines">Your state</h2>
       <p id="state-rules" className="max-w-2xl">
         The typical price is what an average driver paid for one car in 2023. The minimums are the least insurance the law
-        asks you to carry: not a price, and not advice about how much to buy.
+        asks you to carry: not a price, and not advice about how much to buy. Each state also has{" "}
+        <Link href="/states">its own page</Link>, with what a new teen driver adds there.
       </p>
       <div className="max-w-2xl">
         <StatePicker />

@@ -1,11 +1,14 @@
 import type { Metadata } from "next"
 import { CompareCars } from "@/components/compare-cars"
+import { pageMetadata } from "@/lib/site-meta"
 
-export const metadata: Metadata = {
-  title: "Compare cars",
+export const metadata: Metadata = pageMetadata({
+  title: "Compare what cars cost to insure",
   description:
-    "Put up to 15 cars side by side and see roughly what each would cost to insure for the same driver. Sort them, star favorites, and download a spreadsheet.",
-}
+    "Put up to 15 cars side by side and see roughly what each costs to insure for the same driver, like a new 16-year-old. Sort, star, and download.",
+  path: "/compare",
+  image: null,
+})
 
 /**
  * A static page: share links keep their data after the "#", which never

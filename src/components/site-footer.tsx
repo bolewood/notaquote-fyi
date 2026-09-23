@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { MODELS_ENABLED } from "@/lib/car-page-links"
 import { DATA_UPDATED, PUBLISHER } from "@/lib/copy"
 import { GITHUB_REPO_URL } from "@/lib/suggest-fix"
 
@@ -8,6 +9,9 @@ const GROUPS: { heading: string; links: { href: string; label: string; external?
     links: [
       { href: "/", label: "What-if" },
       { href: "/compare", label: "Compare cars" },
+      { href: "/states", label: "States" },
+      ...(MODELS_ENABLED ? [{ href: "/cars", label: "Cars" }] : []),
+      { href: "/guides", label: "Guides" },
     ],
   },
   {

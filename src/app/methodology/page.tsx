@@ -1,4 +1,6 @@
 import type { Metadata } from "next"
+import { MODELS_ENABLED } from "@/lib/car-page-links"
+import { pageMetadata } from "@/lib/site-meta"
 import Link from "next/link"
 import { FactorTables } from "@/components/factor-tables"
 import { RecordTrustView } from "@/components/record-trust-view"
@@ -11,10 +13,11 @@ import { DEFAULT_SCENARIO, stateName } from "@/lib/scenario"
 import { suggestFixUrl } from "@/lib/suggest-fix"
 import { ChevronDown } from "lucide-react"
 
-export const metadata: Metadata = {
-  title: "How it works",
+export const metadata: Metadata = pageMetadata({
+  title: "How we work out the numbers",
   description: "Here's how we got the numbers: a starting price, a few adjustments, and a range. Every piece has a public source, or says it doesn't.",
-}
+  path: "/methodology",
+})
 
 /** How many of the adjustments come from a public source, and how many are our own estimate. */
 function basisCounts() {
@@ -128,6 +131,35 @@ export default function MethodologyPage() {
         companies would land, with our best guess marked in the middle. The more we had to estimate ourselves, the wider it
         gets. Real quotes can still land outside it.
       </p>
+
+      <h2 id="car-pages">The car and state pages</h2>
+      <p>
+        The pages for {MODELS_ENABLED ? <Link href="/cars">each car</Link> : "each car"} and <Link href="/states">each state</Link> use this same math,
+        worked out when the site is built, for one typical driver: a 45-year-old (our 40–64 group) with a clean record,
+        7,500–15,000 miles a year, in the suburbs, with full coverage and a $1,000 deductible.
+      </p>
+      <ul className="bullets">
+        <li>
+          Car pages start from the national typical price: NAIC&apos;s 2023 average for full coverage across the country,
+          brought up to today with the government&apos;s price index for car insurance, which is only a rough guide.
+        </li>
+        <li>
+          Each state moves every car&apos;s price by the same share, so a car&apos;s place against other cars is the same
+          everywhere. State pages use that state&apos;s typical price.
+        </li>
+        <li>
+          We haven&apos;t found a public source for how a car&apos;s age changes the price, so that part is our estimate.
+          The typical price stands for a car about 8 to 12 years old; a newer one costs more to replace.
+        </li>
+        <li>
+          Companies&apos; prices differ a lot, even for the same driver and car, so real quotes can land well above or
+          below any range here.
+        </li>
+        <li>
+          Teen cars are 2022 models, about the age of a typical first car. What adding a teen costs comes from
+          California&apos;s published prices, so its range is wide everywhere.
+        </li>
+      </ul>
 
       <h2>What&apos;s sourced, and what&apos;s our estimate</h2>
       <p>We label every adjustment one of three ways, right next to the number:</p>
