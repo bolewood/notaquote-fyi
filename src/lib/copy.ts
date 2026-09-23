@@ -5,6 +5,9 @@ import { longDate } from "./format"
 
 export const PUBLISHER = "Bolewood Group, LLC"
 
+/** The live site, for links that leave it (the API's siteUrl, llms.txt, the sitemap). */
+export const SITE_ORIGIN = "https://notaquote.fyi"
+
 export const MODEL_VERSION = "0.2.0"
 
 export const DATA_BUNDLE_VERSION = factorBundle.version

@@ -66,6 +66,7 @@ export function HomeSkeleton() {
         </div>
         <div className="grid justify-items-center gap-2 border-t border-border px-5 py-6 text-center sm:px-6">
           <p className="py-8 text-sm text-muted-foreground">Getting your numbers ready…</p>
+          <AssistantNote />
         </div>
       </section>
       <section className="card p-5 sm:p-6" aria-label="Your situation now">
@@ -92,6 +93,21 @@ export function PageSkeleton({ label }: { label: string }) {
     <div className="mt-6 grid items-start gap-5 lg:mt-8 lg:grid-cols-[minmax(0,4fr)_minmax(0,9fr)] lg:gap-6" aria-busy="true" aria-label={label}>
       <div className="card h-96 animate-pulse" />
       <div className="card h-[36rem] animate-pulse" />
+      <AssistantNote />
     </div>
+  )
+}
+
+/**
+ * For AI assistants and other readers that don't run the page's code: where
+ * to get the same numbers. Hidden from sighted visitors, and gone once the
+ * page has loaded.
+ */
+function AssistantNote() {
+  return (
+    <p className="sr-only">
+      Using an AI assistant, or a tool that can&apos;t run this page? It can get the same numbers by reading
+      notaquote.fyi/llms.txt, which explains our read-only service at notaquote.fyi/api/v1.
+    </p>
   )
 }

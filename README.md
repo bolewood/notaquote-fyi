@@ -16,6 +16,20 @@ A free, open-source way to see what a new car, a teen driver, or a move would do
 
 **See how we got it.** Every estimate shows its starting price, each adjustment, and the public source behind it. The site's How it works and Sources pages list every number and every source.
 
+## For AI assistants
+
+Ask your AI assistant to read [notaquote.fyi/llms.txt](https://notaquote.fyi/llms.txt). It explains how to use a small read-only JSON API at [`/api/v1`](https://notaquote.fyi/api/v1) that runs the same math as the site, with recipes for the common questions ("pick five cars for our 16-year-old", "what if I buy a Model Y", "how do two states compare"). For example:
+
+```
+https://notaquote.fyi/api/v1/compare?state=IL&age=16-18&policy=added&cars=popular:first-cars
+```
+
+- **Same numbers as the site.** Every figure comes from the same engine and is rounded the same way, and each answer links back to the same comparison on the site.
+- **Nothing personal goes in.** The only inputs are a state, a few bands (age, coverage, deductible, and so on), and car names. There's no place to send a premium, a VIN, a ZIP code, or a name, and we turn away requests that plainly include one. We don't store what's asked. Our host keeps its standard request logs, and answers are cached by their URL for up to a day.
+- **Still not a quote.** Every answer carries the ranges, where the numbers start, and the one-line disclaimer.
+
+The API lives in `src/lib/agent-api.ts` (with `agent-cars.ts` for car names and ids, and `agent-docs.ts` for `/llms.txt` and `/llms-full.txt`); the routes are in `src/app/api/v1/`.
+
 ## Why it exists
 
 Car insurance prices depend on a handful of big things: who's driving, where, what car, and how much coverage. A lot of what's publicly known about those things is scattered across state insurance department guides, statutes, and government datasets, often in PDFs that few people ever read. NotAQuote.FYI pulls that public information into one place and turns it into something you can play with: change the car, the driver, or the coverage, and see roughly what moves.
@@ -29,6 +43,7 @@ It is not an insurance company, agent, or broker, and it doesn't sell anything o
 - **No account, and nothing to sign up for.**
 - **Your inputs stay in your browser.** The math runs on your device. We don't collect or store your answers.
 - **One exception, and only if you use it:** if you type in a VIN, your browser sends it straight to NHTSA's free vehicle decoder to look up the car. We don't keep it.
+- **AI assistants are the one other difference.** What an assistant asks the read-only API does reach our host; see [For AI assistants](#for-ai-assistants).
 - **No cookies, ad trackers, or analytics scripts.**
 - **Share links.** The link carries your choices, not our estimates. It includes what you pay only if you check the box. It all sits after the `#` in the address, which browsers don't send to any server.
 
@@ -61,7 +76,7 @@ Every dollar figure on the site comes from one set of math that runs in your bro
 
 | Path | What's in it |
 | --- | --- |
-| `src/app/` | The pages: the What-if page (`page.tsx`), Compare cars, and the explainer pages (how it works, sources, privacy, and so on). The What-if tool itself is `src/components/calculator.tsx`. |
+| `src/app/` | The pages: the What-if page (`page.tsx`), Compare cars, and the explainer pages (how it works, sources, privacy, and so on). The What-if tool itself is `src/components/calculator.tsx`. The read-only API for AI assistants is in `api/v1/`, and its guides are `llms.txt` and `llms-full.txt`. |
 | `src/components/` | The building blocks of the interface. |
 | `src/lib/` | The logic: the factor engine (`factor-engine.ts`), state rules (`state-rules.ts`), typical premium by state (`state-baselines.ts`), scenario options (`scenario.ts`), the vehicle catalog, share links, "Suggest a fix" links (`suggest-fix.ts`), and the tests (`*.test.ts`). |
 | `src/data/` | The factor bundle and the list of sources, as JSON. |

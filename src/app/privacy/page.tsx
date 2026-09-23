@@ -13,7 +13,7 @@ export default function PrivacyPage() {
   return (
     <TrustArticle
       title="Privacy"
-      lead={`The short version: what you type stays on your device, except a VIN if you choose to look one up. There's no account, no tracking, and nothing to sell. ${PUBLISHER} publishes this site and never sees your answers.`}
+      lead={`The short version: what you type stays on your device, except a VIN if you choose to look one up. There's no account, no tracking, and nothing to sell. ${PUBLISHER} publishes this site and never sees what you type into it. An AI assistant using our read-only service is the one difference; see below.`}
     >
       <h2>What we don&apos;t ask for</h2>
       <p>
@@ -68,6 +68,16 @@ export default function PrivacyPage() {
       <p>
         No cookies, ad trackers, analytics scripts, or session recording. The only counts are the simple tallies below, kept
         in this browser and never sent. Each one records that something happened, never what you chose or any amount.
+      </p>
+
+      <h2>AI assistants</h2>
+      <p>
+        An AI assistant can&apos;t run this page, so there&apos;s a small read-only service it can ask instead (see{" "}
+        <a href="/llms.txt">notaquote.fyi/llms.txt</a>). Unlike the page, what it asks does reach our host. It only takes
+        a state, a few choices like an age band or coverage level, and car names. There&apos;s no place to send a premium,
+        a VIN, a ZIP code, or a name, and we turn away requests that plainly include one. We don&apos;t store what it
+        asks. Our host keeps its standard request logs, and answers are saved by their web address for up to a day so
+        repeat questions are quick.
       </p>
 
       <h2>Telling us about a problem</h2>
