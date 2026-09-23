@@ -13,7 +13,10 @@ import slugFile from "./seo-slugs.json"
 import { handleCompare } from "./agent-api"
 import { SERVER_CATALOG as catalog } from "./agent-catalog"
 import { carId } from "./agent-cars"
-import { becauseWords, CAR_PAGE_BAR, carContent, carMainText, carUniqueness, noindexCarSlugs, vsAverageWords } from "./car-content"
+import { renderToStaticMarkup } from "react-dom/server"
+import { becauseWords, carContent, carMainText, noindexCarSlugs, vsAverageWords } from "./car-content"
+import { maskDollars, visibleText } from "./rendered-text"
+import { uniqueness } from "./uniqueness"
 import { carPagePath, MODELS_ENABLED } from "./car-page-links"
 import { carFigures, carListings, carPages, carSlug, claimsYearPick, CLAIMS_YEARS } from "./car-pages"
 import { FACTOR_BUNDLE, nationalTypicalStart } from "./factor-engine"
@@ -24,13 +27,24 @@ import { decodeShareSearch } from "./share-link"
 import { breadcrumbJsonLd, DESCRIPTION_MAX, homeJsonLd, jsonLdText, SITE_NAME, stateDatasetsJsonLd, TITLE_MAX } from "./site-meta"
 import { sitemapEntries } from "./sitemap-entries"
 import { countrywideBaseline } from "./state-baselines"
-import { leadText, minimumWords, moveWords, SAME_ORDER_NOTE, stateDescription, stateMainText, stateTitle } from "./state-content"
+import {
+  leadText,
+  liabilityOnlyText,
+  minimumWords,
+  moveWords,
+  SAME_ORDER_NOTE,
+  stateDescription,
+  stateMainText,
+  stateTitle,
+  teenCarsSummary,
+  tiedAtTop,
+} from "./state-content"
 import { NEIGHBORS } from "./state-neighbors"
 import { stateFigures, TEEN_TOP } from "./state-pages"
 import { STATE_SLUGS, stateBySlug, statePath, stateSlug } from "./state-slugs"
 import { liabilityShorthand, stateRule } from "./state-rules"
 import { generateMetadata as stateMetadata, generateStaticParams as stateParams } from "../app/states/[state]/page"
-import { generateMetadata as carMetadata, generateStaticParams as carParams } from "../app/cars/[slug]/page"
+import CarPage, { generateMetadata as carMetadata, generateStaticParams as carParams } from "../app/cars/[slug]/page"
 
 const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/
 
@@ -116,6 +130,17 @@ test("every state page has its own numbers and words", () => {
   assert.ok(prices.size >= 48 && minimums.size >= 12 && teen.size >= 30)
 })
 
+test("ranks read naturally at both ends, and snippets leave the attribution to the page", () => {
+  const highest = ALL_STATES.find((f) => f.liabilityRank.rank === 1)!
+  assert.match(liabilityOnlyText(highest), /, the highest of the 50 states and DC/)
+  const lowest = ALL_STATES.find((f) => f.liabilityRank.rank === f.liabilityRank.of)!
+  assert.match(liabilityOnlyText(lowest), /, the lowest of the 50 states and DC/)
+  for (const f of ALL_STATES) {
+    assert.doesNotMatch(liabilityOnlyText(f), /\bthe 1st\b/, f.code)
+    assert.doesNotMatch(stateDescription(f), /NAIC/, f.code)
+  }
+})
+
 test("minimums read in full words where there's no injury-liability minimum", () => {
   const fl = stateRule("FL")!
   assert.equal(minimumWords(fl), "the law asks for $10,000 of personal injury protection and $10,000 of property damage liability")
@@ -172,19 +197,43 @@ test("state page buttons: the visitor's own car in that state, and the cheapest 
 // ---------------------------------------------------------------------------
 // Car pages
 
-test("car pages are mostly their own words: measured, with the rest kept out of search", () => {
+/**
+ * Regression floor for how much of each rendered car page is its own, with
+ * every dollar amount masked so numbers alone can't carry a page. Measured on
+ * the page's rendered text (the article: breadcrumbs, headings, tables, links,
+ * and the disclaimer). Set just under the values when this was written
+ * (median 20.8%, lowest page 15.7%, highest overlap 0.618); if a wording change
+ * trips it, make the page more its own rather than lowering the floor.
+ */
+export const RENDERED_CAR_FLOOR = { median: 0.2, page: 0.15, jaccard: 0.63 } as const
+
+test("rendered car pages stay their own, with dollar amounts masked", async () => {
   if (!MODELS_ENABLED) return
-  const report = carUniqueness(catalog)
-  assert.ok(report.medianUnique >= CAR_PAGE_BAR.median, `median unique share ${report.medianUnique.toFixed(2)}`)
-  assert.ok(report.maxJaccard <= CAR_PAGE_BAR.jaccard || noindexCarSlugs(catalog).size > 0, `max overlap ${report.maxJaccard.toFixed(2)}`)
-  const noindex = noindexCarSlugs(catalog)
-  const indexed = report.pages.filter((page) => !noindex.has(page.id))
-  for (const page of indexed) {
-    assert.ok(page.unique >= CAR_PAGE_BAR.floor, `${page.id}: ${page.unique.toFixed(2)}`)
-    assert.ok(page.maxJaccard <= CAR_PAGE_BAR.jaccard, `${page.id} vs ${page.closest}: ${page.maxJaccard.toFixed(2)}`)
+  const pages: { id: string; text: string }[] = []
+  for (const { slug } of carParams()) {
+    const element = await CarPage({ params: Promise.resolve({ slug }) } as never)
+    pages.push({ id: slug, text: maskDollars(visibleText(renderToStaticMarkup(element))) })
   }
-  // Most pages clear the bar; a handful at most are kept out of search.
-  assert.ok(noindex.size <= carPages(catalog).length * 0.1, `${noindex.size} car pages below the bar`)
+  const report = uniqueness(pages)
+  const lowest = [...report.pages].sort((left, right) => left.unique - right.unique)[0]
+  console.log(`rendered car pages, dollars masked: median ${(report.medianUnique * 100).toFixed(1)}%, lowest ${lowest.id} ${(lowest.unique * 100).toFixed(1)}%, max overlap ${report.maxJaccard.toFixed(3)}`)
+  assert.ok(report.medianUnique >= RENDERED_CAR_FLOOR.median, `median ${report.medianUnique.toFixed(3)}`)
+  for (const page of report.pages) {
+    assert.ok(page.unique >= RENDERED_CAR_FLOOR.page, `${page.id}: ${page.unique.toFixed(3)} of its five-word runs are its own`)
+    assert.ok(page.maxJaccard <= RENDERED_CAR_FLOOR.jaccard, `${page.id} vs ${page.closest}: overlap ${page.maxJaccard.toFixed(3)}`)
+  }
+  // The text measured is the page's own words, not its markup or structured data.
+  assert.doesNotMatch(pages[0].text, /<|schema\.org|\$\d/)
+})
+
+test("noindex is a deliberate choice per car, never automatic", async () => {
+  const flagged = noindexCarSlugs(catalog)
+  for (const page of carPages(catalog)) assert.equal(flagged.has(page.slug), page.noindex, page.slug)
+  if (!MODELS_ENABLED) return
+  // The RAV4 Prime was noindexed automatically once; it's indexed now.
+  assert.equal(flagged.has("toyota-rav4-prime"), false)
+  const metadata = await carMetadata({ params: Promise.resolve({ slug: "toyota-rav4-prime" }) } as never)
+  assert.equal(metadata.robots, undefined)
 })
 
 test("a car's lead never contradicts its own numbers", () => {
@@ -223,8 +272,25 @@ test("the national start is NAIC's countrywide figure, brought up to today like 
 
 test("the teen guide answers from the numbers, and never names one winner in a tie", () => {
   const lead = teenCarsLead(catalog)
-  if (MODELS_ENABLED) assert.match(lead, /^Of 33 popular first cars, SUVs, and trucks, the Subaru /)
-  else assert.match(lead, /tie for the least/)
+  if (MODELS_ENABLED) {
+    assert.match(lead, /^Of 33 popular first cars, SUVs, and trucks, the 2022 Subaru /)
+    assert.doesNotMatch(lead, /without claims results/)
+  } else {
+    assert.match(lead, /tie for the least/)
+  }
+})
+
+test("state pages name cars that round to the same price, and only blame missing claims data when it's missing", () => {
+  let tiedPages = 0
+  for (const f of ALL_STATES) {
+    const summary = teenCarsSummary(f)
+    if (MODELS_ENABLED) assert.doesNotMatch(summary, /Without claims results/, f.code)
+    if (tiedAtTop(f.teenCars) >= 2) {
+      tiedPages += 1
+      if (MODELS_ENABLED) assert.match(summary, /come out the same, the least of the 33/, f.code)
+    }
+  }
+  if (MODELS_ENABLED) assert.ok(tiedPages > 0, "some states round the cheapest cars to the same $10")
 })
 
 // ---------------------------------------------------------------------------

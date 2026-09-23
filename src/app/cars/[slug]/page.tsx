@@ -106,7 +106,7 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
         {c.about} <Link href="/states">{c.stateLine}</Link> <Link href="/methodology#car-pages">How we got these</Link>.
       </p>
 
-      <h2 id="years">{c.yearsHeading}</h2>
+      {c.years.length > 1 ? <h2 id="years">{c.yearsHeading}</h2> : null}
       {c.years.length > 1 ? (
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-left text-sm">
@@ -148,7 +148,7 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
           </table>
         </div>
       ) : null}
-      <p className="text-sm text-muted-foreground">{c.yearsNote}</p>
+      {c.years.length > 1 ? <p className="text-sm text-muted-foreground">{c.yearsNote}</p> : null}
       {c.trims ? (
         <>
           <p>{c.trims.text}</p>

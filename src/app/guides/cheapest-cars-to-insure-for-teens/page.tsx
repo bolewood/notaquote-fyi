@@ -8,8 +8,8 @@ import { SERVER_CATALOG } from "@/lib/agent-catalog"
 import { claimsPhrase } from "@/lib/car-content"
 import { carFigures, carPageFor, MODELS_ENABLED } from "@/lib/car-pages"
 import { differenceWords, estimateDollars, signedDollars } from "@/lib/format"
-import { nationalTeenCars, modelsWords, TEEN_CARS_GUIDE, TEEN_COST_GUIDE, teenCarsByGroup, teenCarsHref, teenCarsLead } from "@/lib/guides"
-import { articleJsonLd, ENGINE_UPDATED, GUIDES_IMAGE, pageMetadata } from "@/lib/site-meta"
+import { guideModified, nationalTeenCars, modelsWords, TEEN_CARS_GUIDE, TEEN_COST_GUIDE, teenCarsByGroup, teenCarsHref, teenCarsLead } from "@/lib/guides"
+import { articleJsonLd, GUIDES_IMAGE, pageMetadata } from "@/lib/site-meta"
 import { rankWords, SAME_ORDER_NOTE, tiedAtTop } from "@/lib/state-content"
 import { stateFigures, statePath } from "@/lib/state-pages"
 import { TEEN_LIST_YEAR, type TeenPriced } from "@/lib/teen-cars"
@@ -58,7 +58,8 @@ function CarTable({ cars, caption }: { cars: readonly TeenPriced[]; caption: str
 export default function TeenCarsGuide() {
   const all = nationalTeenCars(SERVER_CATALOG)
   const groups = teenCarsByGroup(SERVER_CATALOG)
-  const tied = tiedAtTop(all) >= 3
+  // Only without per-model claims data do whole kinds of car tie; then there's no one car to name.
+  const tied = !MODELS_ENABLED && tiedAtTop(all) >= 3
   const cheapest = all[0]
   const priciest = all.at(-1)!
   const cheapestPage = carPageFor(SERVER_CATALOG, cheapest.car.pick.make, cheapest.car.pick.model)
@@ -84,7 +85,7 @@ export default function TeenCarsGuide() {
       }
     >
       <JsonLdScript
-        data={articleJsonLd({ title: GUIDE.title, description: GUIDE.description, path: GUIDE.path, dateModified: ENGINE_UPDATED, datePublished: GUIDE.published })}
+        data={articleJsonLd({ title: GUIDE.title, description: GUIDE.description, path: GUIDE.path, dateModified: guideModified(GUIDE), datePublished: GUIDE.published })}
       />
 
       <p>

@@ -12,7 +12,7 @@ import factorBundle from "@/data/model-factors.json"
 import { FIRST_CARS, POPULAR_SUVS, TRUCKS_AND_FUN, type QuickCar } from "./car-search"
 import { normalizeName } from "./catalog-match"
 
-type ListedCar = { make: string; model: string; why?: string; slug?: string; segment?: string }
+type ListedCar = { make: string; model: string; why?: string; slug?: string; noindex?: boolean }
 
 type CarPagesFile = { _readme: string; cars: ListedCar[] }
 
@@ -26,7 +26,14 @@ export function carSlug(make: string, model: string): string {
   return normalizeName(`${make} ${model}`).replace(/ /g, "-")
 }
 
-export type CarListing = { make: string; model: string; slug: string; why: string }
+export type CarListing = {
+  make: string
+  model: string
+  slug: string
+  why: string
+  /** Kept for visitors but out of search results and the sitemap, by choice ("noindex": true in the file). */
+  noindex: boolean
+}
 
 const PRESET_WHY: [readonly QuickCar[], string][] = [
   [FIRST_CARS, "on the site's list of popular first cars"],
@@ -36,8 +43,9 @@ const PRESET_WHY: [readonly QuickCar[], string][] = [
 
 const key = (make: string, model: string) => `${make}|${model}`
 
-/** Slug overrides from the file, for any car, including ones on the popular lists. */
+/** Slug overrides and noindex flags from the file, for any car, including ones on the popular lists. */
 const OVERRIDES = new Map(FILE.cars.filter((car) => car.slug).map((car) => [key(car.make, car.model), car.slug!]))
+const NOINDEX = new Set(FILE.cars.filter((car) => car.noindex === true).map((car) => key(car.make, car.model)))
 
 /** Every car we'd like a page for, presets first, each make and model once. */
 export function carListings(): CarListing[] {
@@ -46,7 +54,7 @@ export function carListings(): CarListing[] {
   const add = (make: string, model: string, why: string) => {
     if (seen.has(key(make, model))) return
     seen.add(key(make, model))
-    listings.push({ make, model, why, slug: OVERRIDES.get(key(make, model)) ?? carSlug(make, model) })
+    listings.push({ make, model, why, slug: OVERRIDES.get(key(make, model)) ?? carSlug(make, model), noindex: NOINDEX.has(key(make, model)) })
   }
   for (const [cars, why] of PRESET_WHY) for (const car of cars) add(car.make, car.model, why)
   for (const car of FILE.cars) add(car.make, car.model, car.why ?? "")

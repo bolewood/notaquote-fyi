@@ -143,7 +143,9 @@ Car pages live at `/cars/<slug>`. The cars are the site's popular lists (in `src
 
 The slug is the make and model in lowercase with dashes (Toyota RAV4 is `toyota-rav4`, Ford F-150 is `ford-f-150`, and words in parentheses drop out). There's no year in it, so the address survives the yearly refresh. **Never change a live slug.** Every live slug is pinned in `src/lib/seo-slugs.json`, and `npm test` fails if one changes or disappears; when you add a car, add its slug there too. To keep an old address after a rename, give the car a `"slug"` in `data/car-pages.json` (this works for cars on the popular lists as well). State pages work the same way: `/states/ohio`, `/states/district-of-columbia`.
 
-Car pages are checked for how much of each page is its own (`src/lib/uniqueness.ts`): the median share of five-word runs found on no other car page must stay at 25% or more. A page under 20% stays up for visitors but gets `noindex` and leaves the sitemap. If a change to the wording drops the median, `npm test` says so.
+Car pages are checked for how much of each page is its own. `npm test` renders every car page, masks the dollar amounts (so numbers alone can't carry a page), and measures the share of five-word runs found on no other car page (`src/lib/uniqueness.ts`). It fails if the median drops under 20%, any page drops under 15%, or two pages overlap more than 0.63 (`RENDERED_CAR_FLOOR` in `src/lib/seo.test.ts`, set just under the values when it was written). If your wording change trips it, make the pages more their own; don't lower the floor.
+
+Nothing is kept out of search automatically. To keep one car's page up for visitors but out of search results and the sitemap, add `"noindex": true` to its entry in `data/car-pages.json` (for a car on the popular lists, add an entry with just its make, model, and the flag), and say why in the pull request.
 
 ### Versions
 

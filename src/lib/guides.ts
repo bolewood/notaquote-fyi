@@ -4,9 +4,11 @@
  */
 import type { VehicleCatalog } from "./catalog"
 import { differenceWords } from "./format"
+import { ENGINE_UPDATED } from "./site-meta"
 import { DEFAULT_SCENARIO, STATES, type StateCode } from "./scenario"
 import { encodeSharePath } from "./share-link"
-import { joinNames, tiedAtTop } from "./state-content"
+import { MODELS_ENABLED } from "./car-page-links"
+import { modelsWords, tiedAtTop } from "./state-content"
 import { priceTeenCars, teenDriver, teenPool, TEEN_GROUPS, typicalTeenCost, type TeenGroupId, type TeenPriced } from "./teen-cars"
 
 export type Guide = { slug: string; path: string; title: string; description: string; blurb: string; published: string }
@@ -32,6 +34,11 @@ export const TEEN_COST_GUIDE = {
 } as const satisfies Guide
 
 export const GUIDES: readonly Guide[] = [TEEN_CARS_GUIDE, TEEN_COST_GUIDE]
+
+/** When a guide last changed: its launch, or the data behind it if that's newer. The Article and the sitemap both use this. */
+export function guideModified(guide: Guide): string {
+  return ENGINE_UPDATED > guide.published ? ENGINE_UPDATED : guide.published
+}
 
 /** The popular lists for a new teen, priced nationally, cheapest to add first. */
 export function nationalTeenCars(catalog: VehicleCatalog): TeenPriced[] {
@@ -115,15 +122,7 @@ export function shareWords(share: number): string {
   return words === "double" ? "roughly double" : `roughly ${words} more`
 }
 
-/** "the Subaru Forester, Outback, and Crosstrek": several models, the make said once when they share it. */
-export function modelsWords(cars: readonly TeenPriced[]): string {
-  const makes = new Set(cars.map((item) => item.car.pick.make))
-  if (makes.size === 1 && cars.length > 1) {
-    const make = cars[0].car.pick.make
-    return `the ${make} ${joinNames(cars.map((item) => item.car.pick.model))}`
-  }
-  return `the ${joinNames(cars.map((item) => item.car.model))}`
-}
+export { modelsWords }
 
 /**
  * The guide's answer, from the numbers: the three cheapest and the priciest.
@@ -133,10 +132,10 @@ export function modelsWords(cars: readonly TeenPriced[]): string {
 export function teenCarsLead(catalog: VehicleCatalog): string {
   const all = nationalTeenCars(catalog)
   const ties = tiedAtTop(all)
-  if (ties >= 3) {
+  if (ties >= 3 && !MODELS_ENABLED) {
     return `Of ${all.length} popular first cars, SUVs, and trucks, ${ties} tie for the least to add a new 16-year-old with, about ${differenceWords(all[0].added.increase)} nationally: without claims results for each model, cars of the same kind come out the same.`
   }
-  const top = all.slice(0, 3)
+  const top = all.slice(0, Math.max(3, ties))
   const lastMake = all.at(-1)!.car.pick.make
   const priciest = all.slice(-2).every((item) => item.car.pick.make === lastMake) ? `${lastMake}s cost the most` : `The ${all.at(-1)!.car.model} costs the most`
   return `Of ${all.length} popular first cars, SUVs, and trucks, ${modelsWords(top)} cost the least to add a new 16-year-old: about ${differenceWords(top[0].added.increase)} nationally. ${priciest}, at about ${differenceWords(all.at(-1)!.added.increase)}.`

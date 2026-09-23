@@ -9,6 +9,7 @@ import { DESCRIPTION_MAX } from "./site-meta"
 import { inSentence, TEEN_TOP, type StateFigures } from "./state-pages"
 import { liabilityShorthand, NO_FAULT_CHOICE, stateMinimumAssumption, type StateRule } from "./state-rules"
 import type { TeenPriced } from "./teen-cars"
+import { MODELS_ENABLED } from "./car-page-links"
 
 export function ordinal(value: number): string {
   const tens = value % 100
@@ -84,9 +85,9 @@ export function minimumWords(rule: StateRule | null, style: "sentence" | "cell" 
 export function stateDescription(f: StateFigures): string {
   const name = shortName(f.code)
   const teen = ` Adding a teen: about ${differenceWords(f.teen.added.increase)}.`
-  const long = `${name}: ${naic(f.baseline.annual)} a year for full coverage in 2023 (NAIC), about ${estimateDollars(f.start.annual)} today. Minimum: ${minimumWords(f.rule, "cell")}.`
+  const long = `${name}: ${naic(f.baseline.annual)} a year for full coverage in 2023, about ${estimateDollars(f.start.annual)} today. Minimum: ${minimumWords(f.rule, "cell")}.`
   if (long.length + teen.length <= DESCRIPTION_MAX) return long + teen
-  const short = `${name}: ${naic(f.baseline.annual)} a year in 2023 (NAIC), about ${estimateDollars(f.start.annual)} today. Minimum: ${minimumWords(f.rule, "cell")}.`
+  const short = `${name}: ${naic(f.baseline.annual)} a year in 2023, about ${estimateDollars(f.start.annual)} today. Minimum: ${minimumWords(f.rule, "cell")}.`
   return short.length + teen.length <= DESCRIPTION_MAX ? short + teen : short
 }
 
@@ -100,11 +101,6 @@ export function leadText(f: StateFigures): string {
 export function priceParagraph(f: StateFigures): string {
   const name = inSentence(f.code)
   return `That makes ${name} ${rankWords(f)}. Nationally, the average was ${naic(f.national.annual)}.`
-}
-
-export function liabilityParagraph(f: StateFigures): string {
-  const share = Math.round(f.liabilityShare * 100)
-  return `Liability alone, the part that pays for damage and injuries you cause to others, averaged ${naic(f.baseline.liabilityOnly)}, about ${share}% of the full-coverage price. The rest of a full-coverage bill pays to fix or replace your own car (collision and comprehensive).`
 }
 
 /** How the state sits among its neighbors, in one sentence. */
@@ -169,13 +165,30 @@ export function ownPolicyParagraph(f: StateFigures): string {
 export function liabilityOnlyText(f: StateFigures): string {
   const rank = f.liabilityRank
   const fromBottom = rank.of - rank.rank + 1
-  const place = rank.rank <= rank.of / 2 ? `the ${ordinal(rank.rank)} highest` : fromBottom === 1 ? "the lowest" : `the ${ordinal(fromBottom)} lowest`
-  return `Liability-only coverage, the closest NAIC figure to what a minimum policy costs, averaged ${naic(f.baseline.liabilityOnly)} in ${inSentence(f.code)} in 2023 (about ${estimateDollars(f.liabilityToday)} today, brought up the same rough way), ${place} of the 50 states and DC.`
+  const place =
+    rank.rank === 1
+      ? "the highest"
+      : fromBottom === 1
+        ? "the lowest"
+        : rank.rank <= rank.of / 2
+          ? `the ${ordinal(rank.rank)} highest`
+          : `the ${ordinal(fromBottom)} lowest`
+  const share = Math.round(f.liabilityShare * 100)
+  return `Liability-only coverage, the closest NAIC figure to what a minimum policy costs, averaged ${naic(f.baseline.liabilityOnly)} in ${inSentence(f.code)} in 2023 (about ${estimateDollars(f.liabilityToday)} today, brought up the same rough way), ${place} of the 50 states and DC. That's about ${share}% of the full-coverage price; the rest pays to fix or replace your own car.`
 }
 
 /** The line the owner asked for, word for word. */
 export const SAME_ORDER_NOTE =
   "The order is the same in every state, because our car data is national. What changes from state to state is the price level."
+
+/** "the 2022 Subaru Forester, Outback, and Crosstrek": several cars, the year and make said once when they share them. */
+export function modelsWords(cars: readonly TeenPriced[]): string {
+  const makes = new Set(cars.map((item) => item.car.pick.make))
+  const years = new Set(cars.map((item) => item.car.pick.year))
+  const year = years.size === 1 && cars.length > 0 ? `${cars[0].car.pick.year} ` : ""
+  if (makes.size === 1 && cars.length > 1) return `the ${year}${cars[0].car.pick.make} ${joinNames(cars.map((item) => item.car.pick.model))}`
+  return `the ${year}${joinNames(cars.map((item) => item.car.model))}`
+}
 
 /** How many cars tie with the cheapest one (to the $10 shown). */
 export function tiedAtTop(cars: readonly TeenPriced[]): number {
@@ -188,8 +201,12 @@ export function teenCarsSummary(f: StateFigures): string {
   const first = f.teenCars[0]
   const last = f.teenCars.at(-1)!
   const ties = tiedAtTop(f.teenCars)
-  if (ties >= 3) {
+  if (ties >= 3 && !MODELS_ENABLED) {
     return `Without claims results for each model, cars of the same kind come out the same here: ${ties} of the ${f.teenCars.length} cars on the site's popular lists tie for the least to add a teen with in ${name}, at about ${differenceWords(first.added.increase)}.`
+  }
+  if (ties >= 2) {
+    const tied = f.teenCars.slice(0, ties)
+    return `In ${name}, ${modelsWords(tied)} come out the same, the least of the ${f.teenCars.length} cars on the site's popular lists to add a teen with: about ${differenceWords(first.added.increase)}. At the other end of the same lists, the ${last.car.label} costs about ${differenceWords(last.added.increase)}.`
   }
   return `In ${name}, the ${first.car.label} is the cheapest of the ${f.teenCars.length} cars on the site's popular lists to add a teen with: about ${differenceWords(first.added.increase)}. At the other end of the same lists, the ${last.car.label} costs about ${differenceWords(last.added.increase)}.`
 }
@@ -201,7 +218,6 @@ export function stateMainText(f: StateFigures): string {
     stateDescription(f),
     leadText(f),
     priceParagraph(f),
-    liabilityParagraph(f),
     neighborsSummary(f),
     ...f.neighbors.map((row) => `${row.name} ${naic(row.baseline.annual)} ${moveWords(row.move.delta, row.move.current.likely)}`),
     liabilityOnlyText(f),

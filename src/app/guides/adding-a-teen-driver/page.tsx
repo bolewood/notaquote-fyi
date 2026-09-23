@@ -5,9 +5,9 @@ import { Breadcrumbs } from "@/components/breadcrumbs"
 import { JsonLdScript } from "@/components/json-ld"
 import { TrustArticle } from "@/components/trust-article"
 import { differenceWords, estimateDollars, monthlyDollars, rangeDollars, rangeWords, signedDollars } from "@/lib/format"
-import { addTeenHref, nationalTeenCost, shareWords, TEEN_CARS_GUIDE, TEEN_COST_GUIDE, teenCostByState } from "@/lib/guides"
+import { addTeenHref, guideModified, nationalTeenCost, shareWords, TEEN_CARS_GUIDE, TEEN_COST_GUIDE, teenCostByState } from "@/lib/guides"
 import { HELP_WANTED, helpWantedUrl } from "@/lib/help-wanted"
-import { articleJsonLd, ENGINE_UPDATED, GUIDES_IMAGE, pageMetadata } from "@/lib/site-meta"
+import { articleJsonLd, GUIDES_IMAGE, pageMetadata } from "@/lib/site-meta"
 import { statePath } from "@/lib/state-pages"
 
 const GUIDE = TEEN_COST_GUIDE
@@ -37,7 +37,7 @@ export default function TeenCostGuide() {
       }
     >
       <JsonLdScript
-        data={articleJsonLd({ title: GUIDE.title, description: GUIDE.description, path: GUIDE.path, dateModified: ENGINE_UPDATED, datePublished: GUIDE.published })}
+        data={articleJsonLd({ title: GUIDE.title, description: GUIDE.description, path: GUIDE.path, dateModified: guideModified(GUIDE), datePublished: GUIDE.published })}
       />
 
       <div className="grid gap-1 rounded-2xl bg-sun-soft p-5">

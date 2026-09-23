@@ -9,7 +9,7 @@ import type { VehicleCatalog } from "./catalog"
 import { noindexCarSlugs } from "./car-content"
 import { carPages } from "./car-pages"
 import { SITE_ORIGIN } from "./copy"
-import { GUIDES } from "./guides"
+import { GUIDES, guideModified } from "./guides"
 import { DATA_DATES, ENGINE_UPDATED, SOURCES_UPDATED, STATE_PAGES_UPDATED } from "./site-meta"
 import { STATE_SLUGS } from "./state-slugs"
 
@@ -40,7 +40,7 @@ export function sitemapPaths(catalog: VehicleCatalog): [string, string][] {
   return [
     ...STATIC_PAGES,
     ...(cars.length > 0 ? [["/cars", ENGINE_UPDATED] as [string, string]] : []),
-    ...GUIDES.map((guide): [string, string] => [guide.path, ENGINE_UPDATED]),
+    ...GUIDES.map((guide): [string, string] => [guide.path, guideModified(guide)]),
     ...STATE_SLUGS.map((item): [string, string] => [`/states/${item.slug}`, STATE_PAGES_UPDATED]),
     ...cars.filter((page) => !noindex.has(page.slug)).map((page): [string, string] => [`/cars/${page.slug}`, ENGINE_UPDATED]),
   ]

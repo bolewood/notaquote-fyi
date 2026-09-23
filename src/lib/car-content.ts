@@ -121,8 +121,8 @@ function partWords(hundredths: number): string {
 export function priceEffectText(f: CarFigures): string {
   const { car, average } = f.parts
   const year = f.page.pick.year
-  const own = `Fixing or replacing the ${f.page.shortName}: about ${estimateDollars(car.ownCar)} of the ${estimateDollars(car.ownCar + car.liability)} (average ${year} car: ${estimateDollars(average.ownCar)}), ${partWords(f.page.relativity.physicalHundredths)}.`
-  const others = `Harm to others: about ${estimateDollars(car.liability)} (${estimateDollars(average.liability)}), ${partWords(f.page.relativity.liabilityHundredths)}.`
+  const own = `The part that fixes or replaces the ${f.page.shortName}: about ${estimateDollars(car.ownCar)}, against ${estimateDollars(average.ownCar)} for an average ${year} car (${partWords(f.page.relativity.physicalHundredths)}).`
+  const others = `The part that pays for harm to others: about ${estimateDollars(car.liability)}, against ${estimateDollars(average.liability)} for an average car (${partWords(f.page.relativity.liabilityHundredths)}).`
   return `${own} ${others}`
 }
 
@@ -254,8 +254,6 @@ export type CarContent = {
     teenNote: string
     claimsIntro: string
     ctaNote: string
-    /** Buttons, links, table headings, and the disclaimer: on every car page, so they count against it. */
-    chrome: string
   }
 }
 
@@ -264,14 +262,6 @@ export const CAR_FIXED: CarContent["fixed"] = {
   teenNote: "That's the whole household's bill going up.",
   claimsIntro: "Its insurance claims against an average car's (HLDI):",
   ctaNote: "Both start from your own situation if you've set one. For crash safety, see IIHS and NHTSA ratings.",
-  chrome: [
-    "How we got these.",
-    "Model year Full coverage Liability only Adding a teen Teen on their own policy",
-    "Cheapest cars to insure for a teen.",
-    "What if you bought this car? Add it to a comparison",
-    "Does this look wrong for this car? Tell us",
-    "This is an estimate to help you plan, not a quote. We don't sell insurance, and we never pass your info to anyone. Only an insurer can give you a real price.",
-  ].join("\n"),
 }
 
 function gapWords(delta: number, base: number): string {
@@ -295,7 +285,10 @@ export function carContent(f: CarFigures): CarContent {
     estimate: `about ${estimateDollars(f.adult.likely)}`,
     monthly: `a year (about ${monthlyDollars(f.adult.likely)} a month)`,
     range: rangeWords(f.adult.low, f.adult.high),
-    averageLine: `An average ${year} car: about ${estimateDollars(f.averageCar.likely)}. An older ${page.shortName} costs less (below).`,
+    averageLine:
+      f.years.length > 1
+        ? `An average ${year} car: about ${estimateDollars(f.averageCar.likely)}. An older ${page.shortName} costs less (below).`
+        : `An average ${year} car: about ${estimateDollars(f.averageCar.likely)}.`,
     about: `Priced: the ${year} ${trimName(page.pick.trim, page.model)} (the newest year our claims data covers), a 45-year-old, clean record, full coverage.`,
     stateLine: "Each state moves every car's price by the same share.",
     yearsHeading: `A used ${page.shortName}, by model year`,
@@ -353,10 +346,14 @@ export function carPageText(content: CarContent): string {
     content.averageLine,
     content.about,
     content.stateLine,
-    content.yearsHeading,
-    content.years.length > 1 ? content.fixed.yearsCaption : "",
-    ...content.years.map((row) => `${row.year} ${row.age} ${row.adult} ${row.liability} ${row.teen} ${row.teenOwn}`),
-    content.yearsNote,
+    ...(content.years.length > 1
+      ? [
+          content.yearsHeading,
+          content.fixed.yearsCaption,
+          ...content.years.map((row) => `${row.year} ${row.age} ${row.adult} ${row.liability} ${row.teen} ${row.teenOwn}`),
+          content.yearsNote,
+        ]
+      : []),
     content.trims?.text ?? "",
     ...(content.trims?.rows ?? []).map((row) => `${row.trim} ${row.price}`),
     content.otherDrivers,
@@ -375,7 +372,6 @@ export function carPageText(content: CarContent): string {
     ...content.similar.map((row) => `${row.name} ${row.price}`),
     ...content.notes,
     content.fixed.ctaNote,
-    content.fixed.chrome,
   ]
     .filter(Boolean)
     .join("\n")
@@ -385,32 +381,12 @@ export function carMainText(f: CarFigures): string {
   return carPageText(carContent(f))
 }
 
-/**
- * How much of a car page has to be its own. Across all car pages, the median
- * share of five-word runs found on no other car page must be at least
- * `median`, and no two pages may overlap more than `jaccard`. A page whose
- * own share falls under `floor` (or that overlaps another too much) stays up
- * for visitors but gets noindex and leaves the sitemap. The text measured
- * includes the page's fixed wording and the disclaimer, like the rendered page.
- */
-export const CAR_PAGE_BAR = { median: 0.25, floor: 0.2, jaccard: 0.6 } as const
-
-const REPORTS = new WeakMap<VehicleCatalog, UniquenessReport>()
-
-/** How much of each car page is its own, across all car pages. Worked out once per build. */
-export function carUniqueness(catalog: VehicleCatalog): UniquenessReport {
-  const cached = REPORTS.get(catalog)
-  if (cached) return cached
-  const report = uniqueness(carPages(catalog).map((page) => ({ id: page.slug, text: carMainText(carFigures(catalog, page.slug)!) })))
-  REPORTS.set(catalog, report)
-  return report
+/** Car pages kept out of search results by choice: `"noindex": true` in data/car-pages.json. */
+export function noindexCarSlugs(catalog: VehicleCatalog): Set<string> {
+  return new Set(carPages(catalog).filter((page) => page.noindex).map((page) => page.slug))
 }
 
-/** Car pages below the bar: kept for visitors, but not offered to search engines. */
-export function noindexCarSlugs(catalog: VehicleCatalog): Set<string> {
-  return new Set(
-    carUniqueness(catalog)
-      .pages.filter((page) => page.unique < CAR_PAGE_BAR.floor || page.maxJaccard > CAR_PAGE_BAR.jaccard)
-      .map((page) => page.id),
-  )
+/** How much of each car page's own wording is its own (numbers included), for a quick look while writing. */
+export function carUniqueness(catalog: VehicleCatalog): UniquenessReport {
+  return uniqueness(carPages(catalog).map((page) => ({ id: page.slug, text: carMainText(carFigures(catalog, page.slug)!) })))
 }

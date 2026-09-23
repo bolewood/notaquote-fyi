@@ -12,7 +12,6 @@ import { pageMetadata } from "@/lib/site-meta"
 import {
   faultText,
   leadText,
-  liabilityParagraph,
   moveWords,
   neighborsSummary,
   ownPolicyParagraph,
@@ -108,7 +107,6 @@ export default async function StatePage({ params }: PageProps<"/states/[state]">
         <p className="text-sm text-muted-foreground">{f.start.attribution}</p>
       </div>
       <p>{priceParagraph(f)}</p>
-      <p>{liabilityParagraph(f)}</p>
       <p className="text-muted-foreground">
         It&apos;s an average across every kind of driver and car, not your price. Your car, your driving record, and how
         much coverage you carry move it up or down.

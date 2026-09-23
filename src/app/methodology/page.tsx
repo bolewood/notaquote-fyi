@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { MODELS_ENABLED } from "@/lib/car-page-links"
 import { pageMetadata } from "@/lib/site-meta"
 import Link from "next/link"
 import { FactorTables } from "@/components/factor-tables"
@@ -133,7 +134,7 @@ export default function MethodologyPage() {
 
       <h2 id="car-pages">The car and state pages</h2>
       <p>
-        The pages for <Link href="/cars">each car</Link> and <Link href="/states">each state</Link> use this same math,
+        The pages for {MODELS_ENABLED ? <Link href="/cars">each car</Link> : "each car"} and <Link href="/states">each state</Link> use this same math,
         worked out when the site is built, for one typical driver: a 45-year-old (our 40–64 group) with a clean record,
         7,500–15,000 miles a year, in the suburbs, with full coverage and a $1,000 deductible.
       </p>
