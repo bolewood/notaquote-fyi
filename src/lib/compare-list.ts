@@ -213,9 +213,11 @@ export function carryNote(
           ? `We brought over the driver from your what-if, and the ${join(arrived)}.`
           : "We brought over the driver from your what-if.",
       ]
-    : arrived.length > 0
-      ? [`The ${join(arrived)} ${arrived.length === 1 ? "is" : "are"} on your list, priced for the same driver as the rest.`]
-      : []
+    : arrived.length === 0
+      ? []
+      : after.cars.length > arrived.length
+        ? [`The ${join(arrived)} ${arrived.length === 1 ? "is" : "are"} on your list, priced for the same driver as the rest.`]
+        : [`The ${join(arrived)} ${arrived.length === 1 ? "is" : "are"} on your list. Check who's driving, then add more cars to compare.`]
   if (missing.length > 0) {
     parts.push(`Your list was full, so the ${join(missing)} didn't fit. Remove a car to make room.`)
   }

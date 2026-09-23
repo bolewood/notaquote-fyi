@@ -47,13 +47,19 @@ export type SharedCar = { year: number; make: string; model: string; trim: strin
  * - "whatif": the What-if page handing its cars to Compare.
  * - "page": one of the site's own pages (a state page, a guide) opening an
  *   example to try. It's shown like a shared link, with its own words.
- * - "add": a car page adding one car. Only the car counts: the What-if page
- *   tries it on the visitor's own situation, and Compare adds it to their
- *   own list. The driver in the link is just a placeholder.
+ * - "add": a car page or guide adding one change. Only the change counts:
+ *   the What-if page tries it on the visitor's own situation, and Compare
+ *   adds the cars to their own list. The driver in the link is a placeholder.
+ * - "teen": a guide's list of cars for a new teen. Compare shows them for a
+ *   new 16-year-old added to the visitor's policy, in the visitor's own state,
+ *   like a shared list: nothing of theirs changes until they choose.
+ * - "state": a state page. The What-if page shows the visitor's own
+ *   situation in that state (their premium only if it's already that state),
+ *   with the link's change (a new teen) as the what-if.
  */
-export type ShareVia = "whatif" | "page" | "add"
+export type ShareVia = "whatif" | "page" | "add" | "state" | "teen"
 
-const SHARE_VIAS: readonly ShareVia[] = ["whatif", "page", "add"]
+const SHARE_VIAS: readonly ShareVia[] = ["whatif", "page", "add", "state", "teen"]
 
 export type ShareLinkOk = {
   status: "ok"

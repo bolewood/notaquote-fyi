@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { JsonLdScript } from "@/components/json-ld"
-import { pageMetadata, stateDatasetJsonLd } from "@/lib/site-meta"
+import { pageMetadata, stateDatasetsJsonLd } from "@/lib/site-meta"
 import { RecordTrustView } from "@/components/record-trust-view"
 import { StateBaselinesTable } from "@/components/state-baselines-table"
 import { StateRulesTable } from "@/components/state-rules-table"
@@ -100,7 +100,7 @@ export default function SourcesPage() {
       wide
     >
       <RecordTrustView />
-      <JsonLdScript data={stateDatasetJsonLd()} />
+      <JsonLdScript data={stateDatasetsJsonLd()} />
       <div className="max-w-2xl space-y-4">
         <p>
           Where we couldn&apos;t find a source, we say so right next to the number and widen the range. Further down, pick

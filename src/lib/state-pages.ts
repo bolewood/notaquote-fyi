@@ -11,7 +11,7 @@
  */
 import type { VehicleCatalog } from "./catalog"
 import { vehicleFacts } from "./catalog-class"
-import { typicalStart, type StartingPoint } from "./factor-engine"
+import { broughtUpToToday, typicalStart, type StartingPoint } from "./factor-engine"
 import { priceWhatIf, type WhatIfResult } from "./pricing"
 import { DEFAULT_SCENARIO, stateName, type Scenario, type StateCode } from "./scenario"
 import { STATE_SLUGS, stateBySlug, statePath, stateSlug } from "./state-slugs"
@@ -80,6 +80,10 @@ export type StateFigures = {
   rank: PriceRank
   /** Liability alone as a share of the full-coverage figure, 2023. */
   liabilityShare: number
+  /** NAIC's liability-only average, brought up to today. */
+  liabilityToday: number
+  /** Where the liability-only average ranks (1 = highest). */
+  liabilityRank: { rank: number; of: number }
   neighbors: NeighborRow[]
   bordering: boolean
   rule: StateRule | null
@@ -144,18 +148,23 @@ export function stateFigures(catalog: VehicleCatalog, code: StateCode): StateFig
     vsNational: percentVs(baseline.annual, national.annual),
     rank: priceRank(code),
     liabilityShare: baseline.liabilityOnly / baseline.exact,
+    liabilityToday: broughtUpToToday(baseline.liabilityOnly),
+    liabilityRank: {
+      rank: allStateBaselines().filter((row) => row.liabilityOnly > baseline.liabilityOnly).length + 1,
+      of: allStateBaselines().length,
+    },
     neighbors,
     bordering,
     rule: stateRule(code) ?? null,
     teen: typicalTeenCost({ kind: "state", state: code }),
     teenCars,
-    // "Try it with your own numbers": the What-if page, in this state, adding a 16-year-old to the policy.
+    // "Try it with your own car": the visitor's own situation, moved to this state, adding a 16-year-old.
     whatIfHref: encodeSharePath({
       page: "/",
       scenario: moverScenario(code),
       teenOnParentPolicy: true,
       next: { ...moverScenario(code), age: "16-18", yearsLicensed: "under-1", teen: true },
-      via: "page",
+      via: "state",
     }),
     // "Compare cars for your teen": the same five cars, for the same teen, on the Compare page.
     compareHref: encodeSharePath({

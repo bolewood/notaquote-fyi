@@ -7,7 +7,7 @@ import { StateNoteBody } from "@/components/state-rules-table"
 import { TrustArticle } from "@/components/trust-article"
 import { SERVER_CATALOG } from "@/lib/agent-catalog"
 import { carPageFor } from "@/lib/car-pages"
-import { differenceWords, dollars, estimateDollars, monthlyDollars, rangeWords, signedDollars } from "@/lib/format"
+import { differenceWords, dollars, estimateDollars, monthlyDollars, signedDollars } from "@/lib/format"
 import { pageMetadata } from "@/lib/site-meta"
 import {
   faultText,
@@ -20,8 +20,9 @@ import {
   SAME_ORDER_NOTE,
   stateDescription,
   stateTitle,
+  liabilityOnlyText,
+  teenCallout,
   teenCarsSummary,
-  teenParagraph,
 } from "@/lib/state-content"
 import { inSentence, STATE_SLUGS, stateBySlug, stateFigures, statePath, TEEN_TOP } from "@/lib/state-pages"
 import { STATE_BASELINE_SOURCES } from "@/lib/state-baselines"
@@ -43,7 +44,7 @@ function figuresFor(slug: string) {
 export async function generateMetadata({ params }: PageProps<"/states/[state]">): Promise<Metadata> {
   const f = figuresFor((await params).state)
   if (!f) return {}
-  return pageMetadata({ title: stateTitle(f), description: stateDescription(f), path: statePath(f.code) })
+  return pageMetadata({ title: stateTitle(f), description: stateDescription(f), path: statePath(f.code), image: null })
 }
 
 function limits(rule: StateRule): string {
@@ -147,7 +148,7 @@ export default async function StatePage({ params }: PageProps<"/states/[state]">
                   <Link href={statePath(row.code)}>{row.name}</Link>
                 </th>
                 <td className="py-2 pr-3 text-right whitespace-nowrap tabular-nums">{dollars(row.baseline.annual)}</td>
-                <td className="py-2 pr-3 text-right tabular-nums">{moveWords(row.move.delta)}</td>
+                <td className="py-2 pr-3 text-right tabular-nums">{moveWords(row.move.delta, row.move.current.likely)}</td>
               </tr>
             ))}
             <tr>
@@ -188,36 +189,35 @@ export default async function StatePage({ params }: PageProps<"/states/[state]">
             allows, not a recommendation, and it doesn&apos;t pay to fix your own car.
           </p>
           {fault ? <p>{fault}</p> : null}
+          <p>{liabilityOnlyText(f)}</p>
           <StateNoteBody rule={f.rule} />
         </>
       ) : (
         <p>We haven&apos;t checked this state&apos;s minimums yet.</p>
       )}
 
-      <h2 id="teen">Adding a new teen driver in {name}</h2>
+      <h2 id="teen">A new teen driver in {name}</h2>
       <div className="grid gap-1 rounded-2xl bg-sun-soft p-5" data-testid="state-teen">
         <p className="text-sm font-medium text-sun-ink">Adding a 16-year-old to a typical policy</p>
         <p>
           <span className="money text-3xl font-semibold">about {differenceWords(f.teen.added.increase)}</span>
         </p>
-        <p className="text-sm">Whole policy with the teen: {rangeWords(f.teen.added.after.low, f.teen.added.after.high)} a year.</p>
+        <p className="text-sm">{teenCallout(f)}</p>
       </div>
-      <p>{teenParagraph(f)}</p>
       <p>{ownPolicyParagraph(f)}</p>
       <p className="text-sm text-muted-foreground">
-        What adding a teen costs comes from California&apos;s published prices, comparing families with and without a teen,
-        so the range is wide{f.code === "CA" ? "" : `, and ${name} may differ`}. Many insurers also give discounts for
-        good grades and a driver-training course.{" "}
+        What adding a teen costs comes from California&apos;s published prices, so the range is wide
+        {f.code === "CA" ? "" : `, and ${name} may differ`}.{" "}
         <Link href="/guides/adding-a-teen-driver">How adding a teen driver works</Link>.
       </p>
 
-      <h2 id="teen-cars">Cars that cost the least to insure for a teen in {name}</h2>
+      <h3 id="teen-cars">Cars that cost the least to add a teen with</h3>
       <p>{teenCarsSummary(f)}</p>
       <div className="overflow-x-auto">
         <table className="w-full border-collapse text-left text-sm">
           <caption className="py-2 text-left text-sm text-muted-foreground">
-            The {TEEN_TOP} cheapest of the site&apos;s popular first cars, SUVs, and trucks for a new 16-year-old in {name},{" "}
-            {TEEN_LIST_YEAR} models.
+            The {TEEN_TOP} cheapest of the site&apos;s popular first cars, SUVs, and trucks in {name}: {TEEN_LIST_YEAR}{" "}
+            models, about the age of a typical first car.
           </caption>
           <thead>
             <tr className="border-b border-border text-muted-foreground">
@@ -239,7 +239,7 @@ export default async function StatePage({ params }: PageProps<"/states/[state]">
                 <tr key={item.car.label} className="border-b border-border/60">
                   <th scope="row" className="py-2 pr-3 font-normal">
                     {item.car.pick.year}{" "}
-                    {page ? <Link href={`/cars/${page.slug}`}>{item.car.model}</Link> : item.car.model}
+                    {page ? <Link href={`/cars/${page.slug}`}>{page.shortName}</Link> : item.car.model}
                   </th>
                   <td className="py-2 pr-3 text-right whitespace-nowrap tabular-nums">{signedDollars(item.added.increase)} a year</td>
                   <td className="py-2 pr-3 text-right whitespace-nowrap tabular-nums">{estimateDollars(item.own.likely)} a year</td>
@@ -251,11 +251,7 @@ export default async function StatePage({ params }: PageProps<"/states/[state]">
       </div>
       <p className="font-medium">{SAME_ORDER_NOTE}</p>
       <p className="text-sm text-muted-foreground">
-        &ldquo;Added to your policy&rdquo; is what adding the teen costs the household a year with that car. &ldquo;On their
-        own policy&rdquo; is the teen&apos;s whole bill if they had one. Insurance cost is one thing to weigh: for crash
-        safety, see the <a href="https://www.iihs.org/ratings" rel="noreferrer">IIHS ratings</a> and{" "}
-        <a href="https://www.nhtsa.gov/ratings" rel="noreferrer">NHTSA&apos;s 5-star ratings</a>.{" "}
-        <Link href="/guides/cheapest-cars-to-insure-for-teens">The national guide to cars for a new driver</Link>.
+        <Link href="/guides/cheapest-cars-to-insure-for-teens">Why these cars cost less, and what this doesn&apos;t cover</Link>.
       </p>
 
       <div className="flex flex-wrap gap-3 pt-2">
@@ -263,12 +259,12 @@ export default async function StatePage({ params }: PageProps<"/states/[state]">
           Compare cars for your teen <ArrowRight className="size-4" aria-hidden="true" />
         </a>
         <a href={f.whatIfHref} className="btn plain">
-          Try it with your own numbers
+          Try it with your own car
         </a>
       </div>
       <p className="text-sm text-muted-foreground">
-        Compare opens these {TEEN_TOP} cars for a 16-year-old in {name}, and you can add up to 15. The What-if page opens
-        a family in {name} adding a 16-year-old, starting from a 2020 Toyota Camry; put in your own car and what you pay.
+        &ldquo;Try it with your own car&rdquo; opens your own situation in {name} (a 2020 Toyota Camry if you haven&apos;t set
+        one) with a new 16-year-old. It starts from that car, not an average one, so its figure can differ from the one above.
       </p>
 
       <h2 id="sources">Where these numbers come from</h2>

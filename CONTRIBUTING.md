@@ -141,7 +141,9 @@ The vehicle catalog is generated from NHTSA vPIC and FuelEconomy.gov by `scripts
 
 Car pages live at `/cars/<slug>`. The cars are the site's popular lists (in `src/lib/car-search.ts`) plus the list in [`data/car-pages.json`](data/car-pages.json). To add one, add `{ "make": "...", "model": "...", "why": "..." }` with the catalog's exact make and model names, then run `npm test`. A page is only built when the Highway Loss Data Institute has claims results for that exact model, and the test tells you if yours doesn't.
 
-The slug is the make and model in lowercase with dashes (Toyota RAV4 is `toyota-rav4`, Ford F-150 is `ford-f-150`, and words in parentheses drop out). There's no year in it, so the address survives the yearly refresh. **Never change a live slug.** State pages work the same way: `/states/ohio`, `/states/district-of-columbia`.
+The slug is the make and model in lowercase with dashes (Toyota RAV4 is `toyota-rav4`, Ford F-150 is `ford-f-150`, and words in parentheses drop out). There's no year in it, so the address survives the yearly refresh. **Never change a live slug.** Every live slug is pinned in `src/lib/seo-slugs.json`, and `npm test` fails if one changes or disappears; when you add a car, add its slug there too. To keep an old address after a rename, give the car a `"slug"` in `data/car-pages.json` (this works for cars on the popular lists as well). State pages work the same way: `/states/ohio`, `/states/district-of-columbia`.
+
+Car pages are checked for how much of each page is its own (`src/lib/uniqueness.ts`): the median share of five-word runs found on no other car page must stay at 25% or more. A page under 20% stays up for visitors but gets `noindex` and leaves the sitemap. If a change to the wording drops the median, `npm test` says so.
 
 ### Versions
 

@@ -7,10 +7,11 @@ import { STATES } from "@/lib/scenario"
 import { pageMetadata } from "@/lib/site-meta"
 import { countrywideBaseline, STATE_BASELINE_SOURCES, stateBaseline } from "@/lib/state-baselines"
 import { statePath } from "@/lib/state-pages"
-import { liabilityShorthand, stateRule } from "@/lib/state-rules"
+import { minimumWords } from "@/lib/state-content"
+import { stateRule } from "@/lib/state-rules"
 
 const DESCRIPTION =
-  "What drivers pay for car insurance in each state and DC, and the least coverage each state's law asks for, from NAIC data and each state's own statute. Pick a state for teen drivers and moves."
+  "What drivers pay for car insurance in each state and DC, and the least coverage each state's law asks for. Pick a state for teen drivers and moves."
 
 export const metadata: Metadata = pageMetadata({
   title: "Car insurance by state: typical prices and minimums",
@@ -50,7 +51,7 @@ export default function StatesIndexPage() {
             ) : (
               "from NAIC"
             )}
-            . Minimum liability is per person / per crash / property damage, in thousands of dollars.
+            . Minimum liability is per person / per crash / property damage, in thousands of dollars, where the law sets one.
           </caption>
           <thead>
             <tr className="border-b border-border text-muted-foreground">
@@ -69,11 +70,7 @@ export default function StatesIndexPage() {
             {STATES.map((state) => {
               const baseline = stateBaseline(state.code)
               const rule = stateRule(state.code)
-              const minimum = rule
-                ? rule.insuranceRequired === false
-                  ? "Not required for most drivers"
-                  : (liabilityShorthand(rule) ?? "See the page")
-                : "Not checked yet"
+              const minimum = minimumWords(rule ?? null, "cell")
               return (
                 <tr key={state.code} className="border-b border-border/60">
                   <th scope="row" className="py-2 pr-3 font-normal">

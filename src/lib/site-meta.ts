@@ -15,6 +15,10 @@ import { GITHUB_REPO_URL } from "./suggest-fix"
 
 export const SITE_NAME = "NotAQuote.FYI"
 
+/** Search results show about this many characters of a title, and about 155 of a description. */
+export const TITLE_MAX = 60
+export const DESCRIPTION_MAX = 155
+
 export type SocialImage = { url: string; alt: string }
 
 /** The site's own social image (src/app/opengraph-image.tsx). */
@@ -36,7 +40,7 @@ const LLMS_TYPES = { "text/plain": [{ url: "/llms.txt", title: "For AI assistant
  * Metadata for one page: its title (the layout adds " · NotAQuote.FYI"), a
  * description, its canonical address, and matching Open Graph and Twitter
  * tags. Next.js merges metadata shallowly, so every page sets the whole
- * openGraph and alternates objects here, social image included.
+ * openGraph and alternates objects here (see `image` for social images).
  */
 export function pageMetadata(input: {
   title: string
@@ -46,17 +50,23 @@ export function pageMetadata(input: {
   absoluteTitle?: boolean
   type?: "website" | "article"
   /**
-   * The social image, for pages without their own opengraph-image file: a
-   * page's openGraph replaces its parents', so the site's image has to be named
-   * here. A page's own opengraph-image file still wins.
+   * The social image. Pass null on routes with their own opengraph-image file
+   * (home, Compare, each state and car page): Next.js then uses that file.
+   * Otherwise name one here, since a page's openGraph object replaces its
+   * parents' (and with it an image inherited from a parent folder). An
+   * explicit image here wins over the route's own file, so never set both.
+   * Defaults to the site's image.
    */
-  image?: SocialImage
+  image?: SocialImage | null
+  /** Keep the page for visitors but out of search results. */
+  noindex?: boolean
 }): Metadata {
-  const fullTitle = input.absoluteTitle ? input.title : `${input.title} · ${SITE_NAME}`
-  const image = input.image ?? SITE_IMAGE
-  const images = [{ url: image.url, width: 1200, height: 630, alt: image.alt, type: "image/png" }]
+  const fullTitle = input.absoluteTitle || input.title.length + SITE_NAME.length + 3 > TITLE_MAX ? input.title : `${input.title} · ${SITE_NAME}`
+  const image = input.image === undefined ? SITE_IMAGE : input.image
+  const images = image ? [{ url: image.url, width: 1200, height: 630, alt: image.alt, type: "image/png" }] : undefined
   return {
-    title: input.absoluteTitle ? { absolute: input.title } : input.title,
+    // A title that won't fit with " · NotAQuote.FYI" after it goes out on its own.
+    title: fullTitle === input.title ? { absolute: input.title } : input.title,
     description: input.description,
     alternates: { canonical: input.path, types: LLMS_TYPES },
     openGraph: {
@@ -66,14 +76,15 @@ export function pageMetadata(input: {
       url: input.path,
       title: fullTitle,
       description: input.description,
-      images,
+      ...(images ? { images } : {}),
     },
     twitter: {
       card: "summary_large_image",
       title: fullTitle,
       description: input.description,
-      images,
+      ...(images ? { images } : {}),
     },
+    ...(input.noindex ? { robots: { index: false, follow: true } } : {}),
   }
 }
 
@@ -142,7 +153,7 @@ export function homeJsonLd(description: string): JsonLd[] {
 }
 
 /** A guide page, as an Article. */
-export function articleJsonLd(input: { title: string; description: string; path: string; dateModified: string }): JsonLd {
+export function articleJsonLd(input: { title: string; description: string; path: string; dateModified: string; datePublished: string }): JsonLd {
   return {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -150,7 +161,9 @@ export function articleJsonLd(input: { title: string; description: string; path:
     description: input.description,
     url: `${SITE_ORIGIN}${input.path}`,
     mainEntityOfPage: `${SITE_ORIGIN}${input.path}`,
-    dateModified: input.dateModified,
+    image: `${SITE_ORIGIN}${GUIDES_IMAGE.url}`,
+    datePublished: input.datePublished,
+    dateModified: input.dateModified > input.datePublished ? input.dateModified : input.datePublished,
     inLanguage: "en-US",
     author: ORGANIZATION,
     publisher: ORGANIZATION,
@@ -159,62 +172,67 @@ export function articleJsonLd(input: { title: string; description: string; path:
 }
 
 /**
- * The state data on /sources, as a Dataset: typical prices (NAIC, used as
- * facts with credit) and each state's minimum coverage (compiled by us from
- * statutes and insurance departments, CC BY 4.0).
+ * The state data on /sources, as two Datasets, because they're owned
+ * differently:
+ * - the minimum coverage rules, which we compiled from statutes and
+ *   insurance departments (ours, CC BY 4.0);
+ * - the typical prices, which are NAIC's figures. We use them as facts, with
+ *   credit, and claim no license or authorship for them.
  */
-export function stateDatasetJsonLd(): JsonLd {
-  const sources = STATE_BASELINE_SOURCES.map((source) => ({
+export function stateDatasetsJsonLd(): JsonLd[] {
+  const raw = `${GITHUB_REPO_URL.replace("https://github.com/", "https://raw.githubusercontent.com/")}/main`
+  const naic = STATE_BASELINE_SOURCES.filter((source) => /naic/i.test(source.id)).map((source) => ({
     "@type": "CreativeWork",
     name: source.name,
     publisher: { "@type": "Organization", name: source.publisher },
     url: source.url,
   }))
-  const raw = `${GITHUB_REPO_URL.replace("https://github.com/", "https://raw.githubusercontent.com/")}/main`
-  return {
+  const shared = {
     "@context": "https://schema.org",
     "@type": "Dataset",
-    name: "Car insurance by US state: typical prices and minimum coverage",
-    description:
-      "For each of the 50 states and DC: the average yearly cost of full coverage and of liability-only coverage in 2023 (from the NAIC Auto Insurance Database Report), and the least insurance each state's law requires (liability limits, personal injury protection, medical payments, uninsured and underinsured motorist coverage, and no-fault rules), each row with its statute or insurance department source and the date it was checked.",
-    url: `${SITE_ORIGIN}/sources#state-baselines`,
-    sameAs: `${SITE_ORIGIN}/states`,
-    license: CC_BY,
     isAccessibleForFree: true,
-    creator: ORGANIZATION,
-    publisher: ORGANIZATION,
-    dateModified: SOURCES_UPDATED,
-    temporalCoverage: `${STATE_BASELINE_DATA_YEAR}/${DATA_DATES.stateRules.slice(0, 4)}`,
     spatialCoverage: { "@type": "Place", name: "United States" },
-    keywords: ["car insurance", "auto insurance", "minimum coverage", "state insurance requirements", "average premium"],
-    variableMeasured: [
-      "Average full-coverage premium (combined average premium), 2023",
-      "Average liability premium, 2023",
-      "Minimum bodily-injury liability per person and per crash",
-      "Minimum property-damage liability",
-      "Personal injury protection, medical payments, uninsured and underinsured motorist requirements",
-      "No-fault rules",
-    ],
-    isBasedOn: [
-      ...sources,
-      { "@type": "CreativeWork", name: "State statutes and insurance department pages (one or more per state, listed in the data)" },
-    ],
-    citation: sources.map((source) => `${source.publisher.name}, ${source.name}`),
-    distribution: [
-      {
-        "@type": "DataDownload",
-        name: "State minimum rules",
-        encodingFormat: "application/json",
-        contentUrl: `${raw}/data/state-rules/state-rules.json`,
-      },
-      {
-        "@type": "DataDownload",
-        name: "Typical price by state",
-        encodingFormat: "application/json",
-        contentUrl: `${raw}/data/state-baselines/state-baselines.json`,
-      },
-    ],
   }
+  return [
+    {
+      ...shared,
+      name: "Minimum car insurance required by each US state",
+      description:
+        "For each of the 50 states and DC, the least car insurance the law requires: liability limits, personal injury protection, medical payments, uninsured and underinsured motorist coverage, and no-fault rules, each row with its statute or insurance department source and the date it was checked.",
+      url: `${SITE_ORIGIN}/sources#all-states`,
+      sameAs: `${SITE_ORIGIN}/states`,
+      license: CC_BY,
+      creator: ORGANIZATION,
+      publisher: ORGANIZATION,
+      dateModified: DATA_DATES.stateRules,
+      temporalCoverage: DATA_DATES.stateRules.slice(0, 4),
+      keywords: ["car insurance", "minimum coverage", "state insurance requirements", "no-fault"],
+      variableMeasured: [
+        "Minimum bodily-injury liability per person and per crash",
+        "Minimum property-damage liability",
+        "Personal injury protection, medical payments, uninsured and underinsured motorist requirements",
+        "No-fault rules",
+      ],
+      isBasedOn: { "@type": "CreativeWork", name: "State statutes and insurance department pages (one or more per state, listed in the data)" },
+      distribution: [{ "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${raw}/data/state-rules/state-rules.json` }],
+    },
+    {
+      ...shared,
+      name: "Average car insurance premium by US state, 2023 (NAIC)",
+      description:
+        "For each of the 50 states and DC, the average yearly cost of full coverage and of liability-only coverage in 2023, as published by the National Association of Insurance Commissioners (NAIC). The figures are NAIC's; we use them as facts, with credit.",
+      url: `${SITE_ORIGIN}/sources#state-baselines`,
+      creditText: "Source: NAIC, 2022/2023 Auto Insurance Database Report",
+      publisher: ORGANIZATION,
+      dateModified: DATA_DATES.stateBaselines,
+      temporalCoverage: String(STATE_BASELINE_DATA_YEAR),
+      keywords: ["car insurance", "average premium", "NAIC"],
+      variableMeasured: ["Average full-coverage premium (combined average premium), 2023", "Average liability premium, 2023"],
+      isBasedOn: naic,
+      citation: naic.map((source) => `${source.publisher.name}, ${source.name}`),
+      distribution: [{ "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${raw}/data/state-baselines/state-baselines.json` }],
+    },
+  ]
 }
 
 // ---------------------------------------------------------------------------

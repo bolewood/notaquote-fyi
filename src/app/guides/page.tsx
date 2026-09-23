@@ -23,11 +23,16 @@ export default function GuidesPage() {
       title: "Car insurance by state",
       blurb: "Every state and DC: the typical price, the least insurance the law asks for, and what a new teen driver adds.",
     },
-    {
-      href: "/cars",
-      title: "What popular cars cost to insure",
-      blurb: `${carPages(SERVER_CATALOG).length} cars, SUVs, and trucks, each with a typical price, what adding a teen costs, and why.`,
-    },
+    // No car pages when the per-model claims data is off.
+    ...(carPages(SERVER_CATALOG).length > 0
+      ? [
+          {
+            href: "/cars",
+            title: "What popular cars cost to insure",
+            blurb: `${carPages(SERVER_CATALOG).length} cars, SUVs, and trucks, each with a typical price, what adding a teen costs, and why.`,
+          },
+        ]
+      : []),
   ]
   return (
     <TrustArticle

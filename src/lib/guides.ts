@@ -3,30 +3,32 @@
  * they show, from the same engine as the rest of the site.
  */
 import type { VehicleCatalog } from "./catalog"
-import { differenceWords, estimateDollars } from "./format"
+import { differenceWords } from "./format"
 import { DEFAULT_SCENARIO, STATES, type StateCode } from "./scenario"
 import { encodeSharePath } from "./share-link"
+import { joinNames, tiedAtTop } from "./state-content"
 import { priceTeenCars, teenDriver, teenPool, TEEN_GROUPS, typicalTeenCost, type TeenGroupId, type TeenPriced } from "./teen-cars"
-import { estimate } from "./factor-engine"
 
-export type Guide = { slug: string; path: string; title: string; description: string; blurb: string }
+export type Guide = { slug: string; path: string; title: string; description: string; blurb: string; published: string }
 
 export const TEEN_CARS_GUIDE = {
   slug: "cheapest-cars-to-insure-for-teens",
   path: "/guides/cheapest-cars-to-insure-for-teens",
-  title: "The cheapest cars to insure for a new teen driver",
+  title: "Cheapest cars to insure for a teen driver",
   description:
-    "Which popular first cars, SUVs, and trucks cost the least to insure for a new 16-year-old, why (insurance claims data), and why the order is the same in every state. Planning estimates, not quotes.",
+    "Which popular first cars, SUVs, and trucks cost the least to insure for a new 16-year-old, why, and why the order is the same in every state.",
   blurb: "Which popular cars cost the least to add a new 16-year-old with, and why.",
+  published: "2026-09-23",
 } as const satisfies Guide
 
 export const TEEN_COST_GUIDE = {
   slug: "adding-a-teen-driver",
   path: "/guides/adding-a-teen-driver",
-  title: "How much does adding a teen driver cost?",
+  title: "Adding a teen driver: what it costs",
   description:
-    "What adding a 16-year-old to your car insurance costs in every state, how it compares with the teen's own policy, and what brings it down. From public data, with the range shown.",
-  blurb: "What a new 16-year-old adds to a typical policy, state by state, and what brings it down.",
+    "What adding a 16-year-old to your car insurance costs in every state, how it compares with the teen's own policy, and what changes it. From public data.",
+  blurb: "What a new 16-year-old adds to a typical policy, state by state, and what changes it.",
+  published: "2026-09-23",
 } as const satisfies Guide
 
 export const GUIDES: readonly Guide[] = [TEEN_CARS_GUIDE, TEEN_COST_GUIDE]
@@ -45,14 +47,14 @@ export function teenCarsByGroup(catalog: VehicleCatalog): { id: TeenGroupId; lab
   }))
 }
 
-/** "Add these to a comparison": the cars, added to the visitor's own list (their own driver). */
-export function addCarsHref(cars: readonly TeenPriced[]): string {
+/** "Compare these for your teen": the cars, for a new 16-year-old in the visitor's own state, shown like a shared list. */
+export function teenCarsHref(cars: readonly TeenPriced[]): string {
   return encodeSharePath({
     page: "/compare",
     scenario: teenDriver(DEFAULT_SCENARIO.state),
     teenOnParentPolicy: true,
     cars: cars.map((item) => ({ ...item.car.pick, starred: false })),
-    via: "add",
+    via: "teen",
   })
 }
 
@@ -93,22 +95,49 @@ export function teenCostByState(): StateTeenRow[] {
   })
 }
 
-/** The national typical figures, with and without the two usual discounts. */
+/** The national typical figures. */
 export function nationalTeenCost() {
   const plain = typicalTeenCost({ kind: "national" })
-  const start = plain.start
-  const discounts = { ...start.scenario, goodStudent: true, driverTraining: true }
-  const withDiscounts = estimate(start, { ...discounts, age: "16-18", yearsLicensed: "under-1", teen: true }, { vehicle: "average", teenOnParentPolicy: true })
-  return {
-    ...plain,
-    withDiscounts: withDiscounts.likely - plain.added.before.likely,
-    percent: Math.round((plain.added.after.likely / plain.added.before.likely - 1) * 100),
-  }
+  return { ...plain, share: plain.added.after.likely / plain.added.before.likely - 1 }
 }
 
-export function teenCarsHeadline(catalog: VehicleCatalog): string {
+/** "roughly two-thirds more": a share of a bill in words. */
+export function shareWords(share: number): string {
+  const options: [number, string][] = [
+    [1 / 4, "a quarter"],
+    [1 / 3, "a third"],
+    [1 / 2, "half"],
+    [2 / 3, "two-thirds"],
+    [3 / 4, "three-quarters"],
+    [1, "double"],
+  ]
+  const [, words] = options.reduce((best, option) => (Math.abs(option[0] - share) < Math.abs(best[0] - share) ? option : best))
+  return words === "double" ? "roughly double" : `roughly ${words} more`
+}
+
+/** "the Subaru Forester, Outback, and Crosstrek": several models, the make said once when they share it. */
+export function modelsWords(cars: readonly TeenPriced[]): string {
+  const makes = new Set(cars.map((item) => item.car.pick.make))
+  if (makes.size === 1 && cars.length > 1) {
+    const make = cars[0].car.pick.make
+    return `the ${make} ${joinNames(cars.map((item) => item.car.pick.model))}`
+  }
+  return `the ${joinNames(cars.map((item) => item.car.model))}`
+}
+
+/**
+ * The guide's answer, from the numbers: the three cheapest and the priciest.
+ * When many cars tie (no per-model claims data), it says so instead of naming
+ * a winner.
+ */
+export function teenCarsLead(catalog: VehicleCatalog): string {
   const all = nationalTeenCars(catalog)
-  const first = all[0]
-  const last = all.at(-1)!
-  return `Nationally, the ${first.car.label} costs the least of the ${all.length} to add a new 16-year-old with: about ${differenceWords(first.added.increase)}. The ${last.car.label} costs the most: about ${differenceWords(last.added.increase)}. On their own policy, the same teen would pay about ${estimateDollars(first.own.likely)} a year with the ${first.car.model}.`
+  const ties = tiedAtTop(all)
+  if (ties >= 3) {
+    return `Of ${all.length} popular first cars, SUVs, and trucks, ${ties} tie for the least to add a new 16-year-old with, about ${differenceWords(all[0].added.increase)} nationally: without claims results for each model, cars of the same kind come out the same.`
+  }
+  const top = all.slice(0, 3)
+  const lastMake = all.at(-1)!.car.pick.make
+  const priciest = all.slice(-2).every((item) => item.car.pick.make === lastMake) ? `${lastMake}s cost the most` : `The ${all.at(-1)!.car.model} costs the most`
+  return `Of ${all.length} popular first cars, SUVs, and trucks, ${modelsWords(top)} cost the least to add a new 16-year-old: about ${differenceWords(top[0].added.increase)} nationally. ${priciest}, at about ${differenceWords(all.at(-1)!.added.increase)}.`
 }

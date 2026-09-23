@@ -18,7 +18,6 @@ import { HowWeGotThis, VehicleFixLink } from "@/components/how-we-got-this"
 import { RangeBar } from "@/components/money"
 import { HomeSkeleton, STARTER_ICONS, TABS, type Tab } from "@/components/page-skeleton"
 import { ShareBox } from "@/components/share-box"
-import { carPagePath } from "@/lib/car-page-links"
 import { carName, modelTrims, resolveCar, WHAT_IF_CARS } from "@/lib/car-search"
 import { vehicleFacts } from "@/lib/catalog-class"
 import { catalogYears, trimRecord, type VehiclePick } from "@/lib/catalog"
@@ -62,6 +61,7 @@ import {
   type PremiumPeriod,
   type Situation,
 } from "@/lib/situation"
+import { useCarPagePath } from "@/lib/use-car-page-path"
 import { useCatalog } from "@/lib/use-catalog"
 import { useSituation } from "@/lib/use-stored"
 import { cn } from "cn"
@@ -150,8 +150,20 @@ function readInitial(): {
   present: boolean
   /** The link came from one of the site's own pages, not from another person. */
   fromPage: boolean
+  /** A state page: show the visitor's own situation in this state. */
+  moveTo: StateCode | null
 } {
   const decoded = readShareArrival()
+  if (decoded.status === "ok" && decoded.via === "state") {
+    return {
+      situation: null,
+      changes: decoded.next ? diffFrom(decoded.scenario, decoded.next) : {},
+      notes: [],
+      present: true,
+      fromPage: true,
+      moveTo: decoded.scenario.state,
+    }
+  }
   if (decoded.status === "ok" && decoded.via === "add") {
     // A car page's "What if you bought this car?": try the car on the visitor's own situation.
     const next = decoded.next
@@ -169,6 +181,7 @@ function readInitial(): {
       notes: what ? [`We put ${what} in the What if… card, tried on “Your situation now.” Change anything you like.`] : [],
       present: true,
       fromPage: true,
+      moveTo: null,
     }
   }
   if (decoded.status === "ok") {
@@ -180,9 +193,11 @@ function readInitial(): {
     return {
       situation,
       changes: decoded.next ? diffFrom(decoded.scenario, decoded.next) : {},
-      notes: shareArrivalNotes(decoded),
+      // From one of our pages, the banner below says it all; otherwise, say it was shared.
+      notes: decoded.via === "page" ? [] : shareArrivalNotes(decoded),
       present: true,
       fromPage: decoded.via === "page",
+      moveTo: null,
     }
   }
   return {
@@ -191,6 +206,7 @@ function readInitial(): {
     notes: decoded.status === "invalid" ? [SHARE_INVALID_NOTE] : [],
     present: decoded.status === "invalid",
     fromPage: false,
+    moveTo: null,
   }
 }
 
@@ -269,8 +285,16 @@ function CalculatorReady() {
   const catalogLoad = useCatalog()
   const catalog = catalogLoad.catalog
 
-  // A shared link shows the sender's situation until the visitor changes something.
-  const [linked, setLinked] = useState<Situation | null>(initial.situation)
+  // A shared link shows the sender's situation until the visitor changes something. A state
+  // page's link shows the visitor's own situation in that state (what they pay only if it's
+  // already that state, since a premium belongs to where it was quoted).
+  const [linked, setLinked] = useState<Situation | null>(() => {
+    if (!initial.moveTo) return initial.situation
+    const own = stored.value ?? DEFAULT_SITUATION
+    const same = own.scenario.state === initial.moveTo
+    return { ...own, scenario: withTeenFlag({ ...own.scenario, state: initial.moveTo }), premium: same ? own.premium : null }
+  })
+  const movedFrom = initial.moveTo && stored.value && stored.value.scenario.state !== initial.moveTo ? stored.value.scenario.state : null
   const situation = linked ?? stored.value ?? DEFAULT_SITUATION
   const now = situation.scenario
   const [changes, setChanges] = useState<Partial<Scenario>>(initial.changes)
@@ -331,7 +355,12 @@ function CalculatorReady() {
    * premium: that's kept only if the visitor typed it themselves.
    */
   function saveSituation(nextSituation: Situation, premiumTyped = false) {
-    const own = linked && !premiumTyped ? adoptSharedSituation(nextSituation, stored.value) : nextSituation
+    const own =
+      linked && !premiumTyped
+        ? initial.moveTo
+          ? { ...nextSituation, premium: movedFrom ? null : nextSituation.premium }
+          : adoptSharedSituation(nextSituation, stored.value)
+        : nextSituation
     stored.write({ ...own, scenario: withTeenFlag(own.scenario) })
     if (linked && !premiumTyped) setPremiumDraft(null)
     setLinked(null)
@@ -385,6 +414,7 @@ function CalculatorReady() {
 
   const nowCar: VehiclePick = { year: now.year, make: now.make, model: now.model, trim: now.trim }
   const nextCar: VehiclePick = { year: next.year, make: next.make, model: next.model, trim: next.trim }
+  const nextCarPage = useCarPagePath(nextCar.make, nextCar.model, changed.includes("vehicle"))
   const presets = presetsFor(tab, now)
   const premiumMessage =
     premium.kind === "too-high"
@@ -416,9 +446,11 @@ function CalculatorReady() {
         {linked ? (
           <div className="mt-3 flex flex-wrap items-center gap-3 rounded-2xl bg-sun-soft px-4 py-3 text-sm">
             <p className="flex-1">
-              {initial.fromPage ? "You're looking at an example situation." : "You're looking at someone else's situation."} Change
-              anything and it becomes yours
-              {linked.premium !== null ? " (without what they pay)" : ""}.
+              {initial.moveTo
+                ? `Your situation${movedFrom ? `, moved to ${stateName(initial.moveTo)}` : ` in ${stateName(initial.moveTo)}`}${stored.value ? "" : " (a typical one until you set yours)"}, with a new 16-year-old as the what-if.${movedFrom && stored.value?.premium != null ? " What you pay now isn't used here, since it's for another state." : ""} Change anything and it becomes yours.`
+                : initial.fromPage
+                  ? "You're looking at an example from the page you came from. Change anything and it becomes yours, or tell us what you pay now."
+                  : `You're looking at someone else's situation. Change anything and it becomes yours${linked.premium !== null ? " (without what they pay)" : ""}.`}
             </p>
             <button
               type="button"
@@ -603,7 +635,7 @@ function CalculatorReady() {
                   onKeep={keepWhatIf}
                   vehicleChanged={changed.includes("vehicle")}
                   nextCarName={carName(nextCar)}
-                  carPage={changed.includes("vehicle") ? carPagePath(nextCar.make, nextCar.model) : null}
+                  carPage={nextCarPage}
                   carPageName={`${nextCar.make} ${nextCar.model}`}
                   compareHref={encodeSharePath({
                     page: "/compare",

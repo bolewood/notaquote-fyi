@@ -927,6 +927,12 @@ export function typicalStart(target: Scenario, options: DriverOptions = {}): Sta
   }
 }
 
+/** A 2023 NAIC figure brought up to today the same way the typical starting price is (whole dollars). */
+export function broughtUpToToday(amount: number): number {
+  const ratio = trendRatio()
+  return ratio ? roundHalfUp(mul(rat(Math.round(amount * 100)), ratio, rat(1, 100))) : Math.round(amount)
+}
+
 /**
  * The same kind of starting point as typicalStart, from NAIC's national
  * (countrywide) average instead of one state's, brought up to today the same

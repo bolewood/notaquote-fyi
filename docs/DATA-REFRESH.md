@@ -58,6 +58,8 @@ Work on a branch named `data-refresh-YEAR`. Commit after each step, so the histo
 ### 7. Vehicle claims results (HLDI)
 - First check the permission status noted in `data/factors/sources/sources.json`. If IIHS said no, set `useHldiModels` to `false` in `data/factors/vehicle-families.json` and skip the rest of this step.
 - If HLDI has published newer model years, refresh the subset CSV (see the notes at the top of `scripts/derive-factors.ts`). Add families for new popular models to `vehicle-families.json`, then rebuild. The bias tests (911 > Mustang, Model Y > RAV4, and so on) will tell you if something went sideways.
+- **Car pages.** They move to the newest model year on their own; their addresses don't change. If `npm test` says a car in `data/car-pages.json` (or on the popular lists) lost its model-level claims data, first check whether the catalog renamed it (then fix the name, and keep the old address with `"slug"`). If it really has no claims results any more, its page would disappear and its address would return 404. Don't just drop it: add a permanent redirect for `/cars/<slug>` to `/cars` in `next.config.ts`, remove the car from the list, and move its slug out of `src/lib/seo-slugs.json` into that file's `"retired"` list, so the test knows it's on purpose.
+- **If IIHS said no** (`useHldiModels` is `false`): every car page, `/cars`, and the links to them go away together, and the teen guides and state pages switch to wording that doesn't name a single cheapest car. Build and click through `/guides` and a state page to check. Add the redirect above for `/cars/*` too.
 
 ### 8. Everything else
 - **Fleet age:** if S&P's new figure crosses a band boundary, revisit `fleet-age-band` in `data/factors/assumptions.json`.

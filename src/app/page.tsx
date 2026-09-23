@@ -5,13 +5,14 @@ import { TrustStrip } from "@/components/trust-strip"
 import { homeJsonLd, pageMetadata } from "@/lib/site-meta"
 
 const DESCRIPTION =
-  "What would your car insurance cost with a different car, a new teen driver, or a move? A free, open-source estimate from public data, worked out in your browser. Not a quote."
+  "What would a new car, a teen driver, or a move do to your car insurance? A free, open-source estimate from public data. Not a quote."
 
 export const metadata: Metadata = pageMetadata({
-  title: "NotAQuote.FYI: what a new car, a teen driver, or a move does to your car insurance",
+  title: "NotAQuote.FYI: car insurance what-ifs for families",
   absoluteTitle: true,
   description: DESCRIPTION,
   path: "/",
+  image: null,
 })
 
 /**

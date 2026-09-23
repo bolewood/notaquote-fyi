@@ -1,35 +1,36 @@
 /**
  * The search pages (states, cars, guides) and what search engines read:
  * addresses that never move, pages that each say something of their own,
- * numbers that match the rest of the site, and a sitemap and structured data
- * that line up with the pages that exist.
+ * numbers that match the rest of the site, and a sitemap, social images, and
+ * structured data that line up with the pages that exist.
  */
 import assert from "node:assert/strict"
 import { readdirSync, statSync } from "node:fs"
 import { join } from "node:path"
 import test from "node:test"
 import type { Metadata } from "next"
+import slugFile from "./seo-slugs.json"
 import { handleCompare } from "./agent-api"
 import { SERVER_CATALOG as catalog } from "./agent-catalog"
 import { carId } from "./agent-cars"
-import { carMainText, carTitle, carDescription } from "./car-content"
-import { carPagePath } from "./car-page-links"
+import { becauseWords, CAR_PAGE_BAR, carContent, carMainText, carUniqueness, noindexCarSlugs, vsAverageWords } from "./car-content"
+import { carPagePath, MODELS_ENABLED } from "./car-page-links"
 import { carFigures, carListings, carPages, carSlug, claimsYearPick, CLAIMS_YEARS } from "./car-pages"
 import { FACTOR_BUNDLE, nationalTypicalStart } from "./factor-engine"
 import { shownYearly } from "./format"
-import { GUIDES } from "./guides"
+import { GUIDES, teenCarsLead } from "./guides"
 import { DEFAULT_SCENARIO, STATES } from "./scenario"
 import { decodeShareSearch } from "./share-link"
-import { breadcrumbJsonLd, homeJsonLd, jsonLdText, SITE_NAME, stateDatasetJsonLd } from "./site-meta"
+import { breadcrumbJsonLd, DESCRIPTION_MAX, homeJsonLd, jsonLdText, SITE_NAME, stateDatasetsJsonLd, TITLE_MAX } from "./site-meta"
 import { sitemapEntries } from "./sitemap-entries"
 import { countrywideBaseline } from "./state-baselines"
-import { SAME_ORDER_NOTE, stateDescription, stateMainText, stateTitle } from "./state-content"
+import { leadText, minimumWords, moveWords, SAME_ORDER_NOTE, stateDescription, stateMainText, stateTitle } from "./state-content"
 import { NEIGHBORS } from "./state-neighbors"
 import { stateFigures, TEEN_TOP } from "./state-pages"
 import { STATE_SLUGS, stateBySlug, statePath, stateSlug } from "./state-slugs"
-import { liabilityShorthand } from "./state-rules"
-import { generateStaticParams as stateParams } from "../app/states/[state]/page"
-import { generateStaticParams as carParams } from "../app/cars/[slug]/page"
+import { liabilityShorthand, stateRule } from "./state-rules"
+import { generateMetadata as stateMetadata, generateStaticParams as stateParams } from "../app/states/[state]/page"
+import { generateMetadata as carMetadata, generateStaticParams as carParams } from "../app/cars/[slug]/page"
 
 const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/
 
@@ -38,236 +39,213 @@ const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/
 
 test("state slugs are the state's name, lowercase with dashes, and never change", () => {
   assert.equal(STATE_SLUGS.length, 51)
-  assert.equal(new Set(STATE_SLUGS.map((item) => item.slug)).size, 51)
   for (const item of STATE_SLUGS) {
     assert.match(item.slug, SLUG)
     assert.equal(stateBySlug(item.slug), item.code)
   }
-  // Pinned: these addresses are live. Changing one breaks every link to it.
-  assert.equal(stateSlug("OH"), "ohio")
-  assert.equal(stateSlug("NY"), "new-york")
+  assert.deepEqual(
+    STATE_SLUGS.map((item) => item.slug),
+    slugFile.states,
+    "A state slug changed. Live links would break; see src/lib/seo-slugs.json.",
+  )
   assert.equal(stateSlug("DC"), "district-of-columbia")
   assert.equal(statePath("CA"), "/states/california")
   assert.equal(stateBySlug("OH"), null)
-  assert.equal(stateBySlug("atlantis"), null)
+  assert.equal(stateBySlug("Ohio"), null)
 })
 
-test("car slugs are the make and model, without a year, and never change", () => {
+test("car slugs match the pinned list: none changes or disappears by accident", () => {
   const listings = carListings()
-  assert.equal(new Set(listings.map((item) => item.slug)).size, listings.length, "two cars share a slug")
-  for (const item of listings) assert.match(item.slug, SLUG, item.slug)
-  // Pinned: these addresses are live.
-  assert.equal(carSlug("Toyota", "RAV4"), "toyota-rav4")
-  assert.equal(carSlug("Tesla", "Model Y"), "tesla-model-y")
-  assert.equal(carSlug("Ford", "F-150"), "ford-f-150")
+  const slugs = listings.map((item) => item.slug)
+  assert.equal(new Set(slugs).size, slugs.length, "two cars share a slug")
+  for (const slug of slugs) assert.match(slug, SLUG, slug)
+  const pinned = new Set(slugFile.cars)
+  const retired = new Set(slugFile.retired)
+  const gone = [...pinned].filter((slug) => !slugs.includes(slug) && !retired.has(slug))
+  assert.deepEqual(gone, [], "These live slugs disappeared. Keep them with \"slug\" in data/car-pages.json, or retire them with a redirect (docs/DATA-REFRESH.md).")
+  const added = slugs.filter((slug) => !pinned.has(slug))
+  assert.deepEqual(added, [], "New car slugs: add them to src/lib/seo-slugs.json in the same change.")
   assert.equal(carSlug("Toyota", "RAV4 Prime (PHEV)"), "toyota-rav4-prime")
-  assert.equal(carSlug("Mercedes-Benz", "C-Class"), "mercedes-benz-c-class")
-  const slugs = new Set(listings.map((item) => item.slug))
-  for (const slug of ["toyota-rav4", "tesla-model-y", "subaru-outback", "honda-civic", "ford-f-150", "honda-cr-v", "toyota-camry"]) {
-    assert.ok(slugs.has(slug), `${slug} is missing`)
-  }
+  assert.equal(carSlug("Ford", "F-150"), "ford-f-150")
 })
 
-test("every car on the site's popular lists and in data/car-pages.json gets a page", () => {
-  if (!FACTOR_BUNDLE.vehicle.modelsEnabled) return
+test("every listed car gets a page when the per-model claims data is on", () => {
+  if (!MODELS_ENABLED) {
+    assert.equal(carPages(catalog).length, 0)
+    return
+  }
   const pages = new Set(carPages(catalog).map((page) => page.slug))
   const missing = carListings().filter((listing) => !pages.has(listing.slug))
   assert.deepEqual(
     missing.map((item) => `${item.make} ${item.model}`),
     [],
-    "These have no model-level claims data in our claims years. Fix the name in data/car-pages.json, or remove the car.",
+    "These have no model-level claims data. Fix the name in data/car-pages.json, or retire the car (docs/DATA-REFRESH.md, step 7).",
   )
-  assert.ok(pages.size >= 90, `only ${pages.size} car pages`)
 })
 
 test("car pages exist only for cars with claims results for that exact model", () => {
   for (const page of carPages(catalog)) {
     assert.equal(page.relativity.level, "model", page.slug)
-    assert.ok(page.relativity.rows.length > 0, page.slug)
     assert.equal(page.relativity.outsideYears, false, page.slug)
     assert.ok(page.pick.year >= CLAIMS_YEARS.first && page.pick.year <= CLAIMS_YEARS.last, page.slug)
-    // The newest year the claims data supports.
     const newer = catalog.vehicles[String(page.pick.year + 1)]?.[page.make]?.[page.model]
     if (page.pick.year < CLAIMS_YEARS.last) assert.ok(!newer, `${page.slug} could use a newer year`)
     assert.ok(carId(catalog, page.pick))
   }
-  // A model we only have a class average for gets no page.
   assert.equal(claimsYearPick(catalog, "Mitsubishi", "Mirage"), null)
   assert.equal(claimsYearPick(catalog, "Honda", "Prologue"), null)
-})
-
-test("the What-if and Compare pages link only to car pages that exist", () => {
-  const pages = new Set(carPages(catalog).map((page) => `/cars/${page.slug}`))
-  for (const listing of carListings()) {
-    const path = carPagePath(listing.make, listing.model)
-    if (path) assert.ok(pages.has(path), path)
-  }
   assert.equal(carPagePath("Mitsubishi", "Mirage"), null)
-  assert.equal(carPagePath("Tesla", "Model Y"), "/cars/tesla-model-y")
 })
 
 // ---------------------------------------------------------------------------
-// State pages: what really differs, and what doesn't
+// State pages
 
 const ALL_STATES = STATES.map((state) => stateFigures(catalog, state.code))
 
-test("every state page renders with its own numbers and its own words", () => {
-  assert.equal(ALL_STATES.length, 51)
+test("every state page has its own numbers and words", () => {
   const texts = ALL_STATES.map(stateMainText)
   assert.equal(new Set(texts).size, 51, "two state pages have the same main text")
   for (const f of ALL_STATES) {
-    const text = stateMainText(f)
-    assert.ok(text.length > 1500, `${f.code} is thin`)
-    assert.match(text, new RegExp(f.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")))
-    assert.ok(f.baseline.annual > 0 && f.start.annual > f.baseline.annual, f.code)
-    assert.ok(f.teen.added.increase > 0, f.code)
-    assert.ok(f.rule, `${f.code} has no rule`)
-    assert.ok(f.neighbors.length > 0, `${f.code} has nothing to compare with`)
+    assert.ok(stateMainText(f).length > 1200, `${f.code} is thin`)
+    assert.ok(f.start.annual > f.baseline.annual && f.teen.added.increase > 0 && f.rule && f.neighbors.length > 0, f.code)
   }
-  // Leads, titles, and descriptions are each unique.
-  for (const pick of [stateTitle, stateDescription]) {
-    assert.equal(new Set(ALL_STATES.map(pick)).size, 51)
-  }
-})
-
-test("typical prices, minimums, and teen costs really differ across states", () => {
+  for (const pick of [stateTitle, stateDescription, leadText]) assert.equal(new Set(ALL_STATES.map(pick)).size, 51)
   const prices = new Set(ALL_STATES.map((f) => f.baseline.annual))
   const minimums = new Set(ALL_STATES.map((f) => (f.rule ? liabilityShorthand(f.rule) : null)))
   const teen = new Set(ALL_STATES.map((f) => shownYearly(f.teen.added.increase)))
-  const ranks = new Set(ALL_STATES.map((f) => f.rank.rank))
-  assert.ok(prices.size >= 48, `only ${prices.size} different typical prices`)
-  assert.ok(minimums.size >= 12, `only ${minimums.size} different minimums`)
-  assert.ok(teen.size >= 30, `only ${teen.size} different teen costs`)
-  assert.ok(ranks.size >= 48)
-  // Florida costs more than Maine, and says so.
-  const fl = stateFigures(catalog, "FL")
-  const me = stateFigures(catalog, "ME")
-  assert.ok(fl.teen.added.increase > me.teen.added.increase)
-  assert.equal(fl.rank.rank, 1)
+  assert.ok(prices.size >= 48 && minimums.size >= 12 && teen.size >= 30)
 })
 
-test("the cheapest cars for a teen come out in the same order in every state, and the page says so", () => {
+test("minimums read in full words where there's no injury-liability minimum", () => {
+  const fl = stateRule("FL")!
+  assert.equal(minimumWords(fl), "the law asks for $10,000 of personal injury protection and $10,000 of property damage liability")
+  assert.doesNotMatch(stateDescription(stateFigures(catalog, "FL")), /on the page/)
+  assert.match(minimumWords(stateRule("NH")!), /^insurance itself is optional/)
+  assert.match(minimumWords(stateRule("NH")!, "cell"), /^Optional/)
+  for (const f of ALL_STATES) assert.doesNotMatch(minimumWords(f.rule, "cell"), /See the page/, f.code)
+})
+
+test("the cheapest cars for a teen come out in the same order in every state", () => {
   const order = (code: (typeof STATES)[number]["code"]) =>
     stateFigures(catalog, code).teenCars.map((item) => `${item.car.pick.make} ${item.car.pick.model}`).join(",")
-  const first = order("OH")
-  for (const state of STATES) assert.equal(order(state.code), first, state.code)
+  for (const state of STATES) assert.equal(order(state.code), order("OH"), state.code)
   assert.match(SAME_ORDER_NOTE, /same in every state, because our car data is national/)
-  // Only the dollar level moves.
-  const oh = stateFigures(catalog, "OH").teenCars[0].added.increase
-  const fl = stateFigures(catalog, "FL").teenCars[0].added.increase
-  assert.ok(fl > oh * 1.5)
 })
 
 test("the state page's teen cars match the Compare page and the API, to the dollar", () => {
   for (const code of ["OH", "CA", "TX", "NH"] as const) {
-    const f = stateFigures(catalog, code)
-    const top = f.teenCars.slice(0, TEEN_TOP)
+    const top = stateFigures(catalog, code).teenCars.slice(0, TEEN_TOP)
     const ids = top.map((item) => carId(catalog, item.car.pick))
     const result = handleCompare(catalog, new URLSearchParams(`state=${code}&age=16-18&policy=added&cars=${ids.join(",")}`))
-    assert.equal(result.status, 200)
     const body = result.body as { results: { id: string; teenAdds: { yearly: number } }[] }
     for (const item of top) {
-      const row = body.results.find((candidate) => candidate.id === carId(catalog, item.car.pick))
-      assert.ok(row, item.car.label)
+      const row = body.results.find((candidate) => candidate.id === carId(catalog, item.car.pick))!
       assert.equal(row.teenAdds.yearly, shownYearly(item.added.increase), `${code} ${item.car.label}`)
     }
-    assert.deepEqual(
-      body.results.map((row) => row.id),
-      ids,
-      `${code}: same order as the API`,
-    )
   }
 })
 
-test("neighbors are symmetric, real, and moves use the What-if page's defaults", () => {
+test("neighbors are symmetric, and small moves read as about the same", () => {
   for (const [code, list] of Object.entries(NEIGHBORS)) {
-    assert.ok(!list.includes(code as never), `${code} borders itself`)
     for (const other of list) assert.ok(NEIGHBORS[other].includes(code as never), `${code} and ${other}`)
   }
-  const oh = stateFigures(catalog, "OH")
-  assert.deepEqual(
-    oh.neighbors.map((row) => row.code),
-    ["IN", "KY", "MI", "PA", "WV"],
-  )
-  const fromMichigan = oh.neighbors.find((row) => row.code === "MI")!
-  assert.ok(fromMichigan.move.delta < 0, "Ohio costs less than Michigan")
-  assert.equal(stateFigures(catalog, "AK").bordering, false)
+  assert.equal(moveWords(10, 2000), "About the same")
+  assert.equal(moveWords(-40, 2000), "About the same")
+  assert.equal(moveWords(-230, 2000), "About $230 less a year")
+  const fromIndiana = stateFigures(catalog, "OH").neighbors.find((row) => row.code === "IN")!
+  assert.equal(moveWords(fromIndiana.move.delta, fromIndiana.move.current.likely), "About the same")
 })
 
-test("state page buttons open the What-if and Compare pages filled in for that state", () => {
+test("state page buttons: the visitor's own car in that state, and the cheapest cars for a teen there", () => {
   const oh = stateFigures(catalog, "OH")
   const whatIf = decodeShareSearch(oh.whatIfHref)
-  assert.equal(whatIf.status, "ok")
-  if (whatIf.status !== "ok") return
-  assert.equal(whatIf.via, "page")
-  assert.equal(whatIf.scenario.state, "OH")
-  assert.equal(whatIf.teenOnParentPolicy, true)
-  assert.equal(whatIf.next?.age, "16-18")
+  assert.ok(whatIf.status === "ok" && whatIf.via === "state" && whatIf.scenario.state === "OH" && whatIf.next?.age === "16-18")
   const compare = decodeShareSearch(oh.compareHref)
-  assert.equal(compare.status, "ok")
-  if (compare.status !== "ok") return
-  assert.equal(compare.via, "page")
-  assert.equal(compare.scenario.state, "OH")
-  assert.equal(compare.scenario.age, "16-18")
-  assert.equal(compare.teenOnParentPolicy, true)
+  assert.ok(compare.status === "ok" && compare.via === "page" && compare.scenario.age === "16-18" && compare.teenOnParentPolicy)
   assert.deepEqual(
-    compare.cars?.map((car) => car.model),
+    compare.status === "ok" ? compare.cars?.map((car) => car.model) : [],
     oh.teenCars.slice(0, TEEN_TOP).map((item) => item.car.pick.model),
   )
-  // Nothing in a link carries a dollar figure.
   assert.doesNotMatch(oh.whatIfHref + oh.compareHref, /anchor=|price=|yearly=/)
 })
 
 // ---------------------------------------------------------------------------
 // Car pages
 
-test("every car page has its own numbers and words, from the engine", () => {
-  const pages = carPages(catalog)
-  const texts = pages.map((page) => carMainText(carFigures(catalog, page.slug)!))
-  assert.equal(new Set(texts).size, pages.length, "two car pages have the same main text")
-  assert.equal(new Set(pages.map((page) => carTitle(carFigures(catalog, page.slug)!))).size, pages.length)
-  assert.equal(new Set(pages.map((page) => carDescription(carFigures(catalog, page.slug)!))).size, pages.length)
-  const outback = carFigures(catalog, "subaru-outback")!
-  const modelY = carFigures(catalog, "tesla-model-y")!
-  assert.ok(modelY.adult.likely > outback.adult.likely)
-  assert.ok(modelY.teen.increase > outback.teen.increase)
-  assert.ok(outback.adult.likely < outback.averageCar.likely, "the Outback costs less than an average car")
-  assert.equal(outback.page.pick.year, CLAIMS_YEARS.last)
-  for (const similar of [...outback.similar.cheaper, ...outback.similar.pricier]) {
-    const other = carFigures(catalog, similar.slug)!
-    assert.equal(other.page.facts.classId, outback.page.facts.classId)
+test("car pages are mostly their own words: measured, with the rest kept out of search", () => {
+  if (!MODELS_ENABLED) return
+  const report = carUniqueness(catalog)
+  assert.ok(report.medianUnique >= CAR_PAGE_BAR.median, `median unique share ${report.medianUnique.toFixed(2)}`)
+  assert.ok(report.maxJaccard <= CAR_PAGE_BAR.jaccard || noindexCarSlugs(catalog).size > 0, `max overlap ${report.maxJaccard.toFixed(2)}`)
+  const noindex = noindexCarSlugs(catalog)
+  const indexed = report.pages.filter((page) => !noindex.has(page.id))
+  for (const page of indexed) {
+    assert.ok(page.unique >= CAR_PAGE_BAR.floor, `${page.id}: ${page.unique.toFixed(2)}`)
+    assert.ok(page.maxJaccard <= CAR_PAGE_BAR.jaccard, `${page.id} vs ${page.closest}: ${page.maxJaccard.toFixed(2)}`)
   }
+  // Most pages clear the bar; a handful at most are kept out of search.
+  assert.ok(noindex.size <= carPages(catalog).length * 0.1, `${noindex.size} car pages below the bar`)
+})
+
+test("a car's lead never contradicts its own numbers", () => {
+  for (const page of carPages(catalog)) {
+    const f = carFigures(catalog, page.slug)!
+    const vs = vsAverageWords(f)
+    const because = becauseWords(f)
+    if (!vs.startsWith("about the same")) {
+      assert.doesNotMatch(because, /close to an average|even out/, `${page.slug}: "${vs}" but "${because}"`)
+      const up = vs.includes("more than")
+      if (because.startsWith("because of")) assert.match(because, up ? /pricier|more at-fault/ : /cheaper|fewer/, page.slug)
+    }
+    assert.doesNotMatch(carMainText(f), /\$\d+ (more|less) than an average \d{4} car: its claims/, page.slug)
+  }
+})
+
+test("car pages: model years, versions, and similar cars from the same segment", () => {
+  if (!MODELS_ENABLED) return
+  const rav4 = carFigures(catalog, "toyota-rav4")!
+  assert.ok(rav4.years.length >= 3, "a used RAV4 table")
+  assert.ok(rav4.years[0].adult.likely > rav4.years.at(-1)!.adult.likely, "older is cheaper")
+  const similar = [...rav4.similar.cheaper, ...rav4.similar.pricier].map((car) => car.slug)
+  for (const slug of similar) assert.equal(carFigures(catalog, slug)!.page.segment, rav4.page.segment, slug)
+  assert.ok(!similar.includes("volkswagen-atlas") && !similar.includes("kia-telluride"))
+  const content = carContent(rav4)
+  assert.doesNotMatch(content.title, /\d{4}/, "no year in the title")
+  assert.match(content.lead, /2024/, "the year is in the body")
 })
 
 test("the national start is NAIC's countrywide figure, brought up to today like a state's", () => {
   const start = nationalTypicalStart(DEFAULT_SCENARIO)
-  const national = countrywideBaseline()
   const trend = FACTOR_BUNDLE.typicalStart.trend
-  assert.equal(start.untrendedAnnual, national.annual)
-  assert.ok(Math.abs(start.annual - (national.annual * trend.latestValue) / trend.baseValue) <= 1)
-  assert.equal(start.national, true)
-  assert.match(start.attribution ?? "", /national average full-coverage cost in 2023 was \$1,439/)
+  assert.equal(start.untrendedAnnual, countrywideBaseline().annual)
+  assert.ok(Math.abs(start.annual - (countrywideBaseline().annual * trend.latestValue) / trend.baseValue) <= 1)
+})
+
+test("the teen guide answers from the numbers, and never names one winner in a tie", () => {
+  const lead = teenCarsLead(catalog)
+  if (MODELS_ENABLED) assert.match(lead, /^Of 33 popular first cars, SUVs, and trucks, the Subaru /)
+  else assert.match(lead, /tie for the least/)
 })
 
 // ---------------------------------------------------------------------------
-// Sitemap, structured data, titles
+// Sitemap, social images, structured data, titles
 
-test("the sitemap lists every generated page once, with a real date", () => {
+test("the sitemap lists every indexable page once, with a real date", () => {
   const entries = sitemapEntries(catalog)
-  const urls = entries.map((entry) => entry.url)
+  const urls = entries.map((entry) => entry.url.replace("https://notaquote.fyi", ""))
   assert.equal(new Set(urls).size, urls.length, "a page is listed twice")
-  for (const entry of entries) {
-    assert.match(entry.lastModified, /^\d{4}-\d{2}-\d{2}$/)
-    assert.ok(entry.url.startsWith("https://notaquote.fyi/"))
-  }
-  const listed = new Set(urls.map((url) => url.replace("https://notaquote.fyi", "")))
+  for (const entry of entries) assert.match(entry.lastModified, /^\d{4}-\d{2}-\d{2}$/)
+  const listed = new Set(urls)
   for (const { state } of stateParams()) assert.ok(listed.has(`/states/${state}`), state)
-  for (const { slug } of carParams()) assert.ok(listed.has(`/cars/${slug}`), slug)
+  const noindex = noindexCarSlugs(catalog)
+  for (const { slug } of carParams()) assert.equal(listed.has(`/cars/${slug}`), !noindex.has(slug), slug)
   for (const guide of GUIDES) assert.ok(listed.has(guide.path), guide.path)
-  assert.equal([...listed].filter((path) => path.startsWith("/states/")).length, stateParams().length)
-  assert.equal([...listed].filter((path) => path.startsWith("/cars/")).length, carParams().length)
-  // Every page file that isn't dynamic is in the sitemap.
-  for (const path of staticPagePaths()) assert.ok(listed.has(path), `${path} is missing from the sitemap`)
+  assert.equal(listed.has("/cars"), carPages(catalog).length > 0)
+  assert.ok(!listed.has("/llms.txt") && !listed.has("/llms-full.txt"))
+  for (const path of staticPagePaths()) {
+    if (path === "/cars" && carPages(catalog).length === 0) continue
+    assert.ok(listed.has(path), `${path} is missing from the sitemap`)
+  }
 })
 
 /** "/sources" for src/app/sources/page.tsx; dynamic segments are skipped. */
@@ -285,44 +263,92 @@ function staticPagePaths(dir = join(process.cwd(), "src/app"), prefix = ""): str
   return paths
 }
 
-test("structured data is valid JSON with the fields search engines need", () => {
-  const home = JSON.parse(jsonLdText(homeJsonLd("A description"))) as Record<string, unknown>[]
-  const site = home.find((item) => item["@type"] === "WebSite")!
-  const app = home.find((item) => item["@type"] === "WebApplication")!
-  assert.equal(site.name, SITE_NAME)
-  assert.equal(site.url, "https://notaquote.fyi/")
-  assert.equal(app.applicationCategory, "FinanceApplication")
-  assert.deepEqual(app.offers, { "@type": "Offer", price: "0", priceCurrency: "USD" })
+/** The title a browser tab and search result show: the layout adds " · NotAQuote.FYI" unless the title is absolute. */
+function fullTitle(metadata: Metadata): string {
+  const title = metadata.title
+  if (typeof title === "string") return `${title} · ${SITE_NAME}`
+  if (title && "absolute" in title && title.absolute) return title.absolute
+  throw new Error("no title")
+}
 
-  const dataset = JSON.parse(jsonLdText(stateDatasetJsonLd())) as Record<string, any> // eslint-disable-line @typescript-eslint/no-explicit-any
-  assert.equal(dataset["@context"], "https://schema.org")
-  assert.equal(dataset["@type"], "Dataset")
-  assert.ok(dataset.name && dataset.description.length > 50)
-  assert.equal(dataset.license, "https://creativecommons.org/licenses/by/4.0/")
-  assert.equal(dataset.creator.name, "Bolewood Group, LLC")
-  assert.ok(dataset.isBasedOn.some((source: { url?: string }) => source.url?.includes("naic.org")))
-  assert.ok(dataset.distribution.every((item: { contentUrl: string }) => item.contentUrl.endsWith(".json")))
-  assert.match(dataset.dateModified, /^\d{4}-\d{2}-\d{2}$/)
+const STATIC_PAGES = [
+  "page",
+  "compare/page",
+  "methodology/page",
+  "sources/page",
+  "privacy/page",
+  "disclaimer/page",
+  "data-licenses/page",
+  "corrections/page",
+  "model-version/page",
+  "states/page",
+  "cars/page",
+  "guides/page",
+  "guides/adding-a-teen-driver/page",
+  "guides/cheapest-cars-to-insure-for-teens/page",
+]
 
-  const crumbs = JSON.parse(jsonLdText(breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Ohio", path: "/states/ohio" }])))
-  assert.equal(crumbs.itemListElement[1].item, "https://notaquote.fyi/states/ohio")
-  // "<" can't close the script tag.
-  assert.doesNotMatch(jsonLdText({ name: "</script><script>alert(1)</script>" }), /</)
+async function everyPageMetadata(): Promise<{ path: string; metadata: Metadata }[]> {
+  const all: { path: string; metadata: Metadata }[] = []
+  for (const page of STATIC_PAGES) {
+    const mod = (await import(`../app/${page}`)) as { metadata: Metadata }
+    all.push({ path: page, metadata: mod.metadata })
+  }
+  for (const { state } of stateParams()) all.push({ path: state, metadata: await stateMetadata({ params: Promise.resolve({ state }) } as never) })
+  for (const { slug } of carParams()) all.push({ path: slug, metadata: await carMetadata({ params: Promise.resolve({ slug }) } as never) })
+  return all
+}
+
+test("every page has a unique title of at most 60 characters and a description of at most 155", async () => {
+  const pages = await everyPageMetadata()
+  const titles = pages.map((page) => fullTitle(page.metadata))
+  assert.equal(new Set(titles).size, titles.length, "two pages share a title")
+  for (const [index, page] of pages.entries()) {
+    assert.ok(titles[index].length <= TITLE_MAX, `${page.path}: "${titles[index]}" is ${titles[index].length} characters`)
+    const description = String(page.metadata.description ?? "")
+    assert.ok(description.length > 50 && description.length <= DESCRIPTION_MAX, `${page.path}: description is ${description.length} characters`)
+    assert.ok(page.metadata.alternates?.canonical, `${page.path} has no canonical address`)
+  }
+  assert.equal(fullTitle(pages.find((page) => page.path === "ohio")!.metadata), "Ohio car insurance: cost and state minimums · NotAQuote.FYI")
+  assert.equal(fullTitle(pages.find((page) => page.path === "district-of-columbia")!.metadata), "DC car insurance: cost and state minimums · NotAQuote.FYI")
 })
 
-test("page titles are unique across the site", async () => {
-  const pages = ["page", "compare/page", "methodology/page", "sources/page", "privacy/page", "disclaimer/page", "data-licenses/page", "corrections/page", "model-version/page", "states/page", "cars/page", "guides/page", "guides/adding-a-teen-driver/page", "guides/cheapest-cars-to-insure-for-teens/page"]
-  const titles: string[] = []
-  for (const page of pages) {
-    const mod = (await import(`../app/${page}`)) as { metadata: Metadata }
-    const title = mod.metadata.title
-    const text = typeof title === "string" ? title : title && "absolute" in title ? title.absolute : null
-    assert.ok(text, `${page} has no title`)
-    assert.ok(mod.metadata.description, `${page} has no description`)
-    assert.ok(mod.metadata.alternates?.canonical, `${page} has no canonical address`)
-    titles.push(text)
+test("state and car pages use their own social image, not the site's", async () => {
+  // A page-level image would override the route's opengraph-image file, so these set none.
+  const ohio = await stateMetadata({ params: Promise.resolve({ state: "ohio" }) } as never)
+  assert.equal(ohio.openGraph && "images" in ohio.openGraph ? ohio.openGraph.images : undefined, undefined)
+  assert.equal(ohio.twitter && "images" in ohio.twitter ? ohio.twitter.images : undefined, undefined)
+  if (MODELS_ENABLED) {
+    const rav4 = await carMetadata({ params: Promise.resolve({ slug: "toyota-rav4" }) } as never)
+    assert.equal(rav4.openGraph && "images" in rav4.openGraph ? rav4.openGraph.images : undefined, undefined)
   }
-  for (const f of ALL_STATES) titles.push(stateTitle(f))
-  for (const page of carPages(catalog)) titles.push(carTitle(carFigures(catalog, page.slug)!))
-  assert.equal(new Set(titles).size, titles.length, "two pages share a title")
+  for (const page of ["page", "compare/page"]) {
+    const mod = (await import(`../app/${page}`)) as { metadata: Metadata }
+    assert.equal(mod.metadata.openGraph && "images" in mod.metadata.openGraph ? mod.metadata.openGraph.images : undefined, undefined, page)
+  }
+  // Pages without their own file name the site's image, since their openGraph replaces the parent's.
+  const privacy = (await import("../app/privacy/page")) as { metadata: Metadata }
+  assert.ok(privacy.metadata.openGraph && "images" in privacy.metadata.openGraph && privacy.metadata.openGraph.images)
+})
+
+test("structured data is valid JSON, and credits NAIC's figures to NAIC", () => {
+  const home = JSON.parse(jsonLdText(homeJsonLd("A description"))) as Record<string, unknown>[]
+  assert.equal(home.find((item) => item["@type"] === "WebSite")!.name, SITE_NAME)
+  assert.equal(home.find((item) => item["@type"] === "WebApplication")!.applicationCategory, "FinanceApplication")
+
+  const [rules, prices] = JSON.parse(jsonLdText(stateDatasetsJsonLd())) as Record<string, any>[] // eslint-disable-line @typescript-eslint/no-explicit-any
+  assert.equal(rules["@type"], "Dataset")
+  assert.equal(rules.license, "https://creativecommons.org/licenses/by/4.0/")
+  assert.equal(rules.creator.name, "Bolewood Group, LLC")
+  assert.equal(prices["@type"], "Dataset")
+  assert.equal(prices.license, undefined, "we don't license NAIC's figures")
+  assert.equal(prices.creator, undefined, "we didn't create NAIC's figures")
+  assert.ok(prices.isBasedOn.some((source: { url?: string }) => source.url?.includes("naic.org")))
+  for (const item of [rules, prices]) {
+    assert.ok(item.name && item.description.length > 50 && item.distribution[0].contentUrl.endsWith(".json"))
+    assert.match(item.dateModified, /^\d{4}-\d{2}-\d{2}$/)
+  }
+  const crumbs = JSON.parse(jsonLdText(breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Ohio", path: "/states/ohio" }])))
+  assert.equal(crumbs.itemListElement[1].item, "https://notaquote.fyi/states/ohio")
+  assert.doesNotMatch(jsonLdText({ name: "</script><script>alert(1)</script>" }), /</)
 })

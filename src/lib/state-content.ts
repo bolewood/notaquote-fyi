@@ -3,10 +3,12 @@
  * page says something of its own (docs/VOICE.md applies to all of it). The
  * page adds links and layout around them.
  */
-import { differenceWords, dollars, estimateDollars, monthlyDollars, rangeWords } from "./format"
+import { aboutTheSame, differenceWords, dollars, estimateDollars, monthlyDollars, rangeWords, shownYearly } from "./format"
 import { stateName, type StateCode } from "./scenario"
+import { DESCRIPTION_MAX } from "./site-meta"
 import { inSentence, TEEN_TOP, type StateFigures } from "./state-pages"
-import { liabilityShorthand, NO_FAULT_CHOICE, stateMinimumAssumption } from "./state-rules"
+import { liabilityShorthand, NO_FAULT_CHOICE, stateMinimumAssumption, type StateRule } from "./state-rules"
+import type { TeenPriced } from "./teen-cars"
 
 export function ordinal(value: number): string {
   const tens = value % 100
@@ -49,27 +51,50 @@ function naic(amount: number): string {
   return dollars(amount)
 }
 
-export function stateTitle(f: StateFigures): string {
-  return `Car insurance in ${inSentence(f.code)}: typical cost, minimums, and teen drivers`
+/** "Ohio", or "DC" where space is short. */
+export function shortName(code: StateCode): string {
+  return code === "DC" ? "DC" : stateName(code)
 }
 
-function minimumShort(f: StateFigures): string {
-  const rule = f.rule
-  if (!rule) return "its minimum coverage"
-  if (rule.insuranceRequired === false) return "most drivers aren't required to buy insurance"
+export function stateTitle(f: StateFigures): string {
+  return `${shortName(f.code)} car insurance: cost and state minimums`
+}
+
+/** The least insurance the law asks for, in one short clause, for a lead or a table. */
+export function minimumWords(rule: StateRule | null, style: "sentence" | "cell" = "sentence"): string {
+  if (!rule || rule.sourceUrl === null) return style === "cell" ? "Not checked yet" : "we haven't checked the minimum yet"
   const short = liabilityShorthand(rule)
-  return short ? `the minimum liability coverage is ${short}` : "its minimum coverage is on the page"
+  if (rule.insuranceRequired === false) {
+    return style === "cell"
+      ? `Optional for most drivers; a policy needs ${short ?? "the minimums"}`
+      : `insurance itself is optional for most drivers, but a policy must carry at least ${short ?? "the state's minimums"} liability`
+  }
+  if (short) return style === "cell" ? short : `the law asks for at least ${short} liability`
+  // No injury-liability minimum (Florida): say what is required instead.
+  const parts: string[] = []
+  const pip = rule.pipRequired === true ? rule.pipAmount?.match(/^\$[\d,]+/)?.[0] : null
+  if (pip) parts.push(`${pip} of personal injury protection`)
+  if (rule.pd !== null) parts.push(`${dollars(rule.pd)} of property damage liability`)
+  if (rule.combinedSingleLimit !== null) parts.push(`${dollars(rule.combinedSingleLimit)} of liability`)
+  if (parts.length === 0) return style === "cell" ? "See the page" : "the law's minimum is on this page"
+  const listed = joinNames(parts)
+  return style === "cell" ? listed.replace(/ of personal injury protection/, " PIP").replace(/ of property damage liability/, " property damage") : `the law asks for ${listed}`
 }
 
 export function stateDescription(f: StateFigures): string {
-  const name = inSentence(f.code)
-  return `Full coverage in ${name} averaged ${naic(f.baseline.annual)} a year in 2023 (NAIC), ${f.vsNational.words} the national average, or about ${estimateDollars(f.start.annual)} today. Here, ${minimumShort(f)}, and adding a 16-year-old costs about ${differenceWords(f.teen.added.increase)}.`
+  const name = shortName(f.code)
+  const teen = ` Adding a teen: about ${differenceWords(f.teen.added.increase)}.`
+  const long = `${name}: ${naic(f.baseline.annual)} a year for full coverage in 2023 (NAIC), about ${estimateDollars(f.start.annual)} today. Minimum: ${minimumWords(f.rule, "cell")}.`
+  if (long.length + teen.length <= DESCRIPTION_MAX) return long + teen
+  const short = `${name}: ${naic(f.baseline.annual)} a year in 2023 (NAIC), about ${estimateDollars(f.start.annual)} today. Minimum: ${minimumWords(f.rule, "cell")}.`
+  return short.length + teen.length <= DESCRIPTION_MAX ? short + teen : short
 }
 
-/** The page's opening line. */
+/** The page's opening lines: the facts first. */
 export function leadText(f: StateFigures): string {
   const name = inSentence(f.code)
-  return `Drivers in ${name} paid ${naic(f.baseline.annual)} a year on average for full coverage in 2023, ${f.vsNational.words} the national average. Here's what that means today, the least insurance the law asks for, and what a new teen driver adds.`
+  const vs = f.vsNational.words.replace(" more than", " above").replace(" less than", " below").replace("about the same as", "about the same as")
+  return `Drivers in ${name} paid ${naic(f.baseline.annual)} a year for full coverage in 2023, ${vs} the national average. With prices up since, figure on about ${estimateDollars(f.start.annual)} today. In ${name}, ${minimumWords(f.rule)}.`
 }
 
 export function priceParagraph(f: StateFigures): string {
@@ -105,9 +130,9 @@ export function neighborsSummary(f: StateFigures): string {
 }
 
 /** One move, in words: "Moving from Pennsylvania: about $270 less a year." */
-export function moveWords(delta: number): string {
-  const words = differenceWords(delta)
-  return words === "about the same" ? "About the same" : `About ${words}`
+export function moveWords(delta: number, base: number): string {
+  if (aboutTheSame(delta, base)) return "About the same"
+  return `About ${differenceWords(delta)}`
 }
 
 /** The least insurance the law asks for, in a few plain sentences (the What-if page says the same). */
@@ -129,25 +154,43 @@ export function faultText(f: StateFigures): string | null {
   return null
 }
 
-export function teenParagraph(f: StateFigures): string {
-  const name = inSentence(f.code)
+/** The teen callout's small print: the monthly figure and the whole policy. */
+export function teenCallout(f: StateFigures): string {
   const added = f.teen.added
-  return `Adding a 16-year-old to a typical policy in ${name} (one average car, full coverage) costs about ${differenceWords(added.increase)}, about ${monthlyDollars(added.increase)} a month. The whole policy would then run ${rangeWords(added.after.low, added.after.high)} a year.`
+  return `About ${monthlyDollars(added.increase)} a month, on one average car with full coverage. The whole policy with the teen: ${rangeWords(added.after.low, added.after.high)} a year.`
 }
 
 export function ownPolicyParagraph(f: StateFigures): string {
   const own = f.teen.own
-  return `On a policy of their own, with the same kind of car, the same teen would pay about ${estimateDollars(own.likely)} a year (${rangeWords(own.low, own.high)}). Most families add a new driver to the policy they already have.`
+  return `On a policy of their own, with the same kind of car, the same teen would pay about ${estimateDollars(own.likely)} a year in ${inSentence(f.code)} (${rangeWords(own.low, own.high)}).`
+}
+
+/** Liability-only coverage: the closest NAIC figure to what a minimum policy costs, and its rank. */
+export function liabilityOnlyText(f: StateFigures): string {
+  const rank = f.liabilityRank
+  const fromBottom = rank.of - rank.rank + 1
+  const place = rank.rank <= rank.of / 2 ? `the ${ordinal(rank.rank)} highest` : fromBottom === 1 ? "the lowest" : `the ${ordinal(fromBottom)} lowest`
+  return `Liability-only coverage, the closest NAIC figure to what a minimum policy costs, averaged ${naic(f.baseline.liabilityOnly)} in ${inSentence(f.code)} in 2023 (about ${estimateDollars(f.liabilityToday)} today, brought up the same rough way), ${place} of the 50 states and DC.`
 }
 
 /** The line the owner asked for, word for word. */
 export const SAME_ORDER_NOTE =
   "The order is the same in every state, because our car data is national. What changes from state to state is the price level."
 
+/** How many cars tie with the cheapest one (to the $10 shown). */
+export function tiedAtTop(cars: readonly TeenPriced[]): number {
+  const first = shownYearly(cars[0]?.added.increase ?? 0)
+  return cars.filter((item) => shownYearly(item.added.increase) === first).length
+}
+
 export function teenCarsSummary(f: StateFigures): string {
   const name = inSentence(f.code)
   const first = f.teenCars[0]
   const last = f.teenCars.at(-1)!
+  const ties = tiedAtTop(f.teenCars)
+  if (ties >= 3) {
+    return `Without claims results for each model, cars of the same kind come out the same here: ${ties} of the ${f.teenCars.length} cars on the site's popular lists tie for the least to add a teen with in ${name}, at about ${differenceWords(first.added.increase)}.`
+  }
   return `In ${name}, the ${first.car.label} is the cheapest of the ${f.teenCars.length} cars on the site's popular lists to add a teen with: about ${differenceWords(first.added.increase)}. At the other end of the same lists, the ${last.car.label} costs about ${differenceWords(last.added.increase)}.`
 }
 
@@ -160,11 +203,12 @@ export function stateMainText(f: StateFigures): string {
     priceParagraph(f),
     liabilityParagraph(f),
     neighborsSummary(f),
-    ...f.neighbors.map((row) => `${row.name} ${naic(row.baseline.annual)} ${moveWords(row.move.delta)}`),
+    ...f.neighbors.map((row) => `${row.name} ${naic(row.baseline.annual)} ${moveWords(row.move.delta, row.move.current.likely)}`),
+    liabilityOnlyText(f),
     faultText(f) ?? "",
     f.rule?.note ?? "",
     f.rule?.goodToKnow ?? "",
-    teenParagraph(f),
+    teenCallout(f),
     ownPolicyParagraph(f),
     teenCarsSummary(f),
     ...f.teenCars.slice(0, TEEN_TOP).map((item) => `${item.car.label} ${differenceWords(item.added.increase)} ${estimateDollars(item.own.likely)}`),

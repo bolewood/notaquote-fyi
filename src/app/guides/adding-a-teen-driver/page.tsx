@@ -5,7 +5,7 @@ import { Breadcrumbs } from "@/components/breadcrumbs"
 import { JsonLdScript } from "@/components/json-ld"
 import { TrustArticle } from "@/components/trust-article"
 import { differenceWords, estimateDollars, monthlyDollars, rangeDollars, rangeWords, signedDollars } from "@/lib/format"
-import { addTeenHref, nationalTeenCost, TEEN_CARS_GUIDE, TEEN_COST_GUIDE, teenCostByState } from "@/lib/guides"
+import { addTeenHref, nationalTeenCost, shareWords, TEEN_CARS_GUIDE, TEEN_COST_GUIDE, teenCostByState } from "@/lib/guides"
 import { HELP_WANTED, helpWantedUrl } from "@/lib/help-wanted"
 import { articleJsonLd, ENGINE_UPDATED, GUIDES_IMAGE, pageMetadata } from "@/lib/site-meta"
 import { statePath } from "@/lib/state-pages"
@@ -25,7 +25,7 @@ export default function TeenCostGuide() {
   return (
     <TrustArticle
       title={GUIDE.title}
-      lead={`Adding a new 16-year-old to a typical policy costs about ${differenceWords(national.added.increase)} nationally, roughly ${national.percent}% more than before. Here's why, what it looks like in your state, and what brings it down.`}
+      lead={`Adding a new 16-year-old to a typical policy costs about ${differenceWords(national.added.increase)} nationally, ${shareWords(national.share)} than before. Here's why, what it looks like in your state, and what changes it.`}
       breadcrumbs={
         <Breadcrumbs
           crumbs={[
@@ -36,7 +36,9 @@ export default function TeenCostGuide() {
         />
       }
     >
-      <JsonLdScript data={articleJsonLd({ title: GUIDE.title, description: GUIDE.description, path: GUIDE.path, dateModified: ENGINE_UPDATED })} />
+      <JsonLdScript
+        data={articleJsonLd({ title: GUIDE.title, description: GUIDE.description, path: GUIDE.path, dateModified: ENGINE_UPDATED, datePublished: GUIDE.published })}
+      />
 
       <div className="grid gap-1 rounded-2xl bg-sun-soft p-5">
         <p className="text-sm font-medium text-sun-ink">Adding a 16-year-old to a typical policy, nationally</p>
@@ -58,12 +60,12 @@ export default function TeenCostGuide() {
       <p>
         When a new driver joins your policy, the insurer reprices the whole household. The best public evidence we have is
         California&apos;s published prices, which compare families with and without a 17-year-old: the whole bill goes up
-        by roughly two-thirds. That&apos;s the figure we use everywhere, so outside California it&apos;s a rough guide and
+        {` ${shareWords(national.share)}`}. That&apos;s the figure we use everywhere, so outside California it&apos;s a rough guide and
         the range is wide.
       </p>
       <p>
         On a policy of their own, a new 16-year-old pays far more: about {estimateDollars(national.own.likely)} a year for the
-        same kind of car ({rangeWords(national.own.low, national.own.high)}). That&apos;s why most families add a new driver
+        same kind of car ({rangeWords(national.own.low, national.own.high)}). That&apos;s why many families add a new driver
         to the policy they already have.
       </p>
 
@@ -75,12 +77,11 @@ export default function TeenCostGuide() {
         </li>
         <li>
           <strong>The car they drive.</strong> Cars with cheaper repairs and fewer claims cost less to add a teen with.{" "}
-          <Link href={TEEN_CARS_GUIDE.path}>The cheapest cars to insure for a teen</Link>.
+          <Link href={TEEN_CARS_GUIDE.path}>Cheapest cars to insure for a teen driver</Link>.
         </li>
         <li>
-          <strong>Good grades and driver training.</strong> Many insurers give discounts for both. With both, our estimate
-          comes to about {differenceWords(national.withDiscounts)} instead. Our figures for these discounts are our own
-          estimates, since we haven&apos;t found a public source yet.
+          <strong>Good grades and driver training.</strong> Many insurers give discounts for both. Discounts can bring it
+          down noticeably; we don&apos;t have a public figure yet.
         </li>
         <li>
           <strong>Your coverage.</strong> A higher deductible (the part of a repair bill you pay yourself) lowers the
