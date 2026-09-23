@@ -11,7 +11,10 @@ import {
   CARS_PARAMS,
   EXAMPLES,
   HOW_TO_READ,
+  PRIVACY_STATEMENT,
   SITE_ORIGIN,
+  SITE_URL_NOTE,
+  apiUrl,
   VERSIONS,
   WHATIF_PARAMS,
 } from "./agent-api"
@@ -20,7 +23,7 @@ import { DISCLAIMER } from "./copy"
 import { COMPARE_LIMIT } from "./compare-list"
 import { FACTOR_BUNDLE, FACTOR_FORMULA, formatDollars, publishedFactorGroups } from "./factor-engine"
 import { allStateBaselines, STATE_BASELINE_ATTRIBUTION } from "./state-baselines"
-import { stateName, type StateCode } from "./scenario"
+import { DEFAULT_SCENARIO, STATES, stateName, type StateCode } from "./scenario"
 
 type Spec = { name: string; values?: readonly string[]; default?: string; description: string }
 
@@ -45,7 +48,8 @@ function paramLines(specs: readonly Spec[]): string {
 
 /** A worked example for the most common question, kept in step with the API's own examples. */
 export const TEEN_EXAMPLE = `${API_BASE}/compare?state=IL&age=16-18&policy=added&cars=popular:first-cars`
-export const TEEN_EXAMPLE_MORE = `${API_BASE}/compare?state=IL&age=16-18&policy=added&cars=popular:suvs`
+export const TEEN_EXAMPLE_MORE = `${API_BASE}/compare?state=TX&age=16-18&policy=added&cars=popular:suvs`
+export const CHOICE_EXAMPLE = `${API_BASE}/compare?state=CA&age=40-64&cars=2019%20Honda%20Accord,2025%20Tesla%20Model%20Y,2025%20Toyota%20RAV4%20Hybrid`
 export const STATE_EXAMPLES = [
   `${API_BASE}/whatif?state=IL&age=40-64&car=2020-toyota-camry&toState=CO`,
   `${API_BASE}/compare?state=CO&age=16-18&cars=2022-honda-civic-4dr,2022-toyota-rav4`,
@@ -60,6 +64,7 @@ export function guideExamples(): string[] {
     ...EXAMPLES.whatif,
     TEEN_EXAMPLE,
     TEEN_EXAMPLE_MORE,
+    CHOICE_EXAMPLE,
     ...STATE_EXAMPLES,
   ]
 }
@@ -78,7 +83,9 @@ This file is for AI assistants. There's a read-only JSON API at ${url(API_BASE)}
 - It starts from a typical price for the state (NAIC's 2023 average for full coverage, brought up to today with the government's price index for car insurance), then adjusts for the driver, the car, the place, and the coverage.
 - Each adjustment is either from a public source or labeled as our best guess, and guesses widen the range. The car adjustment comes from HLDI's insurance-claims results for that model, or the average for its kind of car when we don't have the model (\`claimsData\` says which).
 - It covers insurance cost only. It knows nothing about crash-test ratings, reliability, or whether a car fits the family. Say so, and point to IIHS (https://www.iihs.org/ratings, and its list of safe used cars for teens: https://www.iihs.org/ratings/safe-vehicles-for-teens) and NHTSA (https://www.nhtsa.gov/ratings) for safety.
-- It never takes what someone pays, a VIN, a ZIP code, a name, or anything personal. Only a state, a few bands, and car names.
+- Figures are for one car on the policy. With a teen added, the parent is assumed to be 40–64 with a clean record.
+- There's no place to send a premium, a VIN, a ZIP code, or a name, and we turn away requests that plainly include one. Only a state, a few bands, and car names.
+- Always include the model year in a car name ("2019 Honda Accord"). Without one we assume 2022, and say so.
 
 ## Recipes
 
@@ -87,17 +94,22 @@ This file is for AI assistants. There's a read-only JSON API at ${url(API_BASE)}
 1. Price a broad list in one request. The site's list of popular first cars is built in:
    ${url(TEEN_EXAMPLE)}
    Change \`state\` to theirs. \`policy=added\` (the default for 16–18) means the teen joins a parent's policy, which is the usual case; \`policy=own\` prices the teen alone and costs much more. Add \`region=urban|suburban|rural\` if you know it. The model year defaults to 2022 (about the age of a typical first car); set \`year=\` to change it.
-2. Want more choice? Price a second list and merge: \`cars=popular:suvs\`, \`cars=popular:trucks-and-fun\`, or up to ${COMPARE_LIMIT} of your own cars as ids (from ${url(`${API_BASE}/cars?q=...`)}) or names like "2021 Mazda CX-5".
+2. Want more choice? Price a second list and merge: \`cars=popular:suvs\`, \`cars=popular:trucks-and-fun\`, or up to ${COMPARE_LIMIT} of your own cars as ids (from ${url(`${API_BASE}/cars?q=...`)}) or names like "2021 Mazda CX-5". Every compare answer also has \`related\`: ready-to-fetch links for the other lists, the other policy choice, and other states. Here are SUVs for a teen in Texas:
    ${url(TEEN_EXAMPLE_MORE)}
+   Can't build URLs? ${url("/llms-full.txt")} lists these links for every state.
 3. Read \`results\`: they're sorted cheapest first by \`teenAdds.yearly\` (what adding the teen costs a year with that car). \`wholePolicy.range\` is the whole household policy's range. \`gapToCheapest\` is the gap to the cheapest car. \`why\` says what sets a car apart from the others in the list; \`whyVsAverageCar\` compares it with an average car. \`rangeNotes\` flags cars whose range reaches higher (sporty ones, pricey repairs).
 4. Choose. Gaps between cars are often smaller than the ranges, so let the user's other wants decide among the cheaper ones ("not boring", room for gear, all-wheel drive). If they want something sporty, include it but say its range reaches higher.
-5. Answer with, for each car: the name, about how much adding the teen costs a year (and a month), the whole-policy range, and one line of why. Then: where the numbers start (\`startingPoint.attribution\`), that it's not a quote (\`disclaimer\`), a suggestion to check IIHS and NHTSA safety ratings for each car, and the \`siteUrl\` so they can open the same list on the site, star favorites, and print it.
+5. Answer with, for each car: the name (\`label\`), about how much adding the teen costs a year (and a month), the whole-policy range, and one line of why. Then: where the numbers start (\`startingPoint.attribution\`), that it's not a quote (\`disclaimer\`), a suggestion to check IIHS and NHTSA safety ratings for each car, and the \`siteUrl\` so they can open the same list on the site, star favorites, and print it. ${SITE_URL_NOTE}
 
 ### B. "What if I buy X?"
 
 ${url(EXAMPLES.whatif[0])}
 
-\`car\` is the car they have now, \`to\` is the one they're thinking about. Read \`headline\`, \`difference.yearly\` (and its \`parts\`), and \`now\` and \`next\` with their ranges. Add \`state\`, \`age\`, and \`coverage\` if you know them. Other what-ifs: \`toAge=16-18&policy=added\` (adding a teen), \`toDeductible=2000\`, \`toCoverage=standard\`, \`toRegion=urban\`.
+\`car\` is the car they have now, \`to\` is the one they're thinking about. For "X or Y?", one compare call with the current car and both choices is simpler, and it sorts them for you:
+
+${url(CHOICE_EXAMPLE)}
+
+In a what-if, read \`headline\`, \`difference.yearly\` (and its \`parts\`), and \`now\` and \`next\` with their ranges. Add \`state\`, \`age\`, and \`coverage\` if you know them. Other what-ifs: \`toAge=16-18&policy=added\` (adding a teen), \`toDeductible=2000\`, \`toCoverage=standard\`, \`toRegion=urban\`.
 
 ### C. "How do prices compare between states?"
 
@@ -140,7 +152,7 @@ ${paramLines(COMPARE_PARAMS.filter((spec) => !DRIVER_NAMES.has(spec.name)))}
 Examples:
 ${EXAMPLES.compare.map((path) => `- ${url(path)}`).join("\n")}
 
-Per car: \`rank\`, the car's details, \`resolution\` (what your input matched, with \`confidence\`: exact for an id, high for one clear match, medium when we had to choose; read \`note\` and \`alternatives\`), then either \`yearly\`, \`monthly\`, and \`range\` (own policy) or \`teenAdds\` and \`wholePolicy\` (a teen added to a parent's policy), plus \`gapToCheapest\`, \`why\`, \`whyVsAverageCar\`, \`claimsData\`, \`rangeNotes\`, and \`explanation\`. For the whole answer: \`summary\` (one line, like the site's), \`startingPoint\`, \`notes\`, \`howToRead\`, \`disclaimer\`, \`sources\`, \`siteUrl\`, and \`versions\`.
+Per car: \`rank\`, the car's details, \`resolution\` (what your input matched, with \`confidence\`: exact for an id, high for one clear match, medium when we had to choose; read \`note\` and \`alternatives\`), then either \`yearly\`, \`monthly\`, and \`range\` (own policy) or \`teenAdds\` and \`wholePolicy\` (a teen added to a parent's policy), plus \`label\` (the name to use in sentences, with the version when it matters, like "2025 Toyota RAV4 Hybrid AWD"), \`gapToCheapest\`, \`why\`, \`whyVsAverageCar\`, \`claimsData\`, \`rangeNotes\`, and \`explanation\`. For the whole answer: \`summary\` (one line, like the site's), \`startingPoint\`, \`notes\`, \`howToRead\`, \`disclaimer\`, \`sources\`, \`siteUrl\`, \`related\`, and \`versions\`.
 
 ### ${API_BASE}/whatif
 
@@ -151,7 +163,7 @@ ${paramLines(WHATIF_PARAMS.filter((spec) => !DRIVER_NAMES.has(spec.name)))}
 Examples:
 ${EXAMPLES.whatif.map((path) => `- ${url(path)}`).join("\n")}
 
-Returns \`headline\`, \`mode\` ("change", "teen-added", or "teen-own"), \`now\` and \`next\` (each with \`yearly\`, \`monthly\`, and \`range\`), \`difference\` (with \`parts\`), \`startingPoint\`, \`notes\`, \`sources\`, and \`siteUrl\`. For "teen-own" the teen gets a separate policy, so \`next\` is their own bill and \`difference\` is null.
+Returns \`headline\`, \`mode\` ("change", "teen-added", or "teen-own"), \`now\` and \`next\` (each with \`yearly\`, \`monthly\`, and \`range\`), \`difference\` (with \`parts\`), \`startingPoint\`, \`notes\`, \`sources\`, \`siteUrl\`, and \`related\` (ready-to-fetch links: both cars side by side, adding a teen, a higher deductible, other states). For "teen-own" the teen gets a separate policy, so \`next\` is their own bill and \`difference\` is null.
 
 ## How to read and present the numbers
 
@@ -164,7 +176,7 @@ Errors are JSON: \`{ "error": { "status", "code", "message", "hint", ... } }\`. 
 
 ## Privacy
 
-The API takes a state, a few bands, and car names, nothing else. A parameter for what someone pays, a VIN, a ZIP code, a name, an email, or a phone number is rejected, and so is a car name that looks like one. We don't store what you ask, and we don't log it beyond the hosting platform's standard request logs. The site itself works the same way: the math runs in the visitor's browser.
+${PRIVACY_STATEMENT} Car names we can't match are never repeated back in errors. On the site itself, the math runs in the visitor's browser.
 
 ## Caching and rate
 
@@ -189,6 +201,23 @@ function cell(value: string): string {
 }
 
 const SOURCES_BY_ID = new Map(FACTOR_BUNDLE.sources.map((source) => [source.id, source]))
+
+const PRESETS = ["popular:first-cars", "popular:suvs", "popular:trucks-and-fun"] as const
+
+/** Ready-to-fetch compare links for every state: the three lists, with a 16–18-year-old added and on their own. */
+export function readyLinks(): string {
+  return STATES.map((state) => {
+    const lines = PRESETS.flatMap((preset) =>
+      (["added", "own"] as const).map((policy) => {
+        const link = apiUrl("/compare", [["state", state.code], ["age", "16-18"], ["policy", policy], ["coverage", DEFAULT_SCENARIO.coverage], ["cars", preset]])
+        return `- ${preset.slice("popular:".length).replace(/-/g, " ")}, teen ${policy === "added" ? "added to a parent's policy" : "on their own policy"}: ${link}`
+      }),
+    )
+    return `### ${state.name} (${state.code})
+
+${lines.join("\n")}`
+  }).join("\n\n")
+}
 
 /** The methodology as markdown, generated from the factor bundle and the state prices. */
 export function llmsFullText(): string {
@@ -241,5 +270,13 @@ ${states}
 ## Sources
 
 ${sources}
+
+---
+
+# Ready-to-fetch links
+
+For assistants that can fetch a link but can't build one. Each is a compare request for a 16–18-year-old with full coverage in the suburbs, 2022 models.
+
+${readyLinks()}
 `
 }

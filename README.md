@@ -25,7 +25,7 @@ https://notaquote.fyi/api/v1/compare?state=IL&age=16-18&policy=added&cars=popula
 ```
 
 - **Same numbers as the site.** Every figure comes from the same engine and is rounded the same way, and each answer links back to the same comparison on the site.
-- **Nothing personal goes in.** The only inputs are a state, a few bands (age, coverage, deductible, and so on), and car names. A request with what you pay, a VIN, a ZIP code, or a name is turned away, and we don't log what's asked beyond the hosting platform's standard request logs.
+- **Nothing personal goes in.** The only inputs are a state, a few bands (age, coverage, deductible, and so on), and car names. There's no place to send a premium, a VIN, a ZIP code, or a name, and we turn away requests that plainly include one. We don't store what's asked. Our host keeps its standard request logs, and answers are cached by their URL for up to a day.
 - **Still not a quote.** Every answer carries the ranges, where the numbers start, and the one-line disclaimer.
 
 The API lives in `src/lib/agent-api.ts` (with `agent-cars.ts` for car names and ids, and `agent-docs.ts` for `/llms.txt` and `/llms-full.txt`); the routes are in `src/app/api/v1/`.
@@ -43,6 +43,7 @@ It is not an insurance company, agent, or broker, and it doesn't sell anything o
 - **No account, and nothing to sign up for.**
 - **Your inputs stay in your browser.** The math runs on your device. We don't collect or store your answers.
 - **One exception, and only if you use it:** if you type in a VIN, your browser sends it straight to NHTSA's free vehicle decoder to look up the car. We don't keep it.
+- **AI assistants are the one other difference.** What an assistant asks the read-only API does reach our host; see [For AI assistants](#for-ai-assistants).
 - **No cookies, ad trackers, or analytics scripts.**
 - **Share links.** The link carries your choices, not our estimates. It includes what you pay only if you check the box. It all sits after the `#` in the address, which browsers don't send to any server.
 

@@ -1,18 +1,23 @@
 /**
- * Cars for the agent API (/api/v1): stable ids, loose-name resolution, and
- * short descriptions. Everything reads the same catalog and the same search
- * the site uses (src/lib/car-search.ts), so "2022 honda civic", "model y", and
- * "f150" find the same cars an agent's human would find on the page.
+ * Cars for the agent API (/api/v1): stable ids, name resolution, and short
+ * descriptions, all from the same catalog the site uses.
  *
  * An id is a slug of the model year, make, model, and version (trim), with
- * the model's name left out of the version when it repeats it:
- *   2022 / Honda / Civic / "Civic 4Dr"  ->  "2022-honda-civic-4dr"
- *   2022 / Toyota / Corolla / "Corolla" ->  "2022-toyota-corolla"
+ * the model's name left out of the version when it repeats it, and nothing
+ * for a version the catalog couldn't name:
+ *   2022 / Honda / Civic / "Civic 4Dr"          ->  "2022-honda-civic-4dr"
+ *   2022 / Toyota / Corolla / "Corolla"         ->  "2022-toyota-corolla"
+ *   2022 / Honda / Civic Si / "Trim not resolved" -> "2022-honda-civic-si"
  * Ids are stable for a catalog version. In the rare case two versions give
  * the same slug, the later one (in catalog order) gets "-2", "-3", and so on.
+ *
+ * Names are matched strictly, because pricing the wrong car with a straight
+ * face is worse than asking again: the model has to be named (not just a
+ * make, a body style, or a word that happens to sit inside a model's name),
+ * and any extra words have to name a version or look like a version code.
+ * Anything else comes back unresolved, with suggestions.
  */
 import {
-  defaultTrim,
   FIRST_CARS,
   parseCarQuery,
   POPULAR_SUVS,
@@ -25,11 +30,14 @@ import {
 } from "./car-search"
 import { catalogYears, trimRecord, type CatalogTrim, type VehicleCatalog, type VehiclePick } from "./catalog"
 import { VEHICLE_CLASS_LABELS, vehicleFacts, type VehicleFacts } from "./catalog-class"
-import { compactName, normalizeName, type TrimConfidence } from "./catalog-match"
+import { compactName, normalizeName, UNRESOLVED_TRIM_NAME, type TrimConfidence } from "./catalog-match"
 import { vehicleRelativity } from "./factor-engine"
 
 /** Model year used for a car name that doesn't give one: the site's own default for a first car. */
 export const DEFAULT_MODEL_YEAR = 2022
+
+/** The most words we read in one car name. Real names are shorter. */
+export const CAR_WORDS_MAX = 8
 
 export function slugPart(value: string): string {
   return normalizeName(value).replace(/ /g, "-")
@@ -37,7 +45,7 @@ export function slugPart(value: string): string {
 
 function baseSlug(pick: VehiclePick): string {
   const model = slugPart(pick.model)
-  const trim = slugPart(pick.trim)
+  const trim = pick.trim === UNRESOLVED_TRIM_NAME ? "" : slugPart(pick.trim)
   const rest = trim === model ? "" : trim.startsWith(`${model}-`) ? trim.slice(model.length + 1) : trim
   return [String(pick.year), slugPart(pick.make), model, rest].filter(Boolean).join("-")
 }
@@ -61,7 +69,11 @@ export function carIndex(catalog: VehicleCatalog): CarIndex {
     const makes = catalog.vehicles[year]
     for (const make of Object.keys(makes).sort()) {
       for (const model of Object.keys(makes[make]).sort()) {
-        for (const trim of makes[make][model]) {
+        // Named versions first, so a named version keeps the plain slug.
+        const trims = [...makes[make][model]].sort(
+          (left, right) => Number(left.name === UNRESOLVED_TRIM_NAME) - Number(right.name === UNRESOLVED_TRIM_NAME),
+        )
+        for (const trim of trims) {
           const pick = { year: Number(year), make, model, trim: trim.name }
           const base = baseSlug(pick)
           let id = base
@@ -92,7 +104,7 @@ export type CarSummary = {
   year: number
   make: string
   model: string
-  /** The version, as the government sources print it. */
+  /** The version, as the government sources print it ("" when they don't name one). */
   trim: string
   /** The kind of car, from the EPA size class: "Small SUV", "Midsize car", and so on. */
   vehicleClass: string | null
@@ -105,6 +117,10 @@ export function claimsDataOf(level: string): ClaimsData {
   return level === "model" ? "model" : level === "class" ? "class-average" : "unknown"
 }
 
+function shownTrim(trim: string): string {
+  return trim === UNRESOLVED_TRIM_NAME ? "" : trim
+}
+
 export function describeCar(catalog: VehicleCatalog, pick: VehiclePick): CarSummary {
   const facts = vehicleFacts(catalog, pick)
   return {
@@ -113,20 +129,43 @@ export function describeCar(catalog: VehicleCatalog, pick: VehiclePick): CarSumm
     year: pick.year,
     make: pick.make,
     model: pick.model,
-    trim: pick.trim,
+    trim: shownTrim(pick.trim),
     vehicleClass: facts.classId ? VEHICLE_CLASS_LABELS[facts.classId] : null,
     powertrain: facts.powertrain,
     claimsData: claimsDataOf(vehicleRelativity(facts).level),
   }
 }
 
-const QUICK_LISTS: readonly QuickCar[][] = [[...FIRST_CARS], [...POPULAR_SUVS], [...TRUCKS_AND_FUN]]
+/** Words in a version name that mark a special edition, a hybrid, or a sporty version. */
+const SPECIAL_WORDS =
+  /\b(hybrid|hev|phev|plug in|electric|ev|4xe|prime|performance|dark horse|rubicon|trd|wilderness|lightning|zr2|raptor|tremor|gt|gts|rs|srt|amg|nismo|shelby|trx|jcw|john cooper works|type r|convertible|cabriolet|cabrio|roadster|spyder|coupe|cal rt|extended|woodland|platinum|ffv)\b/
 
-/** The version the site's one-tap lists pick for a model, or its usual default. */
-export function siteDefaultTrim(catalog: VehicleCatalog, year: number, make: string, model: string): string | null {
-  const quick = QUICK_LISTS.flat().find((car) => car.make === make && car.model === model)
-  const pick = resolveCar(catalog, year, quick ?? { make, model })
-  return pick?.trim ?? null
+/**
+ * The version we pick when a name doesn't say which: a plain, mainstream
+ * one (not a hybrid, a sporty version, a convertible, or a special edition,
+ * unless that's all there is), strong catalog matches first, shortest name
+ * first. The site's own default (defaultTrim in car-search.ts) only steers
+ * away from hybrids and a few special editions, so for a few models, like the
+ * Mustang Mach-E, it can pick a GT; the API prefers the base version.
+ */
+export function mainstreamTrim(trims: readonly CatalogTrim[]): CatalogTrim | null {
+  if (trims.length === 0) return null
+  const score = (trim: CatalogTrim) =>
+    (trim.confidence === "high" ? 0 : trim.confidence === "limited" ? 2 : 4) +
+    (SPECIAL_WORDS.test(normalizeName(trim.name)) ? 1 : 0)
+  return [...trims].sort((left, right) => score(left) - score(right) || left.name.length - right.name.length || left.name.localeCompare(right.name))[0]
+}
+
+const QUICK_LISTS: readonly QuickCar[] = [...FIRST_CARS, ...POPULAR_SUVS, ...TRUCKS_AND_FUN]
+
+/** The version the site's one-tap lists pick for a model, or else a mainstream one. */
+export function preferredTrim(catalog: VehicleCatalog, year: number, make: string, model: string): string | null {
+  const quick = QUICK_LISTS.find((car) => car.make === make && car.model === model)
+  if (quick) {
+    const pick = resolveCar(catalog, year, quick)
+    if (pick) return pick.trim
+  }
+  return mainstreamTrim(catalog.vehicles[String(year)]?.[make]?.[model] ?? [])?.name ?? null
 }
 
 /** Years in the catalog that list this make and model, newest first. */
@@ -140,6 +179,7 @@ export function yearsWithModel(catalog: VehicleCatalog, make: string, model: str
 export type Confidence = "exact" | "high" | "medium"
 
 export type ResolvedCar = {
+  /** What was sent, when every word of it was used; otherwise what we understood. */
   input: string
   pick: VehiclePick
   id: string
@@ -155,47 +195,149 @@ export type ResolvedCar = {
   alternatives: string[]
 }
 
-export type Unresolved = { input: string; message: string; suggestions: string[] }
+/** A name we couldn't match. It never repeats what was sent, in case it held something personal. */
+export type Unresolved = { message: string; understood: string | null; suggestions: string[] }
 
-function typedExact(hit: ModelHit, typed: string): boolean {
-  const want = compactName(typed)
-  if (!want) return false
-  const model = compactName(hit.model)
-  const full = compactName(`${hit.make} ${hit.model}`)
-  return model === want || full === want || full.endsWith(want)
+/** Common short names for makes and models, applied to the normalized words. */
+const ALIASES: [RegExp, string][] = [
+  [/\bchevy\b/g, "chevrolet"],
+  [/\bvw\b/g, "volkswagen"],
+  [/\b(mercedes benz|mercedes|merc|benz)\b/g, "mercedes benz"],
+  [/\b(beemer|bimmer)\b/g, "bmw"],
+  [/\bcaddy\b/g, "cadillac"],
+  [/\balfa( romeo)?\b/g, "alfa romeo"],
+  [/\blambo\b/g, "lamborghini"],
+  [/\blandrover\b/g, "land rover"],
+  [/\bmclaren( automotive)?\b/g, "mclaren automotive"],
+  [/\b(mx 5 )?miata\b/g, "mx 5"],
+  [/\bmx5\b/g, "mx 5"],
+  [/\b3 series\b/g, "330i"],
+  [/\b5 series\b/g, "530i"],
+  [/\b2 series\b/g, "230i"],
+  [/\b4 series\b/g, "430i"],
+  [/(?<!mustang )\bmach e\b/g, "mustang mach e"],
+  [/\bvette\b/g, "corvette"],
+  [/\bgr 86\b/g, "gr86"],
+]
+
+function applyAliases(text: string): string {
+  return ALIASES.reduce((value, [pattern, replacement]) => value.replace(pattern, replacement), text)
 }
 
-/** True when the model's name starts with what was typed after the make: "mini cooper" and "Cooper Convertible". */
-function typedStart(hit: ModelHit, typed: string): boolean {
-  const make = compactName(hit.make)
-  let want = compactName(typed)
-  if (want.startsWith(make)) want = want.slice(make.length)
-  return want.length > 0 && compactName(hit.model).startsWith(want)
-}
+/** Words that can sit in a car name without changing which car it is. */
+const FILLER = new Set(["new", "used", "base", "the", "a", "an", "standard", "trim", "version", "my"])
 
 /**
- * Models matching `text` in one year: exact names first, then models whose
- * name starts with what was typed, then the rest, each in the site's search
- * order.
+ * Version words the catalog doesn't print but people use ("LX", "XLE",
+ * "Touring"). A name with one of these gets the usual version, with a note.
+ * Anything else left over (a name, a sentence, a number) is refused.
  */
-function modelHits(catalog: VehicleCatalog, year: number, text: string): ModelHit[] {
-  const hits = searchModels(catalog, year, text, 25)
-  const tier = (hit: ModelHit) => (typedExact(hit, text) ? 0 : typedStart(hit, text) ? 1 : 2)
-  return hits.map((hit, order) => ({ hit, order })).sort((left, right) => tier(left.hit) - tier(right.hit) || left.order - right.order).map((item) => item.hit)
+const VERSION_WORDS = new Set([
+  "sport", "touring", "limited", "premium", "platinum", "luxury", "select", "preferred", "signature", "special", "edition",
+  "lariat", "laredo", "sahara", "rubicon", "overland", "trailhawk", "denali", "wilderness", "willys", "altitude", "latitude",
+  "turbo", "hybrid", "plug", "in", "electric", "performance", "long", "range", "awd", "fwd", "rwd", "4wd", "2wd", "4x4", "4x2",
+  "sedan", "hatchback", "hatch", "coupe", "convertible", "wagon", "door", "2dr", "4dr", "5dr", "manual", "automatic", "cvt",
+  "pro", "off", "road", "trail", "crew", "cab", "supercrew", "supercab", "quad", "double", "bed", "short", "box", "offroad",
+  "sr", "sr5", "le", "xle", "xse", "se", "sel", "sle", "slt", "lt", "ls", "ltz", "lx", "ex", "exl", "l", "s", "sv", "sl", "gt",
+  "rs", "ss", "st", "si", "rt", "gl", "gls", "glx", "xl", "xlt", "limited", "titanium", "adventure", "base", "plus",
+])
+
+function looksLikeVersion(word: string): boolean {
+  return VERSION_WORDS.has(word) || /^[a-z]{1,3}\d?$/.test(word) || /^\d\.\d[a-z]?$/.test(word)
+}
+
+type ModelRow = { make: string; model: string; makeCompact: string; makeWords: string[]; modelCompact: string }
+
+const MODEL_ROWS = new WeakMap<VehicleCatalog, Map<number, ModelRow[]>>()
+
+function modelRows(catalog: VehicleCatalog, year: number): ModelRow[] {
+  let byYear = MODEL_ROWS.get(catalog)
+  if (!byYear) {
+    byYear = new Map()
+    MODEL_ROWS.set(catalog, byYear)
+  }
+  let rows = byYear.get(year)
+  if (!rows) {
+    rows = Object.entries(catalog.vehicles[String(year)] ?? {}).flatMap(([make, models]) =>
+      Object.keys(models).map((model) => ({
+        make,
+        model,
+        makeCompact: compactName(make),
+        makeWords: normalizeName(make).split(" "),
+        modelCompact: compactName(model),
+      })),
+    )
+    byYear.set(year, rows)
+  }
+  return rows
+}
+
+/** The make the words start with, if any (the longest one wins: "land rover" over "land"). */
+function leadingMake(catalog: VehicleCatalog, year: number, words: string[]): { make: string; length: number } | null {
+  let best: { make: string; length: number } | null = null
+  const seen = new Set<string>()
+  for (const row of modelRows(catalog, year)) {
+    if (seen.has(row.make)) continue
+    seen.add(row.make)
+    const length = row.makeWords.length
+    if (length <= words.length && row.makeWords.every((word, index) => words[index] === word) && (!best || length > best.length)) {
+      best = { make: row.make, length }
+    }
+  }
+  return best
+}
+
+type ModelMatch = { rows: ModelRow[]; exact: boolean; used: number }
+
+/**
+ * Bounded memo of model lookups by (catalog version, year, make, words), so
+ * a long list of names, or the same name in many years, stays cheap.
+ */
+const MATCH_MEMO = new Map<string, ModelMatch | null>()
+const MATCH_MEMO_MAX = 20_000
+
+/**
+ * The model named by the longest leading run of `words` (after the make, if
+ * one was given). Exact names win; a model whose name starts with what was
+ * typed counts only when the make was given ("mini cooper").
+ */
+function matchModel(catalog: VehicleCatalog, year: number, make: string | null, words: string[]): ModelMatch | null {
+  const key = `${catalog.version}|${year}|${make ?? ""}|${words.join(" ")}`
+  if (MATCH_MEMO.has(key)) return MATCH_MEMO.get(key) ?? null
+  const rows = modelRows(catalog, year).filter((row) => make === null || row.make === make)
+  let result: ModelMatch | null = null
+  for (let count = words.length; count >= 1 && !result; count -= 1) {
+    const typed = words.slice(0, count).join("")
+    if (typed.length < (make ? 1 : 2)) continue
+    const exact = rows.filter((row) => row.modelCompact === typed)
+    if (exact.length > 0) {
+      result = { rows: exact, exact: true, used: count }
+      break
+    }
+    if (make && typed.length >= 2) {
+      const starts = rows.filter((row) => row.modelCompact.startsWith(typed)).sort((left, right) => left.modelCompact.length - right.modelCompact.length)
+      if (starts.length > 0) result = { rows: starts, exact: false, used: count }
+    }
+  }
+  if (MATCH_MEMO.size >= MATCH_MEMO_MAX) MATCH_MEMO.clear()
+  MATCH_MEMO.set(key, result)
+  return result
 }
 
 function trimsMatching(trims: readonly CatalogTrim[], words: string[]): CatalogTrim[] {
   if (words.length === 0) return []
   return trims.filter((trim) => {
     const name = normalizeName(trim.name)
+    const parts = name.split(" ")
     const squeezed = name.replace(/ /g, "")
-    return words.every((word) => name.split(" ").includes(word) || squeezed.includes(word))
+    return words.every((word) => parts.includes(word) || (word.length >= 3 && squeezed.includes(word)))
   })
 }
 
 function nameOf(pick: VehiclePick): string {
   const base = `${pick.year} ${pick.make} ${pick.model}`
-  return pick.trim && pick.trim !== pick.model ? `${base} (${pick.trim})` : base
+  const trim = shownTrim(pick.trim)
+  return trim && trim !== pick.model ? `${base} (${trim})` : base
 }
 
 function resolved(
@@ -218,24 +360,44 @@ function resolved(
   }
 }
 
-/** Find the model for a typed name in one year: the longest leading run of words that names a model. */
-function findModel(
-  catalog: VehicleCatalog,
-  year: number,
-  words: string[],
-): { hits: ModelHit[]; used: string; rest: string[] } | null {
-  for (let count = words.length; count >= 1; count -= 1) {
-    const used = words.slice(0, count).join(" ")
-    const hits = modelHits(catalog, year, used)
-    if (hits.length > 0) return { hits, used, rest: words.slice(count) }
+function idFor(catalog: VehicleCatalog, year: number, make: string, model: string): string[] {
+  const trim = preferredTrim(catalog, year, make, model)
+  return trim ? [carId(catalog, { year, make, model, trim })] : []
+}
+
+/** A few likely cars for words we couldn't match, from the site's own search (for the `suggestions` list). */
+function suggestionsFor(catalog: VehicleCatalog, year: number, make: string | null, words: string[]): string[] {
+  if (make) {
+    const popular = QUICK_LISTS.filter((car) => car.make === make).flatMap((car) => idFor(catalog, year, car.make, car.model))
+    const others = modelRows(catalog, year)
+      .filter((row) => row.make === make)
+      .slice(0, 5)
+      .flatMap((row) => idFor(catalog, year, row.make, row.model))
+    return [...new Set([...popular, ...others])].slice(0, 5)
   }
-  return null
+  const text = words.slice(0, 3).join(" ")
+  if (text.length < 3) return []
+  return searchModels(catalog, year, text, 5).flatMap((hit) => idFor(catalog, year, hit.make, hit.model))
+}
+
+type Attempt =
+  | { kind: "ok"; make: string; match: ModelMatch; rest: string[] }
+  | { kind: "make-only"; make: string }
+  | { kind: "none"; make: string | null }
+
+function attempt(catalog: VehicleCatalog, year: number, words: string[]): Attempt {
+  const lead = leadingMake(catalog, year, words)
+  const modelWords = lead ? words.slice(lead.length) : words
+  if (lead && modelWords.length === 0) return { kind: "make-only", make: lead.make }
+  const match = matchModel(catalog, year, lead?.make ?? null, modelWords)
+  if (!match) return { kind: "none", make: lead?.make ?? null }
+  return { kind: "ok", make: match.rows[0].make, match, rest: modelWords.slice(match.used) }
 }
 
 /**
- * Turn an id or a loose name ("2024 Tesla Model Y", "f150", "2022 civic
- * 4dr") into a car in the catalog. A name without a model year uses
- * `defaultYear`, or the nearest year that lists the car.
+ * Turn an id or a name ("2024 Tesla Model Y", "2022 f150", "2022 civic 5dr")
+ * into a car in the catalog. A name without a model year uses `defaultYear`,
+ * or the nearest year that lists the car.
  */
 export function resolveCarInput(
   catalog: VehicleCatalog,
@@ -252,89 +414,102 @@ export function resolveCarInput(
     const [year, make, model, trim] = input.split("|").map((part) => part.trim())
     const pick = { year: Number(year), make: make ?? "", model: model ?? "", trim: trim ?? "" }
     if (index.idByKey.has(pickKey(pick))) return resolved(catalog, input, pick, "exact")
-    const fallback = `${year ?? ""} ${make ?? ""} ${model ?? ""} ${trim ?? ""}`
-    return resolveCarInput(catalog, fallback.replace(/\s+/g, " "), defaultYear)
+    return resolveCarInput(catalog, [year, make, model, trim].filter(Boolean).join(" "), defaultYear)
   }
 
-  // A slug that isn't an id (say, a made-up one): read it as words.
+  // Slugs that aren't ids (say, a made-up one) are read as words.
   const parsed = parseCarQuery(input.replace(/[-_/]+/g, " "))
-  const words = normalizeName(parsed.text).split(" ").filter(Boolean)
+  const allWords = applyAliases(normalizeName(parsed.text)).split(" ").filter(Boolean)
+  if (allWords.length > CAR_WORDS_MAX) {
+    return { message: `That's more than ${CAR_WORDS_MAX} words. Send just the model year, make, and model, like "2022 Honda Civic".`, understood: null, suggestions: [] }
+  }
+  const words = allWords.filter((word) => !FILLER.has(word))
   if (words.length === 0) {
-    return { input, message: "That's only a model year. Add a make and model, like \"2022 Honda Civic\".", suggestions: [] }
+    return { message: "Add a make and model, like \"2022 Honda Civic\".", understood: parsed.year ? String(parsed.year) : null, suggestions: [] }
   }
   const years = catalogYears(catalog)
   const yearAssumed = parsed.year === null
   let year = parsed.year ?? defaultYear
   if (!years.includes(year)) {
-    return {
-      input,
-      message: `We have model years ${years.at(-1)}–${years[0]}, not ${year}.`,
-      suggestions: [],
-    }
+    return { message: `We have model years ${years.at(-1)}–${years[0]}, not ${year}.`, understood: null, suggestions: [] }
   }
 
-  let found = findModel(catalog, year, words)
-  let note: string | null = null
-  if (!found && yearAssumed) {
+  let found = attempt(catalog, year, words)
+  if (found.kind === "none" && yearAssumed) {
     // No year given and the default year doesn't have it: use the nearest year that does.
     const nearest = [...years].sort((left, right) => Math.abs(left - defaultYear) - Math.abs(right - defaultYear) || right - left)
     for (const candidate of nearest) {
-      const hit = findModel(catalog, candidate, words)
-      if (hit) {
-        found = hit
+      const next = attempt(catalog, candidate, words)
+      if (next.kind === "ok") {
+        found = next
         year = candidate
         break
       }
     }
   }
-  if (!found) {
-    const elsewhere = years.filter((candidate) => candidate !== year && findModel(catalog, candidate, words) !== null)
+  if (found.kind === "make-only") {
     return {
-      input,
-      message: elsewhere.length > 0
-        ? `No ${year} model matches "${parsed.text}". It's listed for ${elsewhere.slice(0, 6).join(", ")}${elsewhere.length > 6 ? ", and more" : ""}.`
-        : `No car in our catalog matches "${parsed.text}". Try the make and model, like "Honda Civic", or search with /api/v1/cars?q=...`,
-      suggestions: elsewhere.length > 0
-        ? (() => {
-            const other = findModel(catalog, elsewhere[0], words)!
-            const trim = siteDefaultTrim(catalog, elsewhere[0], other.hits[0].make, other.hits[0].model)
-            return trim ? [carId(catalog, { year: elsewhere[0], make: other.hits[0].make, model: other.hits[0].model, trim })] : []
-          })()
-        : [],
+      message: `That's only a make. Add the model, like "${year} ${found.make} ${QUICK_LISTS.find((car) => car.make === found.make)?.model ?? "…"}".`,
+      understood: `${year} ${found.make}`,
+      suggestions: suggestionsFor(catalog, year, found.make, []),
+    }
+  }
+  if (found.kind === "none") {
+    const make = found.make
+    const elsewhere = years.filter((candidate) => candidate !== year && attempt(catalog, candidate, words).kind === "ok")
+    const other = elsewhere.length > 0 ? attempt(catalog, elsewhere[0], words) : null
+    return {
+      message:
+        elsewhere.length > 0
+          ? `We found that model for ${elsewhere.slice(0, 6).join(", ")}${elsewhere.length > 6 ? ", and more" : ""}, but not for ${year}.`
+          : make
+            ? `We couldn't find that ${make} model. Check the model's name, or search with /api/v1/cars?q=${encodeURIComponent(normalizeName(make))}.`
+            : "No car in our catalog matches that name. Start with the make, like \"2022 Honda Civic\", or search with /api/v1/cars?q=...",
+      understood: make ? `${year} ${make}` : null,
+      suggestions:
+        other && other.kind === "ok"
+          ? idFor(catalog, elsewhere[0], other.make, other.match.rows[0].model)
+          : suggestionsFor(catalog, year, make, words),
     }
   }
 
-  const hit = found.hits[0]
-  const exactHits = found.hits.filter((candidate) => typedExact(candidate, found.used))
-  const clearModel = found.hits.length === 1 || (exactHits.length === 1 && exactHits[0] === hit)
-  const alternatives = found.hits
-    .filter((candidate) => candidate !== hit)
-    .slice(0, 4)
-    .flatMap((candidate) => {
-      const trim = siteDefaultTrim(catalog, year, candidate.make, candidate.model)
-      return trim ? [carId(catalog, { year, make: candidate.make, model: candidate.model, trim })] : []
-    })
-
+  const { match, rest } = found
+  const row = match.rows[0]
+  const trims = catalog.vehicles[String(year)]?.[row.make]?.[row.model] ?? []
+  const understood = `${year} ${row.make} ${row.model}`
   let trimName: string | null = null
-  let trimNote: string | null = null
-  if (found.rest.length > 0) {
-    const matching = trimsMatching(hit.trims, found.rest)
-    if (matching.length > 0) trimName = defaultTrim(matching)?.name ?? null
-    else trimNote = `We couldn't find a ${hit.model} version matching "${found.rest.join(" ")}", so we used the usual one.`
+  let versionNote: string | null = null
+  let allUsed = true
+  if (rest.length > 0) {
+    const matching = trimsMatching(trims, rest)
+    if (matching.length > 0) {
+      trimName = mainstreamTrim(matching)?.name ?? null
+    } else if (rest.length <= 3 && rest.every(looksLikeVersion)) {
+      versionNote = `We don't list versions by that name for the ${understood}, so we used the usual one.`
+      allUsed = false
+    } else {
+      return {
+        message: `We found the ${understood}, but the other words in that name aren't a version we know. Send just the model year, make, and model.`,
+        understood,
+        suggestions: idFor(catalog, year, row.make, row.model),
+      }
+    }
   }
-  trimName ??= siteDefaultTrim(catalog, year, hit.make, hit.model)
-  if (!trimName) return { input, message: `No versions are listed for the ${year} ${hit.make} ${hit.model}.`, suggestions: [] }
+  trimName ??= preferredTrim(catalog, year, row.make, row.model)
+  if (!trimName) return { message: `No versions are listed for the ${understood}.`, understood, suggestions: [] }
 
+  const clear = match.rows.length === 1
   const notes: string[] = []
   if (yearAssumed) notes.push(`No model year given, so we used ${year}.`)
-  if (!clearModel) notes.push(`"${found.used}" matches more than one model; we picked the ${hit.make} ${hit.model}.`)
-  if (trimNote) notes.push(trimNote)
-  note = notes.length > 0 ? notes.join(" ") : null
-  const confidence: Confidence = clearModel && !yearAssumed && !trimNote ? "high" : "medium"
-  return resolved(catalog, input, { year, make: hit.make, model: hit.model, trim: trimName }, confidence, {
+  if (!clear) notes.push(`That name fits more than one model; we picked the ${row.make} ${row.model}.`)
+  else if (!match.exact) notes.push(`We read that as the ${row.make} ${row.model}.`)
+  if (versionNote) notes.push(versionNote)
+  const confidence: Confidence = clear && match.exact && !yearAssumed && !versionNote ? "high" : "medium"
+  const pick = { year, make: row.make, model: row.model, trim: trimName }
+  return resolved(catalog, allUsed ? input : understood, pick, confidence, {
     yearAssumed,
-    note,
-    alternatives: clearModel ? [] : alternatives,
+    note: notes.length > 0 ? notes.join(" ") : null,
+    alternatives: clear ? [] : match.rows.slice(1, 5).flatMap((other) => idFor(catalog, year, other.make, other.model)),
   })
 }
 
@@ -344,6 +519,37 @@ export function isUnresolved(value: ResolvedCar | Unresolved): value is Unresolv
 
 // ---------------------------------------------------------------------------
 // Search and popular lists
+
+function typedExact(hit: ModelHit, typed: string): boolean {
+  const want = compactName(typed)
+  if (want.length < 2) return false
+  const model = compactName(hit.model)
+  const full = compactName(`${hit.make} ${hit.model}`)
+  return model === want || full === want || (full.endsWith(want) && model.length <= want.length + 1)
+}
+
+/** True when the model's name starts with what was typed after the make: "mini cooper" and "Cooper Convertible". */
+function typedStart(hit: ModelHit, typed: string): boolean {
+  const make = compactName(hit.make)
+  let want = compactName(typed)
+  if (want.startsWith(make)) want = want.slice(make.length)
+  return want.length > 0 && compactName(hit.model).startsWith(want)
+}
+
+/**
+ * Models matching `text` in one year, for the search endpoint: exact names
+ * first, then models whose name starts with what was typed, then the rest,
+ * each in the site's search order.
+ */
+function modelHits(catalog: VehicleCatalog, year: number, text: string): ModelHit[] {
+  const aliased = applyAliases(normalizeName(text))
+  const hits = searchModels(catalog, year, aliased, 25)
+  const tier = (hit: ModelHit) => (typedExact(hit, aliased) ? 0 : typedStart(hit, aliased) ? 1 : 2)
+  return hits
+    .map((hit, order) => ({ hit, order }))
+    .sort((left, right) => tier(left.hit) - tier(right.hit) || left.order - right.order)
+    .map((item) => item.hit)
+}
 
 /** [2027, 2026, 2025, 2020] as "2020, 2025–2027". */
 export function yearSpans(years: readonly number[]): string {
@@ -361,14 +567,14 @@ export function yearSpans(years: readonly number[]): string {
 export type SearchMatch = CarSummary & {
   /** The model years the catalog lists this make and model for, like "2006–2027" or "2016–2019, 2022–2027". */
   yearsAvailable: string
-  /** The other versions of this model in this year. The main entry is the one the site picks by default. */
+  /** The other versions of this model in this year. The main entry is the one we'd pick when a name doesn't say. */
   otherTrims: { id: string; trim: string; vehicleClass: string | null; powertrain: VehicleFacts["powertrain"] }[]
 }
 
 export function searchCars(catalog: VehicleCatalog, year: number, text: string, limit: number): SearchMatch[] {
   const hits = modelHits(catalog, year, text).slice(0, limit)
   return hits.flatMap((hit) => {
-    const main = siteDefaultTrim(catalog, year, hit.make, hit.model)
+    const main = preferredTrim(catalog, year, hit.make, hit.model)
     if (!main) return []
     const summary = describeCar(catalog, { year, make: hit.make, model: hit.model, trim: main })
     const otherTrims = hit.trims
@@ -378,7 +584,7 @@ export function searchCars(catalog: VehicleCatalog, year: number, text: string, 
         const facts = vehicleFacts(catalog, pick)
         return {
           id: carId(catalog, pick),
-          trim: trim.name,
+          trim: shownTrim(trim.name),
           vehicleClass: facts.classId ? VEHICLE_CLASS_LABELS[facts.classId] : null,
           powertrain: facts.powertrain,
         }
@@ -423,4 +629,28 @@ export function popularCars(
       },
     ]),
   )
+}
+
+/**
+ * A short name for a car in sentences, with its version when that's what
+ * sets it apart: "2022 Toyota RAV4 Hybrid AWD", "2022 Ford F-150 Lightning
+ * 4WD". Plain versions ("RAV4", "Civic 4Dr") are left out unless another car
+ * in the same list has the same name.
+ */
+export function carLabel(pick: VehiclePick, sameNameInList = false): string {
+  const name = `${pick.year} ${pick.make} ${pick.model}`
+  const trim = shownTrim(pick.trim)
+  if (!trim) return name
+  const special = SPECIAL_WORDS.test(normalizeName(trim))
+  if (!special && !sameNameInList) return name
+  const model = compactName(pick.model)
+  const words = trim.split(/\s+/)
+  let rest = trim
+  for (let count = 1; count <= words.length; count += 1) {
+    if (compactName(words.slice(0, count).join(" ")) === model) {
+      rest = words.slice(count).join(" ")
+      break
+    }
+  }
+  return rest ? `${name} ${rest}` : name
 }

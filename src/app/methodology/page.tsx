@@ -214,7 +214,8 @@ export default function MethodologyPage() {
       </p>
       <p>
         The assistant only sends a state, a few choices like an age band or a coverage level, and car names. There&apos;s no
-        way for it to send what you pay, a VIN, or anything else personal, and we don&apos;t keep what it asks.
+        place to send a premium, a VIN, a ZIP code, or a name, and we turn away requests that plainly include one.{" "}
+        <Link href="/privacy">More about privacy</Link>.
       </p>
 
       <h2>Saving and sharing</h2>

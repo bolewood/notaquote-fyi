@@ -9,9 +9,10 @@
  * only wrap them in a Response.
  *
  * Privacy: the only inputs are a state, a few bands (age, coverage, and so
- * on), and car names. There is no field for what someone pays, a VIN, a ZIP
- * code, a name, or anything else personal, and a request that tries to send
- * one is turned away. Nothing is stored or logged by this code.
+ * on), and car names. There's no place to send a premium, a VIN, a ZIP code,
+ * or a name, and we turn away requests that plainly include one (see
+ * PRIVATE_NAMES and personalInText). Nothing is stored or logged by this
+ * code; the host keeps its standard request logs.
  */
 import type { VehicleCatalog, VehiclePick } from "./catalog"
 import { CATALOG_VERSION, DATA_BUNDLE_VERSION, DISCLAIMER, MANIFEST_VERSION, MODEL_VERSION, SITE_ORIGIN } from "./copy"
@@ -65,6 +66,7 @@ import { STATE_BASELINE_SOURCES, STATE_BASELINES_VERSION } from "./state-baselin
 import {
   claimsDataOf,
   DEFAULT_MODEL_YEAR,
+  carLabel,
   describeCar,
   expandPreset,
   isUnresolved,
@@ -101,6 +103,14 @@ export const VERSIONS = {
   stateBaselines: STATE_BASELINES_VERSION,
   sources: MANIFEST_VERSION,
 } as const
+
+/** The one privacy statement, used in the index and llms.txt. */
+export const PRIVACY_STATEMENT =
+  "The only inputs are a state, a few bands (age, coverage, deductible, and so on), and car names. There's no place to send a premium, a VIN, a ZIP code, or a name, and we turn away requests that plainly include one. We don't store what you ask. Our host keeps its standard request logs, and answers are cached by their URL for up to a day."
+
+/** What to know before sending someone the site link. */
+export const SITE_URL_NOTE =
+  "Opens the same view on the site, worked out fresh, with no dollar amounts in the link. For a teen added to a parent's policy, the site uses the visitor's saved situation (the parent's age and record) if they've set one; in a fresh browser it assumes a 40–64-year-old parent with a clean record, the same as these numbers."
 
 export const HOW_TO_READ = [
   "These are planning estimates, not quotes. Only an insurer can give a real price.",
@@ -237,18 +247,43 @@ function canonical(name: string): string {
 }
 
 const PRIVATE_HINT =
-  "Leave it out. This API only takes a state, a few bands (age, coverage, deductible, and so on), and car names. It never takes what you pay, a VIN, a ZIP code, a name, or anything else personal."
+  "Leave it out. This API only takes a state, a few bands (age, coverage, deductible, and so on), and car names. There's no place to send a premium, a VIN, a ZIP code, or a name, and we turn away requests that plainly include one."
 
-/** VIN, ZIP, email, phone, or a dollar amount inside a car name. */
-function personalInText(value: string): string | null {
+const VIN_CHARS = /^[A-HJ-NPR-Z0-9]+$/i
+const MODEL_YEAR = /^(19[89]\d|20\d\d)$/
+
+/**
+ * Something personal inside a car name: a VIN or ZIP code (even with spaces
+ * or dashes in it), an email address, a phone number, or money ("$1,800",
+ * "1800 a year", "I pay 150"). A safety net for names, which are free text.
+ */
+export function personalInText(value: string): string | null {
   const text = value.normalize("NFKC")
-  if (/\$\s*\d/.test(text)) return "a dollar amount"
+  const lower = text.toLowerCase()
+  if (/\$\s*\d/.test(text) || /\d\s*(dollars|usd|bucks)\b/.test(lower)) return "a dollar amount"
+  if (/\b(i|we)\s+(pay|paid|spend)\b|\bpaying\b|\bpremium of\b/.test(lower)) return "what you pay"
+  if (/\b\d{2,6}(\.\d\d)?\s*(a|an|per|\/|every|each)\s*(year|yr|month|mo|6 months|six months|week)\b/.test(lower)) return "a dollar amount"
+  if (/\d\s*\/\s*(year|yr|month|mo)\b/.test(lower)) return "a dollar amount"
   if (/[^\s@]+@[^\s@]+\.[^\s@]+/.test(text)) return "an email address"
-  if (/(?:\d[\s().-]*){10,}/.test(text.replace(/\b(19|20)\d\d\b/g, " "))) return "a phone number"
-  for (const token of text.split(/[\s,|]+/)) {
-    if (/^[A-HJ-NPR-Z0-9]{17}$/i.test(token) && (token.match(/\d/g) ?? []).length >= 3) return "a VIN"
-    if (/^\d{5}(-\d{4})?$/.test(token)) return "a ZIP code"
+  const tokens = text.split(/[\s,|-]+/).filter(Boolean)
+  // Runs of neighboring number-ish tokens, joined, catch "1HGCM 82633A004352" and "606 14".
+  for (let start = 0; start < tokens.length; start += 1) {
+    let joined = ""
+    let digitsOnly = true
+    let hasYear = false
+    for (let end = start; end < tokens.length; end += 1) {
+      const token = tokens[end].replace(/-/g, "")
+      if (!VIN_CHARS.test(token) || !/\d/.test(token)) break
+      joined += token
+      digitsOnly &&= /^\d+$/.test(token)
+      hasYear ||= MODEL_YEAR.test(token)
+      const digits = (joined.match(/\d/g) ?? []).length
+      if (joined.length === 17 && digits >= 5 && /\d{4}$/.test(joined) && !digitsOnly) return "a VIN"
+      if (digitsOnly && !hasYear && (joined.length === 5 || joined.length === 9) && (end > start || /^\d{5}(\d{4})?$/.test(token))) return "a ZIP code"
+      if (digitsOnly && !hasYear && joined.length >= 10) return "a phone number"
+    }
   }
+  if (/(?:\d[\s().-]*){10,}/.test(text.replace(/\b(19[89]\d|20\d\d)\b/g, " "))) return "a phone number"
   return null
 }
 
@@ -272,13 +307,14 @@ export function readQuery(search: URLSearchParams, specs: readonly ParamSpec[], 
   for (const [rawName, value] of search.entries()) {
     const key = canonical(rawName)
     if (PRIVATE_NAMES.has(key)) {
-      throw new ApiError(400, "private_input_rejected", `We don't accept "${rawName}".`, PRIVATE_HINT, {
+      throw new ApiError(400, "private_input_rejected", `We don't accept "${rawName.slice(0, 40)}".`, PRIVATE_HINT, {
         validParameters: specs.map((spec) => spec.name),
       })
     }
     const name = byCanonical.get(key)
     if (!name) {
-      throw new ApiError(400, "unknown_parameter", `Unknown parameter "${rawName}".`, `Use only these: ${specs.map((spec) => spec.name).join(", ")}.`, {
+      const hint = specs.length === 0 ? "This endpoint takes no parameters." : `Use only these: ${specs.map((spec) => spec.name).join(", ")}.`
+      throw new ApiError(400, "unknown_parameter", `Unknown parameter "${rawName.slice(0, 40)}".`, hint, {
         validParameters: specs.map((spec) => spec.name),
       })
     }
@@ -356,6 +392,15 @@ function parseDeductible(name: string, value: string): Scenario["deductible"] {
 }
 
 const YEARS_IDS = YEARS_LICENSED.map((item) => item.id)
+const REGION_IDS = REGIONS.map((item) => item.id)
+const REGION_ALIASES: Record<string, Scenario["region"]> = {
+  city: "urban",
+  suburbs: "suburban",
+  suburb: "suburban",
+  country: "rural",
+  town: "rural",
+  "small-town": "rural",
+}
 const COVERAGE_IDS = COVERAGE_PACKAGES.map((item) => item.id)
 const COVERAGE_ALIASES: Record<string, Scenario["coverage"]> = {
   liability: "standard",
@@ -384,10 +429,10 @@ function parseDriver(query: Query, base: Scenario, defaultAge: AgeBand): Driver 
     state: read("state", (value) => parseState("state", value), base.state),
     coverage: read("coverage", (value) => parseChoice("coverage", value, COVERAGE_IDS, COVERAGE_ALIASES), base.coverage),
     deductible: read("deductible", (value) => parseDeductible("deductible", value), base.deductible),
-    region: read("region", (value) => parseChoice("region", value, REGIONS.map((item) => item.id), { city: "urban", suburbs: "suburban", suburb: "suburban", country: "rural", town: "rural" }), base.region),
+    region: read("region", (value) => parseChoice("region", value, REGION_IDS, REGION_ALIASES), base.region),
     yearsLicensed: read(
       "years",
-      (value) => parseChoice("years", value, YEARS_IDS, { "10": "10+", "10-plus": "10+", "10plus": "10+", "10 ": "10+", "0": "under-1" }),
+      (value) => parseChoice("years", value, YEARS_IDS, { "10": "10+", "10-plus": "10+", "10plus": "10+", "0": "under-1" }),
       age === "16-18" ? "under-1" : age === "19-21" ? "1-3" : age === "22-25" ? "4-9" : "10+",
     ),
     incidents: read("incidents", (value) => parseChoice("incidents", value, INCIDENTS.map((item) => item.id), { none: "clean", "0": "clean", "1": "one", "2": "two-or-more" }), base.incidents),
@@ -430,19 +475,25 @@ function parseYear(catalog: VehicleCatalog, name: string, value: string | undefi
   return year
 }
 
-function carNotFound(problems: Unresolved[]): ApiError {
+type Problem = Unresolved & { parameter: string; position?: number }
+
+/** Unmatched car names. We say which one (by position) but never repeat it, in case it held something personal. */
+function carNotFound(problems: Problem[], total: number): ApiError {
+  const which = problems.map((problem) => (problem.position ? `car ${problem.position}` : `"${problem.parameter}"`))
   return new ApiError(
     400,
     "car_not_found",
-    problems.length === 1 ? `We couldn't find "${problems[0].input}".` : `We couldn't find ${problems.length} of those cars.`,
-    "Look the car up with /api/v1/cars?q=<make and model> and send its id. A model year helps.",
+    problems.length === 1
+      ? `We couldn't match ${which[0]}${total > 1 ? ` of ${total}` : ""}. ${problems[0].message}`
+      : `We couldn't match ${which.slice(0, -1).join(", ")} and ${which.at(-1)} of ${total}.`,
+    "Send the model year, make, and model, like \"2022 Honda Civic\", or an id from /api/v1/cars?q=<make and model>. Each item in `unresolved` has suggestions.",
     { unresolved: problems },
   )
 }
 
 function resolveOne(catalog: VehicleCatalog, name: string, value: string, defaultYear: number): ResolvedCar {
   const result = resolveCarInput(catalog, checkCarText(name, value), defaultYear)
-  if (isUnresolved(result)) throw carNotFound([result])
+  if (isUnresolved(result)) throw carNotFound([{ ...result, parameter: name }], 1)
   return result
 }
 
@@ -593,12 +644,13 @@ export function handleCompare(catalog: VehicleCatalog, search: URLSearchParams):
     }
     const defaultYear = parseYear(catalog, "year", query.get("year")) ?? DEFAULT_MODEL_YEAR
 
-    const inputs = query
+    const tokens = query
       .getAll("cars")
       .flatMap((value) => value.split(","))
       .map((value) => value.trim())
       .filter(Boolean)
-      .flatMap((value) => expandPreset(catalog, value, defaultYear) ?? [value])
+    const presetsUsed = tokens.filter((token) => PRESET_NAMES.includes(token.toLowerCase())).map((token) => token.toLowerCase())
+    const inputs = tokens.flatMap((value) => expandPreset(catalog, value, defaultYear) ?? [value])
     if (inputs.length === 0) {
       throw new ApiError(400, "missing_parameter", "Add some cars to compare.", "Send cars=<id>,<id>,... with ids from /api/v1/cars, or names like \"2022 Honda Civic\".", { parameter: "cars" })
     }
@@ -606,13 +658,13 @@ export function handleCompare(catalog: VehicleCatalog, search: URLSearchParams):
       throw new ApiError(400, "too_many_cars", `That's ${inputs.length} cars; the most is ${COMPARE_LIMIT}.`, `Send at most ${COMPARE_LIMIT} cars. Split a longer list into two requests with the same driver.`)
     }
     const found: ResolvedCar[] = []
-    const problems: Unresolved[] = []
-    for (const input of inputs) {
+    const problems: Problem[] = []
+    inputs.forEach((input, index) => {
       const result = resolveCarInput(catalog, checkCarText("cars", input), defaultYear)
-      if (isUnresolved(result)) problems.push(result)
+      if (isUnresolved(result)) problems.push({ ...result, parameter: "cars", position: index + 1 })
       else found.push(result)
-    }
-    if (problems.length > 0) throw carNotFound(problems)
+    })
+    if (problems.length > 0) throw carNotFound(problems, inputs.length)
     const seen = new Set<string>()
     const duplicates: string[] = []
     const cars = found.filter((car) => {
@@ -638,7 +690,11 @@ export function handleCompare(catalog: VehicleCatalog, search: URLSearchParams):
       ? teen.map((item) => ({ estimate: item.after, extra: item.increase }))
       : priceCars(start, scenario, facts).map((item) => ({ estimate: item.estimate, extra: null }))
     const reasons = distinctReasons(priced.map((item, index) => reasonParts(item.estimate, picks[index].year, scenario)))
-    const rows = buildRows(priced, picks.map((pick) => ({ ...pick, starred: false })), reasons)
+    const plainRows = buildRows(priced, picks.map((pick) => ({ ...pick, starred: false })), reasons)
+    // Name a car's version in sentences when that's what sets it apart ("RAV4 Hybrid AWD").
+    const nameCounts = new Map<string, number>()
+    for (const row of plainRows) nameCounts.set(row.name, (nameCounts.get(row.name) ?? 0) + 1)
+    const rows = plainRows.map((row) => ({ ...row, name: carLabel(row.car, (nameCounts.get(row.name) ?? 0) > 1) }))
     const sorted = sortRows(rows, DEFAULT_SORT)
     const { gaps, cheapest } = gapsToCheapest(rows)
     const age = AGE_BANDS.find((band) => band.id === scenario.age)?.label ?? scenario.age
@@ -688,6 +744,8 @@ export function handleCompare(catalog: VehicleCatalog, search: URLSearchParams):
         disclaimer: DISCLAIMER,
         sources: sourcesFor(sourceIds),
         siteUrl: `${SITE_ORIGIN}${sitePath}`,
+        siteUrlNote: SITE_URL_NOTE,
+        related: compareRelated(driver, cars.map((car) => car.id), presetsUsed, defaultYear),
         methodology: `${SITE_ORIGIN}/methodology`,
         versions: VERSIONS,
       },
@@ -720,13 +778,14 @@ function carResult(catalog: VehicleCatalog, row: CompareRow, rank: number, conte
   const base = {
     rank: rank + 1,
     ...summary,
+    label: row.name,
     resolution: resolutionEcho(car),
   }
   const why = row.reason
   const whyVsAverageCar = vehicleReasonParts(estimate.vehicle, hasPhysicalDamage(driver.coverage), row.car.year)
   const gapToCheapest = {
     yearly: gap,
-    words: !cheapest || cheapest.key === row.key ? "The cheapest here" : Math.round(gap / 10) === 0 ? `Same as the ${cheapest.car.model}` : `${money(gap)} more a year than the ${cheapest.name}`,
+    words: !cheapest || cheapest.key === row.key ? "The cheapest here" : Math.round(gap / 10) === 0 ? `Same as the ${cheapest.name}` : `${money(gap)} more a year than the ${cheapest.name}`,
   }
   const rangeNotes = row.rangePoints.filter((point) => !driverNotes.includes(point))
   if (mode === "added" && row.extra !== null) {
@@ -791,7 +850,7 @@ export function handleWhatIf(catalog: VehicleCatalog, search: URLSearchParams): 
       changes.push(name)
     }
     set("toState", "state", (value) => parseState("toState", value))
-    set("toRegion", "region", (value) => parseChoice("toRegion", value, REGIONS.map((item) => item.id), { city: "urban", suburbs: "suburban", country: "rural" }))
+    set("toRegion", "region", (value) => parseChoice("toRegion", value, REGION_IDS, REGION_ALIASES))
     set("toCoverage", "coverage", (value) => parseChoice("toCoverage", value, COVERAGE_IDS, COVERAGE_ALIASES))
     set("toDeductible", "deductible", (value) => parseDeductible("toDeductible", value))
     set("toIncidents", "incidents", (value) => parseChoice("toIncidents", value, INCIDENTS.map((item) => item.id), { none: "clean", "0": "clean", "1": "one", "2": "two-or-more" }))
@@ -831,7 +890,10 @@ export function handleWhatIf(catalog: VehicleCatalog, search: URLSearchParams): 
     return {
       status: 200,
       body: {
-        headline: result.headline,
+        headline:
+          nextCar && result.mode === "change"
+            ? result.headline.replace(`Switching to a ${nextCar.pick.year} ${nextCar.pick.make} ${nextCar.pick.model}`, `Switching to a ${carLabel(nextCar.pick)}`)
+            : result.headline,
         mode: result.mode,
         modeMeaning:
           result.mode === "teen-added"
@@ -880,11 +942,110 @@ export function handleWhatIf(catalog: VehicleCatalog, search: URLSearchParams): 
         disclaimer: DISCLAIMER,
         sources: sourcesFor(sourceIds),
         siteUrl: `${SITE_ORIGIN}${sitePath}`,
+        siteUrlNote: SITE_URL_NOTE,
+        related: whatIfRelated(driver, now, next, nowCar, nextCar, changes),
         methodology: `${SITE_ORIGIN}/methodology`,
         versions: VERSIONS,
       },
     }
   })
+}
+
+// ---------------------------------------------------------------------------
+// Ready-to-fetch links
+
+/** States people often compare against, used for "the same list somewhere else". */
+const POPULAR_STATES: readonly StateCode[] = ["CA", "TX", "FL", "NY", "IL", "PA", "OH", "GA"]
+
+export type RelatedLink = { description: string; url: string }
+
+/** A full API URL with readable commas and colons: `...?state=IL&age=16-18&cars=a,b`. */
+export function apiUrl(path: string, params: [string, string | number][]): string {
+  const query = params
+    .map(([key, value]) => `${key}=${encodeURIComponent(String(value)).replace(/%2C/g, ",").replace(/%3A/g, ":")}`)
+    .join("&")
+  return `${SITE_ORIGIN}${API_BASE}${path}${query ? `?${query}` : ""}`
+}
+
+/** The driver as query parameters: always state, age, and coverage; the rest only when they aren't the default. */
+export function driverParams(scenario: Scenario, policy: "added" | "own" | null): [string, string | number][] {
+  const params: [string, string | number][] = [
+    ["state", scenario.state],
+    ["age", scenario.age === "65+" ? "65" : scenario.age],
+  ]
+  if (policy && scenario.age === "16-18") params.push(["policy", policy])
+  params.push(["coverage", scenario.coverage])
+  if (scenario.deductible !== DEFAULT_SCENARIO.deductible) params.push(["deductible", scenario.deductible])
+  if (scenario.region !== DEFAULT_SCENARIO.region) params.push(["region", scenario.region])
+  if (scenario.incidents !== DEFAULT_SCENARIO.incidents) params.push(["incidents", scenario.incidents])
+  if (scenario.mileage !== DEFAULT_SCENARIO.mileage) params.push(["mileage", scenario.mileage])
+  if (scenario.goodStudent) params.push(["student", 1])
+  if (scenario.driverTraining) params.push(["training", 1])
+  if (scenario.householdPolicy) params.push(["household", 1])
+  if (scenario.loanLease) params.push(["loan", 1])
+  return params
+}
+
+function otherStates(state: StateCode): StateCode[] {
+  return POPULAR_STATES.filter((code) => code !== state).slice(0, 2)
+}
+
+function compareRelated(driver: Driver, ids: string[], presetsUsed: string[], year: number): RelatedLink[] {
+  const scenario = driver.scenario
+  const policy = scenario.age === "16-18" ? driver.policy : null
+  const yearParam: [string, number][] = year !== DEFAULT_MODEL_YEAR ? [["year", year]] : []
+  const links: RelatedLink[] = []
+  for (const preset of ["popular:first-cars", "popular:suvs", "popular:trucks-and-fun"]) {
+    if (presetsUsed.includes(preset)) continue
+    links.push({
+      description: `The site's list of ${preset.slice("popular:".length).replace(/-/g, " ")} for the same driver`,
+      url: apiUrl("/compare", [...driverParams(scenario, policy), ...yearParam, ["cars", preset]]),
+    })
+  }
+  const cars: [string, string] = ["cars", ids.join(",")]
+  if (policy) {
+    const other = policy === "added" ? "own" : "added"
+    links.push({
+      description: other === "own" ? "The same cars with the teen on their own policy" : "The same cars with the teen added to a parent's policy",
+      url: apiUrl("/compare", [...driverParams(scenario, other), cars]),
+    })
+  }
+  for (const state of otherStates(scenario.state)) {
+    links.push({
+      description: `The same cars and driver in ${stateName(state)}`,
+      url: apiUrl("/compare", [...driverParams({ ...scenario, state }, policy), cars]),
+    })
+  }
+  return links
+}
+
+function whatIfRelated(
+  driver: Driver,
+  now: Scenario,
+  next: Scenario,
+  nowCar: ResolvedCar,
+  nextCar: ResolvedCar | null,
+  changes: string[],
+): RelatedLink[] {
+  const base: [string, string | number][] = [...driverParams(now, null), ["car", nowCar.id]]
+  const links: RelatedLink[] = []
+  if (nextCar) {
+    links.push({
+      description: "Both cars side by side, cheapest first. Add more ids to price several choices in one call.",
+      url: apiUrl("/compare", [...driverParams(now, now.age === "16-18" ? driver.policy : null), ["cars", `${nowCar.id},${nextCar.id}`]]),
+    })
+  }
+  if (!changes.includes("toAge") && now.age !== "16-18") {
+    links.push({ description: "Adding a 16–18-year-old to this policy", url: apiUrl("/whatif", [...base, ["toAge", "16-18"], ["policy", "added"]]) })
+  }
+  if (!changes.includes("toDeductible") && (next.coverage === "full" || next.coverage === "high") && now.deductible !== 2000) {
+    links.push({ description: "Raising the deductible to $2,000", url: apiUrl("/whatif", [...base, ["toDeductible", 2000]]) })
+  }
+  for (const state of otherStates(now.state)) {
+    if (next.state === state) continue
+    links.push({ description: `Moving to ${stateName(state)}`, url: apiUrl("/whatif", [...base, ["toState", state]]) })
+  }
+  return links
 }
 
 // ---------------------------------------------------------------------------
@@ -954,8 +1115,7 @@ export function apiIndex() {
         examples: EXAMPLES.whatif.map((path) => `${SITE_ORIGIN}${path}`),
       },
     ],
-    privacy:
-      "Inputs are a state, a few bands, and car names only. There is no way to send what you pay, a VIN, a ZIP code, a name, or anything personal, and requests that try are rejected. We don't store or log what you ask beyond the hosting platform's standard request logs.",
+    privacy: PRIVACY_STATEMENT,
     errors: "Errors are JSON: { error: { status, code, message, hint } }. The hint says how to fix the request. Unknown parameters are rejected, with the valid ones listed.",
     caching: `Responses depend only on the inputs and the data versions, so they're cached for a day (Cache-Control: ${CACHE_CONTROL}); errors for an hour. CORS is open (Access-Control-Allow-Origin: *).`,
     rateLimits: "No key needed. Please keep it to about one request a second; repeat requests are served from cache.",

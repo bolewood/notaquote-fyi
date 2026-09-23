@@ -11,13 +11,14 @@ import {
   handleIndex,
   handleNotFound,
   handleWhatIf,
+  personalInText,
   readQuery,
   SITE_ORIGIN,
   WHATIF_PARAMS,
   type ApiResult,
 } from "./agent-api"
 import { SERVER_CATALOG as catalog } from "./agent-catalog"
-import { carId, carIndex, expandPreset, isUnresolved, resolveCarInput, yearSpans } from "./agent-cars"
+import { carId, carIndex, carLabel, expandPreset, isUnresolved, resolveCarInput, yearSpans } from "./agent-cars"
 import { guideExamples, llmsFullText, llmsText } from "./agent-docs"
 import { vehicleFacts } from "./catalog-class"
 import { buildRows, compareAnswer, gapsToCheapest } from "./compare-table"
@@ -429,4 +430,134 @@ test("the routes send JSON that can be cached and read from any site", async () 
   const bad = compareRoute(new NextRequest("https://notaquote.fyi/api/v1/compare?cars=2022-honda-civic-4dr&premium=1"))
   assert.equal(bad.status, 400)
   assert.equal(((await bad.json()) as Body).error.code, "private_input_rejected")
+})
+
+// ---------------------------------------------------------------------------
+// Review fixes: strict names, aliases, versions, speed, privacy, links
+
+function resolves(input: string) {
+  const result = resolveCarInput(catalog, input)
+  assert.ok(!isUnresolved(result), `${input} should resolve: ${JSON.stringify(result)}`)
+  return result
+}
+
+test("vague or wrong names come back unresolved, never as some other car", () => {
+  for (const input of ["2022 Subaru SUV", "2022 Honda", "car", "a", "2022 truck", "2022 hybrid", "2022 sedan", "क�", "2022 Toyota Flibbert", "suv"]) {
+    const result = resolveCarInput(catalog, input)
+    assert.ok(isUnresolved(result), `${input} should not resolve, got ${JSON.stringify(result)}`)
+  }
+  const honda = resolveCarInput(catalog, "2022 Honda")
+  assert.ok(isUnresolved(honda))
+  assert.match(honda.message, /only a make/)
+  assert.ok(honda.suggestions.length > 0 && honda.suggestions.every((id) => id.startsWith("2022-honda-")))
+  const suv = failed(handleCompare(catalog, q("cars=2022 Honda Civic,2022 Subaru SUV")), 400, "car_not_found")
+  assert.equal(suv.unresolved[0].position, 2)
+  assert.ok(suv.unresolved[0].suggestions.length > 0)
+})
+
+test("makes and models people shorten are understood", () => {
+  assert.equal(resolves("2022 Mercedes C-Class").pick.model, "C-Class")
+  assert.equal(resolves("2022 Mercedes C-Class").pick.trim, "C300")
+  assert.equal(resolves("2022 mercedes-benz c class").pick.model, "C-Class")
+  assert.equal(resolves("2022 BMW 3 Series").pick.model, "330i")
+  assert.equal(resolves("2022 chevy equinox").pick.make, "Chevrolet")
+  assert.equal(resolves("2022 VW Jetta").pick.make, "Volkswagen")
+  const miata = resolves("2022 Mazda MX-5 Miata")
+  assert.equal(miata.pick.model, "MX-5")
+  assert.equal(miata.confidence, "high")
+  assert.equal(resolves("2022 miata").pick.model, "MX-5")
+  assert.equal(resolves("2022 Ford Mach-E").pick.model, "Mustang Mach-E")
+})
+
+test("without a version, we pick a plain, mainstream one", () => {
+  assert.equal(resolves("2022 Mini Cooper").pick.trim, "Cooper Hardtop 2 door")
+  const machE = resolves("2022 Ford Mustang Mach-E").pick.trim
+  assert.doesNotMatch(machE, /GT|CAL RT|Extended/)
+  assert.equal(resolves("2022 Toyota RAV4 Hybrid").pick.trim, "RAV4 Hybrid AWD")
+  assert.match(resolves("2022 Ford F-150 Lightning").pick.trim, /Lightning/)
+  // A version word we don't list gets the usual version, with a note.
+  const lx = resolves("2022 Honda Civic LX")
+  assert.equal(lx.confidence, "medium")
+  assert.match(lx.note ?? "", /usual one/)
+})
+
+test("versions the catalog couldn't name get clean ids", () => {
+  const si = resolves("2022 Honda Civic Si")
+  assert.equal(si.id, "2022-honda-civic-si")
+  assert.equal(si.resolvedAs, "2022 Honda Civic Si")
+  for (const id of carIndex(catalog).byId.keys()) assert.doesNotMatch(id, /trim-not-resolved/)
+})
+
+test("labels name the version when it sets the car apart", () => {
+  const hybrid = carIndex(catalog).byId.get(resolves("2025 Toyota RAV4 Hybrid").id)!
+  assert.equal(carLabel(hybrid), "2025 Toyota RAV4 Hybrid AWD")
+  assert.equal(carLabel({ year: 2022, make: "Honda", model: "Civic", trim: "Civic 4Dr" }), "2022 Honda Civic")
+  const body = ok(handleCompare(catalog, q("state=CA&age=40-64&cars=2019 Honda Accord,2025 Tesla Model Y,2025 Toyota RAV4 Hybrid")))
+  assert.ok(body.results.some((result: Body) => result.label === "2025 Toyota RAV4 Hybrid AWD"))
+  const whatIf = ok(handleWhatIf(catalog, q("state=CA&age=40-64&car=2019 Honda Accord&to=2025 Toyota RAV4 Hybrid")))
+  assert.match(whatIf.headline, /Switching to a 2025 Toyota RAV4 Hybrid AWD/)
+  const forester = ok(handleCompare(catalog, q("cars=2022 Subaru Forester,2022 Subaru Forester Wilderness")))
+  for (const result of forester.results) {
+    assert.ok(result.gapToCheapest.words === "The cheapest here" || /the 2022 Subaru Forester/.test(result.gapToCheapest.words))
+  }
+})
+
+test("long names are cut short, so a big list stays fast", () => {
+  const long = Array.from({ length: 39 }, (_, index) => `zz${index}`).join(" ")
+  const started = performance.now()
+  const result = handleCompare(catalog, q(`cars=${Array.from({ length: 15 }, () => long).join(",")}`))
+  const took = performance.now() - started
+  assert.equal(result.status, 400)
+  assert.ok(took < 1000, `took ${took.toFixed(0)} ms`)
+  const words = Array.from({ length: 8 }, (_, index) => `word${index}`).join(" ")
+  const unmatched = performance.now()
+  handleCompare(catalog, q(`cars=${Array.from({ length: 15 }, (_, index) => `${words} x${index}`.slice(0, 110)).join(",")}`))
+  assert.ok(performance.now() - unmatched < 1500)
+})
+
+test("free text, money, and spaced-out VINs and ZIP codes are turned away", () => {
+  for (const cars of ["civic I pay 1800", "2022 civic 1800 a year", "2022 civic 150/month", "1HGCM 82633A004352", "1HG-CM826-33A004352", "2022 civic 606 14", "2022 civic 1800 dollars"]) {
+    failed(handleCompare(catalog, q(`cars=${encodeURIComponent(cars)}`)), 400, "private_input_rejected")
+  }
+  const named = handleCompare(catalog, q("cars=2022 honda civic John Smith"))
+  const error = failed(named, 400, "car_not_found")
+  assert.doesNotMatch(JSON.stringify(named.body), /John|Smith/i)
+  assert.match(error.message, /car 1/)
+})
+
+test("no real car name or id looks personal", () => {
+  for (const [id, pick] of carIndex(catalog).byId) {
+    assert.equal(personalInText(id), null, id)
+    assert.equal(personalInText(`${pick.year} ${pick.make} ${pick.model} ${pick.trim}`), null, `${pick.year} ${pick.make} ${pick.model} ${pick.trim}`)
+  }
+})
+
+test("related links are ready to fetch, and all work", () => {
+  const compare = ok(handleCompare(catalog, q("state=TX&age=16-18&cars=popular:suvs")))
+  const whatIf = ok(handleWhatIf(catalog, q("state=IL&age=40-64&car=2021 Subaru Outback&toState=FL")))
+  assert.ok(compare.related.length >= 4)
+  assert.ok(compare.related.some((link: Body) => /policy=own/.test(link.url)))
+  assert.ok(!compare.related.some((link: Body) => /cars=popular:suvs/.test(link.url)))
+  assert.ok(whatIf.related.length >= 3)
+  for (const link of [...compare.related, ...whatIf.related]) {
+    assert.ok(link.url.startsWith(`${SITE_ORIGIN}/api/v1/`))
+    ok(call(link.url))
+  }
+  assert.match(compare.siteUrlNote, /40–64/)
+})
+
+test("toRegion takes the same words as region, and the index says it takes nothing", () => {
+  assert.equal(ok(handleWhatIf(catalog, q("toRegion=suburbs&region=city"))).next.region, "suburban")
+  assert.equal(ok(handleWhatIf(catalog, q("toRegion=town"))).next.region, "rural")
+  const error = failed(handleIndex(q("x=1")), 400, "unknown_parameter")
+  assert.equal(error.hint, "This endpoint takes no parameters.")
+})
+
+test("llms-full.txt has ready links for every state", () => {
+  const full = llmsFullText()
+  const ready = full.slice(full.indexOf("# Ready-to-fetch links"))
+  const links = [...ready.matchAll(/https:\/\/notaquote\.fyi(\/api\/v1\/compare\?[^\s]+)/g)].map((match) => match[1])
+  assert.equal(links.length, 51 * 6)
+  for (const path of links.filter((_, index) => index % 17 === 0)) ok(call(path))
+  assert.match(ready, /### Texas \(TX\)/)
 })

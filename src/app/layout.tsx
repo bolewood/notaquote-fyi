@@ -21,6 +21,12 @@ export const metadata: Metadata = {
   },
   description:
     "What would your car insurance cost with a different car, a new teen driver, or a move? A free, open-source estimate to help you plan. Not a quote.",
+  // AI assistants that read the page's head find their guide here.
+  alternates: {
+    types: {
+      "text/plain": [{ url: "/llms.txt", title: "For AI assistants" }],
+    },
+  },
   robots: {
     index: false,
     follow: false,
