@@ -147,3 +147,12 @@ test("after Compare more cars, we say what arrived and what didn't fit", () => {
     "We brought over the driver from your what-if, and the 2020 Toyota Camry. Your list was full, so the 2025 Ford Mustang didn't fit. Remove a car to make room.",
   )
 })
+
+test("a car page's Add it to a comparison says the car arrived, not a driver", () => {
+  const name = (car: { year: number; make: string; model: string }) => `${car.year} ${car.make} ${car.model}`
+  const rav4 = { year: 2024, make: "Toyota", model: "RAV4", trim: "RAV4" }
+  const list = { ...DEFAULT_COMPARE, cars: [{ ...rav4, starred: false }] }
+  assert.equal(carryNote(list, [rav4], name, false), "The 2024 Toyota RAV4 is on your list, priced for the same driver as the rest.")
+  const full = { ...DEFAULT_COMPARE, cars: [] }
+  assert.equal(carryNote(full, [rav4], name, false), "Your list was full, so the 2024 Toyota RAV4 didn't fit. Remove a car to make room.")
+})

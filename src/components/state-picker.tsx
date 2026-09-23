@@ -6,7 +6,9 @@ import { dollars } from "@/lib/format"
 import { STATES, type StateCode } from "@/lib/scenario"
 import { STATE_BASELINE_ATTRIBUTION, stateBaseline } from "@/lib/state-baselines"
 import { flagCell, liabilityCell, noFaultCell, stateRule, type StateRule } from "@/lib/state-rules"
+import { statePath } from "@/lib/state-slugs"
 import { useSituation } from "@/lib/use-stored"
+import Link from "next/link"
 import { useState } from "react"
 
 function limits(rule: StateRule): string {
@@ -41,7 +43,12 @@ export function StatePicker() {
         />
       </div>
       <div className="grid gap-4 rounded-2xl bg-card p-5 ring-1 ring-border" aria-live="polite">
-        <h3 className="!mt-0 text-lg font-semibold">{name}</h3>
+        <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+          <h3 className="!mt-0 text-lg font-semibold">{name}</h3>
+          <Link href={statePath(state)} className="text-sm">
+            {name}&apos;s page: teen drivers, neighbors, and more
+          </Link>
+        </div>
         {baseline ? (
           <div className="grid gap-1">
             <p className="text-sm font-medium text-muted-foreground">Typical yearly price, 2023</p>

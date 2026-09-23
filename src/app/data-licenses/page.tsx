@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { pageMetadata } from "@/lib/site-meta"
 import Link from "next/link"
 import { RecordTrustView } from "@/components/record-trust-view"
 import { TrustArticle } from "@/components/trust-article"
@@ -8,10 +9,11 @@ import { STATE_RULES_CHECKED_ON } from "@/lib/state-rules"
 import { GITHUB_REPO_URL } from "@/lib/suggest-fix"
 import { CATALOG_RETRIEVED_ON, FUEL_ECONOMY_CATALOG_URL, NHTSA_CATALOG_URL } from "@/lib/catalog-meta"
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Data licenses",
-  description: "What you can reuse, and on what terms: MIT for the code, CC BY 4.0 for the data we compile.",
-}
+  description: "What you can reuse, and on what terms: MIT for the code, CC BY 4.0 for the data we compile, and each outside source's own terms.",
+  path: "/data-licenses",
+})
 
 export default function DataLicensesPage() {
   return (

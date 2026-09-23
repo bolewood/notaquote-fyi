@@ -14,6 +14,8 @@ A free, open-source way to see what a new car, a teen driver, or a move would do
 
 ![The Compare page: a starter list of 12 cars priced for a teen added to a parent's policy, cheapest first, with the gap to the cheapest and two cars starred.](docs/images/compare-cars.png)
 
+**Look up your state or a car.** Every state has a page with its typical price, its minimum coverage, and what a new teen driver adds there, and about 120 popular cars have one with why they cost what they do. There are also two guides for families with a new driver.
+
 **See how we got it.** Every estimate shows its starting price, each adjustment, and the public source behind it. The site's How it works and Sources pages list every number and every source.
 
 ## For AI assistants
@@ -78,13 +80,13 @@ The data is refreshed once a year, every September ([the recipe](docs/DATA-REFRE
 
 | Path | What's in it |
 | --- | --- |
-| `src/app/` | The pages: the What-if page (`page.tsx`), Compare cars, and the explainer pages (how it works, sources, privacy, and so on). The What-if tool itself is `src/components/calculator.tsx`. The read-only API for AI assistants is in `api/v1/`, and its guides are `llms.txt` and `llms-full.txt`. |
+| `src/app/` | The pages: the What-if page (`page.tsx`), Compare cars, and the explainer pages (how it works, sources, privacy, and so on). The What-if tool itself is `src/components/calculator.tsx`. The read-only API for AI assistants is in `api/v1/`, and its guides are `llms.txt` and `llms-full.txt`. The pages for search (`states/`, `cars/`, `guides/`) are built from the same math at build time; their words live in `src/lib/state-content.ts` and `src/lib/car-content.ts`. |
 | `src/components/` | The building blocks of the interface. |
 | `src/lib/` | The logic: the factor engine (`factor-engine.ts`), state rules (`state-rules.ts`), typical premium by state (`state-baselines.ts`), scenario options (`scenario.ts`), the vehicle catalog, share links, "Suggest a fix" links (`suggest-fix.ts`), and the tests (`*.test.ts`). |
 | `src/data/` | The factor bundle and the list of sources, as JSON. |
 | `public/catalog/` | The vehicle catalog, built from NHTSA and FuelEconomy.gov data. |
 | `scripts/` | The script that rebuilds the vehicle catalog (`npm run catalog:build`). |
-| `data/` | Research notes for each kind of data, plus two data files you can edit directly: the state minimums (`data/state-rules/state-rules.json`, 50 states and DC, each with sources and a check date) and the typical premium by state (`data/state-baselines/state-baselines.json`). |
+| `data/` | Research notes for each kind of data, plus two data files you can edit directly: the state minimums (`data/state-rules/state-rules.json`, 50 states and DC, each with sources and a check date) and the typical premium by state (`data/state-baselines/state-baselines.json`). `data/car-pages.json` lists which cars get a page. |
 | `docs/` | The [voice guide](docs/VOICE.md) for anything a visitor reads, the [roadmap](docs/ROADMAP.md), the yearly [data refresh recipe](docs/DATA-REFRESH.md), and the README screenshots. |
 | `.github/` | Issue forms, the pull request template, and CI. |
 

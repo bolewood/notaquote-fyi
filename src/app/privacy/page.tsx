@@ -1,13 +1,15 @@
 import type { Metadata } from "next"
+import { pageMetadata } from "@/lib/site-meta"
 import Link from "next/link"
 import { CountLedgerPanel } from "@/components/count-ledger"
 import { TrustArticle } from "@/components/trust-article"
 import { PUBLISHER } from "@/lib/copy"
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Privacy",
-  description: "Everything you type stays in your browser. No account, no tracking, nothing to sell.",
-}
+  description: "Everything you type stays in your browser. No account, no cookies, no tracking scripts, and nothing to sell.",
+  path: "/privacy",
+})
 
 export default function PrivacyPage() {
   return (

@@ -1,13 +1,15 @@
 import type { Metadata } from "next"
+import { pageMetadata } from "@/lib/site-meta"
 import { HelpWantedList } from "@/components/help-wanted-list"
 import { TrustArticle } from "@/components/trust-article"
 import { CONTRIBUTING_URL, ISSUES_URL, suggestFixUrl, type FixKind } from "@/lib/suggest-fix"
 import { ArrowUpRight, Bug, Car, Landmark, Percent } from "lucide-react"
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Help make this better",
   description: "Spot a number that looks wrong, or know a better source? Here's how to tell us, with or without code.",
-}
+  path: "/corrections",
+})
 
 const REPORT_TYPES: { kind: FixKind; heading: string; body: string; action: string; icon: typeof Car }[] = [
   {

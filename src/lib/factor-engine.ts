@@ -44,7 +44,7 @@ import type {
 } from "@/lib/factor-types"
 import { MODEL_VERSION } from "@/lib/copy"
 import { differenceWords, monthlyDollars, percentRangeWords, percentWords } from "@/lib/format"
-import { BASELINE_STATE_CODES, stateBaseline, STATE_BASELINE_ATTRIBUTION } from "@/lib/state-baselines"
+import { BASELINE_STATE_CODES, countrywideBaseline, stateBaseline, STATE_BASELINE_ATTRIBUTION } from "@/lib/state-baselines"
 import {
   hasPhysicalDamage,
   stateName,
@@ -805,6 +805,8 @@ export type StartingPoint = {
   untrendedAnnual?: number
   /** Set by typicalStart: one plain sentence the page can show about where the start comes from. */
   attribution?: string
+  /** Set by nationalTypicalStart: the start is the national average, not one state's. */
+  national?: boolean
 }
 
 export type EstimateOptions = DriverOptions & {
@@ -922,6 +924,36 @@ export function typicalStart(target: Scenario, options: DriverOptions = {}): Sta
     trended: Boolean(ratio),
     untrendedAnnual: baseline.annual,
     attribution,
+  }
+}
+
+/**
+ * The same kind of starting point as typicalStart, from NAIC's national
+ * (countrywide) average instead of one state's, brought up to today the same
+ * way. Used by pages that aren't about one state (a car's page, the national
+ * guides). The target's state is kept on the start so no state step applies;
+ * only the national dollar level stands in for it.
+ */
+export function nationalTypicalStart(target: Scenario): StartingPoint {
+  const baseline = countrywideBaseline()
+  const ratio = trendRatio()
+  const annual = ratio ? roundHalfUp(mul(rat(baseline.annual), ratio)) : baseline.annual
+  const trend = bundle.typicalStart?.trend
+  const percent = ratio ? Math.round((Number(ratio.num) / Number(ratio.den) - 1) * 100) : 0
+  const rounded = Math.round(annual / 10) * 10
+  return {
+    annual,
+    scenario: typicalScenario(target),
+    vehicle: "average",
+    kind: "typical",
+    label: "a typical yearly price nationally",
+    national: true,
+    trended: Boolean(ratio),
+    untrendedAnnual: baseline.annual,
+    attribution:
+      ratio && trend
+        ? `The national average full-coverage cost in ${baseline.dataYear} was ${formatDollars(baseline.annual)}, according to the National Association of Insurance Commissioners (NAIC). Car insurance prices have risen about ${percent}% since then (government price index, ${periodWords(trend.latestPeriod)}), so we start from about ${formatDollars(rounded)}.`
+        : `The national average full-coverage cost in ${baseline.dataYear} was ${formatDollars(baseline.annual)}, according to the National Association of Insurance Commissioners (NAIC).`,
   }
 }
 
@@ -1365,7 +1397,9 @@ function rangePoints(
   } else if (vehicleChanged && target.sporty) {
     add("This car's repair claims run a bit above the cars we could check against real prices, so the range reaches higher.")
   }
-  if (start.trended) {
+  if (start.trended && start.national) {
+    add("We brought the 2023 national price up to today with the government's price index, which is only a rough guide.")
+  } else if (start.trended) {
     add("We brought the 2023 state price up to today with a national price index, which is only a rough guide.")
   }
   if (scenario.age === "16-18" && options.teenOnParentPolicy) {

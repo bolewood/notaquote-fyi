@@ -4,6 +4,20 @@ Every release that changes the data or the math goes here, newest first. The sit
 
 Data versions are date-stamped (`factors-YYYY-MM-DD`, `state-rules-YYYY-MM-DD`, `state-baselines-YYYY-MM-DD`, `catalog-YYYY-MM-DD`, `manifest-YYYY-MM-DD`). Annual refreshes are tagged `data-YYYY.MM`.
 
+## 2026-09-23: Pages for search: states, cars, and guides
+
+### Site
+- **State pages** (`/states/<state>`, 51 pages, plus `/states`): the typical price (NAIC 2023, brought up to today), how it ranks and compares with the national figure and the neighbors, what a move from a neighbor might do, the state's minimum coverage with its sources, what adding a 16-year-old costs, and the five popular cars that cost least to insure for a teen there. The page says plainly that the order of cars is the same in every state.
+- **Car pages** (`/cars/<make-model>`, 121 pages, plus `/cars`): for each popular model with its own HLDI claims results, the newest model year our claims data covers (2024): a typical 45-year-old's yearly estimate nationally and in three states, what adding a 16-year-old costs, why (claims data in plain words), and similar cars. The list is the site's popular lists plus `data/car-pages.json`.
+- **Guides**: `/guides/cheapest-cars-to-insure-for-teens` and `/guides/adding-a-teen-driver`, with a `/guides` index linked from the footer.
+- Every page has its own title, description, and canonical address, plus Open Graph and Twitter tags. Social preview images are drawn at build time for the site, Compare, the guides, and each state and car page.
+- Structured data: `WebSite` and `WebApplication` on the home page, a `Dataset` for the state data on /sources, `Article` on the guides, and breadcrumbs.
+- `sitemap.xml` lists every page, with `lastModified` from the data's own check dates.
+- Links: state pages from the /sources state picker, car pages from the What-if result and Compare rows. Buttons on the new pages open the What-if and Compare pages filled in (a new share-link `via`: `page` shows an example, `add` adds a car or a teen to the visitor's own situation or list).
+
+### Math
+- No change to the math. A national starting point (`nationalTypicalStart`, NAIC's countrywide figure brought up to today the same way as a state's) is new, for pages that aren't about one state.
+
 ## 2026-09-23: Open to search engines
 
 ### Site

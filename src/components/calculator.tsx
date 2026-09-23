@@ -18,6 +18,7 @@ import { HowWeGotThis, VehicleFixLink } from "@/components/how-we-got-this"
 import { RangeBar } from "@/components/money"
 import { HomeSkeleton, STARTER_ICONS, TABS, type Tab } from "@/components/page-skeleton"
 import { ShareBox } from "@/components/share-box"
+import { carPagePath } from "@/lib/car-page-links"
 import { carName, modelTrims, resolveCar, WHAT_IF_CARS } from "@/lib/car-search"
 import { vehicleFacts } from "@/lib/catalog-class"
 import { catalogYears, trimRecord, type VehiclePick } from "@/lib/catalog"
@@ -141,8 +142,35 @@ function presetsFor(tab: Tab, now: Scenario): Preset[] {
   }
 }
 
-function readInitial() {
+function readInitial(): {
+  situation: Situation | null
+  /** What the what-if changes, relative to "now". */
+  changes: Partial<Scenario>
+  notes: string[]
+  present: boolean
+  /** The link came from one of the site's own pages, not from another person. */
+  fromPage: boolean
+} {
   const decoded = readShareArrival()
+  if (decoded.status === "ok" && decoded.via === "add") {
+    // A car page's "What if you bought this car?": try the car on the visitor's own situation.
+    const next = decoded.next
+    const changes = next ? diffFrom(decoded.scenario, next) : {}
+    const what = !next
+      ? null
+      : "make" in changes
+        ? `the ${shortVehicleLabel(next)}`
+        : changes.age === "16-18"
+          ? "a new 16-year-old"
+          : "that change"
+    return {
+      situation: null,
+      changes,
+      notes: what ? [`We put ${what} in the What if… card, tried on “Your situation now.” Change anything you like.`] : [],
+      present: true,
+      fromPage: true,
+    }
+  }
   if (decoded.status === "ok") {
     const situation: Situation = {
       scenario: decoded.scenario,
@@ -151,16 +179,18 @@ function readInitial() {
     }
     return {
       situation,
-      next: decoded.next,
+      changes: decoded.next ? diffFrom(decoded.scenario, decoded.next) : {},
       notes: shareArrivalNotes(decoded),
       present: true,
+      fromPage: decoded.via === "page",
     }
   }
   return {
-    situation: null as Situation | null,
-    next: null as Scenario | null,
+    situation: null,
+    changes: {},
     notes: decoded.status === "invalid" ? [SHARE_INVALID_NOTE] : [],
     present: decoded.status === "invalid",
+    fromPage: false,
   }
 }
 
@@ -243,9 +273,7 @@ function CalculatorReady() {
   const [linked, setLinked] = useState<Situation | null>(initial.situation)
   const situation = linked ?? stored.value ?? DEFAULT_SITUATION
   const now = situation.scenario
-  const [changes, setChanges] = useState<Partial<Scenario>>(() =>
-    initial.situation && initial.next ? diffFrom(initial.situation.scenario, initial.next) : {},
-  )
+  const [changes, setChanges] = useState<Partial<Scenario>>(initial.changes)
   const next = useMemo(() => withTeenFlag({ ...now, ...changes }), [now, changes])
   const changed = changedKeys(now, next)
   const shown = visibleChanges(changed, next)
@@ -388,7 +416,8 @@ function CalculatorReady() {
         {linked ? (
           <div className="mt-3 flex flex-wrap items-center gap-3 rounded-2xl bg-sun-soft px-4 py-3 text-sm">
             <p className="flex-1">
-              You&apos;re looking at someone else&apos;s situation. Change anything and it becomes yours
+              {initial.fromPage ? "You're looking at an example situation." : "You're looking at someone else's situation."} Change
+              anything and it becomes yours
               {linked.premium !== null ? " (without what they pay)" : ""}.
             </p>
             <button
@@ -574,6 +603,8 @@ function CalculatorReady() {
                   onKeep={keepWhatIf}
                   vehicleChanged={changed.includes("vehicle")}
                   nextCarName={carName(nextCar)}
+                  carPage={changed.includes("vehicle") ? carPagePath(nextCar.make, nextCar.model) : null}
+                  carPageName={`${nextCar.make} ${nextCar.model}`}
                   compareHref={encodeSharePath({
                     page: "/compare",
                     scenario: next,
@@ -932,6 +963,8 @@ function WhatIfResult({
   onKeep,
   vehicleChanged,
   nextCarName,
+  carPage,
+  carPageName,
   versionPicker,
 }: {
   headingRef: React.RefObject<HTMLHeadingElement | null>
@@ -957,6 +990,10 @@ function WhatIfResult({
   onKeep: () => void
   vehicleChanged: boolean
   nextCarName: string
+  /** The car's own page (/cars/...), when it has one. */
+  carPage: string | null
+  /** "Tesla Model Y" */
+  carPageName: string
   versionPicker: React.ReactNode
 }) {
   const min = Math.round(Math.min(current.low, next.low) * 0.92)
@@ -1099,6 +1136,13 @@ function WhatIfResult({
         </summary>
         <div className="grid gap-3 pb-4">
           <HowWeGotThis estimate={next} startKind={startKind} startNote={startNote} state={state} sender={sender} />
+          {vehicleChanged && carPage ? (
+            <p className="text-sm">
+              <Link href={carPage} className="link">
+                More about the {carPageName}: why it costs what it does, and similar cars
+              </Link>
+            </p>
+          ) : null}
           {vehicleChanged ? (
             <p>
               <VehicleFixLink carName={nextCarName} shown={vehicleMatchWords(next.vehicle)} />

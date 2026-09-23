@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { pageMetadata } from "@/lib/site-meta"
 import Link from "next/link"
 import { FactorTables } from "@/components/factor-tables"
 import { RecordTrustView } from "@/components/record-trust-view"
@@ -11,10 +12,11 @@ import { DEFAULT_SCENARIO, stateName } from "@/lib/scenario"
 import { suggestFixUrl } from "@/lib/suggest-fix"
 import { ChevronDown } from "lucide-react"
 
-export const metadata: Metadata = {
-  title: "How it works",
+export const metadata: Metadata = pageMetadata({
+  title: "How we work out the numbers",
   description: "Here's how we got the numbers: a starting price, a few adjustments, and a range. Every piece has a public source, or says it doesn't.",
-}
+  path: "/methodology",
+})
 
 /** How many of the adjustments come from a public source, and how many are our own estimate. */
 function basisCounts() {

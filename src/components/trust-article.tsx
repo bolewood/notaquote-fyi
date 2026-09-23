@@ -13,6 +13,7 @@ export function TrustArticle({
   children,
   closingDisclaimer = true,
   wide = false,
+  breadcrumbs,
 }: {
   title: string
   lead?: React.ReactNode
@@ -20,10 +21,13 @@ export function TrustArticle({
   closingDisclaimer?: boolean
   /** For pages with wide tables. The text still keeps a readable width. */
   wide?: boolean
+  /** A trail above the title, for pages deeper in the site. */
+  breadcrumbs?: React.ReactNode
 }) {
   return (
     <div className="mx-auto w-full max-w-7xl px-4 pt-8 pb-16 sm:pt-12 lg:px-6">
       <article className={cn(wide ? "max-w-5xl" : "max-w-2xl")}>
+        {breadcrumbs}
         <header className="max-w-2xl">
           <h1 className="text-3xl leading-tight font-semibold tracking-tight text-balance sm:text-[2.6rem]">{title}</h1>
           {lead ? <p className="mt-3 text-lg leading-relaxed text-pretty text-muted-foreground">{lead}</p> : null}

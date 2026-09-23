@@ -42,10 +42,22 @@ export type ShareCurrent = {
 
 export type SharedCar = { year: number; make: string; model: string; trim: string; starred: boolean }
 
+/**
+ * Where a link came from, when it isn't someone sharing their own choices:
+ * - "whatif": the What-if page handing its cars to Compare.
+ * - "page": one of the site's own pages (a state page, a guide) opening an
+ *   example to try. It's shown like a shared link, with its own words.
+ * - "add": a car page adding one car. Only the car counts: the What-if page
+ *   tries it on the visitor's own situation, and Compare adds it to their
+ *   own list. The driver in the link is just a placeholder.
+ */
+export type ShareVia = "whatif" | "page" | "add"
+
+const SHARE_VIAS: readonly ShareVia[] = ["whatif", "page", "add"]
+
 export type ShareLinkOk = {
   status: "ok"
-  /** Set when the What-if page handed its cars to Compare. */
-  via: "whatif" | null
+  via: ShareVia | null
   scenario: Scenario
   teenOnParentPolicy: boolean
   /** What the sender pays now, only if they chose to include it. */
@@ -166,8 +178,8 @@ export type ShareInput = {
   cars?: readonly SharedCar[]
   modelVersion?: string
   bundleVersion?: string
-  /** "whatif": the What-if page handing its cars to Compare, not a link from someone else. */
-  via?: "whatif"
+  /** Where the link comes from, when it isn't someone sharing their own choices (see ShareVia). */
+  via?: ShareVia
 }
 
 export function encodeSharePath(input: ShareInput): string {
@@ -339,7 +351,7 @@ export function decodeShareSearch(
 
   return {
     status: "ok",
-    via: params.get("via") === "whatif" ? "whatif" : null,
+    via: SHARE_VIAS.find((item) => item === params.get("via")) ?? null,
     scenario,
     teenOnParentPolicy,
     anchorAmount,
@@ -356,7 +368,9 @@ export function decodeShareSearch(
 /** What to tell someone who opened a shared link, in plain words. */
 export function shareArrivalNotes(link: ShareLinkOk): string[] {
   const notes = [
-    "Someone shared this with you. The link carries their choices, not our estimates, so every number here is worked out fresh.",
+    link.via === "page"
+      ? "We filled in an example from the page you came from. Change anything and it becomes yours, or tell us what you pay now."
+      : "Someone shared this with you. The link carries their choices, not our estimates, so every number here is worked out fresh.",
   ]
   if (link.modelMismatch) {
     notes.push(

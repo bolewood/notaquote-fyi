@@ -1,12 +1,15 @@
 import type { Metadata } from "next"
+import { pageMetadata } from "@/lib/site-meta"
 import Link from "next/link"
 import { RecordTrustView } from "@/components/record-trust-view"
 import { TrustArticle } from "@/components/trust-article"
 import { DISCLAIMER, PUBLISHER } from "@/lib/copy"
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Not a quote",
-}
+  description: "What this site is and isn't: a free planning estimate from public data, not a quote, an insurer, or an agent. Only an insurer can give you a real price.",
+  path: "/disclaimer",
+})
 
 export default function DisclaimerPage() {
   return (

@@ -8,6 +8,7 @@ const GROUPS: { heading: string; links: { href: string; label: string; external?
     links: [
       { href: "/", label: "What-if" },
       { href: "/compare", label: "Compare cars" },
+      { href: "/guides", label: "Guides" },
     ],
   },
   {

@@ -45,3 +45,6 @@ next-env.d.ts
 
 # browser automation logs
 .playwright-mcp/
+
+# local notes, scratch files, and screenshots
+/.context/

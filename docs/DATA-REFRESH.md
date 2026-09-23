@@ -69,6 +69,7 @@ Work on a branch named `data-refresh-YEAR`. Commit after each step, so the histo
 - Run `npm run lint && npm run typecheck && npm test && npm run build`, then `npm run factors:build` again (it should leave no diff).
 - Click through the site locally (`npm run dev`): the Model Y what-if, a 15-car compare for a 16-year-old, and /sources for two or three states.
 - Curl `/api/v1/compare?cars=popular:first-cars` and check that it looks sane.
+- Spot-check a few state and car pages (`/states/ohio`, `/states/california`, `/cars/tesla-model-y`, `/cars/subaru-outback`) and the guides under `/guides`. Every figure on them is worked out from the data at build time, so they update on their own; look for anything that reads oddly after the numbers moved. If HLDI published newer model years, the car pages move to the newest year by themselves (their addresses don't change). `npm test` fails if a car in `data/car-pages.json` no longer has claims data.
 - If the UI looks different, retake the README screenshots in `docs/images/`.
 
 ### 10. Write it down and ship
