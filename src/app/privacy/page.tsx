@@ -7,7 +7,7 @@ import { PUBLISHER } from "@/lib/copy"
 
 export const metadata: Metadata = pageMetadata({
   title: "Privacy",
-  description: "Everything you type stays in your browser. No account, no cookies, no tracking scripts, and nothing to sell.",
+  description: "Everything you type stays in your browser. No account, no cookies, no ad trackers, and nothing to sell.",
   path: "/privacy",
 })
 
@@ -15,7 +15,7 @@ export default function PrivacyPage() {
   return (
     <TrustArticle
       title="Privacy"
-      lead={`The short version: what you type stays on your device, except a VIN if you choose to look one up. There's no account, no tracking, and nothing to sell. ${PUBLISHER} publishes this site and never sees what you type into it. An AI assistant using our read-only service is the one difference; see below.`}
+      lead={`The short version: what you type stays on your device, except a VIN if you choose to look one up. There's no account, no cookies, no ad tracking, and nothing to sell. ${PUBLISHER} publishes this site and never sees what you type into it. An AI assistant using our read-only service is the one difference; see below.`}
     >
       <h2>What we don&apos;t ask for</h2>
       <p>
@@ -66,10 +66,17 @@ export default function PrivacyPage() {
         Nothing is uploaded.
       </p>
 
-      <h2>No tracking</h2>
+      <h2>Page-view counts, and nothing else</h2>
       <p>
-        No cookies, ad trackers, analytics scripts, or session recording. The only counts are the simple tallies below, kept
-        in this browser and never sent. Each one records that something happened, never what you chose or any amount.
+        No cookies, ad trackers, or session recording. We do count page views with Vercel Web Analytics, so we know
+        which pages people find useful. It sends the page&apos;s address with anything after <code>?</code> or{" "}
+        <code>#</code> removed (that&apos;s where share links keep choices), plus the site that sent you, your country,
+        and your browser and device type. It sets no cookies and doesn&apos;t follow you to other sites. It never sees
+        what you type, what you pay, or the cars you pick.
+      </p>
+      <p>
+        The simple tallies below are separate. They&apos;re kept in this browser and never sent. Each one records that
+        something happened, never what you chose or any amount.
       </p>
 
       <h2>AI assistants</h2>

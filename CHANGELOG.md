@@ -4,6 +4,11 @@ Every release that changes the data or the math goes here, newest first. The sit
 
 Data versions are date-stamped (`factors-YYYY-MM-DD`, `state-rules-YYYY-MM-DD`, `state-baselines-YYYY-MM-DD`, `catalog-YYYY-MM-DD`, `manifest-YYYY-MM-DD`). Annual refreshes are tagged `data-YYYY.MM`.
 
+## 2026-09-24: Page-view counts
+
+### Site
+- Added Vercel Web Analytics for cookieless page-view counts. Only the page's path is sent; anything after `?` or `#` (where share links keep choices) is removed first, and there are no custom events. The Privacy page, README, and CONTRIBUTING say so.
+
 ## 2026-09-23: Pages for search: states, cars, and guides
 
 ### Site
