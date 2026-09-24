@@ -169,7 +169,7 @@ If your change moves a number people see, add a line to [CHANGELOG.md](CHANGELOG
 These are promises the site makes, so they're rules for every change:
 
 - A visitor's inputs stay in their browser. The only exception is the optional VIN decode, which goes straight from the browser to NHTSA.
-- No analytics scripts, tracking pixels, cookies, or third-party scripts.
+- No tracking pixels, cookies, or other third-party scripts. The one exception is Vercel Web Analytics page-view counts (`src/components/page-analytics.tsx`), which send the page's path only, with anything after `?` or `#` removed. Don't add custom analytics events, and never send anything a visitor chose or typed.
 - Never put a premium, a VIN, or anything personal in a URL that leaves the site.
 
 To add a "Suggest a fix" link beside a number, use the helper in `src/lib/suggest-fix.ts`. It opens a prefilled GitHub issue. It also drops values that look like a dollar amount, a VIN, an email address, or a phone number, but that's a safety net, not a guarantee: only ever pass the site's own labels and values, never anything the visitor typed. Write liability minimums as "30/60/15", since values with a dollar sign are dropped.

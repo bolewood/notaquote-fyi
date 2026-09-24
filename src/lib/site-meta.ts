@@ -2,7 +2,7 @@
  * What search engines, link previews, and AI assistants read about a page:
  * titles and descriptions, the canonical address, Open Graph and Twitter
  * tags, structured data (JSON-LD), and when the data behind a page last
- * changed (for sitemap.xml). No tracking of any kind lives here, or anywhere.
+ * changed (for sitemap.xml). No tracking lives here. The only page-view counting is src/components/page-analytics.tsx, which sends the path alone.
  */
 import type { Metadata } from "next"
 import factorBundle from "@/data/model-factors.json"

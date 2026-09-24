@@ -46,7 +46,7 @@ It is not an insurance company, agent, or broker, and it doesn't sell anything o
 - **Your inputs stay in your browser.** The math runs on your device. We don't collect or store your answers.
 - **One exception, and only if you use it:** if you type in a VIN, your browser sends it straight to NHTSA's free vehicle decoder to look up the car. We don't keep it.
 - **AI assistants are the one other difference.** What an assistant asks the read-only API does reach our host; see [For AI assistants](#for-ai-assistants).
-- **No cookies, ad trackers, or analytics scripts.**
+- **No cookies or ad trackers.** We count page views with Vercel Web Analytics (cookieless). It gets the page's path only, never what's after `?` or `#`, and never anything you type. See `src/components/page-analytics.tsx`.
 - **Share links.** The link carries your choices, not our estimates. It includes what you pay only if you check the box. It all sits after the `#` in the address, which browsers don't send to any server.
 
 ## Quickstart
