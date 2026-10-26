@@ -207,7 +207,7 @@ export function yearsNote(f: CarFigures): string {
   return [
     `We list the ${f.page.shortName} for ${f.yearsListed}.`,
     "How much a car's age takes off is our own estimate.",
-    older ? `Years before ${CLAIMS_YEARS.first} use the ${CLAIMS_YEARS.first}–${String(CLAIMS_YEARS.last).slice(2)} claims results.` : "",
+    older ? `Years before ${CLAIMS_YEARS.first} use the ${CLAIMS_YEARS.first}–${String(CLAIMS_YEARS.first + 2).slice(2)} report.` : "",
   ]
     .filter(Boolean)
     .join(" ")
@@ -215,7 +215,12 @@ export function yearsNote(f: CarFigures): string {
 
 /** The range notes that are about this car, not the ones every page shares (those are on How it works). */
 export function carNotes(f: CarFigures): string[] {
-  const shared = [/^Companies' prices differ/, /^Our figure for the car's age/, /^We brought the 2023/]
+  const shared = [
+    /^Companies' prices differ/,
+    /^Our figure for the car's age/,
+    /^We brought the 2023/,
+    /^HLDI's bodily-injury figure/,
+  ]
   return f.adult.rangePoints.filter((point) => !shared.some((pattern) => pattern.test(point)))
 }
 
@@ -260,7 +265,7 @@ export type CarContent = {
 export const CAR_FIXED: CarContent["fixed"] = {
   yearsCaption: "One model year per age group. Liability only: no coverage for the car itself. Teen columns: a new 16-year-old.",
   teenNote: "That's the whole household's bill going up.",
-  claimsIntro: "Its insurance claims against an average car's (HLDI):",
+  claimsIntro: "Its insurance results against an average car's (HLDI):",
   ctaNote: "Both start from your own situation if you've set one. For crash safety, see IIHS and NHTSA ratings.",
 }
 
@@ -314,11 +319,11 @@ export function carContent(f: CarFigures): CarContent {
       { label: "Repairs", value: claimsPhrase(f.claims.repairs) },
       { label: "Theft and weather", value: claimsPhrase(f.claims.theftAndWeather) },
       { label: "Damage to others", value: claimsPhrase(f.claims.damageToOthers) },
-      { label: "Injuries to others", value: claimsPhrase(f.claims.injuriesToOthers) },
+      { label: "Injuries to others (how often claims happen)", value: claimsPhrase(f.claims.injuriesToOthers) },
     ],
     effect: priceEffectText(f),
     kind: kindText(f),
-    source: `Matched to “${f.claims.series.join("; ")}” in HLDI's results.`,
+    source: `Matched to “${f.claims.series.join("; ")}” (HLDI, ${f.claims.modelYears ?? "2022–24"} models).`,
     similarHeading: similarHeading(f),
     similar: [
       ...[...f.similar.cheaper].reverse(),

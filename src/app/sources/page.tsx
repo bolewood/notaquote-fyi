@@ -31,7 +31,7 @@ const USED_FOR: Record<string, string> = {
   "nd-2026": "How city or country changes a price.",
   "co-2023": "How city or country changes a price.",
   "nc-sdip-2026": "How an at-fault accident raises a price.",
-  "hldi-2022-24": "How each model's insurance claims compare with the average car. This is the “Why” you see when you tap a car.",
+  "hldi-2022-24": "How each model's insurance results compare with the average car (overall losses for collision, comprehensive, and property damage; how often claims happen for injuries), across 2006–08 through 2022–24 model-year reports. This is the “Why” you see when you tap a car.",
   "iso-symbols-2004": "Why a car's crash record only partly moves the liability part of the bill.",
   "sp-global-vio-2023": "How old the average car is, which sets the car's age we start from.",
   "naic-auto-db-2022-2023": "The typical price for each state, and how a full-coverage bill splits.",
@@ -64,7 +64,10 @@ function listed(): Map<string, Listed> {
     map.set(source.id, {
       id: source.id,
       publisher: source.publisher,
-      title: source.title,
+      title:
+        source.id === "hldi-2022-24"
+          ? "Insurance losses by make and model (2006–08 through 2022–24 models)"
+          : source.title,
       url: source.url,
       checked: longDate(source.checkedOn),
       usedFor: USED_FOR[source.id] ?? "",

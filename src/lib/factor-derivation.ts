@@ -26,6 +26,7 @@ import type {
   FactorSource,
   VehicleClassRow,
   VehicleLossRow,
+  VehicleWindow,
 } from "./factor-types"
 
 export const DERIVATION_VERSION = "factors-2026-09-22"
@@ -854,7 +855,7 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
         high: toHundredths(coll / (coll + comp)),
         basis: "indicative",
         sources: ["iso-via-iii-2024"],
-        derivation: `${isoWords} Collision ÷ (collision + comprehensive). Used to weight HLDI's collision and comprehensive results for a vehicle.`,
+        derivation: `${isoWords} Collision ÷ (collision + comprehensive). Used to weight HLDI's collision and comprehensive overall-loss results for a vehicle.`,
         n: 2,
       },
       "bodily-injury-in-liability": {
@@ -864,7 +865,7 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
         high: toHundredths(bi / (bi + pd)),
         basis: "indicative",
         sources: ["iso-via-iii-2024"],
-        derivation: `${isoWords} Bodily injury ÷ (bodily injury + property damage). Used to weight HLDI's bodily-injury and property-damage results for a vehicle.`,
+        derivation: `${isoWords} Bodily injury ÷ (bodily injury + property damage). Used to weight HLDI's bodily-injury claim frequency (with our average-severity assumption) and property-damage overall losses for a vehicle.`,
         n: 2,
       },
     },
@@ -874,19 +875,13 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
   const fullLiability = premiumSplit.cells.liability.value
 
   // --- Vehicles (HLDI).
-  // The per-model rows are one file behind one switch, so they can be removed
-  // cleanly. Without them every vehicle uses its class average (from HLDI's
+  // The per-model rows are behind one switch (useHldiModels in vehicle-families.json,
+  // or deleting sources/hldi-2022-24.csv), so they can be turned off cleanly.
+  // Without them every vehicle uses its window's class average (from HLDI's
   // class subtotals); without those too, every vehicle is "not recognized".
-  const hldiText = files["sources/hldi-2022-24.csv"]
-  const modelsEnabled = families.useHldiModels && hldiText !== undefined
-  const models = modelsEnabled
-    ? parseCsv(hldiText)
-        .map(hldiRow)
-        .filter((row): row is VehicleLossRow => row !== null)
-        .sort((left, right) => left.series.localeCompare(right.series))
-    : []
-  const subtotalText = files["sources/hldi-class-subtotals-2022-24.csv"]
-  const subtotals = subtotalText === undefined ? [] : parseCsv(subtotalText)
+  const injurySeverity = assumed(guess("vehicle", "injury-severity"))
+  const injuryPoint = (freq: number | null, severityHundredths: number) =>
+    freq === null ? null : (freq * severityHundredths) / 100
   const combined = (liability: number, physical: number) =>
     (fullLiability * liability + (100 - fullLiability) * physical) / 100
   const relativities = (row: {
@@ -894,10 +889,294 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
     propertyDamage: number | null
     collision: number | null
     comprehensive: number | null
-  }) => ({
-    liability: weightedRelativity(row.bodilyInjury, row.propertyDamage, biShare),
-    physical: weightedRelativity(row.collision, row.comprehensive, collisionShare),
-  })
+  }) => {
+    const biMid = injuryPoint(row.bodilyInjury, injurySeverity.value)
+    const biLow = injuryPoint(row.bodilyInjury, injurySeverity.low)
+    const biHigh = injuryPoint(row.bodilyInjury, injurySeverity.high)
+    const pd = row.propertyDamage
+    return {
+      bodilyInjury: biMid,
+      bodilyInjuryLow: biLow,
+      bodilyInjuryHigh: biHigh,
+      propertyDamage: pd,
+      liability: weightedRelativity(biMid, pd, biShare),
+      liabilityLow: weightedRelativity(biLow, pd, biShare),
+      liabilityHigh: weightedRelativity(biHigh, pd, biShare),
+      physical: weightedRelativity(row.collision, row.comprehensive, collisionShare),
+    }
+  }
+
+  const plainClass = (classId: string) => VEHICLE_CLASS_LABELS[classId as VehicleClassId] ?? classId
+  // Lower-case the first letter, but leave acronyms such as "SUV" alone.
+  const lower = (value: string) => (/^[A-Z]{2}/.test(value) ? value : value.charAt(0).toLowerCase() + value.slice(1))
+
+  const hldiText = files["sources/hldi-2022-24.csv"]
+  const modelsEnabled = families.useHldiModels && hldiText !== undefined
+  const hldiWindowLabels = [
+    ...new Set(
+      sources.sources
+        .map((source) => /^hldi-(\d{4}-\d{2})$/.exec(source.id)?.[1])
+        .filter((label): label is string => label !== undefined),
+    ),
+  ].sort((left, right) => yearRange(right).yearMax - yearRange(left).yearMax)
+  if (!hldiWindowLabels.includes("2022-24")) hldiWindowLabels.unshift("2022-24")
+
+  // HLDI publishes class subtotals in the API for 2020–22, 2021–23, and 2022–24;
+  // earlier windows fall back to the closest window with published class subtotals.
+  const subtotalWindows = hldiWindowLabels.filter((label) => files[`sources/hldi-class-subtotals-${label}.csv`] !== undefined)
+  const closestSubtotalWindow = (targetLabel: string): string | null => {
+    if (files[`sources/hldi-class-subtotals-${targetLabel}.csv`] !== undefined) return targetLabel
+    if (subtotalWindows.length === 0) return null
+    const target = yearRange(targetLabel)
+    return [...subtotalWindows].sort((left, right) => {
+      const a = yearRange(left)
+      const b = yearRange(right)
+      const distA = Math.min(Math.abs(a.yearMin - target.yearMin), Math.abs(a.yearMax - target.yearMax))
+      const distB = Math.min(Math.abs(b.yearMin - target.yearMin), Math.abs(b.yearMax - target.yearMax))
+      return distA !== distB ? distA - distB : b.yearMax - a.yearMax
+    })[0]
+  }
+
+  const buildWindow = (winLabel: string): { window: VehicleWindow; classRatios: number[]; luxuryRatios: number[]; subtotals: HldiRow[] } => {
+    const winSourceId = `hldi-${winLabel}`
+    const winDisplay = winLabel.replace("-", "–")
+    const { yearMin, yearMax } = yearRange(winLabel)
+    const rawText = files[`sources/hldi-${winLabel}.csv`]
+    const winModels =
+      modelsEnabled && rawText !== undefined
+        ? parseCsv(rawText)
+            .map(hldiRow)
+            .filter((row): row is VehicleLossRow => row !== null)
+            .sort((left, right) => left.series.localeCompare(right.series))
+        : []
+    const subLabel = closestSubtotalWindow(winLabel)
+    const subSourceId = subLabel ? `hldi-${subLabel}` : winSourceId
+    const subDisplay = subLabel ? subLabel.replace("-", "–") : winDisplay
+    const subText = subLabel ? files[`sources/hldi-class-subtotals-${subLabel}.csv`] : undefined
+    const winSubtotals = subText === undefined ? [] : parseCsv(subText)
+    const subNote =
+      subLabel && subLabel !== winLabel
+        ? `HLDI ${subDisplay} class average (the closest HLDI report with class subtotals, used for ${winDisplay} models)`
+        : `HLDI ${winDisplay} class average`
+
+    const makeClassRow = (
+      classId: string,
+      label: string,
+      words: string,
+      kind: "" | "Luxury " | "Electric ",
+    ): VehicleClassRow | null => {
+      const subtotal = winSubtotals.find((row) => row.subtotal_label === label)
+      if (!subtotal) return null
+      const rel = relativities({
+        bodilyInjury: numberOrNull(subtotal.bodily_injury),
+        propertyDamage: numberOrNull(subtotal.property_damage),
+        collision: numberOrNull(subtotal.collision),
+        comprehensive: numberOrNull(subtotal.comprehensive),
+      })
+      if (rel.liability === null || rel.physical === null) throw new Error(`HLDI subtotal ${label} incomplete`)
+      const name = kind ? `${kind}${lower(plainClass(classId))}` : plainClass(classId)
+      const biVal = Math.round(rel.bodilyInjury ?? rel.liability)
+      const biLow = Math.min(biVal - 1, Math.round(rel.bodilyInjuryLow ?? biVal * (injurySeverity.low / 100)))
+      const biHigh = Math.max(biVal + 1, Math.round(rel.bodilyInjuryHigh ?? biVal * (injurySeverity.high / 100)))
+      const pdVal = Math.round(rel.propertyDamage ?? rel.liability)
+      const liabVal = Math.round(rel.liability)
+      const liabLow = Math.min(liabVal, Math.round(rel.liabilityLow ?? liabVal))
+      const liabHigh = Math.max(liabVal, Math.round(rel.liabilityHigh ?? liabVal))
+      return {
+        hldiSubtotal: label,
+        bodilyInjury: {
+          label: `${name}: how often drivers cause injury claims`,
+          value: biVal,
+          low: biLow,
+          high: biHigh,
+          basis: "assumed",
+          sources: [],
+          derivation: `Our estimate. No public source yet; help wanted. ${words} HLDI's bodily-injury figure (${subtotal.bodily_injury || "—"}) measures how often injury claims happen (claim frequency), not overall losses, because injury severity takes too long to develop. We assume a model's average injury claim severity is about average (1.00, range ${(injurySeverity.low / 100).toFixed(2)} to ${(injurySeverity.high / 100).toFixed(2)}) to combine it with property-damage overall losses.`,
+          n: null,
+        },
+        propertyDamage: {
+          label: `${name}: property damage you cause`,
+          value: pdVal,
+          low: pdVal,
+          high: pdVal,
+          basis: "indicative",
+          sources: [subSourceId],
+          derivation: `${words} Property-damage overall losses (claim frequency × severity): ${subtotal.property_damage || "—"}.`,
+          n: 1,
+        },
+        liability: {
+          label: `${name}: damage and injuries you cause`,
+          value: liabVal,
+          low: liabLow,
+          high: liabHigh,
+          basis: "indicative",
+          sources: [subSourceId],
+          derivation: `${words} Bodily-injury claim frequency ${subtotal.bodily_injury || "—"} (assuming average injury claim severity, range ${(injurySeverity.low / 100).toFixed(2)} to ${(injurySeverity.high / 100).toFixed(2)}) and property-damage overall losses ${subtotal.property_damage || "—"}, weighted ${biShare}/${100 - biShare}, before the liability weight.`,
+          n: 1,
+        },
+        physical: {
+          label: `${name}: damage to your own car`,
+          value: Math.round(rel.physical),
+          low: Math.round(rel.physical),
+          high: Math.round(rel.physical),
+          basis: "indicative",
+          sources: [subSourceId],
+          derivation: `${words} Collision ${subtotal.collision || "—"} and comprehensive ${subtotal.comprehensive || "—"} overall losses, weighted ${collisionShare}/${100 - collisionShare}.`,
+          n: 1,
+        },
+      }
+    }
+
+    const memberRatios = (label: string, into: number[]) => {
+      const subtotal = winSubtotals.find((row) => row.subtotal_label === label)
+      if (!subtotal) return
+      const rel = relativities({
+        bodilyInjury: numberOrNull(subtotal.bodily_injury),
+        propertyDamage: numberOrNull(subtotal.property_damage),
+        collision: numberOrNull(subtotal.collision),
+        comprehensive: numberOrNull(subtotal.comprehensive),
+      })
+      if (rel.liability === null || rel.physical === null) return
+      for (const member of winModels.filter((row) => row.hldiClass === `${subtotal.body_class} / ${subtotal.size}`)) {
+        const own = relativities(member)
+        if (own.liability !== null && own.physical !== null) {
+          into.push(combined(own.liability, own.physical) / combined(rel.liability, rel.physical))
+        }
+      }
+    }
+
+    const winClasses: Record<string, VehicleClassRow> = {}
+    const winClassRatios: number[] = []
+    for (const [classId, label] of Object.entries(families.classes)) {
+      const words = `${subNote} "${label}", used for the EPA-based class "${plainClass(classId)}". Which HLDI class stands in for which EPA class is our judgment.${
+        classId === "large-car"
+          ? " EPA sizes cars by interior room, so its large class includes hatchbacks such as the Hyundai Ioniq; HLDI sizes by footprint and weight, so we use HLDI's midsize average."
+          : ""
+      }`
+      const row = makeClassRow(classId, label, words, "")
+      if (row) winClasses[classId] = row
+      memberRatios(label, winClassRatios)
+    }
+
+    const winLuxuryClasses: Record<string, VehicleClassRow> = {}
+    const winLuxuryRatios: number[] = []
+    for (const [classId, label] of Object.entries(families.luxuryClasses)) {
+      const words = `${subNote} "${label}", used for the class "${plainClass(classId)}" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment.`
+      const row = makeClassRow(classId, label, words, "Luxury ")
+      if (row) winLuxuryClasses[classId] = row
+      memberRatios(label, winLuxuryRatios)
+    }
+
+    const winLuxurySportsClasses: Record<string, VehicleClassRow> = {}
+    for (const [classId, label] of Object.entries(families.luxurySportsClasses)) {
+      const words = `${subNote} "${label}", used for two-doors and convertibles in the class "${plainClass(classId)}" from makes HLDI mostly files as luxury or sports cars. The mapping is our judgment.`
+      const row = makeClassRow(classId, label, words, "Luxury ")
+      if (row) {
+        row.bodilyInjury.label = row.bodilyInjury.label.replace(/^Luxury /, "Luxury sporty ")
+        row.propertyDamage.label = row.propertyDamage.label.replace(/^Luxury /, "Luxury sporty ")
+        row.liability.label = row.liability.label.replace(/^Luxury /, "Luxury sporty ")
+        row.physical.label = row.physical.label.replace(/^Luxury /, "Luxury sporty ")
+        winLuxurySportsClasses[classId] = row
+      }
+      memberRatios(label, winLuxuryRatios)
+    }
+
+    const winElectricClasses: Record<string, VehicleClassRow> = {}
+    for (const [classId, [body, size]] of Object.entries(families.electricClassCells)) {
+      const electric = winModels.filter(
+        (row) => row.powertrain === "electric" && row.hldiClass === `${body} / ${size}`,
+      )
+      const bodilyInjuries = electric.map((row) => relativities(row).bodilyInjury).filter((value): value is number => value !== null)
+      const propertyDamages = electric.map((row) => relativities(row).propertyDamage).filter((value): value is number => value !== null)
+      const liabilities = electric.map((row) => relativities(row).liability).filter((value): value is number => value !== null)
+      const liabilitiesLow = electric.map((row) => relativities(row).liabilityLow).filter((value): value is number => value !== null)
+      const liabilitiesHigh = electric.map((row) => relativities(row).liabilityHigh).filter((value): value is number => value !== null)
+      const physicals = electric.map((row) => relativities(row).physical).filter((value): value is number => value !== null)
+      if (bodilyInjuries.length < 3 || propertyDamages.length < 3 || liabilities.length < 3 || physicals.length < 3) continue
+      const name = `Electric ${lower(plainClass(classId))}`
+      const words = `Middle of the ${electric.length} electric HLDI ${winDisplay} series we keep in HLDI's ${body} / ${size} class (${electric.map((row) => row.series).join("; ")}).`
+      const biVal = Math.round(percentile(bodilyInjuries, 0.5))
+      const biLow = Math.min(biVal - 1, Math.round(percentile(bodilyInjuries, 0.25) * (injurySeverity.low / 100)))
+      const biHigh = Math.max(biVal + 1, Math.round(percentile(bodilyInjuries, 0.75) * (injurySeverity.high / 100)))
+      const pdVal = Math.round(percentile(propertyDamages, 0.5))
+      const liabVal = Math.round(percentile(liabilities, 0.5))
+      const liabLow = Math.min(liabVal, Math.round(Math.min(percentile(liabilities, 0.25), percentile(liabilitiesLow, 0.25))))
+      const liabHigh = Math.max(liabVal, Math.round(Math.max(percentile(liabilities, 0.75), percentile(liabilitiesHigh, 0.75))))
+      winElectricClasses[classId] = {
+        hldiSubtotal: `Electric ${body} / ${size}`,
+        bodilyInjury: {
+          label: `${name}: how often drivers cause injury claims`,
+          value: biVal,
+          low: biLow,
+          high: biHigh,
+          basis: "assumed",
+          sources: [],
+          derivation: `Our estimate. No public source yet; help wanted. ${words} HLDI's bodily-injury figure measures how often injury claims happen (claim frequency), not overall losses; we assume average injury claim severity is about average (1.00, range ${(injurySeverity.low / 100).toFixed(2)} to ${(injurySeverity.high / 100).toFixed(2)}).`,
+          n: null,
+        },
+        propertyDamage: {
+          label: `${name}: property damage you cause`,
+          value: pdVal,
+          low: Math.min(pdVal, Math.round(percentile(propertyDamages, 0.25))),
+          high: Math.max(pdVal, Math.round(percentile(propertyDamages, 0.75))),
+          basis: "indicative",
+          sources: [winSourceId],
+          derivation: `${words} Property-damage overall losses per series.`,
+          n: propertyDamages.length,
+        },
+        liability: {
+          label: `${name}: damage and injuries you cause`,
+          value: liabVal,
+          low: liabLow,
+          high: liabHigh,
+          basis: "indicative",
+          sources: [winSourceId],
+          derivation: `${words} Liability result per series (bodily-injury claim frequency with our average-severity assumption and property-damage overall losses, weighted ${biShare}/${100 - biShare}), before the liability weight.`,
+          n: liabilities.length,
+        },
+        physical: {
+          label: `${name}: damage to your own car`,
+          value: Math.round(percentile(physicals, 0.5)),
+          low: Math.round(percentile(physicals, 0.25)),
+          high: Math.round(percentile(physicals, 0.75)),
+          basis: "indicative",
+          sources: [winSourceId],
+          derivation: `${words} Damage overall-loss result per series, weighted as above.`,
+          n: physicals.length,
+        },
+      }
+    }
+
+    return {
+      window: {
+        sourceId: winSourceId,
+        sources: subSourceId === winSourceId ? [winSourceId] : [winSourceId, subSourceId],
+        modelYears: winLabel,
+        yearMin,
+        yearMax,
+        models: winModels,
+        classes: winClasses,
+        electricClasses: winElectricClasses,
+        luxuryClasses: winLuxuryClasses,
+        luxurySportsClasses: winLuxurySportsClasses,
+      },
+      classRatios: winClassRatios,
+      luxuryRatios: winLuxuryRatios,
+      subtotals: winSubtotals,
+    }
+  }
+
+  const builtWindows = hldiWindowLabels.map(buildWindow)
+  const windows = builtWindows.map((item) => item.window)
+  const newestBuilt = builtWindows[0]
+  const models = newestBuilt.window.models
+  const subtotals = newestBuilt.subtotals
+  const classes = newestBuilt.window.classes
+  const luxuryClasses = newestBuilt.window.luxuryClasses
+  const luxurySportsClasses = newestBuilt.window.luxurySportsClasses
+  const electricClasses = newestBuilt.window.electricClasses
+  const classRatios = newestBuilt.classRatios
+  const luxuryRatios = newestBuilt.luxuryRatios
 
   // How much of HLDI's liability result to pass on. Insurers rate liability
   // by vehicle much less than their loss data would suggest: ISO's liability
@@ -935,138 +1214,9 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
     n: null,
   }
 
-  const plainClass = (classId: string) => VEHICLE_CLASS_LABELS[classId as VehicleClassId] ?? classId
-  // Lower-case the first letter, but leave acronyms such as "SUV" alone.
-  const lower = (value: string) => (/^[A-Z]{2}/.test(value) ? value : value.charAt(0).toLowerCase() + value.slice(1))
-  const classRow = (
-    classId: string,
-    label: string,
-    words: string,
-    kind: "" | "Luxury " | "Electric ",
-  ): VehicleClassRow | null => {
-    const subtotal = subtotals.find((row) => row.subtotal_label === label)
-    if (!subtotal) return null
-    const rel = relativities({
-      bodilyInjury: numberOrNull(subtotal.bodily_injury),
-      propertyDamage: numberOrNull(subtotal.property_damage),
-      collision: numberOrNull(subtotal.collision),
-      comprehensive: numberOrNull(subtotal.comprehensive),
-    })
-    if (rel.liability === null || rel.physical === null) throw new Error(`HLDI subtotal ${label} incomplete`)
-    const name = kind ? `${kind}${lower(plainClass(classId))}` : plainClass(classId)
-    return {
-      hldiSubtotal: label,
-      liability: {
-        label: `${name}: damage and injuries you cause`,
-        value: Math.round(rel.liability),
-        low: Math.round(rel.liability),
-        high: Math.round(rel.liability),
-        basis: "indicative",
-        sources: ["hldi-2022-24"],
-        derivation: `${words} Bodily injury ${subtotal.bodily_injury || "—"} and property damage ${subtotal.property_damage || "—"}, weighted ${biShare}/${100 - biShare}, before the liability weight.`,
-        n: 1,
-      },
-      physical: {
-        label: `${name}: damage to your own car`,
-        value: Math.round(rel.physical),
-        low: Math.round(rel.physical),
-        high: Math.round(rel.physical),
-        basis: "indicative",
-        sources: ["hldi-2022-24"],
-        derivation: `${words} Collision ${subtotal.collision || "—"} and comprehensive ${subtotal.comprehensive || "—"}, weighted ${collisionShare}/${100 - collisionShare}.`,
-        n: 1,
-      },
-    }
-  }
-  const memberRatios = (label: string, into: number[]) => {
-    const subtotal = subtotals.find((row) => row.subtotal_label === label)
-    if (!subtotal) return
-    const rel = relativities({
-      bodilyInjury: numberOrNull(subtotal.bodily_injury),
-      propertyDamage: numberOrNull(subtotal.property_damage),
-      collision: numberOrNull(subtotal.collision),
-      comprehensive: numberOrNull(subtotal.comprehensive),
-    })
-    if (rel.liability === null || rel.physical === null) return
-    for (const member of models.filter((row) => row.hldiClass === `${subtotal.body_class} / ${subtotal.size}`)) {
-      const own = relativities(member)
-      if (own.liability !== null && own.physical !== null) {
-        into.push(combined(own.liability, own.physical) / combined(rel.liability, rel.physical))
-      }
-    }
-  }
-
-  const classes: Record<string, VehicleClassRow> = {}
-  const classRatios: number[] = []
-  for (const [classId, label] of Object.entries(families.classes)) {
-    const words = `HLDI 2022–24 class average "${label}", used for the EPA-based class "${plainClass(classId)}". Which HLDI class stands in for which EPA class is our judgment.${
-      classId === "large-car"
-        ? " EPA sizes cars by interior room, so its large class includes hatchbacks such as the Hyundai Ioniq; HLDI sizes by footprint and weight, so we use HLDI's midsize average."
-        : ""
-    }`
-    const row = classRow(classId, label, words, "")
-    if (row) classes[classId] = row
-    memberRatios(label, classRatios)
-  }
-
-  const luxuryClasses: Record<string, VehicleClassRow> = {}
-  const luxuryRatios: number[] = []
-  for (const [classId, label] of Object.entries(families.luxuryClasses)) {
-    const words = `HLDI 2022–24 class average "${label}", used for the class "${plainClass(classId)}" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment.`
-    const row = classRow(classId, label, words, "Luxury ")
-    if (row) luxuryClasses[classId] = row
-    memberRatios(label, luxuryRatios)
-  }
-  const luxurySportsClasses: Record<string, VehicleClassRow> = {}
-  for (const [classId, label] of Object.entries(families.luxurySportsClasses)) {
-    const words = `HLDI 2022–24 class average "${label}", used for two-doors and convertibles in the class "${plainClass(classId)}" from makes HLDI mostly files as luxury or sports cars. The mapping is our judgment.`
-    const row = classRow(classId, label, words, "Luxury ")
-    if (row) {
-      row.liability.label = row.liability.label.replace(/^Luxury /, "Luxury sporty ")
-      row.physical.label = row.physical.label.replace(/^Luxury /, "Luxury sporty ")
-      luxurySportsClasses[classId] = row
-    }
-    memberRatios(label, luxuryRatios)
-  }
-
-  const electricClasses: Record<string, VehicleClassRow> = {}
-  for (const [classId, [body, size]] of Object.entries(families.electricClassCells)) {
-    const electric = models.filter(
-      (row) => row.powertrain === "electric" && row.hldiClass === `${body} / ${size}`,
-    )
-    const liabilities = electric.map((row) => relativities(row).liability).filter((value): value is number => value !== null)
-    const physicals = electric.map((row) => relativities(row).physical).filter((value): value is number => value !== null)
-    if (liabilities.length < 3 || physicals.length < 3) continue
-    const name = `Electric ${lower(plainClass(classId))}`
-    const words = `Middle of the ${electric.length} electric HLDI 2022–24 series we keep in HLDI's ${body} / ${size} class (${electric.map((row) => row.series).join("; ")}).`
-    electricClasses[classId] = {
-      hldiSubtotal: `Electric ${body} / ${size}`,
-      liability: {
-        label: `${name}: damage and injuries you cause`,
-        value: Math.round(percentile(liabilities, 0.5)),
-        low: Math.round(percentile(liabilities, 0.25)),
-        high: Math.round(percentile(liabilities, 0.75)),
-        basis: "indicative",
-        sources: ["hldi-2022-24"],
-        derivation: `${words} Liability result per series, weighted as above, before the liability weight.`,
-        n: liabilities.length,
-      },
-      physical: {
-        label: `${name}: damage to your own car`,
-        value: Math.round(percentile(physicals, 0.5)),
-        low: Math.round(percentile(physicals, 0.25)),
-        high: Math.round(percentile(physicals, 0.75)),
-        basis: "indicative",
-        sources: ["hldi-2022-24"],
-        derivation: `${words} Damage result per series, weighted as above.`,
-        n: physicals.length,
-      },
-    }
-  }
-
   const allCombined = models
     .map((row) => relativities(row))
-    .filter((rel): rel is { liability: number; physical: number } => rel.liability !== null && rel.physical !== null)
+    .filter((rel): rel is NonNullable<ReturnType<typeof relativities>> & { liability: number; physical: number } => rel.liability !== null && rel.physical !== null)
     .map((rel) => combined(rel.liability, rel.physical) / 100)
   const spreadOf = (values: number[], fallback: Summary): Summary => (values.length >= 5 ? summarize(values) : fallback)
   const wide: Summary = { median: 1, p25: 0.8, p75: 1.25, n: 0 }
@@ -1091,7 +1241,7 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
   const luxuryCombined = models
     .filter((row) => luxuryHldiClasses.has(row.hldiClass))
     .map((row) => relativities(row))
-    .filter((rel): rel is { liability: number; physical: number } => rel.liability !== null && rel.physical !== null)
+    .filter((rel): rel is NonNullable<ReturnType<typeof relativities>> & { liability: number; physical: number } => rel.liability !== null && rel.physical !== null)
     .map((rel) => combined(rel.liability, rel.physical) / 100)
   const unknownLuxurySpread = spreadOf(luxuryCombined, { median: 1, p25: 0.8, p75: 1.6, n: 0 })
 
@@ -1495,15 +1645,15 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
       modelsEnabled,
       sourceId: "hldi-2022-24",
       modelYears: "2022-24",
-      yearMin: 2022,
-      yearMax: 2024,
-      note: "HLDI insurance losses for 2022–24 models, 100 = the average vehicle. Collision and comprehensive move only the damage share of the premium, in full. Property-damage and bodily-injury liability move only the liability share, and only partly (see the liability weight). When we don't have the exact model, we use the class average.",
+      windows,
+      note: "HLDI insurance losses by make and model (2006–08 through 2022–24 model-year windows), 100 = the average vehicle. Collision, comprehensive, and property damage are overall losses (claim frequency × severity); bodily injury is claim frequency only, which we combine with property damage by assuming average injury claim severity is about average (1.00, with a wider range). Collision and comprehensive move only the damage share of the premium. Property-damage and bodily-injury liability move only the liability share, and only partly (see the liability weight). Each vehicle uses the most recent HLDI report whose window includes its model year, or its window's class average when we don't have the exact model.",
       models,
       aliases: families.aliases,
       classes,
       electricClasses,
       luxuryClasses,
       luxuryMakes: families.luxuryMakes.map((make) => compactName(make)),
+      injurySeverity,
       liabilityWeight,
       liabilityFloor: 100 - discountMax,
       liabilityCap: 100 + surchargeMax,

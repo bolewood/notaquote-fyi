@@ -35,7 +35,11 @@ import { DEFAULT_SCENARIO, type Scenario, type StateCode } from "./scenario"
 
 export { carListings, carSlug, MODELS_ENABLED, type CarListing }
 
-export const CLAIMS_YEARS = { first: FACTOR_BUNDLE.vehicle.yearMin, last: FACTOR_BUNDLE.vehicle.yearMax }
+const WINDOWS = FACTOR_BUNDLE.vehicle.windows
+export const CLAIMS_YEARS = {
+  first: WINDOWS.length > 0 ? Math.min(...WINDOWS.map((w) => w.yearMin)) : 2022,
+  last: WINDOWS.length > 0 ? Math.max(...WINDOWS.map((w) => w.yearMax)) : 2024,
+}
 
 export type CarPage = CarListing & {
   pick: VehiclePick
@@ -134,16 +138,18 @@ function median(values: number[]): number | null {
 }
 
 export type ClaimsSummary = {
-  /** Collision claims: fixing this car after a crash. */
+  /** Collision claims: fixing this car after a crash (overall losses). */
   repairs: ClaimsWord | null
-  /** Comprehensive claims: theft, weather, glass, and hitting an animal. */
+  /** Comprehensive claims: theft, weather, glass, and hitting an animal (overall losses). */
   theftAndWeather: ClaimsWord | null
-  /** Property-damage liability: damage this car's drivers do to others. */
+  /** Property-damage liability: damage this car's drivers do to others (overall losses). */
   damageToOthers: ClaimsWord | null
-  /** Bodily-injury liability: injuries this car's drivers cause. */
+  /** Bodily-injury liability: how often this car's drivers cause injury claims (claim frequency). */
   injuriesToOthers: ClaimsWord | null
   /** The HLDI series we matched, like "Toyota RAV4 4dr". */
   series: string[]
+  /** The HLDI report window used, like "2022–24". */
+  modelYears: string | null
 }
 
 export function claimsSummary(relativity: VehicleRelativity): ClaimsSummary {
@@ -162,6 +168,7 @@ export function claimsSummary(relativity: VehicleRelativity): ClaimsSummary {
     damageToOthers: word((row) => row.propertyDamage),
     injuriesToOthers: word((row) => row.bodilyInjury),
     series: relativity.rows.map((row) => row.series),
+    modelYears: relativity.modelYears,
   }
 }
 

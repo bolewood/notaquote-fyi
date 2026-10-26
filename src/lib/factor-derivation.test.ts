@@ -194,9 +194,12 @@ test("the HLDI model rows switch off cleanly", () => {
   assert.ok(Object.keys(off.vehicle.classes).length > 5)
   assertFactorBundleSafe(off)
   const removed = { ...files }
-  delete removed["sources/hldi-2022-24.csv"]
+  for (const key of Object.keys(removed)) {
+    if (/^sources\/hldi-\d{4}-\d{2}\.csv$/.test(key)) delete removed[key]
+  }
   const gone = deriveFactors(removed)
   assert.equal(gone.vehicle.modelsEnabled, false)
+  assert.ok(gone.vehicle.windows.every((win) => win.models.length === 0))
   assertFactorBundleSafe(gone)
   // Everything about drivers and coverage is unchanged.
   assert.deepEqual(gone.groups["driver-age"], committed.groups["driver-age"])
@@ -215,6 +218,7 @@ test("every source file is listed in sources.json and used by a factor", () => {
   visit(committed.vehicle)
   visit(committed.typicalStart)
   used.add(committed.vehicle.sourceId)
+  for (const win of committed.vehicle.windows) used.add(win.sourceId)
   for (const name of readdirSync(path.join(DATA, "sources"))) {
     if (!name.endsWith(".csv")) continue
     const id = name
@@ -222,13 +226,31 @@ test("every source file is listed in sources.json and used by a factor", () => {
       .replace(/^iso-loss-costs-2024\.csv$/, "iso-via-iii-2024")
       .replace(/^iso-liability-symbols-2004\.csv$/, "iso-symbols-2004")
       .replace(/^sp-global-vehicle-age-2023\.csv$/, "sp-global-vio-2023")
-      .replace(/^hldi-class-subtotals-2022-24\.csv$/, "hldi-2022-24")
+      .replace(/^hldi-class-subtotals-(\d{4}-\d{2})\.csv$/, "hldi-$1")
       .replace(/\.csv$/, "")
     assert.ok(ids.has(id), `${name} is not listed in sources.json`)
     if (id !== "iso-symbols-2004") assert.ok(used.has(id), `${name} is not used by any factor`)
   }
   for (const id of ids) assert.ok(used.has(id) || id === "iso-symbols-2004", `${id} is listed but not used`)
   assert.match(committed.vehicle.liabilityWeight.derivation, /up to 25 percent, discounts up to 20 percent/)
+})
+
+test("injury frequency uses an assumed severity cell and widens the class liability range", () => {
+  const severity = committed.vehicle.injurySeverity
+  assert.equal(severity.basis, "assumed")
+  assert.equal(severity.value, 100)
+  assert.equal(severity.low, 80)
+  assert.equal(severity.high, 125)
+  assert.deepEqual(severity.sources, [])
+  assert.match(severity.derivation, /claim frequency/i)
+  assert.match(severity.derivation, /average injury claim severity/i)
+
+  for (const row of Object.values(committed.vehicle.classes)) {
+    assert.equal(row.bodilyInjury.basis, "assumed", row.key)
+    assert.match(row.bodilyInjury.derivation, /claim frequency/i)
+    assert.ok(row.bodilyInjury.low < row.bodilyInjury.value && row.bodilyInjury.value < row.bodilyInjury.high, row.key)
+    assert.ok(row.liability.low < row.liability.value && row.liability.value < row.liability.high, row.key)
+  }
 })
 
 test("HLDI rows are copied faithfully and named consistently", () => {

@@ -84,17 +84,34 @@ export type VehicleLossRow = {
 export type VehicleClassRow = {
   /** HLDI subtotal label this class maps to. */
   hldiSubtotal: string
+  /** Bodily-injury part: HLDI claim frequency combined with our assumed average injury claim severity. */
+  bodilyInjury: FactorCell
+  /** Property-damage part: HLDI overall losses (frequency × severity). */
+  propertyDamage: FactorCell
   liability: FactorCell
   physical: FactorCell
 }
 
-export type VehicleData = {
-  /** False when the per-model HLDI file is switched off or missing; the engine then uses class averages. */
-  modelsEnabled: boolean
+export type VehicleWindow = {
   sourceId: string
+  sources: string[]
   modelYears: string
   yearMin: number
   yearMax: number
+  models: VehicleLossRow[]
+  classes: Record<string, VehicleClassRow>
+  electricClasses: Record<string, VehicleClassRow>
+  luxuryClasses: Record<string, VehicleClassRow>
+  luxurySportsClasses: Record<string, VehicleClassRow>
+}
+
+export type VehicleData = {
+  /** False when the per-model HLDI files are switched off or missing; the engine then uses class averages. */
+  modelsEnabled: boolean
+  sourceId: string
+  modelYears: string
+  /** All HLDI model-year windows carried in the bundle, newest first (for example 2022–24 down to 2006–08). */
+  windows: VehicleWindow[]
   note: string
   models: VehicleLossRow[]
   /**
@@ -109,6 +126,12 @@ export type VehicleData = {
   luxuryClasses: Record<string, VehicleClassRow>
   /** Compact make names treated as luxury for the class fallback. */
   luxuryMakes: string[]
+  /**
+   * Assumed average injury claim severity per model (hundredths: 100 = average),
+   * used to turn HLDI's bodily-injury claim frequency into a liability input,
+   * with a wider low/high range to reflect the extra uncertainty.
+   */
+  injurySeverity: FactorCell
   /**
    * How much of HLDI's liability result we pass on to the liability share
    * (hundredths): relativity = 1 + weight × (HLDI − 1), then kept between

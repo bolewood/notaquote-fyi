@@ -116,8 +116,8 @@ export default function TeenCarsGuide() {
       <h2 id="why">Why some cars cost less</h2>
       <p>
         Insurers pay out more for some cars than others. The Highway Loss Data Institute publishes how each model&apos;s
-        claims compare with the average car&apos;s: what it costs to fix the car after a crash, and how often its drivers
-        damage other cars or hurt someone.
+        insurance results compare with the average car&apos;s: overall losses for fixing the car after a crash, theft and
+        weather, and damage to other cars, and how often injury claims happen.
       </p>
       {cheapFigures && priceyFigures ? (
         <>
@@ -127,14 +127,16 @@ export default function TeenCarsGuide() {
                 <Link href={`/cars/${cheapFigures.page.slug}`}>{cheapFigures.page.shortName}</Link>
               </strong>
               : repairs after a crash {claimsPhrase(cheapFigures.claims.repairs)}; damage its drivers do to other cars{" "}
-              {claimsPhrase(cheapFigures.claims.damageToOthers)}; injuries they cause {claimsPhrase(cheapFigures.claims.injuriesToOthers)}.
+              {claimsPhrase(cheapFigures.claims.damageToOthers)}; how often its drivers cause injury claims{" "}
+              {claimsPhrase(cheapFigures.claims.injuriesToOthers)}.
             </li>
             <li>
               <strong>
                 <Link href={`/cars/${priceyFigures.page.slug}`}>{priceyFigures.page.shortName}</Link>
               </strong>
               : repairs after a crash {claimsPhrase(priceyFigures.claims.repairs)}; damage its drivers do to other cars{" "}
-              {claimsPhrase(priceyFigures.claims.damageToOthers)}; injuries they cause {claimsPhrase(priceyFigures.claims.injuriesToOthers)}.
+              {claimsPhrase(priceyFigures.claims.damageToOthers)}; how often its drivers cause injury claims{" "}
+              {claimsPhrase(priceyFigures.claims.injuriesToOthers)}.
             </li>
           </ul>
           <p>

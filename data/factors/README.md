@@ -50,7 +50,7 @@ For each factor we can source:
 | `iso-symbols-2004` | How far ISO's vehicle liability symbols move a premium (+25% at most, 20% less at most). | Insurance Journal, reporting ISO | 2004 |
 | `bls-cpi-sete` | Consumer price index for motor vehicle insurance (CUUR0000SETE): the 2023 average and August 2026. | U.S. Bureau of Labor Statistics | 2023–2026 |
 | `sp-global-vio-2023` | Average age of US cars and light trucks: 12.5 years. | S&P Global Mobility | 2023 |
-| `hldi-2022-24` | Insurance losses by make and model, 100 = average vehicle. | Highway Loss Data Institute (IIHS-HLDI) | 2022–24 models |
+| `hldi-2022-24` (and `hldi-2006-08` through `hldi-2021-23`) | Insurance losses by make and model, 100 = average vehicle (overall losses for collision, comprehensive, and property damage; claim frequency for bodily injury, PIP, and medical payments). | Highway Loss Data Institute (IIHS-HLDI) | 2006–08 through 2022–24 models |
 
 Every row in `sources/` keeps a `locator`: where you'll find it in the original (page, table, row, and column, or the exact web request), plus the printed figure when we converted it. Oklahoma, North Dakota, DC, and Colorado print six-month premiums, which we doubled. `sources/sources.json` has the URLs, check dates, and the terms of use we found. `sources/README.md` lists the quirks in each file, and which companies we left out and why.
 
@@ -85,7 +85,8 @@ The exact numbers, counts, and percentiles are in `src/data/model-factors.json` 
 | Loan or lease | 1.05 | | Our estimate | |
 | Vehicle age 4–7, 8–12, 13+ | 0.88, 0.75, 0.62 | | Our estimate | |
 | Liability share of a full-coverage premium | 51% | 45%–65% | Rough | NAIC 2023 countrywide |
-| How much of a vehicle's liability losses we pass on | 52% | 26%–79% | Our estimate | Fitted to ISO's +25% / 20% less band, then frozen |
+| Average injury claim severity per model (used with HLDI bodily-injury frequency) | 1.00 | 0.80–1.25 | Our estimate | HLDI bodily injury is claim frequency only |
+| How much of a vehicle's liability record we pass on | 52% | 26%–79% | Our estimate | Fitted to ISO's +25% / 20% less band, then frozen |
 | How strongly repair losses move the damage part (exponent) | 0.38 | 0.24–0.52 | Rough | Fitted to California's prices for 12 cars |
 | Extra on the damage part for luxury makes (car value) | ×1.74 | ×1.64–×1.96 | Rough | Fitted to California's prices for 12 cars (BMW and Tesla only) |
 | The same, half strength, for Lexus, Acura, Volvo, Genesis, Infiniti, Cadillac, Lincoln, Alfa Romeo | ×1.32 | ×1.00–×1.96 | Our estimate | Our judgment |
@@ -177,8 +178,10 @@ This is the part that answers "what if I bought a Tesla Model Y?"
 
 Some trim names are sold in more than one version: 61 names as both gas and hybrid (like the 2024 Honda CR-V FWD), and a few as hybrid and plug-in (the 2024 Mazda CX-90 4WD). We price the least electrified version unless the name says otherwise, say which one we priced, and widen the range. The CX-90 4WD is priced as a mild hybrid, and because HLDI has no hybrid row for it, on HLDI's gas row; the note says so. We only fall back to the words in the name when the catalog has nothing.
 
-**What HLDI tells us, and what it doesn't.** The Highway Loss Data Institute publishes, for each vehicle, how its insurance losses compare with the average vehicle (100). A collision result of 134 means collision claims cost 34% more than average.
+**What HLDI tells us, and what it doesn't.** The Highway Loss Data Institute publishes, for each vehicle, how its insurance results compare with the average vehicle (100) across three-year model-year windows (`2006–08` through `2022–24`).
 
+- **Overall losses vs. claim frequency:** HLDI's collision, comprehensive, and property-damage figures are **overall losses** (claim frequency × average claim severity): a collision result of 134 means collision losses are 34% above average. Its bodily-injury, personal-injury-protection, and medical-payments figures are **claim frequency only** (how often injury claims happen), because injury severity takes too long to develop.
+- **Model-year matching:** For a vehicle's model year, we use the most recent HLDI report whose three-year window includes that year (for example, `2020–22` for a 2020 model, or `2022–24` for a 2023 model), and fall back to the nearest window (with a disclosure note) only when no report covers the year.
 - **Adjusted for:** HLDI adjusts these results for the driver's age, gender, and marital status, the state, how built-up the area is, standard or non-standard risk, and (for collision and comprehensive) the deductible.
 - **Not adjusted for:** credit, mileage, prior claims, or income. So a car that careful, well-off drivers tend to buy can look cheaper to insure than it is, because some of the driver's good record shows up as the car's.
 - **Value:** insurers' own vehicle ratings also follow the car's price, which HLDI's losses only partly reflect.
@@ -219,18 +222,19 @@ With only 12 cars, it's *rough*. Leaving each car out in turn moves the exponent
 
 With the calibration, our Model Y is about 30% above an Accord for a 45-year-old in suburban Illinois, and the range reaches about 88% above.
 
-**Liability.** Property-damage and bodily-injury liability results move only the liability part of the premium, weighted 43/57, and only partly. Insurers move liability prices by vehicle much less than their loss data would suggest. ISO's liability symbol plan, as reported by Insurance Journal in 2004, allows surcharges "of up to 25 percent and discounts of up to 20 percent". We pass on 52% of each vehicle's liability result and keep every vehicle inside 0.80–1.25.
+**Liability.** Property-damage overall losses and bodily-injury claim frequency move only the liability part of the premium, weighted 43/57 (ISO's liability split), and only partly. Because HLDI's bodily-injury figure is claim frequency only, we multiply it by an assumed average injury claim severity per model (`vehicle.injury-severity`: `1.00`, range `0.80–1.25`, `basis: "assumed"`), which widens the liability range to reflect the extra uncertainty. Insurers also move liability prices by vehicle much less than their loss data would suggest. ISO's liability symbol plan, as reported by Insurance Journal in 2004, allows surcharges "of up to 25 percent and discounts of up to 20 percent". We pass on 52% of each vehicle's liability result and keep every vehicle inside 0.80–1.25.
 
 The 52% was the largest share that kept the middle 90% of HLDI's liability results inside ISO's band when we first chose it. It's now **frozen** in `assumptions.json`, so adding vehicles can't move it silently; each build reports what the check would give today. It's *our judgment*, and the range allows 26%–79%. We looked for a public insurer liability symbol table (SERFF filings, the Massachusetts residual market manual) and didn't find one. Massachusetts' vehicle rating groups apply to physical damage only.
 
 **Matching a car to HLDI's rows.**
 
+- **Model-year window:** we pick the most recent HLDI report whose three-year window includes the car's model year (`2006–08` through `2022–24`), or the nearest window when no report covers the year.
 - **Body style:** we use the plain row (four doors, no convertible, hatchback, wagon, or coupe) unless the trim names a body. A Mustang uses the coupe row, a Civic sedan the sedan row, a Cayenne Coupe the coupe row.
 - **Trim names:** a more specific HLDI name wins when the trim contains it. The "BMW M" model's "M4 Coupe" trim uses HLDI's M4 rows, a "911 Turbo S Cabriolet" the 911 Turbo convertible.
 - **Drive and cab:** when HLDI lists several versions, we match the drive when we know it and take the middle value of the rest.
 - **Powertrain:** electric and plug-in cars only match electric and plug-in HLDI rows. A hybrid with no hybrid row of its own uses the regular model's row.
 
-**Not in the table?** We use an HLDI class average, with the same calibration, and widen the range. The class is chosen in this order:
+**Not in the table?** We use that window's HLDI class average, with the same calibration, and widen the range. The class is chosen in this order:
 
 1. An electric car uses the middle of the electric models we keep in its class, when there are enough of them (a Porsche Macan Electric is priced like other electric small SUVs, not like a gas Macan).
 2. A two-door or convertible from a luxury make uses HLDI's sports-car average.
@@ -241,9 +245,9 @@ EPA calls some hatchbacks "large cars" because it measures interior room, while 
 
 **Don't know the car at all?** We treat it as average and widen the range more (even more for a luxury make).
 
-We keep HLDI rows for 187 popular, teen-friendly, and luxury or sports model families (387 of the 685 rows HLDI publishes), listed in `vehicle-families.json`.
+We keep HLDI rows for 187 popular, teen-friendly, and luxury or sports model families across 17 report windows (`2006–08` through `2022–24`; 387 of the 685 rows in `2022–24`), listed in `vehicle-families.json`.
 
-**Switching HLDI off.** The per-model rows are one file (`sources/hldi-2022-24.csv`) behind one switch (`useHldiModels` in `vehicle-families.json`). Turn it off or delete the file and every vehicle uses its class average. The calibration can't be fitted without the model rows, so HLDI's class results are then used as they are and the luxury term is off. The class averages come from HLDI's 34 published class subtotals (`sources/hldi-class-subtotals-2022-24.csv`). Delete that too and every vehicle is "not recognized", with a wide range. Nothing about drivers or coverage changes either way. The tests cover both.
+**Switching HLDI off.** The per-model rows (`sources/hldi-2006-08.csv` through `sources/hldi-2022-24.csv`) are behind one switch (`useHldiModels` in `vehicle-families.json`). Turn it off or delete `sources/hldi-2022-24.csv` and every vehicle uses its window's class average. The calibration can't be fitted without the model rows, so HLDI's class results are then used as they are and the luxury term is off. The class averages come from HLDI's 34 published class subtotals (`sources/hldi-class-subtotals-2020-22.csv` through `2022-24.csv`). Delete those too and every vehicle is "not recognized", with a wide range. Nothing about drivers or coverage changes either way. The tests cover both.
 
 ### The range
 
@@ -252,6 +256,7 @@ We keep HLDI rows for 187 popular, teen-friendly, and luxury or sports model fam
 - **How closely real prices follow our vehicle factors**: the lowest and highest of California's price ÷ our model across the 12 calibration cars (12% less to +17%). *Rough.*
 - **Luxury and electric cars**: up to 28% higher, from the biggest miss when each luxury car is left out of the calibration. *Rough.*
 - **Using a class average**, **a luxury class average**, and **vehicle not recognized**: how far HLDI's models sit from their class average, or from the all-vehicle average. *Rough.*
+- **Injury claim severity per model**: how much the liability part would move if the model's average injury claim severity were 0.80 or 1.25 instead of 1.00. *Our estimate.*
 - **The liability weight**: how much the liability part would move if the weight were at the edge of its range.
 - A partly matched trim, a trim sold in more than one version, and moving between states: *our estimates*.
 
@@ -267,26 +272,26 @@ Starting point: Illinois's average full-coverage cost in 2023 was $1,257, accord
 
 | 2024 vehicle | HLDI row used | Liability | Damage | 45-year-old | 16-year-old, own policy | Adding a 16-year-old to the 45-year-old's policy |
 | --- | --- | --- | --- | --- | --- | --- |
-| Tesla Model Y Long Range AWD | Tesla Model Y electric 4dr 4WD | 0.89 | 1.90 | $2,351 ($1,568–$3,403) | $6,748 ($4,392–$10,490) | +$1,552 (policy $3,903, $2,494–$5,778) |
-| Toyota RAV4 | Toyota RAV4 4dr | 0.94 | 0.87 | $1,540 ($1,135–$2,057) | $4,421 ($3,169–$6,494) | +$1,017 (policy $2,557, $1,796–$3,524) |
-| Honda CR-V FWD | Honda CR-V 4dr | 0.86 | 0.84 | $1,447 ($1,044–$1,958) | $4,152 ($2,917–$6,151) | +$955 (policy $2,402, $1,655–$3,348) |
-| Honda Civic 4Dr | Honda Civic | 1.17 | 1.04 | $1,879 ($1,381–$2,512) | $5,391 ($3,855–$7,924) | +$1,239 (policy $3,118, $2,185–$4,302) |
-| Toyota Camry | Toyota Camry; Toyota Camry 4WD | 1.09 | 1.06 | $1,823 ($1,340–$2,645) | $5,232 ($3,743–$8,148) | +$1,203 (policy $3,026, $2,122–$4,489) |
-| Toyota Corolla | Toyota Corolla | 1.14 | 0.99 | $1,811 ($1,333–$2,420) | $5,196 ($3,720–$7,634) | +$1,195 (policy $3,006, $2,110–$4,145) |
-| Ford F150 Pickup 4WD | Ford F-150 4WD; Ford F-150 SuperCab 4WD; Ford F-150 SuperCrew 4WD | 0.94 | 0.94 | $1,596 ($1,173–$2,134) | $4,581 ($3,277–$6,733) | +$1,054 (policy $2,650, $1,858–$3,655) |
-| Chevrolet Silverado 4WD | Chevrolet Silverado 1500 4WD; Chevrolet Silverado 1500 crew cab 4WD; Chevrolet Silverado 1500 ext. cab 4WD | 1.05 | 0.92 | $1,674 ($1,235–$2,234) | $4,805 ($3,449–$7,055) | +$1,105 (policy $2,779, $1,955–$3,828) |
-| Jeep Wrangler 2dr 4WD | Jeep Wrangler 2dr convertible 4WD | 1.10 | 0.74 | $1,564 ($1,159–$2,084) | $4,488 ($3,234–$6,582) | +$1,032 (policy $2,596, $1,833–$3,571) |
-| Subaru Outback AWD | Subaru Outback 4WD with EyeSight | 0.80 | 0.87 | $1,419 ($1,032–$1,905) | $4,073 ($2,884–$6,004) | +$937 (policy $2,356, $1,636–$3,262) |
+| Tesla Model Y Long Range AWD | Tesla Model Y electric 4dr 4WD | 0.89 | 1.90 | $2,351 ($1,567–$3,404) | $6,748 ($4,389–$10,493) | +$1,552 (policy $3,903, $2,493–$5,780) |
+| Toyota RAV4 | Toyota RAV4 4dr | 0.94 | 0.87 | $1,540 ($1,132–$2,060) | $4,421 ($3,161–$6,501) | +$1,017 (policy $2,557, $1,792–$3,529) |
+| Honda CR-V FWD | Honda CR-V 4dr | 0.86 | 0.84 | $1,447 ($1,042–$1,960) | $4,152 ($2,911–$6,156) | +$955 (policy $2,402, $1,652–$3,352) |
+| Honda Civic 4Dr | Honda Civic | 1.17 | 1.04 | $1,879 ($1,376–$2,516) | $5,391 ($3,841–$7,932) | +$1,239 (policy $3,118, $2,178–$4,307) |
+| Toyota Camry | Toyota Camry; Toyota Camry 4WD | 1.09 | 1.06 | $1,823 ($1,336–$2,649) | $5,232 ($3,732–$8,157) | +$1,203 (policy $3,026, $2,116–$4,495) |
+| Toyota Corolla | Toyota Corolla | 1.14 | 0.99 | $1,811 ($1,328–$2,426) | $5,196 ($3,706–$7,647) | +$1,195 (policy $3,006, $2,102–$4,154) |
+| Ford F150 Pickup 4WD | Ford F-150 4WD; Ford F-150 SuperCab 4WD; Ford F-150 SuperCrew 4WD | 0.94 | 0.94 | $1,596 ($1,171–$2,136) | $4,581 ($3,271–$6,739) | +$1,054 (policy $2,650, $1,855–$3,659) |
+| Chevrolet Silverado 4WD | Chevrolet Silverado 1500 4WD; Chevrolet Silverado 1500 crew cab 4WD; Chevrolet Silverado 1500 ext. cab 4WD | 1.05 | 0.92 | $1,674 ($1,232–$2,238) | $4,805 ($3,440–$7,063) | +$1,105 (policy $2,779, $1,950–$3,834) |
+| Jeep Wrangler 2dr 4WD | Jeep Wrangler 2dr convertible 4WD | 1.10 | 0.74 | $1,564 ($1,155–$2,089) | $4,488 ($3,223–$6,592) | +$1,032 (policy $2,596, $1,827–$3,578) |
+| Subaru Outback AWD | Subaru Outback 4WD with EyeSight | 0.80 | 0.87 | $1,419 ($1,032–$1,907) | $4,073 ($2,884–$6,007) | +$937 (policy $2,356, $1,636–$3,264) |
 | Ford Mustang | Ford Mustang 2dr | 1.09 | 1.12 | $1,878 ($1,379–$2,726) | $5,389 ($3,850–$8,395) | +$1,239 (policy $3,117, $2,183–$4,626) |
-| Tesla Model 3 Long Range AWD | Tesla Model 3 electric 4dr 4WD | 0.94 | 1.95 | $2,436 ($1,626–$3,525) | $6,990 ($4,555–$10,863) | +$1,607 (policy $4,043, $2,587–$5,983) |
-| Honda Accord | Honda Accord | 1.13 | 1.00 | $1,806 ($1,329–$2,413) | $5,183 ($3,712–$7,615) | +$1,192 (policy $2,998, $2,104–$4,134) |
+| Tesla Model 3 Long Range AWD | Tesla Model 3 electric 4dr 4WD | 0.94 | 1.95 | $2,436 ($1,625–$3,526) | $6,990 ($4,551–$10,866) | +$1,607 (policy $4,043, $2,585–$5,985) |
+| Honda Accord | Honda Accord | 1.13 | 1.00 | $1,806 ($1,324–$2,419) | $5,183 ($3,698–$7,628) | +$1,192 (policy $2,998, $2,097–$4,143) |
 | Toyota Tacoma 2WD | Toyota Tacoma double cab pickup | 0.96 | 0.94 | $1,611 ($1,185–$2,153) | $4,624 ($3,310–$6,795) | +$1,063 (policy $2,674, $1,876–$3,687) |
-| Kia Soul | Kia Soul | 1.16 | 0.93 | $1,773 ($1,306–$2,368) | $5,088 ($3,646–$7,474) | +$1,170 (policy $2,943, $2,067–$4,057) |
+| Kia Soul | Kia Soul | 1.16 | 0.93 | $1,773 ($1,301–$2,374) | $5,088 ($3,632–$7,485) | +$1,170 (policy $2,943, $2,059–$4,065) |
 
 What it shows:
 
 - Teslas and other expensive cars cost more to repair and are worth more, so their damage factor is high. A Model Y comes out about 30% above an Accord for the 45-year-old, and its range reaches about 88% above.
-- Civics, Camrys, Corollas, and Souls have more liability claims than average in HLDI's data. We pass on only half of that.
+- Civics, Camrys, Corollas, and Souls have higher property-damage losses and more frequent bodily-injury claims than average in HLDI's data. We pass on only half of that.
 - The Mustang and Camry ranges reach higher than their neighbours', because their repair losses are above the mainstream cars we checked against real prices.
 - SUVs and trucks with low repair costs are the cheapest.
 - A teen on their own policy costs about 2.9 times the parent. Adding the teen to the parent's policy raises the household's premium by about two-thirds.
@@ -300,13 +305,12 @@ What it shows:
 ## Sources we found but didn't use
 
 - **Maryland Insurance Administration, "Auto Insurance: A Comparison Guide to Rates" (August 2026).** 53 companies × 29 ZIP codes. It would be excellent for city-versus-rural factors, but its terms say "Partial reproductions are not permitted without the prior written consent of the MIA." We didn't copy it. If the owner gets consent, it can be added quickly.
-- **HLDI's 2021–23 table** has a few models that 2022–24 dropped (Chevrolet Bolt, Kia Rio, Dodge Charger). Its 100 is a different average, so we didn't mix it in.
 - **North Dakota 2025** repeats the same examples as 2026, with many identical figures. We use 2026.
 - States we checked that don't publish multi-company sample premiums now: Virginia, Pennsylvania, New York, New Jersey, Delaware, Connecticut, Massachusetts, West Virginia (last survey 2024, minimum coverage only), Kansas, Arkansas, and Louisiana (its rate guide is no longer on its publications page). We haven't checked Washington, Oregon, Nevada, Arizona, Utah, New Mexico, Georgia, South Carolina, Michigan, Illinois, or Florida yet. Help wanted.
 
 ## Terms of use: decisions for the owner
 
-- **HLDI (IIHS).** The IIHS copyright page says: "The content on this website is made available for limited noncommercial, educational and personal use only; a user may download content to share with others for limited noncommercial and educational purposes without requesting specific permission." It also says: "Repetitive noncommercial, educational, or personal use and copying or redistribution in any manner for commercial use is not permitted without written permission from the Institute." Requests go to legal@iihs.org, and the page lists what to include: which content, the project, the audience, how it's distributed and for how long, and whether you charge (we don't). A table kept in a public repository for years probably counts as repetitive use, so we **asked**: the request went to legal@iihs.org on September 22, 2026, and we're waiting for a reply. If the answer is no, switch HLDI off as described above.
+- **HLDI (IIHS).** The IIHS copyright page says: "The content on this website is made available for limited noncommercial, educational and personal use only; a user may download content to share with others for limited noncommercial and educational purposes without requesting specific permission." It also says: "Repetitive noncommercial, educational, or personal use and copying or redistribution in any manner for commercial use is not permitted without written permission from the Institute." Requests go to legal@iihs.org, and the page lists what to include: which content, the project, the audience, how it's distributed and for how long, and whether you charge (we don't). A table kept in a public repository for years probably counts as repetitive use, so we **asked**: the request went to legal@iihs.org on September 22, 2026, and we're waiting for a reply. If the answer is no, switch HLDI off as described above. The HLDI source files in `data/factors/sources/` are not covered by the repository's MIT or CC BY 4.0 licenses; they are HLDI's data, used with permission, and anyone reusing them needs HLDI's permission.
 - **North Dakota.** The Department's disclaimer grants "permission to copy and distribute the information for non-commercial use, as long as the content remains unaltered." We copy the figures unaltered (six-month figures are kept as printed in each locator). The site footer reads "Copyright © 2025 North Dakota Insurance & Securities Department".
 - **Oklahoma.** The page footer reads "© 2026 The State of Oklahoma". We found no terms specific to the rate comparison.
 - **California** pages carry "Copyright © California Department of Insurance". We fetched 36 more survey pages (the 12 calibration cars in 3 places) the same way a visitor would, two seconds apart. **Colorado** pages carry a general copyright line; **Texas** and **DC** carry none for the data. None of them has terms that restrict using the figures that we could find.

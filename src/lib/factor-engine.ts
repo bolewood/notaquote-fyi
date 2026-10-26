@@ -41,6 +41,7 @@ import type {
   VehicleClassRow,
   VehicleData,
   VehicleLossRow,
+  VehicleWindow,
 } from "@/lib/factor-types"
 import { MODEL_VERSION } from "@/lib/copy"
 import { differenceWords, monthlyDollars, percentRangeWords, percentWords } from "@/lib/format"
@@ -337,6 +338,10 @@ export type VehicleRelativity = {
   label: string
   /** HLDI rows used, when level is "model". */
   rows: VehicleLossRow[]
+  /** HLDI source id of the report window used (for example "hldi-2020-22"), or null. */
+  sourceId: string | null
+  /** Model-year window of the HLDI report used, formatted with an en-dash (for example "2020–22"), or null. */
+  modelYears: string | null
   /** Liability-share multiplier (1 = average vehicle). */
   liability: Rational
   /** Damage-share multiplier (1 = average vehicle). */
@@ -346,7 +351,7 @@ export type VehicleRelativity = {
   physicalHundredths: number
   /** Range cell that describes how sure we are. */
   spreadKey: string
-  /** True when the model year is outside the HLDI model years. */
+  /** True when the model year is outside every HLDI report window. */
   outsideYears: boolean
   /** A stable key: two vehicles with the same key have the same factors. */
   key: string
@@ -355,6 +360,8 @@ export type VehicleRelativity = {
   mixedPowertrain: boolean
   /** Basis points the liability factor could move with the liability weight at the edge of its range. */
   liabilityWeightSpread: number
+  /** Basis points the liability factor could move across our assumed average-injury-severity range. */
+  injurySeveritySpread: { down: number; up: number }
   /** The powertrain we priced (for the note when a name is sold in more than one version). */
   powertrain: VehicleFacts["powertrain"]
   /** A luxury make or an electric car: real prices can run higher or lower than our factor, so the range is wider. */
@@ -458,17 +465,44 @@ function narrowByBody(pool: VehicleLossRow[], facts: VehicleFacts): VehicleLossR
 }
 
 /**
- * The HLDI rows for a vehicle, or an empty list. `data` defaults to the
- * committed bundle; tests pass a bundle built without HLDI's model rows.
+ * Select the HLDI report window for a vehicle's model year:
+ * - Use the most recent report whose window includes `year`.
+ * - Only when no window covers `year`, use the nearest window (`outsideYears: true`).
+ */
+export function selectVehicleWindow(
+  year: number,
+  data: VehicleData = bundle.vehicle,
+): { window: VehicleWindow; outsideYears: boolean; nearestYear: number } {
+  const windows = data.windows
+  const matching = windows.filter((w) => w.yearMin <= year && w.yearMax >= year)
+  if (matching.length > 0) {
+    const best = [...matching].sort((a, b) => (b.yearMax !== a.yearMax ? b.yearMax - a.yearMax : b.yearMin - a.yearMin))[0]
+    return { window: best, outsideYears: false, nearestYear: year }
+  }
+  const sorted = [...windows].sort((a, b) => {
+    const distA = year > a.yearMax ? year - a.yearMax : a.yearMin - year
+    const distB = year > b.yearMax ? year - b.yearMax : b.yearMin - year
+    return distA !== distB ? distA - distB : b.yearMax - a.yearMax
+  })
+  const best = sorted[0]
+  const nearestYear = year > best.yearMax ? best.yearMax : best.yearMin
+  return { window: best, outsideYears: true, nearestYear }
+}
+
+/**
+ * The HLDI rows for a vehicle in its matching report window, or an empty list.
+ * `data` defaults to the committed bundle; tests pass a bundle built without
+ * HLDI's model rows.
  */
 export function matchVehicleRows(facts: VehicleFacts, data: VehicleData = bundle.vehicle): VehicleLossRow[] {
   if (!data.modelsEnabled) return []
   const make = compactName(facts.make)
   const catalogModel = compactName(facts.model)
   if (!make || !catalogModel) return []
+  const { window } = selectVehicleWindow(facts.year, data)
   const model = data.aliases[`${make}|${catalogModel}`] ?? catalogModel
   const trimWords = compactName(facts.trim)
-  const sameMake = data.models.filter((row) => compactName(row.make) === make)
+  const sameMake = window.models.filter((row) => compactName(row.make) === make)
   // A more specific HLDI series whose extra words are in the trim name, for
   // example "F-150 Lightning" for the trim "F-150 Lightning 4WD", "911 Turbo"
   // for "911 Turbo S", or "M4" for the trim "M4 Coupe" under the catalog
@@ -481,6 +515,10 @@ export function matchVehicleRows(facts: VehicleFacts, data: VehicleData = bundle
   const longest = Math.max(0, ...candidates.map((row) => row.family.length))
   const specific = candidates.filter((row) => row.family.length === longest)
   let pool = specific.length > 0 ? specific : sameMake.filter((row) => row.family === model)
+  if (pool.length === 0 && model.endsWith("prime") && rowPowertrain(facts) === "plug-in-hybrid") {
+    const baseModel = model.slice(0, -"prime".length)
+    pool = sameMake.filter((row) => row.family === baseModel && row.powertrain === "plug-in-hybrid")
+  }
   // Powertrain unknown (no catalog): a family HLDI lists only as electric,
   // like Tesla's, is electric; otherwise assume the gas version.
   if (facts.powertrain === null && pool.length > 0 && pool.every((row) => row.powertrain === pool[0].powertrain)) {
@@ -515,26 +553,30 @@ function isLuxuryMake(make: string, data: VehicleData): boolean {
 type ClassKind = "luxury" | "sporty luxury" | "electric" | "plain"
 
 /**
- * The class average for a vehicle without its own HLDI row. Electric comes
- * first (a Porsche Macan Electric is priced like other electric SUVs, not
- * like a gas Macan), then luxury two-doors and convertibles (HLDI's
- * sports-car averages), then other luxury makes, then the plain class.
+ * The class average for a vehicle without its own HLDI row in the selected
+ * window. Electric comes first (a Porsche Macan Electric is priced like other
+ * electric SUVs, not like a gas Macan), then luxury two-doors and convertibles
+ * (HLDI's sports-car averages), then other luxury makes, then the plain class.
  */
-function classRow(facts: VehicleFacts, data: VehicleData): { row: VehicleClassRow; kind: ClassKind } | null {
+function classRow(
+  facts: VehicleFacts,
+  data: VehicleData,
+  window: VehicleWindow = selectVehicleWindow(facts.year, data).window,
+): { row: VehicleClassRow; kind: ClassKind } | null {
   if (!facts.classId) return null
   if (facts.powertrain === "electric") {
-    const electric = data.electricClasses[facts.classId]
+    const electric = window.electricClasses[facts.classId] ?? data.electricClasses[facts.classId]
     if (electric) return { row: electric, kind: "electric" }
   }
   if (isLuxuryMake(facts.make, data)) {
     const body = trimBody(facts)
     const sporty = body.doors === "2dr" || body.special.includes("convertible") || facts.classId === "two-seater"
-    const sports = sporty ? data.luxurySportsClasses?.[facts.classId] : undefined
+    const sports = sporty ? window.luxurySportsClasses?.[facts.classId] : undefined
     if (sports) return { row: sports, kind: "sporty luxury" }
-    const luxury = data.luxuryClasses[facts.classId]
+    const luxury = window.luxuryClasses[facts.classId]
     if (luxury) return { row: luxury, kind: "luxury" }
   }
-  const plain = data.classes[facts.classId]
+  const plain = window.classes[facts.classId]
   return plain ? { row: plain, kind: "plain" } : null
 }
 
@@ -601,6 +643,24 @@ function weightSpread(hldi: Rational, data: VehicleData): number {
   return Math.max(spread(high), spread(low))
 }
 
+/** Basis points the liability factor could move across the assumed injury-severity range. */
+function injurySpread(
+  hldiBase: Rational,
+  hldiLow: Rational,
+  hldiHigh: Rational,
+  data: VehicleData,
+): { down: number; up: number } {
+  const base = creditedLiability(hldiBase, data)
+  const low = creditedLiability(hldiLow, data)
+  const high = creditedLiability(hldiHigh, data)
+  const toBp = (edge: Rational) => {
+    const difference = sub(edge, base)
+    const absolute = difference.num < ZERO ? { num: -difference.num, den: difference.den } : difference
+    return roundHalfUp(mul(div(absolute, base), rat(10000)))
+  }
+  return { down: toBp(low), up: toBp(high) }
+}
+
 const AVERAGE: Pick<VehicleRelativity, "liability" | "physical" | "liabilityHundredths" | "physicalHundredths"> = {
   liability: rat(1),
   physical: rat(1),
@@ -628,6 +688,8 @@ export function vehicleRelativity(
       level: "average",
       label: "an average vehicle",
       rows: [],
+      sourceId: null,
+      modelYears: null,
       ...AVERAGE,
       spreadKey: "",
       outsideYears: false,
@@ -635,13 +697,15 @@ export function vehicleRelativity(
       basis: "reference",
       mixedPowertrain: false,
       liabilityWeightSpread: 0,
+      injurySeveritySpread: { down: 0, up: 0 },
       powertrain: null,
       valueRisk: false,
     }
   }
-  const outsideYears = vehicle.year < data.yearMin || vehicle.year > data.yearMax
+  const { window, outsideYears } = selectVehicleWindow(vehicle.year, data)
+  const modelYears = window.modelYears.replace("-", "–")
   const rows = matchVehicleRows(vehicle, data)
-  const klass = classRow(vehicle, data)
+  const klass = classRow(vehicle, data, window)
   const bi = splitShare("bodily-injury-in-liability")
   const collision = splitShare("collision-in-physical")
   const mixedPowertrain = vehicle.powertrainMixed
@@ -657,12 +721,16 @@ export function vehicleRelativity(
   const sportsClassOnly = (sportsClass: boolean) => tier === "none" && sportsClass
 
   if (rows.length > 0) {
+    const biMed = medianOf(rows, (row) => row.bodilyInjury)
+    const pdMed = medianOf(rows, (row) => row.propertyDamage)
+    const biLow = biMed ? mul(biMed, hundredths(data.injurySeverity.low)) : null
+    const biHigh = biMed ? mul(biMed, hundredths(data.injurySeverity.high)) : null
     const hldiLiability =
-      weighted(
-        medianOf(rows, (row) => row.bodilyInjury),
-        medianOf(rows, (row) => row.propertyDamage),
-        bi,
-      ) ?? (klass ? hundredths(klass.row.liability.value) : rat(1))
+      weighted(biMed, pdMed, bi) ?? (klass ? hundredths(klass.row.liability.value) : rat(1))
+    const hldiLiabilityLow =
+      weighted(biLow, pdMed, bi) ?? (klass ? hundredths(klass.row.liability.low) : hldiLiability)
+    const hldiLiabilityHigh =
+      weighted(biHigh, pdMed, bi) ?? (klass ? hundredths(klass.row.liability.high) : hldiLiability)
     const hldiPhysical =
       weighted(
         medianOf(rows, (row) => row.collision),
@@ -682,21 +750,26 @@ export function vehicleRelativity(
       level: "model",
       label: `${vehicle.make} ${vehicle.model}`,
       rows,
+      sourceId: window.sourceId,
+      modelYears,
       liability,
       physical,
       liabilityHundredths: toHundredths(liability),
       physicalHundredths: toHundredths(physical),
       spreadKey: "vehicle-model",
       outsideYears,
-      key: `model:${rows.map((row) => row.series).join("+")}`,
+      key: `model:${window.modelYears}:${rows.map((row) => row.series).join("+")}`,
       basis: "sourced",
       liabilityWeightSpread: weightSpread(hldiLiability, data),
+      injurySeveritySpread: injurySpread(hldiLiability, hldiLiabilityLow, hldiLiabilityHigh, data),
       ...shared,
     }
   }
 
   if (klass) {
     const hldiLiability = hundredths(klass.row.liability.value)
+    const hldiLiabilityLow = hundredths(klass.row.liability.low)
+    const hldiLiabilityHigh = hundredths(klass.row.liability.high)
     const liability = creditedLiability(hldiLiability, data)
     const physical = calibratedDamage(hundredths(klass.row.physical.value), vehicle.make, data)
     return {
@@ -705,15 +778,18 @@ export function vehicleRelativity(
       level: "class",
       label: classWords(vehicle, klass.kind),
       rows: [],
+      sourceId: klass.row.liability.sources[0] ?? window.sourceId,
+      modelYears,
       liability,
       physical,
       liabilityHundredths: toHundredths(liability),
       physicalHundredths: toHundredths(physical),
       spreadKey: klass.kind === "luxury" || klass.kind === "sporty luxury" ? "vehicle-luxury-class" : "vehicle-class",
       outsideYears,
-      key: `class:${klass.row.hldiSubtotal}:${isLuxuryMake(vehicle.make, data) ? "luxury" : "plain"}`,
+      key: `class:${window.modelYears}:${klass.row.hldiSubtotal}:${isLuxuryMake(vehicle.make, data) ? "luxury" : "plain"}`,
       basis: "indicative",
       liabilityWeightSpread: weightSpread(hldiLiability, data),
+      injurySeveritySpread: injurySpread(hldiLiability, hldiLiabilityLow, hldiLiabilityHigh, data),
       ...shared,
     }
   }
@@ -723,6 +799,8 @@ export function vehicleRelativity(
     level: "unknown",
     label: "an average vehicle",
     rows: [],
+    sourceId: null,
+    modelYears: null,
     ...AVERAGE,
     physical,
     physicalHundredths: toHundredths(physical),
@@ -731,6 +809,7 @@ export function vehicleRelativity(
     key: `unknown:${compactName(vehicle.make)}|${compactName(vehicle.model)}`,
     basis: "assumed",
     liabilityWeightSpread: 0,
+    injurySeveritySpread: { down: 0, up: 0 },
     ...shared,
     mixedPowertrain: false,
   }
@@ -1190,14 +1269,24 @@ function estimateAny(start: StartingPoint, target: Scenario, options: EstimateOp
         const extra = BigInt(relativity.liabilityWeightSpread)
         spreads.push({ down: extra, up: extra, weight: share(to.liabilityPart, to.total) })
       }
+      if (relativity.injurySeveritySpread.down > 0 || relativity.injurySeveritySpread.up > 0) {
+        spreads.push({
+          down: BigInt(relativity.injurySeveritySpread.down),
+          up: BigInt(relativity.injurySeveritySpread.up),
+          weight: share(to.liabilityPart, to.total),
+        })
+      }
     }
+    const vehicleSources = [from.vehicle.sourceId, to.vehicle.sourceId].filter(
+      (id): id is string => id !== null,
+    )
     steps.push({
       group: "vehicle",
       title: "Car model",
       from: describeVehicle(startVehicle),
       to: describeVehicle(targetVehicle),
       basis: weakerBasis(from.vehicle.basis, to.vehicle.basis),
-      sources: [bundle.vehicle.sourceId],
+      sources: vehicleSources.length > 0 ? [...new Set(vehicleSources)] : [bundle.vehicle.sourceId],
     })
   }
 
@@ -1315,14 +1404,14 @@ function summarySentence(start: StartingPoint, steps: ChangeStep[], likely: numb
 }
 
 /**
- * Our HLDI claims data covers these model years (from the bundle). One
- * sentence for every car outside them: "Our claims data covers 2022–2024
- * models, so we used 2022 for the 2020 and 2024 for the 2025."
+ * Our HLDI claims data covers these model years (from the bundle's windows).
+ * One sentence for every car outside them: "Our claims data covers 2006–2024
+ * models, so we used 2006 for the 2004 and 2024 for the 2025."
  */
-function outsideYearsSentence(modelYears: readonly number[]): string {
-  const first = bundle.vehicle.yearMin
-  const last = bundle.vehicle.yearMax
-  const nearest = (year: number) => (year > last ? last : first)
+function outsideYearsSentence(modelYears: readonly number[], data: VehicleData = bundle.vehicle): string {
+  const first = Math.min(...data.windows.map((w) => w.yearMin))
+  const last = Math.max(...data.windows.map((w) => w.yearMax))
+  const nearest = (year: number) => selectVehicleWindow(year, data).nearestYear
   const years = [...new Set(modelYears)].sort((left, right) => left - right)
   if (years.length === 1) {
     return `Our claims data covers ${first}–${last} models, so for a ${years[0]} we used the closest year (${nearest(years[0])}).`
@@ -1371,7 +1460,7 @@ function rangePoints(
       if (relativity.level === "unknown") {
         add("We couldn't tell what kind of vehicle that is, so we treated it as an average one.")
       }
-      if (relativity.level === "model" && relativity.outsideYears) outside.push(modelYear)
+      if (relativity.outsideYears) outside.push(modelYear)
     }
     if (outside.length > 0) add(outsideYearsSentence(outside))
   }
@@ -1828,11 +1917,15 @@ export function publishedFactorGroups(): PublishedFactorGroup[] {
     Object.values(rows).flatMap((row) => [publishedRow(row.liability), publishedRow(row.physical)])
   groups.push({
     family: "Kinds of cars, when we don't have the exact model",
-    note: "From HLDI's insurance claims, compared with the average car. We use these when we don't have claims for the exact model. The last row is how much of a car's liability record we count; it isn't one of the 26 adjustments.",
+    note: "From HLDI's insurance results (overall losses for collision, comprehensive, and property damage; how often claims happen for bodily injury), compared with the average car. We use these when we don't have figures for the exact model. The last two rows show how we treat injury claim severity and how much of a car's liability record we count; each isn't one of the 26 adjustments.",
     rows: [
       ...classRows(bundle.vehicle.classes),
       ...classRows(bundle.vehicle.luxuryClasses),
       ...classRows(bundle.vehicle.electricClasses),
+      publishedRow(
+        bundle.vehicle.injurySeverity,
+        "Average injury claim severity per model, used with HLDI's bodily-injury frequency",
+      ),
       {
         ...publishedRow(bundle.vehicle.liabilityWeight, `We count about half (${bundle.vehicle.liabilityWeight.value}%) of a car's liability claims record`),
         change: `${bundle.vehicle.liabilityWeight.value}%`,
@@ -1909,15 +2002,19 @@ export function assertFactorBundleSafe(candidate: FactorBundle = bundle): void {
     if (!candidate.groups[id]) throw new Error(`Missing group ${id}`)
   }
   if (!sourceIds.has(candidate.vehicle.sourceId)) throw new Error("Vehicle data needs a listed source")
-  for (const row of candidate.vehicle.models) {
-    const results = [row.collision, row.comprehensive, row.propertyDamage, row.bodilyInjury]
-    if (results.every((value) => value === null)) throw new Error(`${row.series}: no results`)
-    for (const value of results) {
-      if (value !== null && (!Number.isInteger(value) || value <= 0)) throw new Error(`${row.series}: bad result`)
+  const checkModels = (models: typeof candidate.vehicle.models) => {
+    for (const row of models) {
+      const results = [row.collision, row.comprehensive, row.propertyDamage, row.bodilyInjury]
+      if (results.every((value) => value === null)) throw new Error(`${row.series}: no results`)
+      for (const value of results) {
+        if (value !== null && (!Number.isInteger(value) || value <= 0)) throw new Error(`${row.series}: bad result`)
+      }
+      if (row.yearMin > row.yearMax) throw new Error(`${row.series}: model years`)
     }
-    if (row.yearMin > row.yearMax) throw new Error(`${row.series}: model years`)
   }
+  checkModels(candidate.vehicle.models)
   checkCell("vehicle.liabilityWeight", candidate.vehicle.liabilityWeight)
+  checkCell("vehicle.injurySeverity", candidate.vehicle.injurySeverity)
   const calibration = candidate.vehicle.calibration
   checkCell("vehicle.calibration.exponent", calibration.exponent)
   checkCell("vehicle.calibration.luxury", calibration.luxury)
@@ -1935,13 +2032,28 @@ export function assertFactorBundleSafe(candidate: FactorBundle = bundle): void {
   if (!(candidate.vehicle.liabilityFloor < 100 && candidate.vehicle.liabilityCap > 100)) {
     throw new Error("The vehicle liability band must include 1.00")
   }
-  for (const [id, row] of [
-    ...Object.entries(candidate.vehicle.classes),
-    ...Object.entries(candidate.vehicle.electricClasses),
-    ...Object.entries(candidate.vehicle.luxuryClasses),
-    ...Object.entries(candidate.vehicle.luxurySportsClasses ?? {}),
-  ]) {
-    checkCell(`vehicle.${id}.liability`, row.liability)
-    checkCell(`vehicle.${id}.physical`, row.physical)
+  const checkClassMap = (prefix: string, map: Record<string, VehicleClassRow>) => {
+    for (const [id, row] of Object.entries(map)) {
+      if (row.bodilyInjury) checkCell(`${prefix}.${id}.bodilyInjury`, row.bodilyInjury)
+      if (row.propertyDamage) checkCell(`${prefix}.${id}.propertyDamage`, row.propertyDamage)
+      checkCell(`${prefix}.${id}.liability`, row.liability)
+      checkCell(`${prefix}.${id}.physical`, row.physical)
+    }
+  }
+  checkClassMap("vehicle", candidate.vehicle.classes)
+  checkClassMap("vehicle.electric", candidate.vehicle.electricClasses)
+  checkClassMap("vehicle.luxury", candidate.vehicle.luxuryClasses)
+  checkClassMap("vehicle.luxurySports", candidate.vehicle.luxurySportsClasses ?? {})
+  if (!candidate.vehicle.windows || candidate.vehicle.windows.length === 0) {
+    throw new Error("Vehicle data needs at least one HLDI window")
+  }
+  for (const win of candidate.vehicle.windows) {
+    if (!sourceIds.has(win.sourceId)) throw new Error(`Window ${win.modelYears}: unknown source ${win.sourceId}`)
+    if (win.yearMin > win.yearMax) throw new Error(`Window ${win.modelYears}: invalid year range`)
+    checkModels(win.models)
+    checkClassMap(`vehicle.window.${win.modelYears}`, win.classes)
+    checkClassMap(`vehicle.window.${win.modelYears}.electric`, win.electricClasses)
+    checkClassMap(`vehicle.window.${win.modelYears}.luxury`, win.luxuryClasses)
+    checkClassMap(`vehicle.window.${win.modelYears}.luxurySports`, win.luxurySportsClasses ?? {})
   }
 }

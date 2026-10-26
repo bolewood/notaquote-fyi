@@ -118,10 +118,19 @@ export default function MethodologyPage() {
 
       <h3>The car</h3>
       <p>
-        The Highway Loss Data Institute (HLDI) publishes how each model&apos;s insurance claims compare with the average car.
-        A car that costs more to repair raises the part of the bill that fixes your own car. A car whose drivers cause more
-        crashes raises the liability part, though only partly, because insurers do the same. When we don&apos;t have a model,
-        we use the average for its kind of car (small SUV, midsize car, and so on) and widen the range. That&apos;s the
+        The Highway Loss Data Institute (HLDI) publishes how each model&apos;s insurance results compare with the average
+        car: overall losses for collision, comprehensive, and property damage, and how often injury claims happen for bodily
+        injury, personal injury protection, and medical payments (because injury severity takes too long to develop). For
+        each car&apos;s model year, we use the most recent HLDI report whose three-year window includes that year (for
+        example, the 2020–22 report for a 2020 car, or 2022–24 for a 2023 car), and use the nearest report only when no
+        window covers the year.
+      </p>
+      <p>
+        A car with higher collision and comprehensive losses raises the part of the bill that fixes your own car. For the
+        liability part, we combine property-damage overall losses with how often bodily-injury claims happen—assuming a
+        model&apos;s average injury claim severity is about average, and widening the range for that extra uncertainty—and
+        count about half of the result, because insurers do the same. When we don&apos;t have a model in that report, we use
+        its average for that kind of car (small SUV, midsize car, and so on) and widen the range. That&apos;s the
         &ldquo;Why&rdquo; you see when you tap a car on the Compare page.
       </p>
 

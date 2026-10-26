@@ -379,7 +379,7 @@ test("without HLDI's model rows, vehicles use their class averages", () => {
   for (const name of ["assumptions.json", "vehicle-families.json"]) files[name] = readFileSync(`data/factors/${name}`, "utf8")
   files["state-baselines.json"] = readFileSync("data/state-baselines/state-baselines.json", "utf8")
   for (const name of readdirSync("data/factors/sources")) {
-    if (name !== "hldi-2022-24.csv") files[`sources/${name}`] = readFileSync(`data/factors/sources/${name}`, "utf8")
+    if (!/^hldi-\d{4}-\d{2}\.csv$/.test(name)) files[`sources/${name}`] = readFileSync(`data/factors/sources/${name}`, "utf8")
   }
   const without = deriveFactors(files)
   for (const facts of [RAV4, F150, CIVIC, LIGHTNING]) {
@@ -637,13 +637,84 @@ test("the range note is short points, each said once, with plurals right", () =>
 })
 
 test("two cars outside the claims years get one sentence", () => {
-  const old = vehicleFacts(catalog, { year: 2020, make: "Toyota", model: "Camry", trim: "Camry" })
+  const old = vehicleFacts(null, { year: 2004, make: "Toyota", model: "Camry", trim: "Camry" })
   const next = vehicleFacts(catalog, { year: 2025, make: "Tesla", model: "Model Y", trim: "Model Y Long Range AWD" })
-  const start: StartingPoint = { annual: 1800, scenario: { ...MOLLY, year: 2020, make: "Toyota", model: "Camry", trim: "Camry" }, vehicle: old, kind: "yours" }
+  const start: StartingPoint = { annual: 1800, scenario: { ...MOLLY, year: 2004, make: "Toyota", model: "Camry", trim: "Camry" }, vehicle: old, kind: "yours" }
   const result = estimate(start, { ...MOLLY, year: 2025, make: "Tesla", model: "Model Y", trim: "Model Y Long Range AWD" }, { vehicle: next })
   const claims = result.rangePoints.filter((point) => point.startsWith("Our claims data covers"))
   assert.equal(claims.length, 1)
-  assert.match(claims[0], /so we used 2022 for the 2020 and 2024 for the 2025\.$/)
+  assert.match(claims[0], /so we used 2006 for the 2004 and 2024 for the 2025\.$/)
+})
+
+test("a 2020 vehicle selects the 2020–22 HLDI report, and falls back to that window's class average when needed", () => {
+  const camry2020 = car(2020, "Toyota", "Camry", "Camry")
+  const rel = vehicleRelativity(camry2020)
+  assert.equal(rel.level, "model")
+  assert.equal(rel.sourceId, "hldi-2020-22")
+  assert.equal(rel.modelYears, "2020–22")
+  assert.equal(rel.outsideYears, false)
+  const priced = estimate(YOURS, on(MOLLY_F150, camry2020), { vehicle: camry2020 })
+  assert.doesNotMatch(priced.rangeNote, /Our claims data covers/)
+  const step = priced.steps.find((item) => item.group === "vehicle")
+  assert.ok(step?.sources.includes("hldi-2020-22"))
+
+  // A 2020 model without its own family row in 2020–22 falls back to the 2020–22 class average.
+  const mirage2020 = car(2020, "Mitsubishi", "Mirage", "Mirage")
+  const classRel = vehicleRelativity(mirage2020)
+  assert.equal(classRel.level, "class")
+  assert.equal(classRel.sourceId, "hldi-2020-22")
+  assert.equal(classRel.modelYears, "2020–22")
+  assert.equal(classRel.outsideYears, false)
+})
+
+test("a model year outside every HLDI window falls back to the nearest window with a disclosure note", () => {
+  const y2025 = car(2025, "Tesla", "Model Y", "Model Y Long Range AWD")
+  const newerRel = vehicleRelativity(y2025)
+  assert.equal(newerRel.sourceId, "hldi-2022-24")
+  assert.equal(newerRel.modelYears, "2022–24")
+  assert.equal(newerRel.outsideYears, true)
+  const newerEst = estimate(YOURS, on(MOLLY_F150, y2025), { vehicle: y2025 })
+  assert.match(newerEst.rangeNote, /Our claims data covers 2006–2024 models, so for a 2025 we used the closest year \(2024\)\./)
+
+  const camry2004 = vehicleFacts(null, { year: 2004, make: "Toyota", model: "Camry", trim: "Camry" })
+  const olderRel = vehicleRelativity(camry2004)
+  assert.equal(olderRel.sourceId, "hldi-2006-08")
+  assert.equal(olderRel.modelYears, "2006–08")
+  assert.equal(olderRel.outsideYears, true)
+  const olderEst = estimate(YOURS, { ...MOLLY_F150, year: 2004, make: "Toyota", model: "Camry", trim: "Camry" }, { vehicle: camry2004 })
+  assert.match(olderEst.rangeNote, /Our claims data covers 2006–2024 models, so for a 2004 we used the closest year \(2006\)\./)
+})
+
+test("the injury frequency part carries the assumed basis and widens the estimate range", () => {
+  const severity = FACTOR_BUNDLE.vehicle.injurySeverity
+  assert.equal(severity.basis, "assumed")
+  assert.ok(severity.low < severity.value && severity.value < severity.high)
+  assert.match(severity.derivation, /claim frequency/i)
+
+  const civicRel = vehicleRelativity(CIVIC)
+  assert.ok(civicRel.injurySeveritySpread.down > 0 && civicRel.injurySeveritySpread.up > 0)
+  const narrowedRel = vehicleRelativity(CIVIC, {
+    ...FACTOR_BUNDLE.vehicle,
+    injurySeverity: { ...severity, low: 100, value: 100, high: 100 },
+  })
+  assert.deepEqual(narrowedRel.injurySeveritySpread, { down: 0, up: 0 })
+
+  const withSpread = estimate(YOURS, on(MOLLY_F150, CIVIC), { vehicle: CIVIC })
+  FACTOR_BUNDLE.vehicle.injurySeverity = { ...severity, low: 100, value: 100, high: 100 }
+  try {
+    const withoutSpread = estimate(YOURS, on(MOLLY_F150, CIVIC), { vehicle: CIVIC })
+    assert.equal(withSpread.likely, withoutSpread.likely)
+    assert.ok(withSpread.spread.down > withoutSpread.spread.down)
+    assert.ok(withSpread.spread.up > withoutSpread.spread.up)
+  } finally {
+    FACTOR_BUNDLE.vehicle.injurySeverity = severity
+  }
+  const classes = publishedFactorGroups().find((group) => group.family.startsWith("Kinds of cars"))
+  const injuryRow = classes?.rows.find((item) => item.key.startsWith("Average injury claim severity"))
+  assert.ok(injuryRow)
+  assert.equal(injuryRow!.basis, "assumed")
+  assert.equal(injuryRow!.confidence, "Our best guess")
+  assert.match(classes!.note, /how often claims happen for bodily injury/)
 })
 
 test("the liability weight reads as a share, not a change", () => {
