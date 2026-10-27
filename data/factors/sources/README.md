@@ -87,6 +87,6 @@ HLDI's insurance results by make and model across the 17 three-year model-year w
 - We keep only the families listed in `../vehicle-families.json` in each window (for example, 387 of the 685 rows in `2022–24`, and 375 of the 699 rows in `2020–22`). To re-pick from full downloads: `npm run factors:build -- --hldi-full path/to/losses.csv` (or a folder of `losses_*.csv` files).
 - HLDI's API returns class subtotal rows (`hldi-class-subtotals-2020-22.csv`, `2021-23.csv`, and `2022-24.csv`) for the 2020–22 through 2022–24 reports; earlier windows fall back to `2020–22` class subtotals when a model has no row of its own in that window. `all_coverages` in the subtotal files is a field the API returns that the page never shows; we don't use it.
 - The per-model files are behind one switch, `useHldiModels` in `../vehicle-families.json`. Turning it off or deleting `hldi-2022-24.csv` makes every vehicle use its window's class average.
-- **License:** These HLDI source files are not covered by the repository's MIT or CC BY 4.0 licenses. They are HLDI's data, used with permission, and anyone reusing them needs HLDI's permission.
+- **License:** These are HLDI's data, not covered by this project's MIT or CC BY 4.0 licenses; reusing them requires HLDI's permission.
 
 Source: www.iihs.org. See the terms note in `../README.md` and `../../DATA-LICENSE.md`.

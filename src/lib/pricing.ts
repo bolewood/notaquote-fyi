@@ -15,6 +15,7 @@ import {
   TYPICAL_START_ATTRIBUTION,
   typicalStart,
   vehicleAgeKey,
+  vehicleReportLabel,
   whatIf,
   type Estimate,
   type StartingPoint,
@@ -469,7 +470,8 @@ export function distinctReasons(lists: readonly string[][]): string[] {
 
 /** What we matched a car to, in the site's own words, for a "Tell us" link. */
 export function vehicleMatchWords(vehicle: VehicleRelativity): string {
-  const report = vehicle.modelYears ? ` (HLDI, ${vehicle.modelYears} models)` : ""
+  const label = vehicleReportLabel(vehicle)
+  const report = label ? ` (${label})` : ""
   if (vehicle.level === "model") {
     return `Matched to ${vehicle.rows.map((row) => row.series).join("; ")}${report}. Liability factor ${(vehicle.liabilityHundredths / 100).toFixed(2)}, damage factor ${(vehicle.physicalHundredths / 100).toFixed(2)}.`
   }

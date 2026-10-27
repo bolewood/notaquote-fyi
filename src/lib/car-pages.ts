@@ -25,6 +25,7 @@ import {
   teenAddedToPolicy,
   vehicleAgeKey,
   vehicleRelativity,
+  vehicleReportLabel,
   type Estimate,
   type StartingPoint,
   type TeenAdded,
@@ -148,8 +149,10 @@ export type ClaimsSummary = {
   injuriesToOthers: ClaimsWord | null
   /** The HLDI series we matched, like "Toyota RAV4 4dr". */
   series: string[]
-  /** The HLDI report window used, like "2022–24". */
+  /** The HLDI report window the numbers came from, like "2022–24". */
   modelYears: string | null
+  /** Full report citation, like "HLDI, 2022–24 models" (or with a note when a pre-2020 class average comes from 2020–22). */
+  report: string | null
 }
 
 export function claimsSummary(relativity: VehicleRelativity): ClaimsSummary {
@@ -169,6 +172,7 @@ export function claimsSummary(relativity: VehicleRelativity): ClaimsSummary {
     injuriesToOthers: word((row) => row.bodilyInjury),
     series: relativity.rows.map((row) => row.series),
     modelYears: relativity.modelYears,
+    report: vehicleReportLabel(relativity),
   }
 }
 

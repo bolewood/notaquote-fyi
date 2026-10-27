@@ -1133,7 +1133,7 @@ export function apiIndex() {
     disclaimer: DISCLAIMER,
     licenses: {
       code: "MIT",
-      data: "CC BY 4.0 (credit NotAQuote.FYI). Typical state prices: NAIC. Car insurance results (overall losses for damage, how often claims happen for injuries): HLDI; the HLDI source files in data/factors/sources/ are HLDI's data, used with permission, and are not covered by MIT or CC BY 4.0. Third-party sources keep their own terms.",
+      data: "CC BY 4.0 (credit NotAQuote.FYI). Typical state prices: NAIC. Car insurance results (overall losses for damage, how often claims happen for injuries): HLDI; for the HLDI source files in data/factors/sources/: These are HLDI's data, not covered by this project's MIT or CC BY 4.0 licenses; reusing them requires HLDI's permission. Third-party sources keep their own terms.",
       page: `${SITE_ORIGIN}/data-licenses`,
     },
     versions: VERSIONS,

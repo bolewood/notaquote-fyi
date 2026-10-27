@@ -25,7 +25,9 @@ import type {
   FactorGroup,
   FactorSource,
   VehicleClassRow,
+  VehicleCompactModelTuple,
   VehicleLossRow,
+  VehicleSeriesTuple,
   VehicleWindow,
 } from "./factor-types"
 
@@ -937,7 +939,32 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
     })[0]
   }
 
-  const buildWindow = (winLabel: string): { window: VehicleWindow; classRatios: number[]; luxuryRatios: number[]; subtotals: HldiRow[] } => {
+  const seriesCatalog: VehicleSeriesTuple[] = []
+  const seriesIndex = new Map<string, number>()
+  const indexSeries = (row: VehicleLossRow): number => {
+    const key = [row.series, row.make, row.family, row.powertrain, row.drive, row.body, row.hldiClass].join("\t")
+    const existing = seriesIndex.get(key)
+    if (existing !== undefined) return existing
+    const idx = seriesCatalog.length
+    seriesCatalog.push([row.series, row.make, row.family, row.powertrain, row.drive, row.body, row.hldiClass])
+    seriesIndex.set(key, idx)
+    return idx
+  }
+
+  const buildWindow = (
+    winLabel: string,
+  ): {
+    window: VehicleWindow
+    models: VehicleLossRow[]
+    classes: Record<string, VehicleClassRow>
+    electricClasses: Record<string, VehicleClassRow>
+    luxuryClasses: Record<string, VehicleClassRow>
+    luxurySportsClasses: Record<string, VehicleClassRow>
+    classRatios: number[]
+    luxuryRatios: number[]
+    subtotals: HldiRow[]
+  } => {
+    const isNewest = winLabel === "2022-24"
     const winSourceId = `hldi-${winLabel}`
     const winDisplay = winLabel.replace("-", "–")
     const { yearMin, yearMax } = yearRange(winLabel)
@@ -949,13 +976,20 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
             .filter((row): row is VehicleLossRow => row !== null)
             .sort((left, right) => left.series.localeCompare(right.series))
         : []
-    const subLabel = closestSubtotalWindow(winLabel)
-    const subSourceId = subLabel ? `hldi-${subLabel}` : winSourceId
-    const subDisplay = subLabel ? subLabel.replace("-", "–") : winDisplay
-    const subText = subLabel ? files[`sources/hldi-class-subtotals-${subLabel}.csv`] : undefined
+    const compactModels: VehicleCompactModelTuple[] = winModels.map((row) => [
+      indexSeries(row),
+      row.collision,
+      row.comprehensive,
+      row.propertyDamage,
+      row.bodilyInjury,
+    ])
+    const subLabel = closestSubtotalWindow(winLabel) ?? winLabel
+    const subSourceId = `hldi-${subLabel}`
+    const subDisplay = subLabel.replace("-", "–")
+    const subText = files[`sources/hldi-class-subtotals-${subLabel}.csv`]
     const winSubtotals = subText === undefined ? [] : parseCsv(subText)
     const subNote =
-      subLabel && subLabel !== winLabel
+      subLabel !== winLabel
         ? `HLDI ${subDisplay} class average (the closest HLDI report with class subtotals, used for ${winDisplay} models)`
         : `HLDI ${winDisplay} class average`
 
@@ -982,6 +1016,31 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
       const liabVal = Math.round(rel.liability)
       const liabLow = Math.min(liabVal, Math.round(rel.liabilityLow ?? liabVal))
       const liabHigh = Math.max(liabVal, Math.round(rel.liabilityHigh ?? liabVal))
+      if (!isNewest) {
+        return {
+          hldiSubtotal: label,
+          liability: {
+            label: `${name}: damage and injuries you cause`,
+            value: liabVal,
+            low: liabLow,
+            high: liabHigh,
+            basis: "indicative",
+            sources: [subSourceId],
+            derivation: `HLDI ${subDisplay} class subtotal (${label}).`,
+            n: 1,
+          },
+          physical: {
+            label: `${name}: damage to your own car`,
+            value: Math.round(rel.physical),
+            low: Math.round(rel.physical),
+            high: Math.round(rel.physical),
+            basis: "indicative",
+            sources: [subSourceId],
+            derivation: `HLDI ${subDisplay} class subtotal (${label}).`,
+            n: 1,
+          },
+        }
+      }
       return {
         hldiSubtotal: label,
         bodilyInjury: {
@@ -1072,8 +1131,8 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
       const words = `${subNote} "${label}", used for two-doors and convertibles in the class "${plainClass(classId)}" from makes HLDI mostly files as luxury or sports cars. The mapping is our judgment.`
       const row = makeClassRow(classId, label, words, "Luxury ")
       if (row) {
-        row.bodilyInjury.label = row.bodilyInjury.label.replace(/^Luxury /, "Luxury sporty ")
-        row.propertyDamage.label = row.propertyDamage.label.replace(/^Luxury /, "Luxury sporty ")
+        if (row.bodilyInjury) row.bodilyInjury.label = row.bodilyInjury.label.replace(/^Luxury /, "Luxury sporty ")
+        if (row.propertyDamage) row.propertyDamage.label = row.propertyDamage.label.replace(/^Luxury /, "Luxury sporty ")
         row.liability.label = row.liability.label.replace(/^Luxury /, "Luxury sporty ")
         row.physical.label = row.physical.label.replace(/^Luxury /, "Luxury sporty ")
         winLuxurySportsClasses[classId] = row
@@ -1102,6 +1161,32 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
       const liabVal = Math.round(percentile(liabilities, 0.5))
       const liabLow = Math.min(liabVal, Math.round(Math.min(percentile(liabilities, 0.25), percentile(liabilitiesLow, 0.25))))
       const liabHigh = Math.max(liabVal, Math.round(Math.max(percentile(liabilities, 0.75), percentile(liabilitiesHigh, 0.75))))
+      if (!isNewest) {
+        winElectricClasses[classId] = {
+          hldiSubtotal: `Electric ${body} / ${size}`,
+          liability: {
+            label: `${name}: damage and injuries you cause`,
+            value: liabVal,
+            low: liabLow,
+            high: liabHigh,
+            basis: "indicative",
+            sources: [winSourceId],
+            derivation: `HLDI ${winDisplay} electric ${body} / ${size} median (n=${liabilities.length}).`,
+            n: liabilities.length,
+          },
+          physical: {
+            label: `${name}: damage to your own car`,
+            value: Math.round(percentile(physicals, 0.5)),
+            low: Math.round(percentile(physicals, 0.25)),
+            high: Math.round(percentile(physicals, 0.75)),
+            basis: "indicative",
+            sources: [winSourceId],
+            derivation: `HLDI ${winDisplay} electric ${body} / ${size} median (n=${physicals.length}).`,
+            n: physicals.length,
+          },
+        }
+        continue
+      }
       winElectricClasses[classId] = {
         hldiSubtotal: `Electric ${body} / ${size}`,
         bodilyInjury: {
@@ -1147,19 +1232,33 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
       }
     }
 
+    const storeOwnSubtotals = !isNewest && subLabel === winLabel
+    const window: VehicleWindow = {
+      sourceId: winSourceId,
+      sources: subSourceId === winSourceId ? [winSourceId] : [winSourceId, subSourceId],
+      modelYears: winLabel,
+      subtotalWindow: subLabel,
+      subtotalSourceId: subSourceId,
+      yearMin,
+      yearMax,
+      compactModels,
+      ...(storeOwnSubtotals
+        ? {
+            classes: winClasses,
+            luxuryClasses: winLuxuryClasses,
+            luxurySportsClasses: winLuxurySportsClasses,
+          }
+        : {}),
+      ...(!isNewest && Object.keys(winElectricClasses).length > 0 ? { electricClasses: winElectricClasses } : {}),
+    }
+
     return {
-      window: {
-        sourceId: winSourceId,
-        sources: subSourceId === winSourceId ? [winSourceId] : [winSourceId, subSourceId],
-        modelYears: winLabel,
-        yearMin,
-        yearMax,
-        models: winModels,
-        classes: winClasses,
-        electricClasses: winElectricClasses,
-        luxuryClasses: winLuxuryClasses,
-        luxurySportsClasses: winLuxurySportsClasses,
-      },
+      window,
+      models: winModels,
+      classes: winClasses,
+      electricClasses: winElectricClasses,
+      luxuryClasses: winLuxuryClasses,
+      luxurySportsClasses: winLuxurySportsClasses,
       classRatios: winClassRatios,
       luxuryRatios: winLuxuryRatios,
       subtotals: winSubtotals,
@@ -1169,12 +1268,12 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
   const builtWindows = hldiWindowLabels.map(buildWindow)
   const windows = builtWindows.map((item) => item.window)
   const newestBuilt = builtWindows[0]
-  const models = newestBuilt.window.models
+  const models = newestBuilt.models
   const subtotals = newestBuilt.subtotals
-  const classes = newestBuilt.window.classes
-  const luxuryClasses = newestBuilt.window.luxuryClasses
-  const luxurySportsClasses = newestBuilt.window.luxurySportsClasses
-  const electricClasses = newestBuilt.window.electricClasses
+  const classes = newestBuilt.classes
+  const luxuryClasses = newestBuilt.luxuryClasses
+  const luxurySportsClasses = newestBuilt.luxurySportsClasses
+  const electricClasses = newestBuilt.electricClasses
   const classRatios = newestBuilt.classRatios
   const luxuryRatios = newestBuilt.luxuryRatios
 
@@ -1645,9 +1744,9 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
       modelsEnabled,
       sourceId: "hldi-2022-24",
       modelYears: "2022-24",
+      seriesCatalog,
       windows,
-      note: "HLDI insurance losses by make and model (2006–08 through 2022–24 model-year windows), 100 = the average vehicle. Collision, comprehensive, and property damage are overall losses (claim frequency × severity); bodily injury is claim frequency only, which we combine with property damage by assuming average injury claim severity is about average (1.00, with a wider range). Collision and comprehensive move only the damage share of the premium. Property-damage and bodily-injury liability move only the liability share, and only partly (see the liability weight). Each vehicle uses the most recent HLDI report whose window includes its model year, or its window's class average when we don't have the exact model.",
-      models,
+      note: "HLDI insurance losses by make and model (2006–08 through 2022–24 model-year windows), 100 = the average vehicle. Collision, comprehensive, and property damage are overall losses (claim frequency × severity); bodily injury is claim frequency only, which we combine with property damage by assuming average injury claim severity is about average (1.00, with a wider range). Collision and comprehensive move only the damage share of the premium. Property-damage and bodily-injury liability move only the liability share, and only partly (see the liability weight). Each vehicle uses the most recent HLDI report whose window includes its model year, or its window's class average when we don't have the exact model (2020–22 for pre-2020 windows, where HLDI does not publish class averages).",
       aliases: families.aliases,
       classes,
       electricClasses,

@@ -664,7 +664,35 @@ test("a 2020 vehicle selects the 2020–22 HLDI report, and falls back to that w
   assert.equal(classRel.level, "class")
   assert.equal(classRel.sourceId, "hldi-2020-22")
   assert.equal(classRel.modelYears, "2020–22")
+  assert.equal(classRel.borrowedForYears, null)
   assert.equal(classRel.outsideYears, false)
+})
+
+test("a pre-2020 vehicle using a class average labels the borrowed 2020–22 report instead of the car's own window", async () => {
+  const { vehicleMatchWords, sourceLinks } = await import("./pricing")
+  const { describeCar } = await import("./agent-cars")
+  const { claimsSummary } = await import("./car-pages")
+  // 2014 Mitsubishi Mirage falls in the 2014–16 window, has no model row, and uses the 2020–22 small-car average.
+  const mirage2014 = car(2014, "Mitsubishi", "Mirage", "Mirage")
+  const rel = vehicleRelativity(mirage2014)
+  assert.equal(rel.level, "class")
+  assert.equal(rel.sourceId, "hldi-2020-22")
+  assert.equal(rel.modelYears, "2020–22")
+  assert.equal(rel.borrowedForYears, "2014–16")
+  assert.equal(
+    vehicleMatchWords(rel),
+    "No model match. Used the small car average (HLDI, 2020–22 models; no class averages are published for 2014–16).",
+  )
+  const priced = estimate(YOURS, on(MOLLY_F150, mirage2014), { vehicle: mirage2014 })
+  const step = priced.steps.find((item) => item.group === "vehicle")
+  assert.ok(step?.sources.includes("hldi-2020-22"))
+  assert.ok(!step?.sources.includes("hldi-2014-16"))
+  const cited = sourceLinks(step?.sources ?? [])
+  assert.ok(cited.some((s) => s.publisher === "Highway Loss Data Institute (IIHS-HLDI), 2020–22 models"))
+  const summary = describeCar(catalog, { year: 2014, make: "Mitsubishi", model: "Mirage", trim: "Mirage" })
+  assert.equal(summary.claimsData, "class-average")
+  assert.equal(summary.claimsReport, "HLDI, 2020–22 models; no class averages are published for 2014–16")
+  assert.equal(claimsSummary(rel).report, "HLDI, 2020–22 models; no class averages are published for 2014–16")
 })
 
 test("a model year outside every HLDI window falls back to the nearest window with a disclosure note", () => {

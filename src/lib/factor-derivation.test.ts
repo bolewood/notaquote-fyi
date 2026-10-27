@@ -3,7 +3,7 @@ import { readdirSync, readFileSync } from "node:fs"
 import path from "node:path"
 import test from "node:test"
 import { deriveFactors, hldiFamily, hldiPowertrain, parseCsv, type FactorFiles } from "./factor-derivation"
-import { assertFactorBundleSafe } from "./factor-engine"
+import { assertFactorBundleSafe, windowModels } from "./factor-engine"
 import type { FactorBundle } from "./factor-types"
 
 const DATA = "data/factors"
@@ -190,7 +190,7 @@ test("the HLDI model rows switch off cleanly", () => {
   const families = JSON.parse(files["vehicle-families.json"])
   const off = deriveFactors({ ...files, "vehicle-families.json": JSON.stringify({ ...families, useHldiModels: false }) })
   assert.equal(off.vehicle.modelsEnabled, false)
-  assert.deepEqual(off.vehicle.models, [])
+  assert.ok(off.vehicle.windows.every((win) => win.compactModels.length === 0))
   assert.ok(Object.keys(off.vehicle.classes).length > 5)
   assertFactorBundleSafe(off)
   const removed = { ...files }
@@ -199,7 +199,7 @@ test("the HLDI model rows switch off cleanly", () => {
   }
   const gone = deriveFactors(removed)
   assert.equal(gone.vehicle.modelsEnabled, false)
-  assert.ok(gone.vehicle.windows.every((win) => win.models.length === 0))
+  assert.ok(gone.vehicle.windows.every((win) => win.compactModels.length === 0))
   assertFactorBundleSafe(gone)
   // Everything about drivers and coverage is unchanged.
   assert.deepEqual(gone.groups["driver-age"], committed.groups["driver-age"])
@@ -246,18 +246,20 @@ test("injury frequency uses an assumed severity cell and widens the class liabil
   assert.match(severity.derivation, /average injury claim severity/i)
 
   for (const row of Object.values(committed.vehicle.classes)) {
-    assert.equal(row.bodilyInjury.basis, "assumed", row.key)
+    assert.ok(row.bodilyInjury)
+    assert.equal(row.bodilyInjury.basis, "assumed")
     assert.match(row.bodilyInjury.derivation, /claim frequency/i)
-    assert.ok(row.bodilyInjury.low < row.bodilyInjury.value && row.bodilyInjury.value < row.bodilyInjury.high, row.key)
-    assert.ok(row.liability.low < row.liability.value && row.liability.value < row.liability.high, row.key)
+    assert.ok(row.bodilyInjury.low < row.bodilyInjury.value && row.bodilyInjury.value < row.bodilyInjury.high)
+    assert.ok(row.liability.low < row.liability.value && row.liability.value < row.liability.high)
   }
 })
 
 test("HLDI rows are copied faithfully and named consistently", () => {
   const source = rows("hldi-2022-24.csv")
   assert.ok(source.length >= 200)
+  const newestModels = windowModels(committed.vehicle.windows[0], committed.vehicle)
   for (const row of source) {
-    const kept = committed.vehicle.models.find((model) => model.series === row.series && model.hldiClass === `${row.body_class} / ${row.size}`)
+    const kept = newestModels.find((model) => model.series === row.series && model.hldiClass === `${row.body_class} / ${row.size}`)
     if (hldiPowertrain(row.model) === null) {
       assert.equal(kept, undefined)
       continue

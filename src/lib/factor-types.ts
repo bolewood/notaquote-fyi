@@ -85,24 +85,47 @@ export type VehicleClassRow = {
   /** HLDI subtotal label this class maps to. */
   hldiSubtotal: string
   /** Bodily-injury part: HLDI claim frequency combined with our assumed average injury claim severity. */
-  bodilyInjury: FactorCell
+  bodilyInjury?: FactorCell
   /** Property-damage part: HLDI overall losses (frequency × severity). */
-  propertyDamage: FactorCell
+  propertyDamage?: FactorCell
   liability: FactorCell
   physical: FactorCell
 }
 
+export type VehicleSeriesTuple = [
+  series: string,
+  make: string,
+  family: string,
+  powertrain: "combustion" | "hybrid" | "plug-in-hybrid" | "electric",
+  drive: "2wd" | "4wd",
+  body: string[],
+  hldiClass: string,
+]
+
+export type VehicleCompactModelTuple = [
+  seriesIndex: number,
+  collision: number | null,
+  comprehensive: number | null,
+  propertyDamage: number | null,
+  bodilyInjury: number | null,
+]
+
 export type VehicleWindow = {
   sourceId: string
+  /** The HLDI window whose published class subtotals this window uses (for example "2020-22" for pre-2020 windows). */
+  subtotalWindow: string
+  subtotalSourceId: string
   sources: string[]
   modelYears: string
   yearMin: number
   yearMax: number
-  models: VehicleLossRow[]
-  classes: Record<string, VehicleClassRow>
-  electricClasses: Record<string, VehicleClassRow>
-  luxuryClasses: Record<string, VehicleClassRow>
-  luxurySportsClasses: Record<string, VehicleClassRow>
+  /** Compact per-model rows indexing into VehicleData.seriesCatalog. */
+  compactModels: VehicleCompactModelTuple[]
+  /** Present only on windows with their own published class subtotals other than the top-level 2022–24 window (2020–22, 2021–23). */
+  classes?: Record<string, VehicleClassRow>
+  electricClasses?: Record<string, VehicleClassRow>
+  luxuryClasses?: Record<string, VehicleClassRow>
+  luxurySportsClasses?: Record<string, VehicleClassRow>
 }
 
 export type VehicleData = {
@@ -110,10 +133,11 @@ export type VehicleData = {
   modelsEnabled: boolean
   sourceId: string
   modelYears: string
+  /** Unique HLDI series across all windows, referenced by index from each window's compactModels. */
+  seriesCatalog: VehicleSeriesTuple[]
   /** All HLDI model-year windows carried in the bundle, newest first (for example 2022–24 down to 2006–08). */
   windows: VehicleWindow[]
   note: string
-  models: VehicleLossRow[]
   /**
    * Catalog model names that HLDI spells differently, keyed by
    * "compact make|compact catalog model" (for example "mazda|mazda3" → "3").

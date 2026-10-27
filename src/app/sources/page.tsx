@@ -66,7 +66,7 @@ function listed(): Map<string, Listed> {
       publisher: source.publisher,
       title:
         source.id === "hldi-2022-24"
-          ? "Insurance losses by make and model (2006–08 through 2022–24 models)"
+          ? "Insurance losses by make and model (2006–08 through 2022–24 models, retrieved October 2026)"
           : source.title,
       url: source.url,
       checked: longDate(source.checkedOn),

@@ -73,12 +73,21 @@ async function main() {
 
   const bundle = deriveFactors(await readFactorFiles())
   assertFactorBundleSafe(bundle)
-  await writeFile(OUT, `${JSON.stringify(bundle, null, 2)}\n`)
+  const json = JSON.stringify(bundle, null, 2).replace(
+    /\[\n\s+(?=(?:\d+|"[^"]*"),\n)/g,
+    (match) => match.trim(),
+  )
+  const compactJson = json.replace(
+    /\[\s*(?:\d+|"[^"]*")(?:\s*,\s*(?:-?\d+|null|"[^"]*")){4,6}\s*\]/g,
+    (tuple) => JSON.stringify(JSON.parse(tuple)),
+  )
+  await writeFile(OUT, `${compactJson}\n`)
   const cells = Object.values(bundle.groups).flatMap((group) => Object.values(group.cells))
   const count = (basis: string) => cells.filter((cell) => cell.basis === basis).length
-  const totalSeries = bundle.vehicle.windows.reduce((sum, window) => sum + window.models.length, 0)
+  const totalSeries = bundle.vehicle.windows.reduce((sum, window) => sum + window.compactModels.length, 0)
+  const newestCount = bundle.vehicle.windows[0]?.compactModels.length ?? 0
   console.log(
-    `Wrote ${path.relative(ROOT, OUT)}: ${count("sourced")} sourced, ${count("indicative")} indicative, ${count("assumed")} assumed, ${count("reference")} reference cells; ${bundle.vehicle.windows.length} HLDI windows (${totalSeries} series total, ${bundle.vehicle.models.length} in ${bundle.vehicle.modelYears}).`,
+    `Wrote ${path.relative(ROOT, OUT)}: ${count("sourced")} sourced, ${count("indicative")} indicative, ${count("assumed")} assumed, ${count("reference")} reference cells; ${bundle.vehicle.windows.length} HLDI windows (${totalSeries} series total, ${newestCount} in ${bundle.vehicle.modelYears}).`,
   )
 }
 

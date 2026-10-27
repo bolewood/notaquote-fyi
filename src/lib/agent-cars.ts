@@ -31,7 +31,7 @@ import {
 import { catalogYears, trimRecord, type CatalogTrim, type VehicleCatalog, type VehiclePick } from "./catalog"
 import { VEHICLE_CLASS_LABELS, vehicleFacts, type VehicleFacts } from "./catalog-class"
 import { compactName, normalizeName, UNRESOLVED_TRIM_NAME, type TrimConfidence } from "./catalog-match"
-import { vehicleRelativity } from "./factor-engine"
+import { vehicleRelativity, vehicleReportLabel } from "./factor-engine"
 
 /** Model year used for a car name that doesn't give one: the site's own default for a first car. */
 export const DEFAULT_MODEL_YEAR = 2022
@@ -111,7 +111,7 @@ export type CarSummary = {
   powertrain: VehicleFacts["powertrain"]
   /** "model": HLDI insurance results for this model (overall losses for damage, how often claims happen for injuries). "class-average": the average for its kind of car. "unknown": an average car. */
   claimsData: ClaimsData
-  /** The HLDI report window used for this car's model year, like "HLDI, 2020–22 models". */
+  /** The HLDI report window the numbers came from, like "HLDI, 2020–22 models" (or with a note when a pre-2020 class average comes from 2020–22). */
   claimsReport: string | null
 }
 
@@ -136,7 +136,7 @@ export function describeCar(catalog: VehicleCatalog, pick: VehiclePick): CarSumm
     vehicleClass: facts.classId ? VEHICLE_CLASS_LABELS[facts.classId] : null,
     powertrain: facts.powertrain,
     claimsData: claimsDataOf(rel.level),
-    claimsReport: rel.modelYears ? `HLDI, ${rel.modelYears} models` : null,
+    claimsReport: vehicleReportLabel(rel),
   }
 }
 

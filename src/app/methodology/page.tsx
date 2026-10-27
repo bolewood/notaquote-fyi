@@ -130,8 +130,9 @@ export default function MethodologyPage() {
         liability part, we combine property-damage overall losses with how often bodily-injury claims happen—assuming a
         model&apos;s average injury claim severity is about average, and widening the range for that extra uncertainty—and
         count about half of the result, because insurers do the same. When we don&apos;t have a model in that report, we use
-        its average for that kind of car (small SUV, midsize car, and so on) and widen the range. That&apos;s the
-        &ldquo;Why&rdquo; you see when you tap a car on the Compare page.
+        HLDI&apos;s average for that kind of car (small SUV, midsize car, and so on)—from that report for 2020 and newer
+        models, or from the 2020–22 report for earlier years where HLDI doesn&apos;t publish class averages—and widen the
+        range. That&apos;s the &ldquo;Why&rdquo; you see when you tap a car on the Compare page.
       </p>
 
       <h2>3. A range, not a price</h2>

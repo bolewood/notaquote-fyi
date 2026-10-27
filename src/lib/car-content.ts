@@ -323,7 +323,10 @@ export function carContent(f: CarFigures): CarContent {
     ],
     effect: priceEffectText(f),
     kind: kindText(f),
-    source: `Matched to “${f.claims.series.join("; ")}” (HLDI, ${f.claims.modelYears ?? "2022–24"} models).`,
+    source:
+      f.claims.series.length > 0
+        ? `Matched to “${f.claims.series.join("; ")}” (${f.claims.report ?? `HLDI, ${f.claims.modelYears ?? "2022–24"} models`}).`
+        : `Used the ${f.adult.vehicle.label} average (${f.claims.report ?? `HLDI, ${f.claims.modelYears ?? "2022–24"} models`}).`,
     similarHeading: similarHeading(f),
     similar: [
       ...[...f.similar.cheaper].reverse(),
