@@ -105,7 +105,7 @@
       "value": 100,
       "low": 90,
       "high": 111,
-      "why": "HLDI's results are for 2022–24 models; an older or newer design may differ."
+      "why": "HLDI's reports cover 2006–24 models; an older or newer design may differ."
     },
     "trim-limited": {
       "label": "Car version only partly matched",
@@ -150,6 +150,13 @@
       "low": 26,
       "high": 79,
       "why": "Frozen at 0.52 on 22 September 2026 so that adding vehicles can't move it silently. It was chosen as the largest share of HLDI's liability results that keeps the middle 90% of the vehicles we kept then inside ISO's liability symbol band (surcharges up to 25 percent, discounts up to 20 percent, as reported by Insurance Journal in 2004). The derivation recomputes that check every build and reports it next to this value. We looked for a public insurer liability symbol table (SERFF filings, the Massachusetts residual market manual) and didn't find one; Massachusetts' vehicle rating groups apply to physical damage only."
+    },
+    "injury-severity": {
+      "label": "Average injury claim severity per model, used with HLDI's bodily-injury frequency",
+      "value": 100,
+      "low": 80,
+      "high": 125,
+      "why": "HLDI's bodily-injury, PIP, and medical-payments figures measure how often claims happen (claim frequency), not overall losses, because injury severity takes too long to develop. To combine bodily-injury claim frequency with property-damage overall losses in a vehicle's liability factor, we assume a model's average injury claim severity is about average (1.00), with a 0.80 to 1.25 range to reflect the extra uncertainty."
     }
   },
   "typical-start": {

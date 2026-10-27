@@ -79,7 +79,9 @@ export default function DataLicensesPage() {
       <p>
         We keep the Highway Loss Data Institute&apos;s published results for the car models we price, with credit and a
         link to the Insurance Institute for Highway Safety (IIHS). We&apos;ve asked IIHS for permission to use this data
-        and are waiting to hear back. If they say no, we&apos;ll take it out.
+        and are waiting to hear back. If they say no, we&apos;ll take it out. As for the HLDI source files in{" "}
+        <code>data/factors/sources/</code>: These are HLDI&apos;s data, not covered by this project&apos;s MIT or CC BY
+        4.0 licenses; reusing them requires HLDI&apos;s permission.
       </p>
 
       <h2>Everything else</h2>

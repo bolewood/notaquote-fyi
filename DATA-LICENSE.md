@@ -8,10 +8,12 @@ The tables, factors, and notes that NotAQuote.FYI contributors research and asse
 
 That covers, for example:
 
-- the factor bundle and source manifest in `src/data/`
+- the factor bundle and source manifest in `src/data/` (excluding the underlying HLDI source tables; see below)
 - the state rule values and their sources (the values and citations only, not the code around them)
 - the research notes and assumption logs in `data/`
 - our selection and arrangement of the vehicle catalog in `public/catalog/`
+
+The HLDI source files in `data/factors/sources/` (`hldi-*.csv` and `hldi-class-subtotals-*.csv`): These are HLDI's data, not covered by this project's MIT or CC BY 4.0 licenses; reusing them requires HLDI's permission.
 
 If you're not sure which license a file falls under, [ask us](https://github.com/bolewood/notaquote-fyi/issues/new?template=5-question.yml).
 
@@ -23,7 +25,7 @@ Copyright (c) 2026 Bolewood Group, LLC and contributors.
 
 ## Third-party sources keep their own terms
 
-Much of what we compile points to, or is drawn from, other people's public information: for example NHTSA's vPIC vehicle listings, FuelEconomy.gov's vehicle file, state insurance department pages, and state statutes. Our license covers our own work, not theirs. Each of those sources keeps its own terms, and we list them, with links, on the site's **Data licenses** page (`src/app/data-licenses/page.tsx`) and in `src/data/source-manifest.json`.
+Much of what we compile points to, or is drawn from, other people's public information: for example NHTSA's vPIC vehicle listings, FuelEconomy.gov's vehicle file, HLDI's insurance loss and claim-frequency tables, state insurance department pages, and state statutes. Our license covers our own work, not theirs. In particular, for the HLDI source files in `data/factors/sources/`: These are HLDI's data, not covered by this project's MIT or CC BY 4.0 licenses; reusing them requires HLDI's permission. Each third-party source keeps its own terms, and we list them, with links, on the site's **Data licenses** page (`src/app/data-licenses/page.tsx`) and in `src/data/source-manifest.json`.
 
 If you reuse our data, please check the terms of any third-party source it relies on, too.
 

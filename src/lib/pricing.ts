@@ -15,6 +15,7 @@ import {
   TYPICAL_START_ATTRIBUTION,
   typicalStart,
   vehicleAgeKey,
+  vehicleReportLabel,
   whatIf,
   type Estimate,
   type StartingPoint,
@@ -469,10 +470,12 @@ export function distinctReasons(lists: readonly string[][]): string[] {
 
 /** What we matched a car to, in the site's own words, for a "Tell us" link. */
 export function vehicleMatchWords(vehicle: VehicleRelativity): string {
+  const label = vehicleReportLabel(vehicle)
+  const report = label ? ` (${label})` : ""
   if (vehicle.level === "model") {
-    return `Matched to ${vehicle.rows.map((row) => row.series).join("; ")}. Liability factor ${(vehicle.liabilityHundredths / 100).toFixed(2)}, damage factor ${(vehicle.physicalHundredths / 100).toFixed(2)}.`
+    return `Matched to ${vehicle.rows.map((row) => row.series).join("; ")}${report}. Liability factor ${(vehicle.liabilityHundredths / 100).toFixed(2)}, damage factor ${(vehicle.physicalHundredths / 100).toFixed(2)}.`
   }
-  if (vehicle.level === "class") return `No model match. Used the ${vehicle.label} average.`
+  if (vehicle.level === "class") return `No model match. Used the ${vehicle.label} average${report}.`
   return "Not recognized. Treated as an average vehicle."
 }
 
@@ -490,7 +493,10 @@ const SOURCES = new Map(FACTOR_BUNDLE.sources.map((source) => [source.id, source
 export function sourceLinks(ids: readonly string[]): SourceLink[] {
   return ids.flatMap((id) => {
     const source = SOURCES.get(id)
-    return source ? [{ id, title: source.title, publisher: source.publisher, url: source.url }] : []
+    if (!source) return []
+    const hldiMatch = /^hldi-(\d{4})-(\d{2})$/.exec(id)
+    const publisher = hldiMatch ? `${source.publisher}, ${hldiMatch[1]}–${hldiMatch[2]} models` : source.publisher
+    return [{ id, title: source.title, publisher, url: source.url }]
   })
 }
 

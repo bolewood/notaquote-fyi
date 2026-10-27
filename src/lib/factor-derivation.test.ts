@@ -3,7 +3,7 @@ import { readdirSync, readFileSync } from "node:fs"
 import path from "node:path"
 import test from "node:test"
 import { deriveFactors, hldiFamily, hldiPowertrain, parseCsv, type FactorFiles } from "./factor-derivation"
-import { assertFactorBundleSafe } from "./factor-engine"
+import { assertFactorBundleSafe, windowModels } from "./factor-engine"
 import type { FactorBundle } from "./factor-types"
 
 const DATA = "data/factors"
@@ -190,13 +190,16 @@ test("the HLDI model rows switch off cleanly", () => {
   const families = JSON.parse(files["vehicle-families.json"])
   const off = deriveFactors({ ...files, "vehicle-families.json": JSON.stringify({ ...families, useHldiModels: false }) })
   assert.equal(off.vehicle.modelsEnabled, false)
-  assert.deepEqual(off.vehicle.models, [])
+  assert.ok(off.vehicle.windows.every((win) => win.compactModels.length === 0))
   assert.ok(Object.keys(off.vehicle.classes).length > 5)
   assertFactorBundleSafe(off)
   const removed = { ...files }
-  delete removed["sources/hldi-2022-24.csv"]
+  for (const key of Object.keys(removed)) {
+    if (/^sources\/hldi-\d{4}-\d{2}\.csv$/.test(key)) delete removed[key]
+  }
   const gone = deriveFactors(removed)
   assert.equal(gone.vehicle.modelsEnabled, false)
+  assert.ok(gone.vehicle.windows.every((win) => win.compactModels.length === 0))
   assertFactorBundleSafe(gone)
   // Everything about drivers and coverage is unchanged.
   assert.deepEqual(gone.groups["driver-age"], committed.groups["driver-age"])
@@ -215,6 +218,7 @@ test("every source file is listed in sources.json and used by a factor", () => {
   visit(committed.vehicle)
   visit(committed.typicalStart)
   used.add(committed.vehicle.sourceId)
+  for (const win of committed.vehicle.windows) used.add(win.sourceId)
   for (const name of readdirSync(path.join(DATA, "sources"))) {
     if (!name.endsWith(".csv")) continue
     const id = name
@@ -222,7 +226,7 @@ test("every source file is listed in sources.json and used by a factor", () => {
       .replace(/^iso-loss-costs-2024\.csv$/, "iso-via-iii-2024")
       .replace(/^iso-liability-symbols-2004\.csv$/, "iso-symbols-2004")
       .replace(/^sp-global-vehicle-age-2023\.csv$/, "sp-global-vio-2023")
-      .replace(/^hldi-class-subtotals-2022-24\.csv$/, "hldi-2022-24")
+      .replace(/^hldi-class-subtotals-(\d{4}-\d{2})\.csv$/, "hldi-$1")
       .replace(/\.csv$/, "")
     assert.ok(ids.has(id), `${name} is not listed in sources.json`)
     if (id !== "iso-symbols-2004") assert.ok(used.has(id), `${name} is not used by any factor`)
@@ -231,11 +235,31 @@ test("every source file is listed in sources.json and used by a factor", () => {
   assert.match(committed.vehicle.liabilityWeight.derivation, /up to 25 percent, discounts up to 20 percent/)
 })
 
+test("injury frequency uses an assumed severity cell and widens the class liability range", () => {
+  const severity = committed.vehicle.injurySeverity
+  assert.equal(severity.basis, "assumed")
+  assert.equal(severity.value, 100)
+  assert.equal(severity.low, 80)
+  assert.equal(severity.high, 125)
+  assert.deepEqual(severity.sources, [])
+  assert.match(severity.derivation, /claim frequency/i)
+  assert.match(severity.derivation, /average injury claim severity/i)
+
+  for (const row of Object.values(committed.vehicle.classes)) {
+    assert.ok(row.bodilyInjury)
+    assert.equal(row.bodilyInjury.basis, "assumed")
+    assert.match(row.bodilyInjury.derivation, /claim frequency/i)
+    assert.ok(row.bodilyInjury.low < row.bodilyInjury.value && row.bodilyInjury.value < row.bodilyInjury.high)
+    assert.ok(row.liability.low < row.liability.value && row.liability.value < row.liability.high)
+  }
+})
+
 test("HLDI rows are copied faithfully and named consistently", () => {
   const source = rows("hldi-2022-24.csv")
   assert.ok(source.length >= 200)
+  const newestModels = windowModels(committed.vehicle.windows[0], committed.vehicle)
   for (const row of source) {
-    const kept = committed.vehicle.models.find((model) => model.series === row.series && model.hldiClass === `${row.body_class} / ${row.size}`)
+    const kept = newestModels.find((model) => model.series === row.series && model.hldiClass === `${row.body_class} / ${row.size}`)
     if (hldiPowertrain(row.model) === null) {
       assert.equal(kept, undefined)
       continue

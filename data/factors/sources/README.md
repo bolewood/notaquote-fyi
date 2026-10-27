@@ -76,16 +76,17 @@ One number from S&P Global Mobility's 15 May 2023 press release: the average US 
 
 The 2024 row of the Insurance Information Institute's table "Private Passenger Auto Insurance Losses, 2015-2024" (source line: ISO, a Verisk Analytics business). Frequency is claims per 100 car-years; severity is the average claim in dollars. The footnotes about which states are left out are in the locator.
 
-## hldi-2022-24.csv and hldi-class-subtotals-2022-24.csv
+## `hldi-2006-08.csv` through `hldi-2022-24.csv` and `hldi-class-subtotals-2020-22.csv` through `2022-24.csv`
 
-HLDI's insurance losses by make and model for 2022–24 models, from the table at https://www.iihs.org/research-areas/auto-insurance/insurance-losses-by-make-and-model. The page loads its data from `POST https://www.iihs.org/api/hldilosses/getviewmodel` (one request per class and size). The locator names the class, size, and row.
+HLDI's insurance results by make and model across the 17 three-year model-year windows (`2006–08` through `2022–24`) that cover our vehicle catalog, from the table at https://www.iihs.org/research-areas/auto-insurance/insurance-losses-by-make-and-model. The page loads its data from `POST https://www.iihs.org/api/hldilosses/getviewmodel` (one request per model-year window, class, and size). Each row's locator names the model-year window, class, size, API parameters, and row.
 
-- Values are HLDI's index: 100 = the average for all passenger vehicles. The web page shows the same numbers as a percentage above or below average, so 124 appears on the page as "24%".
+- Values are HLDI's index: 100 = the average for all passenger vehicles in that three-year report window. The web page shows the same numbers as a percentage above or below average, so 124 appears on the page as "24%".
 - Blank means HLDI shows "Insufficient data".
-- Collision, property damage, and comprehensive are overall losses (how often × how much). Personal injury protection, medical payments, and bodily injury are how often claims happen only.
-- We keep only the families listed in `../vehicle-families.json`: 328 of the 685 rows HLDI publishes. To re-pick from a full download: `npm run factors:build -- --hldi-full path/to/losses.csv`.
-- `all_coverages` in the subtotal file is a field the API returns but the page never shows. We don't use it.
+- **Damage vs. injury coverages:** Collision, property damage, and comprehensive are **overall losses** (claim frequency × average claim severity). Personal injury protection, medical payments, and bodily injury are **claim frequency only** (how often injury claims happen), because injury severity takes too long to develop. To combine bodily-injury claim frequency with property-damage overall losses for the liability part of the bill, the derivation (`src/lib/factor-derivation.ts`) assumes a model's average injury claim severity is about average (1.00, range 0.80–1.25, `vehicle.injury-severity` in `../assumptions.json`, `basis: "assumed"`).
+- **Model-year matching:** For a vehicle's model year, the engine uses the most recent HLDI report whose three-year window includes that year (for example, `2020–22` for a 2020 model, or `2022–24` for a 2023 model), and uses the nearest window only when no report covers the year.
+- We keep only the families listed in `../vehicle-families.json` in each window (for example, 387 of the 685 rows in `2022–24`, and 375 of the 699 rows in `2020–22`). To re-pick from full downloads: `npm run factors:build -- --hldi-full path/to/losses.csv` (or a folder of `losses_*.csv` files).
+- HLDI's API returns class subtotal rows (`hldi-class-subtotals-2020-22.csv`, `2021-23.csv`, and `2022-24.csv`) for the 2020–22 through 2022–24 reports; earlier windows fall back to `2020–22` class subtotals when a model has no row of its own in that window. `all_coverages` in the subtotal files is a field the API returns that the page never shows; we don't use it.
+- The per-model files are behind one switch, `useHldiModels` in `../vehicle-families.json`. Turning it off or deleting `hldi-2022-24.csv` makes every vehicle use its window's class average.
+- **License:** These are HLDI's data, not covered by this project's MIT or CC BY 4.0 licenses; reusing them requires HLDI's permission.
 
-- The per-model file is behind one switch, `useHldiModels` in `../vehicle-families.json`. Turning it off or deleting the file makes every vehicle use its class average.
-
-Source: www.iihs.org. See the terms note in `../README.md`.
+Source: www.iihs.org. See the terms note in `../README.md` and `../../DATA-LICENSE.md`.

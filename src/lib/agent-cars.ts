@@ -31,7 +31,7 @@ import {
 import { catalogYears, trimRecord, type CatalogTrim, type VehicleCatalog, type VehiclePick } from "./catalog"
 import { VEHICLE_CLASS_LABELS, vehicleFacts, type VehicleFacts } from "./catalog-class"
 import { compactName, normalizeName, UNRESOLVED_TRIM_NAME, type TrimConfidence } from "./catalog-match"
-import { vehicleRelativity } from "./factor-engine"
+import { vehicleRelativity, vehicleReportLabel } from "./factor-engine"
 
 /** Model year used for a car name that doesn't give one: the site's own default for a first car. */
 export const DEFAULT_MODEL_YEAR = 2022
@@ -109,8 +109,10 @@ export type CarSummary = {
   /** The kind of car, from the EPA size class: "Small SUV", "Midsize car", and so on. */
   vehicleClass: string | null
   powertrain: VehicleFacts["powertrain"]
-  /** "model": HLDI insurance-claims results for this model. "class-average": the average for its kind of car. "unknown": an average car. */
+  /** "model": HLDI insurance results for this model (overall losses for damage, how often claims happen for injuries). "class-average": the average for its kind of car. "unknown": an average car. */
   claimsData: ClaimsData
+  /** The HLDI report window the numbers came from, like "HLDI, 2020–22 models" (or with a note when a pre-2020 class average comes from 2020–22). */
+  claimsReport: string | null
 }
 
 export function claimsDataOf(level: string): ClaimsData {
@@ -123,6 +125,7 @@ function shownTrim(trim: string): string {
 
 export function describeCar(catalog: VehicleCatalog, pick: VehiclePick): CarSummary {
   const facts = vehicleFacts(catalog, pick)
+  const rel = vehicleRelativity(facts)
   return {
     id: carId(catalog, pick),
     name: `${pick.year} ${pick.make} ${pick.model}`,
@@ -132,7 +135,8 @@ export function describeCar(catalog: VehicleCatalog, pick: VehiclePick): CarSumm
     trim: shownTrim(pick.trim),
     vehicleClass: facts.classId ? VEHICLE_CLASS_LABELS[facts.classId] : null,
     powertrain: facts.powertrain,
-    claimsData: claimsDataOf(vehicleRelativity(facts).level),
+    claimsData: claimsDataOf(rel.level),
+    claimsReport: vehicleReportLabel(rel),
   }
 }
 

@@ -81,7 +81,7 @@ This file is for AI assistants. There's a read-only JSON API at ${url(API_BASE)}
 - It's a ballpark for planning. It is not a quote, and we're not an insurer, agent, or broker. Only an insurer can give a real price.
 - Every estimate is a range. Real quotes can land above or below it. Show the range, not only the middle figure.
 - It starts from a typical price for the state (NAIC's 2023 average for full coverage, brought up to today with the government's price index for car insurance), then adjusts for the driver, the car, the place, and the coverage.
-- Each adjustment is either from a public source or labeled as our best guess, and guesses widen the range. The car adjustment comes from HLDI's insurance-claims results for that model, or the average for its kind of car when we don't have the model (\`claimsData\` says which).
+- Each adjustment is either from a public source or labeled as our best guess, and guesses widen the range. The car adjustment comes from HLDI's insurance results for that model—overall losses for collision, comprehensive, and property damage, and how often injury claims happen for bodily injury (combined with property damage by assuming average injury claim severity per model, which widens the range)—matched to the most recent HLDI report whose model-year window covers the car's year (\`claimsReport\` names the report, like "HLDI, 2020–22 models"), or HLDI's average for its kind of car when we don't have the model (from that report for 2020+ models, or from the 2020–22 report for earlier years where HLDI doesn't publish class averages; \`claimsData\` and \`claimsReport\` say which).
 - It covers insurance cost only. It knows nothing about crash-test ratings, reliability, or whether a car fits the family. Say so, and point to IIHS (https://www.iihs.org/ratings, and its list of safe used cars for teens: https://www.iihs.org/ratings/safe-vehicles-for-teens) and NHTSA (https://www.nhtsa.gov/ratings) for safety.
 - Figures are for one car on the policy. With a teen added, the parent is assumed to be 40–64 with a clean record.
 - There's no place to send a premium, a VIN, a ZIP code, or a name, and we turn away requests that plainly include one. Only a state, a few bands, and car names.
@@ -137,7 +137,7 @@ ${paramLines(CARS_PARAMS)}
 Examples:
 ${EXAMPLES.cars.map((path) => `- ${url(path)}`).join("\n")}
 
-Each match has \`id\` (like "2022-honda-civic-4dr": model year, make, model, and version), \`year\`, \`make\`, \`model\`, \`trim\` (the version), \`vehicleClass\`, \`powertrain\`, \`claimsData\` ("model", "class-average", or "unknown"), \`yearsAvailable\`, and \`otherTrims\`.
+Each match has \`id\` (like "2022-honda-civic-4dr": model year, make, model, and version), \`year\`, \`make\`, \`model\`, \`trim\` (the version), \`vehicleClass\`, \`powertrain\`, \`claimsData\` ("model", "class-average", or "unknown"), \`claimsReport\` (like "HLDI, 2022–24 models"), \`yearsAvailable\`, and \`otherTrims\`.
 
 ### Driver parameters (compare and whatif)
 
@@ -152,7 +152,7 @@ ${paramLines(COMPARE_PARAMS.filter((spec) => !DRIVER_NAMES.has(spec.name)))}
 Examples:
 ${EXAMPLES.compare.map((path) => `- ${url(path)}`).join("\n")}
 
-Per car: \`rank\`, the car's details, \`resolution\` (what your input matched, with \`confidence\`: exact for an id, high for one clear match, medium when we had to choose; read \`note\` and \`alternatives\`), then either \`yearly\`, \`monthly\`, and \`range\` (own policy) or \`teenAdds\` and \`wholePolicy\` (a teen added to a parent's policy), plus \`label\` (the name to use in sentences, with the version when it matters, like "2025 Toyota RAV4 Hybrid AWD"), \`gapToCheapest\`, \`why\`, \`whyVsAverageCar\`, \`claimsData\`, \`rangeNotes\`, and \`explanation\`. For the whole answer: \`summary\` (one line, like the site's), \`startingPoint\`, \`notes\`, \`howToRead\`, \`disclaimer\`, \`sources\`, \`siteUrl\`, \`related\`, and \`versions\`.
+Per car: \`rank\`, the car's details, \`resolution\` (what your input matched, with \`confidence\`: exact for an id, high for one clear match, medium when we had to choose; read \`note\` and \`alternatives\`), then either \`yearly\`, \`monthly\`, and \`range\` (own policy) or \`teenAdds\` and \`wholePolicy\` (a teen added to a parent's policy), plus \`label\` (the name to use in sentences, with the version when it matters, like "2025 Toyota RAV4 Hybrid AWD"), \`gapToCheapest\`, \`why\`, \`whyVsAverageCar\`, \`claimsData\`, \`claimsReport\`, \`rangeNotes\`, and \`explanation\`. For the whole answer: \`summary\` (one line, like the site's), \`startingPoint\`, \`notes\`, \`howToRead\`, \`disclaimer\`, \`sources\`, \`siteUrl\`, \`related\`, and \`versions\`.
 
 ### ${API_BASE}/whatif
 
@@ -185,7 +185,7 @@ Answers depend only on the inputs and the data versions, so they're cached for a
 ## Credit and licenses
 
 - Code: MIT. Data we compile: CC BY 4.0; credit "NotAQuote.FYI".
-- Typical state prices: National Association of Insurance Commissioners (NAIC), 2022/2023 Auto Insurance Database Report. Car claims results: Highway Loss Data Institute (HLDI). Car list: NHTSA vPIC and FuelEconomy.gov. Third-party sources keep their own terms: ${url("/data-licenses")}
+- Typical state prices: National Association of Insurance Commissioners (NAIC), 2022/2023 Auto Insurance Database Report. Car insurance results (overall losses for damage, how often claims happen for injuries): Highway Loss Data Institute (HLDI); for the HLDI source files in \`data/factors/sources/\`: These are HLDI's data, not covered by this project's MIT or CC BY 4.0 licenses; reusing them requires HLDI's permission. Car list: NHTSA vPIC and FuelEconomy.gov. Third-party sources keep their own terms: ${url("/data-licenses")}
 
 ## More
 

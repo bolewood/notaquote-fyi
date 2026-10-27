@@ -33,4 +33,8 @@ export const DATA_UPDATED = longDate(factorBundle.checkedOn)
  * How many public sources the numbers come from: every source the factors
  * cite, plus the two government datasets behind the list of cars.
  */
-export const SOURCE_COUNT = new Set([...factorBundle.sources.map((source) => source.id), "nhtsa-vpic", "fueleconomy"]).size
+export const SOURCE_COUNT = new Set([
+  ...factorBundle.sources.map((source) => (source.id.startsWith("hldi-") ? "hldi" : source.id)),
+  "nhtsa-vpic",
+  "fueleconomy",
+]).size

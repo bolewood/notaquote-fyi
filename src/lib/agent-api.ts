@@ -531,7 +531,10 @@ function startingPointBody(start: StartingPoint) {
 function sourcesFor(ids: Iterable<string>) {
   const all = new Set<string>(ids)
   for (const id of FACTOR_BUNDLE.typicalStart.sources) all.add(id)
-  const links = sourceLinks([...all]).map((source) => ({ name: `${source.publisher}: ${source.title}`, url: source.url }))
+  const links = sourceLinks([...all]).map((source) => ({
+    name: source.id.startsWith("hldi-") ? `${source.publisher}: Insurance losses by make and model` : `${source.publisher}: ${source.title}`,
+    url: source.url,
+  }))
   const naic = STATE_BASELINE_SOURCES.find((source) => source.id === "naic-auto-db-2022-2023")
   if (naic && !links.some((link) => link.url === naic.url)) links.push({ name: `${naic.publisher}: ${naic.name}`, url: naic.url })
   return links
@@ -1130,7 +1133,7 @@ export function apiIndex() {
     disclaimer: DISCLAIMER,
     licenses: {
       code: "MIT",
-      data: "CC BY 4.0 (credit NotAQuote.FYI). Typical state prices: NAIC. Car claims results: HLDI. Third-party sources keep their own terms.",
+      data: "CC BY 4.0 (credit NotAQuote.FYI). Typical state prices: NAIC. Car insurance results (overall losses for damage, how often claims happen for injuries): HLDI; for the HLDI source files in data/factors/sources/: These are HLDI's data, not covered by this project's MIT or CC BY 4.0 licenses; reusing them requires HLDI's permission. Third-party sources keep their own terms.",
       page: `${SITE_ORIGIN}/data-licenses`,
     },
     versions: VERSIONS,
