@@ -326,10 +326,12 @@ const STATES_BY_PRICE: StateCode[] = [...allStateBaselines()]
   .map((row) => row.state as StateCode)
 
 function carStateRows(page: CarPage, carIndex: number): CarStateRow[] {
-  const chosen: StateCode[] = [STATES_BY_PRICE[0], STATES_BY_PRICE.at(-1)!]
-  const pool = STATES_BY_PRICE.slice(1, -1)
-  for (let k = 0; k < 4 && chosen.length < 6; k += 1) {
-    const code = pool[(carIndex * 4 + k) % pool.length]
+  const lowPool = STATES_BY_PRICE.slice(0, 6)
+  const highPool = STATES_BY_PRICE.slice(-6)
+  const midPool = STATES_BY_PRICE.slice(6, -6)
+  const chosen: StateCode[] = [lowPool[carIndex % lowPool.length], highPool[(carIndex * 3) % highPool.length]]
+  for (let k = 0; chosen.length < 6 && k < midPool.length; k += 1) {
+    const code = midPool[(carIndex * 7 + k * 9) % midPool.length]
     if (!chosen.includes(code)) chosen.push(code)
   }
   return chosen

@@ -121,7 +121,7 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-left text-sm">
             <caption className="py-2 text-left text-sm text-muted-foreground">
-              {c.fixed.yearsCaption}
+              {c.yearsCaption}
             </caption>
             <thead>
               <tr className="border-b border-border text-muted-foreground">
@@ -146,7 +146,7 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
               {c.years.map((row) => (
                 <tr key={row.year} className="border-b border-border/60">
                   <th scope="row" className="py-2 pr-3 font-normal">
-                    {row.year} <span className="text-muted-foreground">({row.age})</span>
+                    {row.year} {row.trim} <span className="text-muted-foreground">({row.age})</span>
                   </th>
                   <td className="py-2 pr-3 text-right whitespace-nowrap tabular-nums">{row.adult}</td>
                   <td className="py-2 pr-3 text-right whitespace-nowrap tabular-nums">{row.liability}</td>
@@ -180,12 +180,12 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
       <p>{c.teen}</p>
       <p>{c.teenRank}</p>
       <p className="text-sm text-muted-foreground">
-        {c.fixed.teenNote}{" "}
+        {c.teenNote}{" "}
         <Link href="/guides/cheapest-cars-to-insure-for-teens">Cheapest cars to insure for a teen</Link>.
       </p>
 
       <h2 id="why">{c.whyHeading}</h2>
-      <p>{c.fixed.claimsIntro}</p>
+      <p>{c.claimsIntro}</p>
       <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 rounded-2xl bg-card p-5 text-sm ring-1 ring-border" data-testid="car-claims">
         {c.claims.map((row) => (
           <div key={row.label} className="contents">

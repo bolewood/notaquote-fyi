@@ -257,7 +257,7 @@ test("state page buttons: the visitor's own car in that state, and the cheapest 
  * (median 20.8%, lowest page 15.7%, highest overlap 0.618); if a wording change
  * trips it, make the page more its own rather than lowering the floor.
  */
-export const RENDERED_CAR_FLOOR = { median: 0.2, page: 0.15, jaccard: 0.63 } as const
+export const RENDERED_CAR_FLOOR = { median: 0.38, page: 0.32, jaccard: 0.42 } as const
 
 test("rendered car pages stay their own, with dollar amounts masked", async () => {
   if (!MODELS_ENABLED) return
