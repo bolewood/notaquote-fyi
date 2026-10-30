@@ -252,6 +252,9 @@ export type CarContent = {
   similarHeading: string
   /** The nearest similar cars by price, cheapest first, with this car in its place (slug null). */
   similar: { slug: string | null; name: string; price: string }[]
+  statesHeading: string
+  statesSummary: string
+  states: { name: string; path: string; adult: string; teen: string }[]
   notes: string[]
   /** The sentences every car page shares. Counted in the uniqueness measure, like everything else on the page. */
   fixed: {
@@ -337,6 +340,14 @@ export function carContent(f: CarFigures): CarContent {
       name: car.name,
       price: car.slug === null ? `${price(car.likely)} (this car)` : `${price(car.likely)} (${gapWords(car.likely - f.adult.likely, f.adult.likely)})`,
     })),
+    statesHeading: `What a ${page.shortName} costs in your state`,
+    statesSummary: `Across states, a ${page.name} goes from ${price(f.stateEstimates[0].adultLikely)} a year in ${f.stateEstimates[0].name} to ${price(f.stateEstimates.at(-1)!.adultLikely)} in ${f.stateEstimates.at(-1)!.name} for a ${page.shortName}:`,
+    states: f.stateEstimates.map((row) => ({
+      name: row.name,
+      path: row.path,
+      adult: price(row.adultLikely),
+      teen: signedDollars(row.teenIncrease),
+    })),
     notes: carNotes(f),
     fixed: CAR_FIXED,
   }
@@ -378,6 +389,9 @@ export function carPageText(content: CarContent): string {
     content.similarHeading,
     content.groupRank,
     ...content.similar.map((row) => `${row.name} ${row.price}`),
+    content.statesHeading,
+    content.statesSummary,
+    ...content.states.map((row) => `${row.name} ${content.estimateLabel.split(",")[0]} ${row.adult} ${row.teen}`),
     ...content.notes,
     content.fixed.ctaNote,
   ]

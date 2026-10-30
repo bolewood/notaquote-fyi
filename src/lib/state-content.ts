@@ -350,6 +350,27 @@ export function neighborsSummary(f: StateFigures): string {
   return `A typical policy in ${inSentence(f.code)} (${naic(f.baseline.annual)} in ${f.baseline.dataYear}) costs ${joinNames(parts)}.${spreadSentence}`
 }
 
+export function similarPricesSummary(f: StateFigures): string {
+  if (f.similarPriceStates.length === 0) return ""
+  const name = inSentence(f.code)
+  const listed = joinNames(f.similarPriceStates.map((row) => `${row.name} (${naic(row.baseline.annual)} in ${f.baseline.dataYear}, about ${estimateDollars(row.startAnnual)} today)`))
+  return `Outside ${shortName(f.code)}'s neighbors, the states closest to ${name}'s ${naic(f.baseline.annual)} full-coverage average are ${listed}.`
+}
+
+export function featuredCarsHeading(f: StateFigures): string {
+  return `What popular cars cost to insure in ${inSentence(f.code)}`
+}
+
+export function featuredCarsSummary(f: StateFigures): string {
+  if (f.featuredCars.length === 0) return ""
+  const name = inSentence(f.code)
+  const short = shortName(f.code)
+  const sorted = [...f.featuredCars].sort((a, b) => a.adultLikely - b.adultLikely)
+  const low = sorted[0]
+  const high = sorted.at(-1)!
+  return `In ${name}, a 45-year-old with full coverage pays from about ${estimateDollars(low.adultLikely)} a year for a ${low.name} to about ${estimateDollars(high.adultLikely)} for a ${high.name} on these ${short} sample models.`
+}
+
 /** One move, in words: "Moving from Pennsylvania: about $270 less a year." */
 export function moveWords(delta: number, base: number): string {
   if (aboutTheSame(delta, base)) return "About the same"
@@ -683,6 +704,7 @@ export function stateMainText(f: StateFigures): string {
     neighborsHeading(f),
     neighborsSummary(f),
     ...f.neighbors.map((row) => `${row.name} ${naic(row.baseline.annual)} ${moveWords(row.move.delta, row.move.current.likely)}`),
+    similarPricesSummary(f),
     minimumsHeading(f),
     minimumsOverviewText(f),
     liabilityOnlyText(f),
@@ -698,6 +720,9 @@ export function stateMainText(f: StateFigures): string {
     ownPolicyParagraph(f),
     teenCarsSummary(f),
     ...f.teenCars.slice(0, TEEN_TOP).map((item) => `${item.car.label} ${differenceWords(item.added.increase)} ${estimateDollars(item.own.likely)}`),
+    featuredCarsHeading(f),
+    featuredCarsSummary(f),
+    ...f.featuredCars.map((car) => `${car.name} ${estimateDollars(car.adultLikely)} ${differenceWords(car.teenIncrease)}`),
     faqHeading(f),
     ...stateFaqs(f).map((item) => `${item.question} ${item.answer}`),
   ]

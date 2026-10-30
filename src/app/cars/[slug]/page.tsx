@@ -211,6 +211,24 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
         </>
       ) : null}
 
+      <h2 id="by-state">{c.statesHeading}</h2>
+      <p>{c.statesSummary}</p>
+      <ul className="divide-y divide-border/70 border-y border-border/70 text-sm">
+        {c.states.map((row) => (
+          <li key={row.path} className="flex min-h-10 flex-wrap items-center justify-between gap-x-4 py-1.5">
+            <span>
+              <Link href={row.path}>{row.name}</Link> ({page.shortName})
+            </span>
+            <span className="money text-muted-foreground tabular-nums">
+              {row.adult}/yr · {row.teen} teen
+            </span>
+          </li>
+        ))}
+      </ul>
+      <p className="text-sm text-muted-foreground">
+        <Link href="/states">All 50 states and DC for the {page.shortName}</Link>.
+      </p>
+
       <div className="flex flex-wrap gap-3 pt-2">
         <a href={whatIfHref} className="btn btn-primary plain">
           What if you bought this car? <ArrowRight className="size-4" aria-hidden="true" />

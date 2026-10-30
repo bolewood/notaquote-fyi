@@ -49,6 +49,12 @@ import { STATE_SLUGS, stateBySlug, statePath, stateSlug } from "./state-slugs"
 import { liabilityShorthand, stateRule } from "./state-rules"
 import StatePage, { generateMetadata as stateMetadata, generateStaticParams as stateParams } from "../app/states/[state]/page"
 import CarPage, { generateMetadata as carMetadata, generateStaticParams as carParams } from "../app/cars/[slug]/page"
+import HomePage from "../app/page"
+import StatesIndexPage from "../app/states/page"
+import CarsIndexPage from "../app/cars/page"
+import GuidesPage from "../app/guides/page"
+import TeenCostGuide from "../app/guides/adding-a-teen-driver/page"
+import TeenCarsGuide from "../app/guides/cheapest-cars-to-insure-for-teens/page"
 
 const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/
 
@@ -320,6 +326,58 @@ test("state pages name cars that round to the same price, and only blame missing
     }
   }
   if (MODELS_ENABLED) assert.ok(tiedPages > 0, "some states round the cheapest cars to the same $10")
+})
+
+test("every state page and every indexable car page has at least 3 inbound links from other sitemap pages", async () => {
+  const rendered: { path: string; html: string }[] = [
+    { path: "/", html: renderToStaticMarkup(HomePage()) },
+    { path: "/states", html: renderToStaticMarkup(StatesIndexPage()) },
+    { path: "/guides", html: renderToStaticMarkup(GuidesPage()) },
+    { path: "/guides/adding-a-teen-driver", html: renderToStaticMarkup(TeenCostGuide()) },
+    { path: "/guides/cheapest-cars-to-insure-for-teens", html: renderToStaticMarkup(TeenCarsGuide()) },
+  ]
+  if (MODELS_ENABLED) {
+    rendered.push({ path: "/cars", html: renderToStaticMarkup(CarsIndexPage()) })
+  }
+  const noindex = noindexCarSlugs(catalog)
+  for (const { state } of stateParams()) {
+    rendered.push({
+      path: `/states/${state}`,
+      html: renderToStaticMarkup(await StatePage({ params: Promise.resolve({ state }) } as never)),
+    })
+  }
+  if (MODELS_ENABLED) {
+    for (const { slug } of carParams()) {
+      if (noindex.has(slug)) continue
+      rendered.push({
+        path: `/cars/${slug}`,
+        html: renderToStaticMarkup(await CarPage({ params: Promise.resolve({ slug }) } as never)),
+      })
+    }
+  }
+  const inbound = new Map<string, Set<string>>()
+  for (const page of rendered) {
+    const hrefs = new Set([...page.html.matchAll(/href="(\/[^"#?]*)"/g)].map((m) => m[1]))
+    for (const target of hrefs) {
+      if (target === page.path) continue
+      const set = inbound.get(target) ?? new Set<string>()
+      set.add(page.path)
+      inbound.set(target, set)
+    }
+  }
+  for (const { state } of stateParams()) {
+    const path = `/states/${state}`
+    const count = inbound.get(path)?.size ?? 0
+    assert.ok(count >= 3, `${path} has only ${count} inbound links from other sitemap pages`)
+  }
+  if (MODELS_ENABLED) {
+    for (const { slug } of carParams()) {
+      if (noindex.has(slug)) continue
+      const path = `/cars/${slug}`
+      const count = inbound.get(path)?.size ?? 0
+      assert.ok(count >= 3, `${path} has only ${count} inbound links from other sitemap pages`)
+    }
+  }
 })
 
 // ---------------------------------------------------------------------------

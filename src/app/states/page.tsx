@@ -23,6 +23,11 @@ const NAIC = STATE_BASELINE_SOURCES.find((source) => source.id === "naic-auto-db
 
 export default function StatesIndexPage() {
   const national = countrywideBaseline()
+  const byPrice = [...STATES]
+    .map((s) => ({ ...s, baseline: stateBaseline(s.code)! }))
+    .sort((a, b) => a.baseline.annual - b.baseline.annual)
+  const lowest5 = byPrice.slice(0, 5)
+  const highest5 = [...byPrice.slice(-5)].reverse()
   return (
     <TrustArticle
       title="Car insurance by state"
@@ -37,9 +42,37 @@ export default function StatesIndexPage() {
       }
     >
       <p>
-        Nationally, full coverage averaged {dollars(national.annual)} a year in 2023. Prices have gone up since, and every
-        state page brings its figure up to today.
+        Nationally, full coverage averaged {dollars(national.annual)} a year in 2023 ({dollars(national.liabilityOnly)} for
+        liability-only coverage and {dollars(national.averageExpenditure)} in average expenditure per insured car). Prices
+        have gone up since, and every state page brings its figure up to today, alongside <Link href="/cars">popular car estimates</Link>{" "}
+        and our guides on <Link href="/guides/adding-a-teen-driver">adding a teen driver</Link> and{" "}
+        <Link href="/guides/cheapest-cars-to-insure-for-teens">the cheapest cars for teens</Link>.
       </p>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="rounded-2xl bg-card p-4 text-sm ring-1 ring-border">
+          <h2 className="text-base font-semibold">Lowest 2023 full-coverage averages</h2>
+          <ul className="mt-2 space-y-1">
+            {lowest5.map((s) => (
+              <li key={s.code} className="flex justify-between gap-2">
+                <Link href={statePath(s.code)}>{s.name}</Link>
+                <span className="money tabular-nums">{dollars(s.baseline.annual)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="rounded-2xl bg-card p-4 text-sm ring-1 ring-border">
+          <h2 className="text-base font-semibold">Highest 2023 full-coverage averages</h2>
+          <ul className="mt-2 space-y-1">
+            {highest5.map((s) => (
+              <li key={s.code} className="flex justify-between gap-2">
+                <Link href={statePath(s.code)}>{s.name}</Link>
+                <span className="money tabular-nums">{dollars(s.baseline.annual)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <h2 id="all-states">All 50 states and DC</h2>
       <div className="overflow-x-auto">
         <table className="w-full border-collapse text-left text-sm">
           <caption className="py-2 text-left text-sm text-muted-foreground">

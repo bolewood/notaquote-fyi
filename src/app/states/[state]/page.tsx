@@ -13,6 +13,8 @@ import { faqJsonLd, pageMetadata } from "@/lib/site-meta"
 import {
   faqHeading,
   faultText,
+  featuredCarsHeading,
+  featuredCarsSummary,
   leadText,
   liabilityOnlyText,
   minimumsHeading,
@@ -283,6 +285,19 @@ export default async function StatePage({ params }: PageProps<"/states/[state]">
           </tbody>
         </table>
       </div>
+      {f.similarPriceStates.length > 0 ? (
+        <p className="text-sm text-muted-foreground">
+          States with similar {f.baseline.dataYear} full-coverage averages:{" "}
+          {f.similarPriceStates.map((row, idx) => (
+            <span key={row.code}>
+              {idx > 0 ? (idx === f.similarPriceStates.length - 1 ? ", and " : ", ") : ""}
+              <Link href={statePath(row.code)}>{row.name}</Link> ({dollars(row.baseline.annual)} in {f.baseline.dataYear}, about{" "}
+              {estimateDollars(row.startAnnual)} today)
+            </span>
+          ))}
+          .
+        </p>
+      ) : null}
 
       <h2 id="minimums">{minimumsHeading(f)}</h2>
       {f.rule ? (
@@ -373,6 +388,51 @@ export default async function StatePage({ params }: PageProps<"/states/[state]">
       <p className="text-sm text-muted-foreground">
         {SAME_ORDER_NOTE} <Link href="/guides/cheapest-cars-to-insure-for-teens">See all 33 teen cars and how we rank them</Link>.
       </p>
+
+      {f.featuredCars.length > 0 ? (
+        <>
+          <h2 id="popular-cars">{featuredCarsHeading(f)}</h2>
+          <p>{featuredCarsSummary(f)}</p>
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse text-left text-sm">
+              <caption className="py-2 text-left text-sm text-muted-foreground">
+                Estimated yearly full-coverage cost in {name} for a 45-year-old driver and for adding a 16-year-old teen.
+              </caption>
+              <thead>
+                <tr className="border-b border-border text-muted-foreground">
+                  <th scope="col" className="py-2 pr-3 font-medium">
+                    Car
+                  </th>
+                  <th scope="col" className="py-2 pr-3 text-right font-medium">
+                    45-year-old in {short}
+                  </th>
+                  <th scope="col" className="py-2 pr-3 text-right font-medium">
+                    Adding a teen in {short}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {f.featuredCars.map((car) => (
+                  <tr key={car.slug} className="border-b border-border/60">
+                    <th scope="row" className="py-2 pr-3 font-normal">
+                      <Link href={`/cars/${car.slug}`}>{car.name}</Link>
+                    </th>
+                    <td className="py-2 pr-3 text-right whitespace-nowrap tabular-nums">
+                      about {estimateDollars(car.adultLikely)} a year
+                    </td>
+                    <td className="py-2 pr-3 text-right whitespace-nowrap tabular-nums">
+                      {signedDollars(car.teenIncrease)} a year
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            <Link href="/cars">See all 121 popular cars, SUVs, pickups, and EVs</Link>.
+          </p>
+        </>
+      ) : null}
 
       <h2 id="faq">{faqHeading(f)}</h2>
       <dl className="grid gap-5">

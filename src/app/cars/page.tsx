@@ -64,8 +64,10 @@ export default function CarsIndexPage() {
         Every figure is for the same driver: a 45-year-old with a clean record and full coverage, at the national typical
         price. The cars are {years.length === 1 ? `${years[0]} models` : `mostly ${CLAIMS_YEARS.last} models`}, the newest
         our claims data covers; each page also shows older years. We only make a page when the Highway Loss Data Institute
-        has claims results for that exact model. <Link href="/compare">Compare any cars</Link>, including ones not listed
-        here.
+        has claims results for that exact model. <Link href="/compare">Compare any cars</Link>, browse{" "}
+        <Link href="/states">car insurance by state</Link>, or read our guides on{" "}
+        <Link href="/guides/cheapest-cars-to-insure-for-teens">cheapest cars to insure for a teen</Link> and{" "}
+        <Link href="/guides/adding-a-teen-driver">what adding a teen driver costs</Link>.
       </p>
       <nav aria-label="Kinds of car" className="flex flex-wrap gap-2 text-sm">
         {all.map((group) => (
