@@ -4,15 +4,17 @@ import { notFound } from "next/navigation"
 import { ArrowRight } from "lucide-react"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import { VehicleFixLink } from "@/components/how-we-got-this"
+import { JsonLdScript } from "@/components/json-ld"
 import { TrustArticle } from "@/components/trust-article"
 import { SERVER_CATALOG } from "@/lib/agent-catalog"
 import { carContent, noindexCarSlugs } from "@/lib/car-content"
 import { carFigures, carPages } from "@/lib/car-pages"
 import { FACTOR_BUNDLE } from "@/lib/factor-engine"
+import { longDate } from "@/lib/format"
 import { vehicleMatchWords } from "@/lib/pricing"
 import { DEFAULT_SCENARIO } from "@/lib/scenario"
 import { encodeSharePath } from "@/lib/share-link"
-import { pageMetadata } from "@/lib/site-meta"
+import { CAR_PAGES_UPDATED, pageMetadata, webPageJsonLd } from "@/lib/site-meta"
 import { teenDriver } from "@/lib/teen-cars"
 
 /** Only cars with a page; anything else is a 404. */
@@ -93,6 +95,14 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
         />
       }
     >
+      <JsonLdScript
+        data={webPageJsonLd({
+          title: c.title,
+          description: c.description,
+          path: `/cars/${page.slug}`,
+          dateModified: CAR_PAGES_UPDATED,
+        })}
+      />
       <div className="grid gap-1 rounded-2xl bg-card p-5 ring-1 ring-border" data-testid="car-estimate">
         <p className="text-sm font-medium text-muted-foreground">{c.estimateLabel}</p>
         <p>
@@ -226,7 +236,8 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
         ))}
       </ul>
       <p className="text-sm text-muted-foreground">
-        <Link href="/states">All 50 states and DC for the {page.shortName}</Link>.
+        <Link href="/states">All 50 states and DC for the {page.shortName}</Link> · Updated{" "}
+        <time dateTime={CAR_PAGES_UPDATED}>{longDate(CAR_PAGES_UPDATED)}</time> for the {page.shortName}.
       </p>
 
       <div className="flex flex-wrap gap-3 pt-2">

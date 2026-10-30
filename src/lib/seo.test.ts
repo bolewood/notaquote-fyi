@@ -24,7 +24,24 @@ import { shownYearly } from "./format"
 import { GUIDES, teenCarsLead } from "./guides"
 import { DEFAULT_SCENARIO, STATES } from "./scenario"
 import { decodeShareSearch } from "./share-link"
-import { breadcrumbJsonLd, DESCRIPTION_MAX, faqJsonLd, homeJsonLd, jsonLdText, SITE_NAME, stateDatasetsJsonLd, TITLE_MAX } from "./site-meta"
+import {
+  breadcrumbJsonLd,
+  CAR_PAGES_CONTENT_UPDATED,
+  CAR_PAGES_UPDATED,
+  DATA_DATES,
+  DESCRIPTION_MAX,
+  ENGINE_UPDATED,
+  faqJsonLd,
+  GUIDES_CONTENT_UPDATED,
+  HOME_CONTENT_UPDATED,
+  homeJsonLd,
+  jsonLdText,
+  SITE_NAME,
+  STATE_PAGES_CONTENT_UPDATED,
+  STATE_PAGES_UPDATED,
+  stateDatasetsJsonLd,
+  TITLE_MAX,
+} from "./site-meta"
 import { sitemapEntries } from "./sitemap-entries"
 import { countrywideBaseline } from "./state-baselines"
 import {
@@ -46,7 +63,7 @@ import {
 import { NEIGHBORS } from "./state-neighbors"
 import { stateFigures, TEEN_TOP } from "./state-pages"
 import { STATE_SLUGS, stateBySlug, statePath, stateSlug } from "./state-slugs"
-import { liabilityShorthand, stateRule } from "./state-rules"
+import { isIsoDate, liabilityShorthand, stateRule, todayIso } from "./state-rules"
 import StatePage, { generateMetadata as stateMetadata, generateStaticParams as stateParams } from "../app/states/[state]/page"
 import CarPage, { generateMetadata as carMetadata, generateStaticParams as carParams } from "../app/cars/[slug]/page"
 import HomePage from "../app/page"
@@ -383,17 +400,42 @@ test("every state page and every indexable car page has at least 3 inbound links
 // ---------------------------------------------------------------------------
 // Sitemap, social images, structured data, titles
 
-test("the sitemap lists every indexable page once, with a real date", () => {
+test("the sitemap lists every indexable page once, with a real date that reflects data and content revisions", () => {
   const entries = sitemapEntries(catalog)
   const urls = entries.map((entry) => entry.url.replace("https://notaquote.fyi", ""))
   assert.equal(new Set(urls).size, urls.length, "a page is listed twice")
-  for (const entry of entries) assert.match(entry.lastModified, /^\d{4}-\d{2}-\d{2}$/)
+  const byPath = new Map(entries.map((entry) => [entry.url.replace("https://notaquote.fyi", ""), entry.lastModified]))
+  const today = todayIso()
+  for (const entry of entries) {
+    assert.ok(isIsoDate(entry.lastModified), `invalid date ${entry.lastModified} for ${entry.url}`)
+    assert.ok(entry.lastModified <= today, `${entry.url} has future lastModified ${entry.lastModified} (> ${today})`)
+    assert.ok(entry.lastModified >= DATA_DATES.sources, `${entry.url} lastModified ${entry.lastModified} is older than base data`)
+  }
+  assert.equal(byPath.get("/"), HOME_CONTENT_UPDATED)
+  assert.equal(byPath.get("/states"), STATE_PAGES_UPDATED)
+  assert.equal(STATE_PAGES_UPDATED, STATE_PAGES_CONTENT_UPDATED)
+  assert.ok(STATE_PAGES_UPDATED >= ENGINE_UPDATED && STATE_PAGES_UPDATED >= DATA_DATES.stateRules)
+  assert.equal(byPath.get("/guides"), GUIDES_CONTENT_UPDATED)
   const listed = new Set(urls)
-  for (const { state } of stateParams()) assert.ok(listed.has(`/states/${state}`), state)
+  for (const { state } of stateParams()) {
+    assert.ok(listed.has(`/states/${state}`), state)
+    assert.equal(byPath.get(`/states/${state}`), STATE_PAGES_UPDATED, state)
+  }
   const noindex = noindexCarSlugs(catalog)
-  for (const { slug } of carParams()) assert.equal(listed.has(`/cars/${slug}`), !noindex.has(slug), slug)
-  for (const guide of GUIDES) assert.ok(listed.has(guide.path), guide.path)
+  for (const { slug } of carParams()) {
+    assert.equal(listed.has(`/cars/${slug}`), !noindex.has(slug), slug)
+    if (!noindex.has(slug)) {
+      assert.equal(byPath.get(`/cars/${slug}`), CAR_PAGES_UPDATED, slug)
+      assert.equal(CAR_PAGES_UPDATED, CAR_PAGES_CONTENT_UPDATED)
+      assert.ok(CAR_PAGES_UPDATED >= ENGINE_UPDATED)
+    }
+  }
+  for (const guide of GUIDES) {
+    assert.ok(listed.has(guide.path), guide.path)
+    assert.equal(byPath.get(guide.path), GUIDES_CONTENT_UPDATED, guide.path)
+  }
   assert.equal(listed.has("/cars"), carPages(catalog).length > 0)
+  if (carPages(catalog).length > 0) assert.equal(byPath.get("/cars"), CAR_PAGES_UPDATED)
   assert.ok(!listed.has("/llms.txt") && !listed.has("/llms-full.txt"))
   for (const path of staticPagePaths()) {
     if (path === "/cars" && carPages(catalog).length === 0) continue
@@ -542,4 +584,24 @@ test("structured data is valid JSON, and credits NAIC's figures to NAIC", () => 
   const crumbs = JSON.parse(jsonLdText(breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Ohio", path: "/states/ohio" }])))
   assert.equal(crumbs.itemListElement[1].item, "https://notaquote.fyi/states/ohio")
   assert.doesNotMatch(jsonLdText({ name: "</script><script>alert(1)</script>" }), /</)
+})
+
+test("state and car pages emit matching visible <time> and WebPage JSON-LD dateModified", async () => {
+  const ohioHtml = renderToStaticMarkup(await StatePage({ params: Promise.resolve({ state: "ohio" }) } as never))
+  assert.ok(ohioHtml.includes(`<time dateTime="${STATE_PAGES_UPDATED}">`))
+  const ohioScripts = [...ohioHtml.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((m) => JSON.parse(m[1]))
+  const ohioWebPage = ohioScripts.find((item) => item["@type"] === "WebPage") as { dateModified?: string; url?: string } | undefined
+  assert.ok(ohioWebPage, "Ohio state page missing WebPage JSON-LD")
+  assert.equal(ohioWebPage.dateModified, STATE_PAGES_UPDATED)
+  assert.equal(ohioWebPage.url, "https://notaquote.fyi/states/ohio")
+
+  if (MODELS_ENABLED) {
+    const rav4Html = renderToStaticMarkup(await CarPage({ params: Promise.resolve({ slug: "toyota-rav4" }) } as never))
+    assert.ok(rav4Html.includes(`<time dateTime="${CAR_PAGES_UPDATED}">`))
+    const rav4Scripts = [...rav4Html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((m) => JSON.parse(m[1]))
+    const rav4WebPage = rav4Scripts.find((item) => item["@type"] === "WebPage") as { dateModified?: string; url?: string } | undefined
+    assert.ok(rav4WebPage, "RAV4 car page missing WebPage JSON-LD")
+    assert.equal(rav4WebPage.dateModified, CAR_PAGES_UPDATED)
+    assert.equal(rav4WebPage.url, "https://notaquote.fyi/cars/toyota-rav4")
+  }
 })

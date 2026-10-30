@@ -189,6 +189,21 @@ export function articleJsonLd(input: { title: string; description: string; path:
   }
 }
 
+/** A state or car page, as a WebPage with its dateModified. */
+export function webPageJsonLd(input: { title: string; description: string; path: string; dateModified: string }): JsonLd {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: input.title,
+    description: input.description,
+    url: `${SITE_ORIGIN}${input.path}`,
+    dateModified: input.dateModified,
+    inLanguage: "en-US",
+    isPartOf: { "@type": "WebSite", name: SITE_NAME, url: `${SITE_ORIGIN}/` },
+    publisher: ORGANIZATION,
+  }
+}
+
 /**
  * The state data on /sources, as two Datasets, because they're owned
  * differently:
@@ -271,11 +286,30 @@ export const DATA_DATES = {
   sources: MANIFEST_DATE,
 } as const
 
-/** Pages whose numbers come from the engine alone (what-if, compare, how it works, guides). */
+/**
+ * When the words or structure of these page groups last changed in git.
+ * Bumped deliberately in commits that revise page copy or layout; never set
+ * from `new Date()` at build time.
+ */
+export const HOME_CONTENT_UPDATED = "2026-10-30"
+export const STATE_PAGES_CONTENT_UPDATED = "2026-10-30"
+export const CAR_PAGES_CONTENT_UPDATED = "2026-10-30"
+export const GUIDES_CONTENT_UPDATED = "2026-10-30"
+
+/** Pages whose numbers come from the engine alone (what-if, compare, how it works). */
 export const ENGINE_UPDATED = newest(DATA_DATES.factors, DATA_DATES.stateBaselines, DATA_DATES.catalog)
 
-/** State pages: the engine plus the state rules. */
-export const STATE_PAGES_UPDATED = newest(ENGINE_UPDATED, DATA_DATES.stateRules)
+/** Home page: the engine plus the home page's own copy and links. */
+export const HOME_UPDATED = newest(ENGINE_UPDATED, HOME_CONTENT_UPDATED)
+
+/** State pages and /states: the engine, the state rules, and the state-page content revision. */
+export const STATE_PAGES_UPDATED = newest(ENGINE_UPDATED, DATA_DATES.stateRules, STATE_PAGES_CONTENT_UPDATED)
+
+/** Car pages and /cars: the engine plus the car-page content revision. */
+export const CAR_PAGES_UPDATED = newest(ENGINE_UPDATED, CAR_PAGES_CONTENT_UPDATED)
+
+/** Guides index (/guides): the engine plus the guides content revision. */
+export const GUIDES_UPDATED = newest(ENGINE_UPDATED, GUIDES_CONTENT_UPDATED)
 
 /** Pages that list every source (sources, data licenses). */
-export const SOURCES_UPDATED = newest(STATE_PAGES_UPDATED, DATA_DATES.sources)
+export const SOURCES_UPDATED = newest(ENGINE_UPDATED, DATA_DATES.stateRules, DATA_DATES.sources)

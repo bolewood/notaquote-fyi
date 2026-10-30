@@ -9,7 +9,7 @@ import { TrustArticle } from "@/components/trust-article"
 import { SERVER_CATALOG } from "@/lib/agent-catalog"
 import { carPageFor } from "@/lib/car-pages"
 import { differenceWords, dollars, estimateDollars, longDate, monthlyDollars, signedDollars } from "@/lib/format"
-import { faqJsonLd, pageMetadata } from "@/lib/site-meta"
+import { faqJsonLd, pageMetadata, STATE_PAGES_UPDATED, webPageJsonLd } from "@/lib/site-meta"
 import {
   faqHeading,
   faultText,
@@ -200,6 +200,14 @@ export default async function StatePage({ params }: PageProps<"/states/[state]">
         />
       }
     >
+      <JsonLdScript
+        data={webPageJsonLd({
+          title: stateTitle(f),
+          description: stateDescription(f),
+          path: statePath(f.code),
+          dateModified: STATE_PAGES_UPDATED,
+        })}
+      />
       <JsonLdScript data={faqJsonLd(faqs)} />
 
       <nav aria-label="On this page" className="flex flex-wrap gap-2 text-sm">
@@ -470,8 +478,9 @@ export default async function StatePage({ params }: PageProps<"/states/[state]">
         {f.rule ? (
           <li>
             {short} minimum coverage statutes ({f.rule.sources.map((s) => s.label).join("; ")}), checked{" "}
-            {f.rule.checkedOn ? longDate(f.rule.checkedOn) : "recently"}. See <Link href="/methodology">methodology</Link> and{" "}
-            <Link href="/sources">all sources</Link>.
+            {f.rule.checkedOn ? longDate(f.rule.checkedOn) : "recently"}. Page updated{" "}
+            <time dateTime={STATE_PAGES_UPDATED}>{longDate(STATE_PAGES_UPDATED)}</time> for {name}. See{" "}
+            <Link href="/methodology">methodology</Link> and <Link href="/sources">all sources</Link>.
           </li>
         ) : null}
       </ul>

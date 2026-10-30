@@ -10,16 +10,24 @@ import { noindexCarSlugs } from "./car-content"
 import { carPages } from "./car-pages"
 import { SITE_ORIGIN } from "./copy"
 import { GUIDES, guideModified } from "./guides"
-import { DATA_DATES, ENGINE_UPDATED, SOURCES_UPDATED, STATE_PAGES_UPDATED } from "./site-meta"
+import {
+  CAR_PAGES_UPDATED,
+  DATA_DATES,
+  ENGINE_UPDATED,
+  GUIDES_UPDATED,
+  HOME_UPDATED,
+  SOURCES_UPDATED,
+  STATE_PAGES_UPDATED,
+} from "./site-meta"
 import { STATE_SLUGS } from "./state-slugs"
 
 export type SitemapEntry = { url: string; lastModified: string }
 
-/** Pages that aren't generated from data, with the data they show. */
+/** Pages that aren't generated from data, with the date their data or content last changed. */
 const STATIC_PAGES: readonly [string, string][] = [
-  ["/", ENGINE_UPDATED],
+  ["/", HOME_UPDATED],
   ["/compare", ENGINE_UPDATED],
-  ["/guides", ENGINE_UPDATED],
+  ["/guides", GUIDES_UPDATED],
   ["/states", STATE_PAGES_UPDATED],
   ["/methodology", ENGINE_UPDATED],
   ["/sources", SOURCES_UPDATED],
@@ -39,10 +47,10 @@ export function sitemapPaths(catalog: VehicleCatalog): [string, string][] {
   const noindex = noindexCarSlugs(catalog)
   return [
     ...STATIC_PAGES,
-    ...(cars.length > 0 ? [["/cars", ENGINE_UPDATED] as [string, string]] : []),
+    ...(cars.length > 0 ? [["/cars", CAR_PAGES_UPDATED] as [string, string]] : []),
     ...GUIDES.map((guide): [string, string] => [guide.path, guideModified(guide)]),
     ...STATE_SLUGS.map((item): [string, string] => [`/states/${item.slug}`, STATE_PAGES_UPDATED]),
-    ...cars.filter((page) => !noindex.has(page.slug)).map((page): [string, string] => [`/cars/${page.slug}`, ENGINE_UPDATED]),
+    ...cars.filter((page) => !noindex.has(page.slug)).map((page): [string, string] => [`/cars/${page.slug}`, CAR_PAGES_UPDATED]),
   ]
 }
 
