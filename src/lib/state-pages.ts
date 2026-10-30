@@ -18,7 +18,8 @@ import { STATE_SLUGS, stateBySlug, statePath, stateSlug } from "./state-slugs"
 import { encodeSharePath } from "./share-link"
 import { allStateBaselines, countrywideBaseline, stateBaseline, type StateBaseline } from "./state-baselines"
 import { comparisonStates } from "./state-neighbors"
-import { stateRule, type StateRule } from "./state-rules"
+import { stateEvidence, stateRule, type StateRule, type StateRuleEvidence } from "./state-rules"
+import { stateSurveyFor, type StateSurveySection } from "./state-surveys"
 import { priceTeenCars, teenDriver, teenPool, typicalTeenCost, type TeenPriced } from "./teen-cars"
 
 export { STATE_SLUGS, stateBySlug, statePath, stateSlug }
@@ -84,9 +85,17 @@ export type StateFigures = {
   liabilityToday: number
   /** Where the liability-only average ranks (1 = highest). */
   liabilityRank: { rank: number; of: number }
+  /** NAIC's average expenditure per insured car, brought up to today. */
+  expenditureToday: number
+  /** Average expenditure as a share of the full-coverage combined average, 2023. */
+  expenditureShare: number
+  /** Where the average expenditure ranks (1 = highest). */
+  expenditureRank: { rank: number; of: number }
   neighbors: NeighborRow[]
   bordering: boolean
   rule: StateRule | null
+  evidence: readonly StateRuleEvidence[]
+  survey: StateSurveySection | null
   teen: ReturnType<typeof typicalTeenCost>
   /** The popular lists for a new teen, cheapest to add first. */
   teenCars: TeenPriced[]
@@ -153,9 +162,17 @@ export function stateFigures(catalog: VehicleCatalog, code: StateCode): StateFig
       rank: allStateBaselines().filter((row) => row.liabilityOnly > baseline.liabilityOnly).length + 1,
       of: allStateBaselines().length,
     },
+    expenditureToday: broughtUpToToday(baseline.averageExpenditure),
+    expenditureShare: baseline.averageExpenditure / baseline.exact,
+    expenditureRank: {
+      rank: allStateBaselines().filter((row) => row.averageExpenditure > baseline.averageExpenditure).length + 1,
+      of: allStateBaselines().length,
+    },
     neighbors,
     bordering,
     rule: stateRule(code) ?? null,
+    evidence: stateEvidence(code),
+    survey: stateSurveyFor(code),
     teen: typicalTeenCost({ kind: "state", state: code }),
     teenCars,
     // "Try it with your own car": the visitor's own situation, moved to this state, adding a 16-year-old.

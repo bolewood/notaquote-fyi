@@ -4,10 +4,11 @@ Every release that changes the data or the math goes here, newest first. The sit
 
 Data versions are date-stamped (`factors-YYYY-MM-DD`, `state-rules-YYYY-MM-DD`, `state-baselines-YYYY-MM-DD`, `catalog-YYYY-MM-DD`, `manifest-YYYY-MM-DD`). Annual refreshes are tagged `data-YYYY.MM`.
 
-## 2026-10-30: Answer-first state pages
+## 2026-10-30: Answer-first, state-specific state pages
 
 ### Site
 - **State pages**: updated titles, H1s, meta descriptions, and opening answer blocks to answer "how much is car insurance in <state>" and "average car insurance cost in <state>" directly with the 2023 NAIC full-coverage and liability-only averages, the August 2026 CPI-adjusted figure, and the state's minimum liability limits. Added state-specific section headings and a sourced FAQ section with matching `FAQPage` JSON-LD.
+- **State rate surveys and statutory details**: added state insurance department sample rate-comparison tables for Texas (TDI HelpInsure, 5 ZIPs), California (CDI 2026, 3 territories), Colorado (DOI 2023, 6 ZIPs), Oklahoma (OID 2026, 5 cities), North Dakota (NDISD 2026, 5 regions), and DC (DISB 2024, 29 insurer filings), plus North Carolina's Safe Driver Incentive Plan (SDIP) surcharge points schedule, computed directly from `data/factors/sources/*.csv`. Surfaced each state's statutory effective-date history (`rule.effective`), primary statute/agency quotes (`data/state-rules/evidence.json`), NAIC `averageExpenditure` vs `combinedAveragePremium` comparisons, and neighbor price spreads, and added a rendered state-page uniqueness floor (`RENDERED_STATE_FLOOR`) in `src/lib/seo.test.ts`.
 
 ## 2026-09-24: Page-view counts
 

@@ -120,6 +120,31 @@ test("car pages exist only for cars with claims results for that exact model", (
 
 const ALL_STATES = STATES.map((state) => stateFigures(catalog, state.code))
 
+/**
+ * Regression floor for how much of each rendered state page is its own, with
+ * every dollar amount masked so numbers alone can't carry a page.
+ */
+export const RENDERED_STATE_FLOOR = { median: 0.45, page: 0.38, jaccard: 0.35 } as const
+
+test("rendered state pages stay their own, with dollar amounts masked", async () => {
+  const pages: { id: string; text: string }[] = []
+  for (const { state } of stateParams()) {
+    const element = await StatePage({ params: Promise.resolve({ state }) } as never)
+    pages.push({ id: state, text: maskDollars(visibleText(renderToStaticMarkup(element))) })
+  }
+  const report = uniqueness(pages)
+  const lowest = [...report.pages].sort((left, right) => left.unique - right.unique)[0]
+  console.log(
+    `rendered state pages, dollars masked: median ${(report.medianUnique * 100).toFixed(1)}%, lowest ${lowest.id} ${(lowest.unique * 100).toFixed(1)}%, max overlap ${report.maxJaccard.toFixed(3)}`,
+  )
+  assert.ok(report.medianUnique >= RENDERED_STATE_FLOOR.median, `median ${report.medianUnique.toFixed(3)}`)
+  for (const page of report.pages) {
+    assert.ok(page.unique >= RENDERED_STATE_FLOOR.page, `${page.id}: ${page.unique.toFixed(3)} of its five-word runs are its own`)
+    assert.ok(page.maxJaccard <= RENDERED_STATE_FLOOR.jaccard, `${page.id} vs ${page.closest}: overlap ${page.maxJaccard.toFixed(3)}`)
+  }
+  assert.doesNotMatch(pages[0].text, /<|schema\.org|\$\d/)
+})
+
 test("every state page has its own numbers and words", () => {
   const texts = ALL_STATES.map(stateMainText)
   assert.equal(new Set(texts).size, 51, "two state pages have the same main text")

@@ -8,6 +8,7 @@ import {
   noFaultCell,
   noFaultDefaultText,
   STATE_RULES,
+  stateEvidence,
   upcomingChanges,
   type StateRule,
 } from "@/lib/state-rules"
@@ -150,9 +151,14 @@ function plain(text: string): string {
   return text.replace(/per accident/g, "per crash")
 }
 
+export function plainEffective(text: string): string {
+  return plain(text).replace(/\beff\.\s*/g, "effective ")
+}
+
 export function StateNoteBody({ rule }: { rule: StateRule }) {
   const upcoming = upcomingChanges(rule)
   const defaultText = noFaultDefaultText(rule)
+  const evidence = stateEvidence(rule.state)
   return (
       <div className="grid gap-2 pb-4">
       {rule.note ? <p>{plain(rule.note)}</p> : null}
@@ -195,8 +201,12 @@ export function StateNoteBody({ rule }: { rule: StateRule }) {
               <dd>{plain(rule.umLimits)}</dd>
             </div>
           ) : null}
-          {/* The effective-date notes cite laws in shorthand ("P.A. 102-982, eff. 7-1-23"); they stay in the data and
-              its sources, and changes coming into force are shown above in plain words. */}
+          {rule.effective ? (
+            <div>
+              <dt className="font-medium">History and recent checks</dt>
+              <dd>{plainEffective(rule.effective)}</dd>
+            </div>
+          ) : null}
           <div>
             <dt className="font-medium">Checked</dt>
             <dd>{rule.checkedOn ? formatVerifiedDate(rule.checkedOn) : "Not checked yet"}</dd>
@@ -204,18 +214,26 @@ export function StateNoteBody({ rule }: { rule: StateRule }) {
           <div>
             <dt className="font-medium">Sources</dt>
             <dd>
-              <ul className="list-disc space-y-1 pl-5">
-                {rule.sources.map((source, index) => (
-                  <li key={`${source.url}-${index}`}>
-                    <a
-                      href={source.url}
-                      className="break-words"
-                      rel="noreferrer"
-                    >
-                      {source.label}
-                    </a>
-                  </li>
-                ))}
+              <ul className="list-disc space-y-1.5 pl-5">
+                {rule.sources.map((source, index) => {
+                  const quote = evidence[index]?.quote
+                  return (
+                    <li key={`${source.url}-${index}`}>
+                      <a
+                        href={source.url}
+                        className="break-words"
+                        rel="noreferrer"
+                      >
+                        {source.label}
+                      </a>
+                      {quote ? (
+                        <q className="mt-0.5 block text-xs text-muted-foreground">
+                          {quote}
+                        </q>
+                      ) : null}
+                    </li>
+                  )
+                })}
               </ul>
             </dd>
           </div>

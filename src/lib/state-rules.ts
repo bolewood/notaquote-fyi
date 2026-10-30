@@ -10,6 +10,14 @@
  */
 
 import rulesFile from "../../data/state-rules/state-rules.json"
+import evidenceFile from "../../data/state-rules/evidence.json"
+
+export type StateRuleEvidence = {
+  label: string
+  url: string
+  supports: string
+  quote: string | null
+}
 
 /** The policy must include the coverage unless you delete it in writing. */
 export const REQUIRED_UNLESS_WRITTEN_DELETION = "required-unless-written-deletion" as const
@@ -279,9 +287,14 @@ export const STATE_RULES: readonly StateRule[] = file.states.map((raw) => ({
 }))
 
 const BY_STATE = new Map(STATE_RULES.map((rule) => [rule.state, rule]))
+const EVIDENCE_BY_STATE = evidenceFile.states as Record<string, readonly StateRuleEvidence[]>
 
 export function stateRule(state: string): StateRule | undefined {
   return BY_STATE.get(state)
+}
+
+export function stateEvidence(state: string): readonly StateRuleEvidence[] {
+  return EVIDENCE_BY_STATE[state] ?? []
 }
 
 /** Rows with at least one source. */
