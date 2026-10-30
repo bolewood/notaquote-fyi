@@ -4,6 +4,11 @@ Every release that changes the data or the math goes here, newest first. The sit
 
 Data versions are date-stamped (`factors-YYYY-MM-DD`, `state-rules-YYYY-MM-DD`, `state-baselines-YYYY-MM-DD`, `catalog-YYYY-MM-DD`, `manifest-YYYY-MM-DD`). Annual refreshes are tagged `data-YYYY.MM`.
 
+## 2026-10-30: Answer-first state pages
+
+### Site
+- **State pages**: updated titles, H1s, meta descriptions, and opening answer blocks to answer "how much is car insurance in <state>" and "average car insurance cost in <state>" directly with the 2023 NAIC full-coverage and liability-only averages, the August 2026 CPI-adjusted figure, and the state's minimum liability limits. Added state-specific section headings and a sourced FAQ section with matching `FAQPage` JSON-LD.
+
 ## 2026-09-24: Page-view counts
 
 ### Site

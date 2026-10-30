@@ -122,6 +122,24 @@ export function breadcrumbJsonLd(crumbs: readonly Crumb[]): JsonLd {
   }
 }
 
+export type FaqItem = { question: string; answer: string }
+
+/** A FAQPage for questions and answers shown on a page. */
+export function faqJsonLd(items: readonly FaqItem[]): JsonLd {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+  }
+}
+
 /** The home page: the site, and the tool on it. */
 export function homeJsonLd(description: string): JsonLd[] {
   return [

@@ -24,7 +24,7 @@ import { shownYearly } from "./format"
 import { GUIDES, teenCarsLead } from "./guides"
 import { DEFAULT_SCENARIO, STATES } from "./scenario"
 import { decodeShareSearch } from "./share-link"
-import { breadcrumbJsonLd, DESCRIPTION_MAX, homeJsonLd, jsonLdText, SITE_NAME, stateDatasetsJsonLd, TITLE_MAX } from "./site-meta"
+import { breadcrumbJsonLd, DESCRIPTION_MAX, faqJsonLd, homeJsonLd, jsonLdText, SITE_NAME, stateDatasetsJsonLd, TITLE_MAX } from "./site-meta"
 import { sitemapEntries } from "./sitemap-entries"
 import { countrywideBaseline } from "./state-baselines"
 import {
@@ -33,7 +33,11 @@ import {
   minimumWords,
   moveWords,
   SAME_ORDER_NOTE,
+  shortName,
   stateDescription,
+  stateFaqs,
+  stateFigureDollars,
+  stateHeading,
   stateMainText,
   stateTitle,
   teenCarsSummary,
@@ -43,7 +47,7 @@ import { NEIGHBORS } from "./state-neighbors"
 import { stateFigures, TEEN_TOP } from "./state-pages"
 import { STATE_SLUGS, stateBySlug, statePath, stateSlug } from "./state-slugs"
 import { liabilityShorthand, stateRule } from "./state-rules"
-import { generateMetadata as stateMetadata, generateStaticParams as stateParams } from "../app/states/[state]/page"
+import StatePage, { generateMetadata as stateMetadata, generateStaticParams as stateParams } from "../app/states/[state]/page"
 import CarPage, { generateMetadata as carMetadata, generateStaticParams as carParams } from "../app/cars/[slug]/page"
 
 const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/
@@ -375,8 +379,46 @@ test("every page has a unique title of at most 60 characters and a description o
     assert.ok(description.length > 50 && description.length <= DESCRIPTION_MAX, `${page.path}: description is ${description.length} characters`)
     assert.ok(page.metadata.alternates?.canonical, `${page.path} has no canonical address`)
   }
-  assert.equal(fullTitle(pages.find((page) => page.path === "ohio")!.metadata), "Ohio car insurance: cost and state minimums · NotAQuote.FYI")
-  assert.equal(fullTitle(pages.find((page) => page.path === "district-of-columbia")!.metadata), "DC car insurance: cost and state minimums · NotAQuote.FYI")
+  assert.equal(fullTitle(pages.find((page) => page.path === "ohio")!.metadata), "How much is car insurance in Ohio? · NotAQuote.FYI")
+  assert.equal(fullTitle(pages.find((page) => page.path === "district-of-columbia")!.metadata), "How much is car insurance in DC? · NotAQuote.FYI")
+})
+
+test("state page titles, H1s, and FAQs answer the cost question with figures from StateFigures", async () => {
+  for (const f of ALL_STATES) {
+    const metadata = await stateMetadata({ params: Promise.resolve({ state: f.slug }) } as never)
+    const title = fullTitle(metadata)
+    assert.ok(title.length <= TITLE_MAX, `${f.code}: "${title}" is ${title.length} chars`)
+    assert.ok(title.includes(shortName(f.code)), `${f.code}: title "${title}" missing state name`)
+    assert.match(title, /car insurance/i, `${f.code}: title "${title}" missing "car insurance"`)
+
+    const h1 = stateHeading(f)
+    assert.match(h1, /^How much is car insurance in /, `${f.code}: H1 "${h1}"`)
+
+    const element = await StatePage({ params: Promise.resolve({ state: f.slug }) } as never)
+    const html = renderToStaticMarkup(element)
+    const visible = visibleText(html)
+    assert.ok(visible.includes(h1), `${f.code}: rendered page missing H1`)
+
+    const scripts = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((m) => JSON.parse(m[1]))
+    const faqLd = scripts.find((item) => item["@type"] === "FAQPage") as {
+      "@type": string
+      mainEntity: { "@type": string; name: string; acceptedAnswer: { "@type": string; text: string } }[]
+    } | undefined
+    assert.ok(faqLd, `${f.code}: missing FAQPage JSON-LD`)
+    assert.deepEqual(faqLd, JSON.parse(jsonLdText(faqJsonLd(stateFaqs(f)))))
+    assert.ok(faqLd.mainEntity.length >= 3, `${f.code}: fewer than 3 FAQ items`)
+
+    const allowedDollars = stateFigureDollars(f)
+    for (const entity of faqLd.mainEntity) {
+      const answer = entity.acceptedAnswer.text
+      assert.ok(visible.includes(entity.name), `${f.code}: FAQ question not in visible text: ${entity.name}`)
+      assert.ok(visible.includes(answer), `${f.code}: FAQ answer not in visible text: ${answer}`)
+      const dollarsInAnswer = answer.match(/\$[\d,]+(\.\d+)?/g) ?? []
+      for (const amount of dollarsInAnswer) {
+        assert.ok(allowedDollars.has(amount), `${f.code}: FAQ dollar figure ${amount} not found in StateFigures (${answer})`)
+      }
+    }
+  }
 })
 
 test("state and car pages use their own social image, not the site's", async () => {
