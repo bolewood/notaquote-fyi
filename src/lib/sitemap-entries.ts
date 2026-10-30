@@ -11,6 +11,7 @@ import { carPages } from "./car-pages"
 import { SITE_ORIGIN } from "./copy"
 import { GUIDES, guideModified } from "./guides"
 import {
+  canonicalUrl,
   CAR_PAGES_UPDATED,
   DATA_DATES,
   ENGINE_UPDATED,
@@ -55,5 +56,6 @@ export function sitemapPaths(catalog: VehicleCatalog): [string, string][] {
 }
 
 export function sitemapEntries(catalog: VehicleCatalog): SitemapEntry[] {
-  return sitemapPaths(catalog).map(([path, date]) => ({ url: `${SITE_ORIGIN}${path}`, lastModified: date }))
+  return sitemapPaths(catalog).map(([path, date]) => ({ url: canonicalUrl(path), lastModified: date }))
 }
+export { SITE_ORIGIN }

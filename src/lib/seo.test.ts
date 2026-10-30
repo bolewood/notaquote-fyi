@@ -14,7 +14,7 @@ import { handleCompare } from "./agent-api"
 import { SERVER_CATALOG as catalog } from "./agent-catalog"
 import { carId } from "./agent-cars"
 import { renderToStaticMarkup } from "react-dom/server"
-import { becauseWords, carContent, carMainText, noindexCarSlugs, vsAverageWords } from "./car-content"
+import { articleFor, becauseWords, carContent, carMainText, noindexCarSlugs, vsAverageWords } from "./car-content"
 import { maskDollars, visibleText } from "./rendered-text"
 import { uniqueness } from "./uniqueness"
 import { carPagePath, MODELS_ENABLED } from "./car-page-links"
@@ -72,6 +72,8 @@ import CarsIndexPage from "../app/cars/page"
 import GuidesPage from "../app/guides/page"
 import TeenCostGuide from "../app/guides/adding-a-teen-driver/page"
 import TeenCarsGuide from "../app/guides/cheapest-cars-to-insure-for-teens/page"
+import robots from "../app/robots"
+import nextConfig from "../../next.config"
 
 const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/
 
@@ -400,11 +402,15 @@ test("every state page and every indexable car page has at least 3 inbound links
 // ---------------------------------------------------------------------------
 // Sitemap, social images, structured data, titles
 
-test("the sitemap lists every indexable page once, with a real date that reflects data and content revisions", () => {
+test("the sitemap lists every indexable page once, with a real date that reflects data and content revisions", async () => {
   const entries = sitemapEntries(catalog)
-  const urls = entries.map((entry) => entry.url.replace("https://notaquote.fyi", ""))
+  assert.equal(entries[0]?.url, "https://notaquote.fyi")
+  const homeMod = (await import("../app/page")) as { metadata: Metadata }
+  assert.equal(homeMod.metadata.alternates?.canonical, entries[0]?.url, "home page canonical and sitemap URL must agree")
+  const toPath = (url: string) => url.replace("https://notaquote.fyi", "") || "/"
+  const urls = entries.map((entry) => toPath(entry.url))
   assert.equal(new Set(urls).size, urls.length, "a page is listed twice")
-  const byPath = new Map(entries.map((entry) => [entry.url.replace("https://notaquote.fyi", ""), entry.lastModified]))
+  const byPath = new Map(entries.map((entry) => [toPath(entry.url), entry.lastModified]))
   const today = todayIso()
   for (const entry of entries) {
     assert.ok(isIsoDate(entry.lastModified), `invalid date ${entry.lastModified} for ${entry.url}`)
@@ -604,4 +610,46 @@ test("state and car pages emit matching visible <time> and WebPage JSON-LD dateM
     assert.equal(rav4WebPage.dateModified, CAR_PAGES_UPDATED)
     assert.equal(rav4WebPage.url, "https://notaquote.fyi/cars/toyota-rav4")
   }
+})
+
+test("indefinite articles (a vs an) match vowel and consonant sounds across car and state pages", () => {
+  assert.equal(articleFor("Audi Q5"), "an")
+  assert.equal(articleFor("Acura MDX"), "an")
+  assert.equal(articleFor("Acura RDX"), "an")
+  assert.equal(articleFor("Acura Integra"), "an")
+  assert.equal(articleFor("F-150"), "an")
+  assert.equal(articleFor("Honda Civic"), "a")
+  assert.equal(articleFor("Hyundai Ioniq 5"), "a")
+  assert.equal(articleFor("2024 Audi Q5"), "a")
+
+  if (MODELS_ENABLED) {
+    for (const page of carPages(catalog)) {
+      const c = carContent(carFigures(catalog, page.slug)!)
+      for (const text of [c.title, c.description, c.lead, c.teenHeading, c.statesHeading, carMainText(carFigures(catalog, page.slug)!)]) {
+        assert.doesNotMatch(text, /\ba (Acura|Audi|Infiniti|Outback|Odyssey|Outlander|Equinox|Escape|Explorer|Expedition|Escalade|Elantra|Enclave|Encore|Envista|Impreza|Integra|Ioniq|ID\.4|Atlas|Ascent|Acadia|Accord|Altima|F-150|HR-V|MDX|NX|RDX|RX|X3|X5)\b/i, `${page.slug}: "${text}"`)
+        assert.doesNotMatch(text, /\ban (Ford|Honda|Hyundai|Toyota|Subaru|Chevrolet|Nissan|Kia|BMW|Jeep|Lexus|Mazda|Mercedes|Ram|Tesla|Volkswagen|GMC|Buick|Cadillac|Chrysler|Dodge|Mitsubishi|202\d)\b/i, `${page.slug}: "${text}"`)
+      }
+    }
+  }
+  for (const f of ALL_STATES) {
+    const text = stateMainText(f)
+    assert.doesNotMatch(text, /\ba (Alabama|Alaska|Arizona|Arkansas|Idaho|Illinois|Indiana|Iowa|Ohio|Oklahoma|Oregon)\b/i, f.code)
+    assert.doesNotMatch(text, /\ban Utah\b/i, f.code)
+  }
+})
+
+test("preview *.vercel.app hosts receive X-Robots-Tag: noindex, and robots.txt allows / with the canonical sitemap", async () => {
+  assert.ok(nextConfig.headers, "nextConfig.headers is defined")
+  const headerRules = await nextConfig.headers()
+  const vercelNoindex = headerRules.find((rule) =>
+    rule.has?.some((cond) => cond.type === "header" && cond.key === "host" && cond.value?.includes("vercel\\.app")),
+  )
+  assert.ok(vercelNoindex, "missing *.vercel.app header rule")
+  assert.equal(vercelNoindex.source, "/:path*")
+  assert.ok(vercelNoindex.headers.some((h) => h.key.toLowerCase() === "x-robots-tag" && h.value === "noindex"))
+
+  const r = robots()
+  assert.equal(r.sitemap, "https://notaquote.fyi/sitemap.xml")
+  const rules = Array.isArray(r.rules) ? r.rules[0] : r.rules
+  assert.equal(rules?.allow, "/")
 })

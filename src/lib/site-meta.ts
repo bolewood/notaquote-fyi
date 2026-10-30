@@ -37,6 +37,15 @@ export const GUIDES_IMAGE: SocialImage = {
 const LLMS_TYPES = { "text/plain": [{ url: "/llms.txt", title: "For AI assistants" }] }
 
 /**
+ * The canonical full URL for a path: "https://notaquote.fyi" for "/" (no
+ * trailing slash, matching what Next.js renders for `<link rel="canonical">`)
+ * and "https://notaquote.fyi/<path>" for every other route.
+ */
+export function canonicalUrl(path: string): string {
+  return path === "/" ? SITE_ORIGIN : `${SITE_ORIGIN}${path}`
+}
+
+/**
  * Metadata for one page: its title (the layout adds " · NotAQuote.FYI"), a
  * description, its canonical address, and matching Open Graph and Twitter
  * tags. Next.js merges metadata shallowly, so every page sets the whole
@@ -64,16 +73,17 @@ export function pageMetadata(input: {
   const fullTitle = input.absoluteTitle || input.title.length + SITE_NAME.length + 3 > TITLE_MAX ? input.title : `${input.title} · ${SITE_NAME}`
   const image = input.image === undefined ? SITE_IMAGE : input.image
   const images = image ? [{ url: image.url, width: 1200, height: 630, alt: image.alt, type: "image/png" }] : undefined
+  const url = canonicalUrl(input.path)
   return {
     // A title that won't fit with " · NotAQuote.FYI" after it goes out on its own.
     title: fullTitle === input.title ? { absolute: input.title } : input.title,
     description: input.description,
-    alternates: { canonical: input.path, types: LLMS_TYPES },
+    alternates: { canonical: url, types: LLMS_TYPES },
     openGraph: {
       type: input.type ?? "website",
       siteName: SITE_NAME,
       locale: "en_US",
-      url: input.path,
+      url,
       title: fullTitle,
       description: input.description,
       ...(images ? { images } : {}),

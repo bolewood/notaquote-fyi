@@ -37,6 +37,17 @@ function modelTag(f: CarFigures): string {
   return displayModel(f.page.model)
 }
 
+/**
+ * "an" before vowel sounds ("an Audi Q5", "an Acura MDX", "an F-150", "an Outback");
+ * "a" otherwise ("a 2024 Audi Q5", "a Honda Civic", "a Hyundai Ioniq 5", "a Utah policy").
+ */
+export function articleFor(phrase: string): "a" | "an" {
+  const firstWord = phrase.trim().split(/[\s-]+/)[0] ?? ""
+  if (/^(F|H|L|M|N|R|S|X)\d*$/i.test(firstWord) || /^(HR|MDX|NX|RDX|RX)$/i.test(firstWord)) return "an"
+  if (/^(uni|use|eu|utah)/i.test(firstWord)) return "a"
+  return /^[aeiou]/i.test(firstWord) ? "an" : "a"
+}
+
 /** "a small SUV", "an SUV", "a midsize car". */
 export function classWords(f: CarFigures): string | null {
   const label = f.page.classLabel
@@ -65,7 +76,7 @@ function peerGroupWords(f: CarFigures): string {
 // Headline pieces
 
 export function carTitle(f: CarFigures): string {
-  return `How much is insurance on a ${f.page.shortName}?`
+  return `How much is insurance on ${articleFor(f.page.shortName)} ${f.page.shortName}?`
 }
 
 function vsAverageDelta(f: CarFigures): number {
@@ -161,7 +172,7 @@ export function priceEffectText(f: CarFigures): string {
     return `Physical-damage coverage is what pushes the ${f.page.shortName} up: fixing or replacing the ${model} after a crash, theft, or storm takes ${ownShare}% of the full-coverage bill at about ${estimateDollars(car.ownCar)} a year, versus ${estimateDollars(average.ownCar)} on an average ${year} car (${partWords(phys)}). Third-party liability on the ${model} makes up the other ${liabShare}% at about ${estimateDollars(car.liability)} a year, against ${estimateDollars(average.liability)} for an average car (${partWords(liab)}).`
   }
   if (phys <= 94 && liab <= 94) {
-    return `Both halves of a ${f.page.shortName} policy come in below an average ${year} car: collision and comprehensive coverage for the ${model} itself accounts for ${ownShare}% of the bill at about ${estimateDollars(car.ownCar)} a year versus ${estimateDollars(average.ownCar)} (${partWords(phys)}), while liability coverage for harm to others takes ${liabShare}% at about ${estimateDollars(car.liability)} versus ${estimateDollars(average.liability)} (${partWords(liab)}).`
+    return `Both halves of ${articleFor(f.page.shortName)} ${f.page.shortName} policy come in below an average ${year} car: collision and comprehensive coverage for the ${model} itself accounts for ${ownShare}% of the bill at about ${estimateDollars(car.ownCar)} a year versus ${estimateDollars(average.ownCar)} (${partWords(phys)}), while liability coverage for harm to others takes ${liabShare}% at about ${estimateDollars(car.liability)} versus ${estimateDollars(average.liability)} (${partWords(liab)}).`
   }
   if (liab >= 105) {
     return `Liability claims weigh heavily on the ${f.page.shortName}: paying for damage and injuries to others represents ${liabShare}% of the ${model} bill at about ${estimateDollars(car.liability)} a year, compared with ${estimateDollars(average.liability)} for an average car (${partWords(liab)}). Coverage that repairs or replaces the ${model} itself makes up the remaining ${ownShare}% at about ${estimateDollars(car.ownCar)} a year, against ${estimateDollars(average.ownCar)} on an average ${year} car (${partWords(phys)}).`
@@ -419,7 +430,7 @@ export function carContent(f: CarFigures): CarContent {
     estimateLabel: `${page.name} (${pickedTrim}), national average`,
     estimate: `about ${estimateDollars(f.adult.likely)}`,
     monthly: `a year (about ${monthlyDollars(f.adult.likely)} a month for the ${model})`,
-    range: `${rangeWords(f.adult.low, f.adult.high)} across insurers for a ${page.shortName}`,
+    range: `${rangeWords(f.adult.low, f.adult.high)} across insurers for ${articleFor(page.shortName)} ${page.shortName}`,
     averageLine:
       oldest && oldest.year < year
         ? `An average ${year} car runs about ${estimateDollars(f.averageCar.likely)} a year; a used ${oldest.year} ${model} drops to about ${estimateDollars(oldest.adult.likely)} (see ${model} table below).`
@@ -440,7 +451,7 @@ export function carContent(f: CarFigures): CarContent {
     yearsNote: yearsNote(f),
     trims: trimsSummary(f),
     otherDrivers: otherDriversText(f),
-    teenHeading: `Adding a 16-year-old with a ${page.shortName}`,
+    teenHeading: `Adding a 16-year-old with ${articleFor(page.shortName)} ${page.shortName}`,
     teen: teenText(f),
     teenRank: teenRankText(f),
     teenNote: `That increase is the household's total bill going up when a 16-year-old drives the ${model}.`,
@@ -450,7 +461,7 @@ export function carContent(f: CarFigures): CarContent {
     claims: [
       { label: `${model} crash repairs (collision)`, value: `${claimsPhrase(f.claims.repairs)} for the ${model}` },
       { label: `${model} theft and weather (comprehensive)`, value: `${claimsPhrase(f.claims.theftAndWeather)} for the ${model}` },
-      { label: `Property damage a ${model} causes to others`, value: `${claimsPhrase(f.claims.damageToOthers)} for the ${model}` },
+      { label: `Property damage ${articleFor(model)} ${model} causes to others`, value: `${claimsPhrase(f.claims.damageToOthers)} for the ${model}` },
       { label: `Injury claims involving ${model} drivers`, value: `${claimsPhrase(f.claims.injuriesToOthers)} for the ${model}` },
     ],
     effect: priceEffectText(f),
@@ -469,7 +480,7 @@ export function carContent(f: CarFigures): CarContent {
       name: car.name,
       price: car.slug === null ? `${price(car.likely)} (this ${model})` : `${price(car.likely)} (${gapWords(car.likely - f.adult.likely, f.adult.likely, model)})`,
     })),
-    statesHeading: `What a ${page.shortName} costs in your state`,
+    statesHeading: `What ${articleFor(page.shortName)} ${page.shortName} costs in your state`,
     statesSummary: `In our six sample states for the ${model}, a ${page.name} runs from ${price(firstState.adultLikely)} a year in ${firstState.name} through ${joinWords(middleStateNames)} to ${price(lastState.adultLikely)} in ${lastState.name}:`,
     states: f.stateEstimates.map((row) => ({
       name: row.name,

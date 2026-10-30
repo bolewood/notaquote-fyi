@@ -408,7 +408,7 @@ export function minimumsOverviewText(f: StateFigures): string {
     return `Under ${lawLabel}, ${name} does not require most drivers to buy an auto policy, but drivers still have to prove financial responsibility after an at-fault crash, and any ${short} policy sold must carry at least ${shortLim} liability plus ${rule.pipAmount ?? "medical payments coverage"}—without covering repairs to your own car.`
   }
   if (!shortLim) {
-    return `Under ${lawLabel}, ${name} requires ${minimumWords(rule).replace(/^the law asks for /, "")} and does not set a general bodily-injury liability minimum for most drivers, nor does a ${short} minimum policy pay to repair your own vehicle.`
+    return `Under ${lawLabel}, ${name} requires ${minimumWords(rule).replace(/^the law asks for /, "")} and does not set a general bodily-injury liability minimum for most drivers, nor does ${/^[AEIOU]/i.test(short) && !/^Utah/i.test(short) ? "an" : "a"} ${short} minimum policy pay to repair your own vehicle.`
   }
   return `Set by ${lawLabel}, ${name}'s ${shortLim} minimum pays up to ${dollars(rule.biPerPerson!)} per person and ${dollars(rule.biPerAccident!)} per crash for injuries you cause to others, plus ${dollars(rule.pd!)} for others' property—the legal floor in ${short}, not a coverage recommendation, and it excludes collision or comprehensive repairs on your own car.`
 }
@@ -452,7 +452,8 @@ export function liabilityOnlyText(f: StateFigures): string {
   const share = Math.round(f.liabilityShare * 100)
   const ownShare = 100 - share
   const short = shortName(f.code)
-  return `Liability-only coverage in ${inSentence(f.code)}—the closest NAIC figure to what a ${short} minimum policy costs—averaged ${naic(f.baseline.liabilityOnly)} in ${f.baseline.dataYear} (about ${estimateDollars(f.liabilityToday)} in ${short} today), ${place} of the 50 states and DC. That makes liability ${share}% of ${short}'s full-coverage average (${naic(f.baseline.annual)}), while the remaining ${ownShare}% goes toward collision and comprehensive coverage for your own car.`
+  const art = /^[AEIOU]/i.test(short) && !/^Utah/i.test(short) ? "an" : "a"
+  return `Liability-only coverage in ${inSentence(f.code)}—the closest NAIC figure to what ${art} ${short} minimum policy costs—averaged ${naic(f.baseline.liabilityOnly)} in ${f.baseline.dataYear} (about ${estimateDollars(f.liabilityToday)} in ${short} today), ${place} of the 50 states and DC. That makes liability ${share}% of ${short}'s full-coverage average (${naic(f.baseline.annual)}), while the remaining ${ownShare}% goes toward collision and comprehensive coverage for your own car.`
 }
 
 /** The line the owner asked for, word for word. */
@@ -477,6 +478,7 @@ export function tiedAtTop(cars: readonly TeenPriced[]): number {
 export function teenCarsSummary(f: StateFigures): string {
   const name = inSentence(f.code)
   const short = shortName(f.code)
+  const art = /^[AEIOU]/i.test(short) && !/^Utah/i.test(short) ? "an" : "a"
   const first = f.teenCars[0]
   const last = f.teenCars.at(-1)!
   const ties = tiedAtTop(f.teenCars)
@@ -485,9 +487,9 @@ export function teenCarsSummary(f: StateFigures): string {
   }
   if (ties >= 2) {
     const tied = f.teenCars.slice(0, ties)
-    return `In ${name}, ${modelsWords(tied)} come out the same, the least of the ${f.teenCars.length} cars on the site's popular lists to add a teen with: about ${differenceWords(first.added.increase)} on a ${short} policy, versus about ${differenceWords(last.added.increase)} for the ${last.car.label} at the top of ${short}'s list.`
+    return `In ${name}, ${modelsWords(tied)} come out the same, the least of the ${f.teenCars.length} cars on the site's popular lists to add a teen with: about ${differenceWords(first.added.increase)} on ${art} ${short} policy, versus about ${differenceWords(last.added.increase)} for the ${last.car.label} at the top of ${short}'s list.`
   }
-  return `In ${name}, the ${first.car.label} is the cheapest of the ${f.teenCars.length} cars on the site's popular lists to add a teen with: about ${differenceWords(first.added.increase)} on a ${short} policy, compared with about ${differenceWords(last.added.increase)} for the ${last.car.label} in ${short}.`
+  return `In ${name}, the ${first.car.label} is the cheapest of the ${f.teenCars.length} cars on the site's popular lists to add a teen with: about ${differenceWords(first.added.increase)} on ${art} ${short} policy, compared with about ${differenceWords(last.added.increase)} for the ${last.car.label} in ${short}.`
 }
 
 // ---------------------------------------------------------------------------
@@ -530,7 +532,8 @@ function faqNoFaultAnswer(f: StateFigures): string | null {
     return `Yes—${name} uses no-fault auto insurance rules, so your own ${short} personal injury protection (PIP) pays your medical bills first after a crash regardless of fault.${pipDetails}`
   }
   if (rule.noFault === NO_FAULT_CHOICE) {
-    return `In ${name}, you choose between no-fault rules and traditional fault rules when you buy or renew a ${short} policy.${pipDetails}`
+    const art = /^[AEIOU]/i.test(short) && !/^Utah/i.test(short) ? "an" : "a"
+    return `In ${name}, you choose between no-fault rules and traditional fault rules when you buy or renew ${art} ${short} policy.${pipDetails}`
   }
   if (rule.pipRequired === true) {
     return `No—${name} is an at-fault state for crash liability, though ${short} law still requires personal injury protection (PIP) on auto policies.${pipDetails}`
