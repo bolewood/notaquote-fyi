@@ -156,8 +156,11 @@ export default function TeenCarsGuide() {
       <p className="font-medium">{SAME_ORDER_NOTE}</p>
       <p>
         With {tied ? "the cheapest cars" : `the ${cheapest.car.label}`}, adding a teen costs about {differenceWords(low.teenCars[0].added.increase)} in{" "}
-        <Link href={statePath("OH")}>Ohio</Link>, one of the cheaper states, and about{" "}
-        {differenceWords(high.teenCars[0].added.increase)} in <Link href={statePath("FL")}>Florida</Link>, {rankWords(high)}.{" "}
+        <Link href={statePath("OH")}>Ohio</Link>, one of the cheaper states (alongside{" "}
+        <Link href={statePath("ME")}>Maine</Link> and <Link href={statePath("ND")}>North Dakota</Link>), and about{" "}
+        {differenceWords(high.teenCars[0].added.increase)} in <Link href={statePath("FL")}>Florida</Link>, {rankWords(high)} (with{" "}
+        <Link href={statePath("TX")}>Texas</Link>, <Link href={statePath("CA")}>California</Link>,{" "}
+        <Link href={statePath("WA")}>Washington</Link>, and <Link href={statePath("NY")}>New York</Link> in between).{" "}
         <Link href="/states">Your state&apos;s page</Link> has its own figures, its minimum coverage, and its neighbors.
       </p>
 

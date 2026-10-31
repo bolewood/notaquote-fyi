@@ -14,7 +14,7 @@ import { handleCompare } from "./agent-api"
 import { SERVER_CATALOG as catalog } from "./agent-catalog"
 import { carId } from "./agent-cars"
 import { renderToStaticMarkup } from "react-dom/server"
-import { becauseWords, carContent, carMainText, noindexCarSlugs, vsAverageWords } from "./car-content"
+import { articleFor, becauseWords, carContent, carMainText, noindexCarSlugs, vsAverageWords } from "./car-content"
 import { maskDollars, visibleText } from "./rendered-text"
 import { uniqueness } from "./uniqueness"
 import { carPagePath, MODELS_ENABLED } from "./car-page-links"
@@ -24,7 +24,24 @@ import { shownYearly } from "./format"
 import { GUIDES, teenCarsLead } from "./guides"
 import { DEFAULT_SCENARIO, STATES } from "./scenario"
 import { decodeShareSearch } from "./share-link"
-import { breadcrumbJsonLd, DESCRIPTION_MAX, faqJsonLd, homeJsonLd, jsonLdText, SITE_NAME, stateDatasetsJsonLd, TITLE_MAX } from "./site-meta"
+import {
+  breadcrumbJsonLd,
+  CAR_PAGES_CONTENT_UPDATED,
+  CAR_PAGES_UPDATED,
+  DATA_DATES,
+  DESCRIPTION_MAX,
+  ENGINE_UPDATED,
+  faqJsonLd,
+  GUIDES_CONTENT_UPDATED,
+  HOME_CONTENT_UPDATED,
+  homeJsonLd,
+  jsonLdText,
+  SITE_NAME,
+  STATE_PAGES_CONTENT_UPDATED,
+  STATE_PAGES_UPDATED,
+  stateDatasetsJsonLd,
+  TITLE_MAX,
+} from "./site-meta"
 import { sitemapEntries } from "./sitemap-entries"
 import { countrywideBaseline } from "./state-baselines"
 import {
@@ -46,9 +63,17 @@ import {
 import { NEIGHBORS } from "./state-neighbors"
 import { stateFigures, TEEN_TOP } from "./state-pages"
 import { STATE_SLUGS, stateBySlug, statePath, stateSlug } from "./state-slugs"
-import { liabilityShorthand, stateRule } from "./state-rules"
+import { isIsoDate, liabilityShorthand, stateRule, todayIso } from "./state-rules"
 import StatePage, { generateMetadata as stateMetadata, generateStaticParams as stateParams } from "../app/states/[state]/page"
 import CarPage, { generateMetadata as carMetadata, generateStaticParams as carParams } from "../app/cars/[slug]/page"
+import HomePage from "../app/page"
+import StatesIndexPage from "../app/states/page"
+import CarsIndexPage from "../app/cars/page"
+import GuidesPage from "../app/guides/page"
+import TeenCostGuide from "../app/guides/adding-a-teen-driver/page"
+import TeenCarsGuide from "../app/guides/cheapest-cars-to-insure-for-teens/page"
+import robots from "../app/robots"
+import nextConfig from "../../next.config"
 
 const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/
 
@@ -119,6 +144,31 @@ test("car pages exist only for cars with claims results for that exact model", (
 // State pages
 
 const ALL_STATES = STATES.map((state) => stateFigures(catalog, state.code))
+
+/**
+ * Regression floor for how much of each rendered state page is its own, with
+ * every dollar amount masked so numbers alone can't carry a page.
+ */
+export const RENDERED_STATE_FLOOR = { median: 0.45, page: 0.38, jaccard: 0.35 } as const
+
+test("rendered state pages stay their own, with dollar amounts masked", async () => {
+  const pages: { id: string; text: string }[] = []
+  for (const { state } of stateParams()) {
+    const element = await StatePage({ params: Promise.resolve({ state }) } as never)
+    pages.push({ id: state, text: maskDollars(visibleText(renderToStaticMarkup(element))) })
+  }
+  const report = uniqueness(pages)
+  const lowest = [...report.pages].sort((left, right) => left.unique - right.unique)[0]
+  console.log(
+    `rendered state pages, dollars masked: median ${(report.medianUnique * 100).toFixed(1)}%, lowest ${lowest.id} ${(lowest.unique * 100).toFixed(1)}%, max overlap ${report.maxJaccard.toFixed(3)}`,
+  )
+  assert.ok(report.medianUnique >= RENDERED_STATE_FLOOR.median, `median ${report.medianUnique.toFixed(3)}`)
+  for (const page of report.pages) {
+    assert.ok(page.unique >= RENDERED_STATE_FLOOR.page, `${page.id}: ${page.unique.toFixed(3)} of its five-word runs are its own`)
+    assert.ok(page.maxJaccard <= RENDERED_STATE_FLOOR.jaccard, `${page.id} vs ${page.closest}: overlap ${page.maxJaccard.toFixed(3)}`)
+  }
+  assert.doesNotMatch(pages[0].text, /<|schema\.org|\$\d/)
+})
 
 test("every state page has its own numbers and words", () => {
   const texts = ALL_STATES.map(stateMainText)
@@ -209,7 +259,7 @@ test("state page buttons: the visitor's own car in that state, and the cheapest 
  * (median 20.8%, lowest page 15.7%, highest overlap 0.618); if a wording change
  * trips it, make the page more its own rather than lowering the floor.
  */
-export const RENDERED_CAR_FLOOR = { median: 0.2, page: 0.15, jaccard: 0.63 } as const
+export const RENDERED_CAR_FLOOR = { median: 0.38, page: 0.32, jaccard: 0.42 } as const
 
 test("rendered car pages stay their own, with dollar amounts masked", async () => {
   if (!MODELS_ENABLED) return
@@ -297,20 +347,101 @@ test("state pages name cars that round to the same price, and only blame missing
   if (MODELS_ENABLED) assert.ok(tiedPages > 0, "some states round the cheapest cars to the same $10")
 })
 
+test("every state page and every indexable car page has at least 3 inbound links from other sitemap pages", async () => {
+  const rendered: { path: string; html: string }[] = [
+    { path: "/", html: renderToStaticMarkup(HomePage()) },
+    { path: "/states", html: renderToStaticMarkup(StatesIndexPage()) },
+    { path: "/guides", html: renderToStaticMarkup(GuidesPage()) },
+    { path: "/guides/adding-a-teen-driver", html: renderToStaticMarkup(TeenCostGuide()) },
+    { path: "/guides/cheapest-cars-to-insure-for-teens", html: renderToStaticMarkup(TeenCarsGuide()) },
+  ]
+  if (MODELS_ENABLED) {
+    rendered.push({ path: "/cars", html: renderToStaticMarkup(CarsIndexPage()) })
+  }
+  const noindex = noindexCarSlugs(catalog)
+  for (const { state } of stateParams()) {
+    rendered.push({
+      path: `/states/${state}`,
+      html: renderToStaticMarkup(await StatePage({ params: Promise.resolve({ state }) } as never)),
+    })
+  }
+  if (MODELS_ENABLED) {
+    for (const { slug } of carParams()) {
+      if (noindex.has(slug)) continue
+      rendered.push({
+        path: `/cars/${slug}`,
+        html: renderToStaticMarkup(await CarPage({ params: Promise.resolve({ slug }) } as never)),
+      })
+    }
+  }
+  const inbound = new Map<string, Set<string>>()
+  for (const page of rendered) {
+    const hrefs = new Set([...page.html.matchAll(/href="(\/[^"#?]*)"/g)].map((m) => m[1]))
+    for (const target of hrefs) {
+      if (target === page.path) continue
+      const set = inbound.get(target) ?? new Set<string>()
+      set.add(page.path)
+      inbound.set(target, set)
+    }
+  }
+  for (const { state } of stateParams()) {
+    const path = `/states/${state}`
+    const count = inbound.get(path)?.size ?? 0
+    assert.ok(count >= 3, `${path} has only ${count} inbound links from other sitemap pages`)
+  }
+  if (MODELS_ENABLED) {
+    for (const { slug } of carParams()) {
+      if (noindex.has(slug)) continue
+      const path = `/cars/${slug}`
+      const count = inbound.get(path)?.size ?? 0
+      assert.ok(count >= 3, `${path} has only ${count} inbound links from other sitemap pages`)
+    }
+  }
+})
+
 // ---------------------------------------------------------------------------
 // Sitemap, social images, structured data, titles
 
-test("the sitemap lists every indexable page once, with a real date", () => {
+test("the sitemap lists every indexable page once, with a real date that reflects data and content revisions", async () => {
   const entries = sitemapEntries(catalog)
-  const urls = entries.map((entry) => entry.url.replace("https://notaquote.fyi", ""))
+  assert.equal(entries[0]?.url, "https://notaquote.fyi")
+  const homeMod = (await import("../app/page")) as { metadata: Metadata }
+  assert.equal(homeMod.metadata.alternates?.canonical, entries[0]?.url, "home page canonical and sitemap URL must agree")
+  const toPath = (url: string) => url.replace("https://notaquote.fyi", "") || "/"
+  const urls = entries.map((entry) => toPath(entry.url))
   assert.equal(new Set(urls).size, urls.length, "a page is listed twice")
-  for (const entry of entries) assert.match(entry.lastModified, /^\d{4}-\d{2}-\d{2}$/)
+  const byPath = new Map(entries.map((entry) => [toPath(entry.url), entry.lastModified]))
+  const today = todayIso()
+  for (const entry of entries) {
+    assert.ok(isIsoDate(entry.lastModified), `invalid date ${entry.lastModified} for ${entry.url}`)
+    assert.ok(entry.lastModified <= today, `${entry.url} has future lastModified ${entry.lastModified} (> ${today})`)
+    assert.ok(entry.lastModified >= DATA_DATES.sources, `${entry.url} lastModified ${entry.lastModified} is older than base data`)
+  }
+  assert.equal(byPath.get("/"), HOME_CONTENT_UPDATED)
+  assert.equal(byPath.get("/states"), STATE_PAGES_UPDATED)
+  assert.equal(STATE_PAGES_UPDATED, STATE_PAGES_CONTENT_UPDATED)
+  assert.ok(STATE_PAGES_UPDATED >= ENGINE_UPDATED && STATE_PAGES_UPDATED >= DATA_DATES.stateRules)
+  assert.equal(byPath.get("/guides"), GUIDES_CONTENT_UPDATED)
   const listed = new Set(urls)
-  for (const { state } of stateParams()) assert.ok(listed.has(`/states/${state}`), state)
+  for (const { state } of stateParams()) {
+    assert.ok(listed.has(`/states/${state}`), state)
+    assert.equal(byPath.get(`/states/${state}`), STATE_PAGES_UPDATED, state)
+  }
   const noindex = noindexCarSlugs(catalog)
-  for (const { slug } of carParams()) assert.equal(listed.has(`/cars/${slug}`), !noindex.has(slug), slug)
-  for (const guide of GUIDES) assert.ok(listed.has(guide.path), guide.path)
+  for (const { slug } of carParams()) {
+    assert.equal(listed.has(`/cars/${slug}`), !noindex.has(slug), slug)
+    if (!noindex.has(slug)) {
+      assert.equal(byPath.get(`/cars/${slug}`), CAR_PAGES_UPDATED, slug)
+      assert.equal(CAR_PAGES_UPDATED, CAR_PAGES_CONTENT_UPDATED)
+      assert.ok(CAR_PAGES_UPDATED >= ENGINE_UPDATED)
+    }
+  }
+  for (const guide of GUIDES) {
+    assert.ok(listed.has(guide.path), guide.path)
+    assert.equal(byPath.get(guide.path), GUIDES_CONTENT_UPDATED, guide.path)
+  }
   assert.equal(listed.has("/cars"), carPages(catalog).length > 0)
+  if (carPages(catalog).length > 0) assert.equal(byPath.get("/cars"), CAR_PAGES_UPDATED)
   assert.ok(!listed.has("/llms.txt") && !listed.has("/llms-full.txt"))
   for (const path of staticPagePaths()) {
     if (path === "/cars" && carPages(catalog).length === 0) continue
@@ -459,4 +590,66 @@ test("structured data is valid JSON, and credits NAIC's figures to NAIC", () => 
   const crumbs = JSON.parse(jsonLdText(breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Ohio", path: "/states/ohio" }])))
   assert.equal(crumbs.itemListElement[1].item, "https://notaquote.fyi/states/ohio")
   assert.doesNotMatch(jsonLdText({ name: "</script><script>alert(1)</script>" }), /</)
+})
+
+test("state and car pages emit matching visible <time> and WebPage JSON-LD dateModified", async () => {
+  const ohioHtml = renderToStaticMarkup(await StatePage({ params: Promise.resolve({ state: "ohio" }) } as never))
+  assert.ok(ohioHtml.includes(`<time dateTime="${STATE_PAGES_UPDATED}">`))
+  const ohioScripts = [...ohioHtml.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((m) => JSON.parse(m[1]))
+  const ohioWebPage = ohioScripts.find((item) => item["@type"] === "WebPage") as { dateModified?: string; url?: string } | undefined
+  assert.ok(ohioWebPage, "Ohio state page missing WebPage JSON-LD")
+  assert.equal(ohioWebPage.dateModified, STATE_PAGES_UPDATED)
+  assert.equal(ohioWebPage.url, "https://notaquote.fyi/states/ohio")
+
+  if (MODELS_ENABLED) {
+    const rav4Html = renderToStaticMarkup(await CarPage({ params: Promise.resolve({ slug: "toyota-rav4" }) } as never))
+    assert.ok(rav4Html.includes(`<time dateTime="${CAR_PAGES_UPDATED}">`))
+    const rav4Scripts = [...rav4Html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((m) => JSON.parse(m[1]))
+    const rav4WebPage = rav4Scripts.find((item) => item["@type"] === "WebPage") as { dateModified?: string; url?: string } | undefined
+    assert.ok(rav4WebPage, "RAV4 car page missing WebPage JSON-LD")
+    assert.equal(rav4WebPage.dateModified, CAR_PAGES_UPDATED)
+    assert.equal(rav4WebPage.url, "https://notaquote.fyi/cars/toyota-rav4")
+  }
+})
+
+test("indefinite articles (a vs an) match vowel and consonant sounds across car and state pages", () => {
+  assert.equal(articleFor("Audi Q5"), "an")
+  assert.equal(articleFor("Acura MDX"), "an")
+  assert.equal(articleFor("Acura RDX"), "an")
+  assert.equal(articleFor("Acura Integra"), "an")
+  assert.equal(articleFor("F-150"), "an")
+  assert.equal(articleFor("Honda Civic"), "a")
+  assert.equal(articleFor("Hyundai Ioniq 5"), "a")
+  assert.equal(articleFor("2024 Audi Q5"), "a")
+
+  if (MODELS_ENABLED) {
+    for (const page of carPages(catalog)) {
+      const c = carContent(carFigures(catalog, page.slug)!)
+      for (const text of [c.title, c.description, c.lead, c.teenHeading, c.statesHeading, carMainText(carFigures(catalog, page.slug)!)]) {
+        assert.doesNotMatch(text, /\ba (Acura|Audi|Infiniti|Outback|Odyssey|Outlander|Equinox|Escape|Explorer|Expedition|Escalade|Elantra|Enclave|Encore|Envista|Impreza|Integra|Ioniq|ID\.4|Atlas|Ascent|Acadia|Accord|Altima|F-150|HR-V|MDX|NX|RDX|RX|X3|X5)\b/i, `${page.slug}: "${text}"`)
+        assert.doesNotMatch(text, /\ban (Ford|Honda|Hyundai|Toyota|Subaru|Chevrolet|Nissan|Kia|BMW|Jeep|Lexus|Mazda|Mercedes|Ram|Tesla|Volkswagen|GMC|Buick|Cadillac|Chrysler|Dodge|Mitsubishi|202\d)\b/i, `${page.slug}: "${text}"`)
+      }
+    }
+  }
+  for (const f of ALL_STATES) {
+    const text = stateMainText(f)
+    assert.doesNotMatch(text, /\ba (Alabama|Alaska|Arizona|Arkansas|Idaho|Illinois|Indiana|Iowa|Ohio|Oklahoma|Oregon)\b/i, f.code)
+    assert.doesNotMatch(text, /\ban Utah\b/i, f.code)
+  }
+})
+
+test("preview *.vercel.app hosts receive X-Robots-Tag: noindex, and robots.txt allows / with the canonical sitemap", async () => {
+  assert.ok(nextConfig.headers, "nextConfig.headers is defined")
+  const headerRules = await nextConfig.headers()
+  const vercelNoindex = headerRules.find((rule) =>
+    rule.has?.some((cond) => cond.type === "header" && cond.key === "host" && cond.value?.includes("vercel\\.app")),
+  )
+  assert.ok(vercelNoindex, "missing *.vercel.app header rule")
+  assert.equal(vercelNoindex.source, "/:path*")
+  assert.ok(vercelNoindex.headers.some((h) => h.key.toLowerCase() === "x-robots-tag" && h.value === "noindex"))
+
+  const r = robots()
+  assert.equal(r.sitemap, "https://notaquote.fyi/sitemap.xml")
+  const rules = Array.isArray(r.rules) ? r.rules[0] : r.rules
+  assert.equal(rules?.allow, "/")
 })

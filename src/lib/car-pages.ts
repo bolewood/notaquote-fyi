@@ -23,6 +23,7 @@ import {
   FACTOR_BUNDLE,
   nationalTypicalStart,
   teenAddedToPolicy,
+  typicalStart,
   vehicleAgeKey,
   vehicleRelativity,
   vehicleReportLabel,
@@ -32,7 +33,9 @@ import {
   type VehicleRelativity,
 } from "./factor-engine"
 import { aboutTheSame } from "./format"
-import { DEFAULT_SCENARIO, type Scenario, type StateCode } from "./scenario"
+import { DEFAULT_SCENARIO, stateName, type Scenario, type StateCode } from "./scenario"
+import { allStateBaselines } from "./state-baselines"
+import { statePath } from "./state-slugs"
 
 export { carListings, carSlug, MODELS_ENABLED, type CarListing }
 
@@ -214,6 +217,14 @@ export type TrimRow = { trim: string; likely: number }
 
 export type SimilarCar = { slug: string; name: string; shortName: string; likely: number; low: number; high: number }
 
+export type CarStateRow = {
+  code: StateCode
+  name: string
+  path: string
+  adultLikely: number
+  teenIncrease: number
+}
+
 export type CarFigures = {
   page: CarPage
   start: StartingPoint
@@ -241,6 +252,8 @@ export type CarFigures = {
   /** Where the car ranks by price among its similar cars (1 = least), including itself. */
   groupRank: { rank: number; of: number }
   similar: { cheaper: SimilarCar[]; pricier: SimilarCar[]; basis: "segment" | "class" }
+  /** Sample state estimates for this car (cheapest state, priciest state, plus 4 rotated states). */
+  stateEstimates: CarStateRow[]
 }
 
 const AGE_WORDS: Record<string, string> = {
@@ -308,6 +321,34 @@ const OTHER_DRIVERS: { ages: string; age: Scenario["age"]; years: Scenario["year
   { ages: "65 and older", age: "65+", years: "10+" },
 ]
 
+const STATES_BY_PRICE: StateCode[] = [...allStateBaselines()]
+  .sort((a, b) => a.annual - b.annual || a.state.localeCompare(b.state))
+  .map((row) => row.state as StateCode)
+
+function carStateRows(page: CarPage, carIndex: number): CarStateRow[] {
+  const lowPool = STATES_BY_PRICE.slice(0, 6)
+  const highPool = STATES_BY_PRICE.slice(-6)
+  const midPool = STATES_BY_PRICE.slice(6, -6)
+  const chosen: StateCode[] = [lowPool[carIndex % lowPool.length], highPool[(carIndex * 3) % highPool.length]]
+  for (let k = 0; chosen.length < 6 && k < midPool.length; k += 1) {
+    const code = midPool[(carIndex * 7 + k * 9) % midPool.length]
+    if (!chosen.includes(code)) chosen.push(code)
+  }
+  return chosen
+    .map((code) => {
+      const driver = adultDriver(page.pick, code)
+      const start = typicalStart(driver)!
+      return {
+        code,
+        name: stateName(code),
+        path: statePath(code),
+        adultLikely: estimate(start, driver, { vehicle: page.facts }).likely,
+        teenIncrease: teenAddedToPolicy(start, driver, { vehicle: page.facts }).increase,
+      }
+    })
+    .sort((a, b) => a.adultLikely - b.adultLikely)
+}
+
 const FIGURES = new WeakMap<VehicleCatalog, Map<string, CarFigures>>()
 
 function national(page: CarPage) {
@@ -342,7 +383,8 @@ export function carFigures(catalog: VehicleCatalog, slug: string): CarFigures | 
   if (!page) return null
 
   const all = nationalAll(catalog)
-  const own = all.find((item) => item.other.slug === slug)!
+  const carIndex = all.findIndex((item) => item.other.slug === slug)
+  const own = all[carIndex]!
   const averageCar = estimate(own.start, own.driver, { vehicle: "average" })
   const teenAverageCar = teenAddedToPolicy(own.start, own.driver, { vehicle: "average" })
 
@@ -392,6 +434,7 @@ export function carFigures(catalog: VehicleCatalog, slug: string): CarFigures | 
     }),
     groupRank,
     similar: { cheaper, pricier, basis },
+    stateEstimates: carStateRows(page, carIndex),
   }
   byCatalog.set(slug, figures)
   return figures

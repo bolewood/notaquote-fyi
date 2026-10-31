@@ -4,7 +4,7 @@
  */
 import type { VehicleCatalog } from "./catalog"
 import { differenceWords } from "./format"
-import { ENGINE_UPDATED } from "./site-meta"
+import { ENGINE_UPDATED, GUIDES_CONTENT_UPDATED } from "./site-meta"
 import { DEFAULT_SCENARIO, STATES, type StateCode } from "./scenario"
 import { encodeSharePath } from "./share-link"
 import { MODELS_ENABLED } from "./car-page-links"
@@ -35,9 +35,9 @@ export const TEEN_COST_GUIDE = {
 
 export const GUIDES: readonly Guide[] = [TEEN_CARS_GUIDE, TEEN_COST_GUIDE]
 
-/** When a guide last changed: its launch, or the data behind it if that's newer. The Article and the sitemap both use this. */
+/** When a guide last changed: the newest of its launch, its content revision, or the data behind it. */
 export function guideModified(guide: Guide): string {
-  return ENGINE_UPDATED > guide.published ? ENGINE_UPDATED : guide.published
+  return [ENGINE_UPDATED, GUIDES_CONTENT_UPDATED, guide.published].sort().at(-1)!
 }
 
 /** The popular lists for a new teen, priced nationally, cheapest to add first. */

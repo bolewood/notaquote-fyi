@@ -57,6 +57,35 @@ export default function GuidesPage() {
           </li>
         ))}
       </ul>
+      <h2 id="states">State guides with rate-comparison surveys and minimum rules</h2>
+      <p>
+        Every state page combines NAIC&apos;s 2023 full-coverage, liability-only, and average-expenditure figures (brought up
+        to today with the federal insurance price index) with verified minimum-coverage statutes. Pages for{" "}
+        <Link href="/states/texas">Texas</Link>, <Link href="/states/california">California</Link>,{" "}
+        <Link href="/states/colorado">Colorado</Link>, <Link href="/states/oklahoma">Oklahoma</Link>,{" "}
+        <Link href="/states/north-dakota">North Dakota</Link>, and{" "}
+        <Link href="/states/district-of-columbia">the District of Columbia</Link> also include sample rate-comparison tables
+        from their state insurance departments, and <Link href="/states/north-carolina">North Carolina</Link> includes the
+        statutory Safe Driver Incentive Plan points schedule.
+      </p>
+      {carPages(SERVER_CATALOG).length > 0 ? (
+        <>
+          <h2 id="cars">Popular car pages</h2>
+          <p>
+            Each model page shows a 45-year-old&apos;s full-coverage estimate, a used model-year table, HLDI claim results by
+            coverage, and sample state prices:{" "}
+            {carPages(SERVER_CATALOG)
+              .slice(0, 10)
+              .map((car, index) => (
+                <span key={car.slug}>
+                  {index > 0 ? ", " : ""}
+                  <Link href={`/cars/${car.slug}`}>{car.shortName}</Link>
+                </span>
+              ))}
+            , and <Link href="/cars">all {carPages(SERVER_CATALOG).length} models</Link>.
+          </p>
+        </>
+      ) : null}
     </TrustArticle>
   )
 }

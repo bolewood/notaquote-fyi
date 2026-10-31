@@ -76,8 +76,11 @@ export default function TeenCostGuide() {
           {differenceWords(cheapest.added)} in {cheapest.name} and about {differenceWords(priciest.added)} in {priciest.name}.
         </li>
         <li>
-          <strong>The car they drive.</strong> Cars with cheaper repairs and fewer claims cost less to add a teen with.{" "}
-          <Link href={TEEN_CARS_GUIDE.path}>Cheapest cars to insure for a teen driver</Link>.
+          <strong>The car they drive.</strong> Cars with cheaper repairs and fewer claims—such as the{" "}
+          <Link href="/cars/subaru-forester">Subaru Forester</Link>, <Link href="/cars/subaru-outback">Subaru Outback</Link>,{" "}
+          <Link href="/cars/honda-cr-v">Honda CR-V</Link>, <Link href="/cars/toyota-rav4">Toyota RAV4</Link>,{" "}
+          <Link href="/cars/honda-civic">Honda Civic</Link>, and <Link href="/cars/toyota-corolla">Toyota Corolla</Link>—cost
+          less to add a teen with. <Link href={TEEN_CARS_GUIDE.path}>Cheapest cars to insure for a teen driver</Link>.
         </li>
         <li>
           <strong>Good grades and driver training.</strong> Many insurers give discounts for both. Discounts can bring it

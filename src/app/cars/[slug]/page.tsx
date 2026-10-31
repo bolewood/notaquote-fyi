@@ -4,15 +4,17 @@ import { notFound } from "next/navigation"
 import { ArrowRight } from "lucide-react"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import { VehicleFixLink } from "@/components/how-we-got-this"
+import { JsonLdScript } from "@/components/json-ld"
 import { TrustArticle } from "@/components/trust-article"
 import { SERVER_CATALOG } from "@/lib/agent-catalog"
 import { carContent, noindexCarSlugs } from "@/lib/car-content"
 import { carFigures, carPages } from "@/lib/car-pages"
 import { FACTOR_BUNDLE } from "@/lib/factor-engine"
+import { longDate } from "@/lib/format"
 import { vehicleMatchWords } from "@/lib/pricing"
 import { DEFAULT_SCENARIO } from "@/lib/scenario"
 import { encodeSharePath } from "@/lib/share-link"
-import { pageMetadata } from "@/lib/site-meta"
+import { CAR_PAGES_UPDATED, pageMetadata, webPageJsonLd } from "@/lib/site-meta"
 import { teenDriver } from "@/lib/teen-cars"
 
 /** Only cars with a page; anything else is a 404. */
@@ -93,6 +95,14 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
         />
       }
     >
+      <JsonLdScript
+        data={webPageJsonLd({
+          title: c.title,
+          description: c.description,
+          path: `/cars/${page.slug}`,
+          dateModified: CAR_PAGES_UPDATED,
+        })}
+      />
       <div className="grid gap-1 rounded-2xl bg-card p-5 ring-1 ring-border" data-testid="car-estimate">
         <p className="text-sm font-medium text-muted-foreground">{c.estimateLabel}</p>
         <p>
@@ -111,7 +121,7 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-left text-sm">
             <caption className="py-2 text-left text-sm text-muted-foreground">
-              {c.fixed.yearsCaption}
+              {c.yearsCaption}
             </caption>
             <thead>
               <tr className="border-b border-border text-muted-foreground">
@@ -136,7 +146,7 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
               {c.years.map((row) => (
                 <tr key={row.year} className="border-b border-border/60">
                   <th scope="row" className="py-2 pr-3 font-normal">
-                    {row.year} <span className="text-muted-foreground">({row.age})</span>
+                    {row.year} {row.trim} <span className="text-muted-foreground">({row.age})</span>
                   </th>
                   <td className="py-2 pr-3 text-right whitespace-nowrap tabular-nums">{row.adult}</td>
                   <td className="py-2 pr-3 text-right whitespace-nowrap tabular-nums">{row.liability}</td>
@@ -170,12 +180,12 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
       <p>{c.teen}</p>
       <p>{c.teenRank}</p>
       <p className="text-sm text-muted-foreground">
-        {c.fixed.teenNote}{" "}
+        {c.teenNote}{" "}
         <Link href="/guides/cheapest-cars-to-insure-for-teens">Cheapest cars to insure for a teen</Link>.
       </p>
 
       <h2 id="why">{c.whyHeading}</h2>
-      <p>{c.fixed.claimsIntro}</p>
+      <p>{c.claimsIntro}</p>
       <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 rounded-2xl bg-card p-5 text-sm ring-1 ring-border" data-testid="car-claims">
         {c.claims.map((row) => (
           <div key={row.label} className="contents">
@@ -210,6 +220,25 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
           <SimilarList cars={c.similar} />
         </>
       ) : null}
+
+      <h2 id="by-state">{c.statesHeading}</h2>
+      <p>{c.statesSummary}</p>
+      <ul className="divide-y divide-border/70 border-y border-border/70 text-sm">
+        {c.states.map((row) => (
+          <li key={row.path} className="flex min-h-10 flex-wrap items-center justify-between gap-x-4 py-1.5">
+            <span>
+              <Link href={row.path}>{row.name}</Link> ({page.shortName})
+            </span>
+            <span className="money text-muted-foreground tabular-nums">
+              {row.adult}/yr · {row.teen} teen
+            </span>
+          </li>
+        ))}
+      </ul>
+      <p className="text-sm text-muted-foreground">
+        <Link href="/states">All 50 states and DC for the {page.shortName}</Link> · Updated{" "}
+        <time dateTime={CAR_PAGES_UPDATED}>{longDate(CAR_PAGES_UPDATED)}</time> for the {page.shortName}.
+      </p>
 
       <div className="flex flex-wrap gap-3 pt-2">
         <a href={whatIfHref} className="btn btn-primary plain">

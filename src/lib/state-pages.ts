@@ -11,14 +11,16 @@
  */
 import type { VehicleCatalog } from "./catalog"
 import { vehicleFacts } from "./catalog-class"
-import { broughtUpToToday, typicalStart, type StartingPoint } from "./factor-engine"
+import { adultDriver, carPages } from "./car-pages"
+import { broughtUpToToday, estimate, teenAddedToPolicy, typicalStart, type StartingPoint } from "./factor-engine"
 import { priceWhatIf, type WhatIfResult } from "./pricing"
-import { DEFAULT_SCENARIO, stateName, type Scenario, type StateCode } from "./scenario"
+import { DEFAULT_SCENARIO, STATES, stateName, type Scenario, type StateCode } from "./scenario"
 import { STATE_SLUGS, stateBySlug, statePath, stateSlug } from "./state-slugs"
 import { encodeSharePath } from "./share-link"
 import { allStateBaselines, countrywideBaseline, stateBaseline, type StateBaseline } from "./state-baselines"
 import { comparisonStates } from "./state-neighbors"
-import { stateRule, type StateRule } from "./state-rules"
+import { stateEvidence, stateRule, type StateRule, type StateRuleEvidence } from "./state-rules"
+import { stateSurveyFor, type StateSurveySection } from "./state-surveys"
 import { priceTeenCars, teenDriver, teenPool, typicalTeenCost, type TeenPriced } from "./teen-cars"
 
 export { STATE_SLUGS, stateBySlug, statePath, stateSlug }
@@ -68,6 +70,23 @@ export type NeighborRow = {
   move: WhatIfResult
 }
 
+export type SimilarPriceStateRow = {
+  code: StateCode
+  name: string
+  baseline: StateBaseline
+  startAnnual: number
+  gapDollars: number
+}
+
+export type StateFeaturedCarRow = {
+  slug: string
+  name: string
+  shortName: string
+  classLabel: string | null
+  adultLikely: number
+  teenIncrease: number
+}
+
 export type StateFigures = {
   code: StateCode
   name: string
@@ -84,12 +103,24 @@ export type StateFigures = {
   liabilityToday: number
   /** Where the liability-only average ranks (1 = highest). */
   liabilityRank: { rank: number; of: number }
+  /** NAIC's average expenditure per insured car, brought up to today. */
+  expenditureToday: number
+  /** Average expenditure as a share of the full-coverage combined average, 2023. */
+  expenditureShare: number
+  /** Where the average expenditure ranks (1 = highest). */
+  expenditureRank: { rank: number; of: number }
   neighbors: NeighborRow[]
   bordering: boolean
+  /** Non-neighboring states with the closest 2023 NAIC full-coverage average. */
+  similarPriceStates: SimilarPriceStateRow[]
   rule: StateRule | null
+  evidence: readonly StateRuleEvidence[]
+  survey: StateSurveySection | null
   teen: ReturnType<typeof typicalTeenCost>
   /** The popular lists for a new teen, cheapest to add first. */
   teenCars: TeenPriced[]
+  /** 8 deterministically rotated car pages priced in this state, so all 121 car pages receive state-page links. */
+  featuredCars: StateFeaturedCarRow[]
   whatIfHref: string
   compareHref: string
 }
@@ -138,6 +169,41 @@ export function stateFigures(catalog: VehicleCatalog, code: StateCode): StateFig
   const teenCars = priceTeenCars({ kind: "state", state: code }, teenPool(catalog))
   const top = teenCars.slice(0, TEEN_TOP)
 
+  const neighborCodes = new Set<StateCode>([code, ...states])
+  const similarPriceStates: SimilarPriceStateRow[] = allStateBaselines()
+    .filter((row) => !neighborCodes.has(row.state as StateCode))
+    .sort((a, b) => Math.abs(a.exact - baseline.exact) - Math.abs(b.exact - baseline.exact) || a.state.localeCompare(b.state))
+    .slice(0, 4)
+    .map((row) => {
+      const otherCode = row.state as StateCode
+      const otherStart = typicalStart(moverScenario(otherCode))!
+      return {
+        code: otherCode,
+        name: stateName(otherCode),
+        baseline: row,
+        startAnnual: otherStart.annual,
+        gapDollars: row.annual - baseline.annual,
+      }
+    })
+
+  const allCars = carPages(catalog)
+  const stateIdx = Math.max(0, STATES.findIndex((s) => s.code === code))
+  const featuredCars: StateFeaturedCarRow[] = []
+  if (allCars.length > 0) {
+    for (let k = 0; k < 8 && k < allCars.length; k += 1) {
+      const car = allCars[(stateIdx * 8 + k) % allCars.length]
+      const driver = adultDriver(car.pick, code)
+      featuredCars.push({
+        slug: car.slug,
+        name: car.name,
+        shortName: car.shortName,
+        classLabel: car.classLabel,
+        adultLikely: estimate(start, driver, { vehicle: car.facts }).likely,
+        teenIncrease: teenAddedToPolicy(start, driver, { vehicle: car.facts }).increase,
+      })
+    }
+  }
+
   const figures: StateFigures = {
     code,
     name: stateName(code),
@@ -153,11 +219,21 @@ export function stateFigures(catalog: VehicleCatalog, code: StateCode): StateFig
       rank: allStateBaselines().filter((row) => row.liabilityOnly > baseline.liabilityOnly).length + 1,
       of: allStateBaselines().length,
     },
+    expenditureToday: broughtUpToToday(baseline.averageExpenditure),
+    expenditureShare: baseline.averageExpenditure / baseline.exact,
+    expenditureRank: {
+      rank: allStateBaselines().filter((row) => row.averageExpenditure > baseline.averageExpenditure).length + 1,
+      of: allStateBaselines().length,
+    },
     neighbors,
     bordering,
+    similarPriceStates,
     rule: stateRule(code) ?? null,
+    evidence: stateEvidence(code),
+    survey: stateSurveyFor(code),
     teen: typicalTeenCost({ kind: "state", state: code }),
     teenCars,
+    featuredCars,
     // "Try it with your own car": the visitor's own situation, moved to this state, adding a 16-year-old.
     whatIfHref: encodeSharePath({
       page: "/",
