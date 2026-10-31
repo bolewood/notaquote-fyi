@@ -3,25 +3,33 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ArrowRight } from "lucide-react"
 import { Breadcrumbs } from "@/components/breadcrumbs"
+import { JsonLdScript } from "@/components/json-ld"
 import { StateNoteBody } from "@/components/state-rules-table"
 import { TrustArticle } from "@/components/trust-article"
 import { SERVER_CATALOG } from "@/lib/agent-catalog"
 import { carPageFor } from "@/lib/car-pages"
 import { differenceWords, dollars, estimateDollars, monthlyDollars, signedDollars } from "@/lib/format"
-import { pageMetadata } from "@/lib/site-meta"
+import { faqJsonLd, pageMetadata } from "@/lib/site-meta"
 import {
+  faqHeading,
   faultText,
   leadText,
+  liabilityOnlyText,
+  minimumsHeading,
   moveWords,
+  neighborsHeading,
   neighborsSummary,
   ownPolicyParagraph,
   priceParagraph,
   SAME_ORDER_NOTE,
   stateDescription,
+  stateFaqs,
+  stateHeading,
   stateTitle,
-  liabilityOnlyText,
   teenCallout,
   teenCarsSummary,
+  teenHeading,
+  typicalPriceHeading,
 } from "@/lib/state-content"
 import { inSentence, STATE_SLUGS, stateBySlug, stateFigures, statePath, TEEN_TOP } from "@/lib/state-pages"
 import { STATE_BASELINE_SOURCES } from "@/lib/state-baselines"
@@ -63,11 +71,11 @@ export default async function StatePage({ params }: PageProps<"/states/[state]">
   const name = inSentence(f.code)
   const top = f.teenCars.slice(0, TEEN_TOP)
   const fault = faultText(f)
-  const neighborWord = f.bordering ? "neighbors" : "a nearby state"
+  const faqs = stateFaqs(f)
 
   return (
     <TrustArticle
-      title={`Car insurance in ${name}`}
+      title={stateHeading(f)}
       lead={leadText(f)}
       breadcrumbs={
         <Breadcrumbs
@@ -79,6 +87,8 @@ export default async function StatePage({ params }: PageProps<"/states/[state]">
         />
       }
     >
+      <JsonLdScript data={faqJsonLd(faqs)} />
+
       <nav aria-label="On this page" className="flex flex-wrap gap-2 text-sm">
         <a href="#typical-price" className="chip plain">
           Typical price
@@ -95,9 +105,12 @@ export default async function StatePage({ params }: PageProps<"/states/[state]">
         <a href="#teen-cars" className="chip plain">
           Cars for a teen
         </a>
+        <a href="#faq" className="chip plain">
+          Questions
+        </a>
       </nav>
 
-      <h2 id="typical-price">What people pay in {name}</h2>
+      <h2 id="typical-price">{typicalPriceHeading(f)}</h2>
       <div className="grid gap-1 rounded-2xl bg-card p-5 ring-1 ring-border" data-testid="state-typical">
         <p className="text-sm font-medium text-muted-foreground">A typical yearly price today</p>
         <p>
@@ -112,7 +125,7 @@ export default async function StatePage({ params }: PageProps<"/states/[state]">
         much coverage you carry move it up or down.
       </p>
 
-      <h2 id="neighbors">{name} next to its {neighborWord}</h2>
+      <h2 id="neighbors">{neighborsHeading(f)}</h2>
       <p>{neighborsSummary(f)}</p>
       <div className="overflow-x-auto">
         <table className="w-full border-collapse text-left text-sm">
@@ -165,7 +178,7 @@ export default async function StatePage({ params }: PageProps<"/states/[state]">
         difference, so a real move can come out differently.
       </p>
 
-      <h2 id="minimums">The least insurance {name}&apos;s law asks for</h2>
+      <h2 id="minimums">{minimumsHeading(f)}</h2>
       {f.rule ? (
         <>
           <dl className="grid gap-x-6 gap-y-1 rounded-2xl bg-card p-5 text-sm ring-1 ring-border sm:grid-cols-[auto_1fr]">
@@ -194,7 +207,7 @@ export default async function StatePage({ params }: PageProps<"/states/[state]">
         <p>We haven&apos;t checked this state&apos;s minimums yet.</p>
       )}
 
-      <h2 id="teen">A new teen driver in {name}</h2>
+      <h2 id="teen">{teenHeading(f)}</h2>
       <div className="grid gap-1 rounded-2xl bg-sun-soft p-5" data-testid="state-teen">
         <p className="text-sm font-medium text-sun-ink">Adding a 16-year-old to a typical policy</p>
         <p>
@@ -264,6 +277,16 @@ export default async function StatePage({ params }: PageProps<"/states/[state]">
         &ldquo;Try it with your own car&rdquo; opens your own situation in {name} (a 2020 Toyota Camry if you haven&apos;t set
         one) with a new 16-year-old. It starts from that car, not an average one, so its figure can differ from the one above.
       </p>
+
+      <h2 id="faq">{faqHeading(f)}</h2>
+      <dl className="grid gap-5">
+        {faqs.map((item) => (
+          <div key={item.question} className="grid gap-1.5">
+            <dt className="font-semibold text-foreground">{item.question}</dt>
+            <dd className="text-muted-foreground">{item.answer}</dd>
+          </div>
+        ))}
+      </dl>
 
       <h2 id="sources">Where these numbers come from</h2>
       <ul className="bullets">
