@@ -377,3 +377,16 @@ export function listWords(items: readonly string[]): string {
   if (items.length === 2) return `${items[0]} and ${items[1]}`
   return `${items.slice(0, -1).join(", ")}, and ${items.at(-1)}`
 }
+
+/**
+ * HLDI's results in one line, for the What-if panel: "crash repairs 21%
+ * better than average, non-crash damage 4% better, damage to others'
+ * property 18% better, injury claims filed 24% less often".
+ */
+export function hldiShortLine(report: HldiReport): string {
+  const parts = report.rows.map((row, index) => {
+    const words = index === 0 ? row.percent : row.percent.replace(" than average", "")
+    return `${row.short} ${words}`
+  })
+  return listWords(parts)
+}

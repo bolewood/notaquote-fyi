@@ -1,4 +1,5 @@
 import type { Estimate, StartKind } from "@/lib/factor-engine"
+import { hldiReport, hldiShortLine, priceMeaning } from "@/lib/hldi"
 import { basisLabel, sourceLinks } from "@/lib/pricing"
 import { suggestFixUrl } from "@/lib/suggest-fix"
 import { cn } from "cn"
@@ -36,12 +37,42 @@ export function HowWeGotThis({
           {estimate.steps.map((step) => {
             const sources = sourceLinks(step.sources)
             const ours = step.basis === "assumed"
+            // The car: HLDI's own results first, then what we estimate they mean for price.
+            const report = step.group === "vehicle" ? hldiReport(estimate.vehicle) : null
+            const meaning = report ? priceMeaning(estimate.vehicle, "it", null) : null
+            const fromAverage = step.from === "an average car"
             return (
               <li key={`${step.group}-${step.title}`} className="grid gap-0.5 py-2.5">
-                <p>
-                  <span className="font-semibold">{step.title}:</span> {step.from} <span aria-hidden="true">→</span>
-                  <span className="sr-only">to</span> {step.to}
-                </p>
+                {report && meaning ? (
+                  <>
+                    <p>
+                      <span className="font-semibold">{step.title}:</span>{" "}
+                      {fromAverage ? (
+                        step.to
+                      ) : (
+                        <>
+                          {step.from} <span aria-hidden="true">→</span>
+                          <span className="sr-only">to</span> {step.to}
+                        </>
+                      )}
+                    </p>
+                    <p data-testid="hldi-short">
+                      What HLDI reports ({report.modelYears} models, all drivers combined): {hldiShortLine(report)}.
+                    </p>
+                    <p>
+                      {meaning.short}
+                      {fromAverage ? "" : " We price the car you're switching from the same way."}{" "}
+                      <Link href="/methodology#why-percentages-differ" className="link">
+                        Why these differ
+                      </Link>
+                    </p>
+                  </>
+                ) : (
+                  <p>
+                    <span className="font-semibold">{step.title}:</span> {step.from} <span aria-hidden="true">→</span>
+                    <span className="sr-only">to</span> {step.to}
+                  </p>
+                )}
                 <p className="text-muted-foreground">
                   <span className={cn(ours && "font-medium text-sun-ink")}>{basisLabel(step.basis, step.sources, state)}</span>
                   {ours ? (

@@ -4,6 +4,7 @@ import { SERVER_CATALOG } from "./agent-catalog"
 import { carFigures, carPages, MODELS_ENABLED } from "./car-pages"
 import {
   HLDI_RATING_BANDS,
+  hldiShortLine,
   hldiPercentWords,
   hldiRating,
   hldiReport,
@@ -92,4 +93,16 @@ test("a car HLDI publishes without an injury figure says so instead of claiming 
   const meaning = priceMeaning(f.page.relativity, "the Tacoma", f.parts)!
   assert.match(meaning.paragraph, /HLDI publishes damage to others' property but not injury claims for the Tacoma/)
   assert.doesNotMatch(meaning.paragraph, /injury claims combine/)
+})
+
+test("the What-if panel's short form: HLDI's line, then ours", { skip: !MODELS_ENABLED }, () => {
+  const f = carFigures(SERVER_CATALOG, "subaru-legacy")!
+  assert.equal(
+    hldiShortLine(hldiReport(f.page.relativity)!),
+    "crash repairs 21% better than average, non-crash damage 4% better, damage to others' property 18% better, and injury claims filed 24% less often",
+  )
+  assert.equal(
+    priceMeaning(f.page.relativity, "it", null)!.short,
+    "We estimate the part of the bill that fixes the car is about 6% less than average, and the liability part is about 11% less than average.",
+  )
 })
