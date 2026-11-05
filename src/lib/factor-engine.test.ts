@@ -570,7 +570,7 @@ test("a teen added to a parent's policy is the whole household's premium", () =>
   assert.equal(added.increase, added.after.likely - added.before.likely)
   assert.match(
     added.headline,
-    /^Adding your teen to your policy: about \$[\d,]+ more a year, on a policy that costs about \$[\d,]+ now\.$/,
+    /^Adding your teen to your policy: about \$[\d,]+ more a year, for a car that costs about \$[\d,]+ a year to insure now\.$/,
   )
   assert.throws(
     () => compareVehicles(start, { ...EXAMPLE_ADULT, age: "16-18" }, [accord], { teenOnParentPolicy: true }),

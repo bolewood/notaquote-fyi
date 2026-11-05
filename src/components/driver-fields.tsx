@@ -29,14 +29,17 @@ type Props = {
   onChange: (partial: Partial<Scenario>) => void
   /** Keeps ids unique when two forms share a page. */
   idPrefix: string
+  /** On the "try a change" card: the current value, in words, shown as "Now: …". */
+  now?: string
 }
 
 const UNDER_26 = ["16-18", "19-21", "22-25"]
 const UNDER_22 = ["16-18", "19-21"]
 
-export function AgeField({ scenario, onChange, idPrefix, label = "Driver's age" }: Props & { label?: string }) {
+export function AgeField({ scenario, onChange, idPrefix, now, label = "Driver's age" }: Props & { label?: string }) {
   return (
     <SelectField
+      now={now}
       id={`${idPrefix}-age`}
       label={label}
       value={scenario.age}
@@ -65,17 +68,18 @@ export function PolicyField({
       legend="Whose policy?"
       value={value ? "added" : "own"}
       options={[
-        { value: "added", label: "On my policy" },
-        { value: "own", label: "Their own policy" },
+        { value: "added", label: "Add the teen to our family policy" },
+        { value: "own", label: "Teen gets their own policy" },
       ]}
       onChange={(next) => onChange(next === "added")}
     />
   )
 }
 
-export function StateField({ scenario, onChange, idPrefix }: Props) {
+export function StateField({ scenario, onChange, idPrefix, now }: Props) {
   return (
     <SelectField
+      now={now}
       id={`${idPrefix}-state`}
       label="State"
       value={scenario.state}
@@ -87,11 +91,12 @@ export function StateField({ scenario, onChange, idPrefix }: Props) {
   )
 }
 
-export function RegionField({ scenario, onChange, idPrefix }: Props) {
+export function RegionField({ scenario, onChange, idPrefix, now, label = "Where the car is kept" }: Props & { label?: string }) {
   return (
     <SelectField
+      now={now}
       id={`${idPrefix}-region`}
-      label="Where the car is kept"
+      label={label}
       value={scenario.region}
       options={REGIONS.map((region) => ({ value: region.id, label: region.label }))}
       onChange={(value) => {
@@ -101,13 +106,14 @@ export function RegionField({ scenario, onChange, idPrefix }: Props) {
   )
 }
 
-export function CoverageField({ scenario, onChange, idPrefix, showNote = true }: Props & { showNote?: boolean }) {
+export function CoverageField({ scenario, onChange, idPrefix, now, showNote = true }: Props & { showNote?: boolean }) {
   return (
     <SelectField
+      now={now}
       id={`${idPrefix}-coverage`}
       label="Coverage"
       value={scenario.coverage}
-      options={COVERAGE_PACKAGES.map((item) => ({ value: item.id, label: item.label }))}
+      options={COVERAGE_PACKAGES.map((item) => ({ value: item.id, label: item.option }))}
       onChange={(value) => {
         if (isCoverageId(value)) onChange({ coverage: value })
       }}
@@ -116,10 +122,11 @@ export function CoverageField({ scenario, onChange, idPrefix, showNote = true }:
   )
 }
 
-export function DeductibleField({ scenario, onChange, idPrefix }: Props) {
+export function DeductibleField({ scenario, onChange, idPrefix, now }: Props) {
   const applies = hasPhysicalDamage(scenario.coverage)
   return (
     <SelectField
+      now={now}
       id={`${idPrefix}-deductible`}
       label="Deductible"
       value={String(scenario.deductible)}
@@ -138,11 +145,12 @@ export function DeductibleField({ scenario, onChange, idPrefix }: Props) {
   )
 }
 
-export function RecordField({ scenario, onChange, idPrefix }: Props) {
+export function RecordField({ scenario, onChange, idPrefix, now }: Props) {
   return (
     <SelectField
+      now={now}
       id={`${idPrefix}-record`}
-      label="Driving record"
+      label="Driving record (last 3 years)"
       value={scenario.incidents}
       options={INCIDENTS.map((item) => ({ value: item.id, label: item.label }))}
       onChange={(value) => {
@@ -152,13 +160,14 @@ export function RecordField({ scenario, onChange, idPrefix }: Props) {
   )
 }
 
-export function MileageField({ scenario, onChange, idPrefix }: Props) {
+export function MileageField({ scenario, onChange, idPrefix, now }: Props) {
   return (
     <SelectField
+      now={now}
       id={`${idPrefix}-mileage`}
-      label="Miles driven"
+      label="Miles a year"
       value={scenario.mileage}
-      options={MILEAGE_BANDS.map((item) => ({ value: item.id, label: item.label }))}
+      options={MILEAGE_BANDS.map((item) => ({ value: item.id, label: item.option }))}
       onChange={(value) => {
         if (isMileageBand(value)) onChange({ mileage: value })
       }}
@@ -166,10 +175,11 @@ export function MileageField({ scenario, onChange, idPrefix }: Props) {
   )
 }
 
-export function YearsField({ scenario, onChange, idPrefix }: Props) {
+export function YearsField({ scenario, onChange, idPrefix, now }: Props) {
   const young = UNDER_26.includes(scenario.age)
   return (
     <SelectField
+      now={now}
       id={`${idPrefix}-years`}
       label="Years licensed"
       value={scenario.yearsLicensed}
@@ -182,27 +192,39 @@ export function YearsField({ scenario, onChange, idPrefix }: Props) {
   )
 }
 
-export function DiscountFields({ scenario, onChange, idPrefix }: Props) {
+/** Discounts for a young driver: shown only when the age qualifies, not greyed out. */
+export function DriverDiscountFields({ scenario, onChange, idPrefix }: Props) {
   const student = UNDER_26.includes(scenario.age)
   const training = UNDER_22.includes(scenario.age)
+  if (!student && !training) return null
   return (
     <div className="grid gap-0.5 sm:grid-cols-2">
-      <CheckField
-        id={`${idPrefix}-student`}
-        label="Good student"
-        note={student ? "Usually a B average or better, under 26." : "Only for drivers under 26."}
-        checked={scenario.goodStudent}
-        disabled={!student}
-        onChange={(goodStudent) => onChange({ goodStudent })}
-      />
-      <CheckField
-        id={`${idPrefix}-training`}
-        label="Took driver training"
-        note={training ? "A driver's ed course." : "Only for drivers under 22."}
-        checked={scenario.driverTraining}
-        disabled={!training}
-        onChange={(driverTraining) => onChange({ driverTraining })}
-      />
+      {student ? (
+        <CheckField
+          id={`${idPrefix}-student`}
+          label="Good student"
+          note="Usually a B average or better, under 26."
+          checked={scenario.goodStudent}
+          onChange={(goodStudent) => onChange({ goodStudent })}
+        />
+      ) : null}
+      {training ? (
+        <CheckField
+          id={`${idPrefix}-training`}
+          label="Took driver training"
+          note="A driver's ed course."
+          checked={scenario.driverTraining}
+          onChange={(driverTraining) => onChange({ driverTraining })}
+        />
+      ) : null}
+    </div>
+  )
+}
+
+/** Discounts that belong to the policy, not the driver. */
+export function PolicyDiscountFields({ scenario, onChange, idPrefix }: Props) {
+  return (
+    <div className="grid gap-0.5 sm:grid-cols-2">
       <CheckField
         id={`${idPrefix}-bundle`}
         label="Bundled with home or renters"
@@ -210,14 +232,25 @@ export function DiscountFields({ scenario, onChange, idPrefix }: Props) {
         checked={scenario.householdPolicy}
         onChange={(householdPolicy) => onChange({ householdPolicy })}
       />
-      <CheckField
-        id={`${idPrefix}-loan`}
-        label="Car has a loan or lease"
-        note="Lenders usually ask for full coverage."
-        checked={scenario.loanLease}
-        disabled={!hasPhysicalDamage(scenario.coverage)}
-        onChange={(loanLease) => onChange({ loanLease })}
-      />
+      {hasPhysicalDamage(scenario.coverage) ? (
+        <CheckField
+          id={`${idPrefix}-loan`}
+          label="Car has a loan or lease"
+          note="Lenders usually ask for full coverage."
+          checked={scenario.loanLease}
+          onChange={(loanLease) => onChange({ loanLease })}
+        />
+      ) : null}
+    </div>
+  )
+}
+
+/** Every discount, for the starting-point card. */
+export function DiscountFields(props: Props) {
+  return (
+    <div className="grid gap-0.5">
+      <DriverDiscountFields {...props} />
+      <PolicyDiscountFields {...props} />
     </div>
   )
 }

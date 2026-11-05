@@ -91,13 +91,17 @@ function amountWords(delta: number): string {
   return words === "about the same" ? words : `about ${words}`
 }
 
-/** One piece of a what-if's difference: "Newer car: +$120". */
-export type ChangePart = { label: string; amount: number }
+/** One piece of a what-if's difference: "Newer car: +$120". `key` is what changed, when it's one input. */
+export type ChangePart = { label: string; amount: number; key?: ChangeKey }
 
 export type WhatIfMode =
   /** An ordinary change to the situation now. */
   | "change"
-  /** A teen added to the policyholder's policy: both figures are the whole household's policy. */
+  /**
+   * A teen added to the policyholder's policy: both figures are this car's
+   * cost on that policy (what you pay for it now, or a typical one-car
+   * policy), before and after adding the teen.
+   */
   | "teen-added"
   /** A teen on their own policy: a separate bill, on top of the policyholder's. */
   | "teen-own"
@@ -162,12 +166,32 @@ export function priceWhatIf(
   const onlyTheTeen = changedKeys(now, parent).every((key) => key === "goodStudent" || key === "driverTraining")
   const headline = onlyTheTeen ? added.headline : `With these changes and your teen: ${amountWords(delta)}.`
   const others = explainChange(start, now, nowVehicle, parent, nextVehicle)
-  const parts = [...others.parts, { label: "Adding your teen", amount: added.after.likely - others.last }]
+  const parts: ChangePart[] = [...others.parts, { label: "Adding your teen", amount: added.after.likely - others.last, key: "age" }]
   return { current, next: added.after, delta, deltaRounded, headline, mode: "teen-added", parts }
 }
 
 function carWords(scenario: Pick<Scenario, "make" | "model">): string {
   return `${scenario.make} ${scenario.model}`
+}
+
+/**
+ * Why a car swap moves the price, with the pushes in both directions named
+ * honestly: "pricier repairs, partly offset by fewer at-fault claims". The
+ * reasons that agree with the overall direction come first.
+ */
+export function carSwapWords(from: VehicleRelativity, to: VehicleRelativity, hasDamageCover: boolean, amount: number): string {
+  const damage = hasDamageCover ? to.physicalHundredths - from.physicalHundredths : 0
+  const liability = to.liabilityHundredths - from.liabilityHundredths
+  const ups: string[] = []
+  const downs: string[] = []
+  if (damage >= 8) ups.push(REASON.pricierRepairs)
+  if (damage <= -8) downs.push(REASON.cheaperRepairs)
+  if (liability >= 6) ups.push(REASON.moreClaims)
+  if (liability <= -6) downs.push(REASON.fewerClaims)
+  const [main, against] = amount >= 0 ? [ups, downs] : [downs, ups]
+  if (main.length > 0 && against.length > 0) return `${main.join(" and ")}, partly offset by ${against.join(" and ")}`
+  const all = [...main, ...against]
+  return all.length > 0 ? all.join(" and ") : "similar claims"
 }
 
 /** How one car compares with another, in the same words as the compare table. */
@@ -199,9 +223,9 @@ export function explainChange(
   let facts: VehicleFacts = nowVehicle
   let before = estimate(start, current, { vehicle: facts })
   const parts: ChangePart[] = []
-  const step = (label: string, scenario: Scenario, vehicle: VehicleFacts) => {
+  const step = (label: string, scenario: Scenario, vehicle: VehicleFacts, key?: ChangeKey) => {
     const after = estimate(start, scenario, { vehicle })
-    parts.push({ label, amount: after.likely - before.likely })
+    parts.push({ label, amount: after.likely - before.likely, ...(key ? { key } : {}) })
     current = scenario
     facts = vehicle
     const previous = before
@@ -212,20 +236,20 @@ export function explainChange(
     if (TEEN_KEYS.includes(key) && next.age === "16-18" && now.age !== "16-18") continue
     if (key === "vehicle") {
       if (now.year !== next.year) {
-        step(next.year > now.year ? `Newer car (${next.year})` : `Older car (${next.year})`, { ...current, year: next.year }, { ...facts, year: next.year })
+        step(next.year > now.year ? `Newer car (${next.year})` : `Older car (${next.year})`, { ...current, year: next.year }, { ...facts, year: next.year }, "vehicle")
       }
       if (now.make !== next.make || now.model !== next.model || now.trim !== next.trim) {
         const scenario = { ...current, make: next.make, model: next.model, trim: next.trim }
-        const { previous, after } = step("", scenario, nextVehicle)
-        const why = carDifference(previous.vehicle, after.vehicle, hasPhysicalDamage(scenario.coverage))
+        const { previous, after } = step("", scenario, nextVehicle, "vehicle")
+        const why = carSwapWords(previous.vehicle, after.vehicle, hasPhysicalDamage(scenario.coverage), after.likely - previous.likely)
         parts[parts.length - 1].label =
           now.make === next.make && now.model === next.model
-            ? `A different version (${why})`
-            : `${carWords(now)} → ${carWords(next)} (${why})`
+            ? `A different trim: ${why}`
+            : `${carWords(next)} instead of ${carWords(now)}: ${why}`
       }
       continue
     }
-    step(changeChip(key, next), { ...current, [key]: next[key] } as Scenario, facts)
+    step(changeChip(key, next), { ...current, [key]: next[key] } as Scenario, facts, key)
   }
   return { parts, last: before.likely }
 }
@@ -504,6 +528,9 @@ export function basisWords(basis: keyof typeof BASIS_WORDS): string {
   return BASIS_WORDS[basis]
 }
 
+/** How we know a car's step when it comes from HLDI's per-model claims results. */
+export const CLAIMS_WORDS = "Based on insurance claims data"
+
 /** Which state's published prices a source is. */
 const SURVEY_STATES: Record<string, string> = {
   "ca-2026": "California",
@@ -520,6 +547,8 @@ const SURVEY_STATES: Record<string, string> = {
  * ones: "From published prices in Texas and Oklahoma (Illinois may differ)".
  */
 export function basisLabel(basis: keyof typeof BASIS_WORDS, sourceIds: readonly string[], state: string): string {
+  // HLDI publishes insurance claims results for each car, not prices.
+  if (basis === "sourced" && sourceIds.length > 0 && sourceIds.every((id) => id.startsWith("hldi-"))) return CLAIMS_WORDS
   const words = BASIS_WORDS[basis]
   const states = [...new Set(sourceIds.flatMap((id) => (SURVEY_STATES[id] ? [SURVEY_STATES[id]] : [])))]
   if (basis === "reference" || states.length === 0 || states.includes(state)) return words

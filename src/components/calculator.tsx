@@ -7,7 +7,9 @@ import {
   CoverageField,
   DeductibleField,
   DiscountFields,
+  DriverDiscountFields,
   MileageField,
+  PolicyDiscountFields,
   PolicyField,
   RecordField,
   RegionField,
@@ -16,7 +18,7 @@ import {
 } from "@/components/driver-fields"
 import { HowWeGotThis, VehicleFixLink } from "@/components/how-we-got-this"
 import { RangeBar } from "@/components/money"
-import { HomeSkeleton, STARTER_ICONS, TABS, type Tab } from "@/components/page-skeleton"
+import { HomeSkeleton, StarterCards, TABS, type Tab } from "@/components/page-skeleton"
 import { ShareBox } from "@/components/share-box"
 import { carName, modelTrims, resolveCar, WHAT_IF_CARS } from "@/lib/car-search"
 import { vehicleFacts } from "@/lib/catalog-class"
@@ -24,7 +26,7 @@ import { catalogYears, trimRecord, type VehiclePick } from "@/lib/catalog"
 import { DATA_UPDATED, PREMIUM_HINT } from "@/lib/copy"
 import { recordCount, recordMountedCount } from "@/lib/counts"
 import type { Estimate, StartKind } from "@/lib/factor-engine"
-import { differenceWords, dollars, estimateDollars, rangeWords, signedDollars } from "@/lib/format"
+import { differenceWords, dollars, estimateDollars, rangeDollars, rangeWords, signedDollars } from "@/lib/format"
 import {
   changeChip,
   changedKeys,
@@ -40,13 +42,21 @@ import {
   type WhatIfMode,
 } from "@/lib/pricing"
 import {
+  AGE_BANDS,
   coverageAssumption,
+  coverageLabel,
+  DEFAULT_SCENARIO,
   hasPhysicalDamage,
+  INCIDENTS,
+  MILEAGE_BANDS,
+  regionLabel,
   situationSentence,
-  STARTERS,
   shortVehicleLabel,
   stateName,
   withTeenFlag,
+  YEARS_LICENSED,
+  type CoverageId,
+  type Region,
   type Scenario,
   type StateCode,
   type Starter,
@@ -70,14 +80,17 @@ import Link from "next/link"
 import { useEffect, useMemo, useRef, useState } from "react"
 
 const UNDER_26 = ["16-18", "19-21", "22-25"]
+
+/** Under every range bar. The range hasn't been tested against real quotes, so we don't say where "most" land. */
+const RANGE_NOTE = "The dot marks our central estimate. Actual quotes can fall outside this range."
 const UNDER_22 = ["16-18", "19-21"]
 
 /** One line under the tabs, so every tab starts the same way. */
 const TAB_INTRO: Record<Tab, string> = {
   car: "Tap a car to see what it would cost to insure instead.",
-  driver: "See what a new or younger driver would do to the bill.",
-  move: "Pick a state to see what the same car and driver would cost there.",
-  coverage: "See what more or less coverage would do to the price.",
+  driver: "Add a driver to your policy, or change the main driver's age.",
+  move: "Pick a state to see what the same car, driver and coverage would cost there.",
+  coverage: "See what different coverage, a different deductible, or a discount would do to the price.",
   more: "See what your miles and driving record do to the price.",
 }
 
@@ -117,8 +130,7 @@ function presetsFor(tab: Tab, now: Scenario): Preset[] {
     case "driver":
       return [
         { label: "Add a new 16-year-old driver", change: { age: "16-18", yearsLicensed: "under-1" } },
-        { label: "A 19–21-year-old, on their own policy", change: { age: "19-21", yearsLicensed: "1-3" } },
-        { label: "A 22–25-year-old driver", change: { age: "22-25", yearsLicensed: "4-9" } },
+        { label: "Add a 19–21-year-old, on their own policy", change: { age: "19-21", yearsLicensed: "1-3" } },
       ]
     case "move":
       return MOVE_CANDIDATES.filter((code) => code !== now.state)
@@ -130,8 +142,8 @@ function presetsFor(tab: Tab, now: Scenario): Preset[] {
           label: "$2,000 deductible",
           change: { deductible: 2000, coverage: hasPhysicalDamage(now.coverage) ? now.coverage : "full" },
         },
-        { label: "Liability only", change: { coverage: "standard" } },
-        { label: "Full coverage, higher limits", change: { coverage: "high" } },
+        { label: "Liability only, solid limits", change: { coverage: "standard" } },
+        { label: "Full coverage, extra protection", change: { coverage: "high" } },
       ]
     case "more":
       return [
@@ -178,7 +190,7 @@ function readInitial(): {
     return {
       situation: null,
       changes,
-      notes: what ? [`We put ${what} in the What if… card, tried on “Your situation now.” Change anything you like.`] : [],
+      notes: what ? [`We put ${what} in “Try a change,” tried on your starting point. Change anything you like.`] : [],
       present: true,
       fromPage: true,
       moveTo: null,
@@ -259,16 +271,73 @@ function visibleChanges(keys: readonly ChangeKey[], next: Scenario): ChangeKey[]
   })
 }
 
-/** "a 2025 Tesla Model Y", "a new 16-year-old", or the chip's own words. */
-function changePhrase(key: ChangeKey, now: Scenario, next: Scenario): string {
-  if (key === "vehicle") return shortVehicleLabel(next)
-  if (key === "age" && next.age === "16-18" && now.age !== "16-18") return "a new 16-year-old"
-  return lowerFirst(changeChip(key, next))
-}
-
 function presetPressed(preset: Preset, now: Scenario, next: Scenario): boolean {
   const entries = Object.entries(preset.change) as [keyof Scenario, Scenario[keyof Scenario]][]
   return entries.every(([key, value]) => next[key] === value) && entries.some(([key, value]) => now[key] !== value)
+}
+
+/** Which tab each change lives on, so a tab with a change can show a dot. */
+const TAB_KEYS: Record<Tab, readonly ChangeKey[]> = {
+  car: ["vehicle"],
+  driver: ["age", "yearsLicensed", "goodStudent", "driverTraining"],
+  move: ["state", "region"],
+  coverage: ["coverage", "deductible", "householdPolicy", "loanLease"],
+  more: ["incidents", "mileage"],
+}
+
+function bandLabel<T extends { id: string; label: string }>(items: readonly T[], id: string): string {
+  return items.find((item) => item.id === id)?.label ?? id
+}
+
+/**
+ * The headline inputs still set to the example we filled in. A real driver can
+ * match the example too, so the page says "still set to our example", softly.
+ */
+function exampleFields(now: Scenario): string[] {
+  const fields: string[] = []
+  if (sameVehicle(now, DEFAULT_SCENARIO)) fields.push("car")
+  if (now.age === DEFAULT_SCENARIO.age) fields.push("age")
+  if (now.state === DEFAULT_SCENARIO.state) fields.push("state")
+  if (now.region === DEFAULT_SCENARIO.region) fields.push("area")
+  if (now.coverage === DEFAULT_SCENARIO.coverage) fields.push("coverage")
+  return fields
+}
+
+function listWords(items: readonly string[]): string {
+  if (items.length <= 2) return items.join(" and ")
+  return `${items.slice(0, -1).join(", ")} and ${items[items.length - 1]}`
+}
+
+/** "in the suburbs", "in a city", "in a small town or the country" */
+function regionWords(region: Region): string {
+  return region === "urban" ? "in a city" : region === "suburban" ? "in the suburbs" : "in a small town or the country"
+}
+
+/** A chip for one change, saying plainly when a driver is added rather than changed. */
+function chipLabel(key: ChangeKey, now: Scenario, next: Scenario): string {
+  if (key === "age" && next.age === "16-18" && now.age !== "16-18") return "Teen added (16–18)"
+  if (key === "age" && next.age === "19-21" && now.age !== "19-21") return "Driver added (19–21, own policy)"
+  if (key === "age") return `Main driver's age: ${bandLabel(AGE_BANDS, next.age)}`
+  return changeChip(key, next)
+}
+
+/**
+ * What a coverage change gives up, said plainly next to the price, so a
+ * smaller number never reads as simply good news.
+ */
+function coverageTradeOff(now: Scenario, next: Scenario): string | null {
+  const lines: string[] = []
+  if (hasPhysicalDamage(now.coverage) && !hasPhysicalDamage(next.coverage)) {
+    lines.push("You'd pay for your own car's repairs after a crash, theft or storm.")
+  }
+  const liabilityRank: Record<CoverageId, number> = { "state-minimum": 0, standard: 1, full: 1, high: 2 }
+  if (liabilityRank[next.coverage] < liabilityRank[now.coverage]) {
+    lines.push("Lower limits mean you could owe more yourself if you cause a serious crash.")
+  }
+  if (hasPhysicalDamage(next.coverage) && hasPhysicalDamage(now.coverage) && next.deductible > now.deductible) {
+    lines.push(`You'd pay the first $${next.deductible.toLocaleString("en-US")} of a repair yourself, instead of $${now.deductible.toLocaleString("en-US")}.`)
+  }
+  return lines.length > 0 ? lines.join(" ") : null
 }
 
 /** Waits for the browser (saved choices, share link) before drawing numbers, so nothing flashes. */
@@ -400,7 +469,8 @@ function CalculatorReady() {
     }
     setChanges(diffFrom(now, withTeenFlag({ ...now, ...item.change(now) })))
     setTab(item.tab)
-    whatIfRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+    // Show the answer, not the top of the card: on a phone it's a screen below the tap.
+    revealResult()
   }
 
   function onPremium(text: string, nextPeriod: PremiumPeriod = period) {
@@ -424,7 +494,17 @@ function CalculatorReady() {
         : premium.kind === "low-monthly"
           ? "That looks low even for a month. Double-check it?"
           : PREMIUM_HINT
-  const changesLabel = shown.length > 1 ? `Your changes: ${shown.map((key) => changePhrase(key, now, next)).join(" + ")}` : null
+  const changesLabel = shown.length > 1 ? "With your changes" : null
+  const changedTabs = new Set(TABS.filter((item) => TAB_KEYS[item.id].some((key) => shown.includes(key))).map((item) => item.id))
+  const stillExample = linked === null ? exampleFields(now) : []
+  const isExample = stillExample.length === 5 && situation.premium === null
+  const tradeOff = coverageTradeOff(now, next)
+  // A teen or a 19–21-year-old joining, rather than the main driver getting younger.
+  const addingDriver =
+    (next.age === "16-18" && now.age !== "16-18") || (next.age === "19-21" && now.age !== "19-21" && now.age !== "16-18")
+  const coverageChanged = shown.some((key) => key === "coverage" || key === "deductible")
+  const moveNote =
+    shown.length === 1 && shown[0] === "state" ? `Same car, driver and coverage, still ${regionWords(next.region)}.` : null
 
   return (
     <>
@@ -466,208 +546,19 @@ function CalculatorReady() {
           </div>
         ) : null}
 
-        <div className="mt-8 grid items-start gap-5 lg:mt-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-6">
-          {/* What if */}
-          <section
-            ref={whatIfRef}
-            id="what-if"
-            aria-labelledby="what-if-heading"
-            className="card scroll-mt-4 overflow-hidden lg:col-start-1 lg:row-start-1"
-          >
-            <div className="bg-sun-soft px-5 pt-5 pb-3 sm:px-6">
-              <h2 id="what-if-heading" className="text-xl font-semibold tracking-tight">
-                What if…
-              </h2>
-              <p className="mt-1 text-sm text-muted-foreground lg:hidden">
-                Compared with now: {lowerFirst(situationSentence(now, false))}{" "}
-                <a href="#now" className="link tap-target inline-flex items-center whitespace-nowrap">
-                  Change
-                </a>
-              </p>
-              <p className="mt-1 hidden text-sm text-muted-foreground lg:block">
-                Change one thing, or a few. We&apos;ll show the difference from your situation now.
-              </p>
-            </div>
+        <StarterCards onPick={tryStarter} />
 
-            <div className="tab-scroller border-b border-border bg-sun-soft">
-              <div role="tablist" aria-label="What to change" className="scroll-row px-3 pb-3 sm:px-5">
-                {TABS.map((item) => {
-                  const Icon = item.icon
-                  return (
-                    <button
-                      key={item.id}
-                      type="button"
-                      role="tab"
-                      id={`tab-${item.id}`}
-                      aria-selected={tab === item.id}
-                      aria-controls={`panel-${item.id}`}
-                      tabIndex={tab === item.id ? 0 : -1}
-                      className="tab"
-                      onClick={() => setTab(item.id)}
-                      onKeyDown={(event) => tabKey(event, tab, setTab)}
-                    >
-                      <Icon className="size-4" aria-hidden="true" />
-                      {item.label}
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-
-            <div role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`} tabIndex={0} className="grid gap-4 px-5 py-5 sm:px-6">
-              <p className="text-sm text-muted-foreground">{TAB_INTRO[tab]}</p>
-              {tab === "car" ? (
-                <div className="flex flex-wrap gap-2" data-testid="what-if-cars">
-                  {WHAT_IF_CARS.map((car) => {
-                    const pick = catalog ? resolveCar(catalog, car.year, car) : car.trim ? { ...car, trim: car.trim } : null
-                    const pressed = pick !== null && sameVehicle(pick, nextCar) && !sameVehicle(pick, nowCar)
-                    return (
-                      <button
-                        key={`${car.make}-${car.model}`}
-                        type="button"
-                        className="chip"
-                        aria-pressed={pressed}
-                        disabled={pick === null}
-                        onClick={() => {
-                          if (!pick) return
-                          patchNext(pick)
-                          revealResult()
-                        }}
-                      >
-                        {car.year} {car.make} {car.model}
-                      </button>
-                    )
-                  })}
-                  <button type="button" className="chip border-dashed text-primary" onClick={() => setPicker("next")}>
-                    Search every car…
-                  </button>
-                </div>
-              ) : (
-                <div className="flex flex-wrap gap-2" data-testid={`what-if-presets-${tab}`}>
-                  {presets.map((preset) => (
-                    <button
-                      key={preset.label}
-                      type="button"
-                      className="chip"
-                      aria-pressed={presetPressed(preset, now, next)}
-                      onClick={() => {
-                        patchNext(preset.change)
-                        revealResult()
-                      }}
-                    >
-                      {preset.label}
-                    </button>
-                  ))}
-                </div>
-              )}
-              {tab === "driver" ? (
-                <>
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <AgeField scenario={next} onChange={patchNext} idPrefix="next" />
-                    {UNDER_26.includes(next.age) ? null : <YearsField scenario={next} onChange={patchNext} idPrefix="next" />}
-                    {next.age === "16-18" && now.age !== "16-18" ? (
-                      <div className="grid gap-1.5 sm:col-span-2">
-                        <PolicyField value={situation.teenOnParentPolicy} onChange={setPolicy} idPrefix="next" />
-                        <p className="text-sm leading-snug text-muted-foreground">
-                          {situation.teenOnParentPolicy
-                            ? `We price your whole policy after adding them, with the ${shortVehicleLabel(next)}.`
-                            : "We price the teen alone, on their own policy."}
-                        </p>
-                      </div>
-                    ) : null}
-                    {next.age === "19-21" && now.age !== "19-21" ? (
-                      <p className="text-sm leading-snug text-muted-foreground sm:col-span-2">
-                        We price a 19–21-year-old on their own policy. Staying on a parent&apos;s policy usually costs less.
-                      </p>
-                    ) : null}
-                  </div>
-                  <DiscountFields scenario={next} onChange={patchNext} idPrefix="next" />
-                </>
-              ) : null}
-              {tab === "move" ? (
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <StateField scenario={next} onChange={patchNext} idPrefix="next" />
-                  <RegionField scenario={next} onChange={patchNext} idPrefix="next" />
-                </div>
-              ) : null}
-              {tab === "coverage" ? (
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <CoverageField scenario={next} onChange={patchNext} idPrefix="next" />
-                  <DeductibleField scenario={next} onChange={patchNext} idPrefix="next" />
-                </div>
-              ) : null}
-              {tab === "more" ? (
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <RecordField scenario={next} onChange={patchNext} idPrefix="next" />
-                  <MileageField scenario={next} onChange={patchNext} idPrefix="next" />
-                </div>
-              ) : null}
-            </div>
-
-            <p className="sr-only" aria-live="polite" data-testid="what-if-announce">
-              {result && !premiumInvalid ? result.headline : ""}
-            </p>
-            <div ref={resultRef} className="scroll-mb-4 border-t border-border px-5 py-6 sm:px-6">
-              {result && premiumInvalid ? (
-                <p className="py-4 text-center text-sm text-muted-foreground" data-testid="what-if-waiting">
-                  {premium.kind === "too-high"
-                    ? "What you pay now looks like more than we can work with. Check the number, or leave it empty, and the difference shows here."
-                    : "Finish typing what you pay now (or clear it), and the difference shows here."}
-                </p>
-              ) : result ? (
-                <WhatIfResult
-                  headingRef={resultHeadingRef}
-                  mode={result.mode}
-                  parts={result.parts}
-                  headline={result.headline}
-                  changesLabel={changesLabel}
-                  delta={result.delta}
-                  current={result.current}
-                  next={result.next}
-                  startKind={startKind}
-                  startNote={startNote}
-                  sender={linked !== null && linked.premium !== null}
-                  plural={shown.length > 1}
-                  state={stateName(next.state)}
-                  chips={shown.map((key) => ({ key, label: changeChip(key, next) }))}
-                  onUndo={undo}
-                  onReset={() => setChanges({})}
-                  onKeep={keepWhatIf}
-                  vehicleChanged={changed.includes("vehicle")}
-                  nextCarName={carName(nextCar)}
-                  carPage={nextCarPage}
-                  carPageName={`${nextCar.make} ${nextCar.model}`}
-                  compareHref={encodeSharePath({
-                    page: "/compare",
-                    scenario: next,
-                    teenOnParentPolicy: situation.teenOnParentPolicy,
-                    cars: [nowCar, nextCar].map((car) => ({ ...car, starred: false })),
-                    via: "whatif",
-                  })}
-                  versionPicker={
-                    changed.includes("vehicle") ? (
-                      <VersionPicker idPrefix="next-car" pick={nextCar} catalog={catalog} onChange={(pick) => patchNext(pick)} compact />
-                    ) : null
-                  }
-                />
-              ) : (
-                <div className="grid justify-items-center gap-2 py-6 text-center" data-testid="what-if-empty">
-                  <span className="grid size-10 place-items-center rounded-full bg-sun-soft text-sun-ink" aria-hidden="true">
-                    <ArrowUp className="size-5" />
-                  </span>
-                  <p className="text-lg font-semibold">{TAB_EMPTY[tab].title}</p>
-                  <p className="max-w-sm text-sm text-muted-foreground">{TAB_EMPTY[tab].body}</p>
-                </div>
-              )}
-            </div>
-          </section>
-
-          {/* Now */}
-          <section id="now" aria-labelledby="now-heading" className="card scroll-mt-4 p-5 sm:p-6 lg:col-start-2 lg:row-span-2 lg:row-start-1">
+        <div className="mt-6 grid items-start gap-5 lg:mt-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-6">
+          {/* 1. Where you start */}
+          <section id="now" aria-labelledby="now-heading" className="card scroll-mt-4 p-5 sm:p-6 lg:col-start-1 lg:row-start-1">
             <h2 id="now-heading" className="text-xl font-semibold tracking-tight">
-              Your situation now
+              <span className="text-muted-foreground">1.</span> Start with your situation
             </h2>
-            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{situationSentence(now, false)}</p>
+            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+              {isExample
+                ? "We filled in an example driver. Change the car, age and state to match you. If you know what you pay for this car, add it and we'll start from your real number."
+                : situationSentence(now, false)}
+            </p>
 
             {nowEstimate ? (
               <NowFigure
@@ -676,6 +567,12 @@ function CalculatorReady() {
                 startShortLine={start ? startShort(start, state) : undefined}
                 shared={linked !== null && linked.premium !== null}
                 waiting={premiumInvalid}
+                eyebrow={linked !== null ? null : isExample ? "Example estimate" : "Your starting estimate"}
+                exampleNote={
+                  !isExample && stillExample.length > 0
+                    ? `Still set to our example: ${listWords(stillExample)}. Change ${stillExample.length === 1 ? "it" : "them"} below if ${stillExample.length === 1 ? "it doesn't" : "they don't"} match you.`
+                    : null
+                }
               />
             ) : null}
 
@@ -702,7 +599,9 @@ function CalculatorReady() {
                 <AgeField scenario={now} onChange={patchNow} idPrefix="now" />
                 <StateField scenario={now} onChange={patchNow} idPrefix="now" />
                 <RegionField scenario={now} onChange={patchNow} idPrefix="now" />
-                <CoverageField scenario={now} onChange={patchNow} idPrefix="now" showNote={false} />
+                <div className="col-span-2">
+                  <CoverageField scenario={now} onChange={patchNow} idPrefix="now" showNote={false} />
+                </div>
                 <p className="col-span-2 -mt-1 text-sm leading-snug text-muted-foreground">
                   {coverageAssumption(now.coverage, now.state)}
                 </p>
@@ -710,7 +609,7 @@ function CalculatorReady() {
 
               <div className="grid gap-1.5 rounded-2xl bg-muted/70 p-4">
                 <label htmlFor="premium" className="text-sm font-semibold">
-                  What do you pay now?{" "}
+                  What do you pay for this car?{" "}
                   <span className="font-normal text-muted-foreground">(Optional.)</span>
                 </label>
                 <div className="flex gap-2">
@@ -797,7 +696,7 @@ function CalculatorReady() {
                 {nowEstimate && !result ? (
                   <details className="disclosure">
                     <summary>
-                      Here&apos;s how we got this
+                      How we worked this out
                       <ChevronDown className="size-4" aria-hidden="true" />
                     </summary>
                     <div className="pb-2">
@@ -815,29 +714,259 @@ function CalculatorReady() {
             </div>
           </section>
 
-          <section aria-labelledby="starters-heading" className="mt-6 lg:col-start-1 lg:row-start-2 lg:mt-2">
-            <h2 id="starters-heading" className="text-xl font-semibold tracking-tight">
-              Or start with a question other families ask
-            </h2>
-            <div className="mt-4 grid gap-3 sm:grid-cols-2">
-              {STARTERS.map((item) => {
-                const Icon = STARTER_ICONS[item.id]
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    className="card group grid grid-cols-[auto_1fr] content-start gap-x-3 gap-y-1 p-4 text-left transition-[border-color,transform] hover:-translate-y-0.5 hover:border-primary/50"
-                    onClick={() => tryStarter(item)}
-                    data-testid={`starter-${item.id}`}
-                  >
-                    <span className="row-span-2 grid size-9 place-items-center rounded-full bg-sun-soft text-sun-ink" aria-hidden="true">
-                      <Icon className="size-[1.1rem]" />
-                    </span>
-                    <span className="font-semibold">{item.title}</span>
-                    <span className="text-sm leading-snug text-muted-foreground">{item.story}</span>
+          {/* 2. Try a change, 3. read the result */}
+          <section
+            ref={whatIfRef}
+            id="what-if"
+            aria-labelledby="what-if-heading"
+            className="card scroll-mt-4 overflow-hidden lg:col-start-2 lg:row-start-1"
+          >
+            <div className="bg-sun-soft px-5 pt-5 pb-3 sm:px-6">
+              <h2 id="what-if-heading" className="text-xl font-semibold tracking-tight">
+                <span className="text-muted-foreground">2.</span> Try a change
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Pick a different car, add a driver, move, or change coverage. Changes add up, and you can remove any of them.
+              </p>
+              <p className="mt-1 text-sm text-muted-foreground lg:hidden">
+                Starting from: {lowerFirst(situationSentence(now, false))}{" "}
+                <a href="#now" className="link tap-target inline-flex items-center whitespace-nowrap">
+                  Edit
+                </a>
+              </p>
+            </div>
+
+            <div className="tab-scroller border-b border-border bg-sun-soft">
+              <div role="tablist" aria-label="What to change" className="scroll-row tab-row px-3 pb-3 sm:px-5">
+                {TABS.map((item) => {
+                  const Icon = item.icon
+                  const hasChange = changedTabs.has(item.id)
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      role="tab"
+                      id={`tab-${item.id}`}
+                      aria-selected={tab === item.id}
+                      aria-controls={`panel-${item.id}`}
+                      tabIndex={tab === item.id ? 0 : -1}
+                      className="tab"
+                      onClick={() => setTab(item.id)}
+                      onKeyDown={(event) => tabKey(event, tab, setTab)}
+                    >
+                      <Icon className="size-4" aria-hidden="true" />
+                      {item.label}
+                      {hasChange ? (
+                        <>
+                          <span className="size-2 rounded-full bg-sun" aria-hidden="true" data-testid={`tab-dot-${item.id}`} />
+                          <span className="sr-only"> (changed)</span>
+                        </>
+                      ) : null}
+                    </button>
+                  )
+                })}
+              </div>
+              {shown.length > 0 ? (
+                <p className="px-5 pb-3 text-xs text-muted-foreground sm:px-6" data-testid="changes-add-up">
+                  Changes add up. Remove one with ×.
+                </p>
+              ) : null}
+            </div>
+
+            <div role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`} tabIndex={0} className="grid gap-4 px-5 py-5 sm:px-6">
+              <p className="text-sm text-muted-foreground">{TAB_INTRO[tab]}</p>
+              {tab === "car" ? (
+                <div className="flex flex-wrap gap-2" data-testid="what-if-cars">
+                  {WHAT_IF_CARS.map((car) => {
+                    const pick = catalog ? resolveCar(catalog, car.year, car) : car.trim ? { ...car, trim: car.trim } : null
+                    const pressed = pick !== null && sameVehicle(pick, nextCar) && !sameVehicle(pick, nowCar)
+                    return (
+                      <button
+                        key={`${car.make}-${car.model}`}
+                        type="button"
+                        className="chip"
+                        aria-pressed={pressed}
+                        disabled={pick === null}
+                        onClick={() => {
+                          if (!pick) return
+                          patchNext(pick)
+                          revealResult()
+                        }}
+                      >
+                        {car.year} {car.make} {car.model}
+                      </button>
+                    )
+                  })}
+                  <button type="button" className="chip border-dashed text-primary" onClick={() => setPicker("next")}>
+                    Search every car…
                   </button>
-                )
-              })}
+                </div>
+              ) : (
+                <div className="grid gap-2">
+                  {tab === "driver" ? <p className="text-sm font-semibold">Add a driver</p> : null}
+                  <div className="flex flex-wrap gap-2" data-testid={`what-if-presets-${tab}`}>
+                    {presets.map((preset) => (
+                      <button
+                        key={preset.label}
+                        type="button"
+                        className="chip"
+                        aria-pressed={presetPressed(preset, now, next)}
+                        onClick={() => {
+                          patchNext(preset.change)
+                          revealResult()
+                        }}
+                      >
+                        {preset.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {tab === "driver" ? (
+                <>
+                  {next.age === "16-18" && now.age !== "16-18" ? (
+                    <div className="grid gap-1.5">
+                      <PolicyField value={situation.teenOnParentPolicy} onChange={setPolicy} idPrefix="next" />
+                      <p className="text-sm leading-snug text-muted-foreground">
+                        {situation.teenOnParentPolicy
+                          ? `We add them to the cost of insuring the ${shortVehicleLabel(next)}.`
+                          : "We price the teen alone, on their own policy."}
+                      </p>
+                    </div>
+                  ) : null}
+                  {next.age === "19-21" && now.age !== "19-21" ? (
+                    <p className="text-sm leading-snug text-muted-foreground">
+                      We price a 19–21-year-old on their own policy. Staying on a parent&apos;s policy usually costs less.
+                    </p>
+                  ) : null}
+                  {addingDriver ? (
+                    <div className="grid gap-2 border-t border-border pt-4">
+                      <p className="text-sm font-semibold">About the new driver</p>
+                      <DriverDiscountFields scenario={next} onChange={patchNext} idPrefix="next" />
+                      <p className="text-sm leading-snug text-muted-foreground">
+                        To change the main driver&apos;s age instead, remove the added driver with ×.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="grid gap-3 border-t border-border pt-4">
+                      <p className="text-sm font-semibold">Or change the main driver&apos;s age</p>
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        <AgeField
+                          scenario={next}
+                          onChange={patchNext}
+                          idPrefix="next"
+                          label="Main driver's age"
+                          now={bandLabel(AGE_BANDS, now.age)}
+                        />
+                        {UNDER_26.includes(next.age) ? null : (
+                          <YearsField scenario={next} onChange={patchNext} idPrefix="next" now={bandLabel(YEARS_LICENSED, now.yearsLicensed)} />
+                        )}
+                      </div>
+                      <DriverDiscountFields scenario={next} onChange={patchNext} idPrefix="next" />
+                    </div>
+                  )}
+                </>
+              ) : null}
+              {tab === "move" ? (
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <StateField scenario={next} onChange={patchNext} idPrefix="next" now={stateName(now.state)} />
+                  <RegionField
+                    scenario={next}
+                    onChange={patchNext}
+                    idPrefix="next"
+                    label="Where you'd keep the car"
+                    now={regionLabel(now.region)}
+                  />
+                </div>
+              ) : null}
+              {tab === "coverage" ? (
+                <>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <CoverageField scenario={next} onChange={patchNext} idPrefix="next" now={coverageLabel(now.coverage)} />
+                    <DeductibleField
+                      scenario={next}
+                      onChange={patchNext}
+                      idPrefix="next"
+                      now={hasPhysicalDamage(now.coverage) ? `$${now.deductible.toLocaleString("en-US")}` : "none"}
+                    />
+                  </div>
+                  <div className="grid gap-1">
+                    <p className="text-sm font-semibold">Discounts</p>
+                    <PolicyDiscountFields scenario={next} onChange={patchNext} idPrefix="next" />
+                  </div>
+                </>
+              ) : null}
+              {tab === "more" ? (
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <RecordField scenario={next} onChange={patchNext} idPrefix="next" now={bandLabel(INCIDENTS, now.incidents).replace(" (last 3 years)", "")} />
+                  <MileageField scenario={next} onChange={patchNext} idPrefix="next" now={MILEAGE_BANDS.find((item) => item.id === now.mileage)?.option ?? now.mileage} />
+                </div>
+              ) : null}
+            </div>
+
+            <p className="sr-only" aria-live="polite" data-testid="what-if-announce">
+              {result && !premiumInvalid ? result.headline : ""}
+            </p>
+            <div ref={resultRef} className="scroll-mb-4 border-t border-border px-5 py-6 sm:px-6">
+              {result && premiumInvalid ? (
+                <p className="py-4 text-center text-sm text-muted-foreground" data-testid="what-if-waiting">
+                  {premium.kind === "too-high"
+                    ? "What you pay now looks like more than we can work with. Check the number, or leave it empty, and the difference shows here."
+                    : "Finish typing what you pay now (or clear it), and the difference shows here."}
+                </p>
+              ) : result ? (
+                <WhatIfResult
+                  headingRef={resultHeadingRef}
+                  mode={result.mode}
+                  parts={result.parts}
+                  headline={result.headline}
+                  changesLabel={changesLabel}
+                  delta={result.delta}
+                  current={result.current}
+                  next={result.next}
+                  startKind={startKind}
+                  startNote={startNote}
+                  sender={linked !== null && linked.premium !== null}
+                  plural={shown.length > 1}
+                  state={stateName(next.state)}
+                  chips={shown.map((key) => ({ key, label: chipLabel(key, now, next) }))}
+                  onUndo={undo}
+                  onReset={() => setChanges({})}
+                  onKeep={keepWhatIf}
+                  neutral={coverageChanged}
+                  tradeOff={tradeOff}
+                  moveNote={moveNote}
+                  vehicleChanged={changed.includes("vehicle")}
+                  nextCarName={carName(nextCar)}
+                  carPage={nextCarPage}
+                  carPageName={`${nextCar.make} ${nextCar.model}`}
+                  compareHref={encodeSharePath({
+                    page: "/compare",
+                    scenario: next,
+                    teenOnParentPolicy: situation.teenOnParentPolicy,
+                    cars: [nowCar, nextCar].map((car) => ({ ...car, starred: false })),
+                    via: "whatif",
+                  })}
+                  versionPicker={
+                    changed.includes("vehicle") ? (
+                      <VersionPicker idPrefix="next-car" pick={nextCar} catalog={catalog} onChange={(pick) => patchNext(pick)} compact />
+                    ) : null
+                  }
+                />
+              ) : (
+                <div className="grid justify-items-center gap-2 py-6 text-center" data-testid="what-if-empty">
+                  <span className="grid size-10 place-items-center rounded-full bg-sun-soft text-sun-ink" aria-hidden="true">
+                    <ArrowUp className="size-5" />
+                  </span>
+                  <p className="text-lg font-semibold">{TAB_EMPTY[tab].title}</p>
+                  <p className="max-w-sm text-sm text-muted-foreground">{TAB_EMPTY[tab].body}</p>
+                  <p className="mt-2 max-w-sm text-xs leading-snug text-muted-foreground">
+                    <span className="font-semibold">3. Read the result.</span> The big number is the difference from where you
+                    started. The range is our estimate; actual quotes can fall outside it. Only an insurer can give you an
+                    actual price.
+                  </p>
+                </div>
+              )}
             </div>
           </section>
         </div>
@@ -932,6 +1061,8 @@ function NowFigure({
   startShortLine,
   shared,
   waiting,
+  eyebrow,
+  exampleNote,
 }: {
   estimate: Estimate
   startKind: StartKind
@@ -940,31 +1071,48 @@ function NowFigure({
   shared: boolean
   /** The premium field has text we can't read yet: dim the old figures. */
   waiting: boolean
+  /** "Example estimate" until the visitor makes it theirs. */
+  eyebrow: string | null
+  /** Which inputs are still the example we filled in. */
+  exampleNote: string | null
 }) {
   const ownNumber = startKind === "yours" && estimate.steps.length === 0
   return (
     <div className={cn("mt-5 transition-opacity", waiting && "opacity-35")} data-testid="now-figure" aria-hidden={waiting || undefined}>
+      {eyebrow && !ownNumber ? (
+        <p className="mb-1 text-xs font-semibold tracking-wide text-sun-ink uppercase" data-testid="now-eyebrow">
+          {eyebrow}
+        </p>
+      ) : null}
       <p className="flex flex-wrap items-baseline gap-x-2">
         <span className="money text-[2.6rem] leading-none font-semibold tracking-tight" data-testid="now-yearly">
           {ownNumber ? dollars(estimate.likely) : estimateDollars(estimate.likely)}
         </span>
         <span className="text-base text-muted-foreground">a year</span>
       </p>
-      <p className="mt-2 text-sm text-muted-foreground">
+      <p className="mt-2 text-sm text-muted-foreground" data-testid="now-range">
         {ownNumber
-          ? `${shared ? "What the sender pays now" : "What you pay now"}.`
-          : `Real quotes: ${rangeWords(estimate.low, estimate.high)} a year.`}
+          ? `${shared ? "What the sender pays for this car now" : "What you pay for this car now"}.`
+          : `Estimated yearly range: ${rangeDollars(estimate.low, estimate.high)}.`}
       </p>
       {ownNumber ? null : (
-        <RangeBar
-          className="mt-3"
-          low={estimate.low}
-          likely={estimate.likely}
-          high={estimate.high}
-          min={Math.round(estimate.low * 0.9)}
-          max={Math.round(estimate.high * 1.05)}
-        />
+        <>
+          <RangeBar
+            className="mt-3"
+            low={estimate.low}
+            likely={estimate.likely}
+            high={estimate.high}
+            min={Math.round(estimate.low * 0.9)}
+            max={Math.round(estimate.high * 1.05)}
+          />
+          <p className="mt-2 text-xs leading-snug text-muted-foreground">{RANGE_NOTE}</p>
+        </>
       )}
+      {exampleNote ? (
+        <p className="mt-3 rounded-lg bg-sun-soft px-3 py-2 text-sm leading-snug" data-testid="example-note">
+          {exampleNote}
+        </p>
+      ) : null}
       {startKind === "typical" && startShortLine ? (
         <p className="mt-3 text-sm leading-snug text-muted-foreground" data-testid="start-note">
           {startShortLine}
@@ -993,6 +1141,9 @@ function WhatIfResult({
   onUndo,
   onReset,
   onKeep,
+  neutral,
+  tradeOff,
+  moveNote,
   vehicleChanged,
   nextCarName,
   carPage,
@@ -1004,7 +1155,7 @@ function WhatIfResult({
   parts: ChangePart[]
   compareHref: string
   headline: string
-  /** "Your changes: 2025 Tesla Model Y + a new 16-year-old", when there's more than one. */
+  /** "With your changes", when there's more than one (the chips above say which). */
   changesLabel: string | null
   delta: number
   current: Estimate
@@ -1020,6 +1171,12 @@ function WhatIfResult({
   onUndo: (key: ChangeKey) => void
   onReset: () => void
   onKeep: () => void
+  /** Coverage changed: a lower price isn't simply good news, so no green or red. */
+  neutral: boolean
+  /** What a coverage change gives up, in a sentence. */
+  tradeOff: string | null
+  /** For a move: what stayed the same. */
+  moveNote: string | null
   vehicleChanged: boolean
   nextCarName: string
   /** The car's own page (/cars/...), when it has one. */
@@ -1037,11 +1194,32 @@ function WhatIfResult({
   const label = changesLabel ?? (hasAmount ? headline.slice(0, headline.indexOf(": about")) : null)
   const rounded = Math.round(delta / 10) * 10
   const direction = mode === "teen-own" ? "neutral" : rounded > 0 ? "up" : rounded < 0 ? "down" : "same"
-  const tone = direction === "up" ? "text-up" : direction === "down" ? "text-down" : "text-foreground"
+  const tone = neutral ? "text-foreground" : direction === "up" ? "text-up" : direction === "down" ? "text-down" : "text-foreground"
+  const partTone = (part: ChangePart) =>
+    neutral && (part.key === "coverage" || part.key === "deductible")
+      ? "text-foreground"
+      : part.amount > 0
+        ? "text-up"
+        : part.amount < 0
+          ? "text-down"
+          : "text-muted-foreground"
   // A piece that rounds to $0 doesn't explain anything.
   const shownParts = parts.filter((part) => Math.round(part.amount / 10) !== 0)
   return (
     <div className="pop-in grid gap-6" key={headline}>
+      {chips.length > 0 ? (
+        <div className="flex flex-wrap items-center gap-2" data-testid="what-if-chips">
+          <span className="text-sm text-muted-foreground">You changed:</span>
+          {chips.map((chip) => (
+            <span key={chip.key} className="inline-flex items-center gap-1 rounded-full bg-sun-soft py-1 pr-1 pl-3 text-sm font-medium">
+              {chip.label}
+              <button type="button" className="icon-btn size-7" aria-label={`Remove ${chip.label}`} onClick={() => onUndo(chip.key)}>
+                <X className="size-3.5" />
+              </button>
+            </span>
+          ))}
+        </div>
+      ) : null}
       <div className="grid gap-1">
         {label ? <p className="text-base font-medium text-muted-foreground">{label}</p> : null}
         <h3 ref={headingRef} tabIndex={-1} className="outline-none" data-testid="what-if-headline" aria-label={headline}>
@@ -1067,14 +1245,22 @@ function WhatIfResult({
         {hasAmount ? (
           <p className="text-sm text-muted-foreground">
             {mode === "teen-own"
-              ? `For their own policy, on top of your ${nowWords}.`
+              ? `For their own policy, on top of ${ownNumber ? "the" : "about"} ${nowWords} a year for your car now.`
               : mode === "teen-added"
-                ? `On a policy that costs ${ownNumber ? "" : "about "}${nowWords} now.`
+                ? `Added to this car's cost, ${ownNumber ? "" : "about "}${nowWords} a year now.`
                 : direction === "same"
                   ? "Within $10 either way."
                   : differenceWords(delta, "month") === "about the same"
                     ? "About the same each month."
                     : `About ${differenceWords(delta, "month")}.`}
+            {moveNote ? ` ${moveNote}` : ""}
+          </p>
+        ) : moveNote ? (
+          <p className="text-sm text-muted-foreground">{moveNote}</p>
+        ) : null}
+        {tradeOff ? (
+          <p className="mt-1 rounded-lg bg-muted/70 px-3 py-2 text-sm leading-snug" data-testid="trade-off">
+            {tradeOff}
           </p>
         ) : null}
       </div>
@@ -1086,12 +1272,7 @@ function WhatIfResult({
             {shownParts.map((part) => (
               <li key={part.label} className="flex items-baseline justify-between gap-4 border-b border-border/70 py-1.5 last:border-b-0">
                 <span>{part.label}</span>
-                <span
-                  className={cn(
-                    "money font-semibold whitespace-nowrap",
-                    part.amount > 0 ? "text-up" : part.amount < 0 ? "text-down" : "text-muted-foreground",
-                  )}
-                >
+                <span className={cn("money font-semibold whitespace-nowrap", partTone(part))}>
                   {signedDollars(part.amount)}
                 </span>
               </li>
@@ -1108,7 +1289,7 @@ function WhatIfResult({
       <dl className="grid gap-4 rounded-2xl bg-muted/60 p-4">
         <div className="grid gap-1.5">
           <div className="flex flex-wrap items-baseline justify-between gap-x-3">
-            <dt className="text-sm text-muted-foreground">{mode === "teen-own" ? "Your policy" : "Now"}</dt>
+            <dt className="text-sm text-muted-foreground">{mode === "teen-own" ? "Your car now" : "Where you started"}</dt>
             <dd className="money text-sm text-muted-foreground">
               <span className="text-base font-semibold text-foreground">{nowWords}</span> a year
               {ownNumber ? null : <span> · {rangeWords(current.low, current.high)}</span>}
@@ -1128,23 +1309,9 @@ function WhatIfResult({
           </div>
           <RangeBar low={next.low} likely={next.likely} high={next.high} min={min} max={max} tone="sun" />
         </div>
-        <p className="text-sm text-muted-foreground">The dot is our best guess. The bar shows where most real quotes would land.</p>
+        <p className="text-sm text-muted-foreground">Estimated yearly ranges. {RANGE_NOTE}</p>
       </dl>
       {versionPicker}
-
-      {chips.length > 0 ? (
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-sm text-muted-foreground">You changed:</span>
-          {chips.map((chip) => (
-            <span key={chip.key} className="inline-flex items-center gap-1 rounded-full bg-sun-soft py-1 pr-1 pl-3 text-sm font-medium">
-              {chip.label}
-              <button type="button" className="icon-btn size-7" aria-label={`Undo ${chip.label}`} onClick={() => onUndo(chip.key)}>
-                <X className="size-3.5" />
-              </button>
-            </span>
-          ))}
-        </div>
-      ) : null}
 
       <div className="flex flex-wrap gap-2">
         {vehicleChanged ? (
@@ -1154,16 +1321,16 @@ function WhatIfResult({
           </a>
         ) : null}
         <button type="button" className="btn" onClick={onKeep}>
-          Keep this as my situation
+          Make this my new starting point
         </button>
         <button type="button" className="btn btn-quiet" onClick={onReset}>
-          <RotateCcw className="size-4" aria-hidden="true" /> Start over
+          <RotateCcw className="size-4" aria-hidden="true" /> Clear my changes
         </button>
       </div>
 
       <details className="disclosure -mb-2">
         <summary>
-          {mode === "teen-own" ? "Here's how we got their price" : "Here's how we got this"}
+          {mode === "teen-own" ? "How we worked out their price" : "How we worked this out"}
           <ChevronDown className="size-4" aria-hidden="true" />
         </summary>
         <div className="grid gap-3 pb-4">
@@ -1229,7 +1396,7 @@ function VersionPicker({
       </div>
       <div className="grid min-w-0 gap-1">
         <label htmlFor={`${idPrefix}-trim`} className="text-xs font-medium text-muted-foreground">
-          Version
+          Trim (for example, LE or Sport)
         </label>
         <select
           id={`${idPrefix}-trim`}
@@ -1270,7 +1437,7 @@ function PrintSummary({
       <h1 style={{ fontSize: "20pt", fontWeight: 650, margin: "4pt 0 12pt" }}>
         {result ? result.headline : "Your car insurance, roughly"}
       </h1>
-      <h2 style={{ fontSize: "12pt", fontWeight: 650, marginTop: "12pt" }}>Your situation now</h2>
+      <h2 style={{ fontSize: "12pt", fontWeight: 650, marginTop: "12pt" }}>Where you started</h2>
       <p>{situationSentence(situation.scenario, false)}</p>
       {nowEstimate ? (
         ownNumber ? (

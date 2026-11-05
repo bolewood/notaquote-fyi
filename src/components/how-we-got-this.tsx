@@ -26,6 +26,11 @@ export function HowWeGotThis({
   return (
     <div className="grid gap-3 text-sm leading-relaxed">
       <p data-testid="estimate-summary">{words(estimate.summary)}</p>
+      {estimate.steps.length > 0 && startKind === "typical" ? (
+        <p className="text-muted-foreground" data-testid="steps-start-note">
+          Every step starts from a typical car in your state, not from your current car.
+        </p>
+      ) : null}
       {estimate.steps.length > 0 ? (
         <ul className="grid divide-y divide-border/70 border-y border-border/70">
           {estimate.steps.map((step) => {

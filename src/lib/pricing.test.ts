@@ -16,6 +16,7 @@ import {
   startLine,
   addsTeen,
   carDifference,
+  carSwapWords,
   distinctReasons,
   explainChange,
   vehicleMatchWords,
@@ -65,7 +66,7 @@ test("single changes get plain headline words; cars and states keep the engine's
     "Adding a 16–18-year-old to your policy",
   )
   assert.equal(whatIfLabel(NOW, { ...NOW, age: "16-18" }, false), "A 16–18-year-old on their own policy")
-  assert.equal(whatIfLabel(NOW, { ...NOW, coverage: "standard" }, false), "Switching to liability only")
+  assert.equal(whatIfLabel(NOW, { ...NOW, coverage: "standard" }, false), "Switching to liability only, solid limits")
   assert.equal(whatIfLabel(NOW, { ...NOW, region: "rural" }, false), "Moving to a small town or the country")
   assert.equal(whatIfLabel(NOW, { ...NOW, ...MODEL_Y }, false), undefined)
   assert.equal(whatIfLabel(NOW, { ...NOW, state: "CO" }, false), undefined)
@@ -81,7 +82,7 @@ test("adding a teen on the What-if page prices the whole household's policy", ()
   const facts = vehicleFacts(catalog, NOW)
   const result = priceWhatIf({ ...DEFAULT_SITUATION, premium: 1800 }, facts, next, facts)
   assert.ok(result && result.delta > 0)
-  assert.match(result!.headline, /^Adding your teen to your policy: about \$[\d,]+ more a year, on a policy that costs about \$1,800 now\.$/)
+  assert.match(result!.headline, /^Adding your teen to your policy: about \$[\d,]+ more a year, for a car that costs about \$1,800 a year to insure now\.$/)
   assert.match(result!.next.rangeNote, /whole household/)
 })
 
@@ -162,7 +163,7 @@ test("a what-if is explained as the difference, and the pieces add up to it", ()
   assert.equal(result!.mode, "change")
   const labels = result!.parts.map((part) => part.label)
   assert.equal(labels[0], "Newer car (2025)")
-  assert.match(labels[1], /^Toyota Camry → Tesla Model Y \(.+\)$/)
+  assert.match(labels[1], /^Tesla Model Y instead of Toyota Camry: .+$/)
   assert.equal(labels[2], "$2,000 deductible")
   const sum = result!.parts.reduce((total, part) => total + part.amount, 0)
   assert.equal(sum, result!.delta)
@@ -173,6 +174,13 @@ test("a what-if is explained as the difference, and the pieces add up to it", ()
   const same = vehicleRelativity(nowFacts)
   assert.equal(carDifference(same, same, true), "similar claims")
   assert.equal(carDifference(same, { ...same, physicalHundredths: same.physicalHundredths + 20 }, true), "pricier repairs")
+
+  // A swap that pushes both ways names the push that wins first, then what offsets it.
+  const mixed = { ...same, physicalHundredths: same.physicalHundredths + 30, liabilityHundredths: same.liabilityHundredths - 15 }
+  assert.equal(carSwapWords(same, mixed, true, 500), "pricier repairs, partly offset by fewer at-fault claims")
+  assert.equal(carSwapWords(same, mixed, true, -200), "fewer at-fault claims, partly offset by pricier repairs")
+  assert.equal(carSwapWords(same, mixed, false, -200), "fewer at-fault claims")
+  assert.equal(carSwapWords(same, same, true, 0), "similar claims")
 })
 
 test("adding a teen is explained as the other changes plus the teen", () => {
@@ -199,6 +207,8 @@ test("a step's source says which state's prices it's based on, when that isn't y
   assert.equal(basisLabel("sourced", ["ca-2026"], "California"), "From published prices")
   assert.equal(basisLabel("assumed", [], "Illinois"), "Our best guess")
   assert.equal(basisLabel("indicative", ["hldi-2022-24"], "Illinois"), "Worked out from public data")
+  // HLDI publishes claims results, not prices.
+  assert.equal(basisLabel("sourced", ["hldi-2022-24"], "Illinois"), "Based on insurance claims data")
 })
 
 test("the short start line names the state and a rounded price", () => {

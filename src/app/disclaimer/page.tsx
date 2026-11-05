@@ -30,16 +30,17 @@ export default function DisclaimerPage() {
           date shown on the <Link href="/sources#state-rules">Where the numbers come from</Link> page. It&apos;s a floor, not a suggestion.
         </li>
         <li>
-          <strong>Liability only</strong> pays for damage you cause to others, up to $100,000/$300,000/$100,000 (per
-          person / per crash / property). It doesn&apos;t fix your own car.
+          <strong>Liability only, solid limits</strong> pays for injuries and damage you cause to others, up to $100,000
+          per person, $300,000 per crash and $100,000 for property, well above most states&apos; minimums. It doesn&apos;t
+          fix your own car.
         </li>
         <li>
           <strong>Full coverage</strong> adds collision and comprehensive, which fix or replace your own car after a crash,
           theft, or storm.
         </li>
         <li>
-          <strong>Full coverage, higher limits</strong> is full coverage with more liability protection, up to
-          $250,000/$500,000/$250,000.
+          <strong>Full coverage, extra protection</strong> is full coverage with higher limits for injuries and damage you
+          cause: up to $250,000 per person, $500,000 per crash and $250,000 for property.
         </li>
       </ul>
       <p>We don&apos;t push anyone toward more or less coverage. That&apos;s your call. Try both on the <Link href="/">Try a change</Link> page to see the trade-off.</p>

@@ -1697,7 +1697,7 @@ export function teenAddedToPolicy(
     after,
     increase,
     increaseRounded,
-    headline: `Adding your teen to your policy: about ${differenceWords(increase)}, on a policy that costs about ${formatDollars(now)} now.`,
+    headline: `Adding your teen to your policy: about ${differenceWords(increase)}, for a car that costs about ${formatDollars(now)} a year to insure now.`,
   }
 }
 
