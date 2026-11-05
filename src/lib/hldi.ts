@@ -7,7 +7,7 @@
  * typed in by hand. This file only explains; it never changes a price.
  */
 import { FACTOR_BUNDLE, type VehicleRelativity } from "./factor-engine"
-import { estimateDollars } from "./format"
+import { estimateDollars, longDate } from "./format"
 
 // ---------------------------------------------------------------------------
 // Ratings
@@ -395,12 +395,11 @@ export function hldiShortLine(report: HldiReport): string {
 }
 
 /**
- * When we last pulled HLDI's tables (every window, 2006–08 through the newest).
- * The sources list and the line below both use it. Update it in the January
- * refresh (docs/DATA-REFRESH.md). The 2022–24 source entry's own checkedOn is
- * September 22, 2026; the older windows were added in October 2026.
+ * TODO(HLDI): when HLDI published each report, by source id ("2025-01-15").
+ * HLDI's online tables don't show it, so it's empty until HLDI tells us
+ * (see docs/hldi-review.md). Only dates added here are shown.
  */
-export const HLDI_RETRIEVED = "October 2026"
+export const HLDI_PUBLISHED: Readonly<Record<string, string>> = {}
 
 /** The newest HLDI window, like "2022–24". */
 export function newestHldiWindow(): string | null {
@@ -409,8 +408,56 @@ export function newestHldiWindow(): string | null {
   return [...windows].sort((left, right) => right.yearMax - left.yearMax)[0].modelYears.replace("-", "–")
 }
 
-/** "HLDI data through 2022–24 models, retrieved October 2026." */
+export type HldiReportDates = {
+  /** "2022–24" */
+  modelYears: string
+  /** When we retrieved this report (its source entry's checkedOn). */
+  retrieved: string
+  /** When HLDI published it, if we know. */
+  published: string | null
+}
+
+/** Each HLDI report we use, newest first, with when we retrieved it and (if known) when HLDI published it. */
+export function hldiReportDates(): HldiReportDates[] {
+  return [...FACTOR_BUNDLE.vehicle.windows]
+    .sort((left, right) => right.yearMax - left.yearMax)
+    .flatMap((window) => {
+      const source = FACTOR_BUNDLE.sources.find((item) => item.id === window.sourceId)
+      if (!source) return []
+      return [{ modelYears: window.modelYears.replace("-", "–"), retrieved: source.checkedOn, published: HLDI_PUBLISHED[source.id] ?? null }]
+    })
+}
+
+/**
+ * For the sources page: the newest report, then when we retrieved each
+ * group of reports, then when HLDI published them (or that we don't know):
+ * "HLDI data through 2022–24 models. We retrieved the 2022–24 report on
+ * September 22, 2026, and the 2006–08 through 2021–23 reports on October 26,
+ * 2026. …"
+ */
 export function hldiDataLine(): string | null {
-  const newest = newestHldiWindow()
-  return newest ? `HLDI data through ${newest} models, retrieved ${HLDI_RETRIEVED}.` : null
+  const reports = hldiReportDates()
+  if (reports.length === 0) return null
+  // Runs of reports retrieved on the same day, newest first.
+  const runs: { newest: string; oldest: string; count: number; retrieved: string }[] = []
+  for (const report of reports) {
+    const last = runs.at(-1)
+    if (last && last.retrieved === report.retrieved) {
+      last.oldest = report.modelYears
+      last.count += 1
+    } else {
+      runs.push({ newest: report.modelYears, oldest: report.modelYears, count: 1, retrieved: report.retrieved })
+    }
+  }
+  const runWords = runs.map((run) =>
+    run.count === 1
+      ? `the ${run.newest} report on ${longDate(run.retrieved)}`
+      : `the ${run.oldest} through ${run.newest} reports on ${longDate(run.retrieved)}`,
+  )
+  const published = reports.filter((report) => report.published)
+  const publishedWords =
+    published.length === 0
+      ? "HLDI's online tables don't show when each report was published, so we don't list publication dates yet."
+      : `HLDI published ${listWords(published.map((report) => `the ${report.modelYears} report on ${longDate(report.published!)}`))}.`
+  return `HLDI data through ${reports[0].modelYears} models. We retrieved ${listWords(runWords)}. ${publishedWords}`
 }

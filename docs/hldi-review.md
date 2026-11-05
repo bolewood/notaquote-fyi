@@ -85,8 +85,9 @@ The cutoffs live in one place on the site, so changing them is quick.
 
    > HLDI publishes how each model's insurance losses compare with an average car's, for each coverage separately: overall losses (how often claims happen times how much they cost) for crash repairs (collision), non-crash damage (comprehensive: theft, weather, fire, vandalism, glass, and animal strikes), and damage to others' property (property damage liability), and how often injury claims are filed for injuries to others (bodily injury liability). HLDI's results combine drivers of all ages.
 
-3. **Anything else that reads wrong.** If any sentence above misdescribes HLDI's data, tell us and we'll fix it.
+3. **When was each report published?** Our sources page shows the date we retrieved each report (the 2022–24 report on September 22, 2026; the 2006–08 through 2021–23 reports on October 26, 2026). We'd also like to show when HLDI published each one, but your online tables don't show it. If you can share those dates, we'll add them.
+4. **Anything else that reads wrong.** If any sentence above misdescribes HLDI's data, tell us and we'll fix it.
 
 ## Keeping it current
 
-HLDI publishes new results every January. We've added a January checklist to our data-refresh guide: fetch the new window, rebuild, update the dates, and check the car pages against your published table. Our sources page shows "HLDI data through 2022–24 models, retrieved October 2026".
+HLDI publishes new results every January. We've added a January checklist to our data-refresh guide: fetch the new window, rebuild, update the dates, and check the car pages against your published table. Our sources page shows "HLDI data through 2022–24 models. We retrieved the 2022–24 report on September 22, 2026 and the 2006–08 through 2021–23 reports on October 26, 2026." It will add HLDI's publication dates once we have them.

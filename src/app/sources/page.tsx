@@ -9,7 +9,7 @@ import { TrustArticle } from "@/components/trust-article"
 import { NHTSA_CATALOG_URL, FUEL_ECONOMY_CATALOG_URL, CATALOG_RETRIEVED_ON } from "@/lib/catalog-meta"
 import { longDate, SOURCE_COUNT } from "@/lib/copy"
 import { FACTOR_BUNDLE } from "@/lib/factor-engine"
-import { HLDI_RETRIEVED, hldiDataLine, newestHldiWindow } from "@/lib/hldi"
+import { hldiDataLine, newestHldiWindow } from "@/lib/hldi"
 import { formatVerifiedDate, fullySourcedStateRules, sourcedStateRules, STATE_RULES, STATE_RULES_CHECKED_ON } from "@/lib/state-rules"
 import { CONTRIBUTING_URL, GITHUB_REPO_URL, suggestFixUrl } from "@/lib/suggest-fix"
 import { StatePicker } from "@/components/state-picker"
@@ -67,7 +67,7 @@ function listed(): Map<string, Listed> {
       publisher: source.publisher,
       title:
         source.id === "hldi-2022-24"
-          ? `Insurance losses by make and model (2006–08 through ${newestHldiWindow() ?? "2022–24"} models, retrieved ${HLDI_RETRIEVED})`
+          ? `Insurance losses by make and model (2006–08 through ${newestHldiWindow() ?? "2022–24"} models)`
           : source.title,
       url: source.url,
       checked: longDate(source.checkedOn),
@@ -110,7 +110,7 @@ export default function SourcesPage() {
           Where we couldn&apos;t find a source, we say so right next to the number and widen the range. Further down, pick
           your state to see its typical price and the least insurance its law asks for.
         </p>
-        {hldiDataLine() ? <p data-testid="hldi-data-line">{hldiDataLine()} HLDI publishes new results every January.</p> : null}
+        {hldiDataLine() ? <p data-testid="hldi-data-line">{hldiDataLine()} HLDI publishes new results each year.</p> : null}
         <nav aria-label="On this page" className="flex flex-wrap gap-2 text-sm">
           <a href="#where-numbers-come-from" className="chip plain">
             Where the numbers come from

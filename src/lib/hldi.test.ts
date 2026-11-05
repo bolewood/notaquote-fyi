@@ -5,6 +5,7 @@ import { carFigures, carPages, MODELS_ENABLED } from "./car-pages"
 import {
   HLDI_RATING_BANDS,
   hldiDataLine,
+  hldiReportDates,
   hldiShortLine,
   hldiPercentWords,
   hldiRating,
@@ -108,8 +109,17 @@ test("the What-if panel's short form: HLDI's line, then ours", { skip: !MODELS_E
   )
 })
 
-test("the sources page names HLDI's newest window and when we pulled it", () => {
-  assert.match(hldiDataLine() ?? "", /^HLDI data through \d{4}–\d{2} models, retrieved [A-Z][a-z]+ \d{4}\.$/)
+test("the sources page gives each report's real retrieved date, and no publication date we don't know", () => {
+  const dates = hldiReportDates()
+  const newest = dates[0]
+  assert.equal(newest.modelYears, "2022–24")
+  assert.equal(newest.retrieved, "2026-09-22", "sources.json: the 2022–24 report")
+  assert.ok(dates.slice(1).every((report) => report.retrieved === "2026-10-26"), "the older reports, fetched for PR #13")
+  assert.ok(dates.every((report) => report.published === null), "no publication dates until HLDI confirms them")
+  assert.equal(
+    hldiDataLine(),
+    "HLDI data through 2022–24 models. We retrieved the 2022–24 report on September 22, 2026 and the 2006–08 through 2021–23 reports on October 26, 2026. HLDI's online tables don't show when each report was published, so we don't list publication dates yet.",
+  )
 })
 
 test("a luxury make says our own adjustment moves the number, not HLDI's results", { skip: !MODELS_ENABLED }, () => {
