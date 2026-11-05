@@ -81,6 +81,31 @@
   --down: oklch(0.46 0.11 155);
   --down-soft: oklch(0.965 0.03 155);
   --star: oklch(0.74 0.16 78);
+  /*
+   * Chart colors. Every colored mark also carries a sign, a word, or a label,
+   * so color is never the only signal. Solid marks on the card meet 3:1 and
+   * the text pairs meet 4.5:1 (checked in src/components/charts/tokens.test.ts).
+   * Totals and range bands are drawn lighter on purpose; their labels carry
+   * the meaning.
+   */
+  --chart-up: oklch(0.54 0.16 30);
+  --chart-down: oklch(0.5 0.11 155);
+  --chart-neutral: oklch(0.58 0.025 255);
+  --chart-assumed: oklch(0.6 0.13 62);
+  --chart-axis: oklch(0.45 0.02 255);
+  --chart-grid: oklch(0.9 0.01 80);
+  /* HLDI's five levels: two strengths of better, average, two of worse, and "insufficient data". Not HLDI's own colors. */
+  --hldi-better-strong: oklch(0.4 0.085 205);
+  --hldi-better-strong-ink: oklch(0.99 0 0);
+  --hldi-better: oklch(0.93 0.04 205);
+  --hldi-better-ink: oklch(0.34 0.075 205);
+  --hldi-average: oklch(0.94 0.008 255);
+  --hldi-average-ink: oklch(0.3 0.02 255);
+  --hldi-worse: oklch(0.94 0.04 55);
+  --hldi-worse-ink: oklch(0.42 0.11 45);
+  --hldi-worse-strong: oklch(0.47 0.13 40);
+  --hldi-worse-strong-ink: oklch(0.99 0 0);
+  --hldi-insufficient-ink: oklch(0.45 0.02 255);
   --chart-1: oklch(0.46 0.11 255);
   --chart-2: oklch(0.46 0.12 62);
   --chart-3: oklch(0.46 0.12 25);
