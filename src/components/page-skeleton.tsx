@@ -30,10 +30,14 @@ export const STARTERS_PLACEMENT = "mt-6 lg:order-last lg:mt-8"
 export function StarterCards({ onPick, className }: { onPick?: (item: Starter) => void; className?: string }) {
   return (
     <section aria-labelledby="starters-heading" className={className ?? "mt-6"}>
-      <h2 id="starters-heading" className="text-lg font-semibold tracking-tight">
+      <h2 id="starters-heading" className="text-base font-semibold tracking-tight sm:text-lg">
         Not sure where to start? Pick a question.
       </h2>
-      <div className="mt-3 grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-4">
+      {/* Phones: one row that scrolls sideways, with the next card peeking in. Wider screens: a grid. */}
+      <div
+        className="-mx-4 mt-2 flex snap-x snap-proximity gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:mt-3 sm:grid sm:grid-cols-2 sm:gap-3 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-4"
+        data-testid="starter-row"
+      >
         {STARTERS.map((item) => {
           const Icon = STARTER_ICONS[item.id]
           return (
@@ -41,7 +45,7 @@ export function StarterCards({ onPick, className }: { onPick?: (item: Starter) =
               key={item.id}
               type="button"
               disabled={!onPick}
-              className="card group grid grid-cols-[auto_1fr] content-start gap-x-2.5 gap-y-1 p-3 text-left transition-[border-color,transform] hover:-translate-y-0.5 hover:border-primary/50 disabled:hover:translate-y-0 sm:p-4"
+              className="card group grid w-[42%] shrink-0 snap-start grid-cols-[auto_1fr] content-start gap-x-2.5 gap-y-1 p-3 text-left sm:w-auto transition-[border-color,transform] hover:-translate-y-0.5 hover:border-primary/50 disabled:hover:translate-y-0 sm:p-4"
               onClick={onPick ? () => onPick(item) : undefined}
               data-testid={`starter-${item.id}`}
             >

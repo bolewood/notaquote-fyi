@@ -70,7 +70,7 @@ export default function HomePage() {
               </Link>
             </h2>
             <p className="text-muted-foreground">
-              Estimates from the Highway Loss Data Institute's insurance loss results, with model-year tables and teen-driver costs:
+              Estimates from the Highway Loss Data Institute&apos;s insurance loss results, with model-year tables and teen-driver costs:
             </p>
             <ul className="flex flex-wrap gap-2">
               {popularCars.map((car) => (
