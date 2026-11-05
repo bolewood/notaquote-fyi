@@ -370,6 +370,18 @@ export type VehicleRelativity = {
   valueRisk: boolean
   /** A make that gets the half-strength value term, whose own range also widens the estimate. */
   halfValue?: boolean
+  /**
+   * HLDI's results for this car (or its class) before we soften them, as an
+   * index against an average car (100): collision and comprehensive combined
+   * by their share of industry claim costs, and property damage and
+   * bodily-injury frequency combined the same way. Read-only, for explaining
+   * the factor; the factor itself is computed from the same values.
+   */
+  hldiCombined?: { physical: number; liability: number }
+  /** The car-value term in our damage factor (luxury makes), which HLDI's results don't include. */
+  valueTier?: ValueTier
+  /** Our liability factor was held at the floor or cap of the band insurers use. */
+  liabilityClipped?: "floor" | "cap" | null
   /** A mainstream car whose HLDI damage result is above the fitted range, or in HLDI's sports-car class: the range reaches higher. */
   sporty?: boolean
   /** A mainstream car in HLDI's sports-car class (gets the sporty-car note). */
@@ -651,7 +663,7 @@ function creditedLiability(hldi: Rational, data: VehicleData, weightHundredths =
  * to California's survey: a lookup of HLDI ^ exponent (whole hundredths, so
  * the arithmetic stays exact), times the luxury-make term.
  */
-type ValueTier = "full" | "half" | "none"
+export type ValueTier = "full" | "half" | "none"
 
 /** Which car-value term a make gets (see luxuryValueFull and luxuryValueHalf in vehicle-families.json). */
 function valueTier(make: string, data: VehicleData): ValueTier {
@@ -676,6 +688,19 @@ function calibratedDamage(hldi: Rational, make: string, data: VehicleData): Rati
   const last = calibration.damageCurveMin + calibration.damageCurve.length - 1
   const index = Math.min(last, Math.max(calibration.damageCurveMin, toHundredths(hldi))) - calibration.damageCurveMin
   return mul(rat(calibration.damageCurve[index], 100), luxury)
+}
+
+/** A rational as an index with two decimals (0.8393 → 83.93), for explanations only. */
+function indexOf(value: Rational): number {
+  return Number((value.num * BigInt(10000)) / value.den) / 100
+}
+
+/** Whether the liability factor was held at the floor or the cap. */
+function liabilityClip(hldi: Rational, data: VehicleData): "floor" | "cap" | null {
+  const credited = add(rat(1), mul(rat(data.liabilityWeight.value, 100), sub(hldi, rat(1))))
+  if (compare(credited, rat(data.liabilityFloor, 100)) < 0) return "floor"
+  if (compare(credited, rat(data.liabilityCap, 100)) > 0) return "cap"
+  return null
 }
 
 function compare(left: Rational, right: Rational): number {
@@ -817,6 +842,9 @@ export function vehicleRelativity(
       basis: "sourced",
       liabilityWeightSpread: weightSpread(hldiLiability, data),
       injurySeveritySpread: injurySpread(hldiLiability, hldiLiabilityLow, hldiLiabilityHigh, data),
+      hldiCombined: { physical: indexOf(hldiPhysical), liability: indexOf(hldiLiability) },
+      valueTier: tier,
+      liabilityClipped: liabilityClip(hldiLiability, data),
       ...shared,
     }
   }
@@ -851,6 +879,9 @@ export function vehicleRelativity(
       basis: "indicative",
       liabilityWeightSpread: weightSpread(hldiLiability, data),
       injurySeveritySpread: injurySpread(hldiLiability, hldiLiabilityLow, hldiLiabilityHigh, data),
+      hldiCombined: { physical: indexOf(hundredths(klass.row.physical.value)), liability: indexOf(hldiLiability) },
+      valueTier: valueTier(vehicle.make, data),
+      liabilityClipped: liabilityClip(hldiLiability, data),
       ...shared,
     }
   }
