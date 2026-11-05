@@ -16,6 +16,7 @@ import {
   startLine,
   addsTeen,
   carDifference,
+  carSwapWords,
   distinctReasons,
   explainChange,
   vehicleMatchWords,
@@ -65,7 +66,7 @@ test("single changes get plain headline words; cars and states keep the engine's
     "Adding a 16–18-year-old to your policy",
   )
   assert.equal(whatIfLabel(NOW, { ...NOW, age: "16-18" }, false), "A 16–18-year-old on their own policy")
-  assert.equal(whatIfLabel(NOW, { ...NOW, coverage: "standard" }, false), "Switching to liability only")
+  assert.equal(whatIfLabel(NOW, { ...NOW, coverage: "standard" }, false), "Switching to liability only, solid limits")
   assert.equal(whatIfLabel(NOW, { ...NOW, region: "rural" }, false), "Moving to a small town or the country")
   assert.equal(whatIfLabel(NOW, { ...NOW, ...MODEL_Y }, false), undefined)
   assert.equal(whatIfLabel(NOW, { ...NOW, state: "CO" }, false), undefined)
@@ -81,8 +82,8 @@ test("adding a teen on the What-if page prices the whole household's policy", ()
   const facts = vehicleFacts(catalog, NOW)
   const result = priceWhatIf({ ...DEFAULT_SITUATION, premium: 1800 }, facts, next, facts)
   assert.ok(result && result.delta > 0)
-  assert.match(result!.headline, /^Adding your teen to your policy: about \$[\d,]+ more a year, on a policy that costs about \$1,800 now\.$/)
-  assert.match(result!.next.rangeNote, /whole household/)
+  assert.match(result!.headline, /^Adding your teen to your policy: about \$[\d,]+ more a year, for a car that costs about \$1,800 a year to insure now\.$/)
+  assert.match(result!.next.rangeNote, /this car with your teen added/)
 })
 
 test("every starter changes something from the default situation", () => {
@@ -121,10 +122,11 @@ test("adding a teen and changing the car at once goes through the engine's teen 
 test("the why phrase is short and plain, and says when we used a class average", () => {
   const civic = vehicleRelativity(vehicleFacts(catalog, { year: 2022, make: "Honda", model: "Civic", trim: "Civic 4Dr" }))
   const reason = vehicleReason(civic, true, 2022)
-  assert.ok(reason.length < 80)
+  // HLDI's coverage names are longer than the old "fewer at-fault claims"; still one short line.
+  assert.ok(reason.length < 100, reason)
   assert.doesNotMatch(reason, /relativity|HLDI|factor/i)
   assert.equal(vehicleReason({ ...civic, liabilityHundredths: 100, physicalHundredths: 100 }, true, 2016), "about average")
-  assert.equal(vehicleReason({ ...civic, physicalHundredths: 130, liabilityHundredths: 100 }, true, 2016), "pricier repairs")
+  assert.equal(vehicleReason({ ...civic, physicalHundredths: 130, liabilityHundredths: 100 }, true, 2016), "higher crash-repair losses")
   assert.equal(vehicleReason({ ...civic, physicalHundredths: 130, liabilityHundredths: 100 }, false, 2016), "about average", "repair costs don't matter without damage cover")
   assert.equal(
     vehicleReason({ ...civic, liabilityHundredths: 100, physicalHundredths: 100 }, true, 2016),
@@ -143,11 +145,11 @@ test("the why phrase is short and plain, and says when we used a class average",
 test("phrases every car shares are dropped from the compare table", () => {
   assert.deepEqual(
     distinctReasons([
-      ["pricier repairs", "newer, costs more to replace"],
-      ["fewer at-fault claims", "newer, costs more to replace"],
+      ["higher crash-repair losses", "newer, costs more to replace"],
+      ["fewer injury claims", "newer, costs more to replace"],
       ["newer, costs more to replace"],
     ]),
-    ["pricier repairs", "fewer at-fault claims", "about average"],
+    ["higher crash-repair losses", "fewer injury claims", "about average"],
   )
   assert.deepEqual(distinctReasons([["newer, costs more to replace"]]), ["newer, costs more to replace"])
   assert.deepEqual(distinctReasons([[], []]), ["about average", "about average"])
@@ -162,7 +164,7 @@ test("a what-if is explained as the difference, and the pieces add up to it", ()
   assert.equal(result!.mode, "change")
   const labels = result!.parts.map((part) => part.label)
   assert.equal(labels[0], "Newer car (2025)")
-  assert.match(labels[1], /^Toyota Camry → Tesla Model Y \(.+\)$/)
+  assert.match(labels[1], /^Tesla Model Y instead of Toyota Camry: .+$/)
   assert.equal(labels[2], "$2,000 deductible")
   const sum = result!.parts.reduce((total, part) => total + part.amount, 0)
   assert.equal(sum, result!.delta)
@@ -171,8 +173,20 @@ test("a what-if is explained as the difference, and the pieces add up to it", ()
   assert.deepEqual(explainChange(start, NOW, nowFacts, NOW, nowFacts).parts, [], "no change, nothing to explain")
 
   const same = vehicleRelativity(nowFacts)
-  assert.equal(carDifference(same, same, true), "similar claims")
-  assert.equal(carDifference(same, { ...same, physicalHundredths: same.physicalHundredths + 20 }, true), "pricier repairs")
+  assert.equal(carDifference(same, same, true), "similar losses")
+  // Same HLDI rows, only the factor moved: no single coverage to name, so the side in plain words.
+  assert.equal(carDifference(same, { ...same, physicalHundredths: same.physicalHundredths + 20 }, true), "higher costs to fix or replace")
+
+  // A swap that pushes both ways names the push that wins first, then what offsets it.
+  const mixed = { ...same, physicalHundredths: same.physicalHundredths + 30, liabilityHundredths: same.liabilityHundredths - 15 }
+  assert.equal(carSwapWords(same, mixed, true, 500), "higher costs to fix or replace, partly offset by lower liability losses")
+  assert.equal(carSwapWords(same, mixed, true, -200), "lower liability losses, partly offset by higher costs to fix or replace")
+  assert.equal(carSwapWords(same, mixed, false, -200), "lower liability losses")
+  assert.equal(carSwapWords(same, same, true, 0), "similar losses")
+
+  // Real HLDI rows: a Model Y against a Camry is named coverage by coverage.
+  const modelY = vehicleRelativity(nextFacts)
+  assert.match(carSwapWords(same, modelY, true, 1), /crash-repair losses|injury claims|damage to others' property|non-crash losses/)
 })
 
 test("adding a teen is explained as the other changes plus the teen", () => {
@@ -199,6 +213,8 @@ test("a step's source says which state's prices it's based on, when that isn't y
   assert.equal(basisLabel("sourced", ["ca-2026"], "California"), "From published prices")
   assert.equal(basisLabel("assumed", [], "Illinois"), "Our best guess")
   assert.equal(basisLabel("indicative", ["hldi-2022-24"], "Illinois"), "Worked out from public data")
+  // HLDI publishes claims results, not prices.
+  assert.equal(basisLabel("sourced", ["hldi-2022-24"], "Illinois"), "Based on insurance loss data")
 })
 
 test("the short start line names the state and a rounded price", () => {

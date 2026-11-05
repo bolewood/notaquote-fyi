@@ -12,6 +12,8 @@ import {
   filterRows,
   gapsToCheapest,
   headlineAmount,
+  OVERLAP_NOTE,
+  topRangesOverlap,
   shownAmount,
   nextSort,
   parseMaxYearly,
@@ -182,7 +184,7 @@ test("the CSV starts with who and not-a-quote, then one line per row in the show
   assert.doesNotMatch(csv, /\bnull\b|undefined/)
 
   const added = toCsv(sortRows(addedRows(), DEFAULT_SORT), notes, "added")
-  assert.match(added.slice(1).split("\r\n")[3], /^Car,Version,Starred,Extra a year for your teen \(\$\),Extra a month for your teen \(\$\),"Whole policy a year, with your teen \(\$\)"/)
+  assert.match(added.slice(1).split("\r\n")[3], /^Car,Version,Starred,Extra a year for your teen \(\$\),Extra a month for your teen \(\$\),"This car's total a year, with your teen \(\$\)"/)
 
   assert.equal(csvCell("=HYPERLINK(1)"), "'=HYPERLINK(1)")
   assert.equal(csvCell("+1"), "'+1")
@@ -218,4 +220,14 @@ test("gaps and monthly figures come from the shown, rounded numbers", () => {
     const cells = line.split(",")
     assert.equal(Number(cells[4]), Math.max(5, Math.round(Number(cells[3]) / 12 / 5) * 5), "monthly is the shown yearly ÷ 12, to $5")
   }
+})
+
+test("the overlap note is said only when the top ranges really overlap", () => {
+  const row = (likely: number, low: number, high: number) => ({ extra: null, likely, low, high })
+  assert.equal(topRangesOverlap([row(1500, 1100, 2000), row(1700, 1300, 2300)]), true)
+  assert.equal(topRangesOverlap([row(1000, 900, 1100), row(2000, 1800, 2200), row(3000, 2800, 3300)]), false)
+  assert.equal(topRangesOverlap([row(1000, 900, 1100)]), false, "one car can't overlap")
+  // Only the cheapest three count: an overlap further down doesn't.
+  assert.equal(topRangesOverlap([row(1000, 900, 1100), row(2000, 1800, 2200), row(3000, 2800, 3300), row(3100, 2900, 3400)]), false)
+  assert.equal(OVERLAP_NOTE, "The ranges overlap, so get real quotes on your top two or three.")
 })

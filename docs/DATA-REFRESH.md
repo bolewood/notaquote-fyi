@@ -7,6 +7,7 @@ It's written so one person can do it in a weekend, and so you can hand it to an 
 ## When
 
 - **Every September, the annual refresh.** A GitHub Action opens an issue titled "Annual data refresh (YEAR)" on September 22 with the checklist below. September works well because new model years are out, NAIC's report from the winter before is available, and it lands before DC's scheduled law change on October 1, 2027.
+- **Every January, HLDI's new results.** The Highway Loss Data Institute publishes a new model-year window each January. Follow [the HLDI annual refresh](#hldi-annual-refresh) below; it doesn't wait for September.
 - **Every month, tripwires.** CI also runs on the 1st of each month. It fails if a state's scheduled law change has taken effect without the row being updated, or if anything else has drifted. GitHub emails the failure to the maintainers.
 - **Any time, community fixes.** Someone reports a number through "Suggest a fix", and we fix that one thing in a small PR, following CONTRIBUTING.md. That doesn't have to wait for September.
 
@@ -19,7 +20,7 @@ It's written so one person can do it in a weekend, and so you can hand it to an 
 | Price trend | BLS CPI series CUUR0000SETE | Monthly | `data/state-baselines/state-baselines.json` (trend inputs) | By hand, then `npm run factors:build` |
 | State minimum rules | State statutes and insurance departments | When legislatures act | `data/state-rules/state-rules.json` plus `evidence.json` | By hand ([steps](../data/state-rules/README.md#fixing-a-row)) |
 | Driver and coverage factors | State rate-comparison surveys (CA, TX, CO, OK, ND, DC) and NC's surcharge rule | Mostly yearly | `data/factors/sources/*.csv` plus `sources.json` | Update the CSVs, then `npm run factors:build` |
-| Vehicle claims results | IIHS-HLDI insurance losses by make and model | Yearly, with new model years | `data/factors/sources/hldi-2022-24.csv` | Replace the CSV, then `npm run factors:build` ([Vehicles](../data/factors/README.md#vehicles)) |
+| Vehicle loss results | IIHS-HLDI insurance losses by make and model | Every January, with a new model-year window | `data/factors/sources/hldi-2022-24.csv` | Replace the CSV, then `npm run factors:build` ([Vehicles](../data/factors/README.md#vehicles)) |
 | Fleet age | S&P Global Mobility press release | Yearly | `data/factors/assumptions.json` (`fleet-age-band`) | By hand, only if the band should change |
 
 ## The annual refresh, step by step
@@ -55,10 +56,11 @@ Work on a branch named `data-refresh-YEAR`. Commit after each step, so the histo
 - Bump `DERIVATION_VERSION`, `EFFECTIVE_DATE`, and `CHECKED_ON` in `src/lib/factor-derivation.ts`. Run `npm run factors:build` and read the diff of `src/data/model-factors.json`. Any factor that moves more than about 10% deserves a sentence in the changelog explaining why.
 - A new state survey is the best upgrade we can make. [How to improve a factor](../data/factors/README.md#how-to-improve-a-factor) explains how to wire one in.
 
-### 7. Vehicle claims results (HLDI)
+### 7. Vehicle loss results (HLDI)
+- If the January [HLDI annual refresh](#hldi-annual-refresh) already pulled this year's window, just confirm nothing new has come out since.
 - First check the permission status noted in `data/factors/sources/sources.json`. If IIHS said no, set `useHldiModels` to `false` in `data/factors/vehicle-families.json` and skip the rest of this step.
 - If HLDI has published newer model years, refresh the subset CSV (see the notes at the top of `scripts/derive-factors.ts`). Add families for new popular models to `vehicle-families.json`, then rebuild. The bias tests (911 > Mustang, Model Y > RAV4, and so on) will tell you if something went sideways.
-- **Car pages.** They move to the newest model year on their own; their addresses don't change. If `npm test` says a car in `data/car-pages.json` (or on the popular lists) lost its model-level claims data, first check whether the catalog renamed it (then fix the name, and keep the old address with `"slug"`). If it really has no claims results any more, its page would disappear and its address would return 404. Don't just drop it: add a permanent redirect for `/cars/<slug>` to `/cars` in `next.config.ts`, remove the car from the list, and move its slug out of `src/lib/seo-slugs.json` into that file's `"retired"` list, so the test knows it's on purpose.
+- **Car pages.** They move to the newest model year on their own; their addresses don't change. If `npm test` says a car in `data/car-pages.json` (or on the popular lists) lost its model-level loss data, first check whether the catalog renamed it (then fix the name, and keep the old address with `"slug"`). If it really has no loss results any more, its page would disappear and its address would return 404. Don't just drop it: add a permanent redirect for `/cars/<slug>` to `/cars` in `next.config.ts`, remove the car from the list, and move its slug out of `src/lib/seo-slugs.json` into that file's `"retired"` list, so the test knows it's on purpose.
 - **If IIHS said no** (`useHldiModels` is `false`): every car page, `/cars`, and the links to them go away together, and the teen guides and state pages switch to wording that doesn't name a single cheapest car. Build and click through `/guides` and a state page to check. Add the redirect above for `/cars/*` too.
 
 ### 8. Everything else
@@ -71,7 +73,7 @@ Work on a branch named `data-refresh-YEAR`. Commit after each step, so the histo
 - Run `npm run lint && npm run typecheck && npm test && npm run build`, then `npm run factors:build` again (it should leave no diff).
 - Click through the site locally (`npm run dev`): the Model Y what-if, a 15-car compare for a 16-year-old, and /sources for two or three states.
 - Curl `/api/v1/compare?cars=popular:first-cars` and check that it looks sane.
-- Spot-check a few state and car pages (`/states/ohio`, `/states/california`, `/cars/tesla-model-y`, `/cars/subaru-outback`) and the guides under `/guides`. Every figure on them is worked out from the data at build time, so they update on their own; look for anything that reads oddly after the numbers moved. If HLDI published newer model years, the car pages move to the newest year by themselves (their addresses don't change). `npm test` fails if a car in `data/car-pages.json` no longer has claims data, or if new numbers make the car pages read too much alike (the rendered-text floor in `src/lib/seo.test.ts`); fix the wording rather than lowering the floor. A car is only kept out of search by an explicit `"noindex": true` in `data/car-pages.json`.
+- Spot-check a few state and car pages (`/states/ohio`, `/states/california`, `/cars/tesla-model-y`, `/cars/subaru-outback`) and the guides under `/guides`. Every figure on them is worked out from the data at build time, so they update on their own; look for anything that reads oddly after the numbers moved. If HLDI published newer model years, the car pages move to the newest year by themselves (their addresses don't change). `npm test` fails if a car in `data/car-pages.json` no longer has HLDI loss data, or if new numbers make the car pages read too much alike (the rendered-text floor in `src/lib/seo.test.ts`); fix the wording rather than lowering the floor. A car is only kept out of search by an explicit `"noindex": true` in `data/car-pages.json`.
 - If the UI looks different, retake the README screenshots in `docs/images/`.
 
 ### 10. Write it down and ship
@@ -80,6 +82,22 @@ Work on a branch named `data-refresh-YEAR`. Commit after each step, so the histo
 - Open a PR titled "Annual data refresh (YEAR)", link the refresh issue, wait for CI, and merge. Vercel deploys `main`.
 - Tag the merge commit, e.g. `git tag data-2027.09 && git push origin data-2027.09`, so anyone can find exactly which data a past estimate used.
 - Close the refresh issue.
+
+## HLDI annual refresh
+
+HLDI publishes a new three-year window of insurance loss results by make and model every January (for example, 2023–25 models in January 2027). Work on a branch named `hldi-refresh-YEAR`, and commit after each step.
+
+1. **Check permission.** Read the permission note in `data/factors/sources/sources.json`. If HLDI or IIHS has asked us to stop, set `useHldiModels` to `false` in `data/factors/vehicle-families.json` and follow "If IIHS said no" in step 7 above instead.
+2. **Fetch the new window.** Pull HLDI's newest "Insurance losses by make and model" results the same way as last time (the access method is noted on the `iihs-hldi` entry in `src/data/source-manifest.json`), including the class subtotals if HLDI published them. To re-pick which models we keep from a full download, run `npm run factors:build -- --hldi-full <losses.csv>` (see the `_readme` in `data/factors/vehicle-families.json`). Save the results as `data/factors/sources/hldi-YYYY-YY.csv` and `hldi-class-subtotals-YYYY-YY.csv`, in the same columns as last year's files (collision, comprehensive, property damage, and bodily injury; we don't use med pay or PIP). Don't edit HLDI's figures.
+3. **Register it.** Point the newest-window file name in `src/lib/factor-derivation.ts` (today `sources/hldi-2022-24.csv`) at the new file, and add its source entry (title, URL, `dataYear`, `checkedOn` set to the day you pulled it, and the same terms note) to `data/factors/sources/sources.json`. Update the file list in the `iihs-hldi` license note in `src/data/source-manifest.json`. Add families for new popular models to `vehicle-families.json`.
+4. **Rebuild factors.** Run `npm run factors:build`, then read the diff of `src/data/model-factors.json`. The bias tests (911 > Mustang, Model Y > RAV4, and so on) will tell you if something went sideways.
+5. **Update dates.** Set the new report's `checkedOn` in `data/factors/sources/sources.json` to the day you retrieved it (leave the older reports' dates alone unless you re-pulled them). If HLDI has told us when it published a report, add it to `HLDI_PUBLISHED` in `src/lib/hldi.ts`. Bump the factor bundle's `version` and `checkedOn`, the source manifest's `checkedOn` for HLDI (`src/data/source-manifest.json`), and `CAR_PAGES_CONTENT_UPDATED` in `src/lib/site-meta.ts`. The sources page line ("HLDI data through [window] models. We retrieved …") comes from those dates, so check it reads right on `/sources`.
+6. **Check the car pages.** Run `npm test`. The car pages move to the newest model year by themselves. Fix any car that lost its model-level results (see step 7 above). Then open `/cars/subaru-legacy`, `/cars/toyota-rav4`, `/cars/tesla-model-y`, and two or three others, and check:
+   - "What HLDI reports" names the new window, and each row's percent matches HLDI's published table (100 minus the index).
+   - The ratings match HLDI's own. If HLDI changed its rating cutoffs, update `HLDI_RATING_BANDS` in `src/lib/hldi.ts`.
+   - "What we estimate that means for price" reads sensibly, and the dollars match the figures above it.
+   - The worked example on `/methodology#why-percentages-differ` still reads right (it's generated from the Legacy page). If the Legacy no longer has model-level results, switch the example to another car and update `docs/hldi-review.md`.
+7. **Ship.** Add a CHANGELOG entry and a line on the What's changed page ("Car results now use HLDI's 2023–25 models"), open a PR titled "HLDI refresh (YEAR)", and tag the merge commit `data-YEAR.01`.
 
 ## Changelog rules
 

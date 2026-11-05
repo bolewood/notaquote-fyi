@@ -16,16 +16,18 @@ export const YEARS_LICENSED = [
   { id: "10+", label: "10 years or more" },
 ] as const
 
+/** The model counts the last three years, so the labels say so. */
 export const INCIDENTS = [
-  { id: "clean", label: "No at-fault accidents" },
-  { id: "one", label: "One at-fault accident" },
-  { id: "two-or-more", label: "Two or more at-fault accidents" },
+  { id: "clean", label: "No at-fault accidents (last 3 years)" },
+  { id: "one", label: "One at-fault accident (last 3 years)" },
+  { id: "two-or-more", label: "Two or more at-fault accidents (last 3 years)" },
 ] as const
 
+/** `label` reads in a sentence; `option` is the shorter text in a "Miles a year" select. */
 export const MILEAGE_BANDS = [
-  { id: "under-7500", label: "Under 7,500 miles a year" },
-  { id: "7500-15000", label: "7,500–15,000 miles a year" },
-  { id: "over-15000", label: "Over 15,000 miles a year" },
+  { id: "under-7500", label: "Under 7,500 miles a year", option: "Under 7,500" },
+  { id: "7500-15000", label: "7,500–15,000 miles a year", option: "7,500–15,000" },
+  { id: "over-15000", label: "Over 15,000 miles a year", option: "Over 15,000" },
 ] as const
 
 export const REGIONS = [
@@ -34,11 +36,15 @@ export const REGIONS = [
   { id: "rural", label: "Small town or country" },
 ] as const
 
+/**
+ * `label` is short, for sentences and chips; `option` says what each one is,
+ * for the select. The ids are what share links store: never rename them.
+ */
 export const COVERAGE_PACKAGES = [
-  { id: "state-minimum", label: "State minimum" },
-  { id: "standard", label: "Liability only" },
-  { id: "full", label: "Full coverage" },
-  { id: "high", label: "Full coverage, higher limits" },
+  { id: "state-minimum", label: "State minimum", option: "State minimum (the least the law allows)" },
+  { id: "standard", label: "Liability only, solid limits", option: "Liability only, solid limits" },
+  { id: "full", label: "Full coverage", option: "Full coverage (also fixes your car)" },
+  { id: "high", label: "Full coverage, extra protection", option: "Full coverage, extra protection" },
 ] as const
 
 export const DEDUCTIBLES = [500, 1000, 2000] as const
@@ -161,11 +167,11 @@ export function coverageAssumption(coverage: CoverageId, state: StateCode): stri
     case "state-minimum":
       return stateMinimumAssumption(state)
     case "standard":
-      return "Liability only pays for damage you cause to others, up to $100,000/$300,000/$100,000 (per person / per crash / property). It doesn't fix your own car."
+      return "Pays for injuries and damage you cause to others (up to $100,000 per person, $300,000 per crash, $100,000 for property), well above most states' minimums. It doesn't fix your own car."
     case "full":
-      return "Liability for damage you cause to others, up to $100,000/$300,000/$100,000 (per person / per crash / property), plus collision and comprehensive, which fix or replace your own car after a crash, theft, or storm."
+      return "Pays for injuries and damage you cause (up to $100,000 per person, $300,000 per crash, $100,000 for property) and fixes your own car after a crash, theft or storm."
     case "high":
-      return "Full coverage with higher liability limits: up to $250,000/$500,000/$250,000 (per person / per crash / property)."
+      return "Full coverage with higher limits for injuries and damage you cause: up to $250,000 per person, $500,000 per crash, $250,000 for property."
   }
 }
 
@@ -203,7 +209,7 @@ export function situationSentence(scenario: Scenario, teenOnParentPolicy: boolea
   const age = AGE_BANDS.find((band) => band.id === scenario.age)?.label ?? scenario.age
   const who =
     scenario.age === "16-18"
-      ? `A ${age}-year-old driver ${teenOnParentPolicy ? "added to a parent's policy" : "on their own policy"}`
+      ? `A ${age}-year-old driver ${teenOnParentPolicy ? "added to your policy" : "on their own policy"}`
       : `A ${age}-year-old driver`
   const car = withCar ? `, a ${shortVehicleLabel(scenario)},` : ""
   const coverage = coverageLabel(scenario.coverage).toLowerCase()

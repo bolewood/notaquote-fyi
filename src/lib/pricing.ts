@@ -15,6 +15,7 @@ import {
   TYPICAL_START_ATTRIBUTION,
   typicalStart,
   vehicleAgeKey,
+  vehicleRelativity,
   vehicleReportLabel,
   whatIf,
   type Estimate,
@@ -38,6 +39,10 @@ import {
 import type { Situation } from "./situation"
 import type { TrimConfidence } from "./catalog-match"
 import { differenceWords } from "./format"
+import { listWords, sideReasons, type ReasonPhrase } from "./hldi"
+
+/** An average car (HLDI's 100 on every coverage), to explain a car against. */
+const AVERAGE_CAR = vehicleRelativity("average")
 
 export { formatDollars, TYPICAL_START_ATTRIBUTION }
 
@@ -91,13 +96,17 @@ function amountWords(delta: number): string {
   return words === "about the same" ? words : `about ${words}`
 }
 
-/** One piece of a what-if's difference: "Newer car: +$120". */
-export type ChangePart = { label: string; amount: number }
+/** One piece of a what-if's difference: "Newer car: +$120". `key` is what changed, when it's one input. */
+export type ChangePart = { label: string; amount: number; key?: ChangeKey }
 
 export type WhatIfMode =
   /** An ordinary change to the situation now. */
   | "change"
-  /** A teen added to the policyholder's policy: both figures are the whole household's policy. */
+  /**
+   * A teen added to the policyholder's policy: both figures are this car's
+   * cost on that policy (what you pay for it now, or a typical one-car
+   * policy), before and after adding the teen.
+   */
   | "teen-added"
   /** A teen on their own policy: a separate bill, on top of the policyholder's. */
   | "teen-own"
@@ -162,7 +171,7 @@ export function priceWhatIf(
   const onlyTheTeen = changedKeys(now, parent).every((key) => key === "goodStudent" || key === "driverTraining")
   const headline = onlyTheTeen ? added.headline : `With these changes and your teen: ${amountWords(delta)}.`
   const others = explainChange(start, now, nowVehicle, parent, nextVehicle)
-  const parts = [...others.parts, { label: "Adding your teen", amount: added.after.likely - others.last }]
+  const parts: ChangePart[] = [...others.parts, { label: "Adding your teen", amount: added.after.likely - others.last, key: "age" }]
   return { current, next: added.after, delta, deltaRounded, headline, mode: "teen-added", parts }
 }
 
@@ -170,16 +179,57 @@ function carWords(scenario: Pick<Scenario, "make" | "model">): string {
   return `${scenario.make} ${scenario.model}`
 }
 
-/** How one car compares with another, in the same words as the compare table. */
-export function carDifference(from: VehicleRelativity, to: VehicleRelativity, hasDamageCover: boolean): string {
-  const words: string[] = []
+/**
+ * The pushes up and down between two cars, in HLDI's coverages, for the
+ * sides of the bill that moved by at least the given amount.
+ */
+function lossPushes(
+  from: VehicleRelativity,
+  to: VehicleRelativity,
+  hasDamageCover: boolean,
+  limits: { damage: number; liability: number },
+): { ups: ReasonPhrase[]; downs: ReasonPhrase[] } {
   const damage = hasDamageCover ? to.physicalHundredths - from.physicalHundredths : 0
   const liability = to.liabilityHundredths - from.liabilityHundredths
-  if (damage >= 8) words.push(REASON.pricierRepairs)
-  if (damage <= -8) words.push(REASON.cheaperRepairs)
-  if (liability >= 6) words.push(REASON.moreClaims)
-  if (liability <= -6) words.push(REASON.fewerClaims)
-  return words.length > 0 ? words.join(", ") : "similar claims"
+  const ups: ReasonPhrase[] = []
+  const downs: ReasonPhrase[] = []
+  if (damage >= limits.damage) ups.push(...sideReasons(from, to, "damage", "higher", damage))
+  if (damage <= -limits.damage) downs.push(...sideReasons(from, to, "damage", "lower", damage))
+  if (liability >= limits.liability) ups.push(...sideReasons(from, to, "liability", "higher", liability))
+  if (liability <= -limits.liability) downs.push(...sideReasons(from, to, "liability", "lower", liability))
+  const bySize = (left: ReasonPhrase, right: ReasonPhrase) => right.size - left.size
+  return { ups: ups.sort(bySize), downs: downs.sort(bySize) }
+}
+
+/** The pushes up and down for a car against an average car, in HLDI's coverages. */
+export function lossPushesVsAverage(
+  vehicle: VehicleRelativity,
+  hasDamageCover: boolean,
+  limits: { damage: number; liability: number },
+): { ups: ReasonPhrase[]; downs: ReasonPhrase[] } {
+  return lossPushes(AVERAGE_CAR, vehicle, hasDamageCover, limits)
+}
+
+/**
+ * Why a car swap moves the price, with the pushes in both directions named
+ * honestly, in HLDI's coverages: "higher crash-repair losses, partly offset
+ * by fewer injury claims". The reasons that agree with the overall
+ * direction come first.
+ */
+export function carSwapWords(from: VehicleRelativity, to: VehicleRelativity, hasDamageCover: boolean, amount: number): string {
+  const { ups, downs } = lossPushes(from, to, hasDamageCover, { damage: 8, liability: 6 })
+  const [main, against] = amount >= 0 ? [ups, downs] : [downs, ups]
+  const words = (list: ReasonPhrase[]) => listWords(list.map((item) => item.words))
+  if (main.length > 0 && against.length > 0) return `${words(main)}, partly offset by ${words(against)}`
+  const all = [...main, ...against]
+  return all.length > 0 ? words(all) : REASON.similar
+}
+
+/** How one car compares with another, in the same words as the compare table. */
+export function carDifference(from: VehicleRelativity, to: VehicleRelativity, hasDamageCover: boolean): string {
+  const { ups, downs } = lossPushes(from, to, hasDamageCover, { damage: 8, liability: 6 })
+  const all = [...ups, ...downs].sort((left, right) => right.size - left.size)
+  return all.length > 0 ? all.map((item) => item.words).join(", ") : REASON.similar
 }
 
 /**
@@ -199,9 +249,9 @@ export function explainChange(
   let facts: VehicleFacts = nowVehicle
   let before = estimate(start, current, { vehicle: facts })
   const parts: ChangePart[] = []
-  const step = (label: string, scenario: Scenario, vehicle: VehicleFacts) => {
+  const step = (label: string, scenario: Scenario, vehicle: VehicleFacts, key?: ChangeKey) => {
     const after = estimate(start, scenario, { vehicle })
-    parts.push({ label, amount: after.likely - before.likely })
+    parts.push({ label, amount: after.likely - before.likely, ...(key ? { key } : {}) })
     current = scenario
     facts = vehicle
     const previous = before
@@ -212,20 +262,20 @@ export function explainChange(
     if (TEEN_KEYS.includes(key) && next.age === "16-18" && now.age !== "16-18") continue
     if (key === "vehicle") {
       if (now.year !== next.year) {
-        step(next.year > now.year ? `Newer car (${next.year})` : `Older car (${next.year})`, { ...current, year: next.year }, { ...facts, year: next.year })
+        step(next.year > now.year ? `Newer car (${next.year})` : `Older car (${next.year})`, { ...current, year: next.year }, { ...facts, year: next.year }, "vehicle")
       }
       if (now.make !== next.make || now.model !== next.model || now.trim !== next.trim) {
         const scenario = { ...current, make: next.make, model: next.model, trim: next.trim }
-        const { previous, after } = step("", scenario, nextVehicle)
-        const why = carDifference(previous.vehicle, after.vehicle, hasPhysicalDamage(scenario.coverage))
+        const { previous, after } = step("", scenario, nextVehicle, "vehicle")
+        const why = carSwapWords(previous.vehicle, after.vehicle, hasPhysicalDamage(scenario.coverage), after.likely - previous.likely)
         parts[parts.length - 1].label =
           now.make === next.make && now.model === next.model
-            ? `A different version (${why})`
-            : `${carWords(now)} → ${carWords(next)} (${why})`
+            ? `A different trim: ${why}`
+            : `${carWords(next)} instead of ${carWords(now)}: ${why}`
       }
       continue
     }
-    step(changeChip(key, next), { ...current, [key]: next[key] } as Scenario, facts)
+    step(changeChip(key, next), { ...current, [key]: next[key] } as Scenario, facts, key)
   }
   return { parts, last: before.likely }
 }
@@ -408,24 +458,16 @@ export function changeChip(key: ChangeKey, next: Scenario): string {
 
 /** One short vocabulary for why a car costs what it does, used on the page, in print, and in the spreadsheet. */
 export const REASON = {
-  pricierRepairs: "pricier repairs",
-  cheaperRepairs: "cheaper repairs",
-  moreClaims: "more at-fault claims",
-  fewerClaims: "fewer at-fault claims",
+  similar: "similar losses",
   newer: "newer, costs more to replace",
   older: "older, cheaper to replace",
   average: "about average",
 } as const
 
 /**
- * A short phrase for why a car sits where it does, from the engine's vehicle
- * factors: "higher repair costs", "fewer at-fault crash claims".
- * `hasDamageCover` is false for liability-only coverage, where repair costs
- * don't matter.
- */
-/**
  * Short phrases for why a car sits where it does, compared with an average
- * car, biggest first: "higher repair costs", "fewer at-fault crash claims".
+ * car, biggest first, in HLDI's coverages: "higher crash-repair losses",
+ * "fewer injury claims" (at most three).
  * `hasDamageCover` is false for liability-only coverage, where repair costs
  * and the car's age don't matter. A typical start already assumes an
  * 8–12-year-old car, so newer cars cost more to replace and older ones less.
@@ -433,15 +475,11 @@ export const REASON = {
 export function vehicleReasonParts(vehicle: VehicleRelativity, hasDamageCover: boolean, modelYear?: number): string[] {
   if (vehicle.level === "unknown") return ["we don't know this car, so we used an average one"]
   if (vehicle.level === "average") return []
-  const parts: { size: number; words: string }[] = []
-  const damage = hasDamageCover ? vehicle.physicalHundredths - 100 : 0
-  const liability = vehicle.liabilityHundredths - 100
-  if (damage >= 10) parts.push({ size: damage, words: REASON.pricierRepairs })
-  if (damage <= -10) parts.push({ size: -damage, words: REASON.cheaperRepairs })
-  if (liability >= 8) parts.push({ size: liability, words: REASON.moreClaims })
-  if (liability <= -8) parts.push({ size: -liability, words: REASON.fewerClaims })
-  parts.sort((left, right) => right.size - left.size)
-  const words = parts.map((part) => part.words)
+  const { ups, downs } = lossPushes(AVERAGE_CAR, vehicle, hasDamageCover, { damage: 10, liability: 8 })
+  const words = [...ups, ...downs]
+    .sort((left, right) => right.size - left.size)
+    .slice(0, 3)
+    .map((part) => part.words)
   const age = modelYear === undefined ? null : vehicleAgeKey(modelYear)
   if (hasDamageCover && (age === "0-3" || age === "4-7")) words.push(REASON.newer)
   if (hasDamageCover && age === "13-plus") words.push(REASON.older)
@@ -504,6 +542,9 @@ export function basisWords(basis: keyof typeof BASIS_WORDS): string {
   return BASIS_WORDS[basis]
 }
 
+/** How we know a car's step when it comes from HLDI's per-model loss results. */
+export const CLAIMS_WORDS = "Based on insurance loss data"
+
 /** Which state's published prices a source is. */
 const SURVEY_STATES: Record<string, string> = {
   "ca-2026": "California",
@@ -520,6 +561,8 @@ const SURVEY_STATES: Record<string, string> = {
  * ones: "From published prices in Texas and Oklahoma (Illinois may differ)".
  */
 export function basisLabel(basis: keyof typeof BASIS_WORDS, sourceIds: readonly string[], state: string): string {
+  // HLDI publishes insurance loss results for each car, not prices.
+  if (basis === "sourced" && sourceIds.length > 0 && sourceIds.every((id) => id.startsWith("hldi-"))) return CLAIMS_WORDS
   const words = BASIS_WORDS[basis]
   const states = [...new Set(sourceIds.flatMap((id) => (SURVEY_STATES[id] ? [SURVEY_STATES[id]] : [])))]
   if (basis === "reference" || states.length === 0 || states.includes(state)) return words

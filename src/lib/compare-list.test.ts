@@ -9,6 +9,7 @@ import {
   carryFromWhatIf,
   carryNote,
   defaultCompareFor,
+  firstCarCompareFor,
   clearCars,
   COMPARE_LIMIT,
   COMPARE_STORAGE_KEY,
@@ -158,4 +159,19 @@ test("a car page's Add it to a comparison says the car arrived, not a driver", (
   assert.equal(carryNote(alone, [rav4], name, false), "The 2024 Toyota RAV4 is on your list. Check who's driving, then add more cars to compare.")
   const full = { ...DEFAULT_COMPARE, cars: [] }
   assert.equal(carryNote(full, [rav4], name, false), "Your list was full, so the 2024 Toyota RAV4 didn't fit. Remove a car to make room.")
+})
+
+test("the first-car link starts from a new teen, even after an adult's What-if situation was saved", () => {
+  const adult = {
+    scenario: { ...DEFAULT_COMPARE.driver, age: "40-64" as const, yearsLicensed: "10+" as const, teen: false, state: "TX" as const },
+    teenOnParentPolicy: false,
+    premium: 1500,
+  }
+  const list = firstCarCompareFor(adult)
+  assert.equal(list.driver.age, "16-18")
+  assert.equal(list.driver.state, "TX")
+  assert.equal(list.teenOnParentPolicy, true)
+  assert.equal(list.useMyPremium, false)
+  assert.equal(defaultCompareFor(adult).driver.age, "40-64", "the plain Compare link still uses the saved driver")
+  assert.deepEqual(firstCarCompareFor(null), DEFAULT_COMPARE)
 })

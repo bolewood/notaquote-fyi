@@ -13,6 +13,7 @@ export function SelectField({
   options,
   onChange,
   hint,
+  now,
   disabled = false,
   className,
 }: {
@@ -22,14 +23,21 @@ export function SelectField({
   options: readonly Option[]
   onChange: (value: string) => void
   hint?: ReactNode
+  /** On a "try a change" form: what it's set to now, shown beside the label. */
+  now?: string
   disabled?: boolean
   className?: string
 }) {
   const hintId = hint ? `${id}-hint` : undefined
   return (
     <div className={cn("grid content-start gap-1.5", className)}>
-      <label htmlFor={id} className="field-label">
-        {label}
+      <label htmlFor={id} className="field-label flex flex-wrap items-baseline justify-between gap-x-2">
+        <span>{label}</span>
+        {now !== undefined ? (
+          <span className="text-xs font-normal text-muted-foreground">
+            Now: {now} <span aria-hidden="true">→</span> Try:
+          </span>
+        ) : null}
       </label>
       <select
         id={id}
@@ -120,7 +128,7 @@ export function Segmented<T extends string>({
             <label
               key={option.value}
               className={cn(
-                "flex min-h-9 cursor-pointer items-center justify-center rounded-full px-2 text-center text-sm font-medium whitespace-nowrap transition-colors has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-ring",
+                "flex min-h-9 cursor-pointer items-center justify-center rounded-full px-2 py-1 text-center text-sm leading-tight font-medium text-balance transition-colors has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-ring",
                 checked ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground",
               )}
             >

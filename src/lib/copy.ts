@@ -18,11 +18,14 @@ export { CATALOG_VERSION }
 
 /** The one "not a quote" message. Show it once per page, in one place. */
 export const DISCLAIMER =
-  "This is an estimate to help you plan, not a quote. We don't sell insurance, and we never pass your info to anyone. Only an insurer can give you a real price."
+  "This is an estimate to help you plan, not a quote. We don't sell insurance, and nothing you type is sent to us. Only an insurer can give you a real price."
 
-/** Said once, near the premium field. */
+/**
+ * Said once, near the premium field. The math prices one car and its
+ * drivers, so the number we ask for is this car's share of the bill.
+ */
 export const PREMIUM_HINT =
-  "If you know it, we'll start from your real number. It stays on your device."
+  "Your bill or policy papers list each car's cost. Only one car on the policy? Use the whole amount. It stays on your device."
 
 export { longDate }
 

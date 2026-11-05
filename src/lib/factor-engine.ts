@@ -370,6 +370,18 @@ export type VehicleRelativity = {
   valueRisk: boolean
   /** A make that gets the half-strength value term, whose own range also widens the estimate. */
   halfValue?: boolean
+  /**
+   * HLDI's results for this car (or its class) before we soften them, as an
+   * index against an average car (100): collision and comprehensive combined
+   * by their share of industry claim costs, and property damage and
+   * bodily-injury frequency combined the same way. Read-only, for explaining
+   * the factor; the factor itself is computed from the same values.
+   */
+  hldiCombined?: { physical: number; liability: number }
+  /** The car-value term in our damage factor (luxury makes), which HLDI's results don't include. */
+  valueTier?: ValueTier
+  /** Our liability factor was held at the floor or cap of the band insurers use. */
+  liabilityClipped?: "floor" | "cap" | null
   /** A mainstream car whose HLDI damage result is above the fitted range, or in HLDI's sports-car class: the range reaches higher. */
   sporty?: boolean
   /** A mainstream car in HLDI's sports-car class (gets the sporty-car note). */
@@ -651,7 +663,7 @@ function creditedLiability(hldi: Rational, data: VehicleData, weightHundredths =
  * to California's survey: a lookup of HLDI ^ exponent (whole hundredths, so
  * the arithmetic stays exact), times the luxury-make term.
  */
-type ValueTier = "full" | "half" | "none"
+export type ValueTier = "full" | "half" | "none"
 
 /** Which car-value term a make gets (see luxuryValueFull and luxuryValueHalf in vehicle-families.json). */
 function valueTier(make: string, data: VehicleData): ValueTier {
@@ -676,6 +688,19 @@ function calibratedDamage(hldi: Rational, make: string, data: VehicleData): Rati
   const last = calibration.damageCurveMin + calibration.damageCurve.length - 1
   const index = Math.min(last, Math.max(calibration.damageCurveMin, toHundredths(hldi))) - calibration.damageCurveMin
   return mul(rat(calibration.damageCurve[index], 100), luxury)
+}
+
+/** A rational as an index with two decimals (0.8393 → 83.93), for explanations only. */
+function indexOf(value: Rational): number {
+  return Number((value.num * BigInt(10000)) / value.den) / 100
+}
+
+/** Whether the liability factor was held at the floor or the cap. */
+function liabilityClip(hldi: Rational, data: VehicleData): "floor" | "cap" | null {
+  const credited = add(rat(1), mul(rat(data.liabilityWeight.value, 100), sub(hldi, rat(1))))
+  if (compare(credited, rat(data.liabilityFloor, 100)) < 0) return "floor"
+  if (compare(credited, rat(data.liabilityCap, 100)) > 0) return "cap"
+  return null
 }
 
 function compare(left: Rational, right: Rational): number {
@@ -817,6 +842,9 @@ export function vehicleRelativity(
       basis: "sourced",
       liabilityWeightSpread: weightSpread(hldiLiability, data),
       injurySeveritySpread: injurySpread(hldiLiability, hldiLiabilityLow, hldiLiabilityHigh, data),
+      hldiCombined: { physical: indexOf(hldiPhysical), liability: indexOf(hldiLiability) },
+      valueTier: tier,
+      liabilityClipped: liabilityClip(hldiLiability, data),
       ...shared,
     }
   }
@@ -851,6 +879,9 @@ export function vehicleRelativity(
       basis: "indicative",
       liabilityWeightSpread: weightSpread(hldiLiability, data),
       injurySeveritySpread: injurySpread(hldiLiability, hldiLiabilityLow, hldiLiabilityHigh, data),
+      hldiCombined: { physical: indexOf(hundredths(klass.row.physical.value)), liability: indexOf(hldiLiability) },
+      valueTier: valueTier(vehicle.make, data),
+      liabilityClipped: liabilityClip(hldiLiability, data),
       ...shared,
     }
   }
@@ -1476,9 +1507,9 @@ function outsideYearsSentence(modelYears: readonly number[], data: VehicleData =
   const nearest = (year: number) => selectVehicleWindow(year, data).nearestYear
   const years = [...new Set(modelYears)].sort((left, right) => left - right)
   if (years.length === 1) {
-    return `Our claims data covers ${first}–${last} models, so for a ${years[0]} we used the closest year (${nearest(years[0])}).`
+    return `HLDI's loss data covers ${first}–${last} models, so for a ${years[0]} we used the closest year (${nearest(years[0])}).`
   }
-  return `Our claims data covers ${first}–${last} models, so we used ${joinWords(years.map((year) => `${nearest(year)} for the ${year}`))}.`
+  return `HLDI's loss data covers ${first}–${last} models, so we used ${joinWords(years.map((year) => `${nearest(year)} for the ${year}`))}.`
 }
 
 /**
@@ -1517,7 +1548,7 @@ function rangePoints(
       [target, scenario.year],
     ] as const) {
       if (relativity.level === "class") {
-        add(`We don't have claims data for that exact model, so we used the average for its kind (${lowerFirst(relativity.label)}).`)
+        add(`HLDI doesn't publish loss results for that exact model, so we used the average for its kind (${lowerFirst(relativity.label)}).`)
       }
       if (relativity.level === "unknown") {
         add("We couldn't tell what kind of vehicle that is, so we treated it as an average one.")
@@ -1544,7 +1575,7 @@ function rangePoints(
         : `That name is sold in more than one version. We priced the ${version} one.`,
     )
   } else if (vehicleChanged && target.hybridOnGasRows) {
-    add("The claims data has no separate figures for this hybrid, so we used the gas version's.")
+    add("HLDI's loss data has no separate figures for this hybrid, so we used the gas version's.")
   }
   if (vehicleChanged && target.valueRisk) {
     add("Expensive and electric cars can cost more or less to insure than their repair records suggest.")
@@ -1552,7 +1583,7 @@ function rangePoints(
   if (vehicleChanged && target.sporty && target.sportsCar) {
     add("Sporty cars often cost more to insure than their repair records suggest, so the range reaches higher.")
   } else if (vehicleChanged && target.sporty) {
-    add("This car's repair claims run a bit above the cars we could check against real prices, so the range reaches higher.")
+    add("This car's repair losses run a bit above the cars we could check against real prices, so the range reaches higher.")
   }
   if (start.trended && start.national) {
     add("We brought the 2023 national price up to today with the government's price index, which is only a rough guide.")
@@ -1560,16 +1591,16 @@ function rangePoints(
     add("We brought the 2023 state price up to today with a national price index, which is only a rough guide.")
   }
   if (scenario.age === "16-18" && options.teenOnParentPolicy) {
-    add("This is your whole household's policy after adding your teen, not the teen's own price.")
+    add("This is the cost of insuring this car with your teen added to your policy, not the teen's own price.")
     add(
       scenario.state === "CA"
         ? "It comes from one California comparison of two families, so the range is wide."
         : "We have little data on adding teens, so this range is wide.",
     )
   } else if (scenario.age === "16-18") {
-    add("This prices your teen as the only driver on their own policy. Adding a teen to a parent's policy usually costs less.")
+    add("This prices your teen as the only driver on their own policy. Adding a teen to your policy usually costs less.")
   } else if (scenario.age === "19-21") {
-    add("This prices a young driver as the only driver on their own policy. Staying on a parent's policy usually costs less.")
+    add("This prices a young driver as the only driver on their own policy. Staying on your policy usually costs less.")
   }
   if (trim === "limited" || trim === "unresolved") {
     add("We couldn't pin down the exact version of the car, which widens the range a little.")
@@ -1697,7 +1728,7 @@ export function teenAddedToPolicy(
     after,
     increase,
     increaseRounded,
-    headline: `Adding your teen to your policy: about ${differenceWords(increase)}, on a policy that costs about ${formatDollars(now)} now.`,
+    headline: `Adding your teen to your policy: about ${differenceWords(increase)}, for a car that costs about ${formatDollars(now)} a year to insure now.`,
   }
 }
 
@@ -1935,9 +1966,9 @@ function publishedRangeCell(cell: FactorCell, label: string): PublishedFactorRow
 /** Plain names for the range cells (the data file keeps its own). */
 const RANGE_LABELS: Record<string, string> = {
   "typical-start": "Starting from a typical state price, not yours",
-  "vehicle-model": "How closely real prices follow a car's claims",
+  "vehicle-model": "How closely real prices follow a car's loss results",
   "vehicle-value": "Luxury and electric cars",
-  "vehicle-model-years": "A model year outside the claims data",
+  "vehicle-model-years": "A model year outside HLDI's loss data",
   "vehicle-mixed-powertrain": "A name sold as both gas and hybrid",
   "vehicle-sporty": "Sporty cars, or ones with pricey repairs",
   "vehicle-luxury-class": "A luxury car we price by its kind, not its model",
@@ -1979,7 +2010,7 @@ export function publishedFactorGroups(): PublishedFactorGroup[] {
     Object.values(rows).flatMap((row) => [publishedRow(row.liability), publishedRow(row.physical)])
   groups.push({
     family: "Kinds of cars, when we don't have the exact model",
-    note: "From HLDI's insurance results (overall losses for collision, comprehensive, and property damage; how often claims happen for bodily injury), compared with the average car. We use these when we don't have figures for the exact model. The last two rows show how we treat injury claim severity and how much of a car's liability record we count; each isn't one of the 26 adjustments.",
+    note: "From HLDI's insurance loss results (overall losses for collision, comprehensive, and property damage; how often claims happen for bodily injury), compared with the average car. We use these when we don't have figures for the exact model. The last two rows show how we treat injury claim severity and how much of a car's liability record we count; each isn't one of the 26 adjustments.",
     rows: [
       ...classRows(bundle.vehicle.classes),
       ...classRows(bundle.vehicle.luxuryClasses),
@@ -1989,7 +2020,7 @@ export function publishedFactorGroups(): PublishedFactorGroup[] {
         "Average injury claim severity per model, used with HLDI's bodily-injury frequency",
       ),
       {
-        ...publishedRow(bundle.vehicle.liabilityWeight, `We count about half (${bundle.vehicle.liabilityWeight.value}%) of a car's liability claims record`),
+        ...publishedRow(bundle.vehicle.liabilityWeight, `We count about half (${bundle.vehicle.liabilityWeight.value}%) of a car's liability loss results`),
         change: `${bundle.vehicle.liabilityWeight.value}%`,
         range:
           bundle.vehicle.liabilityWeight.low === bundle.vehicle.liabilityWeight.high

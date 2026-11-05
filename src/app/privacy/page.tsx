@@ -15,8 +15,25 @@ export default function PrivacyPage() {
   return (
     <TrustArticle
       title="Privacy"
-      lead={`The short version: what you type stays on your device, except a VIN if you choose to look one up. There's no account, no cookies, no ad tracking, and nothing to sell. ${PUBLISHER} publishes this site and never sees what you type into it. An AI assistant using our read-only service is the one difference; see below.`}
+      lead="We can't sell what we never receive: everything you type into the calculator stays in your browser. Here's exactly what does leave your device, and when."
     >
+      <div id="what-we-count" className="scroll-mt-4 rounded-2xl border border-foreground/15 bg-card p-5">
+        <p className="text-base font-semibold">What we count</p>
+        <p className="mt-1 text-sm text-muted-foreground">
+          We count page views with Vercel Web Analytics. For each view it records only:
+        </p>
+        <ul className="bullets mt-2 text-sm">
+          <li>the page&apos;s address, with anything after <code>?</code> or <code>#</code> removed</li>
+          <li>the site that sent you, if any</li>
+          <li>your country</li>
+          <li>your browser and device type</li>
+        </ul>
+        <p className="mt-2 text-sm text-muted-foreground">
+          No cookies, and never what you type, what you pay, or the cars you pick. {PUBLISHER} publishes this site and
+          doesn&apos;t sell or share data with advertisers or insurers.
+        </p>
+      </div>
+
       <h2>What we don&apos;t ask for</h2>
       <p>
         No name, email, phone number, birthday, address, ZIP code, driver&apos;s license, policy number, or insurance
@@ -39,7 +56,7 @@ export default function PrivacyPage() {
 
       <h2>What stays on your device</h2>
       <p>
-        So the pages remember your choices, this browser keeps them in its own storage: your situation on the What-if page
+        So the pages remember your choices, this browser keeps them in its own storage: your starting point on the Try a change page
         (including what you pay now, if you entered it) and your list of cars on the Compare page. They never leave your
         device. To remove them, clear this site&apos;s data in your browser settings.
       </p>

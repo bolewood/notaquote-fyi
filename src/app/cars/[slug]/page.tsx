@@ -3,13 +3,14 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ArrowRight } from "lucide-react"
 import { Breadcrumbs } from "@/components/breadcrumbs"
+import { HldiChip, HldiLegend } from "@/components/charts/hldi-chip"
+import { averageBandNote } from "@/lib/hldi"
 import { VehicleFixLink } from "@/components/how-we-got-this"
 import { JsonLdScript } from "@/components/json-ld"
 import { TrustArticle } from "@/components/trust-article"
 import { SERVER_CATALOG } from "@/lib/agent-catalog"
 import { carContent, noindexCarSlugs } from "@/lib/car-content"
 import { carFigures, carPages } from "@/lib/car-pages"
-import { FACTOR_BUNDLE } from "@/lib/factor-engine"
 import { longDate } from "@/lib/format"
 import { vehicleMatchWords } from "@/lib/pricing"
 import { DEFAULT_SCENARIO } from "@/lib/scenario"
@@ -36,8 +37,6 @@ export async function generateMetadata({ params }: PageProps<"/cars/[slug]">): P
     noindex: noindexCarSlugs(SERVER_CATALOG).has(f.page.slug),
   })
 }
-
-const HLDI = FACTOR_BUNDLE.sources.find((source) => source.id === FACTOR_BUNDLE.vehicle.sourceId)
 
 function SimilarList({ cars }: { cars: readonly { slug: string | null; name: string; price: string }[] }) {
   return (
@@ -113,17 +112,83 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
         <p className="text-sm text-muted-foreground">{c.averageLine}</p>
       </div>
       <p className="text-sm text-muted-foreground">
-        {c.about} <Link href="/states">{c.stateLine}</Link> <Link href="/methodology#car-pages">How we got these</Link>.
+        {c.about} <span data-shared="">{c.driverNote}</span> <Link href="/states">{c.stateLine}</Link>
       </p>
+
+      <h2 id="why">{c.whyHeading}</h2>
+      {c.hldi ? (
+        <>
+          <h3 data-shared="">{c.hldi.heading}</h3>
+          <p>{c.hldi.intro}</p>
+          <ul className="grid gap-0 rounded-2xl bg-card px-5 py-2 text-sm ring-1 ring-border" data-testid="car-hldi">
+            {c.hldi.rows.map((row) => (
+              <li key={row.name} className="grid gap-x-4 gap-y-0.5 border-b border-border/70 py-2.5 last:border-b-0 sm:grid-cols-[minmax(0,1fr)_auto]">
+                <span className="min-w-0">
+                  <span className="font-medium" data-shared="">
+                    {row.name}
+                  </span>
+                  <span className="block text-xs text-muted-foreground" data-shared="">
+                    {row.helper}
+                  </span>
+                </span>
+                <span className="grid content-start justify-items-start gap-0.5 sm:justify-items-end sm:text-right">
+                  <span className="flex flex-wrap items-center gap-x-2 gap-y-0.5 sm:justify-end">
+                    <HldiChip level={row.rating} />
+                    <span className="text-xs text-muted-foreground">{row.percent}</span>
+                  </span>
+                  {row.peers ? <span className="block text-xs text-muted-foreground">{row.peers}</span> : null}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <div data-shared="" className="grid gap-1">
+            <HldiLegend />
+            <p className="text-xs text-muted-foreground" data-testid="average-band-note">
+              {averageBandNote()}
+            </p>
+          </div>
+          {c.hldi.missing ? <p className="text-sm text-muted-foreground">{c.hldi.missing}</p> : null}
+          <p className="text-sm text-muted-foreground" data-shared="">
+            {c.hldi.url ? (
+              <a href={c.hldi.url} rel="noreferrer">
+                {c.hldi.source}
+              </a>
+            ) : (
+              c.hldi.source
+            )}
+            .
+          </p>
+        </>
+      ) : null}
+      {c.price ? (
+        <>
+          <h3 data-shared="">{c.price.heading}</h3>
+          <p data-testid="car-price-meaning">
+            <span data-shared="">{c.price.shared}</span> {c.price.text}
+          </p>
+          <p className="text-sm" data-shared="">
+            <Link href="/methodology#why-percentages-differ">How the math works</Link>
+          </p>
+        </>
+      ) : null}
+      <p>{c.kind}</p>
+      {c.notes.length > 0 ? (
+        <ul className="bullets">
+          {c.notes.map((note) => (
+            <li key={note}>{note}</li>
+          ))}
+        </ul>
+      ) : null}
+      <p className="text-sm text-muted-foreground">{c.source}</p>
 
       {c.years.length > 1 ? <h2 id="years">{c.yearsHeading}</h2> : null}
       {c.years.length > 1 ? (
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-left text-sm">
-            <caption className="py-2 text-left text-sm text-muted-foreground">
+            <caption className="py-2 text-left text-sm text-muted-foreground" data-shared="">
               {c.yearsCaption}
             </caption>
-            <thead>
+            <thead data-shared="">
               <tr className="border-b border-border text-muted-foreground">
                 <th scope="col" className="py-2 pr-3 font-medium">
                   Model year
@@ -179,38 +244,9 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
       <h2 id="teen">{c.teenHeading}</h2>
       <p>{c.teen}</p>
       <p>{c.teenRank}</p>
-      <p className="text-sm text-muted-foreground">
+      <p className="text-sm text-muted-foreground" data-shared="">
         {c.teenNote}{" "}
         <Link href="/guides/cheapest-cars-to-insure-for-teens">Cheapest cars to insure for a teen</Link>.
-      </p>
-
-      <h2 id="why">{c.whyHeading}</h2>
-      <p>{c.claimsIntro}</p>
-      <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 rounded-2xl bg-card p-5 text-sm ring-1 ring-border" data-testid="car-claims">
-        {c.claims.map((row) => (
-          <div key={row.label} className="contents">
-            <dt className="font-medium">{row.label}</dt>
-            <dd>{row.value}</dd>
-          </div>
-        ))}
-      </dl>
-      <p>{c.effect}</p>
-      <p>{c.kind}</p>
-      {c.notes.length > 0 ? (
-        <ul className="bullets">
-          {c.notes.map((note) => (
-            <li key={note}>{note}</li>
-          ))}
-        </ul>
-      ) : null}
-      <p className="text-sm text-muted-foreground">
-        {HLDI ? (
-          <a href={HLDI.url} rel="noreferrer">
-            {c.source}
-          </a>
-        ) : (
-          c.source
-        )}
       </p>
 
       {c.similar.length > 1 ? (
@@ -227,7 +263,7 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
         {c.states.map((row) => (
           <li key={row.path} className="flex min-h-10 flex-wrap items-center justify-between gap-x-4 py-1.5">
             <span>
-              <Link href={row.path}>{row.name}</Link> ({page.shortName})
+              <Link href={row.path}>{row.name}</Link>
             </span>
             <span className="money text-muted-foreground tabular-nums">
               {row.adult}/yr · {row.teen} teen
@@ -235,12 +271,12 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
           </li>
         ))}
       </ul>
-      <p className="text-sm text-muted-foreground">
-        <Link href="/states">All 50 states and DC for the {page.shortName}</Link> · Updated{" "}
-        <time dateTime={CAR_PAGES_UPDATED}>{longDate(CAR_PAGES_UPDATED)}</time> for the {page.shortName}.
+      <p className="text-sm text-muted-foreground" data-shared="">
+        <Link href="/states">All 50 states and DC</Link> · Updated{" "}
+        <time dateTime={CAR_PAGES_UPDATED}>{longDate(CAR_PAGES_UPDATED)}</time>.
       </p>
 
-      <div className="flex flex-wrap gap-3 pt-2">
+      <div className="flex flex-wrap gap-3 pt-2" data-shared="">
         <a href={whatIfHref} className="btn btn-primary plain">
           What if you bought this car? <ArrowRight className="size-4" aria-hidden="true" />
         </a>
@@ -248,7 +284,7 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
           Add it to a comparison
         </a>
       </div>
-      <p className="text-sm text-muted-foreground">
+      <p className="text-sm text-muted-foreground" data-shared="">
         Both start from your own situation if you&apos;ve set one. For crash safety, see{" "}
         <a href="https://www.iihs.org/ratings" rel="noreferrer">
           IIHS
@@ -259,7 +295,7 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
         </a>{" "}
         ratings.
       </p>
-      <p>
+      <p data-shared="">
         <VehicleFixLink carName={page.name} shown={vehicleMatchWords(page.relativity)} />
       </p>
     </TrustArticle>

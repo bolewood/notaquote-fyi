@@ -27,6 +27,8 @@ import {
   DEFAULT_SORT,
   filterRows,
   gapsToCheapest,
+  OVERLAP_NOTE,
+  topRangesOverlap,
   nextSort,
   parseMaxYearly,
   reasonWords,
@@ -46,6 +48,7 @@ import {
   clearCars,
   COMPARE_LIMIT,
   defaultCompareFor,
+  firstCarCompareFor,
   removeCar,
   toggleStar,
   type CompareList,
@@ -70,9 +73,11 @@ import { readShareArrival, useClearShareFromAddress, useMounted } from "@/lib/us
 import { DEFAULT_SITUATION } from "@/lib/situation"
 import { useCarPagePath } from "@/lib/use-car-page-path"
 import { useCatalog } from "@/lib/use-catalog"
-import { useCompareList, useSituation } from "@/lib/use-stored"
+import { useCompareChartShown, useCompareList, useSituation } from "@/lib/use-stored"
 import { cn } from "cn"
-import { ArrowDown, ArrowUp, ArrowUpDown, ChevronDown, Download, Plus, Printer, Send, Star, Trash2, Trophy, X } from "lucide-react"
+import { ChartFigure } from "@/components/charts/figure"
+import { RangeRowsChart } from "@/components/charts/range-rows"
+import { ArrowDown, ArrowUp, ArrowUpDown, ChevronDown, Download, Plus, Printer, Send, Star, Trash2, X } from "lucide-react"
 import Link from "next/link"
 import { Fragment, useEffect, useMemo, useRef, useState } from "react"
 
@@ -87,7 +92,7 @@ const SORT_LABELS: Record<SortKey, string> = {
   car: "Car name",
   yearly: "Price",
   monthly: "Price",
-  policy: "Whole policy",
+  policy: "Total with teen",
   range: "Narrowest range",
   reason: "Why",
 }
@@ -184,7 +189,10 @@ function CompareCarsReady() {
     // The What-if page handed over its cars: they're the visitor's own, so keep them.
     if (carried) write(carried)
   }, [carried, write])
-  const own = stored.value ?? carried ?? defaultCompareFor(situationStore.value)
+  // "Shopping for a first car?" means a new teen, even if a saved What-if driver is an adult.
+  const [firstCar] = useState(() => new URLSearchParams(window.location.search).get("for") === "first-car")
+  const own =
+    stored.value ?? carried ?? (firstCar ? firstCarCompareFor(situationStore.value) : defaultCompareFor(situationStore.value))
   const list = linked ?? own
   const situation = situationStore.value ?? DEFAULT_SITUATION
   const driver = list.driver
@@ -326,6 +334,13 @@ function CompareCarsReady() {
   const starredCount = list.cars.filter((car) => car.starred).length
   const hidden = rows.length - visible.length
   const added = mode === "added"
+  // The cheapest car, or every car tied with it at the figure as shown ("Tied for lowest estimate").
+  const lowestKeys = new Set(
+    cheapest && visible.length > 1 ? visible.filter((row) => shownAmount(row) === shownAmount(cheapest)).map((row) => row.key) : [],
+  )
+  const lowestLabel = lowestKeys.size > 1 ? "Tied for lowest estimate" : "Lowest estimate"
+  // Show or hide the chart; remembered in this browser (held in memory if storage is refused).
+  const { shown: showChart, setShown: toggleChart } = useCompareChartShown()
   const age = AGE_BANDS.find((band) => band.id === driver.age)?.label ?? driver.age
   const who = `For a ${age}-year-old in ${stateName(driver.state)}${added ? ", added to your policy" : ""}`
   const answer = compareAnswer(visible, mode, who)
@@ -357,6 +372,8 @@ function CompareCarsReady() {
   const monthAmount = (row: CompareRow) => (row.extra !== null ? `+${monthlyDollars(row.extra)}` : monthlyDollars(row.likely))
   const gapWords = (row: CompareRow) => {
     const gap = gaps.get(row.key) ?? 0
+    // Cars tied for the lowest estimate say so, all of them, like their badges.
+    if (lowestKeys.size > 1 && lowestKeys.has(row.key)) return "Tied for cheapest"
     if (!cheapest || row.key === cheapest.key) return null
     if (Math.round(gap / 10) === 0) return `Same as the ${cheapest.car.model}`
     return `${signedDollars(gap)} vs. ${cheapest.car.model}`
@@ -430,6 +447,11 @@ function CompareCarsReady() {
             {situationSentence(driver, list.teenOnParentPolicy, false)}
           </p>
           <p className="mt-1 hidden text-sm text-muted-foreground lg:block">Every car in your list is priced for this driver.</p>
+          {driver.age === "16-18" ? (
+            <p className="mt-1 text-sm text-muted-foreground" data-testid="teen-default-note">
+              Set to a teen because most people compare cars for a new driver. Change it anytime.
+            </p>
+          ) : null}
           <div id="driver-form" className={cn("mt-4 gap-3 lg:grid", driverOpen ? "grid" : "hidden")}>
             <div className="grid grid-cols-2 gap-3 lg:grid-cols-1">
               <AgeField scenario={driver} onChange={patchDriver} idPrefix="driver" />
@@ -447,7 +469,7 @@ function CompareCarsReady() {
             ) : null}
             <div className="grid grid-cols-2 gap-3 lg:grid-cols-1">
               <RegionField scenario={driver} onChange={patchDriver} idPrefix="driver" />
-              <CoverageField scenario={driver} onChange={patchDriver} idPrefix="driver" showNote={false} />
+              <CoverageField scenario={driver} onChange={patchDriver} idPrefix="driver" short />
             </div>
             <details className="disclosure">
               <summary>
@@ -473,7 +495,7 @@ function CompareCarsReady() {
                   />
                   <span>
                     {mode === "added"
-                      ? `Start from the ${dollars(situation.premium ?? 0)} a year your whole policy costs now, with your ${shortVehicleLabel(situation.scenario)}.`
+                      ? `Start from the ${dollars(situation.premium ?? 0)} a year you pay now for your ${shortVehicleLabel(situation.scenario)}, before adding your teen.`
                       : `Start from the ${dollars(situation.premium ?? 0)} a year you pay now for your ${shortVehicleLabel(situation.scenario)}.`}{" "}
                     It stays on your device.
                   </span>
@@ -482,15 +504,14 @@ function CompareCarsReady() {
                 <p>
                   We start from a typical price for the driver&apos;s state.{" "}
                   <Link href="/#now" className="link">
-                    {mode === "added" ? "Tell us what your whole policy costs now" : "Tell us what you pay now"}
+                    Tell us what you pay for your car now
                   </Link>{" "}
                   and we&apos;ll start from your real number instead.
                 </p>
               )}
               {mode === "added" ? (
                 <p className="mt-2 text-muted-foreground">
-                  We price each car as the one on your policy, with your teen added as a driver. The big number is what
-                  adding them costs each year.
+                  We price each car as the one on your policy, with your teen added as a driver.
                 </p>
               ) : null}
             </div>
@@ -667,10 +688,20 @@ function CompareCarsReady() {
                 </div>
               </div>
 
-              {answer ? (
-                <p className="no-print border-b border-border px-5 py-3 text-base font-medium sm:px-6" data-testid="compare-answer">
-                  {answer}
+              {rows.length > 0 ? (
+                <p className="no-print border-b border-border bg-muted/50 px-5 py-2.5 text-sm sm:px-6" data-testid="compare-legend">
+                  {added
+                    ? "Each price is what adding this teen to your policy costs a year with that car. “Total with teen” is that car's full yearly cost with the teen added."
+                    : "Each price is a yearly estimate for this driver, on their own policy. The range is our estimated range; actual quotes can fall outside it."}
                 </p>
+              ) : null}
+
+              {answer ? (
+                <div className="no-print grid gap-1 border-b border-border px-5 py-3 sm:px-6">
+                  <p className="text-base font-medium" data-testid="compare-answer">
+                    {answer}
+                  </p>
+                </div>
               ) : null}
 
               {hidden > 0 ? (
@@ -689,6 +720,53 @@ function CompareCarsReady() {
                 </p>
               ) : null}
 
+              {visible.length > 0 ? (
+                <section aria-label="Chart of each car's estimate" className="grid gap-2 border-b border-border px-5 py-4 sm:px-6" data-testid="compare-chart">
+                  <div className="no-print flex items-center justify-between gap-3">
+                    <p className="text-sm font-semibold">{added ? "What the teen adds with each car" : "Each car's estimate and range"}</p>
+                    <button
+                      type="button"
+                      className="btn btn-quiet min-h-9 px-3 text-sm"
+                      aria-expanded={showChart}
+                      aria-controls="compare-chart-figure"
+                      onClick={() => toggleChart(!showChart)}
+                    >
+                      {showChart ? "Hide chart" : "Show chart"}
+                    </button>
+                  </div>
+                  {/* Printing always includes the chart. */}
+                  <div id="compare-chart-figure" className={showChart ? "" : "hidden print:block"}>
+                    <ChartFigure
+                      caption={
+                        added
+                          ? "Each dot is what adding the teen costs a year with that car, in the table's order. Our ranges are for the whole bill, not the extra, so there are no bands here; the table shows each car's total range."
+                          : "Each dot is our central estimate and each band is our estimated range, on one dollar scale, in the table's order. Actual quotes can fall outside the bands."
+                      }
+                    >
+                      <RangeRowsChart
+                        rows={visible.map((row) => ({
+                          key: row.key,
+                          name: row.name,
+                          starred: row.starred,
+                          value: row.extra ?? row.likely,
+                          low: row.extra === null ? row.low : null,
+                          high: row.extra === null ? row.high : null,
+                        }))}
+                        lowestKeys={lowestKeys}
+                        lowestLabel={lowestLabel}
+                        extra={added}
+                        axisLabel={added ? "Extra a year to add the teen" : "Yearly estimate for this driver"}
+                      />
+                    </ChartFigure>
+                  </div>
+                  {topRangesOverlap(visible) ? (
+                    <p className="text-sm text-muted-foreground" data-testid="overlap-note">
+                      {OVERLAP_NOTE}
+                    </p>
+                  ) : null}
+                </section>
+              ) : null}
+
               {/* Wide screens: a real table. */}
               <div className="hidden sm:block print:block">
                 <table className="compare-table w-full table-fixed border-collapse text-left text-sm" data-testid="compare-table">
@@ -701,17 +779,17 @@ function CompareCarsReady() {
                         <span className="sr-only">Starred</span>
                       </th>
                       <SortHeader label="Car" sortKey="car" sort={sort} onSort={setSort} className="print:w-[30%]" />
-                      <SortHeader label={added ? "Extra a year" : "A year"} sortKey="yearly" sort={sort} onSort={setSort} align="right" className="w-36" />
+                      <SortHeader label={added ? "Teen adds, a year" : "A year"} sortKey="yearly" sort={sort} onSort={setSort} align="right" className="w-36" />
                       <SortHeader
-                        label={added ? "Extra a month" : "A month"}
+                        label="A month"
                         sortKey="monthly"
                         sort={sort}
                         onSort={setSort}
                         align="right"
-                        className="hidden w-28 pr-5 xl:table-cell"
+                        className="hidden w-28 pr-5 xl:table-cell print:hidden"
                       />
                       <SortHeader
-                        label={added ? "Whole policy" : "Where quotes would land"}
+                        label={added ? "Total with teen" : "Estimated range"}
                         sortKey={added ? "policy" : "range"}
                         sort={sort}
                         onSort={setSort}
@@ -730,7 +808,7 @@ function CompareCarsReady() {
                   </thead>
                   <tbody>
                     {visible.map((row) => {
-                      const lowest = cheapest !== null && visible.length > 1 && row.key === cheapest.key
+                      const lowest = lowestKeys.has(row.key)
                       const version = versionWords(row)
                       return (
                         <Fragment key={row.key}>
@@ -767,7 +845,7 @@ function CompareCarsReady() {
                               </span>
                               {lowest ? (
                                 <span className="tag mt-1.5 bg-down-soft text-down">
-                                  <Trophy className="size-3.5" aria-hidden="true" /> Lowest
+                                  {lowestLabel}
                                 </span>
                               ) : null}
                             </td>
@@ -817,7 +895,7 @@ function CompareCarsReady() {
               {/* Phones: two compact lines per car. */}
               <ul className="grid gap-0 sm:hidden print:hidden" data-testid="compare-cards">
                 {visible.map((row) => {
-                  const lowest = cheapest !== null && visible.length > 1 && row.key === cheapest.key
+                  const lowest = lowestKeys.has(row.key)
                   const version = versionWords(row)
                   return (
                     <li key={row.key} className={cn("border-b border-border/70 px-3 py-2", row.starred && "bg-star/10")}>
@@ -832,8 +910,8 @@ function CompareCarsReady() {
                         >
                           <span className="truncate font-medium">{row.name}</span>
                           <span className="truncate text-xs text-muted-foreground">
-                            {lowest ? "Lowest · " : ""}
-                            {added ? `whole policy about ${estimateDollars(row.likely)}` : `${monthAmount(row)} a month`}
+                            {lowest ? `${lowestLabel} · ` : ""}
+                            {added ? `total with teen about ${estimateDollars(row.likely)}` : `${monthAmount(row)} a month`}
                             {version ? ` · ${version}` : ""}
                           </span>
                         </button>
@@ -974,8 +1052,8 @@ function CompareCarsReady() {
                 setSort({ key, direction })
               }}
             >
-              <option value="yearly:asc">Cheapest first</option>
-              <option value="yearly:desc">Priciest first</option>
+              <option value="yearly:asc">Lowest first</option>
+              <option value="yearly:desc">Highest first</option>
               <option value="car:asc">A to Z</option>
               <option value="range:asc">Narrowest range</option>
               <option value="order:asc">Order added</option>

@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     template: `%s · ${SITE_NAME}`,
   },
   description:
-    "What would your car insurance cost with a different car, a new teen driver, or a move? A free, open-source estimate to help you plan. Not a quote.",
+    "What would your car insurance cost with a different car, a new teen driver, or a move? An estimate from public data. No ads, no account. Not a quote.",
   applicationName: SITE_NAME,
   publisher: PUBLISHER,
   // AI assistants that read the page's head find their guide here. Pages that set

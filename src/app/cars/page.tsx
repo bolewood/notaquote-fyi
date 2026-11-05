@@ -50,7 +50,7 @@ export default function CarsIndexPage() {
   return (
     <TrustArticle
       title="What popular cars cost to insure"
-      lead={`${count} popular cars, SUVs, pickups, and electric cars, each with its own page: a typical yearly price, what adding a 16-year-old costs, and why, from insurance claims data.`}
+      lead={`${count} popular cars, SUVs, pickups, and electric cars, each with its own page: a typical yearly price, what adding a 16-year-old costs, and why, from insurance loss data.`}
       breadcrumbs={
         <Breadcrumbs
           crumbs={[
@@ -63,8 +63,8 @@ export default function CarsIndexPage() {
       <p>
         Every figure is for the same driver: a 45-year-old with a clean record and full coverage, at the national typical
         price. The cars are {years.length === 1 ? `${years[0]} models` : `mostly ${CLAIMS_YEARS.last} models`}, the newest
-        our claims data covers; each page also shows older years. We only make a page when the Highway Loss Data Institute
-        has claims results for that exact model. <Link href="/compare">Compare any cars</Link>, browse{" "}
+        year covered by HLDI&apos;s loss data; each page also shows older years. We only make a page when the Highway Loss Data Institute
+        (HLDI) has loss results for that exact model. <Link href="/compare">Compare any cars</Link>, browse{" "}
         <Link href="/states">car insurance by state</Link>, or read our guides on{" "}
         <Link href="/guides/cheapest-cars-to-insure-for-teens">cheapest cars to insure for a teen</Link> and{" "}
         <Link href="/guides/adding-a-teen-driver">what adding a teen driver costs</Link>.

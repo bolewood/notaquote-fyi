@@ -274,7 +274,7 @@ test("compare echoes the driver, the start, and the things to show once", () => 
   assert.equal(body.disclaimer, DISCLAIMER)
   assert.equal(body.startingPoint.kind, "typical")
   assert.match(body.startingPoint.attribution, /National Association of Insurance Commissioners/)
-  assert.ok(body.notes.some((note: string) => /whole household's policy/.test(note)))
+  assert.ok(body.notes.some((note: string) => /this car with your teen added/.test(note)))
   assert.ok(body.sources.some((source: Body) => /iihs\.org/.test(source.url)))
   assert.ok(body.sources.some((source: Body) => /naic\.org/.test(source.url)))
   assert.ok(body.howToRead.length >= 3)

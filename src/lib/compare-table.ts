@@ -168,9 +168,9 @@ export const CSV_COLUMNS: Record<CompareMode, readonly string[]> = {
     "Starred",
     "Extra a year for your teen ($)",
     "Extra a month for your teen ($)",
-    "Whole policy a year, with your teen ($)",
-    "Whole policy range, low ($)",
-    "Whole policy range, high ($)",
+    "This car's total a year, with your teen ($)",
+    "Total range, low ($)",
+    "Total range, high ($)",
     "Why (compared with an average car)",
   ],
 }
@@ -243,7 +243,7 @@ export function toCsv(rows: readonly CompareRow[], notes: CsvNotes, mode: Compar
   lines.push("")
   lines.push([csvCell("Starting point"), csvCell(notes.start)].join(","))
   lines.push([csvCell("Data"), csvCell(notes.versions)].join(","))
-  lines.push([csvCell("Made with"), csvCell("NotAQuote.FYI, free and open source: notaquote.fyi")].join(","))
+  lines.push([csvCell("Made with"), csvCell("NotAQuote.FYI, open source and non-commercial: notaquote.fyi")].join(","))
   // The byte-order mark tells Excel the file is UTF-8, so "16–18" and "→" read right.
   return `\uFEFF${lines.join("\r\n")}\r\n`
 }
@@ -285,4 +285,24 @@ export function compareAnswer(rows: readonly CompareRow[], mode: CompareMode, wh
 export function csvFilename(today: Date = new Date()): string {
   const iso = today.toISOString().slice(0, 10)
   return `notaquote-car-comparison-${iso}.csv`
+}
+
+/** "The ranges overlap, so get real quotes on your top two or three." Only said when it's true. */
+export const OVERLAP_NOTE = "The ranges overlap, so get real quotes on your top two or three."
+
+/**
+ * Whether the estimated ranges of the cheapest two or three cars in view
+ * overlap: then their order could flip with real quotes. In "added" mode the
+ * ranges are the whole policy's (the extra has no range of its own), which
+ * is the same uncertainty.
+ */
+export function topRangesOverlap(rows: readonly Pick<CompareRow, "extra" | "likely" | "low" | "high">[]): boolean {
+  if (rows.length < 2) return false
+  const top = [...rows].sort((left, right) => headlineAmount(left) - headlineAmount(right)).slice(0, 3)
+  for (let i = 0; i < top.length; i += 1) {
+    for (let j = i + 1; j < top.length; j += 1) {
+      if (top[i].low <= top[j].high && top[j].low <= top[i].high) return true
+    }
+  }
+  return false
 }

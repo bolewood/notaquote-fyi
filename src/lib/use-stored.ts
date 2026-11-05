@@ -35,3 +35,14 @@ export function useCompareList() {
     serialize: compareSnapshot,
   })
 }
+
+/** Whether the Compare page's chart is shown (shown unless the visitor hid it), kept in this browser only. */
+export function useCompareChartShown(): { shown: boolean; setShown: (shown: boolean) => void } {
+  const stored = useStoredValue<boolean>({
+    key: "notaquote.compare-chart.v1",
+    event: "notaquote:compare-chart",
+    parse: (raw) => (raw === "hidden" ? false : raw === "shown" ? true : null),
+    serialize: (shown) => (shown ? "shown" : "hidden"),
+  })
+  return { shown: stored.value ?? true, setShown: stored.write }
+}
