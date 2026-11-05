@@ -3,6 +3,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ArrowRight } from "lucide-react"
 import { Breadcrumbs } from "@/components/breadcrumbs"
+import { HldiChip, HldiLegend } from "@/components/charts/hldi-chip"
 import { VehicleFixLink } from "@/components/how-we-got-this"
 import { JsonLdScript } from "@/components/json-ld"
 import { TrustArticle } from "@/components/trust-article"
@@ -129,14 +130,19 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
                     {row.helper}
                   </span>
                 </span>
-                <span className="sm:text-right">
-                  <span className="block font-medium">{row.rating}</span>
-                  <span className="block text-xs text-muted-foreground">{row.percent}</span>
+                <span className="grid content-start justify-items-start gap-0.5 sm:justify-items-end sm:text-right">
+                  <span className="flex flex-wrap items-center gap-x-2 gap-y-0.5 sm:justify-end">
+                    <HldiChip level={row.rating} />
+                    <span className="text-xs text-muted-foreground">{row.percent}</span>
+                  </span>
                   {row.peers ? <span className="block text-xs text-muted-foreground">{row.peers}</span> : null}
                 </span>
               </li>
             ))}
           </ul>
+          <div data-shared="">
+            <HldiLegend />
+          </div>
           {c.hldi.missing ? <p className="text-sm text-muted-foreground">{c.hldi.missing}</p> : null}
           <p className="text-sm text-muted-foreground" data-shared="">
             {c.hldi.url ? (

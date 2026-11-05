@@ -130,3 +130,28 @@ test("a luxury make says our own adjustment moves the number, not HLDI's results
   assert.match(meaning.paragraph, /Published prices for luxury makes like this one run higher than their loss results alone suggest/)
   assert.doesNotMatch(meaning.paragraph, /don't measure/)
 })
+
+test("the Legacy page shows HLDI's chips: better, average, average, better", { skip: !MODELS_ENABLED }, async () => {
+  const { renderToStaticMarkup } = await import("react-dom/server")
+  const CarPage = (await import("../app/cars/[slug]/page")).default
+  const html = renderToStaticMarkup(await CarPage({ params: Promise.resolve({ slug: "subaru-legacy" }) } as never))
+  const list = html.slice(html.indexOf('data-testid="car-hldi"'), html.indexOf("</ul>", html.indexOf('data-testid="car-hldi"')))
+  const chips = [...list.matchAll(/data-rating="([^"]+)"/g)].map((match) => match[1])
+  assert.deepEqual(chips, ["Better than average", "Average", "Average", "Better than average"])
+  // The words are inside each chip, and HLDI's percent sits next to it.
+  assert.match(list, /data-rating="Better than average"[^>]*>Better than average<\/span>/)
+  assert.match(list, /21% better than average/)
+  // One legend, with all six levels.
+  assert.equal(html.split('data-testid="hldi-legend"').length - 1, 1)
+  assert.equal([...html.matchAll(/data-testid="hldi-legend"[\s\S]*?<\/div>/g)][0][0].split("data-rating=").length - 1, 6)
+})
+
+test("a coverage HLDI doesn't publish shows an Insufficient data chip", { skip: !MODELS_ENABLED }, async () => {
+  const { renderToStaticMarkup } = await import("react-dom/server")
+  const CarPage = (await import("../app/cars/[slug]/page")).default
+  const html = renderToStaticMarkup(await CarPage({ params: Promise.resolve({ slug: "toyota-tacoma" }) } as never))
+  const list = html.slice(html.indexOf('data-testid="car-hldi"'), html.indexOf("</ul>", html.indexOf('data-testid="car-hldi"')))
+  const chips = [...list.matchAll(/data-rating="([^"]+)"/g)].map((match) => match[1])
+  assert.equal(chips.length, 4)
+  assert.equal(chips[3], "Insufficient data")
+})
