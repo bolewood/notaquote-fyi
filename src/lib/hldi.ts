@@ -393,15 +393,23 @@ export function hldiShortLine(report: HldiReport): string {
   return listWords(parts)
 }
 
-const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+/**
+ * When we last pulled HLDI's tables (every window, 2006–08 through the newest).
+ * The sources list and the line below both use it. Update it in the January
+ * refresh (docs/DATA-REFRESH.md). The 2022–24 source entry's own checkedOn is
+ * September 22, 2026; the older windows were added in October 2026.
+ */
+export const HLDI_RETRIEVED = "October 2026"
 
-/** "HLDI data through 2022–24 models, retrieved September 2026": the newest HLDI window and when we pulled it. */
-export function hldiDataLine(): string | null {
+/** The newest HLDI window, like "2022–24". */
+export function newestHldiWindow(): string | null {
   const windows = FACTOR_BUNDLE.vehicle.windows
   if (windows.length === 0) return null
-  const newest = [...windows].sort((left, right) => right.yearMax - left.yearMax)[0]
-  const source = FACTOR_BUNDLE.sources.find((item) => item.id === newest.sourceId)
-  const match = source ? /^(\d{4})-(\d{2})/.exec(source.checkedOn) : null
-  const retrieved = match ? `, retrieved ${MONTHS[Number(match[2]) - 1]} ${match[1]}` : ""
-  return `HLDI data through ${newest.modelYears.replace("-", "–")} models${retrieved}.`
+  return [...windows].sort((left, right) => right.yearMax - left.yearMax)[0].modelYears.replace("-", "–")
+}
+
+/** "HLDI data through 2022–24 models, retrieved October 2026." */
+export function hldiDataLine(): string | null {
+  const newest = newestHldiWindow()
+  return newest ? `HLDI data through ${newest} models, retrieved ${HLDI_RETRIEVED}.` : null
 }

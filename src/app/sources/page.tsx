@@ -9,7 +9,7 @@ import { TrustArticle } from "@/components/trust-article"
 import { NHTSA_CATALOG_URL, FUEL_ECONOMY_CATALOG_URL, CATALOG_RETRIEVED_ON } from "@/lib/catalog-meta"
 import { longDate, SOURCE_COUNT } from "@/lib/copy"
 import { FACTOR_BUNDLE } from "@/lib/factor-engine"
-import { hldiDataLine } from "@/lib/hldi"
+import { HLDI_RETRIEVED, hldiDataLine, newestHldiWindow } from "@/lib/hldi"
 import { formatVerifiedDate, fullySourcedStateRules, sourcedStateRules, STATE_RULES, STATE_RULES_CHECKED_ON } from "@/lib/state-rules"
 import { CONTRIBUTING_URL, GITHUB_REPO_URL, suggestFixUrl } from "@/lib/suggest-fix"
 import { StatePicker } from "@/components/state-picker"
@@ -67,7 +67,7 @@ function listed(): Map<string, Listed> {
       publisher: source.publisher,
       title:
         source.id === "hldi-2022-24"
-          ? "Insurance losses by make and model (2006–08 through 2022–24 models, retrieved October 2026)"
+          ? `Insurance losses by make and model (2006–08 through ${newestHldiWindow() ?? "2022–24"} models, retrieved ${HLDI_RETRIEVED})`
           : source.title,
       url: source.url,
       checked: longDate(source.checkedOn),
