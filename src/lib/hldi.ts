@@ -461,3 +461,19 @@ export function hldiDataLine(): string | null {
       : `HLDI published ${listWords(published.map((report) => `the ${report.modelYears} report on ${longDate(report.published!)}`))}.`
   return `HLDI data through ${reports[0].modelYears} models. We retrieved ${listWords(runWords)}. ${publishedWords}`
 }
+
+/**
+ * Under the ratings legend: how wide "Average" is, worded from
+ * HLDI_RATING_BANDS so it follows the cutoffs when HLDI confirms them.
+ * With 80–122: "HLDI rates results within about 20% of average as “Average.”"
+ */
+export function averageBandNote(bands: typeof HLDI_RATING_BANDS = HLDI_RATING_BANDS): string {
+  const index = bands.findIndex((band) => band.rating === "Average")
+  const lowest = index > 0 ? bands[index - 1].max + 1 : 0
+  const highest = bands[index].max
+  const nearest5 = (value: number) => Math.round(value / 5) * 5
+  const below = nearest5(100 - lowest)
+  const above = nearest5(highest - 100)
+  const span = below === above ? `within about ${below}% of average` : `from about ${below}% better to about ${above}% worse than average`
+  return `HLDI rates results ${span} as “Average.”`
+}

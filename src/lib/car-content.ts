@@ -15,7 +15,7 @@ import {
 } from "./car-pages"
 import { uniqueness, type UniquenessReport } from "./uniqueness"
 import { differenceWords, dollars, estimateDollars, monthlyDollars, rangeDollars, shownYearly, signedDollars } from "./format"
-import { hldiReport, listWords, priceMeaning, SOFTENING_REASON, type HldiRating } from "./hldi"
+import { HLDI_COVERAGES, hldiReport, listWords, priceMeaning, SOFTENING_REASON, type HldiRating } from "./hldi"
 import { lossPushesVsAverage } from "./pricing"
 import { ordinal } from "./state-content"
 
@@ -317,7 +317,7 @@ export type CarContent = {
   hldi: {
     heading: string
     intro: string
-    rows: { name: string; helper: string; rating: string; percent: string; peers: string }[]
+    rows: { name: string; helper: string; rating: HldiRating | "Insufficient data"; percent: string; peers: string }[]
     /** Coverages HLDI doesn't publish for this car. */
     missing: string
     source: string
@@ -409,20 +409,31 @@ function hldiContent(f: CarFigures): CarContent["hldi"] {
   return {
     heading: `What HLDI reports (${report.modelYears} models, all drivers combined)`,
     intro: `${intro} ${scores}`,
-    rows: report.rows.map((row) => {
+    // Every coverage, in the same order on every page; one HLDI doesn't publish for this model says so.
+    rows: HLDI_COVERAGES.map((coverage) => {
+      const row = report.rows.find((item) => item.key === coverage.key)
+      if (!row) {
+        return {
+          name: coverage.name,
+          helper: coverage.helper,
+          rating: "Insufficient data" as const,
+          percent: "No result from HLDI for this model",
+          peers: "",
+        }
+      }
       const rank = f.coverageRanks[row.key]
       const place = rank ? (rank.rank === 1 ? "best" : rank.rank === rank.of ? "worst" : `${ordinal(rank.rank)} best`) : null
       return {
         name: row.name,
         helper: row.helper,
-        rating: row.rating,
+        rating: row.rating as HldiRating | "Insufficient data",
         percent: row.percent,
         peers: rank && place ? `${place} of the ${rank.of} ${peerGroupWords(f)} we compare` : "",
       }
     }),
     missing:
       missing.length > 0
-        ? `HLDI doesn't publish a result for ${listWords(missing.map((key) => missingNames[key]))} on this model, so ${missing.length === 1 ? "it isn't" : "they aren't"} shown here.`
+        ? `HLDI doesn't publish a result for ${listWords(missing.map((key) => missingNames[key]))} on this model, so ${missing.length === 1 ? "it's" : "they're"} marked “Insufficient data”.`
         : "",
     source: `Source: HLDI, insurance losses by make and model, ${report.modelYears} models`,
     url: report.url,

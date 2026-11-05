@@ -1,4 +1,5 @@
 import type { Estimate, StartKind } from "@/lib/factor-engine"
+import { HldiChip, HldiLegend } from "@/components/charts/hldi-chip"
 import { hldiReport, hldiShortLine, priceMeaning } from "@/lib/hldi"
 import { basisLabel, sourceLinks } from "@/lib/pricing"
 import { suggestFixUrl } from "@/lib/suggest-fix"
@@ -56,9 +57,20 @@ export function HowWeGotThis({
                         </>
                       )}
                     </p>
-                    <p data-testid="hldi-short">
-                      What HLDI reports ({report.modelYears} models, all drivers combined): {hldiShortLine(report)}.
-                    </p>
+                    <div data-testid="hldi-short" className="grid gap-1.5">
+                      <p>What HLDI reports ({report.modelYears} models, all drivers combined):</p>
+                      <p className="sr-only">{hldiShortLine(report)}.</p>
+                      <ul className="grid gap-1" aria-hidden="true">
+                        {report.rows.map((row) => (
+                          <li key={row.key} className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                            <span className="min-w-28">{row.short.charAt(0).toUpperCase() + row.short.slice(1)}</span>
+                            <HldiChip level={row.rating} />
+                            <span className="text-muted-foreground">{row.percent}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <HldiLegend />
+                    </div>
                     <p>
                       {meaning.short}
                       {fromAverage ? "" : " We price the car you're switching from the same way."}{" "}
