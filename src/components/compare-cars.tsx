@@ -27,6 +27,8 @@ import {
   DEFAULT_SORT,
   filterRows,
   gapsToCheapest,
+  OVERLAP_NOTE,
+  topRangesOverlap,
   nextSort,
   parseMaxYearly,
   reasonWords,
@@ -71,8 +73,10 @@ import { readShareArrival, useClearShareFromAddress, useMounted } from "@/lib/us
 import { DEFAULT_SITUATION } from "@/lib/situation"
 import { useCarPagePath } from "@/lib/use-car-page-path"
 import { useCatalog } from "@/lib/use-catalog"
-import { useCompareList, useSituation } from "@/lib/use-stored"
+import { useCompareChartShown, useCompareList, useSituation } from "@/lib/use-stored"
 import { cn } from "cn"
+import { ChartFigure } from "@/components/charts/figure"
+import { RangeRowsChart } from "@/components/charts/range-rows"
 import { ArrowDown, ArrowUp, ArrowUpDown, ChevronDown, Download, Plus, Printer, Send, Star, Trash2, Trophy, X } from "lucide-react"
 import Link from "next/link"
 import { Fragment, useEffect, useMemo, useRef, useState } from "react"
@@ -330,6 +334,8 @@ function CompareCarsReady() {
   const starredCount = list.cars.filter((car) => car.starred).length
   const hidden = rows.length - visible.length
   const added = mode === "added"
+  // Show or hide the chart; remembered in this browser (held in memory if storage is refused).
+  const { shown: showChart, setShown: toggleChart } = useCompareChartShown()
   const age = AGE_BANDS.find((band) => band.id === driver.age)?.label ?? driver.age
   const who = `For a ${age}-year-old in ${stateName(driver.state)}${added ? ", added to your policy" : ""}`
   const answer = compareAnswer(visible, mode, who)
@@ -688,9 +694,6 @@ function CompareCarsReady() {
                   <p className="text-base font-medium" data-testid="compare-answer">
                     {answer}
                   </p>
-                  {visible.length > 1 ? (
-                    <p className="text-sm text-muted-foreground">The ranges overlap, so get real quotes on your top two or three.</p>
-                  ) : null}
                 </div>
               ) : null}
 
@@ -708,6 +711,52 @@ function CompareCarsReady() {
                     Show all
                   </button>
                 </p>
+              ) : null}
+
+              {visible.length > 0 ? (
+                <section aria-label="Chart of each car's estimate" className="grid gap-2 border-b border-border px-5 py-4 sm:px-6" data-testid="compare-chart">
+                  <div className="no-print flex items-center justify-between gap-3">
+                    <p className="text-sm font-semibold">{added ? "What the teen adds with each car" : "Each car's estimate and range"}</p>
+                    <button
+                      type="button"
+                      className="btn btn-quiet min-h-9 px-3 text-sm"
+                      aria-expanded={showChart}
+                      aria-controls="compare-chart-figure"
+                      onClick={() => toggleChart(!showChart)}
+                    >
+                      {showChart ? "Hide chart" : "Show chart"}
+                    </button>
+                  </div>
+                  {/* Printing always includes the chart. */}
+                  <div id="compare-chart-figure" className={showChart ? "" : "hidden print:block"}>
+                    <ChartFigure
+                      caption={
+                        added
+                          ? "Each dot is what adding the teen costs a year with that car, in the table's order. Our ranges are for the whole bill, not the extra, so there are no bands here; the table shows each car's total range."
+                          : "Each dot is our central estimate and each band is our estimated range, on one dollar scale, in the table's order. Actual quotes can fall outside the bands."
+                      }
+                    >
+                      <RangeRowsChart
+                        rows={visible.map((row) => ({
+                          key: row.key,
+                          name: row.name,
+                          starred: row.starred,
+                          value: row.extra ?? row.likely,
+                          low: row.extra === null ? row.low : null,
+                          high: row.extra === null ? row.high : null,
+                        }))}
+                        lowestKey={visible.length > 1 ? (cheapest?.key ?? null) : null}
+                        extra={added}
+                        axisLabel={added ? "Extra a year to add the teen" : "Yearly estimate for this driver"}
+                      />
+                    </ChartFigure>
+                  </div>
+                  {topRangesOverlap(visible) ? (
+                    <p className="text-sm text-muted-foreground" data-testid="overlap-note">
+                      {OVERLAP_NOTE}
+                    </p>
+                  ) : null}
+                </section>
               ) : null}
 
               {/* Wide screens: a real table. */}
