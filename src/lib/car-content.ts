@@ -422,7 +422,7 @@ function hldiContent(f: CarFigures): CarContent["hldi"] {
     }),
     missing:
       missing.length > 0
-        ? `HLDI doesn't publish a result for ${listWords(missing.map((key) => missingNames[key]))} on this model, so we leave ${missing.length === 1 ? "it" : "them"} out.`
+        ? `HLDI doesn't publish a result for ${listWords(missing.map((key) => missingNames[key]))} on this model, so ${missing.length === 1 ? "it isn't" : "they aren't"} shown here.`
         : "",
     source: `Source: HLDI, insurance losses by make and model, ${report.modelYears} models`,
     url: report.url,

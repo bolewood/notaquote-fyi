@@ -275,7 +275,7 @@ export function priceMeaning(relativity: VehicleRelativity, name: string, bill: 
         : `HLDI doesn't publish damage results for ${name}, so we use its average for this kind of car: ${combinedWords(combined.physical)}.`
   let damageCount: string
   if (relativity.valueTier && relativity.valueTier !== "none") {
-    damageCount = `Our estimate also adds what the car costs to replace, which HLDI's results don't measure, so the part of the bill that fixes the car is ${factorWords(damageOurs)}${dollars("ownCar", true)}.`
+    damageCount = `Published prices for luxury makes like this one run higher than their loss results alone suggest, so we also add ${relativity.valueTier === "half" ? "a smaller version of an adjustment we fitted to those prices (how much smaller is our estimate)" : "an adjustment fitted to those prices"}. With it, the part of the bill that fixes the car is ${factorWords(damageOurs)}${dollars("ownCar", true)}.`
   } else if (damage.shareText) {
     damageCount = `We count ${damage.shareText} of that difference, so the part of the bill that fixes the car is ${factorWords(damageOurs)}${dollars("ownCar", true)}.`
   } else {
@@ -301,7 +301,8 @@ export function priceMeaning(relativity: VehicleRelativity, name: string, bill: 
 
   const own = [damageResult, damageCount, liabilityResult, liabilityCount].join(" ")
   const paragraph = `${SOFTENING_REASON} ${own}`
-  const valueNote = relativity.valueTier && relativity.valueTier !== "none" ? " (including what the car costs to replace, which HLDI's results don't measure)" : ""
+  const valueNote =
+    relativity.valueTier && relativity.valueTier !== "none" ? " (including our adjustment for luxury makes, fitted to published prices)" : ""
   const clipNote = relativity.liabilityClipped ? " (the most we ever move it)" : ""
   const short = `We estimate the part of the bill that fixes the car is ${factorWords(damageOurs)}${valueNote}, and the liability part is ${factorWords(liabilityOurs)}${clipNote}.`
   return { damage, liability, paragraph, own, short }

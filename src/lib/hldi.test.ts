@@ -112,8 +112,11 @@ test("the sources page names HLDI's newest window and when we pulled it", () => 
   assert.match(hldiDataLine() ?? "", /^HLDI data through \d{4}–\d{2} models, retrieved [A-Z][a-z]+ \d{4}\.$/)
 })
 
-test("the short form says when the car-value term moves our number away from HLDI's", { skip: !MODELS_ENABLED }, () => {
+test("a luxury make says our own adjustment moves the number, not HLDI's results", { skip: !MODELS_ENABLED }, () => {
   const f = carFigures(SERVER_CATALOG, "tesla-model-y")!
   assert.notEqual(f.page.relativity.valueTier, "none")
-  assert.match(priceMeaning(f.page.relativity, "it", null)!.short, /including what the car costs to replace, which HLDI's results don't measure/)
+  const meaning = priceMeaning(f.page.relativity, "the Model Y", f.parts)!
+  assert.match(meaning.short, /including our adjustment for luxury makes, fitted to published prices/)
+  assert.match(meaning.paragraph, /Published prices for luxury makes like this one run higher than their loss results alone suggest/)
+  assert.doesNotMatch(meaning.paragraph, /don't measure/)
 })

@@ -679,7 +679,7 @@ function CompareCarsReady() {
                 <p className="no-print border-b border-border bg-muted/50 px-5 py-2.5 text-sm sm:px-6" data-testid="compare-legend">
                   {added
                     ? "Each price is what adding this teen to your policy costs a year with that car. “Total with teen” is that car's full yearly cost with the teen added."
-                    : "Each price is a yearly estimate for this driver, on their own policy. The range shows where we estimate quotes would land; actual quotes can fall outside it."}
+                    : "Each price is a yearly estimate for this driver, on their own policy. The range is our estimated range; actual quotes can fall outside it."}
                 </p>
               ) : null}
 

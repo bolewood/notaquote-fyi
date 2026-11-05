@@ -39,7 +39,7 @@ Each percentage is 100 minus HLDI's index (for example, 79 becomes "21% better t
 
 The 71% and 29% weights are collision's and comprehensive's shares of industry claim costs per insured car in 2024 (ISO figures, as published by the Insurance Information Institute). The liability side uses the same source: about 43% property damage and 57% bodily injury.
 
-For cars where HLDI doesn't publish one of the coverages, the paragraph says so instead of describing a combination. For luxury makes, where our estimate also adds what the car costs to replace, it says HLDI's results don't measure that.
+For cars where HLDI doesn't publish one of the coverages, the paragraph says so instead of describing a combination. For luxury makes, it says that published prices for those makes run higher than their loss results alone suggest, so we add an adjustment fitted to those prices. That adjustment is ours, not HLDI's.
 
 ### The note about drivers
 
@@ -81,9 +81,9 @@ The cutoffs live in one place on the site, so changing them is quick.
 ## What we need from you
 
 1. **Please confirm the rating cutoffs** above, or send the ones HLDI uses.
-2. **Please send your revised wording for our HLDI paragraph.** On the "How the math works" page, the paragraph describing what HLDI publishes sits in its own marked box, ready to be replaced word for word. Today it reads:
+2. **Please send your revised wording for our HLDI paragraph.** On the "How the math works" page, the paragraph describing what HLDI publishes sits in its own marked box, ready to be replaced word for word. Our own rules (which report we use for each model year, how we combine coverages) sit outside the box, so your wording replaces only the description of HLDI's data. Today it reads:
 
-   > HLDI publishes how each model's insurance losses compare with an average car's, for each coverage separately: overall losses (how often claims happen times how much they cost) for crash repairs (collision), non-crash damage (comprehensive: theft, weather, fire, vandalism, glass, and animal strikes), and damage to others' property (property damage liability), and how often injury claims are filed for injuries to others (bodily injury liability). HLDI's results combine drivers of all ages. For each car's model year, we use the most recent HLDI report whose three-year window includes that year (for example, the 2020–22 report for a 2020 car, or 2022–24 for a 2023 car), and use the nearest report only when no window covers the year.
+   > HLDI publishes how each model's insurance losses compare with an average car's, for each coverage separately: overall losses (how often claims happen times how much they cost) for crash repairs (collision), non-crash damage (comprehensive: theft, weather, fire, vandalism, glass, and animal strikes), and damage to others' property (property damage liability), and how often injury claims are filed for injuries to others (bodily injury liability). HLDI's results combine drivers of all ages.
 
 3. **Anything else that reads wrong.** If any sentence above misdescribes HLDI's data, tell us and we'll fix it.
 

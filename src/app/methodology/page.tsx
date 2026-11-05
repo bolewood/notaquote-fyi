@@ -139,11 +139,15 @@ export default function MethodologyPage() {
           separately: overall losses (how often claims happen times how much they cost) for crash repairs (collision),
           non-crash damage (comprehensive: theft, weather, fire, vandalism, glass, and animal strikes), and damage to
           others&apos; property (property damage liability), and how often injury claims are filed for injuries to others
-          (bodily injury liability). HLDI&apos;s results combine drivers of all ages. For each car&apos;s model year, we
-          use the most recent HLDI report whose three-year window includes that year (for example, the 2020–22 report for
-          a 2020 car, or 2022–24 for a 2023 car), and use the nearest report only when no window covers the year.
+          (bodily injury liability). HLDI&apos;s results combine drivers of all ages.
         </p>
       </div>
+
+      <p>
+        For each car&apos;s model year, we use the most recent HLDI report whose three-year window includes that year (for
+        example, the 2020–22 report for a 2020 car, or 2022–24 for a 2023 car), and use the nearest report only when no
+        window covers the year.
+      </p>
 
       <p>
         HLDI also publishes medical payments and personal injury protection (PIP) results. We don&apos;t use them,
