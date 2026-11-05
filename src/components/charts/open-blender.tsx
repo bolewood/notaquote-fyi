@@ -87,9 +87,9 @@ export function BlenderDrawing({ className }: { className?: string }) {
 }
 
 /** The labels, as real links, numbered like the streams. */
-function IngredientList({ compact }: { compact: boolean }) {
+function IngredientList() {
   return (
-    <ol className={cn("grid gap-2 text-sm", compact ? "gap-1" : "sm:grid-cols-2 lg:grid-cols-4")} aria-label="What goes in">
+    <ol className="grid gap-2 text-sm sm:grid-cols-2 lg:grid-cols-4" aria-label="What goes in">
       {BLENDER_INGREDIENTS.map((item) => (
         <li key={item.n} className="flex items-start gap-2">
           <span
@@ -103,7 +103,7 @@ function IngredientList({ compact }: { compact: boolean }) {
             <Link href={item.href} className="link font-semibold">
               {item.title}
             </Link>
-            <span className={cn("text-muted-foreground", compact ? "text-xs" : "text-sm")}>{item.source}</span>
+            <span className="text-sm text-muted-foreground">{item.source}</span>
           </span>
         </li>
       ))}
@@ -111,48 +111,14 @@ function IngredientList({ compact }: { compact: boolean }) {
   )
 }
 
-/**
- * "full" for the top of /methodology; "compact" beside the homepage hero on
- * wide screens; "thumbnail" is a small link to /methodology for phones.
- */
-export function OpenBlender({ variant = "full", className }: { variant?: "full" | "compact" | "thumbnail"; className?: string }) {
-  if (variant === "thumbnail") {
-    return (
-      <Link href="/methodology" className={cn("plain flex items-center gap-3 rounded-2xl bg-card p-3 ring-1 ring-border hover:ring-primary/50", className)}>
-        <span className="w-20 shrink-0" aria-hidden="true">
-          <BlenderDrawing />
-        </span>
-        <span className="grid gap-0.5 text-sm leading-snug">
-          <span className="link font-semibold">How the math works</span>
-          <span className="text-muted-foreground">A see-through blender: every ingredient listed, and our guesses marked.</span>
-        </span>
-      </Link>
-    )
-  }
+/** The full figure, for the top of /methodology: the labels as links, then the drawing, then the caption. */
+export function OpenBlender({ className }: { className?: string }) {
   return (
-    <ChartFigure className={cn(variant === "compact" ? "gap-1" : "gap-3", className)} caption={BLENDER_CAPTION}
-      captionClassName={cn("text-base text-foreground", variant === "compact" ? "leading-normal" : "leading-relaxed")}
-      testId={`blender-${variant}`}
-    >
-      {variant === "compact" ? (
-        // Beside the homepage question: the drawing and the labels side by side, so it's no taller than the question.
-        <div className="grid grid-cols-[minmax(0,11rem)_minmax(0,1fr)] items-center gap-4">
-          <div className="grid gap-1">
-            <BlenderDrawing />
-            <p className="text-center text-sm font-semibold">
-              <span aria-hidden="true">→ </span>Your estimate, with a range
-            </p>
-          </div>
-          <IngredientList compact />
-        </div>
-      ) : (
-        <>
-          <IngredientList compact={false} />
-          <div className="mx-auto w-full max-w-md">
-            <BlenderDrawing />
-          </div>
-        </>
-      )}
+    <ChartFigure className={cn("gap-3", className)} caption={BLENDER_CAPTION} captionClassName="text-base leading-relaxed text-foreground" testId="blender-full">
+      <IngredientList />
+      <div className="mx-auto w-full max-w-md">
+        <BlenderDrawing />
+      </div>
     </ChartFigure>
   )
 }

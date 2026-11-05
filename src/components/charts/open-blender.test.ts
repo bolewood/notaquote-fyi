@@ -25,7 +25,7 @@ test("the drawing is small, text-only (no logos or images), and labeled", () => 
   assert.doesNotMatch(svg, /<image|<img|xlink:href|href=/)
   assert.match(svg, /role="img"/)
   assert.match(svg, /<title>/)
-  const full = renderToStaticMarkup(createElement(OpenBlender, { variant: "full" }))
+  const full = renderToStaticMarkup(createElement(OpenBlender))
   assert.ok(full.includes(BLENDER_CAPTION.replace(/'/g, "&#x27;")))
   for (const item of BLENDER_INGREDIENTS) assert.ok(full.includes(`href="${item.href}"`), item.title)
 })

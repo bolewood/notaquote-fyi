@@ -54,7 +54,7 @@ export default function MethodologyPage() {
       title="How the math works"
       lead="Every number on this site comes from one small piece of math that runs in your browser. It's simple on purpose, so anyone can check it."
     >
-      <OpenBlender variant="full" />
+      <OpenBlender />
       <RecordTrustView />
 
       <h2>The whole idea, in one line</h2>
