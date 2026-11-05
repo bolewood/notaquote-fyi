@@ -64,7 +64,7 @@ function Kicker() {
  */
 export function TrustStrip() {
   return (
-    <section aria-labelledby="promises-heading" className="no-print mt-5 sm:mt-6" data-testid="trust-band">
+    <section aria-labelledby="promises-heading" className="no-print mt-5 sm:mt-6 xl:mt-4" data-testid="trust-band">
       <h2 id="promises-heading" className="sr-only">
         Our promises
       </h2>

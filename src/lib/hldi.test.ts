@@ -155,3 +155,10 @@ test("a coverage HLDI doesn't publish shows an Insufficient data chip", { skip: 
   assert.equal(chips.length, 4)
   assert.equal(chips[3], "Insufficient data")
 })
+
+test("the legend's note on 'Average' follows the cutoffs", async () => {
+  const { averageBandNote } = await import("./hldi")
+  assert.equal(averageBandNote(), "HLDI rates results within about 20% of average as “Average.”")
+  const other = HLDI_RATING_BANDS.map((band) => (band.rating === "Better than average" ? { ...band, max: 69 } : band))
+  assert.equal(averageBandNote(other), "HLDI rates results from about 30% better to about 20% worse than average as “Average.”")
+})

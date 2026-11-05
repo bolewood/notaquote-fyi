@@ -1,6 +1,7 @@
 import { dollars, estimateDollars, rangeDollars, signedDollars } from "@/lib/format"
 import { AxisTicks } from "./axis"
 import { linearScale, niceTicks, pct, type LinearScale } from "./scale"
+import { LINE_H, wrapLines } from "./wrap"
 
 export type RangeRow = {
   key: string
@@ -19,14 +20,21 @@ function valueWords(value: number, extra: boolean): string {
   return extra ? signedDollars(value) : `about ${estimateDollars(value)}`
 }
 
-function nameWords(row: RangeRow, lowest: boolean): string {
-  return `${row.starred ? "★ " : ""}${row.name}${lowest ? " · Lowest estimate" : ""}`
+/** The label's lines: the name (★ when starred), wrapped, then "Lowest estimate" on its own line. */
+function labelLines(row: RangeRow, lowestLabel: string | null, width: number): { text: string; strong: boolean }[] {
+  const name = wrapLines(`${row.starred ? "★ " : ""}${row.name}`, width).map((text) => ({ text, strong: false }))
+  return lowestLabel ? [...name, { text: lowestLabel, strong: true }] : name
 }
 
 function Mark({ row, scale, y, extra }: { row: RangeRow; scale: LinearScale; y: number; extra: boolean }) {
   return (
     <g>
-      <line x1={pct(scale.range[0])} x2={pct(scale.range[1])} y1={y} y2={y} stroke="var(--chart-grid)" strokeWidth={6} strokeLinecap="round" />
+      {extra ? (
+        // No range of its own: a faint hairline, so nothing reads as a range.
+        <line x1={pct(scale.range[0])} x2={pct(scale.range[1])} y1={y} y2={y} stroke="var(--chart-grid)" strokeWidth={1} />
+      ) : (
+        <line x1={pct(scale.range[0])} x2={pct(scale.range[1])} y1={y} y2={y} stroke="var(--chart-grid)" strokeWidth={6} strokeLinecap="round" />
+      )}
       {row.low !== null && row.high !== null ? (
         <line
           x1={pct(scale(row.low))}
@@ -46,17 +54,21 @@ function Mark({ row, scale, y, extra }: { row: RangeRow; scale: LinearScale; y: 
 
 /**
  * One row per car on a shared dollar axis: the estimated range as a band and
- * the central estimate as a dot, in the table's order. The table below stays
- * as the accessible version.
+ * the central estimate as a dot, in the table's order. Long names wrap; rows
+ * grow to fit. The table below stays as the accessible version.
  */
 export function RangeRowsChart({
   rows,
-  lowestKey,
+  lowestKeys,
+  lowestLabel,
   extra,
   axisLabel,
 }: {
   rows: readonly RangeRow[]
-  lowestKey: string | null
+  /** The cheapest car, or every car tied with it. */
+  lowestKeys: ReadonlySet<string>
+  /** "Lowest estimate", or "Tied for lowest estimate". */
+  lowestLabel: string
   /** Teen added: the dots are the extra a year, with no range of their own. */
   extra: boolean
   axisLabel: string
@@ -74,17 +86,24 @@ export function RangeRowsChart({
   const { min, max, ticks } = niceTicks(lo, hi, 4)
   const tickWords = (value: number) => (extra ? signedDollars(value) : dollars(value))
   const title = `${axisLabel}: ${rows
-    .map((row) => `${row.starred ? "starred, " : ""}${row.name}${row.key === lowestKey ? " (lowest estimate)" : ""} ${valueWords(row.value, extra)}${row.low !== null && row.high !== null ? `, range ${rangeDollars(row.low, row.high)}` : ""}`)
+    .map(
+      (row) =>
+        `${row.starred ? "starred, " : ""}${row.name}${lowestKeys.has(row.key) ? ` (${lowestLabel.toLowerCase()})` : ""} ${valueWords(row.value, extra)}${row.low !== null && row.high !== null ? `, range ${rangeDollars(row.low, row.high)}` : ""}`,
+    )
     .join("; ")}.`
 
-  // Wider screens: names on the left, the bar in the middle, the figure on the right.
-  const rowH = 24
+  // Wider screens: names on the left (wrapped), the bar in the middle, the figure on the right.
+  const wide = rows.map((row) => labelLines(row, lowestKeys.has(row.key) ? lowestLabel : null, 30))
+  const wideHeights = wide.map((lines) => Math.max(24, lines.length * LINE_H + 8))
+  const wideTops = wideHeights.map((_, index) => wideHeights.slice(0, index).reduce((sum, h) => sum + h, 0))
   const wideScale = linearScale([min, max], [37, 85])
-  const wideH = rows.length * rowH + AXIS_H
-  // Phones: the name and figure on one line, the bar under it.
-  const block = 36
+  const wideH = wideHeights.reduce((sum, h) => sum + h, 0) + AXIS_H
+  // Phones: the name (wrapped) and figure, the bar under them.
+  const narrow = rows.map((row) => labelLines(row, lowestKeys.has(row.key) ? lowestLabel : null, 28))
+  const narrowHeights = narrow.map((lines) => lines.length * LINE_H + 22)
+  const narrowTops = narrowHeights.map((_, index) => narrowHeights.slice(0, index).reduce((sum, h) => sum + h, 0))
   const narrowScale = linearScale([min, max], [1.5, 98.5])
-  const narrowH = rows.length * block + AXIS_H
+  const narrowH = narrowHeights.reduce((sum, h) => sum + h, 0) + AXIS_H
 
   return (
     <>
@@ -95,15 +114,20 @@ export function RangeRowsChart({
           {axisLabel}
         </text>
         {rows.map((row, index) => {
-          const y = index * rowH + rowH / 2
-          const lowest = row.key === lowestKey
+          const lines = wide[index]
+          const mid = wideTops[index] + wideHeights[index] / 2
+          const first = mid - ((lines.length - 1) * LINE_H) / 2 + 4
           return (
             <g key={row.key}>
-              <text x="0" y={y + 4} fontSize={12} fill="var(--foreground)" fontWeight={lowest ? 600 : 400}>
-                {nameWords(row, lowest)}
+              <text x="0" y={first} fontSize={12} fill="var(--foreground)">
+                {lines.map((line, n) => (
+                  <tspan key={n} x="0" dy={n === 0 ? 0 : LINE_H} fontWeight={line.strong ? 600 : 400}>
+                    {line.text}
+                  </tspan>
+                ))}
               </text>
-              <Mark row={row} scale={wideScale} y={y} extra={extra} />
-              <text x="100%" y={y + 4} fontSize={12} textAnchor="end" fill="var(--foreground)" fontWeight={600}>
+              <Mark row={row} scale={wideScale} y={mid} extra={extra} />
+              <text x="100%" y={mid + 4} fontSize={12} textAnchor="end" fill="var(--foreground)" fontWeight={600}>
                 {valueWords(row.value, extra)}
               </text>
             </g>
@@ -117,18 +141,21 @@ export function RangeRowsChart({
           {axisLabel}
         </text>
         {rows.map((row, index) => {
-          const y = index * block
-          const lowest = row.key === lowestKey
-          const name = nameWords(row, lowest)
+          const lines = narrow[index]
+          const top = narrowTops[index]
           return (
             <g key={row.key}>
-              <text x="0" y={y + 13} fontSize={12} fill="var(--foreground)" fontWeight={lowest ? 600 : 400}>
-                {name.length > 38 ? `${name.slice(0, 37).trimEnd()}…` : name}
+              <text x="0" y={top + 13} fontSize={12} fill="var(--foreground)">
+                {lines.map((line, n) => (
+                  <tspan key={n} x="0" dy={n === 0 ? 0 : LINE_H} fontWeight={line.strong ? 600 : 400}>
+                    {line.text}
+                  </tspan>
+                ))}
               </text>
-              <text x="100%" y={y + 13} fontSize={12} textAnchor="end" fill="var(--foreground)" fontWeight={600}>
+              <text x="100%" y={top + 13} fontSize={12} textAnchor="end" fill="var(--foreground)" fontWeight={600}>
                 {valueWords(row.value, extra)}
               </text>
-              <Mark row={row} scale={narrowScale} y={y + 25} extra={extra} />
+              <Mark row={row} scale={narrowScale} y={top + lines.length * LINE_H + 10} extra={extra} />
             </g>
           )
         })}

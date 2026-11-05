@@ -77,7 +77,7 @@ import { useCompareChartShown, useCompareList, useSituation } from "@/lib/use-st
 import { cn } from "cn"
 import { ChartFigure } from "@/components/charts/figure"
 import { RangeRowsChart } from "@/components/charts/range-rows"
-import { ArrowDown, ArrowUp, ArrowUpDown, ChevronDown, Download, Plus, Printer, Send, Star, Trash2, Trophy, X } from "lucide-react"
+import { ArrowDown, ArrowUp, ArrowUpDown, ChevronDown, Download, Plus, Printer, Send, Star, Trash2, X } from "lucide-react"
 import Link from "next/link"
 import { Fragment, useEffect, useMemo, useRef, useState } from "react"
 
@@ -334,6 +334,11 @@ function CompareCarsReady() {
   const starredCount = list.cars.filter((car) => car.starred).length
   const hidden = rows.length - visible.length
   const added = mode === "added"
+  // The cheapest car, or every car tied with it at the figure as shown ("Tied for lowest estimate").
+  const lowestKeys = new Set(
+    cheapest && visible.length > 1 ? visible.filter((row) => shownAmount(row) === shownAmount(cheapest)).map((row) => row.key) : [],
+  )
+  const lowestLabel = lowestKeys.size > 1 ? "Tied for lowest estimate" : "Lowest estimate"
   // Show or hide the chart; remembered in this browser (held in memory if storage is refused).
   const { shown: showChart, setShown: toggleChart } = useCompareChartShown()
   const age = AGE_BANDS.find((band) => band.id === driver.age)?.label ?? driver.age
@@ -745,7 +750,8 @@ function CompareCarsReady() {
                           low: row.extra === null ? row.low : null,
                           high: row.extra === null ? row.high : null,
                         }))}
-                        lowestKey={visible.length > 1 ? (cheapest?.key ?? null) : null}
+                        lowestKeys={lowestKeys}
+                        lowestLabel={lowestLabel}
                         extra={added}
                         axisLabel={added ? "Extra a year to add the teen" : "Yearly estimate for this driver"}
                       />
@@ -800,7 +806,7 @@ function CompareCarsReady() {
                   </thead>
                   <tbody>
                     {visible.map((row) => {
-                      const lowest = cheapest !== null && visible.length > 1 && row.key === cheapest.key
+                      const lowest = lowestKeys.has(row.key)
                       const version = versionWords(row)
                       return (
                         <Fragment key={row.key}>
@@ -837,7 +843,7 @@ function CompareCarsReady() {
                               </span>
                               {lowest ? (
                                 <span className="tag mt-1.5 bg-down-soft text-down">
-                                  <Trophy className="size-3.5" aria-hidden="true" /> Lowest estimate
+                                  {lowestLabel}
                                 </span>
                               ) : null}
                             </td>
@@ -887,7 +893,7 @@ function CompareCarsReady() {
               {/* Phones: two compact lines per car. */}
               <ul className="grid gap-0 sm:hidden print:hidden" data-testid="compare-cards">
                 {visible.map((row) => {
-                  const lowest = cheapest !== null && visible.length > 1 && row.key === cheapest.key
+                  const lowest = lowestKeys.has(row.key)
                   const version = versionWords(row)
                   return (
                     <li key={row.key} className={cn("border-b border-border/70 px-3 py-2", row.starred && "bg-star/10")}>
@@ -902,7 +908,7 @@ function CompareCarsReady() {
                         >
                           <span className="truncate font-medium">{row.name}</span>
                           <span className="truncate text-xs text-muted-foreground">
-                            {lowest ? "Lowest estimate · " : ""}
+                            {lowest ? `${lowestLabel} · ` : ""}
                             {added ? `total with teen about ${estimateDollars(row.likely)}` : `${monthAmount(row)} a month`}
                             {version ? ` · ${version}` : ""}
                           </span>

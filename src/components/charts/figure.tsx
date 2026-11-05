@@ -10,17 +10,20 @@ export function ChartFigure({
   caption,
   children,
   className,
+  captionClassName,
   testId,
 }: {
   caption: ReactNode
   children: ReactNode
   className?: string
+  /** A caption that's part of the story (the blender) reads as body text. */
+  captionClassName?: string
   testId?: string
 }) {
   return (
     <figure className={cn("print-exact grid gap-2", className)} data-testid={testId}>
       {children}
-      <figcaption className="text-xs leading-snug text-muted-foreground">{caption}</figcaption>
+      <figcaption className={captionClassName ?? "text-xs leading-snug text-muted-foreground"}>{caption}</figcaption>
     </figure>
   )
 }

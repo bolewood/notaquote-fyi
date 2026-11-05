@@ -89,7 +89,7 @@ export function BlenderDrawing({ className }: { className?: string }) {
 /** The labels, as real links, numbered like the streams. */
 function IngredientList({ compact }: { compact: boolean }) {
   return (
-    <ol className={cn("grid gap-2 text-sm", compact ? "gap-1.5" : "sm:grid-cols-2 lg:grid-cols-4")} aria-label="What goes in">
+    <ol className={cn("grid gap-2 text-sm", compact ? "gap-1" : "sm:grid-cols-2 lg:grid-cols-4")} aria-label="What goes in">
       {BLENDER_INGREDIENTS.map((item) => (
         <li key={item.n} className="flex items-start gap-2">
           <span
@@ -130,17 +130,20 @@ export function OpenBlender({ variant = "full", className }: { variant?: "full" 
     )
   }
   return (
-    <ChartFigure className={cn(variant === "compact" ? "gap-2" : "gap-3", className)} caption={BLENDER_CAPTION} testId={`blender-${variant}`}>
+    <ChartFigure className={cn(variant === "compact" ? "gap-1" : "gap-3", className)} caption={BLENDER_CAPTION}
+      captionClassName={cn("text-base text-foreground", variant === "compact" ? "leading-normal" : "leading-relaxed")}
+      testId={`blender-${variant}`}
+    >
       {variant === "compact" ? (
         // Beside the homepage question: the drawing and the labels side by side, so it's no taller than the question.
         <div className="grid grid-cols-[minmax(0,11rem)_minmax(0,1fr)] items-center gap-4">
-          <BlenderDrawing />
-          <div className="grid gap-1.5">
-            <IngredientList compact />
-            <p className="text-sm font-semibold">
+          <div className="grid gap-1">
+            <BlenderDrawing />
+            <p className="text-center text-sm font-semibold">
               <span aria-hidden="true">→ </span>Your estimate, with a range
             </p>
           </div>
+          <IngredientList compact />
         </div>
       ) : (
         <>

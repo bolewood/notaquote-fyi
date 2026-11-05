@@ -4,6 +4,7 @@ import { notFound } from "next/navigation"
 import { ArrowRight } from "lucide-react"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import { HldiChip, HldiLegend } from "@/components/charts/hldi-chip"
+import { averageBandNote } from "@/lib/hldi"
 import { VehicleFixLink } from "@/components/how-we-got-this"
 import { JsonLdScript } from "@/components/json-ld"
 import { TrustArticle } from "@/components/trust-article"
@@ -140,8 +141,11 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
               </li>
             ))}
           </ul>
-          <div data-shared="">
+          <div data-shared="" className="grid gap-1">
             <HldiLegend />
+            <p className="text-xs text-muted-foreground" data-testid="average-band-note">
+              {averageBandNote()}
+            </p>
           </div>
           {c.hldi.missing ? <p className="text-sm text-muted-foreground">{c.hldi.missing}</p> : null}
           <p className="text-sm text-muted-foreground" data-shared="">

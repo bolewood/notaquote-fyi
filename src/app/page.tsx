@@ -32,7 +32,7 @@ export default function HomePage() {
   return (
     <div className="mx-auto w-full max-w-7xl px-4 pb-12 lg:px-6">
       <JsonLdScript data={homeJsonLd(DESCRIPTION)} />
-      <section className="grid items-start gap-8 pt-8 sm:pt-12 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+      <section className="grid items-start gap-8 pt-8 sm:pt-12 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] xl:pt-8">
         <div className="max-w-3xl">
           <h1 className="text-3xl leading-tight font-semibold tracking-tight text-balance sm:text-[2.6rem]">
             What would a new car, a teen driver, or a move do to your car insurance?

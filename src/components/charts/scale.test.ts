@@ -19,3 +19,12 @@ test("ticks round out to nice numbers and always cover the data", () => {
   assert.ok(min <= 880 && max >= 1480)
   assert.equal(pct(12.3456), "12.35%")
 })
+
+test("chart labels wrap on words and never lose any", async () => {
+  const { wrapLines } = await import("./wrap")
+  assert.deepEqual(wrapLines("Subaru Outback instead of Toyota Camry", 30), ["Subaru Outback instead of", "Toyota Camry"])
+  assert.deepEqual(wrapLines("Where you started", 30), ["Where you started"])
+  const long = "Hyundai Ioniq 5 instead of Volkswagen Atlas Cross Sport"
+  assert.equal(wrapLines(long, 20).join(" "), long, "every word kept")
+  assert.deepEqual(wrapLines("Supercalifragilistic", 5), ["Supercalifragilistic"])
+})
