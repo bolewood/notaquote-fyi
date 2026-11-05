@@ -4,6 +4,7 @@ import { SERVER_CATALOG } from "./agent-catalog"
 import { carFigures, carPages, MODELS_ENABLED } from "./car-pages"
 import {
   HLDI_RATING_BANDS,
+  hldiDataLine,
   hldiShortLine,
   hldiPercentWords,
   hldiRating,
@@ -105,4 +106,8 @@ test("the What-if panel's short form: HLDI's line, then ours", { skip: !MODELS_E
     priceMeaning(f.page.relativity, "it", null)!.short,
     "We estimate the part of the bill that fixes the car is about 6% less than average, and the liability part is about 11% less than average.",
   )
+})
+
+test("the sources page names HLDI's newest window and when we pulled it", () => {
+  assert.match(hldiDataLine() ?? "", /^HLDI data through \d{4}–\d{2} models, retrieved [A-Z][a-z]+ \d{4}\.$/)
 })

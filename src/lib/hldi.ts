@@ -390,3 +390,16 @@ export function hldiShortLine(report: HldiReport): string {
   })
   return listWords(parts)
 }
+
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
+/** "HLDI data through 2022–24 models, retrieved September 2026": the newest HLDI window and when we pulled it. */
+export function hldiDataLine(): string | null {
+  const windows = FACTOR_BUNDLE.vehicle.windows
+  if (windows.length === 0) return null
+  const newest = [...windows].sort((left, right) => right.yearMax - left.yearMax)[0]
+  const source = FACTOR_BUNDLE.sources.find((item) => item.id === newest.sourceId)
+  const match = source ? /^(\d{4})-(\d{2})/.exec(source.checkedOn) : null
+  const retrieved = match ? `, retrieved ${MONTHS[Number(match[2]) - 1]} ${match[1]}` : ""
+  return `HLDI data through ${newest.modelYears.replace("-", "–")} models${retrieved}.`
+}

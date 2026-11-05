@@ -33,8 +33,8 @@ export default function AboutPage() {
       <p>
         When my son was about to turn 16, I wanted a rough idea of what adding him to our policy would cost, and how
         different cars would change that. The only way I found was to send VINs to my agent one at a time and wait. Yet the
-        numbers to estimate this are public: states publish insurance price surveys, and the insurance industry publishes
-        claims data for each car. I couldn&apos;t find a tool that answered my question the way I needed, so I built one.
+        numbers to estimate this are public: states publish insurance price surveys, and an insurance-industry research
+        group publishes loss data for each car. I couldn&apos;t find a tool that answered my question the way I needed, so I built one.
       </p>
 
       <h2 id="promises" className="scroll-mt-4">
