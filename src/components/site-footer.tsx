@@ -7,7 +7,7 @@ const GROUPS: { heading: string; links: { href: string; label: string; external?
   {
     heading: "Use it",
     links: [
-      { href: "/", label: "What-if" },
+      { href: "/", label: "Try a change" },
       { href: "/compare", label: "Compare cars" },
       { href: "/states", label: "States" },
       ...(MODELS_ENABLED ? [{ href: "/cars", label: "Cars" }] : []),
@@ -17,17 +17,17 @@ const GROUPS: { heading: string; links: { href: string; label: string; external?
   {
     heading: "How we know",
     links: [
-      { href: "/methodology", label: "How it works" },
-      { href: "/sources", label: "Sources" },
+      { href: "/methodology", label: "How the math works" },
+      { href: "/sources", label: "Where the numbers come from" },
       { href: "/model-version", label: "What's changed" },
-      { href: "/llms.txt", label: "For AI assistants", plain: true },
     ],
   },
   {
     heading: "The fine print",
     links: [
+      { href: "/about", label: "Who made this" },
       { href: "/privacy", label: "Privacy" },
-      { href: "/disclaimer", label: "Not a quote" },
+      { href: "/disclaimer", label: "What this site is (and isn't)" },
       { href: "/data-licenses", label: "Data licenses" },
     ],
   },
@@ -36,6 +36,7 @@ const GROUPS: { heading: string; links: { href: string; label: string; external?
     links: [
       { href: "/corrections", label: "Suggest a fix" },
       { href: GITHUB_REPO_URL, label: "Source code on GitHub", external: true },
+      { href: "/llms.txt", label: "For AI assistants (text file)", plain: true },
     ],
   },
 ]
@@ -49,7 +50,7 @@ export function SiteFooter() {
             NotAQuote<span className="text-muted-foreground">.FYI</span>
           </p>
           <p className="max-w-xs leading-relaxed text-muted-foreground">
-            Free and open source, from {PUBLISHER}. Not an insurance company, and nothing to sell.
+            Non-commercial and open source. No ads, no data sales, no insurance partners. Published by {PUBLISHER}.
           </p>
           <p className="text-muted-foreground">Data updated {DATA_UPDATED}.</p>
         </div>

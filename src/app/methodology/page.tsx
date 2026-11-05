@@ -14,7 +14,7 @@ import { suggestFixUrl } from "@/lib/suggest-fix"
 import { ChevronDown } from "lucide-react"
 
 export const metadata: Metadata = pageMetadata({
-  title: "How we work out the numbers",
+  title: "How the math works",
   description: "Here's how we got the numbers: a starting price, a few adjustments, and a range. Every piece has a public source, or says it doesn't.",
   path: "/methodology",
 })
@@ -41,7 +41,7 @@ export default function MethodologyPage() {
 
   return (
     <TrustArticle
-      title="How we work out the numbers"
+      title="How the math works"
       lead="Every number on this site comes from one small piece of math that runs in your browser. It's simple on purpose, so anyone can check it."
     >
       <RecordTrustView />
@@ -236,7 +236,7 @@ export default function MethodologyPage() {
         <a href="https://github.com/bolewood/notaquote-fyi/blob/main/data/factors/README.md" rel="noreferrer">
           factors notes on GitHub
         </a>
-        , and all {SOURCE_COUNT} sources are on the <Link href="/sources">Sources</Link> page.
+        , and all {SOURCE_COUNT} sources are on the <Link href="/sources">Where the numbers come from</Link> page.
       </p>
       <details className="disclosure">
         <summary>

@@ -3,6 +3,7 @@ import Link from "next/link"
 import { Calculator } from "@/components/calculator"
 import { JsonLdScript } from "@/components/json-ld"
 import { TrustStrip } from "@/components/trust-strip"
+import { SOURCE_COUNT } from "@/lib/copy"
 import { SERVER_CATALOG } from "@/lib/agent-catalog"
 import { carPages } from "@/lib/car-pages"
 import { GUIDES } from "@/lib/guides"
@@ -10,8 +11,7 @@ import { STATES } from "@/lib/scenario"
 import { homeJsonLd, pageMetadata } from "@/lib/site-meta"
 import { statePath } from "@/lib/state-pages"
 
-const DESCRIPTION =
-  "What would a new car, a teen driver, or a move do to your car insurance? A free, open-source estimate from public data. Not a quote."
+const DESCRIPTION = `What would a new car, a teen driver, or a move do to your car insurance? An estimate from ${SOURCE_COUNT} public sources. No ads, no account. Not a quote.`
 
 export const metadata: Metadata = pageMetadata({
   title: "NotAQuote.FYI: car insurance what-ifs for families",
@@ -36,13 +36,11 @@ export default function HomePage() {
           What would a new car, a teen driver, or a move do to your car insurance?
         </h1>
         <p className="mt-3 max-w-2xl text-lg leading-relaxed text-pretty text-muted-foreground">
-          Change one thing and see roughly what you&apos;d pay, worked out from public data. It&apos;s free, and there&apos;s
-          nothing to sign up for.
+          Change one thing and see roughly what it does to your bill, worked out from {SOURCE_COUNT} public sources. No
+          account, no ads, and nothing you type is sent to us.
         </p>
-        <div className="mt-5">
-          <TrustStrip />
-        </div>
       </section>
+      <TrustStrip />
       <Calculator />
       <section aria-labelledby="browse-heading" className="mt-12 grid gap-8 border-t border-border/70 pt-8 text-sm">
         <div className="grid gap-2">

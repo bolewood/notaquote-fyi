@@ -103,7 +103,7 @@ export function ogImage(input: {
         </div>
 
         <div style={{ display: "flex", fontSize: 24, color: COLORS.muted, borderTop: `2px solid ${COLORS.border}`, paddingTop: 22 }}>
-          Free planning estimates from public data. Not a quote.
+          Planning estimates from public data. No ads. Not a quote.
         </div>
       </div>
     ),

@@ -15,13 +15,13 @@ export default function NotFound() {
     >
       <div className="flex flex-wrap gap-3">
         <Link href="/" className="btn btn-primary">
-          Try a what-if
+          Try a change
         </Link>
         <Link href="/compare" className="btn">
           Compare cars
         </Link>
         <Link href="/methodology" className="btn btn-quiet">
-          How it works
+          How the math works
         </Link>
       </div>
     </TrustArticle>

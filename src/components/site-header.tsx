@@ -5,14 +5,19 @@ import { usePathname } from "next/navigation"
 import { cn } from "cn"
 
 const MAIN = [
-  { href: "/", label: "What-if" },
+  { href: "/", label: "Try a change" },
   { href: "/compare", label: "Compare cars" },
 ]
 
-const HELP = [
-  { href: "/methodology", label: "How it works", always: true },
-  { href: "/sources", label: "Sources", always: false },
-  { href: "/privacy", label: "Privacy", always: false },
+/**
+ * Who's behind the site and what we promise stay visible on every screen
+ * size; the longer links join them on wider screens.
+ */
+const HELP: { href: string; label: string; show: string }[] = [
+  { href: "/about", label: "Who made this", show: "" },
+  { href: "/privacy", label: "Privacy", show: "" },
+  { href: "/methodology", label: "How the math works", show: "hidden md:inline-flex" },
+  { href: "/sources", label: "Where the numbers come from", show: "hidden xl:inline-flex" },
 ]
 
 export function SiteHeader() {
@@ -31,7 +36,9 @@ export function SiteHeader() {
           <span aria-hidden="true" className="grid size-7 place-items-center rounded-lg bg-primary text-sm font-bold text-primary-foreground">
             N
           </span>
-          <span className="hidden sm:inline">NotAQuote<span className="text-muted-foreground">.FYI</span></span>
+          <span>
+            NotAQuote<span className="text-muted-foreground">.FYI</span>
+          </span>
         </Link>
         <nav aria-label="Main" className="flex gap-1">
           {MAIN.map((link) => {
@@ -51,7 +58,7 @@ export function SiteHeader() {
             )
           })}
         </nav>
-        <nav aria-label="Help" className="ml-auto flex flex-wrap gap-x-4 gap-y-1">
+        <nav aria-label="Help" className="flex w-full flex-wrap gap-x-4 gap-y-1 sm:ml-auto sm:w-auto">
           {HELP.map((link) => {
             const current = pathname === link.href
             return (
@@ -61,7 +68,7 @@ export function SiteHeader() {
                 aria-current={current ? "page" : undefined}
                 className={cn(
                   "tap-target inline-flex items-center rounded-sm text-sm",
-                  !link.always && "hidden sm:inline-flex",
+                  link.show,
                   current ? "font-medium text-foreground" : "text-muted-foreground hover:text-foreground",
                 )}
               >

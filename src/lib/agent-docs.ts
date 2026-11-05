@@ -72,7 +72,7 @@ export function guideExamples(): string[] {
 export function llmsText(): string {
   return `# NotAQuote.FYI
 
-> A free, open-source planning tool for US car insurance. It estimates what a car, a teen driver, a move, or a coverage change would do to a typical yearly bill, from public data, with every number sourced or labeled as our own estimate. It gives ranges, not quotes, and it sells nothing.
+> An open-source, non-commercial planning tool for US car insurance, with no ads. It estimates what a car, a teen driver, a move, or a coverage change would do to a typical yearly bill, from public data, with every number sourced or labeled as our own estimate. It gives ranges, not quotes, and it sells nothing.
 
 This file is for AI assistants. There's a read-only JSON API at ${url(API_BASE)} that runs the same math as the site. No key needed. Your user's browser isn't needed either: every answer below is one plain GET.
 

@@ -86,7 +86,7 @@ export default function DataLicensesPage() {
 
       <h2>Everything else</h2>
       <p>
-        The adjustments are worked out from the public sources on the <Link href="/sources">Sources</Link> page. Where we
+        The adjustments are worked out from the public sources on the <Link href="/sources">Where the numbers come from</Link> page. Where we
         couldn&apos;t find a source, the adjustment says it&apos;s our estimate.
       </p>
     </TrustArticle>

@@ -15,7 +15,7 @@ import { StatePicker } from "@/components/state-picker"
 import { ChevronDown, HandHeart } from "lucide-react"
 
 export const metadata: Metadata = pageMetadata({
-  title: "Sources: where every number comes from",
+  title: "Where the numbers come from: every source",
   description: "Every public source behind the numbers, what we use it for, and when we last checked it, plus each state's typical price and minimum coverage.",
   path: "/sources",
 })
@@ -98,7 +98,7 @@ export default function SourcesPage() {
   const rulesCount = sourcedStateRules().length
   return (
     <TrustArticle
-      title="Sources"
+      title="Where the numbers come from"
       lead={`Every number here either comes from a public source you can open, or says it's our best guess. Here are all ${SOURCE_COUNT} sources, what we use each one for, and when we last checked it.`}
       wide
     >

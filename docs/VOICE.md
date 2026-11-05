@@ -21,7 +21,7 @@ Write like a friendly, well-informed parent explaining car insurance at the kitc
 | Current annual premium, optional. Empty keeps the labeled sample. An amount is this scenario's anchor, not a cleared baseline. | What do you pay now? (Optional.) If you know it, we'll start from your real number. It stays on your device. |
 | The lawful sensitivity factor stays locked at 1.00. | We don't ask about credit. Many insurers use it, so your real quote could move up or down because of it. |
 | The range is wider because the geography factor is thin. | We have less data for this state, so the range is wider. |
-| THIS IS NOT A QUOTE. NotAQuote.FYI is an independent educational estimate tool, not an insurance company, agency, broker, producer, or lead-generation service. | This is an estimate to help you plan, not a quote. We don't sell insurance, and we never pass your info to anyone. Only an insurer can give you a real price. |
+| THIS IS NOT A QUOTE. NotAQuote.FYI is an independent educational estimate tool, not an insurance company, agency, broker, producer, or lead-generation service. | This is an estimate to help you plan, not a quote. We don't sell insurance, and nothing you type is sent to us. Only an insurer can give you a real price. |
 | For counsel, not a legal conclusion. | (Delete. If a caveat matters, say it plainly.) |
 
 ## Legal honesty without legalese

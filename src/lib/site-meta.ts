@@ -301,10 +301,12 @@ export const DATA_DATES = {
  * Bumped deliberately in commits that revise page copy or layout; never set
  * from `new Date()` at build time.
  */
-export const HOME_CONTENT_UPDATED = "2026-10-30"
+export const HOME_CONTENT_UPDATED = "2026-11-05"
 export const STATE_PAGES_CONTENT_UPDATED = "2026-10-30"
 export const CAR_PAGES_CONTENT_UPDATED = "2026-10-30"
 export const GUIDES_CONTENT_UPDATED = "2026-10-30"
+/** The /about page: who made the site and what they promise. A change to a promise bumps this. */
+export const ABOUT_CONTENT_UPDATED = "2026-11-05"
 
 /** Pages whose numbers come from the engine alone (what-if, compare, how it works). */
 export const ENGINE_UPDATED = newest(DATA_DATES.factors, DATA_DATES.stateBaselines, DATA_DATES.catalog)

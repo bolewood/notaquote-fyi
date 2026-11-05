@@ -478,6 +478,7 @@ const STATIC_PAGES = [
   "methodology/page",
   "sources/page",
   "privacy/page",
+  "about/page",
   "disclaimer/page",
   "data-licenses/page",
   "corrections/page",

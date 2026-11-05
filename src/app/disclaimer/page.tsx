@@ -6,14 +6,14 @@ import { TrustArticle } from "@/components/trust-article"
 import { DISCLAIMER, PUBLISHER } from "@/lib/copy"
 
 export const metadata: Metadata = pageMetadata({
-  title: "Not a quote",
-  description: "What this site is and isn't: a free planning estimate from public data, not a quote, an insurer, or an agent. Only an insurer can give you a real price.",
+  title: "What this site is (and isn't)",
+  description: "What this site is and isn't: a planning estimate from public data, not a quote, an insurer, or an agent. Only an insurer can give you a real price.",
   path: "/disclaimer",
 })
 
 export default function DisclaimerPage() {
   return (
-    <TrustArticle title="This is not a quote" lead={DISCLAIMER} closingDisclaimer={false}>
+    <TrustArticle title="What this site is (and isn't)" lead={DISCLAIMER} closingDisclaimer={false}>
       <RecordTrustView />
       <h2>What the numbers are</h2>
       <p>
@@ -27,7 +27,7 @@ export default function DisclaimerPage() {
       <ul className="bullets">
         <li>
           <strong>State minimum</strong> is the least liability coverage your state&apos;s law allows, as we found it on the
-          date shown on the <Link href="/sources#state-rules">Sources</Link> page. It&apos;s a floor, not a suggestion.
+          date shown on the <Link href="/sources#state-rules">Where the numbers come from</Link> page. It&apos;s a floor, not a suggestion.
         </li>
         <li>
           <strong>Liability only</strong> pays for damage you cause to others, up to $100,000/$300,000/$100,000 (per
@@ -42,13 +42,14 @@ export default function DisclaimerPage() {
           $250,000/$500,000/$250,000.
         </li>
       </ul>
-      <p>We don&apos;t push anyone toward more or less coverage. That&apos;s your call. Try both on the <Link href="/">What-if page</Link> to see the trade-off.</p>
+      <p>We don&apos;t push anyone toward more or less coverage. That&apos;s your call. Try both on the <Link href="/">Try a change</Link> page to see the trade-off.</p>
 
       <h2>Who we are</h2>
       <p>
-        {PUBLISHER} publishes NotAQuote.FYI as a free, open-source tool. We&apos;re not an insurance company, agent, or
-        broker, and we don&apos;t sell leads or ads. Spot something wrong?{" "}
-        <Link href="/corrections">Tell us</Link>.
+        {PUBLISHER} publishes NotAQuote.FYI as a non-commercial, open-source tool. We&apos;re not an insurance company,
+        agent, or broker. There are no ads, affiliate links, paid rankings or lead sales, and no insurer or agent pays to be
+        here. Free to use, with no account required. <Link href="/about">Who made this, and why</Link>. Spot something
+        wrong? <Link href="/corrections">Tell us</Link>.
       </p>
     </TrustArticle>
   )

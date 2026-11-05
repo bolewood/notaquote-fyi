@@ -24,7 +24,7 @@ import {
 import { DISCLAIMER } from "./copy"
 
 const VERBATIM_DISCLAIMER =
-  "This is an estimate to help you plan, not a quote. We don't sell insurance, and we never pass your info to anyone. Only an insurer can give you a real price."
+  "This is an estimate to help you plan, not a quote. We don't sell insurance, and nothing you type is sent to us. Only an insurer can give you a real price."
 
 const catalog = JSON.parse(
   readFileSync("public/catalog/vehicle-catalog.json", "utf8"),

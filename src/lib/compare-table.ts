@@ -243,7 +243,7 @@ export function toCsv(rows: readonly CompareRow[], notes: CsvNotes, mode: Compar
   lines.push("")
   lines.push([csvCell("Starting point"), csvCell(notes.start)].join(","))
   lines.push([csvCell("Data"), csvCell(notes.versions)].join(","))
-  lines.push([csvCell("Made with"), csvCell("NotAQuote.FYI, free and open source: notaquote.fyi")].join(","))
+  lines.push([csvCell("Made with"), csvCell("NotAQuote.FYI, open source and non-commercial: notaquote.fyi")].join(","))
   // The byte-order mark tells Excel the file is UTF-8, so "16–18" and "→" read right.
   return `\uFEFF${lines.join("\r\n")}\r\n`
 }

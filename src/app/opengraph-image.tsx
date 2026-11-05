@@ -6,8 +6,8 @@ export const alt = "NotAQuote.FYI: what a new car, a teen driver, or a move woul
 
 export default function Image() {
   return ogImage({
-    eyebrow: "Free and open source",
+    eyebrow: "No ads · Open source",
     title: "What would a new car, a teen driver, or a move do to your car insurance?",
-    subtitle: "Change one thing and see roughly what you'd pay, worked out from public data. Nothing to sign up for.",
+    subtitle: "Change one thing and see roughly what it does to your bill, worked out from public data. No account, and nothing you type is sent to us.",
   })
 }
