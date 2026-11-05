@@ -93,7 +93,7 @@
       "publisher": "Highway Loss Data Institute (IIHS-HLDI)",
       "url": "https://www.iihs.org/research-areas/auto-insurance/insurance-losses-by-make-and-model",
       "dataYear": "2021–23 models",
-      "checkedOn": "2026-09-22",
+      "checkedOn": "2026-10-26",
       "terms": "Source: www.iihs.org. Same IIHS-HLDI terms and permission status as hldi-2022-24; stored in sources/hldi-2021-23.csv and sources/hldi-class-subtotals-2021-23.csv."
     },
     {
@@ -102,7 +102,7 @@
       "publisher": "Highway Loss Data Institute (IIHS-HLDI)",
       "url": "https://www.iihs.org/research-areas/auto-insurance/insurance-losses-by-make-and-model",
       "dataYear": "2020–22 models",
-      "checkedOn": "2026-09-22",
+      "checkedOn": "2026-10-26",
       "terms": "Source: www.iihs.org. Same IIHS-HLDI terms and permission status as hldi-2022-24; stored in sources/hldi-2020-22.csv and sources/hldi-class-subtotals-2020-22.csv."
     },
     {
@@ -111,7 +111,7 @@
       "publisher": "Highway Loss Data Institute (IIHS-HLDI)",
       "url": "https://www.iihs.org/research-areas/auto-insurance/insurance-losses-by-make-and-model",
       "dataYear": "2019–21 models",
-      "checkedOn": "2026-09-22",
+      "checkedOn": "2026-10-26",
       "terms": "Source: www.iihs.org. Same IIHS-HLDI terms and permission status as hldi-2022-24; stored in sources/hldi-2019-21.csv."
     },
     {
@@ -120,7 +120,7 @@
       "publisher": "Highway Loss Data Institute (IIHS-HLDI)",
       "url": "https://www.iihs.org/research-areas/auto-insurance/insurance-losses-by-make-and-model",
       "dataYear": "2018–20 models",
-      "checkedOn": "2026-09-22",
+      "checkedOn": "2026-10-26",
       "terms": "Source: www.iihs.org. Same IIHS-HLDI terms and permission status as hldi-2022-24; stored in sources/hldi-2018-20.csv."
     },
     {
@@ -129,7 +129,7 @@
       "publisher": "Highway Loss Data Institute (IIHS-HLDI)",
       "url": "https://www.iihs.org/research-areas/auto-insurance/insurance-losses-by-make-and-model",
       "dataYear": "2017–19 models",
-      "checkedOn": "2026-09-22",
+      "checkedOn": "2026-10-26",
       "terms": "Source: www.iihs.org. Same IIHS-HLDI terms and permission status as hldi-2022-24; stored in sources/hldi-2017-19.csv."
     },
     {
@@ -138,7 +138,7 @@
       "publisher": "Highway Loss Data Institute (IIHS-HLDI)",
       "url": "https://www.iihs.org/research-areas/auto-insurance/insurance-losses-by-make-and-model",
       "dataYear": "2016–18 models",
-      "checkedOn": "2026-09-22",
+      "checkedOn": "2026-10-26",
       "terms": "Source: www.iihs.org. Same IIHS-HLDI terms and permission status as hldi-2022-24; stored in sources/hldi-2016-18.csv."
     },
     {
@@ -147,7 +147,7 @@
       "publisher": "Highway Loss Data Institute (IIHS-HLDI)",
       "url": "https://www.iihs.org/research-areas/auto-insurance/insurance-losses-by-make-and-model",
       "dataYear": "2015–17 models",
-      "checkedOn": "2026-09-22",
+      "checkedOn": "2026-10-26",
       "terms": "Source: www.iihs.org. Same IIHS-HLDI terms and permission status as hldi-2022-24; stored in sources/hldi-2015-17.csv."
     },
     {
@@ -156,7 +156,7 @@
       "publisher": "Highway Loss Data Institute (IIHS-HLDI)",
       "url": "https://www.iihs.org/research-areas/auto-insurance/insurance-losses-by-make-and-model",
       "dataYear": "2014–16 models",
-      "checkedOn": "2026-09-22",
+      "checkedOn": "2026-10-26",
       "terms": "Source: www.iihs.org. Same IIHS-HLDI terms and permission status as hldi-2022-24; stored in sources/hldi-2014-16.csv."
     },
     {
@@ -165,7 +165,7 @@
       "publisher": "Highway Loss Data Institute (IIHS-HLDI)",
       "url": "https://www.iihs.org/research-areas/auto-insurance/insurance-losses-by-make-and-model",
       "dataYear": "2013–15 models",
-      "checkedOn": "2026-09-22",
+      "checkedOn": "2026-10-26",
       "terms": "Source: www.iihs.org. Same IIHS-HLDI terms and permission status as hldi-2022-24; stored in sources/hldi-2013-15.csv."
     },
     {
@@ -174,7 +174,7 @@
       "publisher": "Highway Loss Data Institute (IIHS-HLDI)",
       "url": "https://www.iihs.org/research-areas/auto-insurance/insurance-losses-by-make-and-model",
       "dataYear": "2012–14 models",
-      "checkedOn": "2026-09-22",
+      "checkedOn": "2026-10-26",
       "terms": "Source: www.iihs.org. Same IIHS-HLDI terms and permission status as hldi-2022-24; stored in sources/hldi-2012-14.csv."
     },
     {
@@ -183,7 +183,7 @@
       "publisher": "Highway Loss Data Institute (IIHS-HLDI)",
       "url": "https://www.iihs.org/research-areas/auto-insurance/insurance-losses-by-make-and-model",
       "dataYear": "2011–13 models",
-      "checkedOn": "2026-09-22",
+      "checkedOn": "2026-10-26",
       "terms": "Source: www.iihs.org. Same IIHS-HLDI terms and permission status as hldi-2022-24; stored in sources/hldi-2011-13.csv."
     },
     {
@@ -192,7 +192,7 @@
       "publisher": "Highway Loss Data Institute (IIHS-HLDI)",
       "url": "https://www.iihs.org/research-areas/auto-insurance/insurance-losses-by-make-and-model",
       "dataYear": "2010–12 models",
-      "checkedOn": "2026-09-22",
+      "checkedOn": "2026-10-26",
       "terms": "Source: www.iihs.org. Same IIHS-HLDI terms and permission status as hldi-2022-24; stored in sources/hldi-2010-12.csv."
     },
     {
@@ -201,7 +201,7 @@
       "publisher": "Highway Loss Data Institute (IIHS-HLDI)",
       "url": "https://www.iihs.org/research-areas/auto-insurance/insurance-losses-by-make-and-model",
       "dataYear": "2009–11 models",
-      "checkedOn": "2026-09-22",
+      "checkedOn": "2026-10-26",
       "terms": "Source: www.iihs.org. Same IIHS-HLDI terms and permission status as hldi-2022-24; stored in sources/hldi-2009-11.csv."
     },
     {
@@ -210,7 +210,7 @@
       "publisher": "Highway Loss Data Institute (IIHS-HLDI)",
       "url": "https://www.iihs.org/research-areas/auto-insurance/insurance-losses-by-make-and-model",
       "dataYear": "2008–10 models",
-      "checkedOn": "2026-09-22",
+      "checkedOn": "2026-10-26",
       "terms": "Source: www.iihs.org. Same IIHS-HLDI terms and permission status as hldi-2022-24; stored in sources/hldi-2008-10.csv."
     },
     {
@@ -219,7 +219,7 @@
       "publisher": "Highway Loss Data Institute (IIHS-HLDI)",
       "url": "https://www.iihs.org/research-areas/auto-insurance/insurance-losses-by-make-and-model",
       "dataYear": "2007–09 models",
-      "checkedOn": "2026-09-22",
+      "checkedOn": "2026-10-26",
       "terms": "Source: www.iihs.org. Same IIHS-HLDI terms and permission status as hldi-2022-24; stored in sources/hldi-2007-09.csv."
     },
     {
@@ -228,7 +228,7 @@
       "publisher": "Highway Loss Data Institute (IIHS-HLDI)",
       "url": "https://www.iihs.org/research-areas/auto-insurance/insurance-losses-by-make-and-model",
       "dataYear": "2006–08 models",
-      "checkedOn": "2026-09-22",
+      "checkedOn": "2026-10-26",
       "terms": "Source: www.iihs.org. Same IIHS-HLDI terms and permission status as hldi-2022-24; stored in sources/hldi-2006-08.csv."
     },
     {

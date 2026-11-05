@@ -12,6 +12,11 @@ import { HelpWantedList } from "@/components/help-wanted-list"
 import { DEFAULT_SCENARIO, stateName } from "@/lib/scenario"
 import { suggestFixUrl } from "@/lib/suggest-fix"
 import { ChevronDown } from "lucide-react"
+import { OpenBlender } from "@/components/charts/open-blender"
+import { SERVER_CATALOG } from "@/lib/agent-catalog"
+import { carFigures } from "@/lib/car-pages"
+import { EXAMPLE_DRIVER_NOTE } from "@/lib/car-content"
+import { hldiReport, premiumWeights, priceMeaning } from "@/lib/hldi"
 
 export const metadata: Metadata = pageMetadata({
   title: "How the math works",
@@ -38,12 +43,18 @@ export default function MethodologyPage() {
   const counts = basisCounts()
   const total = counts.sourced + counts.indicative + counts.assumed
   const state = stateName(DEFAULT_SCENARIO.state)
+  // The worked example for HLDI's results, from the same math as the car pages.
+  const legacy = MODELS_ENABLED ? carFigures(SERVER_CATALOG, "subaru-legacy") : null
+  const legacyReport = legacy ? hldiReport(legacy.page.relativity) : null
+  const legacyMeaning = legacy ? priceMeaning(legacy.page.relativity, "the Legacy", legacy.parts) : null
+  const weights = premiumWeights()
 
   return (
     <TrustArticle
       title="How the math works"
       lead="Every number on this site comes from one small piece of math that runs in your browser. It's simple on purpose, so anyone can check it."
     >
+      <OpenBlender variant="full" />
       <RecordTrustView />
 
       <h2>The whole idea, in one line</h2>
@@ -81,7 +92,7 @@ export default function MethodologyPage() {
         </p>
       ) : null}
 
-      <h2>1. A starting price</h2>
+      <h2 id="starting-price" className="scroll-mt-4">1. A starting price</h2>
       <p>
         If you tell us what you pay now, we start from your real number. It stays on your device, and it&apos;s the most
         accurate starting point there is.
@@ -99,7 +110,7 @@ export default function MethodologyPage() {
         <Link href="/sources#state-baselines">See the starting price for every state</Link>.
       </p>
 
-      <h2>2. A few adjustments</h2>
+      <h2 id="adjustments" className="scroll-mt-4">2. A few adjustments</h2>
       <p>
         Each thing that matters moves the price up or down by a percentage. A 16–18-year-old on their own policy, for
         example, costs almost three times what a 40–64-year-old does. One at-fault accident adds about half (+52%).
@@ -116,42 +127,98 @@ export default function MethodologyPage() {
         the first.
       </p>
 
-      <h3>The car</h3>
+      <h3 id="the-car" className="scroll-mt-4">The car</h3>
       <p>
-        <strong>In short:</strong> insurers report how often each model has claims and how much they cost to fix, and an
-        industry group publishes those results. Cars with more or pricier claims cost more to insure, so we nudge the price
-        up or down to match; these are claims results, not prices.
+        <strong>In short:</strong> an insurance-industry research group, the Highway Loss Data Institute (HLDI), publishes
+        how much insurers pay out for each car model compared with an average car. Cars with higher losses cost more to
+        insure, so we move the price up or down to match. These are loss results, not prices.
       </p>
+
+      {/* HLDI review text, to be replaced with HLDI's revised paragraph. */}
+      <div className="rounded-2xl bg-card p-5 ring-1 ring-border" data-testid="hldi-review-text">
+        <p>
+          HLDI publishes how each model&apos;s insurance losses compare with an average car&apos;s, for each coverage
+          separately: overall losses (how often claims happen times how much they cost) for crash repairs (collision),
+          non-crash damage (comprehensive: theft, weather, fire, vandalism, glass, and animal strikes), and damage to
+          others&apos; property (property damage liability), and how often injury claims are filed for injuries to others
+          (bodily injury liability). HLDI&apos;s results combine drivers of all ages.
+        </p>
+      </div>
+
       <p>
-        The Highway Loss Data Institute (HLDI) publishes how each model&apos;s insurance results compare with the average
-        car: overall losses for collision, comprehensive, and property damage, and how often injury claims happen for bodily
-        injury, personal injury protection, and medical payments (because injury severity takes too long to develop). For
-        each car&apos;s model year, we use the most recent HLDI report whose three-year window includes that year (for
+        For each car&apos;s model year, we use the most recent HLDI report whose three-year window includes that year (for
         example, the 2020–22 report for a 2020 car, or 2022–24 for a 2023 car), and use the nearest report only when no
         window covers the year.
       </p>
+
       <p>
-        A car with higher collision and comprehensive losses raises the part of the bill that fixes your own car. For the
-        liability part, we combine property-damage overall losses with how often bodily-injury claims happen—assuming a
-        model&apos;s average injury claim severity is about average, and widening the range for that extra uncertainty—and
-        count about half of the result, because insurers do the same. When we don&apos;t have a model in that report, we use
-        HLDI&apos;s average for that kind of car (small SUV, midsize car, and so on)—from that report for 2020 and newer
-        models, or from the 2020–22 report for earlier years where HLDI doesn&apos;t publish class averages—and widen the
-        range. That&apos;s the &ldquo;Why&rdquo; you see when you tap a car on the Compare page.
+        HLDI also publishes medical payments and personal injury protection (PIP) results. We don&apos;t use them,
+        because med pay covers people in your own car and PIP rules vary by state.
       </p>
+      <p>
+        HLDI publishes each coverage separately. Combining them and counting only part of the result is our choice, made
+        to estimate a price:
+      </p>
+      <ul className="bullets">
+        <li>
+          For the part of the bill that fixes your own car, we combine crash repairs and non-crash damage, weighted about{" "}
+          {weights.collision}% and {weights.comprehensive}%, the share each makes up of industry claim costs.
+        </li>
+        <li>
+          For the liability part, we combine damage to others&apos; property with how often injury claims are filed,
+          weighted about {weights.property}% and {weights.injury}%, assuming a model&apos;s injury claims cost about as much
+          as an average car&apos;s (and widening the range for that).
+        </li>
+        <li>
+          We count only part of each combined result, because a car&apos;s loss record is only one of many things insurers
+          weigh, and how each weighs it is a trade secret. On the liability side we count about half, and never move it
+          more than {100 - FACTOR_BUNDLE.vehicle.liabilityFloor}% below or {FACTOR_BUNDLE.vehicle.liabilityCap - 100}% above
+          an average car. On the damage side, how much we count was fitted to published prices, so it differs from car to
+          car.
+        </li>
+      </ul>
+      <p>
+        When HLDI doesn&apos;t publish a model, we use HLDI&apos;s average for that kind of car (small SUV, midsize car, and
+        so on), from that report for 2020 and newer models, or from the 2020–22 report for earlier years where HLDI
+        doesn&apos;t publish class averages, and widen the range. That&apos;s the &ldquo;Why&rdquo; you see when you tap a
+        car on the Compare page.
+      </p>
+
+      {legacy && legacyReport && legacyMeaning ? (
+        <>
+          <h3 id="why-percentages-differ" className="scroll-mt-4">
+            Why our percentages differ from HLDI&apos;s
+          </h3>
+          <p>
+            Take the {legacy.page.name}. What HLDI reports ({legacyReport.modelYears} models, all drivers combined):
+          </p>
+          <ul className="bullets">
+            {legacyReport.rows.map((row) => (
+              <li key={row.key}>
+                {row.name}: {row.percent} ({row.rating.toLowerCase()})
+              </li>
+            ))}
+          </ul>
+          <p>What we estimate that means for price: {legacyMeaning.paragraph}</p>
+          <p>
+            <Link href={`/cars/${legacy.page.slug}`}>See the {legacy.page.shortName} page</Link>, or any{" "}
+            <Link href="/cars">car page</Link>, for the same two steps.
+          </p>
+        </>
+      ) : null}
 
       <h2>3. A range, not a price</h2>
       <p>
-        Two companies can quote the same driver very different prices. So every estimate is a range, roughly where most
-        companies would land, with our best guess marked in the middle. The more we had to estimate ourselves, the wider it
-        gets. Real quotes can still land outside it.
+        Two companies can quote the same driver very different prices. So every estimate is our estimated range, with our
+        central estimate marked in the middle. The more we had to estimate ourselves, the wider it gets. Actual quotes can
+        fall outside it.
       </p>
 
       <h2 id="car-pages">The car and state pages</h2>
       <p>
         The pages for {MODELS_ENABLED ? <Link href="/cars">each car</Link> : "each car"} and <Link href="/states">each state</Link> use this same math,
         worked out when the site is built, for one typical driver: a 45-year-old (our 40–64 group) with a clean record,
-        7,500–15,000 miles a year, in the suburbs, with full coverage and a $1,000 deductible.
+        7,500–15,000 miles a year, in the suburbs, with full coverage and a $1,000 deductible. {EXAMPLE_DRIVER_NOTE}
       </p>
       <ul className="bullets">
         <li>
@@ -176,7 +243,7 @@ export default function MethodologyPage() {
         </li>
       </ul>
 
-      <h2>What&apos;s sourced, and what&apos;s our estimate</h2>
+      <h2 id="sourced-vs-guess" className="scroll-mt-4">What&apos;s sourced, and what&apos;s our estimate</h2>
       <p>We label every adjustment one of three ways, right next to the number:</p>
       <ul className="bullets">
         <li>

@@ -286,3 +286,23 @@ export function csvFilename(today: Date = new Date()): string {
   const iso = today.toISOString().slice(0, 10)
   return `notaquote-car-comparison-${iso}.csv`
 }
+
+/** "The ranges overlap, so get real quotes on your top two or three." Only said when it's true. */
+export const OVERLAP_NOTE = "The ranges overlap, so get real quotes on your top two or three."
+
+/**
+ * Whether the estimated ranges of the cheapest two or three cars in view
+ * overlap: then their order could flip with real quotes. In "added" mode the
+ * ranges are the whole policy's (the extra has no range of its own), which
+ * is the same uncertainty.
+ */
+export function topRangesOverlap(rows: readonly Pick<CompareRow, "extra" | "likely" | "low" | "high">[]): boolean {
+  if (rows.length < 2) return false
+  const top = [...rows].sort((left, right) => headlineAmount(left) - headlineAmount(right)).slice(0, 3)
+  for (let i = 0; i < top.length; i += 1) {
+    for (let j = i + 1; j < top.length; j += 1) {
+      if (top[i].low <= top[j].high && top[j].low <= top[i].high) return true
+    }
+  }
+  return false
+}

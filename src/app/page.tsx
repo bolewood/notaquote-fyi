@@ -3,6 +3,7 @@ import Link from "next/link"
 import { Calculator } from "@/components/calculator"
 import { JsonLdScript } from "@/components/json-ld"
 import { TrustStrip } from "@/components/trust-strip"
+import { OpenBlender } from "@/components/charts/open-blender"
 import { SOURCE_COUNT } from "@/lib/copy"
 import { SERVER_CATALOG } from "@/lib/agent-catalog"
 import { carPages } from "@/lib/car-pages"
@@ -31,17 +32,23 @@ export default function HomePage() {
   return (
     <div className="mx-auto w-full max-w-7xl px-4 pb-12 lg:px-6">
       <JsonLdScript data={homeJsonLd(DESCRIPTION)} />
-      <section className="max-w-3xl pt-8 sm:pt-12">
-        <h1 className="text-3xl leading-tight font-semibold tracking-tight text-balance sm:text-[2.6rem]">
-          What would a new car, a teen driver, or a move do to your car insurance?
-        </h1>
-        <p className="mt-3 max-w-2xl text-lg leading-relaxed text-pretty text-muted-foreground">
-          Change one thing and see roughly what it does to your bill, worked out from {SOURCE_COUNT} public sources. No
-          account, no ads, and nothing you type is sent to us.
-        </p>
+      <section className="grid items-start gap-8 pt-8 sm:pt-12 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] xl:pt-8">
+        <div className="max-w-3xl">
+          <h1 className="text-3xl leading-tight font-semibold tracking-tight text-balance sm:text-[2.6rem]">
+            What would a new car, a teen driver, or a move do to your car insurance?
+          </h1>
+          <p className="mt-3 max-w-2xl text-lg leading-relaxed text-pretty text-muted-foreground">
+            Change one thing and see roughly what it does to your bill, worked out from {SOURCE_COUNT} public sources. No
+            account, no ads, and nothing you type is sent to us.
+          </p>
+        </div>
+        {/* Wide screens only: the method in one picture, in the space beside the question. */}
+        <OpenBlender variant="compact" className="no-print hidden xl:grid" />
       </section>
       <TrustStrip />
       <Calculator />
+      {/* Phones and tablets: a small link below the tool, so it never pushes the estimate down. */}
+      <OpenBlender variant="thumbnail" className="no-print mt-8 xl:hidden" />
       <section aria-labelledby="browse-heading" className="mt-12 grid gap-8 border-t border-border/70 pt-8 text-sm">
         <div className="grid gap-2">
           <h2 id="browse-heading" className="text-lg font-semibold">
@@ -70,7 +77,7 @@ export default function HomePage() {
               </Link>
             </h2>
             <p className="text-muted-foreground">
-              Estimates from Highway Loss Data Institute claims results, with model-year tables and teen-driver costs:
+              Estimates from the Highway Loss Data Institute&apos;s insurance loss results, with model-year tables and teen-driver costs:
             </p>
             <ul className="flex flex-wrap gap-2">
               {popularCars.map((car) => (

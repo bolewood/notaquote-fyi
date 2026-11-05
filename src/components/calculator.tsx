@@ -20,6 +20,8 @@ import { HowWeGotThis, VehicleFixLink } from "@/components/how-we-got-this"
 import { RangeBar } from "@/components/money"
 import { HomeSkeleton, StarterCards, STARTERS_PLACEMENT, TABS, type Tab } from "@/components/page-skeleton"
 import { ShareBox } from "@/components/share-box"
+import { BridgeChart } from "@/components/charts/bridge-chart"
+import { bridgeRows, type Bridge } from "@/lib/bridge"
 import { carName, modelTrims, resolveCar, WHAT_IF_CARS } from "@/lib/car-search"
 import { vehicleFacts } from "@/lib/catalog-class"
 import { catalogYears, trimRecord, type VehiclePick } from "@/lib/catalog"
@@ -1032,6 +1034,19 @@ function CalculatorReady() {
         nowEstimate={nowEstimate}
         ownNumber={startKind === "yours" && (nowEstimate?.steps.length ?? 0) === 0}
         result={result ? { headline: result.headline, next: result.next, parts: result.parts } : null}
+        bridge={
+          result && !premiumInvalid
+            ? resultBridge({
+                mode: result.mode,
+                current: result.current,
+                next: result.next,
+                parts: result.parts,
+                ownNumber: startKind === "yours" && result.current.steps.length === 0,
+                plural: shown.length > 1,
+                neutral: shown.some((key) => key === "coverage" || key === "deductible"),
+              })
+            : null
+        }
         changes={shown.map((key) => chipLabel(key, now, next))}
       />
 
@@ -1125,6 +1140,30 @@ function NowFigure({
   )
 }
 
+/** The bridge chart's rows for a result (not for a teen on their own policy: that's a separate bill). */
+function resultBridge(input: {
+  mode: WhatIfMode
+  current: Estimate
+  next: Estimate
+  parts: readonly ChangePart[]
+  ownNumber: boolean
+  plural: boolean
+  neutral: boolean
+}): Bridge | null {
+  if (input.mode === "teen-own") return null
+  return bridgeRows({
+    start: { label: "Where you started", likely: input.current.likely, ownNumber: input.ownNumber },
+    parts: input.parts,
+    end: {
+      label: input.mode === "teen-added" ? "With your teen" : input.plural ? "With these changes" : "With this change",
+      likely: input.next.likely,
+      low: input.next.low,
+      high: input.next.high,
+    },
+    neutral: (part) => input.neutral && (part.key === "coverage" || part.key === "deductible"),
+  })
+}
+
 function WhatIfResult({
   headingRef,
   mode,
@@ -1208,6 +1247,7 @@ function WhatIfResult({
           : "text-muted-foreground"
   // A piece that rounds to $0 doesn't explain anything.
   const shownParts = parts.filter((part) => Math.round(part.amount / 10) !== 0)
+  const bridge = hasAmount ? resultBridge({ mode, current, next, parts, ownNumber, plural, neutral }) : null
   return (
     <div className="pop-in grid gap-6" key={headline}>
       {chips.length > 0 ? (
@@ -1267,6 +1307,8 @@ function WhatIfResult({
           </p>
         ) : null}
       </div>
+
+      {bridge ? <BridgeChart bridge={bridge} /> : null}
 
       {shownParts.length > 1 || (shownParts.length === 1 && vehicleChanged) ? (
         <div className="grid gap-2" data-testid="what-if-parts">
@@ -1425,12 +1467,15 @@ function PrintSummary({
   ownNumber,
   result,
   changes,
+  bridge,
 }: {
   situation: Situation
   nowEstimate: Estimate | null
   /** The figure is what they typed: print it as is, with no range. */
   ownNumber: boolean
   result: { headline: string; next: Estimate; parts: ChangePart[] } | null
+  /** The bridge chart, drawn wide for paper. */
+  bridge: Bridge | null
   changes: string[]
 }) {
   const printed = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
@@ -1459,6 +1504,7 @@ function PrintSummary({
           <p>
             <strong>About {estimateDollars(result.next.likely)} a year</strong> ({rangeWords(result.next.low, result.next.high)}).
           </p>
+          {bridge ? <BridgeChart bridge={bridge} layout="wide" className="my-2" /> : null}
           {result.parts.some((part) => Math.round(part.amount / 10) !== 0) ? (
             <ul style={{ margin: "6pt 0 0 14pt", listStyle: "disc" }}>
               {result.parts

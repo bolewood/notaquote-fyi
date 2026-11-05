@@ -133,7 +133,7 @@ export function teenCarsLead(catalog: VehicleCatalog): string {
   const all = nationalTeenCars(catalog)
   const ties = tiedAtTop(all)
   if (ties >= 3 && !MODELS_ENABLED) {
-    return `Of ${all.length} popular first cars, SUVs, and trucks, ${ties} tie for the least to add a new 16-year-old with, about ${differenceWords(all[0].added.increase)} nationally: without claims results for each model, cars of the same kind come out the same.`
+    return `Of ${all.length} popular first cars, SUVs, and trucks, ${ties} tie for the least to add a new 16-year-old with, about ${differenceWords(all[0].added.increase)} nationally: without HLDI's loss results for each model, cars of the same kind come out the same.`
   }
   const top = all.slice(0, Math.max(3, ties))
   const lastMake = all.at(-1)!.car.pick.make
