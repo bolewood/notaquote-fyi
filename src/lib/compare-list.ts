@@ -54,6 +54,20 @@ export function defaultCompareFor(situation: Situation | null): CompareList {
 }
 
 /**
+ * Arriving from "Shopping for a first car?": a new 16-year-old added to your
+ * policy, even if a saved What-if situation is an adult's. Where they live
+ * and the coverage come from that situation, since they're the household's.
+ */
+export function firstCarCompareFor(situation: Situation | null): CompareList {
+  if (!situation) return DEFAULT_COMPARE
+  const { state, region, coverage, deductible } = situation.scenario
+  return {
+    ...DEFAULT_COMPARE,
+    driver: withTeenFlag({ ...DEFAULT_COMPARE.driver, state, region, coverage, deductible }),
+  }
+}
+
+/**
  * Arriving from a what-if ("Compare more cars"): price the what-if's driver,
  * and add the car you have now and the car you were trying to the list you
  * already had (or a fresh one).

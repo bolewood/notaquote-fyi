@@ -979,7 +979,7 @@ function CalculatorReady() {
               together. Then take the spreadsheet with you.
             </p>
           </div>
-          <Link href="/compare" className="btn border-background bg-background text-foreground hover:bg-background/90">
+          <Link href="/compare?for=first-car" className="btn border-background bg-background text-foreground hover:bg-background/90">
             Compare cars <ArrowRight className="size-4" aria-hidden="true" />
           </Link>
         </section>

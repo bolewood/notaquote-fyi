@@ -46,6 +46,7 @@ import {
   clearCars,
   COMPARE_LIMIT,
   defaultCompareFor,
+  firstCarCompareFor,
   removeCar,
   toggleStar,
   type CompareList,
@@ -184,7 +185,10 @@ function CompareCarsReady() {
     // The What-if page handed over its cars: they're the visitor's own, so keep them.
     if (carried) write(carried)
   }, [carried, write])
-  const own = stored.value ?? carried ?? defaultCompareFor(situationStore.value)
+  // "Shopping for a first car?" means a new teen, even if a saved What-if driver is an adult.
+  const [firstCar] = useState(() => new URLSearchParams(window.location.search).get("for") === "first-car")
+  const own =
+    stored.value ?? carried ?? (firstCar ? firstCarCompareFor(situationStore.value) : defaultCompareFor(situationStore.value))
   const list = linked ?? own
   const situation = situationStore.value ?? DEFAULT_SITUATION
   const driver = list.driver
@@ -430,6 +434,11 @@ function CompareCarsReady() {
             {situationSentence(driver, list.teenOnParentPolicy, false)}
           </p>
           <p className="mt-1 hidden text-sm text-muted-foreground lg:block">Every car in your list is priced for this driver.</p>
+          {driver.age === "16-18" ? (
+            <p className="mt-1 text-sm text-muted-foreground" data-testid="teen-default-note">
+              Set to a teen because most people compare cars for a new driver. Change it anytime.
+            </p>
+          ) : null}
           <div id="driver-form" className={cn("mt-4 gap-3 lg:grid", driverOpen ? "grid" : "hidden")}>
             <div className="grid grid-cols-2 gap-3 lg:grid-cols-1">
               <AgeField scenario={driver} onChange={patchDriver} idPrefix="driver" />
@@ -447,7 +456,7 @@ function CompareCarsReady() {
             ) : null}
             <div className="grid grid-cols-2 gap-3 lg:grid-cols-1">
               <RegionField scenario={driver} onChange={patchDriver} idPrefix="driver" />
-              <CoverageField scenario={driver} onChange={patchDriver} idPrefix="driver" showNote={false} />
+              <CoverageField scenario={driver} onChange={patchDriver} idPrefix="driver" short />
             </div>
             <details className="disclosure">
               <summary>
@@ -473,7 +482,7 @@ function CompareCarsReady() {
                   />
                   <span>
                     {mode === "added"
-                      ? `Start from the ${dollars(situation.premium ?? 0)} a year your whole policy costs now, with your ${shortVehicleLabel(situation.scenario)}.`
+                      ? `Start from the ${dollars(situation.premium ?? 0)} a year you pay now for your ${shortVehicleLabel(situation.scenario)}, before adding your teen.`
                       : `Start from the ${dollars(situation.premium ?? 0)} a year you pay now for your ${shortVehicleLabel(situation.scenario)}.`}{" "}
                     It stays on your device.
                   </span>
@@ -482,15 +491,14 @@ function CompareCarsReady() {
                 <p>
                   We start from a typical price for the driver&apos;s state.{" "}
                   <Link href="/#now" className="link">
-                    {mode === "added" ? "Tell us what your whole policy costs now" : "Tell us what you pay now"}
+                    Tell us what you pay for your car now
                   </Link>{" "}
                   and we&apos;ll start from your real number instead.
                 </p>
               )}
               {mode === "added" ? (
                 <p className="mt-2 text-muted-foreground">
-                  We price each car as the one on your policy, with your teen added as a driver. The big number is what
-                  adding them costs each year.
+                  We price each car as the one on your policy, with your teen added as a driver.
                 </p>
               ) : null}
             </div>
@@ -667,10 +675,23 @@ function CompareCarsReady() {
                 </div>
               </div>
 
-              {answer ? (
-                <p className="no-print border-b border-border px-5 py-3 text-base font-medium sm:px-6" data-testid="compare-answer">
-                  {answer}
+              {rows.length > 0 ? (
+                <p className="no-print border-b border-border bg-muted/50 px-5 py-2.5 text-sm sm:px-6" data-testid="compare-legend">
+                  {added
+                    ? "Each price is what adding this teen to your policy costs a year with that car. “Whole policy” is that car's full yearly cost with the teen added."
+                    : "Each price is a yearly estimate for this driver, on their own policy. The range shows where we estimate quotes would land; actual quotes can fall outside it."}
                 </p>
+              ) : null}
+
+              {answer ? (
+                <div className="no-print grid gap-1 border-b border-border px-5 py-3 sm:px-6">
+                  <p className="text-base font-medium" data-testid="compare-answer">
+                    {answer}
+                  </p>
+                  {visible.length > 1 ? (
+                    <p className="text-sm text-muted-foreground">The ranges overlap, so get real quotes on your top two or three.</p>
+                  ) : null}
+                </div>
               ) : null}
 
               {hidden > 0 ? (
@@ -701,9 +722,9 @@ function CompareCarsReady() {
                         <span className="sr-only">Starred</span>
                       </th>
                       <SortHeader label="Car" sortKey="car" sort={sort} onSort={setSort} className="print:w-[30%]" />
-                      <SortHeader label={added ? "Extra a year" : "A year"} sortKey="yearly" sort={sort} onSort={setSort} align="right" className="w-36" />
+                      <SortHeader label={added ? "Teen adds, a year" : "A year"} sortKey="yearly" sort={sort} onSort={setSort} align="right" className="w-36" />
                       <SortHeader
-                        label={added ? "Extra a month" : "A month"}
+                        label="A month"
                         sortKey="monthly"
                         sort={sort}
                         onSort={setSort}
@@ -711,7 +732,7 @@ function CompareCarsReady() {
                         className="hidden w-28 pr-5 xl:table-cell"
                       />
                       <SortHeader
-                        label={added ? "Whole policy" : "Where quotes would land"}
+                        label={added ? "Whole policy" : "Estimated range"}
                         sortKey={added ? "policy" : "range"}
                         sort={sort}
                         onSort={setSort}
@@ -767,7 +788,7 @@ function CompareCarsReady() {
                               </span>
                               {lowest ? (
                                 <span className="tag mt-1.5 bg-down-soft text-down">
-                                  <Trophy className="size-3.5" aria-hidden="true" /> Lowest
+                                  <Trophy className="size-3.5" aria-hidden="true" /> Lowest estimate
                                 </span>
                               ) : null}
                             </td>
@@ -832,7 +853,7 @@ function CompareCarsReady() {
                         >
                           <span className="truncate font-medium">{row.name}</span>
                           <span className="truncate text-xs text-muted-foreground">
-                            {lowest ? "Lowest · " : ""}
+                            {lowest ? "Lowest estimate · " : ""}
                             {added ? `whole policy about ${estimateDollars(row.likely)}` : `${monthAmount(row)} a month`}
                             {version ? ` · ${version}` : ""}
                           </span>
@@ -974,8 +995,8 @@ function CompareCarsReady() {
                 setSort({ key, direction })
               }}
             >
-              <option value="yearly:asc">Cheapest first</option>
-              <option value="yearly:desc">Priciest first</option>
+              <option value="yearly:asc">Lowest first</option>
+              <option value="yearly:desc">Highest first</option>
               <option value="car:asc">A to Z</option>
               <option value="range:asc">Narrowest range</option>
               <option value="order:asc">Order added</option>

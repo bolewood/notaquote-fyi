@@ -209,7 +209,7 @@ export function situationSentence(scenario: Scenario, teenOnParentPolicy: boolea
   const age = AGE_BANDS.find((band) => band.id === scenario.age)?.label ?? scenario.age
   const who =
     scenario.age === "16-18"
-      ? `A ${age}-year-old driver ${teenOnParentPolicy ? "added to a parent's policy" : "on their own policy"}`
+      ? `A ${age}-year-old driver ${teenOnParentPolicy ? "added to your policy" : "on their own policy"}`
       : `A ${age}-year-old driver`
   const car = withCar ? `, a ${shortVehicleLabel(scenario)},` : ""
   const coverage = coverageLabel(scenario.coverage).toLowerCase()

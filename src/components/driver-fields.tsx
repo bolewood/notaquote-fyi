@@ -106,14 +106,21 @@ export function RegionField({ scenario, onChange, idPrefix, now, label = "Where 
   )
 }
 
-export function CoverageField({ scenario, onChange, idPrefix, now, showNote = true }: Props & { showNote?: boolean }) {
+export function CoverageField({
+  scenario,
+  onChange,
+  idPrefix,
+  now,
+  showNote = true,
+  short = false,
+}: Props & { showNote?: boolean; /** Short option text for a narrow column, with the helper below saying what it covers. */ short?: boolean }) {
   return (
     <SelectField
       now={now}
       id={`${idPrefix}-coverage`}
       label="Coverage"
       value={scenario.coverage}
-      options={COVERAGE_PACKAGES.map((item) => ({ value: item.id, label: item.option }))}
+      options={COVERAGE_PACKAGES.map((item) => ({ value: item.id, label: short ? item.label : item.option }))}
       onChange={(value) => {
         if (isCoverageId(value)) onChange({ coverage: value })
       }}
