@@ -12,6 +12,7 @@ import { HelpWantedList } from "@/components/help-wanted-list"
 import { DEFAULT_SCENARIO, stateName } from "@/lib/scenario"
 import { suggestFixUrl } from "@/lib/suggest-fix"
 import { ChevronDown } from "lucide-react"
+import { OpenBlender } from "@/components/charts/open-blender"
 import { SERVER_CATALOG } from "@/lib/agent-catalog"
 import { carFigures } from "@/lib/car-pages"
 import { EXAMPLE_DRIVER_NOTE } from "@/lib/car-content"
@@ -53,6 +54,7 @@ export default function MethodologyPage() {
       title="How the math works"
       lead="Every number on this site comes from one small piece of math that runs in your browser. It's simple on purpose, so anyone can check it."
     >
+      <OpenBlender variant="full" />
       <RecordTrustView />
 
       <h2>The whole idea, in one line</h2>
@@ -90,7 +92,7 @@ export default function MethodologyPage() {
         </p>
       ) : null}
 
-      <h2>1. A starting price</h2>
+      <h2 id="starting-price" className="scroll-mt-4">1. A starting price</h2>
       <p>
         If you tell us what you pay now, we start from your real number. It stays on your device, and it&apos;s the most
         accurate starting point there is.
@@ -108,7 +110,7 @@ export default function MethodologyPage() {
         <Link href="/sources#state-baselines">See the starting price for every state</Link>.
       </p>
 
-      <h2>2. A few adjustments</h2>
+      <h2 id="adjustments" className="scroll-mt-4">2. A few adjustments</h2>
       <p>
         Each thing that matters moves the price up or down by a percentage. A 16–18-year-old on their own policy, for
         example, costs almost three times what a 40–64-year-old does. One at-fault accident adds about half (+52%).
@@ -125,7 +127,7 @@ export default function MethodologyPage() {
         the first.
       </p>
 
-      <h3>The car</h3>
+      <h3 id="the-car" className="scroll-mt-4">The car</h3>
       <p>
         <strong>In short:</strong> an insurance-industry research group, the Highway Loss Data Institute (HLDI), publishes
         how much insurers pay out for each car model compared with an average car. Cars with higher losses cost more to
@@ -241,7 +243,7 @@ export default function MethodologyPage() {
         </li>
       </ul>
 
-      <h2>What&apos;s sourced, and what&apos;s our estimate</h2>
+      <h2 id="sourced-vs-guess" className="scroll-mt-4">What&apos;s sourced, and what&apos;s our estimate</h2>
       <p>We label every adjustment one of three ways, right next to the number:</p>
       <ul className="bullets">
         <li>
