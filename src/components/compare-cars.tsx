@@ -372,6 +372,8 @@ function CompareCarsReady() {
   const monthAmount = (row: CompareRow) => (row.extra !== null ? `+${monthlyDollars(row.extra)}` : monthlyDollars(row.likely))
   const gapWords = (row: CompareRow) => {
     const gap = gaps.get(row.key) ?? 0
+    // Cars tied for the lowest estimate say so, all of them, like their badges.
+    if (lowestKeys.size > 1 && lowestKeys.has(row.key)) return "Tied for cheapest"
     if (!cheapest || row.key === cheapest.key) return null
     if (Math.round(gap / 10) === 0) return `Same as the ${cheapest.car.model}`
     return `${signedDollars(gap)} vs. ${cheapest.car.model}`
