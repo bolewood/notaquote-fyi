@@ -118,6 +118,11 @@ export default function MethodologyPage() {
 
       <h3>The car</h3>
       <p>
+        <strong>In short:</strong> insurers report how often each model has claims and how much they cost to fix, and an
+        industry group publishes those results. Cars with more or pricier claims cost more to insure, so we nudge the price
+        up or down to match; these are claims results, not prices.
+      </p>
+      <p>
         The Highway Loss Data Institute (HLDI) publishes how each model&apos;s insurance results compare with the average
         car: overall losses for collision, comprehensive, and property damage, and how often injury claims happen for bodily
         injury, personal injury protection, and medical payments (because injury severity takes too long to develop). For
