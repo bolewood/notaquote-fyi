@@ -389,8 +389,8 @@ function hldiContent(f: CarFigures): CarContent["hldi"] {
   const series = report.series
   const intro =
     series.length === 1
-      ? `The Highway Loss Data Institute (HLDI) compares each model's insurance losses with an average car's. Its results for the ${series[0]}:`
-      : `The Highway Loss Data Institute (HLDI) compares each model's insurance losses with an average car's. HLDI lists this model as ${series.length} versions (${joinWords(series)}); each figure is the middle of them:`
+      ? `The Highway Loss Data Institute (HLDI) compares each model's insurance losses with an average car's. For the ${series[0]}, on HLDI's scale where 100 is an average car and lower is better, it reports`
+      : `The Highway Loss Data Institute (HLDI) compares each model's insurance losses with an average car's. HLDI lists this model as ${series.length} versions (${joinWords(series)}). Taking the middle of them, on HLDI's scale where 100 is an average car and lower is better, it reports`
   const shown = new Set(report.rows.map((row) => row.key))
   const missing = ["collision", "comprehensive", "propertyDamage", "bodilyInjury"].filter((key) => !shown.has(key as never))
   const missingNames: Record<string, string> = {
@@ -405,12 +405,10 @@ function hldiContent(f: CarFigures): CarContent["hldi"] {
     propertyDamage: "damage to others' property",
     bodilyInjury: "injury claims",
   }
-  const scores = `On HLDI's scale, where 100 is an average car and lower is better, it scores ${listWords(
-    report.rows.map((row) => `${row.index} for ${indexWords[row.key]}`),
-  )}.`
+  const scores = `${listWords(report.rows.map((row) => `${row.index} for ${indexWords[row.key]}`))}.`
   return {
     heading: `What HLDI reports (${report.modelYears} models, all drivers combined)`,
-    intro: `${intro.replace(/:$/, ".")} ${scores}`,
+    intro: `${intro} ${scores}`,
     rows: report.rows.map((row) => {
       const rank = f.coverageRanks[row.key]
       const place = rank ? (rank.rank === 1 ? "best" : rank.rank === rank.of ? "worst" : `${ordinal(rank.rank)} best`) : null

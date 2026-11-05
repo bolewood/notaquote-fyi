@@ -35,7 +35,7 @@ export function StarterCards({ onPick, className }: { onPick?: (item: Starter) =
       </h2>
       {/* Phones: one row that scrolls sideways, with the next card peeking in. Wider screens: a grid. */}
       <div
-        className="-mx-4 mt-2 flex snap-x snap-proximity gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:mt-3 sm:grid sm:grid-cols-2 sm:gap-3 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-4"
+        className="-mx-4 mt-2 flex snap-x snap-proximity scroll-px-4 gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:mt-3 sm:grid sm:grid-cols-2 sm:gap-3 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-4"
         data-testid="starter-row"
       >
         {STARTERS.map((item) => {

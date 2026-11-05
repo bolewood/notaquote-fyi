@@ -301,7 +301,9 @@ export function priceMeaning(relativity: VehicleRelativity, name: string, bill: 
 
   const own = [damageResult, damageCount, liabilityResult, liabilityCount].join(" ")
   const paragraph = `${SOFTENING_REASON} ${own}`
-  const short = `We estimate the part of the bill that fixes the car is ${factorWords(damageOurs)}, and the liability part is ${factorWords(liabilityOurs)}.`
+  const valueNote = relativity.valueTier && relativity.valueTier !== "none" ? " (including what the car costs to replace, which HLDI's results don't measure)" : ""
+  const clipNote = relativity.liabilityClipped ? " (the most we ever move it)" : ""
+  const short = `We estimate the part of the bill that fixes the car is ${factorWords(damageOurs)}${valueNote}, and the liability part is ${factorWords(liabilityOurs)}${clipNote}.`
   return { damage, liability, paragraph, own, short }
 }
 
