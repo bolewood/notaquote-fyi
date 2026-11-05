@@ -641,7 +641,7 @@ test("two cars outside the claims years get one sentence", () => {
   const next = vehicleFacts(catalog, { year: 2025, make: "Tesla", model: "Model Y", trim: "Model Y Long Range AWD" })
   const start: StartingPoint = { annual: 1800, scenario: { ...MOLLY, year: 2004, make: "Toyota", model: "Camry", trim: "Camry" }, vehicle: old, kind: "yours" }
   const result = estimate(start, { ...MOLLY, year: 2025, make: "Tesla", model: "Model Y", trim: "Model Y Long Range AWD" }, { vehicle: next })
-  const claims = result.rangePoints.filter((point) => point.startsWith("Our claims data covers"))
+  const claims = result.rangePoints.filter((point) => point.startsWith("HLDI's loss data covers"))
   assert.equal(claims.length, 1)
   assert.match(claims[0], /so we used 2006 for the 2004 and 2024 for the 2025\.$/)
 })
@@ -654,7 +654,7 @@ test("a 2020 vehicle selects the 2020–22 HLDI report, and falls back to that w
   assert.equal(rel.modelYears, "2020–22")
   assert.equal(rel.outsideYears, false)
   const priced = estimate(YOURS, on(MOLLY_F150, camry2020), { vehicle: camry2020 })
-  assert.doesNotMatch(priced.rangeNote, /Our claims data covers/)
+  assert.doesNotMatch(priced.rangeNote, /HLDI's loss data covers/)
   const step = priced.steps.find((item) => item.group === "vehicle")
   assert.ok(step?.sources.includes("hldi-2020-22"))
 
@@ -702,7 +702,7 @@ test("a model year outside every HLDI window falls back to the nearest window wi
   assert.equal(newerRel.modelYears, "2022–24")
   assert.equal(newerRel.outsideYears, true)
   const newerEst = estimate(YOURS, on(MOLLY_F150, y2025), { vehicle: y2025 })
-  assert.match(newerEst.rangeNote, /Our claims data covers 2006–2024 models, so for a 2025 we used the closest year \(2024\)\./)
+  assert.match(newerEst.rangeNote, /HLDI's loss data covers 2006–2024 models, so for a 2025 we used the closest year \(2024\)\./)
 
   const camry2004 = vehicleFacts(null, { year: 2004, make: "Toyota", model: "Camry", trim: "Camry" })
   const olderRel = vehicleRelativity(camry2004)
@@ -710,7 +710,7 @@ test("a model year outside every HLDI window falls back to the nearest window wi
   assert.equal(olderRel.modelYears, "2006–08")
   assert.equal(olderRel.outsideYears, true)
   const olderEst = estimate(YOURS, { ...MOLLY_F150, year: 2004, make: "Toyota", model: "Camry", trim: "Camry" }, { vehicle: camry2004 })
-  assert.match(olderEst.rangeNote, /Our claims data covers 2006–2024 models, so for a 2004 we used the closest year \(2006\)\./)
+  assert.match(olderEst.rangeNote, /HLDI's loss data covers 2006–2024 models, so for a 2004 we used the closest year \(2006\)\./)
 })
 
 test("the injury frequency part carries the assumed basis and widens the estimate range", () => {

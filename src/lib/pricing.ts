@@ -542,8 +542,8 @@ export function basisWords(basis: keyof typeof BASIS_WORDS): string {
   return BASIS_WORDS[basis]
 }
 
-/** How we know a car's step when it comes from HLDI's per-model claims results. */
-export const CLAIMS_WORDS = "Based on insurance claims data"
+/** How we know a car's step when it comes from HLDI's per-model loss results. */
+export const CLAIMS_WORDS = "Based on insurance loss data"
 
 /** Which state's published prices a source is. */
 const SURVEY_STATES: Record<string, string> = {
@@ -561,7 +561,7 @@ const SURVEY_STATES: Record<string, string> = {
  * ones: "From published prices in Texas and Oklahoma (Illinois may differ)".
  */
 export function basisLabel(basis: keyof typeof BASIS_WORDS, sourceIds: readonly string[], state: string): string {
-  // HLDI publishes insurance claims results for each car, not prices.
+  // HLDI publishes insurance loss results for each car, not prices.
   if (basis === "sourced" && sourceIds.length > 0 && sourceIds.every((id) => id.startsWith("hldi-"))) return CLAIMS_WORDS
   const words = BASIS_WORDS[basis]
   const states = [...new Set(sourceIds.flatMap((id) => (SURVEY_STATES[id] ? [SURVEY_STATES[id]] : [])))]

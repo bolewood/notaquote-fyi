@@ -76,7 +76,7 @@ export default function TeenCostGuide() {
           {differenceWords(cheapest.added)} in {cheapest.name} and about {differenceWords(priciest.added)} in {priciest.name}.
         </li>
         <li>
-          <strong>The car they drive.</strong> Cars with cheaper repairs and fewer claims—such as the{" "}
+          <strong>The car they drive.</strong> Cars with lower insurance losses—cheaper crash repairs, fewer injury claims—such as the{" "}
           <Link href="/cars/subaru-forester">Subaru Forester</Link>, <Link href="/cars/subaru-outback">Subaru Outback</Link>,{" "}
           <Link href="/cars/honda-cr-v">Honda CR-V</Link>, <Link href="/cars/toyota-rav4">Toyota RAV4</Link>,{" "}
           <Link href="/cars/honda-civic">Honda Civic</Link>, and <Link href="/cars/toyota-corolla">Toyota Corolla</Link>—cost

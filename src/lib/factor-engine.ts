@@ -1507,9 +1507,9 @@ function outsideYearsSentence(modelYears: readonly number[], data: VehicleData =
   const nearest = (year: number) => selectVehicleWindow(year, data).nearestYear
   const years = [...new Set(modelYears)].sort((left, right) => left - right)
   if (years.length === 1) {
-    return `Our claims data covers ${first}–${last} models, so for a ${years[0]} we used the closest year (${nearest(years[0])}).`
+    return `HLDI's loss data covers ${first}–${last} models, so for a ${years[0]} we used the closest year (${nearest(years[0])}).`
   }
-  return `Our claims data covers ${first}–${last} models, so we used ${joinWords(years.map((year) => `${nearest(year)} for the ${year}`))}.`
+  return `HLDI's loss data covers ${first}–${last} models, so we used ${joinWords(years.map((year) => `${nearest(year)} for the ${year}`))}.`
 }
 
 /**
@@ -1548,7 +1548,7 @@ function rangePoints(
       [target, scenario.year],
     ] as const) {
       if (relativity.level === "class") {
-        add(`We don't have claims data for that exact model, so we used the average for its kind (${lowerFirst(relativity.label)}).`)
+        add(`HLDI doesn't publish loss results for that exact model, so we used the average for its kind (${lowerFirst(relativity.label)}).`)
       }
       if (relativity.level === "unknown") {
         add("We couldn't tell what kind of vehicle that is, so we treated it as an average one.")
@@ -1575,7 +1575,7 @@ function rangePoints(
         : `That name is sold in more than one version. We priced the ${version} one.`,
     )
   } else if (vehicleChanged && target.hybridOnGasRows) {
-    add("The claims data has no separate figures for this hybrid, so we used the gas version's.")
+    add("HLDI's loss data has no separate figures for this hybrid, so we used the gas version's.")
   }
   if (vehicleChanged && target.valueRisk) {
     add("Expensive and electric cars can cost more or less to insure than their repair records suggest.")
@@ -1583,7 +1583,7 @@ function rangePoints(
   if (vehicleChanged && target.sporty && target.sportsCar) {
     add("Sporty cars often cost more to insure than their repair records suggest, so the range reaches higher.")
   } else if (vehicleChanged && target.sporty) {
-    add("This car's repair claims run a bit above the cars we could check against real prices, so the range reaches higher.")
+    add("This car's repair losses run a bit above the cars we could check against real prices, so the range reaches higher.")
   }
   if (start.trended && start.national) {
     add("We brought the 2023 national price up to today with the government's price index, which is only a rough guide.")
@@ -1966,9 +1966,9 @@ function publishedRangeCell(cell: FactorCell, label: string): PublishedFactorRow
 /** Plain names for the range cells (the data file keeps its own). */
 const RANGE_LABELS: Record<string, string> = {
   "typical-start": "Starting from a typical state price, not yours",
-  "vehicle-model": "How closely real prices follow a car's claims",
+  "vehicle-model": "How closely real prices follow a car's loss results",
   "vehicle-value": "Luxury and electric cars",
-  "vehicle-model-years": "A model year outside the claims data",
+  "vehicle-model-years": "A model year outside HLDI's loss data",
   "vehicle-mixed-powertrain": "A name sold as both gas and hybrid",
   "vehicle-sporty": "Sporty cars, or ones with pricey repairs",
   "vehicle-luxury-class": "A luxury car we price by its kind, not its model",
@@ -2010,7 +2010,7 @@ export function publishedFactorGroups(): PublishedFactorGroup[] {
     Object.values(rows).flatMap((row) => [publishedRow(row.liability), publishedRow(row.physical)])
   groups.push({
     family: "Kinds of cars, when we don't have the exact model",
-    note: "From HLDI's insurance results (overall losses for collision, comprehensive, and property damage; how often claims happen for bodily injury), compared with the average car. We use these when we don't have figures for the exact model. The last two rows show how we treat injury claim severity and how much of a car's liability record we count; each isn't one of the 26 adjustments.",
+    note: "From HLDI's insurance loss results (overall losses for collision, comprehensive, and property damage; how often claims happen for bodily injury), compared with the average car. We use these when we don't have figures for the exact model. The last two rows show how we treat injury claim severity and how much of a car's liability record we count; each isn't one of the 26 adjustments.",
     rows: [
       ...classRows(bundle.vehicle.classes),
       ...classRows(bundle.vehicle.luxuryClasses),
@@ -2020,7 +2020,7 @@ export function publishedFactorGroups(): PublishedFactorGroup[] {
         "Average injury claim severity per model, used with HLDI's bodily-injury frequency",
       ),
       {
-        ...publishedRow(bundle.vehicle.liabilityWeight, `We count about half (${bundle.vehicle.liabilityWeight.value}%) of a car's liability claims record`),
+        ...publishedRow(bundle.vehicle.liabilityWeight, `We count about half (${bundle.vehicle.liabilityWeight.value}%) of a car's liability loss results`),
         change: `${bundle.vehicle.liabilityWeight.value}%`,
         range:
           bundle.vehicle.liabilityWeight.low === bundle.vehicle.liabilityWeight.high

@@ -75,7 +75,7 @@ export default function DataLicensesPage() {
         index for car insurance, which is public domain.
       </p>
 
-      <h2>Car claims</h2>
+      <h2>Car loss data</h2>
       <p>
         We keep the Highway Loss Data Institute&apos;s published results for the car models we price, with credit and a
         link to the Insurance Institute for Highway Safety (IIHS). We&apos;ve asked IIHS for permission to use this data

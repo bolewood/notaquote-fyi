@@ -321,7 +321,7 @@ export const LOSS_PHRASES: Record<CoverageKey, { lower: string; higher: string }
  * on a luxury make), the side of the bill in plain words.
  */
 export const SIDE_PHRASES = {
-  damage: { lower: "cheaper to fix or replace", higher: "pricier to fix or replace" },
+  damage: { lower: "lower costs to fix or replace", higher: "higher costs to fix or replace" },
   liability: { lower: "lower liability losses", higher: "higher liability losses" },
 } as const
 

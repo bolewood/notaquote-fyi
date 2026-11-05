@@ -483,7 +483,7 @@ export function teenCarsSummary(f: StateFigures): string {
   const last = f.teenCars.at(-1)!
   const ties = tiedAtTop(f.teenCars)
   if (ties >= 3 && !MODELS_ENABLED) {
-    return `Without claims results for each model, cars of the same kind come out the same here: ${ties} of the ${f.teenCars.length} cars on the site's popular lists tie for the least to add a teen with in ${name}, at about ${differenceWords(first.added.increase)}.`
+    return `Without HLDI's loss results for each model, cars of the same kind come out the same here: ${ties} of the ${f.teenCars.length} cars on the site's popular lists tie for the least to add a teen with in ${name}, at about ${differenceWords(first.added.increase)}.`
   }
   if (ties >= 2) {
     const tied = f.teenCars.slice(0, ties)
