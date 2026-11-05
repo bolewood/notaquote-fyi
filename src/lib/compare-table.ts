@@ -168,9 +168,9 @@ export const CSV_COLUMNS: Record<CompareMode, readonly string[]> = {
     "Starred",
     "Extra a year for your teen ($)",
     "Extra a month for your teen ($)",
-    "Whole policy a year, with your teen ($)",
-    "Whole policy range, low ($)",
-    "Whole policy range, high ($)",
+    "This car's total a year, with your teen ($)",
+    "Total range, low ($)",
+    "Total range, high ($)",
     "Why (compared with an average car)",
   ],
 }

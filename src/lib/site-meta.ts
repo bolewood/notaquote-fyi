@@ -304,7 +304,7 @@ export const DATA_DATES = {
 export const HOME_CONTENT_UPDATED = "2026-11-05"
 export const STATE_PAGES_CONTENT_UPDATED = "2026-10-30"
 export const CAR_PAGES_CONTENT_UPDATED = "2026-10-30"
-export const GUIDES_CONTENT_UPDATED = "2026-10-30"
+export const GUIDES_CONTENT_UPDATED = "2026-11-05"
 /** The /about page: who made the site and what they promise. A change to a promise bumps this. */
 export const ABOUT_CONTENT_UPDATED = "2026-11-05"
 

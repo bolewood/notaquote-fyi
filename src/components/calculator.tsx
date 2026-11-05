@@ -18,7 +18,7 @@ import {
 } from "@/components/driver-fields"
 import { HowWeGotThis, VehicleFixLink } from "@/components/how-we-got-this"
 import { RangeBar } from "@/components/money"
-import { HomeSkeleton, StarterCards, TABS, type Tab } from "@/components/page-skeleton"
+import { HomeSkeleton, StarterCards, STARTERS_PLACEMENT, TABS, type Tab } from "@/components/page-skeleton"
 import { ShareBox } from "@/components/share-box"
 import { carName, modelTrims, resolveCar, WHAT_IF_CARS } from "@/lib/car-search"
 import { vehicleFacts } from "@/lib/catalog-class"
@@ -316,7 +316,8 @@ function regionWords(region: Region): string {
 /** A chip for one change, saying plainly when a driver is added rather than changed. */
 function chipLabel(key: ChangeKey, now: Scenario, next: Scenario): string {
   if (key === "age" && next.age === "16-18" && now.age !== "16-18") return "Teen added (16–18)"
-  if (key === "age" && next.age === "19-21" && now.age !== "19-21") return "Driver added (19–21, own policy)"
+  // Same test as priceWhatIf's: a teen growing into 19–21 is the same driver, not a new one.
+  if (key === "age" && next.age === "19-21" && now.age !== "19-21" && now.age !== "16-18") return "Driver added (19–21, own policy)"
   if (key === "age") return `Main driver's age: ${bandLabel(AGE_BANDS, next.age)}`
   return changeChip(key, next)
 }
@@ -546,7 +547,8 @@ function CalculatorReady() {
           </div>
         ) : null}
 
-        <StarterCards onPick={tryStarter} />
+        <div className="flex flex-col">
+        <StarterCards onPick={tryStarter} className={STARTERS_PLACEMENT} />
 
         <div className="mt-6 grid items-start gap-5 lg:mt-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-6">
           {/* 1. Where you start */}
@@ -970,6 +972,7 @@ function CalculatorReady() {
             </div>
           </section>
         </div>
+        </div>
 
         <section className="mt-10 flex flex-col items-start gap-4 rounded-3xl bg-foreground px-6 py-7 text-background sm:flex-row sm:items-center sm:px-8">
           <div className="flex-1">
@@ -1029,7 +1032,7 @@ function CalculatorReady() {
         nowEstimate={nowEstimate}
         ownNumber={startKind === "yours" && (nowEstimate?.steps.length ?? 0) === 0}
         result={result ? { headline: result.headline, next: result.next, parts: result.parts } : null}
-        changes={shown.map((key) => changeChip(key, next))}
+        changes={shown.map((key) => chipLabel(key, now, next))}
       />
 
       <CarPicker

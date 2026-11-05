@@ -19,14 +19,17 @@ export const STARTER_ICONS: Record<StarterId, typeof Car> = {
   "higher-deductible": Shield,
 }
 
+/** Above the tool on phones; below it on wide screens, so the estimate is in view on landing. */
+export const STARTERS_PLACEMENT = "mt-6 lg:order-last lg:mt-8"
+
 /**
  * "Not sure where to start? Pick a question." Above the tool, so the easiest
  * way in is the first thing a newcomer sees. Before the page is ready the
  * cards are drawn the same size, without a tap action.
  */
-export function StarterCards({ onPick }: { onPick?: (item: Starter) => void }) {
+export function StarterCards({ onPick, className }: { onPick?: (item: Starter) => void; className?: string }) {
   return (
-    <section aria-labelledby="starters-heading" className="mt-6">
+    <section aria-labelledby="starters-heading" className={className ?? "mt-6"}>
       <h2 id="starters-heading" className="text-lg font-semibold tracking-tight">
         Not sure where to start? Pick a question.
       </h2>
@@ -66,8 +69,8 @@ function Bar({ className }: { className: string }) {
  */
 export function HomeSkeleton() {
   return (
-    <>
-      <StarterCards />
+    <div className="flex flex-col">
+      <StarterCards className={STARTERS_PLACEMENT} />
       <div className="mt-6 grid items-start gap-5 lg:mt-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-6" aria-busy="true">
         <section className="card p-5 sm:p-6" aria-label="Start with your situation">
           <h2 className="text-xl font-semibold tracking-tight">
@@ -124,7 +127,7 @@ export function HomeSkeleton() {
           </div>
         </section>
       </div>
-    </>
+    </div>
   )
 }
 

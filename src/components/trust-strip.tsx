@@ -32,7 +32,7 @@ export const PROMISES: readonly { title: string; line: string; href: string }[] 
 /** A compact, high-contrast band: one row on wide screens, two short rows on phones. */
 export function TrustStrip() {
   return (
-    <section aria-labelledby="promises-heading" className="mt-6 rounded-2xl border border-foreground/15 bg-card px-4 py-4 sm:px-5" data-testid="trust-band">
+    <section aria-labelledby="promises-heading" className="no-print mt-6 rounded-2xl border border-foreground/15 bg-card px-4 py-4 sm:px-5" data-testid="trust-band">
       <h2 id="promises-heading" className="sr-only">
         Our promises
       </h2>

@@ -182,7 +182,7 @@ test("the CSV starts with who and not-a-quote, then one line per row in the show
   assert.doesNotMatch(csv, /\bnull\b|undefined/)
 
   const added = toCsv(sortRows(addedRows(), DEFAULT_SORT), notes, "added")
-  assert.match(added.slice(1).split("\r\n")[3], /^Car,Version,Starred,Extra a year for your teen \(\$\),Extra a month for your teen \(\$\),"Whole policy a year, with your teen \(\$\)"/)
+  assert.match(added.slice(1).split("\r\n")[3], /^Car,Version,Starred,Extra a year for your teen \(\$\),Extra a month for your teen \(\$\),"This car's total a year, with your teen \(\$\)"/)
 
   assert.equal(csvCell("=HYPERLINK(1)"), "'=HYPERLINK(1)")
   assert.equal(csvCell("+1"), "'+1")

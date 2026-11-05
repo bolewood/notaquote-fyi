@@ -83,7 +83,7 @@ test("adding a teen on the What-if page prices the whole household's policy", ()
   const result = priceWhatIf({ ...DEFAULT_SITUATION, premium: 1800 }, facts, next, facts)
   assert.ok(result && result.delta > 0)
   assert.match(result!.headline, /^Adding your teen to your policy: about \$[\d,]+ more a year, for a car that costs about \$1,800 a year to insure now\.$/)
-  assert.match(result!.next.rangeNote, /whole household/)
+  assert.match(result!.next.rangeNote, /this car with your teen added/)
 })
 
 test("every starter changes something from the default situation", () => {

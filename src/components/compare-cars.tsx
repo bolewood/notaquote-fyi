@@ -88,7 +88,7 @@ const SORT_LABELS: Record<SortKey, string> = {
   car: "Car name",
   yearly: "Price",
   monthly: "Price",
-  policy: "Whole policy",
+  policy: "Total with teen",
   range: "Narrowest range",
   reason: "Why",
 }
@@ -678,7 +678,7 @@ function CompareCarsReady() {
               {rows.length > 0 ? (
                 <p className="no-print border-b border-border bg-muted/50 px-5 py-2.5 text-sm sm:px-6" data-testid="compare-legend">
                   {added
-                    ? "Each price is what adding this teen to your policy costs a year with that car. “Whole policy” is that car's full yearly cost with the teen added."
+                    ? "Each price is what adding this teen to your policy costs a year with that car. “Total with teen” is that car's full yearly cost with the teen added."
                     : "Each price is a yearly estimate for this driver, on their own policy. The range shows where we estimate quotes would land; actual quotes can fall outside it."}
                 </p>
               ) : null}
@@ -729,10 +729,10 @@ function CompareCarsReady() {
                         sort={sort}
                         onSort={setSort}
                         align="right"
-                        className="hidden w-28 pr-5 xl:table-cell"
+                        className="hidden w-28 pr-5 xl:table-cell print:hidden"
                       />
                       <SortHeader
-                        label={added ? "Whole policy" : "Estimated range"}
+                        label={added ? "Total with teen" : "Estimated range"}
                         sortKey={added ? "policy" : "range"}
                         sort={sort}
                         onSort={setSort}
@@ -854,7 +854,7 @@ function CompareCarsReady() {
                           <span className="truncate font-medium">{row.name}</span>
                           <span className="truncate text-xs text-muted-foreground">
                             {lowest ? "Lowest estimate · " : ""}
-                            {added ? `whole policy about ${estimateDollars(row.likely)}` : `${monthAmount(row)} a month`}
+                            {added ? `total with teen about ${estimateDollars(row.likely)}` : `${monthAmount(row)} a month`}
                             {version ? ` · ${version}` : ""}
                           </span>
                         </button>

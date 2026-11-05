@@ -56,7 +56,7 @@ export default function PrivacyPage() {
 
       <h2>What stays on your device</h2>
       <p>
-        So the pages remember your choices, this browser keeps them in its own storage: your situation on the What-if page
+        So the pages remember your choices, this browser keeps them in its own storage: your starting point on the Try a change page
         (including what you pay now, if you entered it) and your list of cars on the Compare page. They never leave your
         device. To remove them, clear this site&apos;s data in your browser settings.
       </p>

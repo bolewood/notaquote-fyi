@@ -88,7 +88,7 @@ export default function TeenCostGuide() {
         </li>
         <li>
           <strong>Your coverage.</strong> A higher deductible (the part of a repair bill you pay yourself) lowers the
-          yearly bill, and means paying more yourself after a crash. Try it on the What-if page.
+          yearly bill, and means paying more yourself after a crash. Try it on the Try a change page.
         </li>
       </ul>
 
@@ -157,7 +157,7 @@ export default function TeenCostGuide() {
         </Link>
       </div>
       <p className="text-sm text-muted-foreground">
-        The What-if page adds a new 16-year-old to your own situation. Tell it what you pay now for the closest estimate.{" "}
+        The Try a change page adds a new 16-year-old to your own situation. Tell it what you pay for your car now for the closest estimate.{" "}
         <Link href="/methodology">Here&apos;s how we got these numbers</Link>.
       </p>
     </TrustArticle>

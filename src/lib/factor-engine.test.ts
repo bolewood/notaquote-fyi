@@ -397,8 +397,8 @@ test("teens: own policy by default, and a rough figure for adding them to a pare
   const teen = { ...MOLLY_F150, age: "16-18" as const, yearsLicensed: "under-1" as const }
   const own = estimate(YOURS, teen, { vehicle: F150 })
   const added = estimate(YOURS, teen, { vehicle: F150, teenOnParentPolicy: true })
-  assert.match(own.rangeNote, /only driver on their own policy\. Adding a teen to a parent's policy usually costs less\./)
-  assert.match(added.rangeNote, /whole household's policy after adding your teen, not the teen's own price/)
+  assert.match(own.rangeNote, /only driver on their own policy\. Adding a teen to your policy usually costs less\./)
+  assert.match(added.rangeNote, /this car with your teen added to your policy, not the teen's own price/)
   assert.ok(added.likely < own.likely)
   assert.equal(added.steps.find((step) => step.group === "driver-age")?.basis, "indicative")
   const young = estimate(YOURS, { ...MOLLY_F150, age: "19-21" as const }, { vehicle: F150, teenOnParentPolicy: true })

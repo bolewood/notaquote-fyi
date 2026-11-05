@@ -1560,16 +1560,16 @@ function rangePoints(
     add("We brought the 2023 state price up to today with a national price index, which is only a rough guide.")
   }
   if (scenario.age === "16-18" && options.teenOnParentPolicy) {
-    add("This is your whole household's policy after adding your teen, not the teen's own price.")
+    add("This is the cost of insuring this car with your teen added to your policy, not the teen's own price.")
     add(
       scenario.state === "CA"
         ? "It comes from one California comparison of two families, so the range is wide."
         : "We have little data on adding teens, so this range is wide.",
     )
   } else if (scenario.age === "16-18") {
-    add("This prices your teen as the only driver on their own policy. Adding a teen to a parent's policy usually costs less.")
+    add("This prices your teen as the only driver on their own policy. Adding a teen to your policy usually costs less.")
   } else if (scenario.age === "19-21") {
-    add("This prices a young driver as the only driver on their own policy. Staying on a parent's policy usually costs less.")
+    add("This prices a young driver as the only driver on their own policy. Staying on your policy usually costs less.")
   }
   if (trim === "limited" || trim === "unresolved") {
     add("We couldn't pin down the exact version of the car, which widens the range a little.")
