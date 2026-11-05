@@ -5,7 +5,7 @@ import { Breadcrumbs } from "@/components/breadcrumbs"
 import { JsonLdScript } from "@/components/json-ld"
 import { TrustArticle } from "@/components/trust-article"
 import { SERVER_CATALOG } from "@/lib/agent-catalog"
-import { claimsPhrase } from "@/lib/car-content"
+import { ratingPhrase } from "@/lib/car-content"
 import { carFigures, carPageFor, MODELS_ENABLED } from "@/lib/car-pages"
 import { differenceWords, estimateDollars, signedDollars } from "@/lib/format"
 import { guideModified, nationalTeenCars, modelsWords, TEEN_CARS_GUIDE, TEEN_COST_GUIDE, teenCarsByGroup, teenCarsHref, teenCarsLead } from "@/lib/guides"
@@ -115,9 +115,11 @@ export default function TeenCarsGuide() {
 
       <h2 id="why">Why some cars cost less</h2>
       <p>
-        Insurers pay out more for some cars than others. The Highway Loss Data Institute publishes how each model&apos;s
-        insurance results compare with the average car&apos;s: overall losses for fixing the car after a crash, theft and
-        weather, and damage to other cars, and how often injury claims happen.
+        Insurers pay out more for some cars than others. The Highway Loss Data Institute (HLDI) publishes how each
+        model&apos;s insurance losses compare with an average car&apos;s, one coverage at a time: crash repairs, non-crash
+        damage (theft, weather, fire, vandalism, glass, and animal strikes), and damage to others&apos; property, plus how
+        often injury claims are filed. HLDI rates each one from &ldquo;substantially better than average&rdquo; to
+        &ldquo;substantially worse than average&rdquo;.
       </p>
       {cheapFigures && priceyFigures ? (
         <>
@@ -126,17 +128,17 @@ export default function TeenCarsGuide() {
               <strong>
                 <Link href={`/cars/${cheapFigures.page.slug}`}>{cheapFigures.page.shortName}</Link>
               </strong>
-              : repairs after a crash {claimsPhrase(cheapFigures.claims.repairs)}; damage its drivers do to other cars{" "}
-              {claimsPhrase(cheapFigures.claims.damageToOthers)}; how often its drivers cause injury claims{" "}
-              {claimsPhrase(cheapFigures.claims.injuriesToOthers)}.
+              : crash repairs {ratingPhrase(cheapFigures.claims.repairs)}; damage to others&apos; property{" "}
+              {ratingPhrase(cheapFigures.claims.damageToOthers)}; injury claims {ratingPhrase(cheapFigures.claims.injuriesToOthers)} (HLDI&apos;s
+              ratings).
             </li>
             <li>
               <strong>
                 <Link href={`/cars/${priceyFigures.page.slug}`}>{priceyFigures.page.shortName}</Link>
               </strong>
-              : repairs after a crash {claimsPhrase(priceyFigures.claims.repairs)}; damage its drivers do to other cars{" "}
-              {claimsPhrase(priceyFigures.claims.damageToOthers)}; how often its drivers cause injury claims{" "}
-              {claimsPhrase(priceyFigures.claims.injuriesToOthers)}.
+              : crash repairs {ratingPhrase(priceyFigures.claims.repairs)}; damage to others&apos; property{" "}
+              {ratingPhrase(priceyFigures.claims.damageToOthers)}; injury claims {ratingPhrase(priceyFigures.claims.injuriesToOthers)} (HLDI&apos;s
+              ratings).
             </li>
           </ul>
           <p>
@@ -146,7 +148,7 @@ export default function TeenCarsGuide() {
         </>
       ) : (
         <p>
-          We don&apos;t have claims results for each model right now, so every car here is priced as an average car of its
+          We don&apos;t have HLDI&apos;s loss results for each model right now, so every car here is priced as an average car of its
           kind (small SUV, midsize car, and so on), and cars of the same kind tie. A newer car still costs more to replace
           than an older one.
         </p>

@@ -225,6 +225,8 @@ export type PriceMeaning = {
   liability: PriceSide
   /** The full plain paragraph (step B on a car page). */
   paragraph: string
+  /** The paragraph without its fixed opening (SOFTENING_REASON): the part about this car. */
+  own: string
   /** One short line for the What-if panel. */
   short: string
 }
@@ -297,7 +299,81 @@ export function priceMeaning(relativity: VehicleRelativity, name: string, bill: 
     liabilityCount = `So that part is ${factorWords(liabilityOurs)}${dollars("liability", false)}.`
   }
 
-  const paragraph = [SOFTENING_REASON, damageResult, damageCount, liabilityResult, liabilityCount].join(" ")
+  const own = [damageResult, damageCount, liabilityResult, liabilityCount].join(" ")
+  const paragraph = `${SOFTENING_REASON} ${own}`
   const short = `We estimate the part of the bill that fixes the car is ${factorWords(damageOurs)}, and the liability part is ${factorWords(liabilityOurs)}.`
-  return { damage, liability, paragraph, short }
+  return { damage, liability, paragraph, own, short }
+}
+
+// ---------------------------------------------------------------------------
+// Why one car costs more or less than another, in HLDI's coverages
+
+/** How each coverage reads as a reason: "lower crash-repair losses", "fewer injury claims". */
+export const LOSS_PHRASES: Record<CoverageKey, { lower: string; higher: string }> = {
+  collision: { lower: "lower crash-repair losses", higher: "higher crash-repair losses" },
+  comprehensive: { lower: "lower non-crash losses", higher: "higher non-crash losses" },
+  propertyDamage: { lower: "less damage to others' property", higher: "more damage to others' property" },
+  bodilyInjury: { lower: "fewer injury claims", higher: "more injury claims" },
+}
+
+/**
+ * When no single coverage stands out (a class average, or the car-value term
+ * on a luxury make), the side of the bill in plain words.
+ */
+export const SIDE_PHRASES = {
+  damage: { lower: "cheaper to fix or replace", higher: "pricier to fix or replace" },
+  liability: { lower: "lower liability losses", higher: "higher liability losses" },
+} as const
+
+const SIDE_KEYS: Record<keyof typeof SIDE_PHRASES, readonly CoverageKey[]> = {
+  damage: ["collision", "comprehensive"],
+  liability: ["propertyDamage", "bodilyInjury"],
+}
+
+/** A car's HLDI index per coverage (the middle of its rows); an average car is 100 everywhere; a class average has none. */
+export function coverageIndexes(relativity: VehicleRelativity): Partial<Record<CoverageKey, number>> {
+  if (relativity.level === "average") return { collision: 100, comprehensive: 100, propertyDamage: 100, bodilyInjury: 100 }
+  if (relativity.level !== "model") return {}
+  const found: Partial<Record<CoverageKey, number>> = {}
+  for (const coverage of HLDI_COVERAGES) {
+    const value = medianOf(relativity.rows.flatMap((row) => (row[coverage.key] === null ? [] : [row[coverage.key] as number])))
+    if (value !== null) found[coverage.key] = value
+  }
+  return found
+}
+
+export type ReasonPhrase = { size: number; words: string }
+
+/**
+ * Why `to` is higher or lower than `from` on one side of the bill: the HLDI
+ * coverages on that side that moved the same way by at least 5 points,
+ * biggest first. When none did, the side in plain words, so a reason never
+ * contradicts the price.
+ */
+export function sideReasons(
+  from: VehicleRelativity,
+  to: VehicleRelativity,
+  side: keyof typeof SIDE_PHRASES,
+  direction: "lower" | "higher",
+  sideSize: number,
+): ReasonPhrase[] {
+  const before = coverageIndexes(from)
+  const after = coverageIndexes(to)
+  const found: ReasonPhrase[] = []
+  for (const key of SIDE_KEYS[side]) {
+    const left = before[key]
+    const right = after[key]
+    if (left === undefined || right === undefined) continue
+    const change = right - left
+    if (direction === "lower" ? change <= -5 : change >= 5) found.push({ size: Math.abs(change), words: LOSS_PHRASES[key][direction] })
+  }
+  if (found.length === 0) return [{ size: Math.abs(sideSize), words: SIDE_PHRASES[side][direction] }]
+  return found.sort((left, right) => right.size - left.size)
+}
+
+/** "a", "a and b", "a, b, and c" */
+export function listWords(items: readonly string[]): string {
+  if (items.length <= 1) return items[0] ?? ""
+  if (items.length === 2) return `${items[0]} and ${items[1]}`
+  return `${items.slice(0, -1).join(", ")}, and ${items.at(-1)}`
 }

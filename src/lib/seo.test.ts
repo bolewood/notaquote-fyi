@@ -15,7 +15,7 @@ import { SERVER_CATALOG as catalog } from "./agent-catalog"
 import { carId } from "./agent-cars"
 import { renderToStaticMarkup } from "react-dom/server"
 import { articleFor, becauseWords, carContent, carMainText, noindexCarSlugs, vsAverageWords } from "./car-content"
-import { maskDollars, visibleText } from "./rendered-text"
+import { maskDollars, visibleText, withoutShared } from "./rendered-text"
 import { uniqueness } from "./uniqueness"
 import { carPagePath, MODELS_ENABLED } from "./car-page-links"
 import { carFigures, carListings, carPages, carSlug, claimsYearPick, CLAIMS_YEARS } from "./car-pages"
@@ -254,23 +254,37 @@ test("state page buttons: the visitor's own car in that state, and the cheapest 
 /**
  * Regression floor for how much of each rendered car page is its own, with
  * every dollar amount masked so numbers alone can't carry a page. Measured on
- * the page's rendered text (the article: breadcrumbs, headings, tables, links,
- * and the disclaimer). Set just under the values when this was written
- * (median 20.8%, lowest page 15.7%, highest overlap 0.618); if a wording change
- * trips it, make the page more its own rather than lowering the floor.
+ * the page's car-specific text: the rendered article without the elements
+ * marked `data-shared` (text every car page shows on purpose, like a
+ * coverage's helper text, the fixed sentence of the price explanation, the
+ * 45-year-old note, table captions and headers, and the buttons). If a
+ * wording change trips it, make the page more its own rather than lowering
+ * the floor, and never by repeating the car's name.
+ *
+ * `words` is an absolute floor on how much car-specific text each page has,
+ * so marking more text as shared can't make a thin page pass. Set just under
+ * the lowest page when it was added (mazda-cx-50, 753 words, November 2026).
  */
-export const RENDERED_CAR_FLOOR = { median: 0.38, page: 0.32, jaccard: 0.42 } as const
+export const RENDERED_CAR_FLOOR = { median: 0.38, page: 0.32, jaccard: 0.42, words: 740 } as const
 
 test("rendered car pages stay their own, with dollar amounts masked", async () => {
   if (!MODELS_ENABLED) return
   const pages: { id: string; text: string }[] = []
   for (const { slug } of carParams()) {
     const element = await CarPage({ params: Promise.resolve({ slug }) } as never)
-    pages.push({ id: slug, text: maskDollars(visibleText(renderToStaticMarkup(element))) })
+    pages.push({ id: slug, text: maskDollars(visibleText(withoutShared(renderToStaticMarkup(element)))) })
   }
   const report = uniqueness(pages)
   const lowest = [...report.pages].sort((left, right) => left.unique - right.unique)[0]
-  console.log(`rendered car pages, dollars masked: median ${(report.medianUnique * 100).toFixed(1)}%, lowest ${lowest.id} ${(lowest.unique * 100).toFixed(1)}%, max overlap ${report.maxJaccard.toFixed(3)}`)
+  const closest = [...report.pages].sort((left, right) => right.maxJaccard - left.maxJaccard)[0]
+  const fewest = [...pages].sort((left, right) => left.text.split(/\s+/).length - right.text.split(/\s+/).length)[0]
+  console.log(
+    `rendered car pages, car-specific text, dollars masked: median ${(report.medianUnique * 100).toFixed(1)}%, lowest ${lowest.id} ${(lowest.unique * 100).toFixed(1)}%, max overlap ${closest.id} vs ${closest.closest} ${report.maxJaccard.toFixed(3)}, fewest words ${fewest.id} ${fewest.text.split(/\s+/).length}`,
+  )
+  for (const page of pages) {
+    const words = page.text.split(/\s+/).length
+    assert.ok(words >= RENDERED_CAR_FLOOR.words, `${page.id}: ${words} car-specific words`)
+  }
   assert.ok(report.medianUnique >= RENDERED_CAR_FLOOR.median, `median ${report.medianUnique.toFixed(3)}`)
   for (const page of report.pages) {
     assert.ok(page.unique >= RENDERED_CAR_FLOOR.page, `${page.id}: ${page.unique.toFixed(3)} of its five-word runs are its own`)
@@ -298,9 +312,9 @@ test("a car's lead never contradicts its own numbers", () => {
     if (!vs.startsWith("about the same")) {
       assert.doesNotMatch(because, /close to an average|even out/, `${page.slug}: "${vs}" but "${because}"`)
       const up = vs.includes("more than")
-      if (because.startsWith("because of")) assert.match(because, up ? /pricier|more at-fault/ : /cheaper|fewer/, page.slug)
+      if (because.startsWith("because of")) assert.match(because, up ? /higher|more|pricier/ : /lower|fewer|less|cheaper/, page.slug)
     }
-    assert.doesNotMatch(carMainText(f), /\$\d+ (more|less) than an average \d{4} car: its claims/, page.slug)
+    assert.doesNotMatch(carMainText(f), /\$\d+ (more|less) than an average car of the same age: its losses/, page.slug)
   }
 })
 
@@ -653,4 +667,9 @@ test("preview *.vercel.app hosts receive X-Robots-Tag: noindex, and robots.txt a
   assert.equal(r.sitemap, "https://notaquote.fyi/sitemap.xml")
   const rules = Array.isArray(r.rules) ? r.rules[0] : r.rules
   assert.equal(rules?.allow, "/")
+})
+
+test("shared text is left out of the measure by its markup, nothing else", () => {
+  const html = '<div><p>Kept one.</p><p data-shared=""><span>Gone <b>too</b></span></p><span data-shared="">gone</span><p>Kept two.</p></div>'
+  assert.equal(visibleText(withoutShared(html)), "Kept one. Kept two.")
 })

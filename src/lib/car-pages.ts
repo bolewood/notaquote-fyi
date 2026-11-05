@@ -4,10 +4,10 @@
  * the rest of the site.
  *
  * Which cars: the site's popular lists plus data/car-pages.json. A car gets
- * a page only when the Highway Loss Data Institute has claims results for
+ * a page only when the Highway Loss Data Institute has loss results for
  * that model (not just an average for its kind of car), so every page says
  * something about that car in particular. The page leads with the newest
- * model year our claims data covers, and says which.
+ * model year HLDI's loss data covers, and says which.
  *
  * Addresses: the make and model, lowercase, with dashes ("toyota-rav4").
  * No year, so an address survives the yearly data refresh. See the file's
@@ -33,6 +33,7 @@ import {
   type VehicleRelativity,
 } from "./factor-engine"
 import { aboutTheSame } from "./format"
+import { coverageIndexes, HLDI_COVERAGES, hldiRating, type CoverageKey, type HldiRating } from "./hldi"
 import { DEFAULT_SCENARIO, stateName, type Scenario, type StateCode } from "./scenario"
 import { allStateBaselines } from "./state-baselines"
 import { statePath } from "./state-slugs"
@@ -123,16 +124,12 @@ export function adultDriver(pick: VehiclePick, state: StateCode = DEFAULT_SCENAR
   return { ...DEFAULT_SCENARIO, state, ...pick }
 }
 
-export type ClaimsWord = "much lower" | "lower" | "about average" | "higher" | "much higher"
-
-/** HLDI results are relative to an average car (100). Words, not the figures themselves. */
-export function claimsWord(value: number): ClaimsWord {
-  if (value <= 80) return "much lower"
-  if (value <= 92) return "lower"
-  if (value < 108) return "about average"
-  if (value < 120) return "higher"
-  return "much higher"
-}
+/**
+ * HLDI results are relative to an average car (100). The rating uses HLDI's
+ * own five levels; the cutoffs live in one place (HLDI_RATING_BANDS in
+ * src/lib/hldi.ts).
+ */
+export const lossRating = hldiRating
 
 function median(values: number[]): number | null {
   if (values.length === 0) return null
@@ -142,14 +139,14 @@ function median(values: number[]): number | null {
 }
 
 export type ClaimsSummary = {
-  /** Collision claims: fixing this car after a crash (overall losses). */
-  repairs: ClaimsWord | null
-  /** Comprehensive claims: theft, weather, glass, and hitting an animal (overall losses). */
-  theftAndWeather: ClaimsWord | null
-  /** Property-damage liability: damage this car's drivers do to others (overall losses). */
-  damageToOthers: ClaimsWord | null
-  /** Bodily-injury liability: how often this car's drivers cause injury claims (claim frequency). */
-  injuriesToOthers: ClaimsWord | null
+  /** Crash repairs (collision): fixing this car after a crash (overall losses). */
+  repairs: HldiRating | null
+  /** Non-crash damage (comprehensive): theft, weather, fire, vandalism, glass, and animal strikes (overall losses). */
+  nonCrash: HldiRating | null
+  /** Damage to others' property (property damage liability): overall losses. */
+  damageToOthers: HldiRating | null
+  /** Injuries to others (bodily injury liability): how often injury claims are filed, not how much they cost. */
+  injuriesToOthers: HldiRating | null
   /** The HLDI series we matched, like "Toyota RAV4 4dr". */
   series: string[]
   /** The HLDI report window the numbers came from, like "2022–24". */
@@ -166,11 +163,11 @@ export function claimsSummary(relativity: VehicleRelativity): ClaimsSummary {
         return found === null ? [] : [found]
       }),
     )
-    return value === null ? null : claimsWord(value)
+    return value === null ? null : lossRating(value)
   }
   return {
     repairs: word((row) => row.collision),
-    theftAndWeather: word((row) => row.comprehensive),
+    nonCrash: word((row) => row.comprehensive),
     damageToOthers: word((row) => row.propertyDamage),
     injuriesToOthers: word((row) => row.bodilyInjury),
     series: relativity.rows.map((row) => row.series),
@@ -252,6 +249,11 @@ export type CarFigures = {
   /** Where the car ranks by price among its similar cars (1 = least), including itself. */
   groupRank: { rank: number; of: number }
   similar: { cheaper: SimilarCar[]; pricier: SimilarCar[]; basis: "segment" | "class" }
+  /**
+   * For each HLDI coverage, where this car's result ranks among the similar
+   * cars we compare (1 = best, the lowest losses), including itself.
+   */
+  coverageRanks: Partial<Record<CoverageKey, { rank: number; of: number }>>
   /** Sample state estimates for this car (cheapest state, priciest state, plus 4 rotated states). */
   stateEstimates: CarStateRow[]
 }
@@ -415,6 +417,21 @@ export function carFigures(catalog: VehicleCatalog, slug: string): CarFigures | 
     .sort((left, right) => left.likely - right.likely)
     .slice(0, 4)
 
+  // HLDI's own results, coverage by coverage, against the same similar cars.
+  const peerPages = [page, ...(basis === "segment" ? segment : others.filter((item) => page.facts.classId !== null && item.other.facts.classId === page.facts.classId)).map((item) => item.other)]
+  const ownIndexes = coverageIndexes(page.relativity)
+  const coverageRanks: CarFigures["coverageRanks"] = {}
+  for (const coverage of HLDI_COVERAGES) {
+    const mine = ownIndexes[coverage.key]
+    if (mine === undefined) continue
+    const values = peerPages.flatMap((other) => {
+      const value = coverageIndexes(other.relativity)[coverage.key]
+      return value === undefined ? [] : [Math.round(value)]
+    })
+    if (values.length < 3) continue
+    coverageRanks[coverage.key] = { rank: values.filter((value) => value < Math.round(mine)).length + 1, of: values.length }
+  }
+
   const figures: CarFigures = {
     page,
     start: own.start,
@@ -434,6 +451,7 @@ export function carFigures(catalog: VehicleCatalog, slug: string): CarFigures | 
     }),
     groupRank,
     similar: { cheaper, pricier, basis },
+    coverageRanks,
     stateEstimates: carStateRows(page, carIndex),
   }
   byCatalog.set(slug, figures)
