@@ -3,13 +3,28 @@
     "slug": "acura-integra",
     "name": "Acura Integra",
     "series": {
-      "article": "Honda Integra",
-      "revision": 1362843144
+      "article": "Acura Integra (2023)",
+      "revision": 1381400749
     },
-    "generations": [],
-    "warnings": [
-      "no generations found: set them in series.json"
-    ]
+    "generations": [
+      {
+        "id": "acura-integra/acura-integra-de4-de5",
+        "label": "Acura Integra (DE4/DE5)",
+        "from": 2023,
+        "to": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Acura-badged category; its subcategory 'Acura Integra Type S' (DE5, 14 files) adds more photos. The 2026 refresh is in the same generation. Don't use Honda Integra/Civic categories.",
+        "source": {
+          "article": "Acura Integra (2023)",
+          "section": null,
+          "revision": 1381400749
+        },
+        "wikidata": null,
+        "commons": "Acura Integra DE4",
+        "faceliftHints": []
+      }
+    ],
+    "warnings": []
   },
   "acura-mdx": {
     "slug": "acura-mdx",
@@ -20,11 +35,11 @@
     },
     "generations": [
       {
-        "id": "acura-mdx/first-generation-yd1-2001",
-        "label": "First generation (YD1; 2001)",
+        "id": "acura-mdx/acura-mdx-first-generation-yd1",
+        "label": "Acura MDX (first generation, YD1)",
         "from": 2001,
         "to": 2006,
-        "yearsSource": "model_years",
+        "yearsSource": "series.json",
         "yearsNote": null,
         "source": {
           "article": "Acura MDX",
@@ -32,15 +47,15 @@
           "revision": 1381508339
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Acura MDX (1st generation)",
         "faceliftHints": []
       },
       {
-        "id": "acura-mdx/second-generation-yd2-2007",
-        "label": "Second generation (YD2; 2007)",
+        "id": "acura-mdx/acura-mdx-second-generation-yd2",
+        "label": "Acura MDX (second generation, YD2)",
         "from": 2007,
         "to": 2013,
-        "yearsSource": "model_years",
+        "yearsSource": "series.json",
         "yearsNote": null,
         "source": {
           "article": "Acura MDX",
@@ -48,15 +63,15 @@
           "revision": 1381508339
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Acura MDX (2nd generation)",
         "faceliftHints": []
       },
       {
-        "id": "acura-mdx/third-generation-yd3-4-7-2014",
-        "label": "Third generation (YD3/4/7; 2014)",
+        "id": "acura-mdx/acura-mdx-third-generation-yd3-4-7",
+        "label": "Acura MDX (third generation, YD3/4/7)",
         "from": 2014,
         "to": 2020,
-        "yearsSource": "model_years",
+        "yearsSource": "series.json",
         "yearsNote": null,
         "source": {
           "article": "Acura MDX",
@@ -64,15 +79,15 @@
           "revision": 1381508339
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Acura MDX (3rd generation)",
         "faceliftHints": []
       },
       {
-        "id": "acura-mdx/fourth-generation-yd8-9-ye1-2022",
-        "label": "Fourth generation (YD8/9/YE1; 2022)",
+        "id": "acura-mdx/acura-mdx-fourth-generation-yd8-9-ye1",
+        "label": "Acura MDX (fourth generation, YD8/9/YE1)",
         "from": 2022,
         "to": null,
-        "yearsSource": "model_years",
+        "yearsSource": "series.json",
         "yearsNote": null,
         "source": {
           "article": "Acura MDX",
@@ -80,7 +95,7 @@
           "revision": 1381508339
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Acura MDX (4th generation)",
         "faceliftHints": []
       }
     ],
@@ -154,58 +169,55 @@
     },
     "generations": [
       {
-        "id": "audi-q5/first-generation-typ-8r-2008",
-        "label": "First generation (Typ 8R; 2008)",
-        "from": 2008,
+        "id": "audi-q5/audi-q5-8r-first-generation",
+        "label": "Audi Q5 (8R, first generation)",
+        "from": 2009,
         "to": 2017,
-        "yearsSource": "production",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "2013 facelift subcategory 'Audi Q5 (2012)'; pre-facelift 'Audi Q5 (2008)'.",
         "source": {
           "article": "Audi Q5",
           "section": "First generation (Typ 8R; 2008)",
           "revision": 1373497931
         },
         "wikidata": null,
-        "commons": "Audi Q5 (2008)",
+        "commons": "Audi Q5 8R",
         "faceliftHints": []
       },
       {
-        "id": "audi-q5/second-generation-typ-fy-2016",
-        "label": "Second generation (Typ FY; 2016)",
-        "from": 2016,
-        "to": 2016,
-        "yearsSource": "production",
-        "yearsNote": null,
+        "id": "audi-q5/audi-q5-fy-second-generation",
+        "label": "Audi Q5 (FY, second generation)",
+        "from": 2018,
+        "to": 2025,
+        "yearsSource": "series.json",
+        "yearsNote": "Split year 2025: the FY was sold as a 2025 model alongside the all-new GU 2025 Q5. 2021 facelift (US 2021 MY) is in subcategory 'Audi Q5 (2021)'. The category also holds the Chinese Q5L; exclude it.",
         "source": {
           "article": "Audi Q5",
           "section": "Second generation (Typ FY; 2016)",
           "revision": 1373497931
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Audi Q5 FY",
         "faceliftHints": []
       },
       {
-        "id": "audi-q5/third-generation-type-gu-2025",
-        "label": "Third generation (Type GU; 2025)",
+        "id": "audi-q5/audi-q5-gu-third-generation",
+        "label": "Audi Q5 (GU, third generation)",
         "from": 2025,
         "to": null,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Split year 2025 (see FY).",
         "source": {
           "article": "Audi Q5",
           "section": "Third generation (Type GU; 2025)",
           "revision": 1373497931
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Audi Q5 GU",
         "faceliftHints": []
       }
     ],
-    "warnings": [
-      "First generation (Typ 8R; 2008): only production years in the infobox; check the US model years",
-      "Second generation (Typ FY; 2016): only production years in the infobox; check the US model years"
-    ]
+    "warnings": []
   },
   "bmw-330i": {
     "slug": "bmw-330i",
@@ -338,51 +350,51 @@
     },
     "generations": [
       {
-        "id": "bmw-x3/first-generation-e83-2003",
-        "label": "First generation (E83; 2003)",
+        "id": "bmw-x3/bmw-x3-e83",
+        "label": "BMW X3 (E83)",
         "from": 2004,
         "to": 2010,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "The US got the facelift (LCI) for the 2007 model year. Subcategory: X3 Cross Country (E83). 'BMW X3 (E83)' exists but is empty.",
         "source": {
           "article": "BMW X3",
           "section": "First generation (E83; 2003)",
           "revision": 1383367687
         },
         "wikidata": null,
-        "commons": "BMW X3 (E83)",
+        "commons": "BMW E83",
         "faceliftHints": []
       },
       {
-        "id": "bmw-x3/second-generation-f25-2010",
-        "label": "Second generation (F25; 2010)",
+        "id": "bmw-x3/bmw-x3-f25",
+        "label": "BMW X3 (F25)",
         "from": 2011,
         "to": 2017,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Avoid the 'Alpina XD3 (F25)', police and development-mule subcategories.",
         "source": {
           "article": "BMW X3",
           "section": "Second generation (F25; 2010)",
           "revision": 1383367687
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "BMW F25",
         "faceliftHints": []
       },
       {
-        "id": "bmw-x3/third-generation-g01-2017",
-        "label": "Third generation (G01; 2017)",
+        "id": "bmw-x3/bmw-x3-g01",
+        "label": "BMW X3 (G01)",
         "from": 2018,
         "to": 2024,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Avoid the 'BMW G08' subcategory: that is the China-built iX3 EV. Subcategories also include X3 M, M40i, 30e and Alpina.",
         "source": {
           "article": "BMW X3",
           "section": "Third generation (G01; 2017)",
           "revision": 1383367687
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "BMW G01",
         "faceliftHints": []
       },
       {
@@ -390,8 +402,8 @@
         "label": "BMW X3 (G45)",
         "from": 2025,
         "to": null,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Avoid the development-mule subcategory. Don't use the iX3 (NA5) categories: it is a separate electric model.",
         "source": {
           "article": "BMW X3 (G45)",
           "section": null,
@@ -416,9 +428,9 @@
         "id": "bmw-x5/bmw-x5-e53",
         "label": "BMW X5 (E53)",
         "from": 2000,
-        "to": 2007,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "to": 2006,
+        "yearsSource": "series.json",
+        "yearsNote": "Not a split year in 2007: E53 production ended in September 2006, and the US 2007 X5 was the E70 (launched late 2006). The infobox's '2007' end looks like a production/European convention. 'BMW X5 (E53)' on Commons exists but is empty (0 files), so use 'BMW E53'.",
         "source": {
           "article": "BMW X5 (E53)",
           "section": null,
@@ -437,9 +449,9 @@
         "id": "bmw-x5/bmw-x5-e70",
         "label": "BMW X5 (E70)",
         "from": 2007,
-        "to": 2014,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "to": 2013,
+        "yearsSource": "series.json",
+        "yearsNote": "The infobox's 2014 end isn't supported for the US: E70 production ended July 2013, the fueleconomy.gov 2014 list has no X5 M, and it includes the F15-only sDrive35i, so the US 2014 X5 is the F15. 'BMW X5 (E70)' on Commons is empty; use 'BMW E70'. The 2011 LCI facelift is the same generation.",
         "source": {
           "article": "BMW X5 (E70)",
           "section": null,
@@ -454,7 +466,7 @@
         "label": "BMW X5 (F15)",
         "from": 2014,
         "to": 2018,
-        "yearsSource": "model_years",
+        "yearsSource": "series.json",
         "yearsNote": null,
         "source": {
           "article": "BMW X5 (F15)",
@@ -470,8 +482,8 @@
         "label": "BMW X5 (G05)",
         "from": 2019,
         "to": 2026,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "LCI facelift for MY2024 is the same generation.",
         "source": {
           "article": "BMW X5 (G05)",
           "section": null,
@@ -485,16 +497,16 @@
         "id": "bmw-x5/bmw-x5-g65",
         "label": "BMW X5 (G65)",
         "from": 2027,
-        "to": 2027,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "to": null,
+        "yearsSource": "series.json",
+        "yearsNote": "'BMW G65' has 0 files and 2 subcategories ('BMW G65 X5 M60e' is empty; 'BMW iX5' is the electric variant). There are effectively no photos yet. Fall back to the parent 'BMW X5' or wait.",
         "source": {
           "article": "BMW X5 (G65)",
           "section": null,
           "revision": 1383918429
         },
         "wikidata": "Q140387706",
-        "commons": null,
+        "commons": "BMW G65",
         "faceliftHints": []
       }
     ],
@@ -509,51 +521,51 @@
     },
     "generations": [
       {
-        "id": "buick-enclave/first-generation-2008",
-        "label": "First generation (2008)",
+        "id": "buick-enclave/buick-enclave-lambda",
+        "label": "Buick Enclave (Lambda)",
         "from": 2008,
         "to": 2017,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "2013 refresh is in the same generation.",
         "source": {
           "article": "Buick Enclave",
           "section": "First generation (2008)",
           "revision": 1372047714
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Buick Enclave (Lambda)",
         "faceliftHints": []
       },
       {
-        "id": "buick-enclave/north-america-2018",
-        "label": "North America (2018)",
+        "id": "buick-enclave/buick-enclave-c1xx",
+        "label": "Buick Enclave (C1XX)",
         "from": 2018,
         "to": 2024,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Avoid the 'Buick Enclave (China)' subcategory: it is a different, shorter vehicle. 'Enclave Avenir (C1XX)' is fine.",
         "source": {
           "article": "Buick Enclave",
-          "section": "North America (2018)",
+          "section": "Second generation (2018) / North America (2018)",
           "revision": 1372047714
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Buick Enclave (C1XX)",
         "faceliftHints": []
       },
       {
-        "id": "buick-enclave/third-generation-2025",
-        "label": "Third generation (2025)",
+        "id": "buick-enclave/buick-enclave-third-generation",
+        "label": "Buick Enclave (third generation)",
         "from": 2025,
         "to": null,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "I checked the files: all are 2025 Enclaves. The 2027 Enclave is a carryover (GM Authority: production began July 2026 at Lansing Delta Township).",
         "source": {
           "article": "Buick Enclave",
           "section": "Third generation (2025)",
           "revision": 1372047714
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Buick Enclave (C1XX-2)",
         "faceliftHints": []
       }
     ],
@@ -627,83 +639,67 @@
     },
     "generations": [
       {
-        "id": "cadillac-escalade/second-generation-2001",
-        "label": "Second generation (2001)",
+        "id": "cadillac-escalade/cadillac-escalade-gmt800",
+        "label": "Cadillac Escalade (GMT800)",
         "from": 2002,
         "to": 2006,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "'Cadillac Escalade (GMT 820)' (with a space) exists but is empty.",
         "source": {
           "article": "Cadillac Escalade",
           "section": "Second generation (2001)",
           "revision": 1383300205
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Cadillac Escalade (GMT820)",
         "faceliftHints": []
       },
       {
-        "id": "cadillac-escalade/third-generation-2007",
-        "label": "Third generation (2007)",
+        "id": "cadillac-escalade/cadillac-escalade-gmt900",
+        "label": "Cadillac Escalade (GMT900)",
         "from": 2007,
         "to": 2014,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "The parser's stray '2007–2013' is the Hybrid (and the EXT pickup, which ended in 2013). Exclude 'Cadillac Escalade EXT (GMT946)' and ESV categories for the standard Escalade.",
         "source": {
           "article": "Cadillac Escalade",
           "section": "Third generation (2007)",
           "revision": 1383300205
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Cadillac Escalade (GMT926)",
         "faceliftHints": []
       },
       {
-        "id": "cadillac-escalade/2nd-generation-2007-2013",
-        "label": "2nd generation (2007–2013)",
-        "from": 2007,
-        "to": 2013,
-        "yearsSource": "model_years",
-        "yearsNote": null,
-        "source": {
-          "article": "Cadillac Escalade",
-          "section": "2nd generation (2007–2013)",
-          "revision": 1383300205
-        },
-        "wikidata": null,
-        "commons": null,
-        "faceliftHints": []
-      },
-      {
-        "id": "cadillac-escalade/fourth-generation-2015",
-        "label": "Fourth generation (2015)",
+        "id": "cadillac-escalade/cadillac-escalade-k2xx",
+        "label": "Cadillac Escalade (K2XX)",
         "from": 2015,
         "to": 2020,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "'Cadillac Escalade (GMTK2XX)' exists but is empty; use GMTK2UL (the short-wheelbase code).",
         "source": {
           "article": "Cadillac Escalade",
           "section": "Fourth generation (2015)",
           "revision": 1383300205
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Cadillac Escalade (GMTK2UL)",
         "faceliftHints": []
       },
       {
-        "id": "cadillac-escalade/fifth-generation-2021",
-        "label": "Fifth generation (2021)",
+        "id": "cadillac-escalade/cadillac-escalade-t1xx",
+        "label": "Cadillac Escalade (T1XX)",
         "from": 2021,
         "to": null,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "'Cadillac Escalade (GMTT1XX)' exists but is empty; use GMTT1UL. The 2025 facelift is the same generation. Escalade IQ (EV) is a separate model.",
         "source": {
           "article": "Cadillac Escalade",
           "section": "Fifth generation (2021)",
           "revision": 1383300205
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Cadillac Escalade (GMTT1UL)",
         "faceliftHints": []
       }
     ],
@@ -713,13 +709,28 @@
     "slug": "chevrolet-blazer",
     "name": "Chevrolet Blazer",
     "series": {
-      "article": "Chevrolet Blazer",
-      "revision": 1328035680
+      "article": "Chevrolet Blazer (crossover)",
+      "revision": 1372047707
     },
-    "generations": [],
-    "warnings": [
-      "no generations found: set them in series.json"
-    ]
+    "generations": [
+      {
+        "id": "chevrolet-blazer/chevrolet-blazer-c1xx",
+        "label": "Chevrolet Blazer (C1XX)",
+        "from": 2019,
+        "to": 2026,
+        "yearsSource": "series.json",
+        "yearsNote": "2023 facelift is in the same generation. Avoid the 'Chevrolet Blazer (China)' subcategory: its 7-seat Chinese version looks different. Also don't use 'Chevrolet Blazer EV' (separate model).",
+        "source": {
+          "article": "Chevrolet Blazer (crossover)",
+          "section": null,
+          "revision": 1372047707
+        },
+        "wikidata": null,
+        "commons": "Chevrolet Blazer (C1XX)",
+        "faceliftHints": []
+      }
+    ],
+    "warnings": []
   },
   "chevrolet-camaro": {
     "slug": "chevrolet-camaro",
@@ -921,67 +932,67 @@
     },
     "generations": [
       {
-        "id": "chevrolet-malibu/sixth-generation-gmx380-2004",
-        "label": "Sixth generation (GMX380; 2004)",
+        "id": "chevrolet-malibu/chevrolet-malibu-sixth-generation-gmx380",
+        "label": "Chevrolet Malibu (sixth generation, GMX380)",
         "from": 2004,
-        "to": 2007,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "to": 2008,
+        "yearsSource": "series.json",
+        "yearsNote": "Split year 2008: the outgoing car continued as the fleet-only 2008 'Malibu Classic' alongside the new 2008 Malibu. If the reviewer prefers the retail car, end this generation at 2007. Category title uses an en dash ('2004–2007'); the hyphen version is empty. Subcategories: Malibu MAXX and Malibu SS.",
         "source": {
           "article": "Chevrolet Malibu",
           "section": "Sixth generation (GMX380; 2004)",
           "revision": 1382634678
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Chevrolet Malibu (2004–2007)",
         "faceliftHints": []
       },
       {
-        "id": "chevrolet-malibu/seventh-generation-2008",
-        "label": "Seventh generation (2008)",
+        "id": "chevrolet-malibu/chevrolet-malibu-seventh-generation-epsilon",
+        "label": "Chevrolet Malibu (seventh generation, Epsilon)",
         "from": 2008,
         "to": 2012,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Split year 2008 (see the sixth generation). The Commons category says 2008-2011 (hyphen), but it is the only seventh-generation category; 2012 cars look the same. Subcategories: LS/LT/LTZ/Hybrid.",
         "source": {
           "article": "Chevrolet Malibu",
           "section": "Seventh generation (2008)",
           "revision": 1382634678
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Chevrolet Malibu (2008-2011)",
         "faceliftHints": []
       },
       {
-        "id": "chevrolet-malibu/eighth-generation-2013",
-        "label": "Eighth generation (2013)",
+        "id": "chevrolet-malibu/chevrolet-malibu-eighth-generation-epsilon-ii",
+        "label": "Chevrolet Malibu (eighth generation, Epsilon II)",
         "from": 2013,
-        "to": 2015,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "to": 2016,
+        "yearsSource": "series.json",
+        "yearsNote": "Split year 2016: the outgoing car was sold for 2016 as the 'Malibu Limited' (mostly fleet) alongside the new ninth-generation 2016 Malibu. Avoid the 'Chevrolet Malibu (China)' subcategory.",
         "source": {
           "article": "Chevrolet Malibu",
           "section": "Eighth generation (2013)",
           "revision": 1382634678
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Chevrolet Malibu (Epsilon II)",
         "faceliftHints": []
       },
       {
-        "id": "chevrolet-malibu/ninth-generation-2016",
-        "label": "Ninth generation (2016)",
+        "id": "chevrolet-malibu/chevrolet-malibu-ninth-generation-e2xx",
+        "label": "Chevrolet Malibu (ninth generation, E2XX)",
         "from": 2016,
         "to": 2025,
-        "yearsSource": "model_years",
-        "yearsNote": "North America",
+        "yearsSource": "series.json",
+        "yearsNote": "Split year 2016 (see the eighth generation). 2019 refresh is in the same generation. The 'Malibu XL' subcategory is the Chinese-market name; avoid it.",
         "source": {
           "article": "Chevrolet Malibu",
           "section": "Ninth generation (2016)",
           "revision": 1382634678
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Chevrolet Malibu (E2XX)",
         "faceliftHints": []
       }
     ],
@@ -996,73 +1007,71 @@
     },
     "generations": [
       {
-        "id": "chevrolet-silverado/chevrolet-silverado-first-generation",
-        "label": "Chevrolet Silverado (first generation)",
-        "from": 2007,
+        "id": "chevrolet-silverado/chevrolet-silverado-gmt800",
+        "label": "Chevrolet Silverado (GMT800)",
+        "from": 1999,
         "to": 2007,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Split year 2007: the GMT800 'Silverado Classic' was sold alongside the new GMT900 as a 2007 model. The bare 'Chevrolet Silverado (GMT800)' category has only 5 files; the 'pickups' subcategory is the one to use. HD (GMT880) trucks are in 'Chevrolet Silverado (GMT880, pickup)'.",
         "source": {
           "article": "Chevrolet Silverado (first generation)",
           "section": null,
           "revision": 1383420518
         },
         "wikidata": "Q116675951",
-        "commons": "Chevrolet Silverado (GMT800/GMT880)",
+        "commons": "Chevrolet Silverado (GMT800) pickups",
         "faceliftHints": []
       },
       {
-        "id": "chevrolet-silverado/chevrolet-silverado-second-generation",
-        "label": "Chevrolet Silverado (second generation)",
+        "id": "chevrolet-silverado/chevrolet-silverado-gmt900",
+        "label": "Chevrolet Silverado (GMT900)",
         "from": 2007,
         "to": 2013,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Split year 2007 with the Classic. GMT901 is the light-duty 1500. The HD (GMT911) kept this body through 2014.",
         "source": {
           "article": "Chevrolet Silverado (second generation)",
           "section": null,
           "revision": 1383668862
         },
         "wikidata": "Q124421943",
-        "commons": "Chevrolet Silverado (GMT901/GMT911)",
+        "commons": "Chevrolet Silverado (GMT901)",
         "faceliftHints": []
       },
       {
-        "id": "chevrolet-silverado/third-generation-silverado-fourth-generation-sierra-gmt-k2xx-2014",
-        "label": "Third-generation Silverado / fourth-generation Sierra (GMT K2XX; 2014)",
+        "id": "chevrolet-silverado/chevrolet-silverado-k2xx",
+        "label": "Chevrolet Silverado (K2XX)",
         "from": 2014,
         "to": 2018,
-        "yearsSource": "model_years",
-        "yearsNote": "1500",
+        "yearsSource": "series.json",
+        "yearsNote": "The parent holds only 2 files; the photos are in its subcategories by cab: 'Chevrolet Silverado (GMTK2CC)' (crew cab, 162), '(GMTK2EC)' (double cab, 96), '(GMTK2RC)' (regular cab, 25), plus HD. If you need one flat category, use GMTK2CC. A carryover K2XX was also sold for 2019 as the 'Silverado 1500 LD' (fleet-oriented, separate name), so I mapped 2019 to T1XX.",
         "source": {
           "article": "Chevrolet Silverado",
           "section": "Third-generation Silverado / fourth-generation Sierra (GMT K2XX; 2014)",
           "revision": 1383992498
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Chevrolet Silverado (GMTK2XX)",
         "faceliftHints": []
       },
       {
-        "id": "chevrolet-silverado/fourth-generation-silverado-fifth-generation-sierra-gmt-t1xx-2019",
-        "label": "Fourth-generation Silverado / fifth-generation Sierra (GMT T1XX; 2019)",
+        "id": "chevrolet-silverado/chevrolet-silverado-t1xx",
+        "label": "Chevrolet Silverado (T1XX)",
         "from": 2019,
         "to": 2026,
-        "yearsSource": "model_years",
-        "yearsNote": "1500",
+        "yearsSource": "series.json",
+        "yearsNote": "A fifth-generation 1500 starts with the 2027 model year (infobox model_years \"2027\"), which is outside the catalog.",
         "source": {
           "article": "Chevrolet Silverado",
           "section": "Fourth-generation Silverado / fifth-generation Sierra (GMT T1XX; 2019)",
           "revision": 1383992498
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Chevrolet Silverado (GMTT1XX)",
         "faceliftHints": []
       }
     ],
-    "warnings": [
-      "Military applications (2001–present) spans other generations; left out"
-    ]
+    "warnings": []
   },
   "chevrolet-suburban": {
     "slug": "chevrolet-suburban",
@@ -1073,73 +1082,71 @@
     },
     "generations": [
       {
-        "id": "chevrolet-suburban/ninth-generation-2000",
-        "label": "Ninth generation (2000)",
+        "id": "chevrolet-suburban/chevrolet-suburban-gmt800-gmt830",
+        "label": "Chevrolet Suburban (GMT800/GMT830)",
         "from": 2000,
         "to": 2006,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "GMT830 is the GM code for the 2000–2006 Suburban. 'Chevrolet Suburban (GMT800)' exists but is empty. Avoid the police-service subcategory.",
         "source": {
           "article": "Chevrolet Suburban",
           "section": "Ninth generation (2000)",
           "revision": 1383659384
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Chevrolet Suburban (GMT830)",
         "faceliftHints": []
       },
       {
-        "id": "chevrolet-suburban/tenth-generation-2007",
-        "label": "Tenth generation (2007)",
+        "id": "chevrolet-suburban/chevrolet-suburban-gmt900-gmt931",
+        "label": "Chevrolet Suburban (GMT900/GMT931)",
         "from": 2007,
         "to": 2014,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Avoid the police-service subcategory.",
         "source": {
           "article": "Chevrolet Suburban",
           "section": "Tenth generation (2007)",
           "revision": 1383659384
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Chevrolet Suburban (GMT931)",
         "faceliftHints": []
       },
       {
-        "id": "chevrolet-suburban/eleventh-generation-2015",
-        "label": "Eleventh generation (2015)",
+        "id": "chevrolet-suburban/chevrolet-suburban-gmtk2yc",
+        "label": "Chevrolet Suburban (GMTK2YC)",
         "from": 2015,
         "to": 2020,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Replaces the NYPD category the parser found. Subcategories: police service and Suburban HD; avoid both. 'Chevrolet Suburban (GMTK2XX)' exists but is empty.",
         "source": {
           "article": "Chevrolet Suburban",
           "section": "Eleventh generation (2015)",
           "revision": 1383659384
         },
         "wikidata": null,
-        "commons": "Chevrolet Suburban (Eleventh generation, NYPD)",
+        "commons": "Chevrolet Suburban (GMTK2YC)",
         "faceliftHints": []
       },
       {
-        "id": "chevrolet-suburban/twelfth-generation-2021",
-        "label": "Twelfth generation (2021)",
+        "id": "chevrolet-suburban/chevrolet-suburban-gmtt1yc",
+        "label": "Chevrolet Suburban (GMTT1YC)",
         "from": 2021,
         "to": null,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "2025 refresh is in the same generation. The 2027 Suburban carries over this generation (GM Authority / GM-Trucks 2027 coverage: production began September 2026 at Arlington). 'Chevrolet Suburban (GMTT1XX)' exists but is empty.",
         "source": {
           "article": "Chevrolet Suburban",
           "section": "Twelfth generation (2021)",
           "revision": 1383659384
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Chevrolet Suburban (GMTT1YC)",
         "faceliftHints": []
       }
     ],
-    "warnings": [
-      "Military applications (2001–present) spans other generations; left out"
-    ]
+    "warnings": []
   },
   "chevrolet-tahoe": {
     "slug": "chevrolet-tahoe",
@@ -1150,27 +1157,27 @@
     },
     "generations": [
       {
-        "id": "chevrolet-tahoe/second-generation-2000",
-        "label": "Second generation (2000)",
+        "id": "chevrolet-tahoe/chevrolet-tahoe-gmt800",
+        "label": "Chevrolet Tahoe (GMT800)",
         "from": 2000,
         "to": 2006,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "GMT820 is the Tahoe's code within GMT800.",
         "source": {
           "article": "Chevrolet Tahoe",
           "section": "Second generation (2000)",
           "revision": 1383669612
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Chevrolet Tahoe (GMT820)",
         "faceliftHints": []
       },
       {
-        "id": "chevrolet-tahoe/third-generation-2007",
-        "label": "Third generation (2007)",
+        "id": "chevrolet-tahoe/chevrolet-tahoe-gmt900",
+        "label": "Chevrolet Tahoe (GMT900)",
         "from": 2007,
         "to": 2014,
-        "yearsSource": "model_years",
+        "yearsSource": "series.json",
         "yearsNote": null,
         "source": {
           "article": "Chevrolet Tahoe",
@@ -1178,45 +1185,43 @@
           "revision": 1383669612
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Chevrolet Tahoe (GMT921)",
         "faceliftHints": []
       },
       {
-        "id": "chevrolet-tahoe/fourth-generation-2015",
-        "label": "Fourth generation (2015)",
+        "id": "chevrolet-tahoe/chevrolet-tahoe-k2xx",
+        "label": "Chevrolet Tahoe (K2XX)",
         "from": 2015,
         "to": 2020,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "'Chevrolet Tahoe (GMTK2XX)' exists but is empty (0 files); K2UC is the Tahoe code.",
         "source": {
           "article": "Chevrolet Tahoe",
           "section": "Fourth generation (2015)",
           "revision": 1383669612
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Chevrolet Tahoe (GMTK2UC)",
         "faceliftHints": []
       },
       {
-        "id": "chevrolet-tahoe/fifth-generation-2021",
-        "label": "Fifth generation (2021)",
+        "id": "chevrolet-tahoe/chevrolet-tahoe-t1xx",
+        "label": "Chevrolet Tahoe (T1XX)",
         "from": 2021,
         "to": null,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Includes the 2025 refresh. GM Authority calls the 2027 the seventh model year of the fifth generation (carryover). 'Chevrolet Tahoe (GMTT1XX)' is empty.",
         "source": {
           "article": "Chevrolet Tahoe",
           "section": "Fifth generation (2021)",
           "revision": 1383669612
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Chevrolet Tahoe (GMTT1UC)",
         "faceliftHints": []
       }
     ],
-    "warnings": [
-      "Military applications (2001–present) spans other generations; left out"
-    ]
+    "warnings": []
   },
   "chevrolet-trailblazer": {
     "slug": "chevrolet-trailblazer",
@@ -1225,10 +1230,46 @@
       "article": "Chevrolet Trailblazer",
       "revision": 1358791928
     },
-    "generations": [],
-    "warnings": [
-      "no generations found: set them in series.json"
-    ]
+    "generations": [
+      {
+        "id": "chevrolet-trailblazer/chevrolet-trailblazer-gmt360-mid-size-suv",
+        "label": "Chevrolet TrailBlazer (GMT360, mid-size SUV)",
+        "from": 2002,
+        "to": 2009,
+        "yearsSource": "series.json",
+        "yearsNote": "Body-on-frame mid-size SUV. Its subcategories include police and EXT/SS variants.",
+        "source": {
+          "article": "Chevrolet TrailBlazer (SUV)",
+          "section": "First generation (KC; 2001)",
+          "revision": 1378989454
+        },
+        "wikidata": "Q1071321",
+        "commons": "Chevrolet TrailBlazer (GMT360)",
+        "faceliftHints": []
+      },
+      {
+        "id": "chevrolet-trailblazer/chevrolet-trailblazer-crossover-vss-f-9byc",
+        "label": "Chevrolet Trailblazer (crossover, VSS-F 9BYC)",
+        "from": 2021,
+        "to": null,
+        "yearsSource": "series.json",
+        "yearsNote": "A different vehicle that only shares the name (subcompact crossover). Commons files it under the platform name 'VSS-S'; the category is tagged subcompact crossover and GM VSS-S platform.",
+        "source": {
+          "article": "Chevrolet Trailblazer (crossover)",
+          "section": null,
+          "revision": 1360715139
+        },
+        "wikidata": "Q82654604",
+        "commons": "Chevrolet TrailBlazer (VSS-S)",
+        "faceliftHints": [
+          {
+            "modelYear": 2024,
+            "evidence": "=== 2024 refresh === The Trailblazer received a facelift in February 2024 for the 2024 model year."
+          }
+        ]
+      }
+    ],
+    "warnings": []
   },
   "chevrolet-traverse": {
     "slug": "chevrolet-traverse",
@@ -1239,11 +1280,11 @@
     },
     "generations": [
       {
-        "id": "chevrolet-traverse/first-generation-2009",
-        "label": "First generation (2009)",
+        "id": "chevrolet-traverse/chevrolet-traverse-first-generation-lambda",
+        "label": "Chevrolet Traverse (first generation, Lambda)",
         "from": 2009,
         "to": 2017,
-        "yearsSource": "model_years",
+        "yearsSource": "series.json",
         "yearsNote": null,
         "source": {
           "article": "Chevrolet Traverse",
@@ -1251,39 +1292,39 @@
           "revision": 1375274407
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Chevrolet Traverse (Lambda)",
         "faceliftHints": []
       },
       {
-        "id": "chevrolet-traverse/second-generation-2018",
-        "label": "Second generation (2018)",
+        "id": "chevrolet-traverse/chevrolet-traverse-second-generation-c1xx",
+        "label": "Chevrolet Traverse (second generation, C1XX)",
         "from": 2018,
         "to": 2024,
-        "yearsSource": "model_years",
-        "yearsNote": "North America",
+        "yearsSource": "series.json",
+        "yearsNote": "Split year 2024: a shortened 2024 model year of the outgoing car was sold as the 'Chevrolet Traverse Limited' alongside the new third-generation 2024 Traverse.",
         "source": {
           "article": "Chevrolet Traverse",
           "section": "Second generation (2018)",
           "revision": 1375274407
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Chevrolet Traverse (C1XX)",
         "faceliftHints": []
       },
       {
-        "id": "chevrolet-traverse/third-generation-2024",
-        "label": "Third generation (2024)",
+        "id": "chevrolet-traverse/chevrolet-traverse-third-generation-c1xx-2",
+        "label": "Chevrolet Traverse (third generation, C1XX-2)",
         "from": 2024,
         "to": null,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Split year 2024 (see the previous generation). For a single 2024 photo, prefer this generation, since the 'Traverse' badge in 2024 mostly meant the new model; the old one was 'Traverse Limited'.",
         "source": {
           "article": "Chevrolet Traverse",
           "section": "Third generation (2024)",
           "revision": 1375274407
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Chevrolet Traverse (C1XX-2)",
         "faceliftHints": []
       }
     ],
@@ -1298,12 +1339,12 @@
     },
     "generations": [
       {
-        "id": "chevrolet-trax/first-generation-u200-2013",
-        "label": "First generation (U200; 2013)",
-        "from": 2013,
+        "id": "chevrolet-trax/chevrolet-trax-first-generation-u200",
+        "label": "Chevrolet Trax (first generation, U200)",
+        "from": 2015,
         "to": 2022,
-        "yearsSource": "model_years",
-        "yearsNote": "Canada, Mexico",
+        "yearsSource": "series.json",
+        "yearsNote": null,
         "source": {
           "article": "Chevrolet Trax",
           "section": "First generation (U200; 2013)",
@@ -1314,12 +1355,12 @@
         "faceliftHints": []
       },
       {
-        "id": "chevrolet-trax/second-generation-2023",
-        "label": "Second generation (2023)",
+        "id": "chevrolet-trax/chevrolet-trax-second-generation",
+        "label": "Chevrolet Trax (second generation)",
         "from": 2024,
         "to": null,
-        "yearsSource": "model_years",
-        "yearsNote": "North America",
+        "yearsSource": "series.json",
+        "yearsNote": "A facelift was unveiled on 9 October 2026 (Wikipedia section '2027 facelift'), so 2027 is the same generation with new styling, and current Commons photos are pre-facelift.",
         "source": {
           "article": "Chevrolet Trax",
           "section": "Second generation (2023)",
@@ -1336,13 +1377,44 @@
     "slug": "chrysler-pacifica",
     "name": "Chrysler Pacifica",
     "series": {
-      "article": "Chrysler Pacifica",
-      "revision": 1197273472
+      "article": "Chrysler Pacifica (minivan)",
+      "revision": 1383832073
     },
-    "generations": [],
-    "warnings": [
-      "no generations found: set them in series.json"
-    ]
+    "generations": [
+      {
+        "id": "chrysler-pacifica/chrysler-pacifica-cs-crossover",
+        "label": "Chrysler Pacifica (CS crossover)",
+        "from": 2004,
+        "to": 2008,
+        "yearsSource": "series.json",
+        "yearsNote": "A different vehicle from the 2017+ minivan.",
+        "source": {
+          "article": "Chrysler Pacifica (crossover)",
+          "section": null,
+          "revision": 1354504441
+        },
+        "wikidata": "Q1088754",
+        "commons": "Chrysler Pacifica (CS)",
+        "faceliftHints": []
+      },
+      {
+        "id": "chrysler-pacifica/chrysler-pacifica-ru-minivan",
+        "label": "Chrysler Pacifica (RU minivan)",
+        "from": 2017,
+        "to": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Includes the Pacifica Hybrid ('Chrysler Pacifica Hybrid' category; Waymo cars are a separate category).",
+        "source": {
+          "article": "Chrysler Pacifica (minivan)",
+          "section": null,
+          "revision": 1383832073
+        },
+        "wikidata": null,
+        "commons": "Chrysler Pacifica (RU)",
+        "faceliftHints": []
+      }
+    ],
+    "warnings": []
   },
   "dodge-durango": {
     "slug": "dodge-durango",
@@ -1396,19 +1468,19 @@
     },
     "generations": [
       {
-        "id": "ford-bronco/sixth-generation-u725-2021",
-        "label": "Sixth generation (U725; 2021)",
+        "id": "ford-bronco/ford-bronco-sixth-generation-u725",
+        "label": "Ford Bronco (sixth generation, U725)",
         "from": 2021,
         "to": null,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Subcategory 'Ford Bronco Raptor'. Not the Bronco Sport (a separate model, 'Ford Bronco Sport').",
         "source": {
           "article": "Ford Bronco",
           "section": "Sixth generation (U725; 2021)",
           "revision": 1382960134
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Ford Bronco (6th generation)",
         "faceliftHints": []
       }
     ],
@@ -1450,12 +1522,12 @@
     },
     "generations": [
       {
-        "id": "ford-escape/first-generation-2001",
-        "label": "First generation (2001)",
+        "id": "ford-escape/ford-escape-first-generation",
+        "label": "Ford Escape (first generation)",
         "from": 2001,
         "to": 2007,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "The catalog years are the 2005–2007 facelift. The category mixes 2001–2004 pre-facelift cars and possibly Asia-Pacific ZB/ZC/ZD Escapes, so prefer files named 2005–2007. 1 subcategory: Escape Hybrid (first generation).",
         "source": {
           "article": "Ford Escape",
           "section": "First generation (2001)",
@@ -1466,12 +1538,12 @@
         "faceliftHints": []
       },
       {
-        "id": "ford-escape/second-generation-2008",
-        "label": "Second generation (2008)",
+        "id": "ford-escape/ford-escape-second-generation",
+        "label": "Ford Escape (second generation)",
         "from": 2008,
         "to": 2012,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Subcategories: NYPD and Hybrid. Avoid NYPD-livery photos.",
         "source": {
           "article": "Ford Escape",
           "section": "Second generation (2008)",
@@ -1482,12 +1554,12 @@
         "faceliftHints": []
       },
       {
-        "id": "ford-escape/third-generation-2013",
-        "label": "Third generation (2013)",
+        "id": "ford-escape/ford-escape-third-generation",
+        "label": "Ford Escape (third generation)",
         "from": 2013,
         "to": 2019,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "2017 refresh is in the same generation.",
         "source": {
           "article": "Ford Escape",
           "section": "Third generation (2013)",
@@ -1498,12 +1570,12 @@
         "faceliftHints": []
       },
       {
-        "id": "ford-escape/fourth-generation-2020",
-        "label": "Fourth generation (2020)",
+        "id": "ford-escape/ford-escape-fourth-generation",
+        "label": "Ford Escape (fourth generation)",
         "from": 2020,
         "to": 2026,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "2023 refresh is in the same generation. Subcategories include '4th gen, China' (avoid it) and NYC taxis.",
         "source": {
           "article": "Ford Escape",
           "section": "Fourth generation (2020)",
@@ -1659,11 +1731,11 @@
     },
     "generations": [
       {
-        "id": "ford-f-150/ford-f-series-eleventh-generation",
-        "label": "Ford F-Series (eleventh generation)",
+        "id": "ford-f-150/ford-f-150-eleventh-generation",
+        "label": "Ford F-150 (eleventh generation)",
         "from": 2004,
         "to": 2008,
-        "yearsSource": "model_years",
+        "yearsSource": "series.json",
         "yearsNote": null,
         "source": {
           "article": "Ford F-Series (eleventh generation)",
@@ -1675,12 +1747,12 @@
         "faceliftHints": []
       },
       {
-        "id": "ford-f-150/ford-f-series-twelfth-generation",
-        "label": "Ford F-Series (twelfth generation)",
+        "id": "ford-f-150/ford-f-150-twelfth-generation",
+        "label": "Ford F-150 (twelfth generation)",
         "from": 2009,
         "to": 2014,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Avoid the 'twelfth generation clones' subcategory (Chinese copies).",
         "source": {
           "article": "Ford F-Series (twelfth generation)",
           "section": null,
@@ -1691,12 +1763,12 @@
         "faceliftHints": []
       },
       {
-        "id": "ford-f-150/ford-f-series-thirteenth-generation",
-        "label": "Ford F-Series (thirteenth generation)",
+        "id": "ford-f-150/ford-f-150-thirteenth-generation",
+        "label": "Ford F-150 (thirteenth generation)",
         "from": 2015,
         "to": 2020,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "2018 refresh is in the same generation.",
         "source": {
           "article": "Ford F-Series (thirteenth generation)",
           "section": null,
@@ -1707,12 +1779,12 @@
         "faceliftHints": []
       },
       {
-        "id": "ford-f-150/ford-f-series-fourteenth-generation",
-        "label": "Ford F-Series (fourteenth generation)",
+        "id": "ford-f-150/ford-f-150-fourteenth-generation",
+        "label": "Ford F-150 (fourteenth generation)",
         "from": 2021,
         "to": null,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "2024 refresh is in the same generation. The Lightning EV is part of this generation in Wikipedia; exclude Lightning photos if the catalog lists it separately.",
         "source": {
           "article": "Ford F-Series (fourteenth generation)",
           "section": null,
@@ -1723,21 +1795,34 @@
         "faceliftHints": []
       }
     ],
-    "warnings": [
-      "Ford F-Series (medium-duty truck) (1948–present) spans other generations; left out"
-    ]
+    "warnings": []
   },
   "ford-maverick": {
     "slug": "ford-maverick",
     "name": "Ford Maverick",
     "series": {
-      "article": "Ford Maverick",
-      "revision": 1268170828
+      "article": "Ford Maverick (2022)",
+      "revision": 1380355207
     },
-    "generations": [],
-    "warnings": [
-      "no generations found: set them in series.json"
-    ]
+    "generations": [
+      {
+        "id": "ford-maverick/ford-maverick-pickup-truck",
+        "label": "Ford Maverick (pickup truck)",
+        "from": 2022,
+        "to": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Single generation. The 2025 refresh (new front fascia, Lobo trim) is in the same generation. Subcategories: Lobo, Tremor and XLT. Don't use 'Ford Maverick (first generation)', '(second generation)', '(Australia)', '(Brazil)' or '(SUV)': those are other vehicles.",
+        "source": {
+          "article": "Ford Maverick (2022)",
+          "section": null,
+          "revision": 1380355207
+        },
+        "wikidata": null,
+        "commons": "Ford Maverick (pickup truck)",
+        "faceliftHints": []
+      }
+    ],
+    "warnings": []
   },
   "ford-mustang": {
     "slug": "ford-mustang",
@@ -1843,71 +1928,60 @@
     "slug": "ford-ranger",
     "name": "Ford Ranger",
     "series": {
-      "article": "Ford Ranger",
-      "revision": 1376110166
+      "article": "Ford Ranger (Americas)",
+      "revision": 1375968356
     },
     "generations": [
       {
-        "id": "ford-ranger/ford-ranger-americas",
-        "label": "Ford Ranger (Americas)",
-        "from": 1983,
-        "to": 2012,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "id": "ford-ranger/ford-ranger-americas-third-generation",
+        "label": "Ford Ranger (Americas, third generation)",
+        "from": 1998,
+        "to": 2011,
+        "yearsSource": "series.json",
+        "yearsNote": "'Ford Ranger (2006)' is the facelift subcategory of 'Ford Ranger (third generation)' (under 'Ford Ranger (Americas)'), which matches the catalog's 2006–2011 trucks exactly. Don't use the international PJ/PK Ranger categories: that's a different truck.",
         "source": {
           "article": "Ford Ranger (Americas)",
-          "section": null,
+          "section": "Third generation (1998)",
           "revision": 1375968356
         },
-        "wikidata": "Q915824",
-        "commons": "Ford Ranger (Americas)",
-        "faceliftHints": [
-          {
-            "modelYear": 1989,
-            "evidence": "For the 1989 model year, the Ranger underwent a major mid-cycle revision to improve its exterior aerodynamics and interior ergonomics."
-          },
-          {
-            "modelYear": 2003,
-            "evidence": "The 2001 exterior facelift given to North American Rangers was not carried over to South American versions, with the 1998 front bodywork remaining until the 2003 model year."
-          }
-        ]
-      },
-      {
-        "id": "ford-ranger/ford-ranger-international",
-        "label": "Ford Ranger (international)",
-        "from": 1998,
-        "to": null,
-        "yearsSource": "production",
-        "yearsNote": null,
-        "source": {
-          "article": "Ford Ranger (international)",
-          "section": null,
-          "revision": 1383734298
-        },
-        "wikidata": "Q9261328",
-        "commons": "Ford Ranger (International)",
+        "wikidata": null,
+        "commons": "Ford Ranger (2006)",
         "faceliftHints": []
       },
       {
-        "id": "ford-ranger/ford-ranger-t6",
-        "label": "Ford Ranger (T6)",
+        "id": "ford-ranger/ford-ranger-t6-p375-north-america",
+        "label": "Ford Ranger (T6, P375; North America)",
         "from": 2019,
-        "to": null,
-        "yearsSource": "model_years",
-        "yearsNote": "North America",
+        "to": 2023,
+        "yearsSource": "series.json",
+        "yearsNote": "The Commons category 'Ford Ranger (fourth generation)' is the North American P375 (child of 'Ford Ranger (Americas)'). The global 'Ford Ranger (T6, P375)' has 501 files but is mostly non-US trucks with different fronts.",
         "source": {
           "article": "Ford Ranger (T6)",
-          "section": null,
+          "section": "First generation (P375/PX; 2011)",
           "revision": 1381433223
         },
         "wikidata": "Q5467907",
-        "commons": "Ford Ranger (T6)",
+        "commons": "Ford Ranger (fourth generation)",
+        "faceliftHints": []
+      },
+      {
+        "id": "ford-ranger/ford-ranger-t6-p703-north-america",
+        "label": "Ford Ranger (T6, P703; North America)",
+        "from": 2024,
+        "to": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Global category (Australia, Argentina, Europe, etc.); there's no US subcategory ('Ford Ranger (fifth generation)' redirects here). Many files are diesel/Wildtrak trucks from other markets; same body, but the badging and trims differ. 'Ford Ranger Raptor (P703)' is a subcategory.",
+        "source": {
+          "article": "Ford Ranger (T6)",
+          "section": "Second generation (P703/RA; 2022)",
+          "revision": 1381433223
+        },
+        "wikidata": "Q5467907",
+        "commons": "Ford Ranger (T6, P703)",
         "faceliftHints": []
       }
     ],
-    "warnings": [
-      "Ford Ranger (international): only production years in the infobox; check the US model years"
-    ]
+    "warnings": []
   },
   "gmc-acadia": {
     "slug": "gmc-acadia",
@@ -1977,11 +2051,11 @@
     },
     "generations": [
       {
-        "id": "gmc-canyon/first-generation-2004",
-        "label": "First generation (2004)",
+        "id": "gmc-canyon/gmc-canyon-gmt355",
+        "label": "GMC Canyon (GMT355)",
         "from": 2004,
         "to": 2012,
-        "yearsSource": "model_years",
+        "yearsSource": "series.json",
         "yearsNote": null,
         "source": {
           "article": "Chevrolet Colorado",
@@ -1989,39 +2063,39 @@
           "revision": 1383669104
         },
         "wikidata": null,
-        "commons": "Chevrolet Colorado (first generation)",
+        "commons": "GMC Canyon (GMT355)",
         "faceliftHints": []
       },
       {
-        "id": "gmc-canyon/second-generation-rg-2011",
-        "label": "Second generation (RG; 2011)",
+        "id": "gmc-canyon/gmc-canyon-gmt31xx",
+        "label": "GMC Canyon (GMT31XX)",
         "from": 2015,
         "to": 2022,
-        "yearsSource": "model_years",
-        "yearsNote": "US and Canada",
+        "yearsSource": "series.json",
+        "yearsNote": null,
         "source": {
           "article": "Chevrolet Colorado",
           "section": "Second generation (RG; 2011)",
           "revision": 1383669104
         },
         "wikidata": null,
-        "commons": "Chevrolet Colorado (second generation)",
+        "commons": "GMC Canyon (GMT31XX)",
         "faceliftHints": []
       },
       {
-        "id": "gmc-canyon/third-generation-2023",
-        "label": "Third generation (2023)",
+        "id": "gmc-canyon/gmc-canyon-gmt31xx-2",
+        "label": "GMC Canyon (GMT31XX-2)",
         "from": 2023,
         "to": null,
-        "yearsSource": "model_years",
-        "yearsNote": "US and Canada",
+        "yearsSource": "series.json",
+        "yearsNote": null,
         "source": {
           "article": "Chevrolet Colorado",
           "section": "Third generation (2023)",
           "revision": 1383669104
         },
         "wikidata": null,
-        "commons": "Chevrolet Colorado (third generation)",
+        "commons": "GMC Canyon (GMT31XX-2)",
         "faceliftHints": []
       }
     ],
@@ -2036,73 +2110,71 @@
     },
     "generations": [
       {
-        "id": "gmc-sierra/chevrolet-silverado-first-generation",
-        "label": "Chevrolet Silverado (first generation)",
-        "from": 2007,
+        "id": "gmc-sierra/gmc-sierra-gmt800",
+        "label": "GMC Sierra (GMT800)",
+        "from": 1999,
         "to": 2007,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Split year 2007: the GMT800 continued as the 2007 'Sierra Classic' alongside the new GMT900 2007 Sierra. The parent 'GMC Sierra (GMT800)' has only 1 file plus this subcategory; HD trucks are in 'GMC Sierra (GMT880)' (11 files).",
         "source": {
           "article": "Chevrolet Silverado (first generation)",
           "section": null,
           "revision": 1383420518
         },
         "wikidata": "Q116675951",
-        "commons": "Chevrolet Silverado (GMT800/GMT880)",
+        "commons": "GMC Sierra (GMT800) pickups",
         "faceliftHints": []
       },
       {
-        "id": "gmc-sierra/chevrolet-silverado-second-generation",
-        "label": "Chevrolet Silverado (second generation)",
+        "id": "gmc-sierra/gmc-sierra-gmt900",
+        "label": "GMC Sierra (GMT900)",
         "from": 2007,
         "to": 2013,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Split year 2007 (see GMT800). The HD version is in 'GMC Sierra HD (GMT912)' under 'GMC Sierra (GMT902/GMT912)'.",
         "source": {
           "article": "Chevrolet Silverado (second generation)",
           "section": null,
           "revision": 1383668862
         },
         "wikidata": "Q124421943",
-        "commons": "Chevrolet Silverado (GMT901/GMT911)",
+        "commons": "GMC Sierra (GMT902)",
         "faceliftHints": []
       },
       {
-        "id": "gmc-sierra/third-generation-silverado-fourth-generation-sierra-gmt-k2xx-2014",
-        "label": "Third-generation Silverado / fourth-generation Sierra (GMT K2XX; 2014)",
+        "id": "gmc-sierra/gmc-sierra-k2xx",
+        "label": "GMC Sierra (K2XX)",
         "from": 2014,
-        "to": 2018,
-        "yearsSource": "model_years",
-        "yearsNote": "1500",
+        "to": 2019,
+        "yearsSource": "series.json",
+        "yearsNote": "Split year 2019: the K2XX Sierra 1500 continued as the 2019 'Sierra Limited' alongside the new T1XX 2019 Sierra 1500. HD trucks: 'GMC Sierra HD (GMTK2HG)'.",
         "source": {
           "article": "Chevrolet Silverado",
           "section": "Third-generation Silverado / fourth-generation Sierra (GMT K2XX; 2014)",
           "revision": 1383992498
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "GMC Sierra (GMTK2XX)",
         "faceliftHints": []
       },
       {
-        "id": "gmc-sierra/fourth-generation-silverado-fifth-generation-sierra-gmt-t1xx-2019",
-        "label": "Fourth-generation Silverado / fifth-generation Sierra (GMT T1XX; 2019)",
+        "id": "gmc-sierra/gmc-sierra-t1xx",
+        "label": "GMC Sierra (T1XX)",
         "from": 2019,
         "to": 2026,
-        "yearsSource": "model_years",
-        "yearsNote": "1500",
+        "yearsSource": "series.json",
+        "yearsNote": "Split year 2019 (see K2XX). The 2022 mid-cycle refresh is the same generation (the pre-refresh 2022 'Sierra 1500 Limited' is also T1XX). A sixth-generation Sierra 1500 is listed with model_years \"2027\", outside the catalog's range.",
         "source": {
           "article": "Chevrolet Silverado",
           "section": "Fourth-generation Silverado / fifth-generation Sierra (GMT T1XX; 2019)",
           "revision": 1383992498
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "GMC Sierra (GMTT1XX)",
         "faceliftHints": []
       }
     ],
-    "warnings": [
-      "Military applications (2001–present) spans other generations; left out"
-    ]
+    "warnings": []
   },
   "gmc-terrain": {
     "slug": "gmc-terrain",
@@ -2113,11 +2185,11 @@
     },
     "generations": [
       {
-        "id": "gmc-terrain/first-generation-2010",
-        "label": "First generation (2010)",
+        "id": "gmc-terrain/gmc-terrain-first-generation-theta",
+        "label": "GMC Terrain (first generation, Theta)",
         "from": 2010,
         "to": 2017,
-        "yearsSource": "model_years",
+        "yearsSource": "series.json",
         "yearsNote": null,
         "source": {
           "article": "GMC Terrain",
@@ -2125,39 +2197,39 @@
           "revision": 1382326006
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "GMC Terrain (Theta)",
         "faceliftHints": []
       },
       {
-        "id": "gmc-terrain/second-generation-2018",
-        "label": "Second generation (2018)",
+        "id": "gmc-terrain/gmc-terrain-second-generation",
+        "label": "GMC Terrain (second generation)",
         "from": 2018,
         "to": 2024,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Watch the naming: Commons files the 2018–2024 Terrain under 'D2UX' (sort key 2; files are 2018–2024 cars), even though Wikipedia lists D2XX as its platform.",
         "source": {
           "article": "GMC Terrain",
           "section": "Second generation (2018)",
           "revision": 1382326006
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "GMC Terrain (D2UX)",
         "faceliftHints": []
       },
       {
-        "id": "gmc-terrain/third-generation-2025",
-        "label": "Third generation (2025)",
+        "id": "gmc-terrain/gmc-terrain-third-generation",
+        "label": "GMC Terrain (third generation)",
         "from": 2025,
         "to": null,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Commons 'GMC Terrain (D2XX)' holds the 2025+ cars (sort key 3; files are named 2025/2026 GMC Terrain). Few files.",
         "source": {
           "article": "GMC Terrain",
           "section": "Third generation (2025)",
           "revision": 1382326006
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "GMC Terrain (D2XX)",
         "faceliftHints": []
       }
     ],
@@ -2172,73 +2244,71 @@
     },
     "generations": [
       {
-        "id": "gmc-yukon/second-generation-2000",
-        "label": "Second generation (2000)",
+        "id": "gmc-yukon/gmc-yukon-gmt800-gmt820",
+        "label": "GMC Yukon (GMT800/GMT820)",
         "from": 2000,
         "to": 2006,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "GMC-badged category. 'GMC Yukon (GMT800)' exists but is empty. Subcategory: Yukon Denali (GMT820).",
         "source": {
           "article": "Chevrolet Tahoe",
           "section": "Second generation (2000)",
           "revision": 1383669612
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "GMC Yukon (GMT820)",
         "faceliftHints": []
       },
       {
-        "id": "gmc-yukon/third-generation-2007",
-        "label": "Third generation (2007)",
+        "id": "gmc-yukon/gmc-yukon-gmt900-gmt922",
+        "label": "GMC Yukon (GMT900/GMT922)",
         "from": 2007,
         "to": 2014,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Subcategories: Yukon Denali (GMT922) and Yukon Hybrid. A separate NYPD category exists; avoid it.",
         "source": {
           "article": "Chevrolet Tahoe",
           "section": "Third generation (2007)",
           "revision": 1383669612
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "GMC Yukon (GMT922)",
         "faceliftHints": []
       },
       {
-        "id": "gmc-yukon/fourth-generation-2015",
-        "label": "Fourth generation (2015)",
+        "id": "gmc-yukon/gmc-yukon-gmtk2ug",
+        "label": "GMC Yukon (GMTK2UG)",
         "from": 2015,
         "to": 2020,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "'GMC Yukon (GMTK2XX)' exists but is empty. Subcategory: Yukon Denali (GMTK2UG).",
         "source": {
           "article": "Chevrolet Tahoe",
           "section": "Fourth generation (2015)",
           "revision": 1383669612
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "GMC Yukon (GMTK2UG)",
         "faceliftHints": []
       },
       {
-        "id": "gmc-yukon/fifth-generation-2021",
-        "label": "Fifth generation (2021)",
+        "id": "gmc-yukon/gmc-yukon-gmtt1ug",
+        "label": "GMC Yukon (GMTT1UG)",
         "from": 2021,
         "to": null,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "2025 facelift is in the same generation. The 2027 Yukon carries over (GM Authority: 2027 production scheduled from September 8, 2026 at Arlington). 'GMC Yukon (GMTT1XX)' exists but is empty. Subcategory: Yukon Denali (GMTT1UG).",
         "source": {
           "article": "Chevrolet Tahoe",
           "section": "Fifth generation (2021)",
           "revision": 1383669612
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "GMC Yukon (GMTT1UG)",
         "faceliftHints": []
       }
     ],
-    "warnings": [
-      "Military applications (2001–present) spans other generations; left out"
-    ]
+    "warnings": []
   },
   "honda-accord": {
     "slug": "honda-accord",
@@ -2253,15 +2323,15 @@
         "label": "Honda Accord (North America seventh generation)",
         "from": 2003,
         "to": 2007,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Catalog years 2006–2007 are the facelifted cars; the article's own Commons link is the whole-model 'Honda Accord' category, so use this NA-specific one instead.",
         "source": {
           "article": "Honda Accord (North America seventh generation)",
           "section": null,
           "revision": 1364437686
         },
         "wikidata": "Q10860903",
-        "commons": null,
+        "commons": "Honda Accord (2002, North America)",
         "faceliftHints": [
           {
             "modelYear": 2006,
@@ -2274,7 +2344,7 @@
         "label": "Honda Accord (North America eighth generation)",
         "from": 2008,
         "to": 2012,
-        "yearsSource": "model_years",
+        "yearsSource": "series.json",
         "yearsNote": null,
         "source": {
           "article": "Honda Accord (North America eighth generation)",
@@ -2295,15 +2365,15 @@
         "label": "Honda Accord (ninth generation)",
         "from": 2013,
         "to": 2017,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Parent 'Honda Accord (2013)' has 0 files (only subcategories), so use the NA subcategory.",
         "source": {
           "article": "Honda Accord (ninth generation)",
           "section": null,
           "revision": 1380841972
         },
         "wikidata": "Q27576500",
-        "commons": "Honda Accord (2013)",
+        "commons": "Honda Accord (2013, North America)",
         "faceliftHints": [
           {
             "modelYear": 2016,
@@ -2316,35 +2386,35 @@
         ]
       },
       {
-        "id": "honda-accord/tenth-generation-2017",
-        "label": "Tenth generation (2017)",
+        "id": "honda-accord/honda-accord-tenth-generation",
+        "label": "Honda Accord (tenth generation)",
         "from": 2018,
         "to": 2022,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "There's no NA subcategory. A few files may show the China-market car.",
         "source": {
           "article": "Honda Accord",
           "section": "Tenth generation (2017)",
           "revision": 1384011866
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Honda Accord (2017)",
         "faceliftHints": []
       },
       {
-        "id": "honda-accord/eleventh-generation-2023",
-        "label": "Eleventh generation (2023)",
+        "id": "honda-accord/honda-accord-eleventh-generation",
+        "label": "Honda Accord (eleventh generation)",
         "from": 2023,
         "to": null,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Commons names it by reveal year (2022). A refreshed 2027 Accord has been shown in Japan; the US 2027 is not yet listed on fueleconomy.gov (2026 is). Any US 2027 will still be this generation.",
         "source": {
           "article": "Honda Accord",
           "section": "Eleventh generation (2023)",
           "revision": 1384011866
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Honda Accord (2022)",
         "faceliftHints": []
       }
     ],
@@ -2462,19 +2532,19 @@
     },
     "generations": [
       {
-        "id": "honda-cr-v/second-generation-2002",
-        "label": "Second generation (2002)",
+        "id": "honda-cr-v/honda-cr-v-second-generation",
+        "label": "Honda CR-V (second generation)",
         "from": 2002,
         "to": 2006,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Subcategories include China-market and clone cars; the main category is fine.",
         "source": {
           "article": "Honda CR-V",
           "section": "Second generation (2002)",
           "revision": 1383641363
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Honda CR-V (2nd generation)",
         "faceliftHints": []
       },
       {
@@ -2482,8 +2552,8 @@
         "label": "Honda CR-V (third generation)",
         "from": 2007,
         "to": 2011,
-        "yearsSource": "model_years",
-        "yearsNote": "US",
+        "yearsSource": "series.json",
+        "yearsNote": null,
         "source": {
           "article": "Honda CR-V (third generation)",
           "section": null,
@@ -2503,7 +2573,7 @@
         "label": "Honda CR-V (fourth generation)",
         "from": 2012,
         "to": 2016,
-        "yearsSource": "model_years",
+        "yearsSource": "series.json",
         "yearsNote": null,
         "source": {
           "article": "Honda CR-V (fourth generation)",
@@ -2524,7 +2594,7 @@
         "label": "Honda CR-V (fifth generation)",
         "from": 2017,
         "to": 2022,
-        "yearsSource": "model_years",
+        "yearsSource": "series.json",
         "yearsNote": null,
         "source": {
           "article": "Honda CR-V (fifth generation)",
@@ -2540,7 +2610,7 @@
         "label": "Honda CR-V (sixth generation)",
         "from": 2023,
         "to": null,
-        "yearsSource": "model_years",
+        "yearsSource": "series.json",
         "yearsNote": null,
         "source": {
           "article": "Honda CR-V (sixth generation)",
@@ -2563,53 +2633,103 @@
     },
     "generations": [
       {
-        "id": "honda-hr-v/second-generation-ru-2013",
-        "label": "Second generation (RU; 2013)",
+        "id": "honda-hr-v/honda-hr-v-second-generation-ru",
+        "label": "Honda HR-V (second generation, RU)",
         "from": 2016,
         "to": 2022,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Global RU model (Vezel in Japan); no North America subcategory, so the category includes non-US cars and Vezel-adjacent photos.",
         "source": {
           "article": "Honda HR-V",
           "section": "Second generation (RU; 2013)",
           "revision": 1382808874
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Honda HR-V (2nd generation)",
         "faceliftHints": []
       },
       {
-        "id": "honda-hr-v/honda-hr-v-third-generation",
-        "label": "Honda HR-V (third generation)",
-        "from": 2021,
+        "id": "honda-hr-v/honda-hr-v-north-america-rz-zr-v-based",
+        "label": "Honda HR-V (North America, RZ / ZR-V-based)",
+        "from": 2023,
         "to": null,
-        "yearsSource": "production",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "The US HR-V from 2023 is the Civic-based RZ (sold elsewhere as the Honda ZR-V), not the international third-generation RV HR-V/Vezel. Do not use 'Honda HR-V (3rd generation)' or '(3rd generation, international)'.",
         "source": {
-          "article": "Honda HR-V (third generation)",
-          "section": null,
-          "revision": 1382069360
+          "article": "Honda ZR-V",
+          "section": "North America",
+          "revision": 1380228328
         },
-        "wikidata": "Q135643369",
-        "commons": "Honda HR-V (3rd generation)",
-        "faceliftHints": []
+        "wikidata": "Q109546578",
+        "commons": "Honda HR-V (3rd generation, North America)",
+        "faceliftHints": [
+          {
+            "modelYear": 2026,
+            "evidence": "In May 2025, for the 2026 model year, the HR-V line-up was updated with changes such as refreshed exterior and interior styling, a 9-inch touchscreen with wireless Android Auto and Apple CarPlay became standard across th"
+          }
+        ]
       }
     ],
-    "warnings": [
-      "Honda HR-V (third generation): only production years in the infobox; check the US model years"
-    ]
+    "warnings": []
   },
   "honda-odyssey": {
     "slug": "honda-odyssey",
     "name": "Honda Odyssey",
     "series": {
-      "article": "Honda Odyssey",
-      "revision": 1273984756
+      "article": "Honda Odyssey (North America)",
+      "revision": 1383837662
     },
-    "generations": [],
-    "warnings": [
-      "no generations found: set them in series.json"
-    ]
+    "generations": [
+      {
+        "id": "honda-odyssey/honda-odyssey-rl3-rl4",
+        "label": "Honda Odyssey (RL3/RL4)",
+        "from": 2005,
+        "to": 2010,
+        "yearsSource": "series.json",
+        "yearsNote": "No separate RL4 category exists; RL3 covers this generation. 2008 refresh is in the same generation.",
+        "source": {
+          "article": "Honda Odyssey (North America)",
+          "section": "Third generation (RL3/4; 2005)",
+          "revision": 1383837662
+        },
+        "wikidata": null,
+        "commons": "Honda Odyssey RL3",
+        "faceliftHints": []
+      },
+      {
+        "id": "honda-odyssey/honda-odyssey-rl5",
+        "label": "Honda Odyssey (RL5)",
+        "from": 2011,
+        "to": 2017,
+        "yearsSource": "series.json",
+        "yearsNote": "2014 refresh is in the same generation.",
+        "source": {
+          "article": "Honda Odyssey (North America)",
+          "section": "Fourth generation (RL5; 2011)",
+          "revision": 1383837662
+        },
+        "wikidata": null,
+        "commons": "Honda Odyssey RL5",
+        "faceliftHints": []
+      },
+      {
+        "id": "honda-odyssey/honda-odyssey-rl6",
+        "label": "Honda Odyssey (RL6)",
+        "from": 2018,
+        "to": null,
+        "yearsSource": "series.json",
+        "yearsNote": "2021 and 2025 refreshes are in the same generation.",
+        "source": {
+          "article": "Honda Odyssey (North America)",
+          "section": "Fifth generation (RL6; 2018)",
+          "revision": 1383837662
+        },
+        "wikidata": null,
+        "commons": "Honda Odyssey RL6",
+        "faceliftHints": []
+      }
+    ],
+    "warnings": []
   },
   "honda-passport": {
     "slug": "honda-passport",
@@ -2929,25 +3049,20 @@
     },
     "generations": [
       {
-        "id": "hyundai-ioniq-6/hyundai-ioniq-6",
-        "label": "Hyundai Ioniq 6",
+        "id": "hyundai-ioniq-6/hyundai-ioniq-6-ce-pre-facelift",
+        "label": "Hyundai Ioniq 6 (CE, pre-facelift)",
         "from": 2023,
         "to": 2025,
-        "yearsSource": "model_years",
-        "yearsNote": "US",
+        "yearsSource": "series.json",
+        "yearsNote": "US cars never got the 2025 facelift. Parent 'Hyundai Ioniq 6' has 0 files.",
         "source": {
           "article": "Hyundai Ioniq 6",
           "section": null,
           "revision": 1381404016
         },
-        "wikidata": "Q112577811",
-        "commons": "Hyundai Ioniq 6",
-        "faceliftHints": [
-          {
-            "modelYear": 2026,
-            "evidence": "In Canada, the facelifted non-N Ioniq 6 is set to go on sale as a 2027 model after taking a hiatus for the 2026 model year."
-          }
-        ]
+        "wikidata": null,
+        "commons": "Hyundai Ioniq 6 (2022)",
+        "faceliftHints": []
       }
     ],
     "warnings": []
@@ -3331,41 +3446,23 @@
     },
     "generations": [
       {
-        "id": "hyundai-venue/first-generation-qx-2019",
-        "label": "First generation (QX; 2019)",
+        "id": "hyundai-venue/hyundai-venue-qx",
+        "label": "Hyundai Venue (QX)",
         "from": 2020,
         "to": null,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "There's no QX-specific Commons category; the whole-model category holds QX photos (all markets, many Indian-market cars), and the second generation is in the separate subcategory 'Hyundai Venue II' (4 files), so don't use that one.",
         "source": {
           "article": "Hyundai Venue",
           "section": "First generation (QX; 2019)",
           "revision": 1383517281
         },
         "wikidata": null,
-        "commons": null,
-        "faceliftHints": []
-      },
-      {
-        "id": "hyundai-venue/second-generation-qu2-2025",
-        "label": "Second generation (QU2; 2025)",
-        "from": 2025,
-        "to": null,
-        "yearsSource": "production",
-        "yearsNote": null,
-        "source": {
-          "article": "Hyundai Venue",
-          "section": "Second generation (QU2; 2025)",
-          "revision": 1383517281
-        },
-        "wikidata": null,
-        "commons": null,
+        "commons": "Hyundai Venue",
         "faceliftHints": []
       }
     ],
-    "warnings": [
-      "Second generation (QU2; 2025): only production years in the infobox; check the US model years"
-    ]
+    "warnings": []
   },
   "jeep-compass": {
     "slug": "jeep-compass",
@@ -3376,28 +3473,28 @@
     },
     "generations": [
       {
-        "id": "jeep-compass/first-generation-mk49-2006",
-        "label": "First generation (MK49; 2006)",
+        "id": "jeep-compass/jeep-compass-mk49",
+        "label": "Jeep Compass (MK49)",
         "from": 2007,
         "to": 2017,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Split year 2017: the old MK Compass and the new MP ('New Compass') were both sold as 2017 models; fueleconomy.gov 2017 lists both 'Compass' and 'New Compass'.",
         "source": {
           "article": "Jeep Compass",
           "section": "First generation (MK49; 2006)",
           "revision": 1375207742
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Jeep Compass (MK)",
         "faceliftHints": []
       },
       {
-        "id": "jeep-compass/second-generation-mp-552-2016",
-        "label": "Second generation (MP/552; 2016)",
+        "id": "jeep-compass/jeep-compass-mp",
+        "label": "Jeep Compass (MP)",
         "from": 2017,
         "to": 2027,
-        "yearsSource": "model_years",
-        "yearsNote": "USA",
+        "yearsSource": "series.json",
+        "yearsNote": "Split year 2017 with the MK. The third generation (J4U/J4D) isn't sold in the US yet: the article says US production at Belvidere starts December 2027 for the 2028 model year, so the US 2025–2027 Compass is still the MP.",
         "source": {
           "article": "Jeep Compass",
           "section": "Second generation (MP/552; 2016)",
@@ -3406,39 +3503,36 @@
         "wikidata": null,
         "commons": "Jeep Compass (MP)",
         "faceliftHints": []
-      },
-      {
-        "id": "jeep-compass/third-generation-j4u-j4d-2025",
-        "label": "Third generation (J4U/J4D; 2025)",
-        "from": 2025,
-        "to": null,
-        "yearsSource": "production",
-        "yearsNote": null,
-        "source": {
-          "article": "Jeep Compass",
-          "section": "Third generation (J4U/J4D; 2025)",
-          "revision": 1375207742
-        },
-        "wikidata": null,
-        "commons": "Jeep Compass (J4U)",
-        "faceliftHints": []
       }
     ],
-    "warnings": [
-      "Third generation (J4U/J4D; 2025): only production years in the infobox; check the US model years"
-    ]
+    "warnings": []
   },
   "jeep-gladiator": {
     "slug": "jeep-gladiator",
     "name": "Jeep Gladiator",
     "series": {
-      "article": "Jeep Gladiator",
-      "revision": 1370849277
+      "article": "Jeep Gladiator (JT)",
+      "revision": 1380931236
     },
-    "generations": [],
-    "warnings": [
-      "no generations found: set them in series.json"
-    ]
+    "generations": [
+      {
+        "id": "jeep-gladiator/jeep-gladiator-jt",
+        "label": "Jeep Gladiator (JT)",
+        "from": 2020,
+        "to": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Includes the 2025 refresh.",
+        "source": {
+          "article": "Jeep Gladiator (JT)",
+          "section": null,
+          "revision": 1380931236
+        },
+        "wikidata": null,
+        "commons": "Jeep Gladiator (JT)",
+        "faceliftHints": []
+      }
+    ],
+    "warnings": []
   },
   "jeep-grand-cherokee": {
     "slug": "jeep-grand-cherokee",
@@ -3453,7 +3547,7 @@
         "label": "Jeep Grand Cherokee (WK)",
         "from": 2005,
         "to": 2010,
-        "yearsSource": "model_years",
+        "yearsSource": "series.json",
         "yearsNote": null,
         "source": {
           "article": "Jeep Grand Cherokee (WK)",
@@ -3469,8 +3563,8 @@
         "label": "Jeep Grand Cherokee (WK2)",
         "from": 2011,
         "to": 2022,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Split year 2022: the carryover two-row WK2 was sold as the 2022 'Grand Cherokee WK' alongside the new two-row WL 2022 Grand Cherokee. Most photos are in the subcategories: 'Jeep Grand Cherokee (WK2, 2010)' 110 files (2011–2013), '(WK2, 2013)' 107 files (2014–2016 facelift), '(WK2, 2017)' 168 files (2017–2022).",
         "source": {
           "article": "Jeep Grand Cherokee (WK2)",
           "section": null,
@@ -3486,12 +3580,12 @@
         ]
       },
       {
-        "id": "jeep-grand-cherokee/fifth-generation-wl-2021",
-        "label": "Fifth generation (WL; 2021)",
-        "from": 2021,
+        "id": "jeep-grand-cherokee/jeep-grand-cherokee-wl",
+        "label": "Jeep Grand Cherokee (WL)",
+        "from": 2022,
         "to": null,
-        "yearsSource": "model_years",
-        "yearsNote": "Grand Cherokee L",
+        "yearsSource": "series.json",
+        "yearsNote": "Two-row WL from MY2022 (split year with the WK2 'WK'). The three-row Grand Cherokee L started in MY2021, but in 2021 the regular (two-row) Grand Cherokee was still the WK2, so 2021 maps to WK2. 'Jeep Grand Cherokee L' (65 files) is a subcategory of WL; exclude it for the regular two-row model, or accept it if the catalog's slug covers the L.",
         "source": {
           "article": "Jeep Grand Cherokee",
           "section": "Fifth generation (WL; 2021)",
@@ -4026,12 +4120,12 @@
     },
     "generations": [
       {
-        "id": "kia-telluride/first-generation-on-2020",
-        "label": "First generation (ON; 2020)",
+        "id": "kia-telluride/kia-telluride-on-first-generation",
+        "label": "Kia Telluride (ON, first generation)",
         "from": 2020,
         "to": 2025,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "2023 refresh (facelift) is the same generation.",
         "source": {
           "article": "Kia Telluride",
           "section": "First generation (ON; 2020)",
@@ -4042,11 +4136,11 @@
         "faceliftHints": []
       },
       {
-        "id": "kia-telluride/second-generation-lq2-2027",
-        "label": "Second generation (LQ2; 2027)",
+        "id": "kia-telluride/kia-telluride-lq2-second-generation",
+        "label": "Kia Telluride (LQ2, second generation)",
         "from": 2027,
         "to": null,
-        "yearsSource": "model_years",
+        "yearsSource": "series.json",
         "yearsNote": null,
         "source": {
           "article": "Kia Telluride",
@@ -4203,12 +4297,12 @@
     },
     "generations": [
       {
-        "id": "lexus-rx/second-generation-xu30-2003",
-        "label": "Second generation (XU30; 2003)",
+        "id": "lexus-rx/lexus-rx-xu30",
+        "label": "Lexus RX (XU30)",
         "from": 2004,
         "to": 2009,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "More in subcategories (RX 330, RX 350 GSU30/35, RX 400h).",
         "source": {
           "article": "Lexus RX",
           "section": "Second generation (XU30; 2003)",
@@ -4219,12 +4313,12 @@
         "faceliftHints": []
       },
       {
-        "id": "lexus-rx/third-generation-al10-2008",
-        "label": "Third generation (AL10; 2008)",
+        "id": "lexus-rx/lexus-rx-al10",
+        "label": "Lexus RX (AL10)",
         "from": 2010,
         "to": 2015,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "More in subcategories (RX 350 GGL10/15, RX 450h GYL10/15, F Sport).",
         "source": {
           "article": "Lexus RX",
           "section": "Third generation (AL10; 2008)",
@@ -4235,12 +4329,12 @@
         "faceliftHints": []
       },
       {
-        "id": "lexus-rx/fourth-generation-al20-2015",
-        "label": "Fourth generation (AL20; 2015)",
+        "id": "lexus-rx/lexus-rx-al20",
+        "label": "Lexus RX (AL20)",
         "from": 2016,
         "to": 2022,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "More in subcategories (RX 350 GGL20/25, RX 450h, RX L).",
         "source": {
           "article": "Lexus RX",
           "section": "Fourth generation (AL20; 2015)",
@@ -4251,19 +4345,19 @@
         "faceliftHints": []
       },
       {
-        "id": "lexus-rx/fifth-generation-ala10-alh10-2022",
-        "label": "Fifth generation (ALA10/ALH10; 2022)",
+        "id": "lexus-rx/lexus-rx-fifth-generation-ala10-alh10",
+        "label": "Lexus RX (fifth generation, ALA10/ALH10)",
         "from": 2023,
         "to": null,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Commons names the fifth generation 'Lexus RX (AL10, 2022)'; 'Lexus RX (AL30)' is a category redirect to it. More photos in subcategories (RX 350 TALA10/15, RX 350h, RX 450h+, RX 500h).",
         "source": {
           "article": "Lexus RX",
           "section": "Fifth generation (ALA10/ALH10; 2022)",
           "revision": 1384002024
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Lexus RX (AL10, 2022)",
         "faceliftHints": []
       }
     ],
@@ -4497,15 +4591,15 @@
         "label": "Mercedes-Benz C-Class (W203)",
         "from": 2001,
         "to": 2007,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "The catalog's 2006–2007 are facelift cars, so I used the facelift subcategory. Generation parent: 'Mercedes-Benz W203' (37 files + subcategories).",
         "source": {
           "article": "Mercedes-Benz C-Class (W203)",
           "section": null,
           "revision": 1366622628
         },
         "wikidata": "Q11344082",
-        "commons": "Mercedes-Benz type 203",
+        "commons": "Mercedes-Benz W203 (2004–2007)",
         "faceliftHints": [
           {
             "modelYear": 2005,
@@ -4522,8 +4616,8 @@
         "label": "Mercedes-Benz C-Class (W204)",
         "from": 2008,
         "to": 2014,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "The parent has few direct files; use the subcategories 'Mercedes-Benz W204 (2007)' (301, pre-facelift: 2008–2011 MY) and 'Mercedes-Benz W204 (2010)' (150, facelift: 2012–2014 MY). The C204 coupe ran to 2015.",
         "source": {
           "article": "Mercedes-Benz C-Class (W204)",
           "section": null,
@@ -4543,8 +4637,8 @@
         "label": "Mercedes-Benz C-Class (W205)",
         "from": 2015,
         "to": 2021,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Use the subcategories 'Mercedes-Benz W205 (2014)' (197, pre-facelift) and 'Mercedes-Benz W205 (2018)' (119, facelift). The W205-based coupe/cabriolet stayed on sale through 2023, overlapping the W206 sedan.",
         "source": {
           "article": "Mercedes-Benz C-Class (W205)",
           "section": null,
@@ -4564,37 +4658,19 @@
         "label": "Mercedes-Benz C-Class (W206)",
         "from": 2022,
         "to": null,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "The 2027 US gasoline C-Class is the facelifted W206 (2026 facelift).",
         "source": {
           "article": "Mercedes-Benz C-Class (W206)",
           "section": null,
           "revision": 1374230587
         },
         "wikidata": "Q105642743",
-        "commons": "Mercedes-Benz type 206",
-        "faceliftHints": []
-      },
-      {
-        "id": "mercedes-benz-c-class/battery-electric-w520-2026",
-        "label": "Battery electric (W520; 2026)",
-        "from": 2026,
-        "to": null,
-        "yearsSource": "production",
-        "yearsNote": null,
-        "source": {
-          "article": "Mercedes-Benz C-Class",
-          "section": "Battery electric (W520; 2026)",
-          "revision": 1377635930
-        },
-        "wikidata": null,
-        "commons": null,
+        "commons": "Mercedes-Benz W206",
         "faceliftHints": []
       }
     ],
-    "warnings": [
-      "Battery electric (W520; 2026): only production years in the infobox; check the US model years"
-    ]
+    "warnings": []
   },
   "mercedes-benz-glc-class": {
     "slug": "mercedes-benz-glc-class",
@@ -4605,41 +4681,39 @@
     },
     "generations": [
       {
-        "id": "mercedes-benz-glc-class/first-generation-x253-c253-v253-2015",
-        "label": "First generation (X253/C253/V253; 2015)",
+        "id": "mercedes-benz-glc-class/mercedes-benz-glc-x253",
+        "label": "Mercedes-Benz GLC (X253)",
         "from": 2016,
         "to": 2022,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "The parent category has 0 files directly; the photos are in subcategories 'Mercedes-Benz X253 (2015-2019)' (176 files, pre-facelift) and 'Mercedes-Benz X253 (2019–2022)' (71 files, facelift; US 2020+). Use them by year. Avoid 'Mercedes-Benz X253 L' (Chinese long-wheelbase version). The X253 SUV ended with the 2022 model year in the US.",
         "source": {
           "article": "Mercedes-Benz GLC",
           "section": "First generation (X253/C253/V253; 2015)",
           "revision": 1377658797
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Mercedes-Benz X253",
         "faceliftHints": []
       },
       {
-        "id": "mercedes-benz-glc-class/second-generation-x254-c254-v254-2022",
-        "label": "Second generation (X254/C254/V254; 2022)",
-        "from": 2022,
+        "id": "mercedes-benz-glc-class/mercedes-benz-glc-x254",
+        "label": "Mercedes-Benz GLC (X254)",
+        "from": 2023,
         "to": null,
-        "yearsSource": "production",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "First US model year is 2023, not 2022 (2022 was the production start). Subcategory: Mercedes-AMG X254.",
         "source": {
           "article": "Mercedes-Benz GLC",
           "section": "Second generation (X254/C254/V254; 2022)",
           "revision": 1377658797
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Mercedes-Benz X254",
         "faceliftHints": []
       }
     ],
-    "warnings": [
-      "Second generation (X254/C254/V254; 2022): only production years in the infobox; check the US model years"
-    ]
+    "warnings": []
   },
   "mitsubishi-outlander": {
     "slug": "mitsubishi-outlander",
@@ -4650,12 +4724,12 @@
     },
     "generations": [
       {
-        "id": "mitsubishi-outlander/first-generation-cu-ze-zf-2001",
-        "label": "First generation (CU/ZE/ZF; 2001)",
-        "from": 2001,
-        "to": 2008,
-        "yearsSource": "production",
-        "yearsNote": "Airtrek",
+        "id": "mitsubishi-outlander/mitsubishi-outlander-first-generation-cu",
+        "label": "Mitsubishi Outlander (first generation, CU)",
+        "from": 2003,
+        "to": 2006,
+        "yearsSource": "series.json",
+        "yearsNote": "US model years 2003–2006. The category may include Japanese Airtrek photos.",
         "source": {
           "article": "Mitsubishi Outlander",
           "section": "First generation (CU/ZE/ZF; 2001)",
@@ -4666,12 +4740,12 @@
         "faceliftHints": []
       },
       {
-        "id": "mitsubishi-outlander/second-generation-cw-zg-zh-2006",
-        "label": "Second generation (CW/ZG/ZH; 2006)",
+        "id": "mitsubishi-outlander/mitsubishi-outlander-second-generation-cw",
+        "label": "Mitsubishi Outlander (second generation, CW)",
         "from": 2007,
         "to": 2013,
-        "yearsSource": "model_years",
-        "yearsNote": "North America",
+        "yearsSource": "series.json",
+        "yearsNote": "2010 facelift (US): subcategory 'Mitsubishi Outlander (second generation, facelift)'.",
         "source": {
           "article": "Mitsubishi Outlander",
           "section": "Second generation (CW/ZG/ZH; 2006)",
@@ -4682,12 +4756,12 @@
         "faceliftHints": []
       },
       {
-        "id": "mitsubishi-outlander/third-generation-gf-gg-zj-zk-zl-2012",
-        "label": "Third generation (GF/GG/ZJ/ZK/ZL; 2012)",
-        "from": 2013,
+        "id": "mitsubishi-outlander/mitsubishi-outlander-third-generation-gf",
+        "label": "Mitsubishi Outlander (third generation, GF)",
+        "from": 2014,
         "to": 2021,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "The US third generation started with MY2014. Photos are in the facelift subcategories '(third generation, 2012)', '(third generation, 2015)' (US 2016 MY facelift), and '(third generation, 2018)' (US 2019 MY).",
         "source": {
           "article": "Mitsubishi Outlander",
           "section": "Third generation (GF/GG/ZJ/ZK/ZL; 2012)",
@@ -4698,11 +4772,11 @@
         "faceliftHints": []
       },
       {
-        "id": "mitsubishi-outlander/fourth-generation-gm-gn-zm-2021",
-        "label": "Fourth generation (GM/GN/ZM; 2021)",
+        "id": "mitsubishi-outlander/mitsubishi-outlander-fourth-generation-gm-gn",
+        "label": "Mitsubishi Outlander (fourth generation, GM/GN)",
         "from": 2022,
         "to": null,
-        "yearsSource": "model_years",
+        "yearsSource": "series.json",
         "yearsNote": null,
         "source": {
           "article": "Mitsubishi Outlander",
@@ -4714,9 +4788,7 @@
         "faceliftHints": []
       }
     ],
-    "warnings": [
-      "First generation (CU/ZE/ZF; 2001): only production years in the infobox; check the US model years"
-    ]
+    "warnings": []
   },
   "nissan-altima": {
     "slug": "nissan-altima",
@@ -4797,13 +4869,49 @@
     "slug": "nissan-frontier",
     "name": "Nissan Frontier",
     "series": {
-      "article": "Nissan Frontier",
-      "revision": 1353705510
+      "article": "Nissan Frontier (North America)",
+      "revision": 1362553779
     },
-    "generations": [],
-    "warnings": [
-      "no generations found: set them in series.json"
-    ]
+    "generations": [
+      {
+        "id": "nissan-frontier/nissan-frontier-d40",
+        "label": "Nissan Frontier (D40)",
+        "from": 2005,
+        "to": 2021,
+        "yearsSource": "series.json",
+        "yearsNote": "The 2020 powertrain update (new V6) is the same D40 body.",
+        "source": {
+          "article": "Nissan Navara",
+          "section": "Second generation (D40; 2004)",
+          "revision": 1383699606
+        },
+        "wikidata": "Q1465915",
+        "commons": "Nissan Frontier (D40)",
+        "faceliftHints": [
+          {
+            "modelYear": 2009,
+            "evidence": "=== Facelift === thumb|left|2011 Nissan Frontier Pro-4X (US) For the North American Frontier in the 2009 model year, and the European Navara in the 2010 model year, Nissan updated the shape of some minor components."
+          }
+        ]
+      },
+      {
+        "id": "nissan-frontier/nissan-frontier-d41",
+        "label": "Nissan Frontier (D41)",
+        "from": 2022,
+        "to": null,
+        "yearsSource": "series.json",
+        "yearsNote": "'Nissan Frontier (D41)' redirects to 'Nissan Frontier (North America)'. A 2025 model-year facelift is the same generation.",
+        "source": {
+          "article": "Nissan Frontier (North America)",
+          "section": "Third generation (D41; 2022)",
+          "revision": 1362553779
+        },
+        "wikidata": null,
+        "commons": "Nissan Frontier (D41)",
+        "faceliftHints": []
+      }
+    ],
+    "warnings": []
   },
   "nissan-kicks": {
     "slug": "nissan-kicks",
@@ -4857,27 +4965,27 @@
     },
     "generations": [
       {
-        "id": "nissan-leaf/nissan-leaf-first-generation",
-        "label": "Nissan Leaf (first generation)",
+        "id": "nissan-leaf/nissan-leaf-ze0-aze0-first-generation",
+        "label": "Nissan Leaf (ZE0/AZE0, first generation)",
         "from": 2011,
-        "to": 2011,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "to": 2017,
+        "yearsSource": "series.json",
+        "yearsNote": "Includes the 2013+ AZE0 update (US-built at Smyrna); same body.",
         "source": {
           "article": "Nissan Leaf (first generation)",
           "section": null,
           "revision": 1383241605
         },
         "wikidata": "Q38278176",
-        "commons": null,
+        "commons": "Nissan Leaf (ZE0)",
         "faceliftHints": []
       },
       {
-        "id": "nissan-leaf/second-generation-ze1-2017",
-        "label": "Second generation (ZE1; 2017)",
+        "id": "nissan-leaf/nissan-leaf-ze1-second-generation",
+        "label": "Nissan Leaf (ZE1, second generation)",
         "from": 2018,
         "to": 2025,
-        "yearsSource": "model_years",
+        "yearsSource": "series.json",
         "yearsNote": null,
         "source": {
           "article": "Nissan Leaf",
@@ -4889,12 +4997,12 @@
         "faceliftHints": []
       },
       {
-        "id": "nissan-leaf/third-generation-ze2-2025",
-        "label": "Third generation (ZE2; 2025)",
+        "id": "nissan-leaf/nissan-leaf-ze2-third-generation",
+        "label": "Nissan Leaf (ZE2, third generation)",
         "from": 2026,
         "to": null,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Crossover body; a different shape from earlier Leafs.",
         "source": {
           "article": "Nissan Leaf",
           "section": "Third generation (ZE2; 2025)",
@@ -4991,12 +5099,12 @@
     },
     "generations": [
       {
-        "id": "nissan-pathfinder/third-generation-r51-2004",
-        "label": "Third generation (R51; 2004)",
+        "id": "nissan-pathfinder/nissan-pathfinder-r51",
+        "label": "Nissan Pathfinder (R51)",
         "from": 2005,
         "to": 2012,
-        "yearsSource": "model_years",
-        "yearsNote": "North America",
+        "yearsSource": "series.json",
+        "yearsNote": "The category also has non-US and facelifted R51s; avoid its 'Nissan Dunehawk' subcategory.",
         "source": {
           "article": "Nissan Pathfinder",
           "section": "Third generation (R51; 2004)",
@@ -5007,12 +5115,12 @@
         "faceliftHints": []
       },
       {
-        "id": "nissan-pathfinder/fourth-generation-r52-2012",
-        "label": "Fourth generation (R52; 2012)",
+        "id": "nissan-pathfinder/nissan-pathfinder-r52",
+        "label": "Nissan Pathfinder (R52)",
         "from": 2013,
         "to": 2020,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "2017 refresh is in the same generation. Subcategories: Concept and Rock Creek; avoid the concept.",
         "source": {
           "article": "Nissan Pathfinder",
           "section": "Fourth generation (R52; 2012)",
@@ -5023,19 +5131,19 @@
         "faceliftHints": []
       },
       {
-        "id": "nissan-pathfinder/global-version-2021",
-        "label": "Global version (2021)",
+        "id": "nissan-pathfinder/nissan-pathfinder-r53",
+        "label": "Nissan Pathfinder (R53)",
         "from": 2022,
         "to": null,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Avoid the 'Nissan Pathfinder (China)' subcategory. A 2027 Pathfinder is confirmed (carryover, plus a 40th-anniversary Special Edition): https://www.kbb.com/car-news/2027-nissan-pathfinder-special-edition-celebrates-40-year-history/",
         "source": {
           "article": "Nissan Pathfinder",
-          "section": "Global version (2021)",
+          "section": "Fifth generation (R53; 2021) / Global version (2021)",
           "revision": 1381290043
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Nissan Pathfinder (R53)",
         "faceliftHints": []
       }
     ],
@@ -5214,10 +5322,88 @@
       "article": "Nissan Versa",
       "revision": 1366088644
     },
-    "generations": [],
-    "warnings": [
-      "no generations found: set them in series.json"
-    ]
+    "generations": [
+      {
+        "id": "nissan-versa/nissan-versa-c11-tiida",
+        "label": "Nissan Versa (C11, Tiida)",
+        "from": 2007,
+        "to": 2012,
+        "yearsSource": "series.json",
+        "yearsNote": "Split year 2012: the 2012 Versa hatchback was still C11 while the 2012 Versa sedan was the new N17. Most photos are in the subcategories 'Nissan Versa (C11) hatchback' (61) and 'Nissan Versa (C11) sedan' (36).",
+        "source": {
+          "article": "Nissan Tiida",
+          "section": "First generation (C11; 2004)",
+          "revision": 1369680862
+        },
+        "wikidata": "Q530013",
+        "commons": "Nissan Versa (C11)",
+        "faceliftHints": [
+          {
+            "modelYear": 2021,
+            "evidence": "File:2017 Yulon-Nissan Tiida (facelift, front).jpg|Front view of Nissan iTiida (2017 facelift) File:2017 Yulon-Nissan Tiida (facelift, rear).jpg|Rear view of Nissan iTiida (2017 facelift) ==== Tiida J ==== The Taiwanese "
+          }
+        ]
+      },
+      {
+        "id": "nissan-versa/nissan-versa-sedan-n17-almera",
+        "label": "Nissan Versa sedan (N17, Almera)",
+        "from": 2012,
+        "to": 2019,
+        "yearsSource": "series.json",
+        "yearsNote": "Split year 2012 with the C11 hatchback. From 2014 to 2019 the hatchback was the separate Versa Note (E12); see comments.",
+        "source": {
+          "article": "Nissan Almera",
+          "section": "Third generation (N17; 2011)",
+          "revision": 1383617822
+        },
+        "wikidata": "Q1141759",
+        "commons": "Nissan Versa (N17)",
+        "faceliftHints": [
+          {
+            "modelYear": 1998,
+            "evidence": "=== Facelift === The Almera received a facelift for the 1998 model year."
+          },
+          {
+            "modelYear": 2015,
+            "evidence": "For the 2015 model year, the Versa received its facelift, with redesigned tail lights and larger headlights."
+          },
+          {
+            "modelYear": 2023,
+            "evidence": "The facelifted Versa was unveiled on October 10, 2022 for the 2023 model year."
+          }
+        ]
+      },
+      {
+        "id": "nissan-versa/nissan-versa-sedan-n18",
+        "label": "Nissan Versa sedan (N18)",
+        "from": 2020,
+        "to": 2025,
+        "yearsSource": "series.json",
+        "yearsNote": null,
+        "source": {
+          "article": "Nissan Almera",
+          "section": "Fourth generation (N18; 2019, N19; 2026)",
+          "revision": 1383617822
+        },
+        "wikidata": "Q1141759",
+        "commons": "Nissan Versa (N18)",
+        "faceliftHints": [
+          {
+            "modelYear": 1998,
+            "evidence": "=== Facelift === The Almera received a facelift for the 1998 model year."
+          },
+          {
+            "modelYear": 2015,
+            "evidence": "For the 2015 model year, the Versa received its facelift, with redesigned tail lights and larger headlights."
+          },
+          {
+            "modelYear": 2023,
+            "evidence": "The facelifted Versa was unveiled on October 10, 2022 for the 2023 model year."
+          }
+        ]
+      }
+    ],
+    "warnings": []
   },
   "ram-1500": {
     "slug": "ram-1500",
@@ -5228,35 +5414,40 @@
     },
     "generations": [
       {
-        "id": "ram-1500/fourth-generation-2009-ds",
-        "label": "Fourth generation (2009; DS)",
+        "id": "ram-1500/ram-1500-ds",
+        "label": "Ram 1500 (DS)",
         "from": 2009,
-        "to": 2024,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "to": 2018,
+        "yearsSource": "series.json",
+        "yearsNote": "Ends at 2018 for the regular Ram 1500; from 2019 the DS was sold only as the 'Ram 1500 Classic'. The category also has 2009–2010 Dodge-badged trucks (Ram became its own brand around 2010), so prefer files of 2013+ trucks (the 2013 refresh is the catalog's first year). Avoid its 'Ram 1500 Classic (DS)' subcategory for 2013–2018.",
         "source": {
-          "article": "Ram pickup",
-          "section": "Fourth generation (2009; DS)",
-          "revision": 1380790759
+          "article": "Ram pickup (fourth generation)",
+          "section": null,
+          "revision": 1382656232
         },
-        "wikidata": null,
-        "commons": null,
-        "faceliftHints": []
+        "wikidata": "Q141303963",
+        "commons": "Ram 1500 (DS)",
+        "faceliftHints": [
+          {
+            "modelYear": 2013,
+            "evidence": "thumb|2013 Ram 1500 The Ram 1500 was updated for the 2013 model year with a revised grille and front bumper, refreshed interior, new wheels, and available projector headlamps."
+          }
+        ]
       },
       {
-        "id": "ram-1500/fifth-generation-2019-dt",
-        "label": "Fifth generation (2019; DT)",
+        "id": "ram-1500/ram-1500-dt",
+        "label": "Ram 1500 (DT)",
         "from": 2019,
         "to": null,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "2025 refresh is in the same generation. Subcategories RHO, Rumble Bee and TRX are performance variants; base 1500 photos are preferable.",
         "source": {
-          "article": "Ram pickup",
-          "section": "Fifth generation (2019; DT)",
-          "revision": 1380790759
+          "article": "Ram 1500 (DT)",
+          "section": null,
+          "revision": 1382920090
         },
-        "wikidata": null,
-        "commons": null,
+        "wikidata": "Q52063690",
+        "commons": "Ram 1500 (DT)",
         "faceliftHints": []
       }
     ],
@@ -5298,28 +5489,28 @@
     },
     "generations": [
       {
-        "id": "subaru-crosstrek/first-generation-gp-2012",
-        "label": "First generation (GP; 2012)",
+        "id": "subaru-crosstrek/subaru-crosstrek-gp",
+        "label": "Subaru Crosstrek (GP)",
         "from": 2013,
         "to": 2017,
-        "yearsSource": "model_years",
-        "yearsNote": "North America",
+        "yearsSource": "series.json",
+        "yearsNote": "North America sold it as the 'XV Crosstrek' for 2013–2015 and as plain 'Crosstrek' from 2016 (article: 'Subaru dropped the XV moniker in North America, marketing it simply as the Crosstrek for the 2016 model year'). The category holds North American cars (2013–2017 files, including '16/'17 Crosstrek) plus a 1-file Hybrid subcategory. Fallback: 'Subaru XV (GP)' (142 files), but those are mostly XV-badged cars from outside North America.",
         "source": {
           "article": "Subaru Crosstrek",
           "section": "First generation (GP; 2012)",
           "revision": 1375306691
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Subaru XV Crosstrek",
         "faceliftHints": []
       },
       {
-        "id": "subaru-crosstrek/second-generation-gt-2017",
-        "label": "Second generation (GT; 2017)",
+        "id": "subaru-crosstrek/subaru-crosstrek-gt",
+        "label": "Subaru Crosstrek (GT)",
         "from": 2018,
         "to": 2023,
-        "yearsSource": "model_years",
-        "yearsNote": "North America",
+        "yearsSource": "series.json",
+        "yearsNote": null,
         "source": {
           "article": "Subaru Crosstrek",
           "section": "Second generation (GT; 2017)",
@@ -5330,12 +5521,12 @@
         "faceliftHints": []
       },
       {
-        "id": "subaru-crosstrek/third-generation-gu-2022",
-        "label": "Third generation (GU; 2022)",
+        "id": "subaru-crosstrek/subaru-crosstrek-gu",
+        "label": "Subaru Crosstrek (GU)",
         "from": 2024,
         "to": null,
-        "yearsSource": "model_years",
-        "yearsNote": "North America",
+        "yearsSource": "series.json",
+        "yearsNote": "Has 3 subcategories (e-BOXER and others). e-BOXER is a non-US version.",
         "source": {
           "article": "Subaru Crosstrek",
           "section": "Third generation (GU; 2022)",
@@ -5723,21 +5914,19 @@
         "label": "Tesla Model 3",
         "from": 2017,
         "to": null,
-        "yearsSource": "production",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "One generation (production years). The 2024 'Highland' refresh is a facelift, not a new generation; in the US it was delivered from January 2024. For matching photos to styling, use the subcategories 'Tesla Model 3 (2017–2023)' (479 files) for 2017–2023 and 'Tesla Model 3 (2023–)' (155 files) for 2024 onward. The parent has only 9 files; 'Tesla Model 3 (2023)' exists but is empty.",
         "source": {
           "article": "Tesla Model 3",
           "section": null,
           "revision": 1383854148
         },
-        "wikidata": "Q7705507",
+        "wikidata": null,
         "commons": "Tesla Model 3",
         "faceliftHints": []
       }
     ],
-    "warnings": [
-      "Tesla Model 3: only production years in the infobox; check the US model years"
-    ]
+    "warnings": []
   },
   "tesla-model-s": {
     "slug": "tesla-model-s",
@@ -5750,23 +5939,18 @@
       {
         "id": "tesla-model-s/tesla-model-s",
         "label": "Tesla Model S",
-        "from": 2013,
+        "from": 2012,
         "to": 2026,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "One generation with two facelifts. The parent has 162 files plus subcategories by design: 'Tesla Model S (2012–2016)' (334 files, original nose: 2012–2016), 'Tesla Model S (2016–2021)' (131, April 2016 facelift sold as 2017 MY per the article), and 'Tesla Model S (2021–)' (11, 2021 refresh/Plaid). Production ended May 2026, so 2026 is the last year.",
         "source": {
           "article": "Tesla Model S",
           "section": null,
           "revision": 1380869680
         },
-        "wikidata": "Q1463050",
+        "wikidata": null,
         "commons": "Tesla Model S",
-        "faceliftHints": [
-          {
-            "modelYear": 2017,
-            "evidence": "=== 2016–2019: First major update === In April 2016, Tesla implemented a facelift for the Model S, releasing these cars for the 2017 model year."
-          }
-        ]
+        "faceliftHints": []
       }
     ],
     "warnings": []
@@ -5778,10 +5962,25 @@
       "article": "Tesla Model X",
       "revision": 1379672256
     },
-    "generations": [],
-    "warnings": [
-      "no generations found: set them in series.json"
-    ]
+    "generations": [
+      {
+        "id": "tesla-model-x/tesla-model-x",
+        "label": "Tesla Model X",
+        "from": 2016,
+        "to": 2026,
+        "yearsSource": "series.json",
+        "yearsNote": "Tesla doesn't use model years conventionally, so these are production years mapped to the catalog. The first cars were delivered in September 2015 as 2016 models (EPA lists a '2016 Tesla Model X'). One generation throughout. The 2021 'Palladium' refresh (new interior with yoke/horizontal screen, Plaid trim, small exterior changes) is not a new generation, and Commons has no separate refresh category. 'Tesla Model X (2016)' is the only generation-level category and seems to cover all years.",
+        "source": {
+          "article": "Tesla Model X",
+          "section": null,
+          "revision": 1379672256
+        },
+        "wikidata": null,
+        "commons": "Tesla Model X (2016)",
+        "faceliftHints": []
+      }
+    ],
+    "warnings": []
   },
   "tesla-model-y": {
     "slug": "tesla-model-y",
@@ -5796,21 +5995,19 @@
         "label": "Tesla Model Y",
         "from": 2020,
         "to": null,
-        "yearsSource": "production",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Facelift, not a new generation: the 2025 refresh ('Juniper', launched Jan 10, 2025; US deliveries from March 2025) is sold in the US as the 2026 Model Y (VIN 10th digit 'T'). Refresh photos are in the subcategory 'Tesla Model Y (2025)' (123 files). For 2026+ prefer that subcategory; for 2020–2025 use the parent's direct files.",
         "source": {
           "article": "Tesla Model Y",
           "section": null,
           "revision": 1383842988
         },
-        "wikidata": "Q42298250",
+        "wikidata": null,
         "commons": "Tesla Model Y",
         "faceliftHints": []
       }
     ],
-    "warnings": [
-      "Tesla Model Y: only production years in the infobox; check the US model years"
-    ]
+    "warnings": []
   },
   "toyota-4runner": {
     "slug": "toyota-4runner",
@@ -5878,10 +6075,25 @@
       "article": "Toyota bZ4X",
       "revision": 1381593066
     },
-    "generations": [],
-    "warnings": [
-      "no generations found: set them in series.json"
-    ]
+    "generations": [
+      {
+        "id": "toyota-bz4x/toyota-bz4x-ea10-pre-facelift",
+        "label": "Toyota bZ4X (EA10, pre-facelift)",
+        "from": 2023,
+        "to": 2025,
+        "yearsSource": "series.json",
+        "yearsNote": "One generation. From MY2026 the facelift is sold in the US as the 'Toyota bZ' (Commons 'Toyota bZ4X (2025)', 35 files). That is outside the catalog's 2023–2025 range, so avoid that subcategory. The parent category mixes concepts and global cars.",
+        "source": {
+          "article": "Toyota bZ4X",
+          "section": "Original models",
+          "revision": 1381593066
+        },
+        "wikidata": null,
+        "commons": "Toyota bZ4X",
+        "faceliftHints": []
+      }
+    ],
+    "warnings": []
   },
   "toyota-camry": {
     "slug": "toyota-camry",
@@ -6167,12 +6379,12 @@
     },
     "generations": [
       {
-        "id": "toyota-highlander/first-generation-xu20-2000",
-        "label": "First generation (XU20; 2000)",
+        "id": "toyota-highlander/toyota-highlander-xu20",
+        "label": "Toyota Highlander (XU20)",
         "from": 2001,
         "to": 2007,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Includes the Highlander Hybrid (2006–2007; subcategory 'Toyota Highlander Hybrid (XU20)').",
         "source": {
           "article": "Toyota Highlander",
           "section": "First generation (XU20; 2000)",
@@ -6183,11 +6395,11 @@
         "faceliftHints": []
       },
       {
-        "id": "toyota-highlander/second-generation-xu40-2007",
-        "label": "Second generation (XU40; 2007)",
+        "id": "toyota-highlander/toyota-highlander-xu40",
+        "label": "Toyota Highlander (XU40)",
         "from": 2008,
         "to": 2013,
-        "yearsSource": "model_years",
+        "yearsSource": "series.json",
         "yearsNote": null,
         "source": {
           "article": "Toyota Highlander",
@@ -6199,11 +6411,11 @@
         "faceliftHints": []
       },
       {
-        "id": "toyota-highlander/third-generation-xu50-2013",
-        "label": "Third generation (XU50; 2013)",
+        "id": "toyota-highlander/toyota-highlander-xu50",
+        "label": "Toyota Highlander (XU50)",
         "from": 2014,
         "to": 2019,
-        "yearsSource": "model_years",
+        "yearsSource": "series.json",
         "yearsNote": null,
         "source": {
           "article": "Toyota Highlander",
@@ -6215,11 +6427,11 @@
         "faceliftHints": []
       },
       {
-        "id": "toyota-highlander/fourth-generation-xu70-2019",
-        "label": "Fourth generation (XU70; 2019)",
+        "id": "toyota-highlander/toyota-highlander-xu70",
+        "label": "Toyota Highlander (XU70)",
         "from": 2020,
         "to": 2026,
-        "yearsSource": "model_years",
+        "yearsSource": "series.json",
         "yearsNote": null,
         "source": {
           "article": "Toyota Highlander",
@@ -6322,35 +6534,35 @@
     },
     "generations": [
       {
-        "id": "toyota-prius-prime/second-generation-xw50-2016",
-        "label": "Second generation (XW50; 2016)",
+        "id": "toyota-prius-prime/toyota-prius-prime-xw50",
+        "label": "Toyota Prius Prime (XW50)",
         "from": 2017,
         "to": 2022,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "The parser's 'Toyota Prius Plug-in Hybrid (second generation)' category is empty (0 files). Use this one. Its subcategory 'Prius PHV GR Sport' is Japan-only; avoid it.",
         "source": {
           "article": "Toyota Prius Plug-in Hybrid",
           "section": "Second generation (XW50; 2016)",
           "revision": 1375605175
         },
         "wikidata": null,
-        "commons": "Toyota Prius Plug-in Hybrid (second generation)",
+        "commons": "Toyota Prius (XW50) Plug-in Hybrid",
         "faceliftHints": []
       },
       {
-        "id": "toyota-prius-prime/third-generation-xw60-2023",
-        "label": "Third generation (XW60; 2023)",
+        "id": "toyota-prius-prime/toyota-prius-prime-prius-plug-in-hybrid-xw60",
+        "label": "Toyota Prius Prime / Prius Plug-in Hybrid (XW60)",
         "from": 2023,
         "to": null,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Same vehicle, renamed: sold as 'Prius Prime' for 2023–2024 and as 'Prius Plug-in Hybrid' for 2025 onward. A 2027 Prius Plug-in Hybrid is confirmed (https://pressroom.toyota.com/2027-toyota-prius-plug-in-hybrid-combines-electrified-performance-and-everyday-efficiency/).",
         "source": {
           "article": "Toyota Prius Plug-in Hybrid",
           "section": "Third generation (XW60; 2023)",
           "revision": 1375605175
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Toyota Prius (XW60) Plug-in Hybrid",
         "faceliftHints": []
       }
     ],
@@ -6440,11 +6652,11 @@
     },
     "generations": [
       {
-        "id": "toyota-rav4-prime/fifth-generation-xa50-2018",
-        "label": "Fifth generation (XA50; 2018)",
-        "from": 2019,
+        "id": "toyota-rav4-prime/toyota-rav4-prime-xa50",
+        "label": "Toyota RAV4 Prime (XA50)",
+        "from": 2021,
         "to": 2025,
-        "yearsSource": "model_years",
+        "yearsSource": "series.json",
         "yearsNote": null,
         "source": {
           "article": "Toyota RAV4",
@@ -6452,23 +6664,23 @@
           "revision": 1381284884
         },
         "wikidata": null,
-        "commons": "Toyota RAV4 (XA50)",
+        "commons": "Toyota RAV4 Plug-in Hybrid (XA50)",
         "faceliftHints": []
       },
       {
-        "id": "toyota-rav4-prime/sixth-generation-xa60-2025",
-        "label": "Sixth generation (XA60; 2025)",
+        "id": "toyota-rav4-prime/toyota-rav4-plug-in-hybrid-xa60",
+        "label": "Toyota RAV4 Plug-in Hybrid (XA60)",
         "from": 2026,
         "to": null,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "As of November 2026, fueleconomy.gov has no 2026 plug-in RAV4 listed; recheck. Not shown on the car page yet (it shows 2022 and 2024).",
         "source": {
           "article": "Toyota RAV4",
           "section": "Sixth generation (XA60; 2025)",
           "revision": 1381284884
         },
         "wikidata": null,
-        "commons": "Toyota RAV4 (XA60)",
+        "commons": "Toyota RAV4 Plug-in Hybrid (XA60)",
         "faceliftHints": []
       }
     ],
@@ -6660,35 +6872,35 @@
     },
     "generations": [
       {
-        "id": "volkswagen-atlas/first-generation-2017",
-        "label": "First generation (2017)",
+        "id": "volkswagen-atlas/volkswagen-atlas-first-generation-ca1",
+        "label": "Volkswagen Atlas (first generation, CA1)",
         "from": 2018,
         "to": 2026,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "There's no first-generation Commons category; the whole-model 'Volkswagen Atlas' category currently holds only first-gen photos. Its subcategories include the Atlas Cross Sport (a separate 2-row model) and a concept; leave those out. 'Volkswagen Teramont (1st generation)' (7 files) is the Chinese-market twin.",
         "source": {
           "article": "Volkswagen Atlas",
           "section": "First generation (2017)",
           "revision": 1380951151
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Volkswagen Atlas",
         "faceliftHints": []
       },
       {
-        "id": "volkswagen-atlas/second-generation-2025",
-        "label": "Second generation (2025)",
+        "id": "volkswagen-atlas/volkswagen-atlas-second-generation",
+        "label": "Volkswagen Atlas (second generation)",
         "from": 2027,
-        "to": 2027,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "to": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Badge caveat: Commons has no Atlas-named second-generation category and no 2027 Atlas files (search found none). The Wikipedia infobox for this generation says aka \"Volkswagen Teramont Pro (China)\" (SAIC-VW, unveiled Feb 17, 2025; the US Atlas was introduced March 31, 2026), so 'Volkswagen Teramont Pro' shows the same vehicle with the same VW brand. But the rear script says Teramont and the fascia/trim may differ from US cars. Fall back to 'Volkswagen Atlas' if that's not acceptable (but it only has first-gen photos).",
         "source": {
           "article": "Volkswagen Atlas",
           "section": "Second generation (2025)",
           "revision": 1380951151
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Volkswagen Teramont Pro",
         "faceliftHints": []
       }
     ],
@@ -6707,14 +6919,14 @@
         "label": "Volkswagen ID.4",
         "from": 2021,
         "to": 2026,
-        "yearsSource": "model_years",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "Single generation. This is the model-level category: mostly European cars, which look the same as US ones apart from plates. Avoid its subcategories ID.4 Crozz and ID.4 X (Chinese versions). No US-specific Commons category exists.",
         "source": {
           "article": "Volkswagen ID.4",
           "section": null,
           "revision": 1381052250
         },
-        "wikidata": "Q86668068",
+        "wikidata": null,
         "commons": "Volkswagen ID.4",
         "faceliftHints": []
       }
@@ -6835,56 +7047,54 @@
     },
     "generations": [
       {
-        "id": "volkswagen-tiguan/first-generation-5n-2007",
-        "label": "First generation (5N; 2007)",
+        "id": "volkswagen-tiguan/volkswagen-tiguan-5n-first-generation",
+        "label": "Volkswagen Tiguan (5N, first generation)",
         "from": 2009,
-        "to": 2016,
-        "yearsSource": "model_years",
-        "yearsNote": "North America",
+        "to": 2018,
+        "yearsSource": "series.json",
+        "yearsNote": "2017 = 5N (sold as the 'Tiguan Limited'); split year 2018 (5N Tiguan Limited alongside the new long-wheelbase AD/BW Tiguan). The parent category has 0 files; photos are in the subcategories 'Volkswagen Tiguan (2007)' (138 files, 2009–2011 US) and 'Volkswagen Tiguan (2011)' (134 files, facelift, 2012–2018 US).",
         "source": {
           "article": "Volkswagen Tiguan",
           "section": "First generation (5N; 2007)",
           "revision": 1380816795
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Volkswagen Tiguan I",
         "faceliftHints": []
       },
       {
-        "id": "volkswagen-tiguan/second-generation-ad-bw-2016",
-        "label": "Second generation (AD/BW; 2016)",
+        "id": "volkswagen-tiguan/volkswagen-tiguan-ad-bw-second-generation-north-america-lwb",
+        "label": "Volkswagen Tiguan (AD/BW, second generation, North America LWB)",
         "from": 2018,
         "to": 2024,
-        "yearsSource": "model_years",
-        "yearsNote": "North America",
+        "yearsSource": "series.json",
+        "yearsNote": "Split year 2018 (see the first generation). The US car is the long-wheelbase version (the Allspace elsewhere); the 2022 facelift is the same generation.",
         "source": {
           "article": "Volkswagen Tiguan",
           "section": "Second generation (AD/BW; 2016)",
           "revision": 1380816795
         },
         "wikidata": null,
-        "commons": null,
+        "commons": "Volkswagen Tiguan II (North America)",
         "faceliftHints": []
       },
       {
-        "id": "volkswagen-tiguan/third-generation-ct1-2024",
-        "label": "Third generation (CT1; 2024)",
-        "from": 2024,
+        "id": "volkswagen-tiguan/volkswagen-tiguan-third-generation-north-america-tayron-l-based",
+        "label": "Volkswagen Tiguan (third generation, North America; Tayron L-based)",
+        "from": 2025,
         "to": null,
-        "yearsSource": "production",
-        "yearsNote": null,
+        "yearsSource": "series.json",
+        "yearsNote": "The US third-generation Tiguan is a long-wheelbase model that differs from the European Tiguan Mk3 (CT1). Use the North America subcategory, not 'Volkswagen Tiguan III'.",
         "source": {
-          "article": "Volkswagen Tiguan",
-          "section": "Third generation (CT1; 2024)",
-          "revision": 1380816795
+          "article": "Volkswagen Tayron",
+          "section": "North America (Tiguan)",
+          "revision": 1382342312
         },
-        "wikidata": null,
-        "commons": null,
+        "wikidata": "Q56402354",
+        "commons": "Volkswagen Tiguan III (North America)",
         "faceliftHints": []
       }
     ],
-    "warnings": [
-      "Third generation (CT1; 2024): only production years in the infobox; check the US model years"
-    ]
+    "warnings": []
   }
 }

@@ -13,7 +13,11 @@ import { GENERATIONS_FILE, type CarGenerations } from "./generations"
 import { api, chunks, getJson } from "./http"
 import { readSeries } from "./series"
 
-type CategoryStats = { files: number; subcats: number; northAmerica: string[]; facelift: string[] }
+type CategoryStats = { files: number; subcats: number; subcatFiles: number; northAmerica: string[]; facelift: string[] }
+
+/** Subcategories whose photos we won't use: racing, police, taxis, concepts, cutaways, other markets. ("International" stays: the US Corolla E140 is the international one.) */
+export const SKIP_SUBCATEGORY =
+  /in competition|police|taxi|concept|cutaway|prototype|interior|\b(?:china|japan|europe|asia|asia-pacific|india|australia|brazil|russia|korea|latin america|south africa|middle east|thailand|indonesia|taiwan|mexico)\b/i
 
 /** File and subcategory counts for Commons categories, plus any North America subcategories. */
 async function categoryStats(categories: readonly string[]): Promise<Map<string, CategoryStats>> {
@@ -24,7 +28,7 @@ async function categoryStats(categories: readonly string[]): Promise<Map<string,
     )
     for (const page of body.query.pages) {
       if (page.missing || !page.categoryinfo) continue
-      out.set(page.title.replace(/^Category:/, ""), { files: page.categoryinfo.files, subcats: page.categoryinfo.subcats, northAmerica: [], facelift: [] })
+      out.set(page.title.replace(/^Category:/, ""), { files: page.categoryinfo.files, subcats: page.categoryinfo.subcats, subcatFiles: 0, northAmerica: [], facelift: [] })
     }
   }
   for (const [name, stats] of out) {
@@ -36,6 +40,14 @@ async function categoryStats(categories: readonly string[]): Promise<Map<string,
     stats.northAmerica = subcats.filter((title) => /north america|\bU\.?S\.?A?\b|united states|canada/i.test(title))
     // "Toyota Prius (XW50, facelift)": Commons sorts a restyle into its own subcategory.
     stats.facelift = subcats.filter((title) => /facelift|refresh|restyl/i.test(title) && !/pre-facelift/i.test(title))
+    // Busy categories keep their photos one level down (by year, body style or market): count the usable ones.
+    const usable = subcats.filter((title) => !SKIP_SUBCATEGORY.test(title) || /north america/i.test(title))
+    for (const group of chunks(usable, 40)) {
+      const info = await getJson<{ query: { pages: { categoryinfo?: { files: number } }[] } }>(
+        api("commons.wikimedia.org", { action: "query", prop: "categoryinfo", titles: group.map((title) => `Category:${title}`).join("|") }),
+      )
+      stats.subcatFiles += info.query.pages.reduce((sum, page) => sum + (page.categoryinfo?.files ?? 0), 0)
+    }
   }
   return out
 }
@@ -51,6 +63,8 @@ export type CarCoverage = {
   splitYears: number[]
   overlaps: number[]
   issues: string[]
+  /** Not wrong, but could change: predictions about recent or coming model years, unsure reviews. Check each fall. */
+  recheck: string[]
   generations: {
     id: string
     label: string
@@ -58,6 +72,8 @@ export type CarCoverage = {
     to: number | null
     commons: string | null
     files: number | null
+    /** Files one level down, in subcategories we'd use. */
+    subcatFiles: number | null
     northAmerica: string[]
     /** Model years Wikipedia's text ties to a facelift (hints). */
     facelifts: number[]
@@ -73,6 +89,7 @@ async function main() {
   const cars = libraryCars()
   const stats = await categoryStats(Object.values(all).flatMap((car) => car.generations.flatMap((g) => (g.commons ? [g.commons] : []))))
   const coverage: CarCoverage[] = []
+  const thisYear = new Date().getFullYear()
   for (const car of cars) {
     const gens = all[car.slug]?.generations ?? []
     const notSold = new Set(series[car.slug]?.notSold?.years ?? [])
@@ -95,10 +112,21 @@ async function main() {
       if (g.yearsSource === "series.json" && !g.yearsNote && !series[car.slug]?.generations?.find((item) => item.label === g.label)?.source && g.source.article === all[car.slug]?.series.article)
         issues.push(`${g.label}: hand-entered years need a source`)
       if (!g.commons) issues.push(`${g.label}: no Commons category`)
-      else if (all[car.slug] && g.commons === all[car.slug].series.article.replace(/\s*\(.*\)$/, "") && gens.length > 1)
+      else if (all[car.slug] && g.yearsSource !== "series.json" && g.commons === all[car.slug].series.article.replace(/\s*\(.*\)$/, "") && gens.length > 1)
         issues.push(`${g.label}: Commons category "${g.commons}" is the whole model, not this generation`)
       else if (!stats.has(g.commons)) issues.push(`${g.label}: Commons category "${g.commons}" not found`)
     }
+    const recheck: string[] = []
+    const entry = series[car.slug]
+    if (entry?.confidence) recheck.push(`${entry.confidence}-confidence review${entry.note ? `: ${entry.note}` : ""}`)
+    const predicted = [...notSold].filter((year) => year > thisYear)
+    if (predicted.length) recheck.push(`not sold in ${predicted.join(", ")} (a prediction when written)`)
+    const phantom = car.shownYears.filter((year) => notSold.has(year))
+    if (phantom.length) recheck.push(`the car page shows ${phantom.join(", ")}, which wasn't sold in the US (a site catalog question)`)
+    // A generation that ended last model year with nothing after it: did the car really stop, or is the next year just missing?
+    for (const g of gens)
+      if (g.to === thisYear && !gens.some((other) => other.from === g.to || other.from === g.to! + 1))
+        recheck.push(`${g.label} ends at ${g.to} with no generation after it: check whether a ${g.to + 1} exists`)
     coverage.push({
       slug: car.slug,
       name: car.name,
@@ -108,6 +136,7 @@ async function main() {
       splitYears,
       overlaps,
       issues,
+      recheck,
       generations: gens.map((g) => ({
         id: g.id,
         label: g.label,
@@ -115,6 +144,7 @@ async function main() {
         to: g.to,
         commons: g.commons,
         files: g.commons ? (stats.get(g.commons)?.files ?? null) : null,
+        subcatFiles: g.commons ? (stats.get(g.commons)?.subcatFiles ?? null) : null,
         northAmerica: g.commons ? (stats.get(g.commons)?.northAmerica ?? []) : [],
         facelifts: [...new Set(g.faceliftHints.map((hint) => hint.modelYear))].filter((year) => year > g.from && year <= (g.to ?? 9999)),
         faceliftCategories: g.commons ? (stats.get(g.commons)?.facelift ?? []) : [],
@@ -144,13 +174,19 @@ async function main() {
     "",
     ...coverage.filter((car) => car.issues.length > 0).flatMap((car) => [`- **${car.slug}**`, ...car.issues.map((issue) => `  - ${issue}`)]),
     "",
+    "## Recheck each fall",
+    "",
+    "Not errors: predictions about recent or coming model years, and reviews that weren't sure.",
+    "",
+    ...coverage.filter((car) => car.recheck.length > 0).flatMap((car) => [`- **${car.slug}**`, ...car.recheck.map((item) => `  - ${item}`)]),
+    "",
     "## Every car",
     "",
-    "| Car | Generations (US model years) | Commons files |",
+    "| Car | Generations (US model years) | Commons files (+ usable subcategories) |",
     "| --- | --- | --- |",
     ...coverage.map(
       (car) =>
-        `| ${car.slug} | ${car.generations.map((g) => `${g.label.replace(/\|/g, "/")} ${g.from}–${g.to ?? "present"}${g.facelifts.length || g.faceliftCategories.length ? ` (facelift${g.facelifts.length ? ` ${g.facelifts.join(", ")}?` : ""}${g.faceliftCategories.length ? " on Commons" : ""})` : ""}`).join("<br>") || "—"} | ${car.generations.map((g) => (g.files === null ? "—" : String(g.files))).join(" / ")} |`,
+        `| ${car.slug} | ${car.generations.map((g) => `${g.label.replace(/\|/g, "/")} ${g.from}–${g.to ?? "present"}${g.facelifts.length || g.faceliftCategories.length ? ` (facelift${g.facelifts.length ? ` ${g.facelifts.join(", ")}?` : ""}${g.faceliftCategories.length ? " on Commons" : ""})` : ""}`).join("<br>") || "—"} | ${car.generations.map((g) => (g.files === null ? "—" : `${g.files}${g.subcatFiles ? ` (+${g.subcatFiles})` : ""}`)).join(" / ")} |`,
     ),
     "",
   ]

@@ -116,14 +116,16 @@ Requests go to Wikipedia, Wikidata and Commons one at a time, with a User-Agent 
 3. Read the car's lines under "Needs attention" in `docs/photo-coverage.md`. Most cars need nothing. If something's flagged, fix it in the car's `series.json` entry:
    - **Wrong article** (a shared name, an overview article): set `wikipedia` and `wikidata` to the right ones, then run `photos:add` again.
    - **Generations the parser can't read** (one name covering different vehicles, an article without US model years): list them under `generations`, each with `label`, `from`, `to` (null if still on sale), `article`, `commons`, and a `source`, a quote or URL for the US model years. Hand-entered years without a source are flagged.
+   - **A badge twin** (GMC Canyon and Chevrolet Colorado, Yukon and Tahoe, Escalade): the shared article gives the right years, but the photos must carry this car's badge. Give each generation its own brand's `commons` category. A `commons` set by hand is always kept, even a whole-model one, so add a `note` saying why.
    - **Sections that aren't this car** (an electric spin-off, a Raptor): add a pattern to `exclude`.
    - **Catalog years the US model wasn't sold** (a skipped year, a listing ahead of launch): `notSold` with `years`, `note` and `source`.
    - Set `status` to `"checked"` once a person or a review has confirmed the entry.
-4. Run `npm test`. The photo-library test fails if any year a car page shows has no generation.
+4. Look at the car's row in the "Every car" table. Busy Commons categories keep their photos in subcategories (by year, body style or market), so the table counts usable files one level down too. Some go deeper: the US Camry XV50 photos are three levels down, under "Toyota Camry (XV50, North America, 2011)" and "(…, 2014)". A shown generation with almost no files may need a better category.
+5. Run `npm test`. The photo-library test fails if any year a car page shows has no generation, or no Commons category.
 
 ### Each fall (new model years)
 
-After the vehicle catalog refresh (step 2 of the annual refresh), run `npm run photos:generations` and then `npm run photos:coverage`. New model years show up as gaps, or past the end of a generation still marked "present". Wikipedia usually has the new generation by then; if not, add a hand entry with a manufacturer source, or wait.
+After the vehicle catalog refresh (step 2 of the annual refresh), run `npm run photos:generations` and then `npm run photos:coverage`. New model years show up as gaps, or past the end of a generation still marked "present". Wikipedia usually has the new generation by then; if not, add a hand entry with a manufacturer source, or wait. Then work through "Recheck each fall" in `docs/photo-coverage.md`: `notSold` years that were predictions, generations that ended recently (did a new model year appear?), and entries a review marked `confidence: "medium"`. Update or clear each one.
 
 ## Changelog rules
 

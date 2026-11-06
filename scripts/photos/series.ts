@@ -22,6 +22,8 @@ export type SeriesEntry = {
   wikidata: string | null
   /** How the entry was made: "auto" (check it) or "checked" (a person or a review confirmed it). */
   status: "auto" | "checked"
+  /** Set when a review wasn't sure (say why in `note`). The coverage report lists it under "Recheck". */
+  confidence?: "medium" | "low"
   note?: string
   /** Section headings or article titles (regular expressions) that aren't this car, like "Electric" or "Raptor". */
   exclude?: string[]
