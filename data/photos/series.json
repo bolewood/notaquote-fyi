@@ -1,0 +1,607 @@
+{
+  "acura-integra": {
+    "wikipedia": "Honda Integra",
+    "wikidata": "Q1426408",
+    "status": "auto"
+  },
+  "acura-mdx": {
+    "wikipedia": "Acura MDX",
+    "wikidata": "Q1422815",
+    "status": "auto"
+  },
+  "acura-rdx": {
+    "wikipedia": "Acura RDX",
+    "wikidata": "Q344792",
+    "status": "auto"
+  },
+  "audi-q5": {
+    "wikipedia": "Audi Q5",
+    "wikidata": "Q758769",
+    "status": "auto"
+  },
+  "bmw-330i": {
+    "wikipedia": "BMW 3 Series",
+    "wikidata": "Q466066",
+    "status": "auto"
+  },
+  "bmw-x3": {
+    "wikipedia": "BMW X3",
+    "wikidata": "Q796780",
+    "status": "auto"
+  },
+  "bmw-x5": {
+    "wikipedia": "BMW X5",
+    "wikidata": "Q796778",
+    "status": "auto"
+  },
+  "buick-enclave": {
+    "wikipedia": "Buick Enclave",
+    "wikidata": "Q24055",
+    "status": "auto"
+  },
+  "buick-encore-gx": {
+    "wikipedia": "Buick Encore GX",
+    "wikidata": "Q65046637",
+    "status": "auto"
+  },
+  "buick-envista": {
+    "wikipedia": "Buick Envista",
+    "wikidata": "Q113659133",
+    "status": "auto"
+  },
+  "cadillac-escalade": {
+    "wikipedia": "Cadillac Escalade",
+    "wikidata": "Q830369",
+    "status": "auto"
+  },
+  "chevrolet-blazer": {
+    "wikipedia": "Chevrolet Blazer",
+    "wikidata": "Q525558",
+    "status": "auto"
+  },
+  "chevrolet-camaro": {
+    "wikipedia": "Chevrolet Camaro",
+    "wikidata": "Q332448",
+    "status": "auto"
+  },
+  "chevrolet-colorado": {
+    "wikipedia": "Chevrolet Colorado",
+    "wikidata": "Q1071143",
+    "status": "auto"
+  },
+  "chevrolet-equinox": {
+    "wikipedia": "Chevrolet Equinox",
+    "wikidata": "Q1071199",
+    "status": "auto"
+  },
+  "chevrolet-malibu": {
+    "wikipedia": "Chevrolet Malibu",
+    "wikidata": "Q287723",
+    "status": "auto"
+  },
+  "chevrolet-silverado": {
+    "wikipedia": "Chevrolet Silverado",
+    "wikidata": "Q871329",
+    "status": "auto"
+  },
+  "chevrolet-suburban": {
+    "wikipedia": "Chevrolet Suburban",
+    "wikidata": "Q859501",
+    "status": "auto"
+  },
+  "chevrolet-tahoe": {
+    "wikipedia": "Chevrolet Tahoe",
+    "wikidata": "Q910928",
+    "status": "auto"
+  },
+  "chevrolet-trailblazer": {
+    "wikipedia": "Chevrolet Trailblazer",
+    "wikidata": "Q94572715",
+    "status": "auto"
+  },
+  "chevrolet-traverse": {
+    "wikipedia": "Chevrolet Traverse",
+    "wikidata": "Q1071327",
+    "status": "auto"
+  },
+  "chevrolet-trax": {
+    "wikipedia": "Chevrolet Trax",
+    "wikidata": "Q1071315",
+    "status": "auto"
+  },
+  "chrysler-pacifica": {
+    "wikipedia": "Chrysler Pacifica",
+    "wikidata": "Q25114477",
+    "status": "auto"
+  },
+  "dodge-durango": {
+    "wikipedia": "Dodge Durango",
+    "wikidata": "Q973654",
+    "status": "auto"
+  },
+  "ford-bronco": {
+    "wikipedia": "Ford Bronco",
+    "wikidata": "Q534238",
+    "status": "auto"
+  },
+  "ford-bronco-sport": {
+    "wikipedia": "Ford Bronco Sport",
+    "wikidata": "Q90665373",
+    "status": "auto"
+  },
+  "ford-escape": {
+    "wikipedia": "Ford Escape",
+    "wikidata": "Q680524",
+    "status": "auto"
+  },
+  "ford-expedition": {
+    "wikipedia": "Ford Expedition",
+    "wikidata": "Q1339764",
+    "status": "auto"
+  },
+  "ford-explorer": {
+    "wikipedia": "Ford Explorer",
+    "wikidata": "Q598084",
+    "status": "auto"
+  },
+  "ford-f-150": {
+    "wikipedia": "Ford F-Series",
+    "wikidata": "Q1146685",
+    "status": "auto"
+  },
+  "ford-maverick": {
+    "wikipedia": "Ford Maverick",
+    "wikidata": "Q11101117",
+    "status": "auto"
+  },
+  "ford-mustang": {
+    "wikipedia": "Ford Mustang",
+    "wikidata": "Q183476",
+    "status": "auto"
+  },
+  "ford-mustang-mach-e": {
+    "wikipedia": "Ford Mustang Mach-E",
+    "wikidata": "Q75419891",
+    "status": "auto"
+  },
+  "ford-ranger": {
+    "wikipedia": "Ford Ranger",
+    "wikidata": "Q5467909",
+    "status": "auto"
+  },
+  "gmc-acadia": {
+    "wikipedia": "GMC Acadia",
+    "wikidata": "Q936505",
+    "status": "auto"
+  },
+  "gmc-canyon": {
+    "wikipedia": "Chevrolet Colorado",
+    "wikidata": "Q1071143",
+    "status": "auto"
+  },
+  "gmc-sierra": {
+    "wikipedia": "Chevrolet Silverado",
+    "wikidata": "Q871329",
+    "status": "auto"
+  },
+  "gmc-terrain": {
+    "wikipedia": "GMC Terrain",
+    "wikidata": "Q1485959",
+    "status": "auto"
+  },
+  "gmc-yukon": {
+    "wikipedia": "Chevrolet Tahoe",
+    "wikidata": "Q910928",
+    "status": "auto"
+  },
+  "honda-accord": {
+    "wikipedia": "Honda Accord",
+    "wikidata": "Q463632",
+    "status": "auto"
+  },
+  "honda-civic": {
+    "wikipedia": "Honda Civic",
+    "wikidata": "Q216747",
+    "status": "auto"
+  },
+  "honda-cr-v": {
+    "wikipedia": "Honda CR-V",
+    "wikidata": "Q255461",
+    "status": "auto"
+  },
+  "honda-hr-v": {
+    "wikipedia": "Honda HR-V",
+    "wikidata": "Q1426415",
+    "status": "auto"
+  },
+  "honda-odyssey": {
+    "wikipedia": "Honda Odyssey",
+    "wikidata": "Q5892599",
+    "status": "auto"
+  },
+  "honda-passport": {
+    "wikipedia": "Honda Passport",
+    "wikidata": "Q3272026",
+    "status": "auto"
+  },
+  "honda-pilot": {
+    "wikipedia": "Honda Pilot",
+    "wikidata": "Q3139963",
+    "status": "auto"
+  },
+  "honda-ridgeline": {
+    "wikipedia": "Honda Ridgeline",
+    "wikidata": "Q1626665",
+    "status": "auto"
+  },
+  "hyundai-elantra": {
+    "wikipedia": "Hyundai Elantra",
+    "wikidata": "Q482530",
+    "status": "auto"
+  },
+  "hyundai-ioniq-5": {
+    "wikipedia": "Hyundai Ioniq 5",
+    "wikidata": "Q99342695",
+    "status": "auto"
+  },
+  "hyundai-ioniq-6": {
+    "wikipedia": "Hyundai Ioniq 6",
+    "wikidata": "Q112577811",
+    "status": "auto"
+  },
+  "hyundai-kona": {
+    "wikipedia": "Hyundai Kona",
+    "wikidata": "Q30322680",
+    "status": "auto"
+  },
+  "hyundai-palisade": {
+    "wikipedia": "Hyundai Palisade",
+    "wikidata": "Q55735991",
+    "status": "auto"
+  },
+  "hyundai-santa-cruz": {
+    "wikipedia": "Hyundai Santa Cruz",
+    "wikidata": "Q97619529",
+    "status": "auto"
+  },
+  "hyundai-santa-fe": {
+    "wikipedia": "Hyundai Santa Fe",
+    "wikidata": "Q489852",
+    "status": "auto"
+  },
+  "hyundai-sonata": {
+    "wikipedia": "Hyundai Sonata",
+    "wikidata": "Q482458",
+    "status": "auto"
+  },
+  "hyundai-tucson": {
+    "wikipedia": "Hyundai Tucson",
+    "wikidata": "Q482430",
+    "status": "auto"
+  },
+  "hyundai-venue": {
+    "wikipedia": "Hyundai Venue",
+    "wikidata": "Q62381823",
+    "status": "auto"
+  },
+  "jeep-compass": {
+    "wikipedia": "Jeep Compass",
+    "wikidata": "Q1686208",
+    "status": "auto"
+  },
+  "jeep-gladiator": {
+    "wikipedia": "Jeep Gladiator",
+    "wikidata": "Q60795112",
+    "status": "auto"
+  },
+  "jeep-grand-cherokee": {
+    "wikipedia": "Jeep Grand Cherokee",
+    "wikidata": "Q1129521",
+    "status": "auto"
+  },
+  "jeep-wrangler": {
+    "wikipedia": "Jeep Wrangler",
+    "wikidata": "Q1353305",
+    "status": "auto"
+  },
+  "kia-carnival": {
+    "wikipedia": "Kia Carnival",
+    "wikidata": "Q488173",
+    "status": "auto"
+  },
+  "kia-ev6": {
+    "wikipedia": "Kia EV6",
+    "wikidata": "Q105975708",
+    "status": "auto"
+  },
+  "kia-forte": {
+    "wikipedia": "Kia Forte",
+    "wikidata": "Q489621",
+    "status": "auto"
+  },
+  "kia-k5": {
+    "wikipedia": "Kia K5",
+    "wikidata": "Q12586722",
+    "status": "auto"
+  },
+  "kia-niro": {
+    "wikipedia": "Kia Niro",
+    "wikidata": "Q22754238",
+    "status": "auto"
+  },
+  "kia-seltos": {
+    "wikipedia": "Kia Seltos",
+    "wikidata": "Q65044174",
+    "status": "auto"
+  },
+  "kia-sorento": {
+    "wikipedia": "Kia Sorento",
+    "wikidata": "Q489836",
+    "status": "auto"
+  },
+  "kia-soul": {
+    "wikipedia": "Kia Soul",
+    "wikidata": "Q420780",
+    "status": "auto"
+  },
+  "kia-sportage": {
+    "wikipedia": "Kia Sportage",
+    "wikidata": "Q145527",
+    "status": "auto"
+  },
+  "kia-telluride": {
+    "wikipedia": "Kia Telluride",
+    "wikidata": "Q23058524",
+    "status": "auto"
+  },
+  "lexus-es": {
+    "wikipedia": "Lexus ES",
+    "wikidata": "Q577397",
+    "status": "auto"
+  },
+  "lexus-nx": {
+    "wikipedia": "Lexus NX",
+    "wikidata": "Q16325434",
+    "status": "auto"
+  },
+  "lexus-rx": {
+    "wikipedia": "Lexus RX",
+    "wikidata": "Q660273",
+    "status": "auto"
+  },
+  "mazda-3": {
+    "wikipedia": "Mazda3",
+    "wikidata": "Q911466",
+    "status": "auto"
+  },
+  "mazda-cx-30": {
+    "wikipedia": "Mazda CX-30",
+    "wikidata": "Q61993966",
+    "status": "auto"
+  },
+  "mazda-cx-5": {
+    "wikipedia": "Mazda CX-5",
+    "wikidata": "Q1580031",
+    "status": "auto"
+  },
+  "mazda-cx-50": {
+    "wikipedia": "Mazda CX-50",
+    "wikidata": "Q109601206",
+    "status": "auto"
+  },
+  "mazda-cx-90": {
+    "wikipedia": "Mazda CX-90",
+    "wikidata": "Q116526635",
+    "status": "auto"
+  },
+  "mercedes-benz-c-class": {
+    "wikipedia": "Mercedes-Benz C-Class",
+    "wikidata": "Q331694",
+    "status": "auto"
+  },
+  "mercedes-benz-glc-class": {
+    "wikipedia": "Mercedes-Benz GLC",
+    "wikidata": "Q20634916",
+    "status": "auto"
+  },
+  "mitsubishi-outlander": {
+    "wikipedia": "Mitsubishi Outlander",
+    "wikidata": "Q1044544",
+    "status": "auto"
+  },
+  "nissan-altima": {
+    "wikipedia": "Nissan Altima",
+    "wikidata": "Q636791",
+    "status": "auto"
+  },
+  "nissan-frontier": {
+    "wikipedia": "Nissan Frontier",
+    "wikidata": "Q105453076",
+    "status": "auto"
+  },
+  "nissan-kicks": {
+    "wikipedia": "Nissan Kicks",
+    "wikidata": "Q26186522",
+    "status": "auto"
+  },
+  "nissan-leaf": {
+    "wikipedia": "Nissan Leaf",
+    "wikidata": "Q911323",
+    "status": "auto"
+  },
+  "nissan-murano": {
+    "wikipedia": "Nissan Murano",
+    "wikidata": "Q1278086",
+    "status": "auto"
+  },
+  "nissan-pathfinder": {
+    "wikipedia": "Nissan Pathfinder",
+    "wikidata": "Q1419007",
+    "status": "auto"
+  },
+  "nissan-rogue": {
+    "wikipedia": "Nissan Rogue",
+    "wikidata": "Q1993846",
+    "status": "auto"
+  },
+  "nissan-sentra": {
+    "wikipedia": "Nissan Sentra",
+    "wikidata": "Q719974",
+    "status": "auto"
+  },
+  "nissan-versa": {
+    "wikipedia": "Nissan Versa",
+    "wikidata": "Q26261942",
+    "status": "auto"
+  },
+  "ram-1500": {
+    "wikipedia": "Ram pickup",
+    "wikidata": "Q1211586",
+    "status": "auto"
+  },
+  "subaru-ascent": {
+    "wikipedia": "Subaru Ascent",
+    "wikidata": "Q48799438",
+    "status": "auto"
+  },
+  "subaru-crosstrek": {
+    "wikipedia": "Subaru Crosstrek",
+    "wikidata": "Q2119417",
+    "status": "auto"
+  },
+  "subaru-forester": {
+    "wikipedia": "Subaru Forester",
+    "wikidata": "Q1324599",
+    "status": "auto"
+  },
+  "subaru-impreza": {
+    "wikipedia": "Subaru Impreza",
+    "wikidata": "Q391342",
+    "status": "auto"
+  },
+  "subaru-legacy": {
+    "wikipedia": "Subaru Legacy",
+    "wikidata": "Q603323",
+    "status": "auto"
+  },
+  "subaru-outback": {
+    "wikipedia": "Subaru Outback",
+    "wikidata": "Q1536958",
+    "status": "auto"
+  },
+  "tesla-model-3": {
+    "wikipedia": "Tesla Model 3",
+    "wikidata": "Q7705507",
+    "status": "auto"
+  },
+  "tesla-model-s": {
+    "wikipedia": "Tesla Model S",
+    "wikidata": "Q1463050",
+    "status": "auto"
+  },
+  "tesla-model-x": {
+    "wikipedia": "Tesla Model X",
+    "wikidata": "Q1634161",
+    "status": "auto"
+  },
+  "tesla-model-y": {
+    "wikipedia": "Tesla Model Y",
+    "wikidata": "Q42298250",
+    "status": "auto"
+  },
+  "toyota-4runner": {
+    "wikipedia": "Toyota 4Runner",
+    "wikidata": "Q1342063",
+    "status": "auto"
+  },
+  "toyota-bz4x": {
+    "wikipedia": "Toyota bZ4X",
+    "wikidata": "Q106481505",
+    "status": "auto"
+  },
+  "toyota-camry": {
+    "wikipedia": "Toyota Camry",
+    "wikidata": "Q500035",
+    "status": "auto"
+  },
+  "toyota-corolla": {
+    "wikipedia": "Toyota Corolla",
+    "wikidata": "Q243543",
+    "status": "auto"
+  },
+  "toyota-corolla-cross": {
+    "wikipedia": "Toyota Corolla Cross",
+    "wikidata": "Q97094785",
+    "status": "auto"
+  },
+  "toyota-grand-highlander": {
+    "wikipedia": "Toyota Grand Highlander",
+    "wikidata": "Q117007632",
+    "status": "auto"
+  },
+  "toyota-highlander": {
+    "wikipedia": "Toyota Highlander",
+    "wikidata": "Q1421661",
+    "status": "auto"
+  },
+  "toyota-prius": {
+    "wikipedia": "Toyota Prius",
+    "wikidata": "Q213115",
+    "status": "auto"
+  },
+  "toyota-prius-prime": {
+    "wikipedia": "Toyota Prius Plug-in Hybrid",
+    "wikidata": "Q7830860",
+    "status": "auto"
+  },
+  "toyota-rav4": {
+    "wikipedia": "Toyota RAV4",
+    "wikidata": "Q819982",
+    "status": "auto"
+  },
+  "toyota-rav4-prime": {
+    "wikipedia": "Toyota RAV4",
+    "wikidata": "Q819982",
+    "status": "auto"
+  },
+  "toyota-sienna": {
+    "wikipedia": "Toyota Sienna",
+    "wikidata": "Q1139368",
+    "status": "auto"
+  },
+  "toyota-tacoma": {
+    "wikipedia": "Toyota Tacoma",
+    "wikidata": "Q1581540",
+    "status": "auto"
+  },
+  "toyota-tundra": {
+    "wikipedia": "Toyota Tundra",
+    "wikidata": "Q1353337",
+    "status": "auto"
+  },
+  "volkswagen-atlas": {
+    "wikipedia": "Volkswagen Atlas",
+    "wikidata": "Q27765737",
+    "status": "auto"
+  },
+  "volkswagen-id-4": {
+    "wikipedia": "Volkswagen ID.4",
+    "wikidata": "Q86668068",
+    "status": "auto"
+  },
+  "volkswagen-jetta": {
+    "wikipedia": "Volkswagen Jetta",
+    "wikidata": "Q697152",
+    "status": "auto"
+  },
+  "volkswagen-taos": {
+    "wikipedia": "Volkswagen Taos",
+    "wikidata": "Q56402691",
+    "status": "auto"
+  },
+  "volkswagen-tiguan": {
+    "wikipedia": "Volkswagen Tiguan",
+    "wikidata": "Q782671",
+    "status": "auto"
+  }
+}

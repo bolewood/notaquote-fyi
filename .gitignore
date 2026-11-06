@@ -48,3 +48,6 @@ next-env.d.ts
 
 # local notes, scratch files, and screenshots
 /.context/
+
+# photo pipeline: raw Wikimedia API responses (re-fetchable)
+data/photos/.cache/
