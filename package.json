@@ -21,6 +21,7 @@
     "photos:candidates": "tsx scripts/photos/candidates.ts",
     "photos:eval": "tsx scripts/photos/eval.ts",
     "photos:verify": "tsx scripts/photos/verify.ts",
+    "photos:download": "tsx scripts/photos/download.ts",
     "photos:add": "tsx scripts/photos/add.ts"
   },
   "dependencies": {
@@ -42,6 +43,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
     "shadcn": "^4.21.0",
+    "sharp": "0.35.4",
     "tailwindcss": "^4",
     "tsx": "^4.23.15",
     "typescript": "^5"
