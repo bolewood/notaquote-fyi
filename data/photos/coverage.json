@@ -95,6 +95,7 @@
           2008,
           2009
         ],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -111,6 +112,7 @@
           2013,
           2014
         ],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -124,6 +126,7 @@
         "facelifts": [
           2019
         ],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -137,6 +140,7 @@
         "facelifts": [
           2025
         ],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -237,6 +241,7 @@
         "facelifts": [
           2005
         ],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -250,6 +255,7 @@
         "facelifts": [
           2011
         ],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -265,6 +271,7 @@
         "facelifts": [
           2017
         ],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -281,6 +288,7 @@
           2023,
           2024
         ],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -376,6 +384,7 @@
         "files": 2,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -387,6 +396,7 @@
         "files": 1,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -403,6 +413,7 @@
           2015,
           2016
         ],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -418,6 +429,7 @@
         "facelifts": [
           2021
         ],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -429,6 +441,7 @@
         "files": 3,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       }
     ]
@@ -514,6 +527,7 @@
     "splitYears": [],
     "overlaps": [],
     "issues": [
+      "Honda Accord (North America seventh generation): no Commons category",
       "Tenth generation (2017): no Commons category",
       "Eleventh generation (2023): no Commons category"
     ],
@@ -523,12 +537,13 @@
         "label": "Honda Accord (North America seventh generation)",
         "from": 2003,
         "to": 2007,
-        "commons": "Honda Accord",
-        "files": 2,
+        "commons": null,
+        "files": null,
         "northAmerica": [],
         "facelifts": [
           2006
         ],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -542,6 +557,7 @@
         "facelifts": [
           2011
         ],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -557,6 +573,7 @@
         "facelifts": [
           2016
         ],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -568,6 +585,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -579,6 +597,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -671,6 +690,7 @@
         "files": 407,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -682,6 +702,7 @@
         "files": 247,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -693,6 +714,7 @@
         "files": 152,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -704,6 +726,7 @@
         "files": 259,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -795,13 +818,14 @@
         "label": "Subaru Impreza (second generation)",
         "from": 2002,
         "to": 2007,
-        "commons": "Subaru Impreza",
-        "files": 1,
+        "commons": "Subaru Impreza (second generation)",
+        "files": 0,
         "northAmerica": [],
         "facelifts": [
           2004,
           2006
         ],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -813,6 +837,7 @@
         "files": 50,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -824,6 +849,7 @@
         "files": 48,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -835,6 +861,7 @@
         "files": 40,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -846,6 +873,7 @@
         "files": 26,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -941,6 +969,7 @@
         "files": 171,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -952,6 +981,7 @@
         "files": 73,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -963,6 +993,7 @@
         "files": 178,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -974,6 +1005,7 @@
         "files": 153,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -985,6 +1017,7 @@
         "files": 121,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -996,6 +1029,7 @@
         "files": 0,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       }
     ]
@@ -1070,6 +1104,7 @@
         "files": 98,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -1081,6 +1116,7 @@
         "files": 48,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -1092,6 +1128,7 @@
         "files": 78,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -1183,10 +1220,11 @@
         "label": "Toyota Prius (XW20)",
         "from": 2004,
         "to": 2009,
-        "commons": "Toyota Prius",
-        "files": 3,
+        "commons": "Toyota Prius (XW20)",
+        "files": 256,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -1200,6 +1238,7 @@
         "facelifts": [
           2012
         ],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -1211,6 +1250,9 @@
         "files": 0,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [
+          "Toyota Prius (XW50, facelift)"
+        ],
         "shown": true
       },
       {
@@ -1222,6 +1264,7 @@
         "files": 213,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -1317,6 +1360,7 @@
         "files": 48,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -1328,6 +1372,7 @@
         "files": 71,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -1339,6 +1384,7 @@
         "files": 98,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -1350,6 +1396,7 @@
         "files": 50,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -1361,6 +1408,7 @@
         "files": 7,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       }
     ]
@@ -1456,6 +1504,7 @@
         "files": 109,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -1469,6 +1518,7 @@
         "facelifts": [
           2013
         ],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -1483,6 +1533,7 @@
           2022,
           2025
         ],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -1560,6 +1611,7 @@
         "files": 312,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -1571,6 +1623,7 @@
         "files": 136,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -1582,6 +1635,7 @@
         "files": 99,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -1648,6 +1702,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -1659,6 +1714,7 @@
         "files": 47,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -1670,6 +1726,7 @@
         "files": 57,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -1744,6 +1801,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -1757,6 +1815,7 @@
           "Honda HR-V (3rd generation, North America)"
         ],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -1815,6 +1874,7 @@
         "files": 114,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -1826,6 +1886,7 @@
         "files": 186,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -1921,6 +1982,7 @@
         "files": 5,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -1932,6 +1994,7 @@
         "files": 4,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -1943,6 +2006,7 @@
         "files": 263,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -1954,6 +2018,7 @@
         "files": 2,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       }
     ]
@@ -2051,6 +2116,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -2064,6 +2130,7 @@
         "facelifts": [
           2010
         ],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -2077,6 +2144,7 @@
         "facelifts": [
           2015
         ],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -2088,6 +2156,7 @@
         "files": 228,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -2099,6 +2168,7 @@
         "files": 132,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -2197,6 +2267,7 @@
         "files": 0,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -2208,6 +2279,7 @@
         "files": 193,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -2219,6 +2291,7 @@
         "files": 241,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -2230,6 +2303,7 @@
         "files": 170,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -2241,6 +2315,7 @@
         "files": 25,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       }
     ]
@@ -2336,6 +2411,7 @@
         "files": 5,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -2347,6 +2423,7 @@
         "files": 153,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -2358,6 +2435,7 @@
         "files": 218,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -2369,6 +2447,7 @@
         "files": 108,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -2380,6 +2459,7 @@
         "files": 6,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       }
     ]
@@ -2451,6 +2531,7 @@
         "files": 235,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -2462,6 +2543,7 @@
         "files": 152,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -2473,6 +2555,7 @@
         "files": 66,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       }
     ]
@@ -2568,6 +2651,7 @@
         "files": 241,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -2579,6 +2663,7 @@
         "files": 80,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -2590,6 +2675,7 @@
         "files": 225,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -2601,6 +2687,7 @@
         "files": 6,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -2612,6 +2699,7 @@
         "files": 233,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       }
     ]
@@ -2707,6 +2795,7 @@
         "files": 177,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -2718,6 +2807,7 @@
         "files": 167,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -2729,6 +2819,7 @@
         "files": 236,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -2740,6 +2831,7 @@
         "files": 223,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -2835,6 +2927,7 @@
         "files": 54,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -2846,6 +2939,7 @@
         "files": 72,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -2857,6 +2951,7 @@
         "files": 141,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -2868,6 +2963,7 @@
         "files": 17,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       }
     ]
@@ -2965,6 +3061,7 @@
         "files": 179,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -2976,6 +3073,7 @@
         "files": 143,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -2987,6 +3085,7 @@
         "files": 217,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -2998,6 +3097,7 @@
         "files": 61,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -3090,6 +3190,7 @@
         "files": 58,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -3101,6 +3202,7 @@
         "files": 91,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -3112,6 +3214,7 @@
         "files": 65,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -3123,6 +3226,7 @@
         "files": 0,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       }
     ]
@@ -3220,6 +3324,7 @@
         "files": 50,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -3231,6 +3336,7 @@
         "files": 148,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -3242,6 +3348,7 @@
         "files": 164,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -3253,6 +3360,7 @@
         "files": 95,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -3307,6 +3415,7 @@
         "files": 251,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -3401,6 +3510,7 @@
         "files": 316,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -3412,6 +3522,7 @@
         "files": 508,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -3423,6 +3534,7 @@
         "files": 452,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -3434,6 +3546,7 @@
         "files": 228,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -3526,6 +3639,7 @@
         "files": 170,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -3537,6 +3651,7 @@
         "files": 128,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -3548,6 +3663,7 @@
         "files": 35,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -3648,6 +3764,7 @@
         "facelifts": [
           2003
         ],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -3662,6 +3779,7 @@
           2011,
           2014
         ],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -3675,6 +3793,7 @@
         "facelifts": [
           2024
         ],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -3770,6 +3889,7 @@
         "files": 0,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -3783,6 +3903,7 @@
         "facelifts": [
           2018
         ],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -3794,6 +3915,7 @@
         "files": 3,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -3858,6 +3980,7 @@
         "files": 9,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -3905,6 +4028,7 @@
         "facelifts": [
           2025
         ],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -3953,6 +4077,7 @@
           2025,
           2026
         ],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -4048,6 +4173,7 @@
         "files": 87,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -4059,6 +4185,7 @@
         "files": 88,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -4070,6 +4197,7 @@
         "files": 164,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -4081,6 +4209,7 @@
         "files": 113,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -4201,6 +4330,7 @@
         "files": 95,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -4212,6 +4342,7 @@
         "files": 55,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       }
     ]
@@ -4260,6 +4391,7 @@
         "files": 209,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -4355,6 +4487,7 @@
         "files": 328,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -4366,6 +4499,7 @@
         "files": 293,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -4377,6 +4511,7 @@
         "files": 253,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -4388,6 +4523,7 @@
         "files": 539,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -4482,6 +4618,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -4493,6 +4630,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -4504,6 +4642,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -4515,6 +4654,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -4591,6 +4731,7 @@
         "files": 145,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -4602,6 +4743,7 @@
         "files": 64,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -4640,6 +4782,7 @@
         "files": 36,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -4731,6 +4874,7 @@
         "facelifts": [
           2008
         ],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -4742,6 +4886,7 @@
         "files": 0,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -4753,6 +4898,7 @@
         "files": 78,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -4764,6 +4910,7 @@
         "files": 34,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -4815,6 +4962,7 @@
         "files": 189,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -4826,6 +4974,7 @@
         "files": 54,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       }
     ]
@@ -4890,6 +5039,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -4901,6 +5051,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       }
     ]
@@ -4978,6 +5129,7 @@
           2012,
           2014
         ],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -4991,6 +5143,7 @@
         "facelifts": [
           2019
         ],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -5054,6 +5207,7 @@
         "files": 0,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -5065,6 +5219,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -5113,6 +5268,7 @@
         "files": 263,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -5124,6 +5280,7 @@
         "files": 2,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       }
     ]
@@ -5202,6 +5359,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -5213,6 +5371,7 @@
         "files": 274,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -5224,6 +5383,7 @@
         "files": 77,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       }
     ]
@@ -5264,6 +5424,7 @@
         "files": 0,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -5309,6 +5470,7 @@
         "files": 75,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -5370,6 +5532,7 @@
         "files": 68,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -5381,6 +5544,7 @@
         "files": 110,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -5429,6 +5593,7 @@
         "files": 122,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -5479,6 +5644,7 @@
         "files": 135,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -5581,6 +5747,7 @@
         "facelifts": [
           2017
         ],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -5718,6 +5885,7 @@
         "files": 73,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -5729,6 +5897,7 @@
         "files": 109,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -5740,6 +5909,7 @@
         "files": 76,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -5751,6 +5921,7 @@
         "files": 29,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -5805,6 +5976,7 @@
         "files": 31,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -5816,6 +5988,7 @@
         "files": 3,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       }
     ]
@@ -5911,6 +6084,7 @@
         "files": 57,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -5922,6 +6096,7 @@
         "files": 200,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -5933,6 +6108,7 @@
         "files": 14,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       }
     ]
@@ -5971,6 +6147,7 @@
         "files": 25,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -6025,6 +6202,7 @@
         "files": 41,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -6073,6 +6251,7 @@
         "files": 160,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -6111,6 +6290,7 @@
         "files": 30,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -6146,6 +6326,7 @@
         "files": 70,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -6241,6 +6422,7 @@
         "files": 181,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -6252,6 +6434,7 @@
         "files": 211,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -6263,6 +6446,7 @@
         "files": 144,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -6274,6 +6458,7 @@
         "files": 224,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -6285,6 +6470,7 @@
         "files": 398,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -6336,6 +6522,9 @@
         "files": 141,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [
+          "Hyundai Palisade (LX2; facelift)"
+        ],
         "shown": true
       },
       {
@@ -6347,6 +6536,7 @@
         "files": 510,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       }
     ]
@@ -6400,6 +6590,7 @@
         "files": 63,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -6411,6 +6602,7 @@
         "files": 9,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       }
     ]
@@ -6503,6 +6695,7 @@
         "files": 127,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -6514,6 +6707,7 @@
         "files": 244,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -6525,6 +6719,7 @@
         "files": 163,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -6536,6 +6731,7 @@
         "files": 167,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -6708,6 +6904,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -6719,6 +6916,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -6730,6 +6928,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -6831,6 +7030,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -6842,6 +7042,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -6853,6 +7054,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -6864,6 +7066,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -6964,6 +7167,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -6975,6 +7179,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -6986,6 +7191,7 @@
         "files": 4,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -6997,6 +7203,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -7092,6 +7299,7 @@
         "files": 102,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -7103,6 +7311,7 @@
         "files": 281,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -7114,6 +7323,7 @@
         "files": 134,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -7164,6 +7374,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -7212,6 +7423,7 @@
         "files": 83,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -7307,6 +7519,7 @@
         "files": 94,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -7318,6 +7531,7 @@
         "files": 130,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -7329,6 +7543,7 @@
         "files": 108,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -7340,6 +7555,7 @@
         "files": 13,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       }
     ]
@@ -7431,6 +7647,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -7442,6 +7659,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -7453,6 +7671,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       }
     ]
@@ -7545,6 +7764,7 @@
         "files": 78,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -7556,6 +7776,7 @@
         "files": 46,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -7567,6 +7788,7 @@
         "files": 19,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -7668,6 +7890,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -7679,6 +7902,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -7690,6 +7914,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -7701,6 +7926,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -7803,6 +8029,7 @@
         "files": 128,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -7816,6 +8043,7 @@
         "facelifts": [
           2014
         ],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -7827,6 +8055,7 @@
         "files": 39,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -7938,6 +8167,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -7949,6 +8179,7 @@
         "files": 101,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -7960,6 +8191,7 @@
         "files": 30,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       }
     ]
@@ -8058,6 +8290,7 @@
         "files": 124,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -8069,6 +8302,7 @@
         "files": 69,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -8080,6 +8314,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -8172,6 +8407,7 @@
         "files": 85,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -8183,6 +8419,7 @@
         "files": 101,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -8194,6 +8431,7 @@
         "files": 86,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -8205,6 +8443,7 @@
         "files": 25,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       }
     ]
@@ -8301,6 +8540,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -8312,6 +8552,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -8323,6 +8564,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -8384,6 +8626,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -8395,6 +8638,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       }
     ]
@@ -8442,6 +8686,7 @@
         "facelifts": [
           2025
         ],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -8495,6 +8740,7 @@
         "facelifts": [
           2024
         ],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -8592,6 +8838,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -8603,6 +8850,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -8614,6 +8862,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       }
     ]
@@ -8706,6 +8955,7 @@
         "files": 83,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -8717,6 +8967,7 @@
         "files": 135,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -8824,6 +9075,7 @@
         "files": 68,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -8835,6 +9087,9 @@
         "files": 122,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [
+          "Mitsubishi Outlander (second generation, facelift)"
+        ],
         "shown": true
       },
       {
@@ -8846,6 +9101,7 @@
         "files": 4,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -8857,6 +9113,7 @@
         "files": 47,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -8957,6 +9214,7 @@
         "files": 19,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -8968,6 +9226,7 @@
         "files": 28,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -8979,6 +9238,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -8990,6 +9250,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -9081,6 +9342,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -9092,6 +9354,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -9192,6 +9455,7 @@
         "files": 19,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -9203,6 +9467,7 @@
         "files": 28,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -9214,6 +9479,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -9225,6 +9491,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -9317,6 +9584,7 @@
         "files": 0,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -9328,6 +9596,7 @@
         "files": 1,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -9339,6 +9608,7 @@
         "files": 54,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -9445,6 +9715,7 @@
           1989,
           2003
         ],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -9456,6 +9727,7 @@
         "files": 0,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -9467,6 +9739,7 @@
         "files": 0,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -9582,6 +9855,7 @@
         "files": 124,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -9593,6 +9867,7 @@
         "files": 155,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -9604,6 +9879,7 @@
         "files": 58,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -9690,6 +9966,7 @@
         "files": 124,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -9701,6 +9978,7 @@
         "files": 155,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -9712,6 +9990,7 @@
         "files": 58,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -9866,6 +10145,7 @@
           2009,
           2012
         ],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -9877,6 +10157,7 @@
         "files": 103,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -9957,6 +10238,7 @@
         "files": 54,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -10117,6 +10399,7 @@
         "files": 141,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -10128,6 +10411,7 @@
         "files": 252,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -10139,6 +10423,7 @@
         "files": 208,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -10235,6 +10520,7 @@
         "files": 342,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -10329,6 +10615,7 @@
         "files": 41,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -10340,6 +10627,7 @@
         "files": 39,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -10351,6 +10639,7 @@
         "files": 30,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -10362,6 +10651,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -10425,6 +10715,7 @@
         "files": 0,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -10436,6 +10727,7 @@
         "files": 14,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -10528,6 +10820,7 @@
         "files": 2,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -10539,6 +10832,7 @@
         "files": 38,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -10550,6 +10844,7 @@
         "files": 209,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -10561,6 +10856,7 @@
         "files": 22,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -10572,6 +10868,7 @@
         "files": 7,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       }
     ]
@@ -10640,6 +10937,7 @@
           2002,
           2004
         ],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -10654,6 +10952,7 @@
           2009,
           2010
         ],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -10667,6 +10966,7 @@
         "facelifts": [
           2016
         ],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -10678,6 +10978,7 @@
         "files": 173,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -10776,6 +11077,7 @@
         "files": 0,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -10787,6 +11089,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -10798,6 +11101,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -10809,6 +11113,7 @@
         "files": 58,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       }
     ]
@@ -10913,6 +11218,7 @@
         "facelifts": [
           2004
         ],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -10924,6 +11230,7 @@
         "files": 256,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -10935,6 +11242,7 @@
         "files": 191,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -10946,6 +11254,7 @@
         "files": 287,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -10957,6 +11266,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       }
     ]
@@ -11064,6 +11374,7 @@
         "facelifts": [
           2005
         ],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -11077,6 +11388,7 @@
         "facelifts": [
           2012
         ],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -11090,6 +11402,7 @@
         "facelifts": [
           2019
         ],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -11101,6 +11414,7 @@
         "files": 0,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -11112,6 +11426,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       }
     ]
@@ -11184,6 +11499,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -11195,6 +11511,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -11287,6 +11604,7 @@
         "files": 163,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -11298,6 +11616,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -11309,6 +11628,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       }
     ]
@@ -11407,6 +11727,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -11418,6 +11739,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -11429,6 +11751,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -11440,6 +11763,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -11529,6 +11853,7 @@
         "files": 38,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -11540,6 +11865,7 @@
         "files": 57,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -11551,6 +11877,7 @@
         "files": 81,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]
@@ -11694,6 +12021,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": false
       },
       {
@@ -11705,6 +12033,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -11716,6 +12045,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -11727,6 +12057,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       },
       {
@@ -11738,6 +12069,7 @@
         "files": null,
         "northAmerica": [],
         "facelifts": [],
+        "faceliftCategories": [],
         "shown": true
       }
     ]

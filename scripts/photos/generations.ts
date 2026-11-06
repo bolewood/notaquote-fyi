@@ -299,6 +299,11 @@ async function main() {
   const missing = results.flatMap((car) => car.generations.filter((g) => !g.commons && g.wikidata).map((g) => g.wikidata!))
   const fromWikidata = await commonsFromWikidata(missing)
   for (const car of results) for (const g of car.generations) if (!g.commons && g.wikidata) g.commons = fromWikidata.get(g.wikidata) ?? null
+  // A generation article that names the whole model's category ("Toyota Prius") hasn't told us the generation's: look further.
+  for (const car of results) {
+    const whole = car.series.article.replace(/\s*\(.*\)$/, "")
+    if (car.generations.length > 1) for (const g of car.generations) if (g.commons === whole) g.commons = null
+  }
   // Still none: try the usual Commons names, and keep the first that exists.
   const guesses = results.flatMap((car) => car.generations.filter((g) => !g.commons).map((g) => ({ g, names: categoryGuesses(car.series.article, g) })))
   const existing2 = await existingCategories(guesses.flatMap((item) => item.names))

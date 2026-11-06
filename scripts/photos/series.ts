@@ -30,7 +30,23 @@ export type SeriesEntry = {
    * covers different vehicles over the years (a Trailblazer is an SUV in
    * 2006–09 and a small crossover from 2021). Each needs a source article.
    */
-  generations?: { label: string; from: number; to: number | null; article?: string; section?: string; commons?: string; note?: string }[]
+  generations?: {
+    label: string
+    from: number
+    to: number | null
+    article?: string
+    section?: string
+    commons?: string
+    note?: string
+    /** Where the years come from, when it isn't the article's infobox: a quote or URL. */
+    source?: string
+  }[]
+  /**
+   * Model years the catalog lists that weren't sold in the US under this
+   * name (a skipped year, a listing ahead of launch). Coverage leaves them
+   * out, with the reason.
+   */
+  notSold?: { years: number[]; note: string; source?: string }
 }
 
 export async function readSeries(): Promise<Record<string, SeriesEntry>> {

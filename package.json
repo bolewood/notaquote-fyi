@@ -17,7 +17,8 @@
     "factors:build": "tsx scripts/derive-factors.ts",
     "photos:series": "tsx scripts/photos/series.ts",
     "photos:generations": "tsx scripts/photos/generations.ts",
-    "photos:coverage": "tsx scripts/photos/coverage.ts"
+    "photos:coverage": "tsx scripts/photos/coverage.ts",
+    "photos:add": "tsx scripts/photos/add.ts"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

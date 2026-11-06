@@ -2261,7 +2261,7 @@
           "revision": 1364437686
         },
         "wikidata": "Q10860903",
-        "commons": "Honda Accord",
+        "commons": null,
         "faceliftHints": [
           {
             "modelYear": 2006,
@@ -5460,7 +5460,7 @@
           "revision": 1379066894
         },
         "wikidata": "Q20653715",
-        "commons": "Subaru Impreza",
+        "commons": "Subaru Impreza (second generation)",
         "faceliftHints": [
           {
             "modelYear": 2004,
@@ -6254,7 +6254,7 @@
           "revision": 1383324955
         },
         "wikidata": "Q7830857",
-        "commons": "Toyota Prius",
+        "commons": "Toyota Prius (XW20)",
         "faceliftHints": []
       },
       {

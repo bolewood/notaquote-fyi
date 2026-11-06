@@ -99,6 +99,32 @@ HLDI publishes a new three-year window of insurance loss results by make and mod
    - The worked example on `/methodology#why-percentages-differ` still reads right (it's generated from the Legacy page). If the Legacy no longer has model-level results, switch the example to another car and update `docs/hldi-review.md`.
 7. **Ship.** Add a CHANGELOG entry and a line on the What's changed page ("Car results now use HLDI's 2023–25 models"), open a PR titled "HLDI refresh (YEAR)", and tag the merge commit `data-YEAR.01`.
 
+## Photo library
+
+Each car page will get a credited, openly licensed photo of the right generation of the car. Before any photo, the library maps every model year to a generation, from sources anyone can check:
+
+- `data/photos/series.json` (hand-maintained): each car's English Wikipedia article and Wikidata item, plus any hand entries (below). Scripts add new cars but never overwrite an entry.
+- `data/photos/generations.json` (generated): each car's generations with US model years, the Wikipedia article and revision they come from, and the Commons category for its photos. Don't edit it; fix the car in `series.json` and regenerate.
+- `data/photos/coverage.json` and `docs/photo-coverage.md` (generated): every catalog model year mapped to one generation, with gaps, overlaps, split years, facelift evidence and "Needs attention".
+
+Requests go to Wikipedia, Wikidata and Commons one at a time, with a User-Agent that names this repo, and are cached in `data/photos/.cache/` (not committed; delete it to refetch).
+
+### Adding a car
+
+1. Add it to `data/car-pages.json` as usual (step 7 above).
+2. Run `npm run photos:add -- <slug>`. It finds the car's article, reads its generations and US model years, and rebuilds the coverage report.
+3. Read the car's lines under "Needs attention" in `docs/photo-coverage.md`. Most cars need nothing. If something's flagged, fix it in the car's `series.json` entry:
+   - **Wrong article** (a shared name, an overview article): set `wikipedia` and `wikidata` to the right ones, then run `photos:add` again.
+   - **Generations the parser can't read** (one name covering different vehicles, an article without US model years): list them under `generations`, each with `label`, `from`, `to` (null if still on sale), `article`, `commons`, and a `source`, a quote or URL for the US model years. Hand-entered years without a source are flagged.
+   - **Sections that aren't this car** (an electric spin-off, a Raptor): add a pattern to `exclude`.
+   - **Catalog years the US model wasn't sold** (a skipped year, a listing ahead of launch): `notSold` with `years`, `note` and `source`.
+   - Set `status` to `"checked"` once a person or a review has confirmed the entry.
+4. Run `npm test`. The photo-library test fails if any year a car page shows has no generation.
+
+### Each fall (new model years)
+
+After the vehicle catalog refresh (step 2 of the annual refresh), run `npm run photos:generations` and then `npm run photos:coverage`. New model years show up as gaps, or past the end of a generation still marked "present". Wikipedia usually has the new generation by then; if not, add a hand entry with a manufacturer source, or wait.
+
 ## Changelog rules
 
 - **`CHANGELOG.md`** (repo) records every release that changes data or math. Newest first, dated, grouped as *Data*, *Math*, *Site*. It's for contributors and anyone auditing a number.
