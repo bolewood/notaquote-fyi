@@ -25,7 +25,12 @@ export type SeriesEntry = {
   /** Set when a review wasn't sure (say why in `note`). The coverage report lists it under "Recheck". */
   confidence?: "medium" | "low"
   note?: string
-  /** Section headings or article titles (regular expressions) that aren't this car, like "Electric" or "Raptor". */
+  /**
+   * Cars that look nearly the same with another badge or trim (slugs): GMC Canyon and Chevrolet Colorado,
+   * RAV4 and RAV4 Prime. The photo review names each as its own answer, so a twin's photo isn't taken for this car.
+   */
+  twins?: string[]
+  /** Section headings, article titles or Commons subcategories (regular expressions) that aren't this car, like "Electric" or "Raptor". */
   exclude?: string[]
   /**
    * Set by hand when Wikipedia can't be read automatically, or when one name

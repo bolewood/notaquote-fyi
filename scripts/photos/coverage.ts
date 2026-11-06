@@ -15,9 +15,9 @@ import { readSeries } from "./series"
 
 type CategoryStats = { files: number; subcats: number; subcatFiles: number; northAmerica: string[]; facelift: string[] }
 
-/** Subcategories whose photos we won't use: racing, police, taxis, concepts, cutaways, other markets. ("International" stays: the US Corolla E140 is the international one.) */
+/** Subcategories whose photos we won't use: racing (not "Series" alone: BMW 3 Series), police, taxis, concepts, cutaways, other markets. ("International" stays: the US Corolla E140 is the international one.) */
 export const SKIP_SUBCATEGORY =
-  /in competition|police|taxi|concept|cutaway|prototype|interior|\b(?:china|japan|europe|asia|asia-pacific|india|australia|brazil|russia|korea|latin america|south africa|middle east|thailand|indonesia|taiwan|mexico)\b/i
+  /in competition|racing|nascar|\barca\b|cup series|motorsport|rally|drift|number \d+ |police|taxi|concept|cutaway|prototype|interior|\b(?:china|japan|europe|asia|asia-pacific|india|australia|brazil|russia|korea|latin america|south africa|middle east|thailand|indonesia|taiwan|mexico)\b/i
 
 /** File and subcategory counts for Commons categories, plus any North America subcategories. */
 async function categoryStats(categories: readonly string[]): Promise<Map<string, CategoryStats>> {

@@ -102,7 +102,7 @@ Not errors: predictions about recent or coming model years, and reviews that wer
 | hyundai-ioniq-6 | Hyundai Ioniq 6 (CE, pre-facelift) 2023–2025 | 463 |
 | kia-ev6 | Kia EV6 2022–present | 75 (+198) |
 | kia-niro | First generation (DE; 2016) 2017–2022<br>Second generation (SG2; 2021) 2023–present | 68 (+41) / 110 (+42) |
-| ford-mustang-mach-e | Ford Mustang Mach-E 2021–present | 122 (+69) |
+| ford-mustang-mach-e | Ford Mustang Mach-E 2021–present | 122 (+60) |
 | volkswagen-id-4 | Volkswagen ID.4 2021–2026 | 135 (+124) |
 | toyota-bz4x | Toyota bZ4X (EA10, pre-facelift) 2023–2025 | 128 (+72) |
 | tesla-model-s | Tesla Model S 2012–2026 | 162 (+563) |

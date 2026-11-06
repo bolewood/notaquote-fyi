@@ -116,12 +116,30 @@ Requests go to Wikipedia, Wikidata and Commons one at a time, with a User-Agent 
 3. Read the car's lines under "Needs attention" in `docs/photo-coverage.md`. Most cars need nothing. If something's flagged, fix it in the car's `series.json` entry:
    - **Wrong article** (a shared name, an overview article): set `wikipedia` and `wikidata` to the right ones, then run `photos:add` again.
    - **Generations the parser can't read** (one name covering different vehicles, an article without US model years): list them under `generations`, each with `label`, `from`, `to` (null if still on sale), `article`, `commons`, and a `source`, a quote or URL for the US model years. Hand-entered years without a source are flagged.
-   - **A badge twin** (GMC Canyon and Chevrolet Colorado, Yukon and Tahoe, Escalade): the shared article gives the right years, but the photos must carry this car's badge. Give each generation its own brand's `commons` category. A `commons` set by hand is always kept, even a whole-model one, so add a `note` saying why.
+   - **A badge twin** (GMC Canyon and Chevrolet Colorado, Yukon and Tahoe, Escalade): the shared article gives the right years, but the photos must carry this car's badge. Give each generation its own brand's `commons` category, and list the other car's slug under `twins` (on both cars), so the photo review can tell them apart. A `commons` set by hand is always kept, even a whole-model one, so add a `note` saying why.
    - **Sections that aren't this car** (an electric spin-off, a Raptor): add a pattern to `exclude`.
    - **Catalog years the US model wasn't sold** (a skipped year, a listing ahead of launch): `notSold` with `years`, `note` and `source`.
    - Set `status` to `"checked"` once a person or a review has confirmed the entry.
 4. Look at the car's row in the "Every car" table. Busy Commons categories keep their photos in subcategories (by year, body style or market), so the table counts usable files one level down too. Some go deeper: the US Camry XV50 photos are three levels down, under "Toyota Camry (XV50, North America, 2011)" and "(…, 2014)". A shown generation with almost no files may need a better category.
 5. Run `npm test`. The photo-library test fails if any year a car page shows has no generation, or no Commons category.
+
+### Choosing the photos
+
+Two more steps pick a photo for every model year a car page shows. Both need `OPENROUTER_API_KEY`, which comes from 1Password: run them through `npm run with:secrets -- …`. Never print the key.
+
+1. `npm run photos:candidates [-- <slug>…]` lists the openly licensed photos (public domain, CC0, CC BY, CC BY-SA) in each shown generation's Commons category and the usable subcategories under it, up to four levels down. It skips racing, police, taxi, concept and other-market subcategories, and files under 1200×700. The list goes to `data/photos/.cache/` (not committed).
+2. `npm run with:secrets -- npm run photos:verify [-- <slug>…]` asks Jev (TypeSafe's decision model, through OpenRouter) about candidates, best first. Jev sees only the image, never the filename or category, and answers:
+   - which generation of the car this is, or a badge twin, a different model, or no single car;
+   - whether it shows the outside of one whole car, a recognizable face or a readable plate;
+   - whether it's a taxi, police car, race car or wreck, and how good the photo is.
+
+   A photo is used only when Commons and Jev agree on the generation, Jev's confidence is at least `GATE` in `scripts/photos/verify.ts`, it shows a whole car, and nobody's face is recognizable. Photos from near a shown year are reviewed first, and each shown year gets the accepted photo nearest to its year, so a year after a facelift gets the facelifted car. Accepted photos get one more question (is the car registered outside the US and Canada?), and a foreign car ranks lower. The result, with credit, license and the exact file version, is `data/photos/manifest.json`.
+
+   Some generations look so much like their neighbors that Jev is rarely sure (the 2017–2022 Prius Prime, several Subarus). If a generation has no photo at `GATE` after 150 reviews, verify takes one at `FALLBACK_GATE` where Commons and Jev still agree, and lists it at the end of its output as "worth a look". Open those on Commons before a release.
+
+Answers are cached by file, so rerunning costs nothing; a fresh review of every car costs about a dollar.
+
+**Changing the model or the questions.** The model is pinned in `scripts/photos/jev.ts` (with the endpoint, an OpenRouter alpha; if it moves, that file is the only one to change). Before changing either, run `npm run with:secrets -- npm run photos:eval`. It asks the same questions about photos whose answer Commons already knows, on hard cases (neighboring generations, badge twins, plug-in versions), and reports how often an answer at each confidence is right. Set `GATE` from that table, and look at the disagreements yourself: Commons is sometimes the one that's wrong.
 
 ### Each fall (new model years)
 

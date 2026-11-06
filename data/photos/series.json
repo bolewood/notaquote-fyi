@@ -314,6 +314,11 @@
         "source": "Infobox model_years: \"2021–present\"",
         "note": "'Cadillac Escalade (GMTT1XX)' exists but is empty; use GMTT1UL. The 2025 facelift is the same generation. Escalade IQ (EV) is a separate model."
       }
+    ],
+    "twins": [
+      "chevrolet-tahoe",
+      "gmc-yukon",
+      "chevrolet-suburban"
     ]
   },
   "chevrolet-blazer": {
@@ -349,7 +354,10 @@
   "chevrolet-colorado": {
     "wikipedia": "Chevrolet Colorado",
     "wikidata": "Q1071143",
-    "status": "auto"
+    "status": "auto",
+    "twins": [
+      "gmc-canyon"
+    ]
   },
   "chevrolet-equinox": {
     "wikipedia": "Chevrolet Equinox",
@@ -448,6 +456,9 @@
         "source": "Infobox model_years: \"2019–2026 (1500) / 2020–present (2500, 3500)\" (Chevrolet Silverado, Fourth generation section)",
         "note": "A fifth-generation 1500 starts with the 2027 model year (infobox model_years \"2027\"), which is outside the catalog."
       }
+    ],
+    "twins": [
+      "gmc-sierra"
     ]
   },
   "chevrolet-suburban": {
@@ -496,6 +507,11 @@
         "source": "Infobox model_years: \"2021–present\"",
         "note": "2025 refresh is in the same generation. The 2027 Suburban carries over this generation (GM Authority / GM-Trucks 2027 coverage: production began September 2026 at Arlington). 'Chevrolet Suburban (GMTT1XX)' exists but is empty."
       }
+    ],
+    "twins": [
+      "chevrolet-tahoe",
+      "gmc-yukon",
+      "cadillac-escalade"
     ]
   },
   "chevrolet-tahoe": {
@@ -542,6 +558,11 @@
         "source": "Infobox model_years: \"2021–present\" (Chevrolet Tahoe, Fifth generation section); fueleconomy.gov lists 2027 Tahoe",
         "note": "Includes the 2025 refresh. GM Authority calls the 2027 the seventh model year of the fifth generation (carryover). 'Chevrolet Tahoe (GMTT1XX)' is empty."
       }
+    ],
+    "twins": [
+      "gmc-yukon",
+      "cadillac-escalade",
+      "chevrolet-suburban"
     ]
   },
   "chevrolet-trailblazer": {
@@ -916,6 +937,9 @@
         "commons": "GMC Canyon (GMT31XX-2)",
         "source": "Chevrolet Colorado article, Third generation (2023) infobox model_years"
       }
+    ],
+    "twins": [
+      "chevrolet-colorado"
     ]
   },
   "gmc-sierra": {
@@ -962,6 +986,9 @@
         "source": "Infobox model_years: \"2019–2026 (1500) / 2020–present (2500, 3500)\"",
         "note": "Split year 2019 (see K2XX). The 2022 mid-cycle refresh is the same generation (the pre-refresh 2022 'Sierra 1500 Limited' is also T1XX). A sixth-generation Sierra 1500 is listed with model_years \"2027\", outside the catalog's range."
       }
+    ],
+    "twins": [
+      "chevrolet-silverado"
     ]
   },
   "gmc-terrain": {
@@ -1054,6 +1081,11 @@
         "source": "Infobox model_years: \"2021–present\" (Chevrolet Tahoe, Fifth generation section)",
         "note": "2025 facelift is in the same generation. The 2027 Yukon carries over (GM Authority: 2027 production scheduled from September 8, 2026 at Arlington). 'GMC Yukon (GMTT1XX)' exists but is empty. Subcategory: Yukon Denali (GMTT1UG)."
       }
+    ],
+    "twins": [
+      "chevrolet-tahoe",
+      "cadillac-escalade",
+      "chevrolet-suburban"
     ]
   },
   "honda-accord": {
@@ -2125,7 +2157,10 @@
   "toyota-prius": {
     "wikipedia": "Toyota Prius",
     "wikidata": "Q213115",
-    "status": "auto"
+    "status": "auto",
+    "twins": [
+      "toyota-prius-prime"
+    ]
   },
   "toyota-prius-prime": {
     "wikipedia": "Toyota Prius Plug-in Hybrid",
@@ -2153,12 +2188,18 @@
         "source": "Infobox model_years: \"2023–present\"; aka \"Toyota Prius Prime (North America, 2023–2024)\"; text: \"In 2024, for the 2025 model year, the Prius Prime was renamed Prius Plug-in Hybrid\" (https://www.caranddriver.com/news/a62387953/2025-toyota-rav4-prius-prime-plug-in-hybrid-name-change/)",
         "note": "Same vehicle, renamed: sold as 'Prius Prime' for 2023–2024 and as 'Prius Plug-in Hybrid' for 2025 onward. A 2027 Prius Plug-in Hybrid is confirmed (https://pressroom.toyota.com/2027-toyota-prius-plug-in-hybrid-combines-electrified-performance-and-everyday-efficiency/)."
       }
+    ],
+    "twins": [
+      "toyota-prius"
     ]
   },
   "toyota-rav4": {
     "wikipedia": "Toyota RAV4",
     "wikidata": "Q819982",
-    "status": "auto"
+    "status": "auto",
+    "twins": [
+      "toyota-rav4-prime"
+    ]
   },
   "toyota-rav4-prime": {
     "wikipedia": "Toyota RAV4",
@@ -2185,6 +2226,9 @@
         "source": "Toyota RAV4 article, Sixth generation (XA60; 2025) infobox model_years (2026–present)",
         "note": "As of November 2026, fueleconomy.gov has no 2026 plug-in RAV4 listed; recheck. Not shown on the car page yet (it shows 2022 and 2024)."
       }
+    ],
+    "twins": [
+      "toyota-rav4"
     ]
   },
   "toyota-sienna": {
