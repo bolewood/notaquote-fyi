@@ -19,6 +19,22 @@ async function pace() {
   last = Date.now()
 }
 
+/**
+ * fetch, retried when the connection itself fails (a timeout, a dropped
+ * network): up to 5 tries over about a minute. HTTP errors are returned as
+ * usual, for the caller to handle.
+ */
+export async function fetchRetry(url: string, init?: RequestInit): Promise<Response> {
+  for (let attempt = 1; ; attempt += 1) {
+    try {
+      return await fetch(url, init)
+    } catch (error) {
+      if (attempt >= 5) throw error
+      await new Promise((resolve) => setTimeout(resolve, 4000 * attempt))
+    }
+  }
+}
+
 /** GET a URL as JSON, from the cache when we have it. `maxAgeDays` refetches older entries. */
 export async function getJson<T = unknown>(url: string, { maxAgeDays = 30, cache = true } = {}): Promise<T> {
   const key = createHash("sha1").update(url).digest("hex")
@@ -33,7 +49,7 @@ export async function getJson<T = unknown>(url: string, { maxAgeDays = 30, cache
   }
   for (let attempt = 1; ; attempt += 1) {
     await pace()
-    const response = await fetch(url, { headers: { "User-Agent": USER_AGENT, Accept: "application/json" } })
+    const response = await fetchRetry(url, { headers: { "User-Agent": USER_AGENT, Accept: "application/json" } })
     const retryAfter = Number(response.headers.get("retry-after") ?? 0)
     if ((response.status === 429 || response.status >= 500) && attempt < 6) {
       await new Promise((resolve) => setTimeout(resolve, Math.max(retryAfter * 1000, 2000 * attempt)))

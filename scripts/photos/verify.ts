@@ -36,7 +36,7 @@ export const GATE = 0.8
  * was right 95% of the time in photos:eval; with Commons agreeing, more.
  */
 export const FALLBACK_GATE = 0.6
-/** Review this many candidates for a generation, or up to EXTENDED_REVIEWS while it has no photo at GATE. */
+/** Review this many candidates for a generation, or up to EXTENDED_REVIEWS while a shown year has no photo at GATE near it. */
 const MAX_REVIEWS = 40
 const EXTENDED_REVIEWS = 150
 /** Keep this many accepted photos per shown year: the pick and alternates. */
@@ -78,19 +78,28 @@ export type Manifest = Record<string, { name: string; years: Record<string, Mani
 
 type Reviewed = { candidate: Candidate; pick: PhotoPick | null }
 
+/** A pick that suits a year well: within `years` of it, a US or Canadian car, not a rear view. */
+function fits(pick: PhotoPick, year: number, years: number): boolean {
+  return pick.photoYear !== null && Math.abs(pick.photoYear - year) <= years && (pick.foreign ?? 0) < 0.5 && !/\b(rear|back|behind)\b/i.test(pick.file)
+}
+
 async function reviewGeneration(library: Library, slug: string, found: GenerationCandidates, wantYears: number[]): Promise<Reviewed[]> {
   const questions = questionsFor(library, slug)
   const key = generationKey(found.generation)
   const reviewed: Reviewed[] = []
   // Review best-first, photos from near a shown year first (so a year after a facelift gets the facelifted car);
-  // stop once every shown year has enough accepted photos within a year of it.
+  // stop once every shown year has enough accepted, well-suited photos within a year of it.
   const near = (candidate: Candidate) => {
     const year = photoYear(candidate)
     return year !== null && wantYears.some((want) => Math.abs(want - year) <= 1) ? 1.5 : 0
   }
   const order = [...found.candidates].sort((a, b) => b.prior + near(b) - (a.prior + near(a)))
   for (const [index, candidate] of order.slice(0, EXTENDED_REVIEWS).entries()) {
-    if (index >= MAX_REVIEWS && reviewed.some((item) => item.pick && item.pick.gate === GATE)) break
+    // Past MAX_REVIEWS, go on (to EXTENDED_REVIEWS) only while a shown year has no well-suited photo at GATE within two years of it.
+    if (index >= MAX_REVIEWS) {
+      const strong = reviewed.flatMap((item) => (item.pick && item.pick.gate === GATE ? [item.pick] : []))
+      if (wantYears.every((year) => strong.some((pick) => fits(pick, year, 2)))) break
+    }
     const decision = await reviewPhoto(questions, candidate)
     if (!decision) continue
     const answer = decision.answers.generation
@@ -132,19 +141,36 @@ async function reviewGeneration(library: Library, slug: string, found: Generatio
           }
         : null,
     })
+    const latest = reviewed.at(-1)!
+    if (latest.pick) latest.pick.foreign = await marketCheck(latest.candidate)
     const picks = reviewed.flatMap((item) => (item.pick && item.pick.gate === GATE ? [item.pick] : []))
-    const covered = wantYears.every((year) => picks.filter((pick) => pick.photoYear !== null && Math.abs(pick.photoYear - year) <= 1).length >= PER_YEAR)
+    const covered = wantYears.every((year) => picks.filter((pick) => fits(pick, year, 1)).length >= PER_YEAR)
     if (covered) break
   }
   return reviewed
 }
 
-/** The best picks for one year: photos at GATE if there are any, then nearest photo year first, then Jev's quality score (less for a readable plate), then confidence. */
+/**
+ * How well a pick suits a year: near in years (a facelift changes the look), a US or Canadian car,
+ * shot from the front or side, no readable plate, and a good photo. Higher is better.
+ */
+export function suitability(pick: PhotoPick, year: number): number {
+  const distance = pick.photoYear === null ? 3 : Math.min(Math.abs(pick.photoYear - year), 4)
+  return (
+    -distance -
+    ((pick.foreign ?? 0) >= 0.5 ? 2.5 : 0) -
+    (/\b(rear|back|behind)\b/i.test(pick.file) ? 2.5 : 0) -
+    (pick.jev.plate >= 0.5 ? 0.5 : 0) +
+    pick.jev.quality * 0.5
+  )
+}
+
+/** The best picks for one year: photos at GATE if there are any, best suited first. */
 function bestFor(year: number, picks: PhotoPick[]): PhotoPick[] {
-  const rank = (pick: PhotoPick) => pick.jev.quality - (pick.jev.plate >= 0.5 ? 1 : 0) - ((pick.foreign ?? 0) >= 0.5 ? 1.5 : 0)
-  const distance = (pick: PhotoPick) => (pick.photoYear === null ? 3 : Math.min(Math.abs(pick.photoYear - year), 3))
   const strong = picks.filter((pick) => pick.gate === GATE)
-  return [...(strong.length ? strong : picks)].sort((a, b) => distance(a) - distance(b) || rank(b) - rank(a) || b.jev.confidence - a.jev.confidence).slice(0, PER_YEAR)
+  return [...(strong.length ? strong : picks)]
+    .sort((a, b) => suitability(b, year) - suitability(a, year) || b.jev.confidence - a.jev.confidence)
+    .slice(0, PER_YEAR)
 }
 
 async function main() {
@@ -170,13 +196,7 @@ async function main() {
       if (!found) continue
       const reviewed = await reviewGeneration(library, car.slug, found, wantYears)
       reviews += reviewed.length
-      const picks: PhotoPick[] = []
-      for (const item of reviewed) {
-        if (!item.pick) continue
-        item.pick.foreign = await marketCheck(item.candidate)
-        picks.push(item.pick)
-      }
-      picksByGeneration.set(id, picks)
+      picksByGeneration.set(id, reviewed.flatMap((item) => (item.pick ? [item.pick] : [])))
     }
     for (const year of car.shownYears) {
       // A split year (sold as both generations) shows the newer one.

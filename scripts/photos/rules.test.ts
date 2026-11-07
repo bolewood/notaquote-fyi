@@ -3,7 +3,7 @@ import assert from "node:assert/strict"
 import test from "node:test"
 import { licenseOk, restrictionsOk, thumbnailUrl } from "./candidates"
 import { imagePart } from "./jev"
-import { photoYear } from "./verify"
+import { photoYear, suitability, type PhotoPick } from "./verify"
 
 test("only licenses we can use with credit pass", () => {
   for (const ok of ["CC BY-SA 4.0", "CC BY 2.0", "CC BY-SA 3.0", "CC0", "Public domain"]) assert.equal(licenseOk(ok), true, ok)
@@ -34,4 +34,13 @@ test("images are typed from their bytes, and only PNG and JPEG are sent", () => 
   assert.match((imagePart(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 1])) as { image_url: { url: string } }).image_url.url, /^data:image\/png;base64,/)
   assert.match((imagePart(Buffer.from([0xff, 0xd8, 0xff, 0xe0])) as { image_url: { url: string } }).image_url.url, /^data:image\/jpeg;base64,/)
   assert.throws(() => imagePart(Buffer.from("GIF89a")))
+})
+
+test("a near-year, US, front photo beats a foreign, far or rear one", () => {
+  const base = { file: "File:2024 Car front.jpg", photoYear: 2024, foreign: 0.1, jev: { plate: 0.1, quality: 2 } } as unknown as PhotoPick
+  const at = (changes: Partial<PhotoPick>) => suitability({ ...base, ...changes }, 2024)
+  assert.ok(at({}) > at({ foreign: 0.8 }), "foreign ranks lower")
+  assert.ok(at({}) > at({ photoYear: 2021 }), "three years off ranks lower")
+  assert.ok(at({}) > at({ file: "File:2024 Car, rear left.jpg" }), "a rear view ranks lower")
+  assert.ok(at({ photoYear: 2023 }) > at({ foreign: 0.8 }), "a US car a year off beats a foreign car of the year")
 })

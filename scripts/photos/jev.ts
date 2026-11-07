@@ -15,6 +15,7 @@
 import { createHash } from "node:crypto"
 import { mkdir, readFile, writeFile } from "node:fs/promises"
 import path from "node:path"
+import { fetchRetry } from "./http"
 
 export const DECISIONS_URL = "https://openrouter.ai/api/alpha/decisions"
 export const MODEL = "typesafe/jev-1.14"
@@ -64,7 +65,7 @@ export async function decide(state: StatePart[] | (() => Promise<StatePart[]>), 
   const parts = typeof state === "function" ? await state() : state
   let lastError = ""
   for (let attempt = 0; attempt < 4; attempt += 1) {
-    const response = await fetch(DECISIONS_URL, {
+    const response = await fetchRetry(DECISIONS_URL, {
       method: "POST",
       headers: { "content-type": "application/json", authorization: `Bearer ${key}` },
       body: JSON.stringify({ model: MODEL, state: parts, questions }),

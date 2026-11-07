@@ -12,7 +12,7 @@ import { readFile } from "node:fs/promises"
 import type { Candidate } from "./candidates"
 import type { CarCoverage } from "./coverage"
 import { GENERATIONS_FILE, type CarGenerations } from "./generations"
-import { USER_AGENT } from "./http"
+import { fetchRetry, USER_AGENT } from "./http"
 import { decide, imagePart, type Decision, type Question } from "./jev"
 import type { SeriesEntry } from "./series"
 
@@ -82,7 +82,7 @@ async function thumbnail(candidate: Candidate): Promise<Buffer> {
   if (wait > 0) await new Promise((resolve) => setTimeout(resolve, wait))
   lastImageFetch = Date.now()
   for (let attempt = 0; attempt < 4; attempt += 1) {
-    const response = await fetch(candidate.thumbUrl, { headers: { "User-Agent": USER_AGENT } })
+    const response = await fetchRetry(candidate.thumbUrl, { headers: { "User-Agent": USER_AGENT } })
     if (response.ok) return Buffer.from(await response.arrayBuffer())
     if (response.status !== 429 && response.status < 500) throw new Error(`${candidate.title}: HTTP ${response.status}`)
     await new Promise((resolve) => setTimeout(resolve, 3000 * 2 ** attempt))

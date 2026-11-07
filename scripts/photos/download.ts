@@ -18,7 +18,7 @@ import { mkdir, readdir, readFile, rm, stat, writeFile } from "node:fs/promises"
 import path from "node:path"
 import sharp from "sharp"
 import { licenseOk, restrictionsOk, stripHtml } from "./candidates"
-import { api, chunks, getJson, USER_AGENT } from "./http"
+import { api, chunks, fetchRetry, getJson, USER_AGENT } from "./http"
 import { MANIFEST_FILE, type Manifest, type PhotoPick } from "./verify"
 
 export const IMAGE_DIR = "public/car-photos"
@@ -95,7 +95,7 @@ async function recheck(picks: PhotoPick[]): Promise<Map<string, string>> {
 async function fetchResized(pick: PhotoPick): Promise<Buffer> {
   const url = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(pick.file.replace(/^File:/, ""))}?width=${Math.min(WIDTH, pick.width)}`
   for (let attempt = 0; attempt < 4; attempt += 1) {
-    const response = await fetch(url, { headers: { "User-Agent": USER_AGENT } })
+    const response = await fetchRetry(url, { headers: { "User-Agent": USER_AGENT } })
     if (response.ok) return Buffer.from(await response.arrayBuffer())
     if (response.status !== 429 && response.status < 500) throw new Error(`${pick.file}: HTTP ${response.status}`)
     await new Promise((resolve) => setTimeout(resolve, 3000 * 2 ** attempt))
