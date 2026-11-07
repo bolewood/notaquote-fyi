@@ -681,18 +681,18 @@
       }
     },
     "2024": {
-      "src": "/car-photos/3fb5a2f6bc0f1a642b2b920c68a0f73e9a492309.webp",
+      "src": "/car-photos/e7a543781f9304ddd5212d384de7f5cb883a5964.webp",
       "width": 1200,
-      "height": 736,
+      "height": 900,
       "generation": "chevrolet-camaro/chevrolet-camaro-sixth-generation",
       "generationYears": "2016–2024",
       "photoYear": 2024,
       "credit": {
-        "title": "File:2024 Chevrolet Camaro LT1 convertible with RS package, front left, 06-08-2024.jpg",
-        "author": "MercurySable99",
+        "title": "File:Camaro ZL1 front side view.jpg",
+        "author": "Ominae",
         "license": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-        "source": "https://commons.wikimedia.org/wiki/File:2024_Chevrolet_Camaro_LT1_convertible_with_RS_package,_front_left,_06-08-2024.jpg",
+        "source": "https://commons.wikimedia.org/wiki/File:Camaro_ZL1_front_side_view.jpg",
         "changes": "Resized, converted to WebP, and cropped for display"
       }
     }
@@ -1692,18 +1692,18 @@
       }
     },
     "2022": {
-      "src": "/car-photos/3c90b9dfb3aa6098f2234f9bbbe62a08996b1380.webp",
+      "src": "/car-photos/1b39a4fbb9b19577e3bf9bf885cbbfbace5dbc2d.webp",
       "width": 1200,
-      "height": 661,
+      "height": 876,
       "generation": "ford-f-150/ford-f-150-fourteenth-generation",
       "generationYears": "2021–present",
-      "photoYear": 2022,
+      "photoYear": 2021,
       "credit": {
-        "title": "File:2022 Ford F-150 Lightning Lariat in Atlas Blue Metallic, Front Right, 08-06-2022.jpg",
-        "author": "Elise240SX",
-        "license": "CC BY-SA 4.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-        "source": "https://commons.wikimedia.org/wiki/File:2022_Ford_F-150_Lightning_Lariat_in_Atlas_Blue_Metallic,_Front_Right,_08-06-2022.jpg",
+        "title": "File:'21 Ford F-150 XLT Crew Cab.jpg",
+        "author": "Bull-Doser",
+        "license": "Public domain",
+        "licenseUrl": null,
+        "source": "https://commons.wikimedia.org/wiki/File:%2721_Ford_F-150_XLT_Crew_Cab.jpg",
         "changes": "Resized, converted to WebP, and cropped for display"
       }
     },
@@ -2322,34 +2322,34 @@
       }
     },
     "2018": {
-      "src": "/car-photos/40eec4ba14249370f6393cd9477e3d9323784103.webp",
+      "src": "/car-photos/d382227b164f158d0ca5d61cb3ea7dd56ae40f05.webp",
       "width": 1200,
-      "height": 655,
+      "height": 661,
       "generation": "honda-civic/honda-civic-tenth-generation",
       "generationYears": "2016–2021",
-      "photoYear": 2017,
+      "photoYear": 2018,
       "credit": {
-        "title": "File:2017 Honda Civic EX-T coupe front 1.21.19.jpg",
-        "author": "Kevauto",
+        "title": "File:2018 Honda Civic EX, Front Left, 05-09-2021.jpg",
+        "author": "SsmIntrigue",
         "license": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-        "source": "https://commons.wikimedia.org/wiki/File:2017_Honda_Civic_EX-T_coupe_front_1.21.19.jpg",
+        "source": "https://commons.wikimedia.org/wiki/File:2018_Honda_Civic_EX,_Front_Left,_05-09-2021.jpg",
         "changes": "Resized, converted to WebP, and cropped for display"
       }
     },
     "2022": {
-      "src": "/car-photos/2cec81585b63ef0d66ca0ee52042fe7090f7621d.webp",
+      "src": "/car-photos/0ada46223ea22a7acdc50cfbf1a87160298b8510.webp",
       "width": 1200,
-      "height": 641,
+      "height": 626,
       "generation": "honda-civic/honda-civic-eleventh-generation",
       "generationYears": "2022–present",
       "photoYear": 2022,
       "credit": {
-        "title": "File:2022 Honda Civic Hatchback EX-L in Platinum White Pearl, front right (2).jpg",
-        "author": "Mr.choppers",
-        "license": "CC BY-SA 3.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-        "source": "https://commons.wikimedia.org/wiki/File:2022_Honda_Civic_Hatchback_EX-L_in_Platinum_White_Pearl,_front_right_(2).jpg",
+        "title": "File:2022 Honda Civic Touring in Lunar Silver Metallic, Front Left, 05-10-2022.jpg",
+        "author": "Elise240SX",
+        "license": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "source": "https://commons.wikimedia.org/wiki/File:2022_Honda_Civic_Touring_in_Lunar_Silver_Metallic,_Front_Left,_05-10-2022.jpg",
         "changes": "Resized, converted to WebP, and cropped for display"
       }
     },
@@ -3022,18 +3022,18 @@
   },
   "hyundai-sonata": {
     "2013": {
-      "src": "/car-photos/1fa427a1f6da3e7639aa1d30fc24fe53dca79c6f.webp",
+      "src": "/car-photos/c37fd24bce2e8ca29510835514fb69600cec2d2b.webp",
       "width": 1200,
-      "height": 900,
+      "height": 663,
       "generation": "hyundai-sonata/sixth-generation-yf-2009",
       "generationYears": "2011–2014",
-      "photoYear": 2013,
+      "photoYear": 2012,
       "credit": {
-        "title": "File:2013 Hyundai Sonata Hybrid with US Government license plates (Front-Left).jpg",
-        "author": "LouieRBLX",
+        "title": "File:2012 Hyundai Sonata Limited, front left, 05-09-2023.jpg",
+        "author": "MercurySable99",
         "license": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-        "source": "https://commons.wikimedia.org/wiki/File:2013_Hyundai_Sonata_Hybrid_with_US_Government_license_plates_(Front-Left).jpg",
+        "source": "https://commons.wikimedia.org/wiki/File:2012_Hyundai_Sonata_Limited,_front_left,_05-09-2023.jpg",
         "changes": "Resized, converted to WebP, and cropped for display"
       }
     },
@@ -3488,34 +3488,34 @@
   },
   "kia-forte": {
     "2013": {
-      "src": "/car-photos/e2002fb9a6500afe74a83d1bcc8654ac185f407d.webp",
+      "src": "/car-photos/9fc431ea7d78de4cf2a0118ff26a288801ea83ae.webp",
       "width": 1200,
-      "height": 740,
+      "height": 665,
       "generation": "kia-forte/first-generation-td-2008",
       "generationYears": "2010–2013",
-      "photoYear": 2011,
+      "photoYear": 2010,
       "credit": {
-        "title": "File:2011 Kia Forte SX hatchback -- 06-23-2011 front.jpg",
+        "title": "File:2010 Kia Forte EX -- 10-26-2010 1.jpg",
         "author": "IFCAR",
         "license": "Public domain",
         "licenseUrl": null,
-        "source": "https://commons.wikimedia.org/wiki/File:2011_Kia_Forte_SX_hatchback_--_06-23-2011_front.jpg",
+        "source": "https://commons.wikimedia.org/wiki/File:2010_Kia_Forte_EX_--_10-26-2010_1.jpg",
         "changes": "Resized, converted to WebP, and cropped for display"
       }
     },
     "2018": {
-      "src": "/car-photos/19a0ace7def2b710b84c0e6217463077ab93dd4f.webp",
+      "src": "/car-photos/64661bf6bdf23d83e8d667ebc1bad8e5f09113f0.webp",
       "width": 1200,
-      "height": 746,
+      "height": 795,
       "generation": "kia-forte/second-generation-yd-2012",
       "generationYears": "2014–2018",
-      "photoYear": 2017,
+      "photoYear": 2015,
       "credit": {
-        "title": "File:2017 Kia Forte.jpg",
-        "author": "DestinationFearFan",
-        "license": "CC BY-SA 4.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-        "source": "https://commons.wikimedia.org/wiki/File:2017_Kia_Forte.jpg",
+        "title": "File:2015 Kia Forte 05.jpg",
+        "author": "CapCase",
+        "license": "CC BY 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+        "source": "https://commons.wikimedia.org/wiki/File:2015_Kia_Forte_05.jpg",
         "changes": "Resized, converted to WebP, and cropped for display"
       }
     },
@@ -3604,18 +3604,18 @@
       }
     },
     "2022": {
-      "src": "/car-photos/89ca25978e1c4b10e788eb3f5ab2258039e90fb8.webp",
+      "src": "/car-photos/69ea90d2e0ad9ea426493b59463af192254d3ce2.webp",
       "width": 1200,
-      "height": 800,
+      "height": 960,
       "generation": "kia-niro/first-generation-de-2016",
       "generationYears": "2017–2022",
       "photoYear": null,
       "credit": {
-        "title": "File:Geneva International Motor Show 2018, Le Grand-Saconnex (1X7A1902).jpg",
-        "author": "Matti Blume",
-        "license": "CC BY-SA 4.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-        "source": "https://commons.wikimedia.org/wiki/File:Geneva_International_Motor_Show_2018,_Le_Grand-Saconnex_(1X7A1902).jpg",
+        "title": "File:Kia Niro (DE) Washington DC Metro Area, USA.jpg",
+        "author": "OWS Photography",
+        "license": "CC BY 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+        "source": "https://commons.wikimedia.org/wiki/File:Kia_Niro_(DE)_Washington_DC_Metro_Area,_USA.jpg",
         "changes": "Resized, converted to WebP, and cropped for display"
       }
     },
@@ -4070,18 +4070,18 @@
   },
   "mazda-3": {
     "2013": {
-      "src": "/car-photos/5103dc752efc88184375bbc9382be907f9a88604.webp",
+      "src": "/car-photos/302532460e316ebed04131072c035ee56f162857.webp",
       "width": 1200,
-      "height": 800,
+      "height": 803,
       "generation": "mazda-3/second-generation-bl-2008",
       "generationYears": "2010–2013",
-      "photoYear": 2012,
+      "photoYear": null,
       "credit": {
-        "title": "File:2012 ASA AutoX Event 00002 (6958208186).jpg",
-        "author": "Grant.C",
-        "license": "CC BY 2.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-        "source": "https://commons.wikimedia.org/wiki/File:2012_ASA_AutoX_Event_00002_(6958208186).jpg",
+        "title": "File:Automobile DSC 0577 (5462936100).jpg",
+        "author": "Lord of the Wings© from Toronto, Canada",
+        "license": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+        "source": "https://commons.wikimedia.org/wiki/File:Automobile_DSC_0577_(5462936100).jpg",
         "changes": "Resized, converted to WebP, and cropped for display"
       }
     },
@@ -4102,34 +4102,34 @@
       }
     },
     "2022": {
-      "src": "/car-photos/1fc0eaf5ccafbcb2bd805ea4c1067212736fa583.webp",
+      "src": "/car-photos/4bc93d4a7f7c16233fea7835aa9d7a5c0abc23ff.webp",
       "width": 1200,
-      "height": 654,
+      "height": 675,
       "generation": "mazda-3/fourth-generation-bp-2019",
       "generationYears": "2019–present",
-      "photoYear": 2023,
+      "photoYear": 2022,
       "credit": {
-        "title": "File:2023 Mazda3 Sport GS in Platinum Quartz Metallic, Front Left, 10-09-2023.jpg",
-        "author": "Elise240SX",
+        "title": "File:2022 Mazda 3 Carbon Edition.jpg",
+        "author": "Chanokchon",
         "license": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-        "source": "https://commons.wikimedia.org/wiki/File:2023_Mazda3_Sport_GS_in_Platinum_Quartz_Metallic,_Front_Left,_10-09-2023.jpg",
+        "source": "https://commons.wikimedia.org/wiki/File:2022_Mazda_3_Carbon_Edition.jpg",
         "changes": "Resized, converted to WebP, and cropped for display"
       }
     },
     "2024": {
-      "src": "/car-photos/48bbaab75fd38909b9ced563498fadef8ccba382.webp",
+      "src": "/car-photos/4bc93d4a7f7c16233fea7835aa9d7a5c0abc23ff.webp",
       "width": 1200,
-      "height": 772,
+      "height": 675,
       "generation": "mazda-3/fourth-generation-bp-2019",
       "generationYears": "2019–present",
-      "photoYear": 2024,
+      "photoYear": 2022,
       "credit": {
-        "title": "File:2024 Mazda3 2.0L Fastback in Platinum Quartz, 06-09-2024.jpg",
-        "author": "Ethan Llamas",
+        "title": "File:2022 Mazda 3 Carbon Edition.jpg",
+        "author": "Chanokchon",
         "license": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-        "source": "https://commons.wikimedia.org/wiki/File:2024_Mazda3_2.0L_Fastback_in_Platinum_Quartz,_06-09-2024.jpg",
+        "source": "https://commons.wikimedia.org/wiki/File:2022_Mazda_3_Carbon_Edition.jpg",
         "changes": "Resized, converted to WebP, and cropped for display"
       }
     }
@@ -4404,18 +4404,18 @@
       }
     },
     "2018": {
-      "src": "/car-photos/d09957c604bbc10df1275e153db882701c4ea705.webp",
+      "src": "/car-photos/aec36bfa960475a10b09c1327a85e26464d59f30.webp",
       "width": 1200,
-      "height": 525,
+      "height": 900,
       "generation": "mitsubishi-outlander/mitsubishi-outlander-third-generation-gf",
       "generationYears": "2014–2021",
-      "photoYear": 2019,
+      "photoYear": 2018,
       "credit": {
-        "title": "File:2019 Mitsubishi Outlander, front right side.jpg",
-        "author": "Mr.choppers",
-        "license": "CC BY-SA 3.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-        "source": "https://commons.wikimedia.org/wiki/File:2019_Mitsubishi_Outlander,_front_right_side.jpg",
+        "title": "File:20 Mitsubishi Outlander SEL.jpg",
+        "author": "HJUdall",
+        "license": "CC0",
+        "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "source": "https://commons.wikimedia.org/wiki/File:20_Mitsubishi_Outlander_SEL.jpg",
         "changes": "Resized, converted to WebP, and cropped for display"
       }
     },
@@ -4932,18 +4932,18 @@
       }
     },
     "2022": {
-      "src": "/car-photos/52dc5f886a99849a2f6bdc9fb824e4494984a3df.webp",
+      "src": "/car-photos/64d7d79923b3cf0d412bdb5fbed3d61349cc0fc6.webp",
       "width": 1200,
       "height": 800,
       "generation": "nissan-sentra/eighth-generation-b18-2019",
       "generationYears": "2020–2025",
       "photoYear": 2023,
       "credit": {
-        "title": "File:2023 Cleveland Auto Show (52790283343).jpg",
-        "author": "Erik Drost",
-        "license": "CC BY 2.0",
-        "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-        "source": "https://commons.wikimedia.org/wiki/File:2023_Cleveland_Auto_Show_(52790283343).jpg",
+        "title": "File:2023 Nissan Sentra Sedan (53786140030).jpg",
+        "author": "formulanone",
+        "license": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+        "source": "https://commons.wikimedia.org/wiki/File:2023_Nissan_Sentra_Sedan_(53786140030).jpg",
         "changes": "Resized, converted to WebP, and cropped for display"
       }
     },
@@ -5996,18 +5996,18 @@
       }
     },
     "2018": {
-      "src": "/car-photos/8438b8ba42a1c49794cd63eb919ec1892b5189fb.webp",
+      "src": "/car-photos/812730c1132b3fa2c4b8c6c43207e822e5cdfc17.webp",
       "width": 1200,
-      "height": 800,
+      "height": 900,
       "generation": "toyota-prius/toyota-prius-xw50",
       "generationYears": "2016–2022",
-      "photoYear": 2018,
+      "photoYear": null,
       "credit": {
-        "title": "File:2018 Toyota Prius (facelift).jpg",
-        "author": "User3204",
+        "title": "File:Toyota PRIUS S (DAA-ZVW50-AHXEB) & PRIUS S\"Touring Selection\" (DAA-ZVW51-AHXEB(T)) front.jpg",
+        "author": "Tokumeigakarinoaoshima",
         "license": "CC BY-SA 4.0",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-        "source": "https://commons.wikimedia.org/wiki/File:2018_Toyota_Prius_(facelift).jpg",
+        "source": "https://commons.wikimedia.org/wiki/File:Toyota_PRIUS_S_(DAA-ZVW50-AHXEB)_%26_PRIUS_S%22Touring_Selection%22_(DAA-ZVW51-AHXEB(T))_front.jpg",
         "changes": "Resized, converted to WebP, and cropped for display"
       }
     },

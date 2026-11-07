@@ -14,7 +14,7 @@ import type { CarCoverage } from "./coverage"
 import { GENERATIONS_FILE, type CarGenerations } from "./generations"
 import { fetchRetry, USER_AGENT } from "./http"
 import { decide, imagePart, type Decision, type Question } from "./jev"
-import type { SeriesEntry } from "./series"
+import type { BodyStyle, SeriesEntry } from "./series"
 
 export const OTHER = "other"
 export const NONE = "none"
@@ -122,4 +122,30 @@ export async function marketCheck(candidate: Candidate): Promise<number | null> 
   )
   const answer = decision?.answers.foreign
   return answer?.type === "noul" ? answer.noul : null
+}
+
+export const BODY_STYLES: Record<BodyStyle, string> = {
+  sedan: "A sedan: four doors and a separate trunk",
+  hatchback: "A hatchback or liftback: the rear window lifts up with the tailgate",
+  coupe: "A coupe: two doors and a fixed roof",
+  convertible: "A convertible: a folding or removable roof",
+  wagon: "A station wagon: a long roof over a cargo area, lower than an SUV",
+  suv: "An SUV or crossover",
+  pickup: "A pickup truck",
+  van: "A van or minivan",
+}
+
+/** Asked only about accepted photos of cars that come in several bodies: which body is this? Null if Jev refuses the image. */
+export async function bodyCheck(candidate: Candidate): Promise<{ body: string; confidence: number } | null> {
+  const questions: Record<string, Question> = {
+    body: { type: "choice", instructions: "What body style is the main car in this photo?", criteria: { ...BODY_STYLES } },
+  }
+  const decision = await decide(async () => [{ type: "text", text: "A photo of a car." }, imagePart(await thumbnail(candidate))], questions, `body:${candidate.sha1}`).catch(
+    (error: Error) => {
+      if (!/HTTP 400/.test(error.message)) throw error
+      return null
+    },
+  )
+  const answer = decision?.answers.body
+  return answer?.type === "choice" ? { body: answer.choice, confidence: answer.confidence } : null
 }

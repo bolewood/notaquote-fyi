@@ -3291,28 +3291,28 @@
             }
           },
           {
-            "file": "File:2024 Chevrolet Camaro LT1 convertible with RS package, front left, 06-08-2024.jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2024_Chevrolet_Camaro_LT1_convertible_with_RS_package,_front_left,_06-08-2024.jpg",
-            "sha1": "3fb5a2f6bc0f1a642b2b920c68a0f73e9a492309",
-            "timestamp": "2024-06-09T15:04:23Z",
-            "width": 4672,
-            "height": 2865,
+            "file": "File:Camaro ZL1 front side view.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Camaro_ZL1_front_side_view.jpg",
+            "sha1": "e7a543781f9304ddd5212d384de7f5cb883a5964",
+            "timestamp": "2017-11-13T03:30:10Z",
+            "width": 4032,
+            "height": 3024,
             "license": "CC BY-SA 4.0",
             "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-            "artist": "MercurySable99",
+            "artist": "Ominae",
             "credit": "Own work",
             "photoYear": 2024,
             "gate": 0.8,
-            "foreign": 0.03,
+            "foreign": 0.3,
             "jev": {
               "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794002357-Tyk9mPcz9012L2xdZud8",
-              "confidence": 1,
-              "exterior": 0.93,
-              "face": 0.03,
-              "plate": 0.02,
-              "special": 0.08,
-              "quality": 2.84
+              "id": "gen-dec-1794002358-XuXHOY7O3cDN9mmRONNh",
+              "confidence": 0.99,
+              "exterior": 0.85,
+              "face": 0.07,
+              "plate": 0.01,
+              "special": 0.2,
+              "quality": 2.77
             }
           }
         ]
@@ -3320,31 +3320,6 @@
       "2024": {
         "generation": "chevrolet-camaro/chevrolet-camaro-sixth-generation",
         "picks": [
-          {
-            "file": "File:2024 Chevrolet Camaro LT1 convertible with RS package, front left, 06-08-2024.jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2024_Chevrolet_Camaro_LT1_convertible_with_RS_package,_front_left,_06-08-2024.jpg",
-            "sha1": "3fb5a2f6bc0f1a642b2b920c68a0f73e9a492309",
-            "timestamp": "2024-06-09T15:04:23Z",
-            "width": 4672,
-            "height": 2865,
-            "license": "CC BY-SA 4.0",
-            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-            "artist": "MercurySable99",
-            "credit": "Own work",
-            "photoYear": 2024,
-            "gate": 0.8,
-            "foreign": 0.03,
-            "jev": {
-              "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794002357-Tyk9mPcz9012L2xdZud8",
-              "confidence": 1,
-              "exterior": 0.93,
-              "face": 0.03,
-              "plate": 0.02,
-              "special": 0.08,
-              "quality": 2.84
-            }
-          },
           {
             "file": "File:Camaro ZL1 front side view.jpg",
             "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Camaro_ZL1_front_side_view.jpg",
@@ -3393,6 +3368,31 @@
               "plate": 0.07,
               "special": 0.1,
               "quality": 2.69
+            }
+          },
+          {
+            "file": "File:Camaro-1.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Camaro-1.jpg",
+            "sha1": "e19ecc25a266c53ef5a4456dc2cdfb03afaf61b9",
+            "timestamp": "2018-04-18T02:47:07Z",
+            "width": 5067,
+            "height": 3349,
+            "license": "CC BY 2.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+            "artist": "Janusz Sobolewski from Mississauga, Ontario, Canada",
+            "credit": "Camaro-1",
+            "photoYear": 2024,
+            "gate": 0.8,
+            "foreign": 0.03,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794002371-wwImDVEWIPYqWT096pl6",
+              "confidence": 0.85,
+              "exterior": 0.94,
+              "face": 0.04,
+              "plate": 0.03,
+              "special": 0.07,
+              "quality": 1.83
             }
           }
         ]
@@ -6302,28 +6302,28 @@
             }
           },
           {
-            "file": "File:2017 Chrysler Pacifica Touring L Plus finished in Jazz Blue Pearlcoat - Maryland.jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2017_Chrysler_Pacifica_Touring_L_Plus_finished_in_Jazz_Blue_Pearlcoat_-_Maryland.jpg",
-            "sha1": "4768e10c234cafb4dbd410f42243bae8b198aa84",
-            "timestamp": "2021-11-15T05:06:33Z",
-            "width": 4032,
-            "height": 3024,
-            "license": "CC0",
-            "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-            "artist": "CZmarlin — Christopher Ziemnowicz, a photo credit would be appreciated if this image is used anywhere other than Wikipedia.",
+            "file": "File:2017 Chrysler Pacifica on West Side Highway.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2017_Chrysler_Pacifica_on_West_Side_Highway.jpg",
+            "sha1": "47cedc008f87cab082a72074aa31a681cec0448a",
+            "timestamp": "2016-09-08T23:33:36Z",
+            "width": 2604,
+            "height": 1314,
+            "license": "CC BY-SA 3.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+            "artist": "Mr.choppers",
             "credit": "Own work",
             "photoYear": 2017,
             "gate": 0.8,
-            "foreign": 0.04,
+            "foreign": 0.08,
             "jev": {
               "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794004486-4GUC3m3fot0M04foSnOi",
-              "confidence": 0.99,
-              "exterior": 0.96,
-              "face": 0.04,
-              "plate": 0.05,
+              "id": "gen-dec-1794050544-YnMrtvn6Z8p0q8EGspYa",
+              "confidence": 0.96,
+              "exterior": 0.83,
+              "face": 0.06,
+              "plate": 0.31,
               "special": 0.02,
-              "quality": 2.31
+              "quality": 2.61
             }
           }
         ]
@@ -6437,31 +6437,6 @@
             }
           },
           {
-            "file": "File:2024 Chrysler Pacifica Plug-In Hybrid Select in Silver Mist, front right, 2025-08-24.jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2024_Chrysler_Pacifica_Plug-In_Hybrid_Select_in_Silver_Mist,_front_right,_2025-08-24.jpg",
-            "sha1": "40d7a49d9c4757f2c09ffa6caba3bf9b309e4666",
-            "timestamp": "2025-08-24T12:57:08Z",
-            "width": 5044,
-            "height": 2802,
-            "license": "CC BY-SA 4.0",
-            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-            "artist": "Elise240SX",
-            "credit": "Own work",
-            "photoYear": 2024,
-            "gate": 0.8,
-            "foreign": 0.04,
-            "jev": {
-              "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794004472-xaYmqkVOd0sJ8D1w2fg3",
-              "confidence": 1,
-              "exterior": 0.86,
-              "face": 0.05,
-              "plate": 0.27,
-              "special": 0.02,
-              "quality": 2.74
-            }
-          },
-          {
             "file": "File:2023 Chrysler Pacifica Hybrid minivan in Velvet Red Pearl Coat charging 1of2.jpg",
             "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2023_Chrysler_Pacifica_Hybrid_minivan_in_Velvet_Red_Pearl_Coat_charging_1of2.jpg",
             "sha1": "1c26bfdbfea0974384aa786454a536e638915b7e",
@@ -6484,6 +6459,31 @@
               "plate": 0.24,
               "special": 0.03,
               "quality": 2.63
+            }
+          },
+          {
+            "file": "File:2022 Chrysler Pacifica Touring L (facelift), front 6.17.23.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2022_Chrysler_Pacifica_Touring_L_(facelift),_front_6.17.23.jpg",
+            "sha1": "a80e0d8126b61f68184a9eb27af8d74b600a5a5c",
+            "timestamp": "2023-07-27T04:34:07Z",
+            "width": 3085,
+            "height": 1671,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Kevauto",
+            "credit": "Own work",
+            "photoYear": 2022,
+            "gate": 0.8,
+            "foreign": 0.01,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794004472-XPeJG4dG80ZJmbRvDy10",
+              "confidence": 1,
+              "exterior": 0.89,
+              "face": 0.04,
+              "plate": 0.29,
+              "special": 0.03,
+              "quality": 2.66
             }
           }
         ]
@@ -8287,53 +8287,53 @@
         "generation": "ford-f-150/ford-f-150-fourteenth-generation",
         "picks": [
           {
-            "file": "File:2022 Ford F-150 Lightning Lariat in Atlas Blue Metallic, Front Right, 08-06-2022.jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2022_Ford_F-150_Lightning_Lariat_in_Atlas_Blue_Metallic,_Front_Right,_08-06-2022.jpg",
-            "sha1": "3c90b9dfb3aa6098f2234f9bbbe62a08996b1380",
-            "timestamp": "2022-08-10T16:44:17Z",
-            "width": 4738,
-            "height": 2610,
-            "license": "CC BY-SA 4.0",
-            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-            "artist": "Elise240SX",
+            "file": "File:'21 Ford F-150 XLT Crew Cab.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:%2721_Ford_F-150_XLT_Crew_Cab.jpg",
+            "sha1": "1b39a4fbb9b19577e3bf9bf885cbbfbace5dbc2d",
+            "timestamp": "2021-05-26T02:25:14Z",
+            "width": 2296,
+            "height": 1676,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "Bull-Doser",
             "credit": "Own work",
-            "photoYear": 2022,
+            "photoYear": 2021,
             "gate": 0.8,
-            "foreign": 0.02,
+            "foreign": 0.03,
             "jev": {
               "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794001716-IFaS3kyffSRCOsPqszR6",
-              "confidence": 0.95,
-              "exterior": 0.83,
-              "face": 0.05,
-              "plate": 0.02,
-              "special": 0.05,
-              "quality": 2.82
+              "id": "gen-dec-1794050303-HK17gJfdOFpwntdLh468",
+              "confidence": 0.8,
+              "exterior": 0.71,
+              "face": 0.04,
+              "plate": 0.04,
+              "special": 0.06,
+              "quality": 2.66
             }
           },
           {
-            "file": "File:2022 Ford F-150 Lightning, NYIAS 2022.jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2022_Ford_F-150_Lightning,_NYIAS_2022.jpg",
-            "sha1": "ae03fce21488073afc467ecf57858dc009a85907",
-            "timestamp": "2022-07-07T04:47:46Z",
-            "width": 4105,
-            "height": 2903,
-            "license": "CC BY-SA 4.0",
-            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-            "artist": "Kevauto",
-            "credit": "Own work",
-            "photoYear": 2022,
+            "file": "File:2021-2023 Ford F-150 Ext'd Cab.JPG",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2021-2023_Ford_F-150_Ext%27d_Cab.JPG",
+            "sha1": "4fa56f491f9a03eca70739b5feacfa03d0aa3301",
+            "timestamp": "2025-08-03T04:00:13Z",
+            "width": 2341,
+            "height": 1609,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "Bull-Doser",
+            "credit": "Own work.",
+            "photoYear": 2021,
             "gate": 0.8,
-            "foreign": 0.04,
+            "foreign": 0.13,
             "jev": {
               "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794006301-a0uejLyGHNmgyEBnXhPQ",
-              "confidence": 0.95,
-              "exterior": 0.86,
-              "face": 0.05,
-              "plate": 0.03,
-              "special": 0.23,
-              "quality": 2.69
+              "id": "gen-dec-1794050300-AGSRoVxKF6NmJQAIuGn5",
+              "confidence": 0.9,
+              "exterior": 0.67,
+              "face": 0.08,
+              "plate": 0.07,
+              "special": 0.02,
+              "quality": 2.64
             }
           },
           {
@@ -8722,31 +8722,6 @@
             }
           },
           {
-            "file": "File:2017 Ford Mustang V6 Convertible in Ruby Red Metallic Tinted Clearcoat, front left, 04-26-2025.jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2017_Ford_Mustang_V6_Convertible_in_Ruby_Red_Metallic_Tinted_Clearcoat,_front_left,_04-26-2025.jpg",
-            "sha1": "6c4cf50b537fc740aade69830e1c2870cfe67bbb",
-            "timestamp": "2025-04-30T16:28:00Z",
-            "width": 3208,
-            "height": 1872,
-            "license": "CC0",
-            "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-            "artist": "Cutlass",
-            "credit": "Own work",
-            "photoYear": 2017,
-            "gate": 0.8,
-            "foreign": 0.04,
-            "jev": {
-              "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794001867-uYd6aberb40HHfPNIeBL",
-              "confidence": 0.99,
-              "exterior": 0.91,
-              "face": 0.04,
-              "plate": 0.09,
-              "special": 0.04,
-              "quality": 2.63
-            }
-          },
-          {
             "file": "File:2019 Ford Mustang Silver (49454864307).jpg",
             "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2019_Ford_Mustang_Silver_(49454864307).jpg",
             "sha1": "64eb3c2be5a8e1bf9af0ad1678c6a4b1787b5f7d",
@@ -8769,6 +8744,31 @@
               "plate": 0.02,
               "special": 0.07,
               "quality": 2.58
+            }
+          },
+          {
+            "file": "File:2018-08-26. Авто-мото экзотика 14.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2018-08-26._%D0%90%D0%B2%D1%82%D0%BE-%D0%BC%D0%BE%D1%82%D0%BE_%D1%8D%D0%BA%D0%B7%D0%BE%D1%82%D0%B8%D0%BA%D0%B0_14.jpg",
+            "sha1": "7218c62916f6f650128d00d99edeb32ab9ce5d40",
+            "timestamp": "2018-08-28T21:20:49Z",
+            "width": 4928,
+            "height": 3264,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Andrey Butko",
+            "credit": "Own work",
+            "photoYear": 2018,
+            "gate": 0.8,
+            "foreign": 0.79,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794009611-esxN7pUvhHoqIzfqaWX8",
+              "confidence": 0.98,
+              "exterior": 0.74,
+              "face": 0.08,
+              "plate": 0.24,
+              "special": 0.08,
+              "quality": 2.66
             }
           }
         ]
@@ -8827,28 +8827,28 @@
             }
           },
           {
-            "file": "File:2023 Ford Mustang 5.0 GT convertible in Oxford White, front left.jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2023_Ford_Mustang_5.0_GT_convertible_in_Oxford_White,_front_left.jpg",
-            "sha1": "89853b5255d13dbe58d162fde6028f52dc535d8f",
-            "timestamp": "2024-08-18T06:10:19Z",
-            "width": 3354,
-            "height": 1676,
-            "license": "CC BY-SA 4.0",
-            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-            "artist": "Ethan Llamas",
-            "credit": "Own work",
-            "photoYear": 2023,
+            "file": "File:2021 Ford Mustang Fastback 2.3L (51767449779).jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2021_Ford_Mustang_Fastback_2.3L_(51767449779).jpg",
+            "sha1": "0aa7cf1307ee2d4e8f2341c5cd88d0b06b335f89",
+            "timestamp": "2021-12-23T08:15:15Z",
+            "width": 5224,
+            "height": 2490,
+            "license": "CC BY 2.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+            "artist": "GPS 56",
+            "credit": "2021 Ford Mustang Fastback 2.3L",
+            "photoYear": 2021,
             "gate": 0.8,
-            "foreign": 0.55,
+            "foreign": 0.93,
             "jev": {
               "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794001866-4LgV66E0hHeZCY9sEnLc",
-              "confidence": 0.99,
-              "exterior": 0.89,
-              "face": 0.11,
-              "plate": 0.08,
-              "special": 0.12,
-              "quality": 2.68
+              "id": "gen-dec-1794009607-C96ubY5R6ViuJQtaTX7d",
+              "confidence": 0.94,
+              "exterior": 0.81,
+              "face": 0.05,
+              "plate": 0.97,
+              "special": 0.07,
+              "quality": 2.84
             }
           }
         ]
@@ -11282,78 +11282,78 @@
         "generation": "honda-civic/honda-civic-tenth-generation",
         "picks": [
           {
-            "file": "File:2017 Honda Civic EX-T coupe front 1.21.19.jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2017_Honda_Civic_EX-T_coupe_front_1.21.19.jpg",
-            "sha1": "40eec4ba14249370f6393cd9477e3d9323784103",
-            "timestamp": "2019-01-22T04:42:14Z",
-            "width": 4987,
-            "height": 2725,
+            "file": "File:2018 Honda Civic EX, Front Left, 05-09-2021.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2018_Honda_Civic_EX,_Front_Left,_05-09-2021.jpg",
+            "sha1": "d382227b164f158d0ca5d61cb3ea7dd56ae40f05",
+            "timestamp": "2021-06-06T18:01:07Z",
+            "width": 3204,
+            "height": 1764,
             "license": "CC BY-SA 4.0",
             "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-            "artist": "Kevauto",
+            "artist": "SsmIntrigue",
             "credit": "Own work",
-            "photoYear": 2017,
+            "photoYear": 2018,
             "gate": 0.8,
-            "foreign": 0.01,
+            "foreign": 0.3,
             "jev": {
               "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794013310-3pjaqv5DZz9ZkoUgN3N5",
-              "confidence": 0.92,
-              "exterior": 0.9,
-              "face": 0.1,
-              "plate": 0.14,
-              "special": 0.03,
-              "quality": 2.73
+              "id": "gen-dec-1794049830-8wiuW6skvw1S6dCvZasY",
+              "confidence": 1,
+              "exterior": 0.86,
+              "face": 0.05,
+              "plate": 0.97,
+              "special": 0.02,
+              "quality": 2.71
             }
           },
           {
-            "file": "File:2019 Honda Civic coupe (facelift), front 12.16.19.jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2019_Honda_Civic_coupe_(facelift),_front_12.16.19.jpg",
-            "sha1": "785096caf01254b96cbb6ead831d579018e01cf3",
-            "timestamp": "2020-01-24T16:54:08Z",
-            "width": 5066,
-            "height": 2525,
+            "file": "File:2019 Honda Civic Sport, front 12.18.21.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2019_Honda_Civic_Sport,_front_12.18.21.jpg",
+            "sha1": "1d4963ba056b40ac65847d2e07594ac0bcb5c277",
+            "timestamp": "2021-12-29T02:55:22Z",
+            "width": 3756,
+            "height": 1720,
             "license": "CC BY-SA 4.0",
             "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
             "artist": "Kevauto",
             "credit": "Own work",
             "photoYear": 2019,
             "gate": 0.8,
-            "foreign": 0.01,
+            "foreign": 0.06,
             "jev": {
               "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794000024-ry74mBMcL2l25O1SyPbN",
-              "confidence": 0.94,
-              "exterior": 0.9,
-              "face": 0.07,
-              "plate": 0.12,
-              "special": 0.03,
-              "quality": 2.67
+              "id": "gen-dec-1794049838-Zxvk4bg9zWLXjN5VJ1eN",
+              "confidence": 0.95,
+              "exterior": 0.92,
+              "face": 0.37,
+              "plate": 0.19,
+              "special": 0.02,
+              "quality": 2.68
             }
           },
           {
-            "file": "File:2017 Honda Civic hatchback front 5.26.18.jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2017_Honda_Civic_hatchback_front_5.26.18.jpg",
-            "sha1": "96cb86b9f1d63924e67ac441b22ccf391ae72370",
-            "timestamp": "2018-05-30T23:56:20Z",
-            "width": 4994,
-            "height": 3031,
+            "file": "File:2019 Honda Civic LX Sedan in Modern Steel Metallic, front left, 2024-10-28.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2019_Honda_Civic_LX_Sedan_in_Modern_Steel_Metallic,_front_left,_2024-10-28.jpg",
+            "sha1": "1de02eb0fd1e1848007e145fef61cfa550601cec",
+            "timestamp": "2024-10-28T22:04:32Z",
+            "width": 4602,
+            "height": 2440,
             "license": "CC BY-SA 4.0",
             "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-            "artist": "Kevauto",
+            "artist": "Elise240SX",
             "credit": "Own work",
-            "photoYear": 2017,
+            "photoYear": 2019,
             "gate": 0.8,
-            "foreign": 0.01,
+            "foreign": 0.03,
             "jev": {
               "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794000383-xTaXjNpr0joNxLEre9eM",
-              "confidence": 0.94,
-              "exterior": 0.91,
-              "face": 0.08,
-              "plate": 0.11,
-              "special": 0.03,
-              "quality": 2.61
+              "id": "gen-dec-1794049833-8paoPTXD7egQyh9fuT66",
+              "confidence": 0.81,
+              "exterior": 0.9,
+              "face": 0.07,
+              "plate": 0.41,
+              "special": 0.02,
+              "quality": 2.56
             }
           }
         ]
@@ -11361,56 +11361,6 @@
       "2022": {
         "generation": "honda-civic/honda-civic-eleventh-generation",
         "picks": [
-          {
-            "file": "File:2022 Honda Civic Hatchback EX-L in Platinum White Pearl, front right (2).jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2022_Honda_Civic_Hatchback_EX-L_in_Platinum_White_Pearl,_front_right_(2).jpg",
-            "sha1": "2cec81585b63ef0d66ca0ee52042fe7090f7621d",
-            "timestamp": "2023-08-30T05:45:33Z",
-            "width": 5243,
-            "height": 2800,
-            "license": "CC BY-SA 3.0",
-            "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-            "artist": "Mr.choppers",
-            "credit": "Own work",
-            "photoYear": 2022,
-            "gate": 0.8,
-            "foreign": 0.1,
-            "jev": {
-              "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794000383-bRJGNOwBvGz5cYLyuJKV",
-              "confidence": 0.9,
-              "exterior": 0.91,
-              "face": 0.07,
-              "plate": 0.37,
-              "special": 0.02,
-              "quality": 2.78
-            }
-          },
-          {
-            "file": "File:2022 Honda Civic Hatchback EX-L in Platinum White Pearl, front right (cropped).jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2022_Honda_Civic_Hatchback_EX-L_in_Platinum_White_Pearl,_front_right_(cropped).jpg",
-            "sha1": "225ddd4b934766f0ee4b5b048500d0e904dfc646",
-            "timestamp": "2023-09-08T05:53:55Z",
-            "width": 5243,
-            "height": 2690,
-            "license": "CC BY-SA 3.0",
-            "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-            "artist": "Mr.choppers",
-            "credit": "Own work",
-            "photoYear": 2022,
-            "gate": 0.8,
-            "foreign": 0.05,
-            "jev": {
-              "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794000384-HegIllcGccwlGlm64MiV",
-              "confidence": 0.92,
-              "exterior": 0.9,
-              "face": 0.24,
-              "plate": 0.25,
-              "special": 0.02,
-              "quality": 2.74
-            }
-          },
           {
             "file": "File:2022 Honda Civic Touring in Lunar Silver Metallic, Front Left, 05-10-2022.jpg",
             "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2022_Honda_Civic_Touring_in_Lunar_Silver_Metallic,_Front_Left,_05-10-2022.jpg",
@@ -11434,6 +11384,56 @@
               "plate": 0.17,
               "special": 0.02,
               "quality": 2.74
+            }
+          },
+          {
+            "file": "File:2022 Honda Civic Sedan EX in Platinum White Pearl, front left (cropped).jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2022_Honda_Civic_Sedan_EX_in_Platinum_White_Pearl,_front_left_(cropped).jpg",
+            "sha1": "b2c6960baa26e673f597b079ac7531f9c9f55cd4",
+            "timestamp": "2023-09-08T05:53:19Z",
+            "width": 4788,
+            "height": 2285,
+            "license": "CC BY-SA 3.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+            "artist": "Mr.choppers",
+            "credit": "Own work",
+            "photoYear": 2022,
+            "gate": 0.8,
+            "foreign": 0.01,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794000386-AHGPxBKX2HOtkbYB7iGh",
+              "confidence": 0.83,
+              "exterior": 0.91,
+              "face": 0.04,
+              "plate": 0.6,
+              "special": 0.02,
+              "quality": 2.86
+            }
+          },
+          {
+            "file": "File:2022 Honda Civic Sedan EX in Platinum White Pearl, front left (2).jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2022_Honda_Civic_Sedan_EX_in_Platinum_White_Pearl,_front_left_(2).jpg",
+            "sha1": "bbffa75637559120968a51905cbbd38f9bf4e0d1",
+            "timestamp": "2023-08-27T09:13:20Z",
+            "width": 4788,
+            "height": 2451,
+            "license": "CC BY-SA 3.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+            "artist": "Mr.choppers",
+            "credit": "Own work",
+            "photoYear": 2022,
+            "gate": 0.8,
+            "foreign": 0.01,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794000385-8kFjEVxWSWCHMv8LEcbP",
+              "confidence": 0.84,
+              "exterior": 0.93,
+              "face": 0.04,
+              "plate": 0.68,
+              "special": 0.02,
+              "quality": 2.83
             }
           }
         ]
@@ -13287,28 +13287,28 @@
             }
           },
           {
-            "file": "File:2012 Hyundai Elantra GLS, Front Left, 10-13-2020.jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2012_Hyundai_Elantra_GLS,_Front_Left,_10-13-2020.jpg",
-            "sha1": "1021b821634e16c552a54ccf02fec10e9273f01f",
-            "timestamp": "2020-10-20T03:17:45Z",
-            "width": 2880,
-            "height": 1188,
+            "file": "File:2014 Hyundai Elantra (MD3) Trophy sedan (2018-09-28) 01.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2014_Hyundai_Elantra_(MD3)_Trophy_sedan_(2018-09-28)_01.jpg",
+            "sha1": "b8e04bfc958f4530721a1321c9fd25e4c8c13e85",
+            "timestamp": "2018-09-29T03:40:04Z",
+            "width": 4378,
+            "height": 2116,
             "license": "CC BY-SA 4.0",
             "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-            "artist": "SsmIntrigue",
+            "artist": "EurovisionNim",
             "credit": "Own work",
-            "photoYear": 2012,
+            "photoYear": 2014,
             "gate": 0.8,
-            "foreign": 0.02,
+            "foreign": 0.26,
             "jev": {
               "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794013369-93EqFEqRwpRZLlFiMyG2",
-              "confidence": 0.89,
-              "exterior": 0.9,
-              "face": 0.04,
-              "plate": 0.85,
-              "special": 0.25,
-              "quality": 2.52
+              "id": "gen-dec-1794050080-mNWOsrFQq82mxiwTrkNL",
+              "confidence": 0.93,
+              "exterior": 0.84,
+              "face": 0.03,
+              "plate": 0.97,
+              "special": 0.03,
+              "quality": 2.76
             }
           }
         ]
@@ -13997,31 +13997,6 @@
             }
           },
           {
-            "file": "File:2024 Hyundai Kona, front NYIAS 2023.jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2024_Hyundai_Kona,_front_NYIAS_2023.jpg",
-            "sha1": "f85d0611199f9378ada7635970b542534fa2abe0",
-            "timestamp": "2023-07-27T05:38:53Z",
-            "width": 3800,
-            "height": 2533,
-            "license": "CC BY-SA 4.0",
-            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-            "artist": "Kevauto",
-            "credit": "Own work",
-            "photoYear": 2024,
-            "gate": 0.8,
-            "foreign": 0.08,
-            "jev": {
-              "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794013554-1bboDtTtBMYQfOydh5gN",
-              "confidence": 0.89,
-              "exterior": 0.81,
-              "face": 0.05,
-              "plate": 0.02,
-              "special": 0.22,
-              "quality": 2.79
-            }
-          },
-          {
             "file": "File:2024 Hyundai Kona SEL, front right, 05-06-2024.jpg",
             "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2024_Hyundai_Kona_SEL,_front_right,_05-06-2024.jpg",
             "sha1": "721da06c973d5567424386e8d48030712cf5564c",
@@ -14044,6 +14019,31 @@
               "plate": 0.02,
               "special": 0.09,
               "quality": 2.7
+            }
+          },
+          {
+            "file": "File:2024 Hyundai Kona N Line AWD in Meta Blue, Front Right, 09-30-2023.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2024_Hyundai_Kona_N_Line_AWD_in_Meta_Blue,_Front_Right,_09-30-2023.jpg",
+            "sha1": "f4fa3d84ddcc48faf5af0352827e766fd4405e60",
+            "timestamp": "2023-10-03T03:40:36Z",
+            "width": 3758,
+            "height": 2156,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Elise240SX",
+            "credit": "Own work",
+            "photoYear": 2024,
+            "gate": 0.8,
+            "foreign": 0.04,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794050278-Uq6xwaKyl581MRkOGctT",
+              "confidence": 0.87,
+              "exterior": 0.9,
+              "face": 0.07,
+              "plate": 0.66,
+              "special": 0.1,
+              "quality": 2.83
             }
           }
         ]
@@ -14712,31 +14712,6 @@
         "generation": "hyundai-sonata/sixth-generation-yf-2009",
         "picks": [
           {
-            "file": "File:2013 Hyundai Sonata Hybrid with US Government license plates (Front-Left).jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2013_Hyundai_Sonata_Hybrid_with_US_Government_license_plates_(Front-Left).jpg",
-            "sha1": "1fa427a1f6da3e7639aa1d30fc24fe53dca79c6f",
-            "timestamp": "2020-11-15T05:49:43Z",
-            "width": 4032,
-            "height": 3024,
-            "license": "CC BY-SA 4.0",
-            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-            "artist": "LouieRBLX",
-            "credit": "Own work",
-            "photoYear": 2013,
-            "gate": 0.8,
-            "foreign": 0.02,
-            "jev": {
-              "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794002075-HJSKmIExNNsA20KyRBjJ",
-              "confidence": 0.94,
-              "exterior": 0.74,
-              "face": 0.17,
-              "plate": 0.98,
-              "special": 0.03,
-              "quality": 2.41
-            }
-          },
-          {
             "file": "File:2012 Hyundai Sonata Limited, front left, 05-09-2023.jpg",
             "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2012_Hyundai_Sonata_Limited,_front_left,_05-09-2023.jpg",
             "sha1": "c37fd24bce2e8ca29510835514fb69600cec2d2b",
@@ -14784,6 +14759,31 @@
               "plate": 0.06,
               "special": 0.02,
               "quality": 2.8
+            }
+          },
+          {
+            "file": "File:2012 Washington Auto Show (6801976667).jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2012_Washington_Auto_Show_(6801976667).jpg",
+            "sha1": "b0250ede38f920b719f0d3dda22c156a91da5d04",
+            "timestamp": "2021-06-17T23:06:19Z",
+            "width": 5616,
+            "height": 3744,
+            "license": "CC BY 2.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+            "artist": "docmonstereyes from USA",
+            "credit": "IMG_3216",
+            "photoYear": 2012,
+            "gate": 0.8,
+            "foreign": 0.04,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794050418-8Bi3hRNk6wFtvzbsnmev",
+              "confidence": 0.96,
+              "exterior": 0.72,
+              "face": 0.17,
+              "plate": 0.76,
+              "special": 0.13,
+              "quality": 2.39
             }
           }
         ]
@@ -16997,53 +16997,78 @@
         "generation": "kia-forte/first-generation-td-2008",
         "picks": [
           {
-            "file": "File:2011 Kia Forte SX hatchback -- 06-23-2011 front.jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2011_Kia_Forte_SX_hatchback_--_06-23-2011_front.jpg",
-            "sha1": "e2002fb9a6500afe74a83d1bcc8654ac185f407d",
-            "timestamp": "2011-06-30T22:05:22Z",
-            "width": 2084,
-            "height": 1284,
+            "file": "File:2010 Kia Forte EX -- 10-26-2010 1.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2010_Kia_Forte_EX_--_10-26-2010_1.jpg",
+            "sha1": "9fc431ea7d78de4cf2a0118ff26a288801ea83ae",
+            "timestamp": "2010-11-28T01:50:53Z",
+            "width": 1803,
+            "height": 998,
             "license": "Public domain",
             "licenseUrl": null,
             "artist": "IFCAR",
-            "credit": "Own work",
-            "photoYear": 2011,
-            "gate": 0.8,
-            "foreign": 0.08,
-            "jev": {
-              "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794000689-tsWYCfHcVr8BcvhbySHK",
-              "confidence": 0.9,
-              "exterior": 0.95,
-              "face": 0.04,
-              "plate": 0.23,
-              "special": 0.02,
-              "quality": 2.79
-            }
-          },
-          {
-            "file": "File:2010 Kia Forte SX in Titanium Metallic, front right, 2024-09-09.jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2010_Kia_Forte_SX_in_Titanium_Metallic,_front_right,_2024-09-09.jpg",
-            "sha1": "de723666aae5adba5f4a62702d9768c30a9baf68",
-            "timestamp": "2024-09-09T18:09:25Z",
-            "width": 3099,
-            "height": 1999,
-            "license": "CC BY-SA 4.0",
-            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-            "artist": "Elise240SX",
             "credit": "Own work",
             "photoYear": 2010,
             "gate": 0.8,
             "foreign": 0.02,
             "jev": {
               "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794000688-VBCaGPDkDW1GlJ0E6wR8",
-              "confidence": 0.84,
-              "exterior": 0.89,
-              "face": 0.19,
-              "plate": 0.54,
-              "special": 0.03,
-              "quality": 2.79
+              "id": "gen-dec-1794050127-miqvwmrSnQVqU1HFsf4A",
+              "confidence": 0.85,
+              "exterior": 0.86,
+              "face": 0.03,
+              "plate": 0.36,
+              "special": 0.02,
+              "quality": 2.65
+            }
+          },
+          {
+            "file": "File:Kia Forte.JPG",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Kia_Forte.JPG",
+            "sha1": "586f0432be46c1242d8c63671551d0935faa8805",
+            "timestamp": "2009-02-16T23:25:16Z",
+            "width": 2816,
+            "height": 2112,
+            "license": "CC BY-SA 3.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+            "artist": "The number 3",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.12,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794050102-v1akrCzkFCt7NAXAYoOe",
+              "confidence": 0.96,
+              "exterior": 0.88,
+              "face": 0.23,
+              "plate": 0.02,
+              "special": 0.11,
+              "quality": 2.42
+            }
+          },
+          {
+            "file": "File:Kia Forte (3286766683).jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Kia_Forte_(3286766683).jpg",
+            "sha1": "912fcf16982afa525d765bf062daeb283ff0af99",
+            "timestamp": "2018-02-13T16:42:21Z",
+            "width": 3072,
+            "height": 2304,
+            "license": "CC BY 2.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+            "artist": "Mike Babcock from Peterborough, Ontario, Canada",
+            "credit": "Kia Forte",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.09,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794050097-4CMMIJzDMYGAHtRfLuOF",
+              "confidence": 0.98,
+              "exterior": 0.92,
+              "face": 0.4,
+              "plate": 0.02,
+              "special": 0.09,
+              "quality": 2.39
             }
           }
         ]
@@ -17051,56 +17076,6 @@
       "2018": {
         "generation": "kia-forte/second-generation-yd-2012",
         "picks": [
-          {
-            "file": "File:2017 Kia Forte.jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2017_Kia_Forte.jpg",
-            "sha1": "19a0ace7def2b710b84c0e6217463077ab93dd4f",
-            "timestamp": "2021-03-22T16:04:27Z",
-            "width": 2594,
-            "height": 1614,
-            "license": "CC BY-SA 4.0",
-            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-            "artist": "DestinationFearFan",
-            "credit": "Own work",
-            "photoYear": 2017,
-            "gate": 0.8,
-            "foreign": 0.11,
-            "jev": {
-              "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794000723-aYjQAMbnoog6P9tpBCyw",
-              "confidence": 0.8,
-              "exterior": 0.91,
-              "face": 0.1,
-              "plate": 0.87,
-              "special": 0.03,
-              "quality": 1.95
-            }
-          },
-          {
-            "file": "File:2016 Kia Forte5 EX, front left, 07-13-2023.jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2016_Kia_Forte5_EX,_front_left,_07-13-2023.jpg",
-            "sha1": "a344d333b631a915487c473c05f9a911d2452af4",
-            "timestamp": "2023-07-13T19:48:28Z",
-            "width": 4105,
-            "height": 2106,
-            "license": "CC BY-SA 4.0",
-            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-            "artist": "MercurySable99",
-            "credit": "Own work",
-            "photoYear": 2016,
-            "gate": 0.8,
-            "foreign": 0.11,
-            "jev": {
-              "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794000714-wErlLTRn4cPNBdjQ6uyr",
-              "confidence": 0.8,
-              "exterior": 0.89,
-              "face": 0.04,
-              "plate": 0.03,
-              "special": 0.02,
-              "quality": 2.67
-            }
-          },
           {
             "file": "File:2015 Kia Forte 05.jpg",
             "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2015_Kia_Forte_05.jpg",
@@ -17124,6 +17099,56 @@
               "plate": 0.02,
               "special": 0.02,
               "quality": 2.75
+            }
+          },
+          {
+            "file": "File:2015 Kia Forte 03.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2015_Kia_Forte_03.jpg",
+            "sha1": "7369d5428494b838d555262d0453a44318014441",
+            "timestamp": "2017-05-13T22:23:04Z",
+            "width": 2416,
+            "height": 1600,
+            "license": "CC BY 2.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+            "artist": "CapCase",
+            "credit": "https://www.flickr.com/photos/7467877@N07/14825721138/",
+            "photoYear": 2015,
+            "gate": 0.8,
+            "foreign": 0.05,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794000726-7HpHzYNaGpCilDgMNGGh",
+              "confidence": 0.8,
+              "exterior": 0.92,
+              "face": 0.06,
+              "plate": 0.04,
+              "special": 0.02,
+              "quality": 2.72
+            }
+          },
+          {
+            "file": "File:Kia Forte EX, Front Left, 05-02-2021.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Kia_Forte_EX,_Front_Left,_05-02-2021.jpg",
+            "sha1": "bf7a71c6a21a171a7a8bd4f853b795c95d34258a",
+            "timestamp": "2021-05-06T22:04:52Z",
+            "width": 3132,
+            "height": 1836,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "SsmIntrigue",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.07,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794000715-ePNHQ2vsSqaZMkvOarZ1",
+              "confidence": 0.8,
+              "exterior": 0.85,
+              "face": 0.07,
+              "plate": 0.02,
+              "special": 0.02,
+              "quality": 2.66
             }
           }
         ]
@@ -17542,31 +17567,6 @@
         "generation": "kia-niro/first-generation-de-2016",
         "picks": [
           {
-            "file": "File:Geneva International Motor Show 2018, Le Grand-Saconnex (1X7A1902).jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Geneva_International_Motor_Show_2018,_Le_Grand-Saconnex_(1X7A1902).jpg",
-            "sha1": "89ca25978e1c4b10e788eb3f5ab2258039e90fb8",
-            "timestamp": "2018-03-10T00:01:57Z",
-            "width": 6720,
-            "height": 4480,
-            "license": "CC BY-SA 4.0",
-            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-            "artist": "Matti Blume",
-            "credit": "Own work",
-            "photoYear": null,
-            "gate": 0.8,
-            "foreign": 0.48,
-            "jev": {
-              "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794002530-TplYJAkPfyh7NZeVPmon",
-              "confidence": 0.89,
-              "exterior": 0.7,
-              "face": 0.08,
-              "plate": 0.35,
-              "special": 0.15,
-              "quality": 1.98
-            }
-          },
-          {
             "file": "File:Kia Niro (DE) Washington DC Metro Area, USA.jpg",
             "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Kia_Niro_(DE)_Washington_DC_Metro_Area,_USA.jpg",
             "sha1": "69ea90d2e0ad9ea426493b59463af192254d3ce2",
@@ -17614,6 +17614,31 @@
               "plate": 0.02,
               "special": 0.13,
               "quality": 1.68
+            }
+          },
+          {
+            "file": "File:2017 Kia Niro base, left front (USA).jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2017_Kia_Niro_base,_left_front_(USA).jpg",
+            "sha1": "3344f0ec7a6a6e55732d03a2c586b2e215102dd8",
+            "timestamp": "2017-07-31T06:19:36Z",
+            "width": 3326,
+            "height": 2142,
+            "license": "CC BY-SA 3.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+            "artist": "Mr.choppers",
+            "credit": "Own work",
+            "photoYear": 2017,
+            "gate": 0.8,
+            "foreign": 0.04,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794002508-qh1jVke1oeJrtBk6C3G1",
+              "confidence": 0.95,
+              "exterior": 0.94,
+              "face": 0.03,
+              "plate": 0.06,
+              "special": 0.02,
+              "quality": 2.78
             }
           }
         ]
@@ -18299,6 +18324,31 @@
               "plate": 0.97,
               "special": 0.02,
               "quality": 2.72
+            }
+          },
+          {
+            "file": "File:2014 Kia Soul EX in Bright SIlver Metallic, Rear Right, 10-01-2023.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2014_Kia_Soul_EX_in_Bright_SIlver_Metallic,_Rear_Right,_10-01-2023.jpg",
+            "sha1": "315b187a259e676b5f13b18dfc59f7924fc30782",
+            "timestamp": "2023-10-03T03:40:42Z",
+            "width": 3739,
+            "height": 2375,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Elise240SX",
+            "credit": "Own work",
+            "photoYear": 2014,
+            "gate": 0.8,
+            "foreign": 0.08,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794050272-AA8LOnKBWtUbFbPNNJEO",
+              "confidence": 0.84,
+              "exterior": 0.81,
+              "face": 0.04,
+              "plate": 0.3,
+              "special": 0.02,
+              "quality": 2.47
             }
           }
         ]
@@ -19727,53 +19777,53 @@
         "generation": "mazda-3/second-generation-bl-2008",
         "picks": [
           {
-            "file": "File:2012 ASA AutoX Event 00002 (6958208186).jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2012_ASA_AutoX_Event_00002_(6958208186).jpg",
-            "sha1": "5103dc752efc88184375bbc9382be907f9a88604",
-            "timestamp": "2018-02-12T20:28:27Z",
-            "width": 2048,
-            "height": 1365,
-            "license": "CC BY 2.0",
-            "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-            "artist": "Grant.C",
-            "credit": "ASA_Event_00002",
-            "photoYear": 2012,
+            "file": "File:Automobile DSC 0577 (5462936100).jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Automobile_DSC_0577_(5462936100).jpg",
+            "sha1": "302532460e316ebed04131072c035ee56f162857",
+            "timestamp": "2018-06-24T15:22:48Z",
+            "width": 3872,
+            "height": 2592,
+            "license": "CC BY-SA 2.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+            "artist": "Lord of the Wings© from Toronto, Canada",
+            "credit": "DSC_0577",
+            "photoYear": null,
             "gate": 0.8,
-            "foreign": 0.11,
+            "foreign": 0.07,
             "jev": {
               "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794005651-S8o3VnP2ZlEzvfDB26Xr",
-              "confidence": 0.8,
-              "exterior": 0.96,
-              "face": 0.21,
-              "plate": 0.04,
-              "special": 0.06,
-              "quality": 1.94
+              "id": "gen-dec-1794049950-fY7EvnfBjReOrsyXMWCr",
+              "confidence": 0.88,
+              "exterior": 0.72,
+              "face": 0.28,
+              "plate": 0.03,
+              "special": 0.17,
+              "quality": 2.54
             }
           },
           {
-            "file": "File:2013 Mazda3 Tamura 1.6.jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2013_Mazda3_Tamura_1.6.jpg",
-            "sha1": "b5cb5ae2f4c7bacfc3c5f4511cce368dbe2198d2",
-            "timestamp": "2018-06-08T17:10:48Z",
-            "width": 4961,
-            "height": 2606,
-            "license": "CC BY-SA 4.0",
-            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-            "artist": "Vauxford",
-            "credit": "Own work",
-            "photoYear": 2013,
+            "file": "File:Automobile DSC 0576 (5462929902).jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Automobile_DSC_0576_(5462929902).jpg",
+            "sha1": "cc63d7bc68bfb52a83cd02c1876322bc9c546531",
+            "timestamp": "2018-06-24T15:22:43Z",
+            "width": 3872,
+            "height": 2592,
+            "license": "CC BY-SA 2.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+            "artist": "Lord of the Wings© from Toronto, Canada",
+            "credit": "DSC_0576",
+            "photoYear": null,
             "gate": 0.8,
-            "foreign": 0.77,
+            "foreign": 0.47,
             "jev": {
               "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794005638-mmqShPF5r43WJB5HGTB4",
-              "confidence": 0.8,
-              "exterior": 0.89,
-              "face": 0.05,
-              "plate": 0.07,
-              "special": 0.03,
-              "quality": 2.63
+              "id": "gen-dec-1794049948-CxaOVolTYrXtiC3P7wLs",
+              "confidence": 0.87,
+              "exterior": 0.74,
+              "face": 0.25,
+              "plate": 0.44,
+              "special": 0.2,
+              "quality": 2.32
             }
           }
         ]
@@ -19807,53 +19857,53 @@
             }
           },
           {
-            "file": "File:2015 Mazda3 Sport GX in Snowflake White Pearl, Front Right.jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2015_Mazda3_Sport_GX_in_Snowflake_White_Pearl,_Front_Right.jpg",
-            "sha1": "d1998d7c3aced6d614836b35ad343d8a3367515a",
-            "timestamp": "2023-08-27T11:21:08Z",
-            "width": 3444,
-            "height": 1540,
+            "file": "File:Mazda 3 Sedan (3rd generation, facelift).jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Mazda_3_Sedan_(3rd_generation,_facelift).jpg",
+            "sha1": "3d8e6b58393bc86696a544f8f64cc216bd33a413",
+            "timestamp": "2019-02-11T22:05:11Z",
+            "width": 4608,
+            "height": 2592,
             "license": "CC BY-SA 4.0",
             "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-            "artist": "Elise240SX",
+            "artist": "SsmIntrigue",
             "credit": "Own work",
-            "photoYear": 2015,
+            "photoYear": null,
             "gate": 0.8,
-            "foreign": 0.02,
+            "foreign": 0.05,
             "jev": {
               "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794000533-GKJgNBWsGPHbM9lRNhGx",
-              "confidence": 0.88,
-              "exterior": 0.84,
-              "face": 0.04,
-              "plate": 0.39,
+              "id": "gen-dec-1794000554-qZ2tXnxK4QnAivY30UQO",
+              "confidence": 0.86,
+              "exterior": 0.91,
+              "face": 0.07,
+              "plate": 0.04,
               "special": 0.02,
-              "quality": 2.77
+              "quality": 2.16
             }
           },
           {
-            "file": "File:Mazda 3 Sport GT front (21024486602).jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Mazda_3_Sport_GT_front_(21024486602).jpg",
-            "sha1": "8f942dc8d32ab9a488f79bb59d7b83ef81680b9a",
-            "timestamp": "2022-05-11T21:14:35Z",
-            "width": 2592,
-            "height": 1944,
+            "file": "File:2014 Canadian International AutoShow 0170 (12645757345).jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2014_Canadian_International_AutoShow_0170_(12645757345).jpg",
+            "sha1": "30bf780a64f51fa0ccd53031263cc7483b051f1e",
+            "timestamp": "2014-03-29T01:28:53Z",
+            "width": 3872,
+            "height": 2592,
             "license": "CC BY-SA 2.0",
             "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-            "artist": "Zytonits",
-            "credit": "Mazda 3 Sport GT front",
-            "photoYear": null,
+            "artist": "Lord of the Wings© from Toronto, Canada",
+            "credit": "DSC_0170",
+            "photoYear": 2014,
             "gate": 0.8,
-            "foreign": 0.08,
+            "foreign": 0.13,
             "jev": {
               "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794000535-CC4bjOF0JAmPqJVNLwpB",
-              "confidence": 0.96,
-              "exterior": 0.58,
-              "face": 0.07,
-              "plate": 0.01,
-              "special": 0.1,
-              "quality": 2.69
+              "id": "gen-dec-1794011486-AIbgKg6ohaAgREdU3Cwu",
+              "confidence": 0.98,
+              "exterior": 0.84,
+              "face": 0.15,
+              "plate": 0.05,
+              "special": 0.08,
+              "quality": 2.6
             }
           }
         ]
@@ -19862,28 +19912,53 @@
         "generation": "mazda-3/fourth-generation-bp-2019",
         "picks": [
           {
-            "file": "File:2023 Mazda3 Sport GS in Platinum Quartz Metallic, Front Left, 10-09-2023.jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2023_Mazda3_Sport_GS_in_Platinum_Quartz_Metallic,_Front_Left,_10-09-2023.jpg",
-            "sha1": "1fc0eaf5ccafbcb2bd805ea4c1067212736fa583",
-            "timestamp": "2023-10-17T10:28:01Z",
-            "width": 3664,
-            "height": 1999,
+            "file": "File:2022 Mazda 3 Carbon Edition.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2022_Mazda_3_Carbon_Edition.jpg",
+            "sha1": "4bc93d4a7f7c16233fea7835aa9d7a5c0abc23ff",
+            "timestamp": "2022-10-19T09:00:48Z",
+            "width": 4608,
+            "height": 2592,
             "license": "CC BY-SA 4.0",
             "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-            "artist": "Elise240SX",
+            "artist": "Chanokchon",
             "credit": "Own work",
-            "photoYear": 2023,
+            "photoYear": 2022,
             "gate": 0.8,
-            "foreign": 0.07,
+            "foreign": 0.45,
             "jev": {
               "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794000558-hf8F7plrZ0WR9bG8WinY",
-              "confidence": 0.93,
-              "exterior": 0.95,
+              "id": "gen-dec-1794050023-OvW3k1hrhxCe8iYiELD0",
+              "confidence": 0.99,
+              "exterior": 0.86,
               "face": 0.11,
-              "plate": 0.03,
-              "special": 0.03,
-              "quality": 2.78
+              "plate": 0.88,
+              "special": 0.08,
+              "quality": 2.76
+            }
+          },
+          {
+            "file": "File:2022 Mazda 3 Sedan 2.0 SP.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2022_Mazda_3_Sedan_2.0_SP.jpg",
+            "sha1": "c38de0b68835c06e6cd26751b81d699aa3b2355e",
+            "timestamp": "2022-03-10T02:12:26Z",
+            "width": 1624,
+            "height": 972,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Chanokchon",
+            "credit": "Own work",
+            "photoYear": 2022,
+            "gate": 0.8,
+            "foreign": 0.48,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794050032-dMS0RmHRYUmo5dKs9lNF",
+              "confidence": 0.96,
+              "exterior": 0.75,
+              "face": 0.28,
+              "plate": 0.82,
+              "special": 0.09,
+              "quality": 2.64
             }
           },
           {
@@ -19910,31 +19985,6 @@
               "special": 0.04,
               "quality": 2.65
             }
-          },
-          {
-            "file": "File:2021 Mazda3 Sport GS AWD, Front Right, 07-01-2021.jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2021_Mazda3_Sport_GS_AWD,_Front_Right,_07-01-2021.jpg",
-            "sha1": "4ed638e0faf19587add71266ab0fec2585c73464",
-            "timestamp": "2021-07-11T19:00:59Z",
-            "width": 3468,
-            "height": 1872,
-            "license": "CC BY-SA 4.0",
-            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-            "artist": "SsmIntrigue",
-            "credit": "Own work",
-            "photoYear": 2021,
-            "gate": 0.8,
-            "foreign": 0.03,
-            "jev": {
-              "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794000559-8EqYxBg53tRxhHXnjgsW",
-              "confidence": 0.82,
-              "exterior": 0.89,
-              "face": 0.09,
-              "plate": 0.77,
-              "special": 0.06,
-              "quality": 2.63
-            }
           }
         ]
       },
@@ -19942,78 +19992,78 @@
         "generation": "mazda-3/fourth-generation-bp-2019",
         "picks": [
           {
-            "file": "File:2024 Mazda3 2.0L Fastback in Platinum Quartz, 06-09-2024.jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2024_Mazda3_2.0L_Fastback_in_Platinum_Quartz,_06-09-2024.jpg",
-            "sha1": "48bbaab75fd38909b9ced563498fadef8ccba382",
-            "timestamp": "2024-06-09T02:49:32Z",
-            "width": 6144,
-            "height": 3950,
+            "file": "File:2022 Mazda 3 Carbon Edition.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2022_Mazda_3_Carbon_Edition.jpg",
+            "sha1": "4bc93d4a7f7c16233fea7835aa9d7a5c0abc23ff",
+            "timestamp": "2022-10-19T09:00:48Z",
+            "width": 4608,
+            "height": 2592,
             "license": "CC BY-SA 4.0",
             "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-            "artist": "Ethan Llamas",
+            "artist": "Chanokchon",
             "credit": "Own work",
-            "photoYear": 2024,
+            "photoYear": 2022,
             "gate": 0.8,
-            "foreign": 0.24,
+            "foreign": 0.45,
             "jev": {
               "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794000573-azBoQ1wSWbAolE8AVvnP",
-              "confidence": 0.96,
-              "exterior": 0.82,
-              "face": 0.04,
-              "plate": 0.02,
-              "special": 0.19,
-              "quality": 2.58
-            }
-          },
-          {
-            "file": "File:2025 Mazda3 2.5 S Carbon Edition hatchback, front right, 05-25-2025.jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2025_Mazda3_2.5_S_Carbon_Edition_hatchback,_front_right,_05-25-2025.jpg",
-            "sha1": "45755dcd50fbfeac6194a1cb3ccdde2526a47c62",
-            "timestamp": "2025-05-25T20:27:34Z",
-            "width": 4392,
-            "height": 3105,
-            "license": "CC BY-SA 4.0",
-            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-            "artist": "MercurySable99",
-            "credit": "Own work",
-            "photoYear": 2025,
-            "gate": 0.8,
-            "foreign": 0.01,
-            "jev": {
-              "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794000557-18f7qsttywCpJBYTypKo",
-              "confidence": 0.92,
-              "exterior": 0.93,
-              "face": 0.05,
-              "plate": 0.2,
-              "special": 0.03,
-              "quality": 2.84
-            }
-          },
-          {
-            "file": "File:2023 Mazda3 Sport GS in Platinum Quartz Metallic, Front Left, 10-09-2023.jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2023_Mazda3_Sport_GS_in_Platinum_Quartz_Metallic,_Front_Left,_10-09-2023.jpg",
-            "sha1": "1fc0eaf5ccafbcb2bd805ea4c1067212736fa583",
-            "timestamp": "2023-10-17T10:28:01Z",
-            "width": 3664,
-            "height": 1999,
-            "license": "CC BY-SA 4.0",
-            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-            "artist": "Elise240SX",
-            "credit": "Own work",
-            "photoYear": 2023,
-            "gate": 0.8,
-            "foreign": 0.07,
-            "jev": {
-              "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794000558-hf8F7plrZ0WR9bG8WinY",
-              "confidence": 0.93,
-              "exterior": 0.95,
+              "id": "gen-dec-1794050023-OvW3k1hrhxCe8iYiELD0",
+              "confidence": 0.99,
+              "exterior": 0.86,
               "face": 0.11,
-              "plate": 0.03,
-              "special": 0.03,
-              "quality": 2.78
+              "plate": 0.88,
+              "special": 0.08,
+              "quality": 2.76
+            }
+          },
+          {
+            "file": "File:2022 Mazda 3 Sedan 2.0 SP.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2022_Mazda_3_Sedan_2.0_SP.jpg",
+            "sha1": "c38de0b68835c06e6cd26751b81d699aa3b2355e",
+            "timestamp": "2022-03-10T02:12:26Z",
+            "width": 1624,
+            "height": 972,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Chanokchon",
+            "credit": "Own work",
+            "photoYear": 2022,
+            "gate": 0.8,
+            "foreign": 0.48,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794050032-dMS0RmHRYUmo5dKs9lNF",
+              "confidence": 0.96,
+              "exterior": 0.75,
+              "face": 0.28,
+              "plate": 0.82,
+              "special": 0.09,
+              "quality": 2.64
+            }
+          },
+          {
+            "file": "File:2021 Mazda3 GT Turbo AWD, Front Right, 07-01-2021.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2021_Mazda3_GT_Turbo_AWD,_Front_Right,_07-01-2021.jpg",
+            "sha1": "fe485b3e88f5ef5d05a5f156472268941587dd91",
+            "timestamp": "2021-07-11T19:01:00Z",
+            "width": 3420,
+            "height": 1728,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "SsmIntrigue",
+            "credit": "Own work",
+            "photoYear": 2021,
+            "gate": 0.8,
+            "foreign": 0.04,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794000565-WKXCAflsxCoRfNRr1G2l",
+              "confidence": 0.9,
+              "exterior": 0.87,
+              "face": 0.24,
+              "plate": 0.51,
+              "special": 0.04,
+              "quality": 2.65
             }
           }
         ]
@@ -20652,28 +20702,28 @@
             }
           },
           {
-            "file": "File:2024 Mazda CX-90 PHEV Premium in Rhodium White Metallic, front left.jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2024_Mazda_CX-90_PHEV_Premium_in_Rhodium_White_Metallic,_front_left.jpg",
-            "sha1": "ec2e8cc6e4c4b311d81b04f7beba9974d9880a19",
-            "timestamp": "2025-01-09T05:01:31Z",
-            "width": 4390,
-            "height": 2935,
-            "license": "CC BY-SA 3.0",
-            "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-            "artist": "Mr.choppers",
+            "file": "File:2024 Mazda CX-90, front 1.18.23.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2024_Mazda_CX-90,_front_1.18.23.jpg",
+            "sha1": "d0f4eaf5d101ae169e583fa7518be10ddd94e429",
+            "timestamp": "2024-11-09T23:40:38Z",
+            "width": 2972,
+            "height": 1667,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Kevauto",
             "credit": "Own work",
             "photoYear": 2024,
             "gate": 0.8,
             "foreign": 0.02,
             "jev": {
               "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794014435-xLgKZ12IzLMLSO04bVL6",
-              "confidence": 0.98,
-              "exterior": 0.86,
-              "face": 0.11,
-              "plate": 0.66,
-              "special": 0.04,
-              "quality": 2.77
+              "id": "gen-dec-1794050488-JUlIifasIs1zGfSm2ZTc",
+              "confidence": 0.97,
+              "exterior": 0.92,
+              "face": 0.04,
+              "plate": 0.53,
+              "special": 0.03,
+              "quality": 2.68
             }
           }
         ]
@@ -21337,6 +21387,31 @@
         "generation": "mitsubishi-outlander/mitsubishi-outlander-third-generation-gf",
         "picks": [
           {
+            "file": "File:20 Mitsubishi Outlander SEL.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:20_Mitsubishi_Outlander_SEL.jpg",
+            "sha1": "aec36bfa960475a10b09c1327a85e26464d59f30",
+            "timestamp": "2024-04-29T04:44:15Z",
+            "width": 4128,
+            "height": 3096,
+            "license": "CC0",
+            "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+            "artist": "HJUdall",
+            "credit": "Own work",
+            "photoYear": 2018,
+            "gate": 0.8,
+            "foreign": 0.04,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794050520-C7y8FcKoK0sJfa58hbzb",
+              "confidence": 0.95,
+              "exterior": 0.94,
+              "face": 0.04,
+              "plate": 0.14,
+              "special": 0.03,
+              "quality": 2.61
+            }
+          },
+          {
             "file": "File:2019 Mitsubishi Outlander, front right side.jpg",
             "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2019_Mitsubishi_Outlander,_front_right_side.jpg",
             "sha1": "d09957c604bbc10df1275e153db882701c4ea705",
@@ -21384,31 +21459,6 @@
               "plate": 0.04,
               "special": 0.03,
               "quality": 2.69
-            }
-          },
-          {
-            "file": "File:Mitsubishi Outlander 2.0 GLX 2022.jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Mitsubishi_Outlander_2.0_GLX_2022.jpg",
-            "sha1": "b8a3046f8f81cd790df4ffa5fce730ea54cf71eb",
-            "timestamp": "2026-03-03T06:40:53Z",
-            "width": 5321,
-            "height": 2995,
-            "license": "CC BY-SA 4.0",
-            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-            "artist": "RL GNZLZ",
-            "credit": "https://www.flickr.com/photos/juanelo242a/55125795538/",
-            "photoYear": 2018,
-            "gate": 0.8,
-            "foreign": 0.68,
-            "jev": {
-              "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794014737-02c7SfIjbpzg4NYgnyfK",
-              "confidence": 0.82,
-              "exterior": 0.9,
-              "face": 0.03,
-              "plate": 0.12,
-              "special": 0.03,
-              "quality": 2.63
             }
           }
         ]
@@ -21522,31 +21572,6 @@
             }
           },
           {
-            "file": "File:2023 Mitsubishi Outlander PHEV SEL in Jet Black Mica, front left (NYC).jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2023_Mitsubishi_Outlander_PHEV_SEL_in_Jet_Black_Mica,_front_left_(NYC).jpg",
-            "sha1": "14c19f5841017af21eb49b2eb79cdcb68a7df4f2",
-            "timestamp": "2025-01-11T23:55:42Z",
-            "width": 3907,
-            "height": 2460,
-            "license": "CC BY-SA 3.0",
-            "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-            "artist": "Mr.choppers",
-            "credit": "Own work",
-            "photoYear": 2023,
-            "gate": 0.8,
-            "foreign": 0.01,
-            "jev": {
-              "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794003854-tEjcdu42fWmDUZFgJX8c",
-              "confidence": 0.98,
-              "exterior": 0.88,
-              "face": 0.06,
-              "plate": 0.97,
-              "special": 0.03,
-              "quality": 2.7
-            }
-          },
-          {
             "file": "File:2022 Mitsubishi Outlander SE Launch Edition (United States) front view 04.png",
             "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2022_Mitsubishi_Outlander_SE_Launch_Edition_(United_States)_front_view_04.png",
             "sha1": "e16d4669548a7b941f2a661a8568bc71c630fee3",
@@ -21569,6 +21594,31 @@
               "plate": 0.04,
               "special": 0.05,
               "quality": 2.89
+            }
+          },
+          {
+            "file": "File:2022 Mitsubishi Outlander SE Launch Edition (United States) front view 01.png",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2022_Mitsubishi_Outlander_SE_Launch_Edition_(United_States)_front_view_01.png",
+            "sha1": "fb041f94779c6f97eaec9a196f748931391c96e1",
+            "timestamp": "2021-04-01T05:24:33Z",
+            "width": 3365,
+            "height": 1892,
+            "license": "CC BY 3.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+            "artist": "Gold Pony",
+            "credit": "YouTube: https://www.youtube.com/watch?v=7-13qZfGViM – View/save archived versions on archive.org",
+            "photoYear": 2022,
+            "gate": 0.8,
+            "foreign": 0.07,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794003850-Ac4Oo1jqnP0ndIki18sD",
+              "confidence": 0.99,
+              "exterior": 0.86,
+              "face": 0.09,
+              "plate": 0.03,
+              "special": 0.04,
+              "quality": 2.88
             }
           }
         ]
@@ -23937,6 +23987,31 @@
         "generation": "nissan-sentra/eighth-generation-b18-2019",
         "picks": [
           {
+            "file": "File:2023 Nissan Sentra Sedan (53786140030).jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2023_Nissan_Sentra_Sedan_(53786140030).jpg",
+            "sha1": "64d7d79923b3cf0d412bdb5fbed3d61349cc0fc6",
+            "timestamp": "2024-06-28T17:21:55Z",
+            "width": 3600,
+            "height": 2400,
+            "license": "CC BY-SA 2.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+            "artist": "formulanone",
+            "credit": "2023 Nissan Sentra Sedan",
+            "photoYear": 2023,
+            "gate": 0.8,
+            "foreign": 0.05,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794050237-T4qTnzXCav6Xzmi3nD33",
+              "confidence": 0.91,
+              "exterior": 0.92,
+              "face": 0.06,
+              "plate": 0.02,
+              "special": 0.03,
+              "quality": 2.79
+            }
+          },
+          {
             "file": "File:2023 Cleveland Auto Show (52790283343).jpg",
             "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2023_Cleveland_Auto_Show_(52790283343).jpg",
             "sha1": "52dc5f886a99849a2f6bdc9fb824e4494984a3df",
@@ -23985,31 +24060,6 @@
               "special": 0.02,
               "quality": 2.82
             }
-          },
-          {
-            "file": "File:2021 Nissan Sentra SR in Electric Blue, front left, 2021-10-03.jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2021_Nissan_Sentra_SR_in_Electric_Blue,_front_left,_2021-10-03.jpg",
-            "sha1": "a86bf8cfd2a0586cc6cdd0e6677bd750c9d3edb7",
-            "timestamp": "2025-12-15T07:16:44Z",
-            "width": 4009,
-            "height": 2460,
-            "license": "CC BY-SA 4.0",
-            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-            "artist": "Elise240SX",
-            "credit": "Own work",
-            "photoYear": 2021,
-            "gate": 0.8,
-            "foreign": 0.05,
-            "jev": {
-              "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794000817-jOnBGXrFRr1OLF4WfEVb",
-              "confidence": 0.89,
-              "exterior": 0.89,
-              "face": 0.08,
-              "plate": 0.53,
-              "special": 0.03,
-              "quality": 2.66
-            }
           }
         ]
       },
@@ -24042,6 +24092,31 @@
             }
           },
           {
+            "file": "File:2024 Nissan Sentra (B18) IMG 3109.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2024_Nissan_Sentra_(B18)_IMG_3109.jpg",
+            "sha1": "15cbae7b26c5898e7bca8ce917045b13b48baadc",
+            "timestamp": "2025-06-20T16:41:53Z",
+            "width": 4611,
+            "height": 3069,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Alexander Migl",
+            "credit": "Own work",
+            "photoYear": 2024,
+            "gate": 0.8,
+            "foreign": 0.48,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794050229-J2YLzyI0kQsnOBbaszXy",
+              "confidence": 0.89,
+              "exterior": 0.84,
+              "face": 0.09,
+              "plate": 0.2,
+              "special": 0.05,
+              "quality": 2.67
+            }
+          },
+          {
             "file": "File:2024 Nissan Sentra (B18) IMG 3106.jpg",
             "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2024_Nissan_Sentra_(B18)_IMG_3106.jpg",
             "sha1": "f799c9a88745c2f4c70cf3e57d4e00398c856b24",
@@ -24064,31 +24139,6 @@
               "plate": 0.32,
               "special": 0.17,
               "quality": 2.66
-            }
-          },
-          {
-            "file": "File:2023 Cleveland Auto Show (52790283343).jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2023_Cleveland_Auto_Show_(52790283343).jpg",
-            "sha1": "52dc5f886a99849a2f6bdc9fb824e4494984a3df",
-            "timestamp": "2023-04-06T17:20:30Z",
-            "width": 8256,
-            "height": 5504,
-            "license": "CC BY 2.0",
-            "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-            "artist": "Erik Drost",
-            "credit": "2023 Cleveland Auto Show",
-            "photoYear": 2023,
-            "gate": 0.8,
-            "foreign": 0.05,
-            "jev": {
-              "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794000818-xQUgq9LEvWzR8F8CKk6E",
-              "confidence": 0.82,
-              "exterior": 0.72,
-              "face": 0.03,
-              "plate": 0.02,
-              "special": 0.14,
-              "quality": 2.76
             }
           }
         ]
@@ -25567,31 +25617,6 @@
             }
           },
           {
-            "file": "File:Subaru IMPREZA G4 1.6i-L EyeSight (DBA-GK2).jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Subaru_IMPREZA_G4_1.6i-L_EyeSight_(DBA-GK2).jpg",
-            "sha1": "ea4216f2f813b3dd4920bec0c69bdbd94ad905fc",
-            "timestamp": "2016-12-25T09:54:31Z",
-            "width": 2548,
-            "height": 1904,
-            "license": "CC BY-SA 4.0",
-            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-            "artist": "Tokumeigakarinoaoshima",
-            "credit": "Own work",
-            "photoYear": null,
-            "gate": 0.6,
-            "foreign": 0.91,
-            "jev": {
-              "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794000601-XaVBnlPr7qycd7HfWOua",
-              "confidence": 0.7,
-              "exterior": 0.57,
-              "face": 0.09,
-              "plate": 0.02,
-              "special": 0.05,
-              "quality": 2.58
-            }
-          },
-          {
             "file": "File:Subaru IMPREZA G4 2.0i-S EyeSight (3BA-GK6).jpg",
             "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Subaru_IMPREZA_G4_2.0i-S_EyeSight_(3BA-GK6).jpg",
             "sha1": "83c47ea7b7b38fdb8d2351ee91527dd5548fac2b",
@@ -25614,6 +25639,31 @@
               "plate": 0.02,
               "special": 0.03,
               "quality": 2.53
+            }
+          },
+          {
+            "file": "File:Subaru IMPREZA G4 2.0i-S EyeSight (3BA-GK6) front.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Subaru_IMPREZA_G4_2.0i-S_EyeSight_(3BA-GK6)_front.jpg",
+            "sha1": "8b5ea69c5d5b04eac366ade460a442a45737a1a8",
+            "timestamp": "2022-04-02T14:09:03Z",
+            "width": 2560,
+            "height": 1920,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Tokumeigakarinoaoshima",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.6,
+            "foreign": 0.73,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794000589-ehiNJfhwu9rRlwwsl2rc",
+              "confidence": 0.76,
+              "exterior": 0.81,
+              "face": 0.06,
+              "plate": 0.02,
+              "special": 0.04,
+              "quality": 2.46
             }
           }
         ]
@@ -25647,31 +25697,6 @@
             }
           },
           {
-            "file": "File:Subaru IMPREZA G4 1.6i-L EyeSight (DBA-GK2).jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Subaru_IMPREZA_G4_1.6i-L_EyeSight_(DBA-GK2).jpg",
-            "sha1": "ea4216f2f813b3dd4920bec0c69bdbd94ad905fc",
-            "timestamp": "2016-12-25T09:54:31Z",
-            "width": 2548,
-            "height": 1904,
-            "license": "CC BY-SA 4.0",
-            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-            "artist": "Tokumeigakarinoaoshima",
-            "credit": "Own work",
-            "photoYear": null,
-            "gate": 0.6,
-            "foreign": 0.91,
-            "jev": {
-              "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794000601-XaVBnlPr7qycd7HfWOua",
-              "confidence": 0.7,
-              "exterior": 0.57,
-              "face": 0.09,
-              "plate": 0.02,
-              "special": 0.05,
-              "quality": 2.58
-            }
-          },
-          {
             "file": "File:Subaru IMPREZA G4 2.0i-S EyeSight (3BA-GK6).jpg",
             "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Subaru_IMPREZA_G4_2.0i-S_EyeSight_(3BA-GK6).jpg",
             "sha1": "83c47ea7b7b38fdb8d2351ee91527dd5548fac2b",
@@ -25694,6 +25719,31 @@
               "plate": 0.02,
               "special": 0.03,
               "quality": 2.53
+            }
+          },
+          {
+            "file": "File:Subaru IMPREZA G4 2.0i-S EyeSight (3BA-GK6) front.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Subaru_IMPREZA_G4_2.0i-S_EyeSight_(3BA-GK6)_front.jpg",
+            "sha1": "8b5ea69c5d5b04eac366ade460a442a45737a1a8",
+            "timestamp": "2022-04-02T14:09:03Z",
+            "width": 2560,
+            "height": 1920,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Tokumeigakarinoaoshima",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.6,
+            "foreign": 0.73,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794000589-ehiNJfhwu9rRlwwsl2rc",
+              "confidence": 0.76,
+              "exterior": 0.81,
+              "face": 0.06,
+              "plate": 0.02,
+              "special": 0.04,
+              "quality": 2.46
             }
           }
         ]
@@ -28287,31 +28337,6 @@
             }
           },
           {
-            "file": "File:2022 Toyota Corolla Hatchback SE in Classic Silver Metallic, Front Right, 09-10-2023.jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2022_Toyota_Corolla_Hatchback_SE_in_Classic_Silver_Metallic,_Front_Right,_09-10-2023.jpg",
-            "sha1": "5a263e689dabfdc6c05dd32f98a92310b452a702",
-            "timestamp": "2023-09-11T04:20:37Z",
-            "width": 3693,
-            "height": 1945,
-            "license": "CC BY-SA 4.0",
-            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-            "artist": "Elise240SX",
-            "credit": "Own work",
-            "photoYear": 2022,
-            "gate": 0.8,
-            "foreign": 0.41,
-            "jev": {
-              "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794000416-7GhROjh2zKIcenHllq0o",
-              "confidence": 0.98,
-              "exterior": 0.89,
-              "face": 0.32,
-              "plate": 0.95,
-              "special": 0.03,
-              "quality": 2.6
-            }
-          },
-          {
             "file": "File:2021 Toyota Corolla SE front view (United States).jpg",
             "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2021_Toyota_Corolla_SE_front_view_(United_States).jpg",
             "sha1": "b224791b979294192ddcc9e6913cb1fc6012dc5f",
@@ -28334,6 +28359,31 @@
               "plate": 0.03,
               "special": 0.06,
               "quality": 2.82
+            }
+          },
+          {
+            "file": "File:2020 Toyota Corolla SE, front 2.29.20.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2020_Toyota_Corolla_SE,_front_2.29.20.jpg",
+            "sha1": "77fa275cd4f5fcbc70de92550b2f2c94f6e9c211",
+            "timestamp": "2020-03-07T21:09:42Z",
+            "width": 4582,
+            "height": 2403,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Kevauto",
+            "credit": "Own work",
+            "photoYear": 2020,
+            "gate": 0.8,
+            "foreign": 0.01,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794000415-W9Akkc58eLklbGTYytgS",
+              "confidence": 0.92,
+              "exterior": 0.91,
+              "face": 0.04,
+              "plate": 0.09,
+              "special": 0.04,
+              "quality": 2.79
             }
           }
         ]
@@ -29082,31 +29132,6 @@
         "generation": "toyota-prius/toyota-prius-xw50",
         "picks": [
           {
-            "file": "File:2018 Toyota Prius (facelift).jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2018_Toyota_Prius_(facelift).jpg",
-            "sha1": "8438b8ba42a1c49794cd63eb919ec1892b5189fb",
-            "timestamp": "2020-01-26T15:07:30Z",
-            "width": 4051,
-            "height": 2701,
-            "license": "CC BY-SA 4.0",
-            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-            "artist": "User3204",
-            "credit": "Own work",
-            "photoYear": 2018,
-            "gate": 0.8,
-            "foreign": 0.86,
-            "jev": {
-              "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794005825-lmFo9wclkliZUQUFcKUo",
-              "confidence": 0.8,
-              "exterior": 0.91,
-              "face": 0.09,
-              "plate": 0.97,
-              "special": 0.03,
-              "quality": 2.61
-            }
-          },
-          {
             "file": "File:Toyota PRIUS S (DAA-ZVW50-AHXEB) & PRIUS S\"Touring Selection\" (DAA-ZVW51-AHXEB(T)) front.jpg",
             "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Toyota_PRIUS_S_(DAA-ZVW50-AHXEB)_%26_PRIUS_S%22Touring_Selection%22_(DAA-ZVW51-AHXEB(T))_front.jpg",
             "sha1": "812730c1132b3fa2c4b8c6c43207e822e5cdfc17",
@@ -29159,31 +29184,6 @@
               "plate": 0.83,
               "special": 0.2,
               "quality": 1.94
-            }
-          },
-          {
-            "file": "File:2018 Toyota Prius (facelift).jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2018_Toyota_Prius_(facelift).jpg",
-            "sha1": "8438b8ba42a1c49794cd63eb919ec1892b5189fb",
-            "timestamp": "2020-01-26T15:07:30Z",
-            "width": 4051,
-            "height": 2701,
-            "license": "CC BY-SA 4.0",
-            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-            "artist": "User3204",
-            "credit": "Own work",
-            "photoYear": 2018,
-            "gate": 0.8,
-            "foreign": 0.86,
-            "jev": {
-              "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794005825-lmFo9wclkliZUQUFcKUo",
-              "confidence": 0.8,
-              "exterior": 0.91,
-              "face": 0.09,
-              "plate": 0.97,
-              "special": 0.03,
-              "quality": 2.61
             }
           }
         ]
@@ -29242,28 +29242,28 @@
             }
           },
           {
-            "file": "File:2024 Toyota Prius Excel PHEV - 1987cc 2.0 (225PS) Plug-in Hybrid - Silver Metallic - 10-2024, Front Quarter.jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2024_Toyota_Prius_Excel_PHEV_-_1987cc_2.0_(225PS)_Plug-in_Hybrid_-_Silver_Metallic_-_10-2024,_Front_Quarter.jpg",
-            "sha1": "55ae70fe18f01196b6b8c933cb60efb62b100492",
-            "timestamp": "2024-10-20T08:09:30Z",
-            "width": 4664,
-            "height": 2424,
-            "license": "CC0",
-            "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-            "artist": "Harvey Bold",
+            "file": "File:2025 Toyota Prius LE, rear right, 09-06-2025.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2025_Toyota_Prius_LE,_rear_right,_09-06-2025.jpg",
+            "sha1": "b1227df83a8ffb422c3075caaa9a157c2cf440a1",
+            "timestamp": "2025-09-07T01:13:51Z",
+            "width": 4303,
+            "height": 2801,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "MercurySable99",
             "credit": "Own work",
-            "photoYear": 2024,
+            "photoYear": 2025,
             "gate": 0.8,
-            "foreign": 0.94,
+            "foreign": 0.04,
             "jev": {
               "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794000789-D6lQYMA8EiXOPeEhKA1E",
-              "confidence": 0.8,
-              "exterior": 0.85,
-              "face": 0.24,
-              "plate": 0.93,
-              "special": 0.03,
-              "quality": 2.78
+              "id": "gen-dec-1794013391-ufCD3vblMdTtzWFjzoLt",
+              "confidence": 0.92,
+              "exterior": 0.8,
+              "face": 0.05,
+              "plate": 0.2,
+              "special": 0.04,
+              "quality": 2.74
             }
           }
         ]
@@ -31397,28 +31397,28 @@
             }
           },
           {
-            "file": "File:'13 Volkswagen Jetta Hybrid (MIAS '13).jpg",
-            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:%2713_Volkswagen_Jetta_Hybrid_(MIAS_%2713).jpg",
-            "sha1": "cba4ebf36ea6cd5fc73964ae304be9a3b4f377e2",
-            "timestamp": "2013-05-02T03:51:43Z",
-            "width": 1573,
-            "height": 1195,
+            "file": "File:2012 Volkswagen Jetta GLI -- 2012 DC.JPG",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2012_Volkswagen_Jetta_GLI_--_2012_DC.JPG",
+            "sha1": "088fa731aec570c02080793b6d1a786ae43b4ac8",
+            "timestamp": "2012-02-01T15:43:41Z",
+            "width": 2497,
+            "height": 1532,
             "license": "Public domain",
             "licenseUrl": null,
-            "artist": "Bull-Doser",
+            "artist": "IFCAR",
             "credit": "Own work",
-            "photoYear": 2013,
+            "photoYear": 2012,
             "gate": 0.8,
-            "foreign": 0.2,
+            "foreign": 0.12,
             "jev": {
               "model": "typesafe/jev-1.14-20261014",
-              "id": "gen-dec-1794005873-idE0VvFMkKTaMCKBFXGv",
-              "confidence": 0.82,
-              "exterior": 0.82,
-              "face": 0.12,
-              "plate": 0.03,
-              "special": 0.12,
-              "quality": 2.1
+              "id": "gen-dec-1794005872-XZ5SLlegqsIYOAeD2ASi",
+              "confidence": 0.94,
+              "exterior": 0.89,
+              "face": 0.47,
+              "plate": 0.02,
+              "special": 0.13,
+              "quality": 2.74
             }
           }
         ]

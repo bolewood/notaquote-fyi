@@ -14,6 +14,8 @@ export type LibraryCar = {
   years: number[]
   /** The model years the car page shows (its headline year and the used-year rows). */
   shownYears: number[]
+  /** The priced version's powertrain: "combustion", "hybrid", "plug-in-hybrid" or "electric". */
+  powertrain: string
 }
 
 export function libraryCars(): LibraryCar[] {
@@ -26,6 +28,7 @@ export function libraryCars(): LibraryCar[] {
       name: `${page.make} ${displayModel(page.model)}`,
       years: [...yearsWithModel(SERVER_CATALOG, page.make, page.model)].sort((a, b) => a - b),
       shownYears: [...new Set([page.pick.year, ...figures.years.map((row) => row.year)])].sort((a, b) => a - b),
+      powertrain: page.facts.powertrain ?? "combustion",
     }
   })
 }
