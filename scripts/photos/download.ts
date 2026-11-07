@@ -19,12 +19,18 @@ import path from "node:path"
 import sharp from "sharp"
 import { licenseOk, restrictionsOk, stripHtml } from "./candidates"
 import { api, chunks, fetchRetry, getJson, USER_AGENT } from "./http"
+import { GENERATIONS_FILE, type CarGenerations } from "./generations"
 import { MANIFEST_FILE, type Manifest, type PhotoPick } from "./verify"
 
 export const IMAGE_DIR = "public/car-photos"
 export const IMAGES_FILE = "data/photos/images.json"
 /** Wide enough for a sharp card on a large screen; Commons originals are often 6000 pixels. */
 const WIDTH = 1200
+/**
+ * Smaller copies next to each photo ("<sha1>-320.webp", "<sha1>-640.webp"), so a thumbnail or a phone
+ * doesn't download the 1200-pixel file. src/lib/car-photo-loader.ts picks one for each srcset width.
+ */
+export const VARIANT_WIDTHS = [320, 640] as const
 
 export type Credit = {
   /** "File:2019 Toyota Camry LE in white, front left.jpg" */
@@ -37,7 +43,16 @@ export type Credit = {
   changes: string
 }
 
-export type ImageEntry = { src: string; width: number; height: number; generation: string; photoYear: number | null; credit: Credit }
+export type ImageEntry = {
+  src: string
+  width: number
+  height: number
+  generation: string
+  /** The generation's US model years, "2018–2024" or "2025–present", for a caption. */
+  generationYears: string
+  photoYear: number | null
+  credit: Credit
+}
 
 /** "User:McChizzle" → "McChizzle". Empty → null, so the credit falls back to the file page. */
 export function cleanAuthor(artist: string): string | null {
@@ -127,17 +142,26 @@ async function main() {
       fetched += 1
       await new Promise((resolve) => setTimeout(resolve, 250))
     }
+    for (const variant of VARIANT_WIDTHS) {
+      const small = path.join(IMAGE_DIR, `${sha1}-${variant}.webp`)
+      if (!(await exists(small))) await sharp(file).resize({ width: variant, withoutEnlargement: true }).webp({ quality: 74 }).toFile(small)
+    }
     const { width = 0, height = 0 } = await sharp(file).metadata()
     sizes.set(sha1, { width, height })
   }
   // Files the manifest no longer uses.
   let removed = 0
   for (const name of await readdir(IMAGE_DIR)) {
-    if (!name.endsWith(".webp") || sizes.has(name.replace(/\.webp$/, ""))) continue
+    if (!name.endsWith(".webp") || sizes.has(name.replace(/(-\d+)?\.webp$/, ""))) continue
     await rm(path.join(IMAGE_DIR, name))
     removed += 1
   }
 
+  const generations = JSON.parse(await readFile(GENERATIONS_FILE, "utf8")) as Record<string, CarGenerations>
+  const generationYears = (id: string) => {
+    const g = generations[id.split("/")[0]]?.generations.find((item) => item.id === id)
+    return g ? (g.to === g.from ? `${g.from}` : `${g.from}–${g.to ?? "present"}`) : ""
+  }
   const images: Record<string, Record<string, ImageEntry | null>> = {}
   for (const [slug, car] of Object.entries(manifest)) {
     images[slug] = {}
@@ -150,6 +174,7 @@ async function main() {
               src: `/car-photos/${pick.sha1}.webp`,
               ...size,
               generation: value.generation,
+              generationYears: generationYears(value.generation),
               photoYear: pick.photoYear,
               credit: {
                 title: pick.file,

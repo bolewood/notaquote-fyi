@@ -290,10 +290,6 @@ export const CAR_OVERLAP_ALLOWED: Readonly<Record<string, number>> = {
   "chevrolet-trailblazer / volkswagen-taos": 0.435,
   "hyundai-sonata / toyota-camry": 0.434,
   "hyundai-elantra / nissan-sentra": 0.431,
-  "chevrolet-equinox / gmc-terrain": 0.426,
-  "kia-seltos / toyota-corolla-cross": 0.424,
-  "subaru-forester / subaru-outback": 0.421,
-  "nissan-sentra / nissan-versa": 0.42,
 }
 
 /** "a / b" with the two slugs in alphabetical order, so a pair has one name. */

@@ -5,6 +5,7 @@
       "width": 1200,
       "height": 731,
       "generation": "acura-integra/acura-integra-de4-de5",
+      "generationYears": "2023–present",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Acura Integra (base) in Lunar Silver Metallic, front left.jpg",
@@ -22,6 +23,7 @@
       "width": 1200,
       "height": 900,
       "generation": "acura-mdx/acura-mdx-second-generation-yd2",
+      "generationYears": "2007–2013",
       "photoYear": 2012,
       "credit": {
         "title": "File:2012 Acura MDX.jpg",
@@ -37,6 +39,7 @@
       "width": 1200,
       "height": 900,
       "generation": "acura-mdx/acura-mdx-third-generation-yd3-4-7",
+      "generationYears": "2014–2020",
       "photoYear": null,
       "credit": {
         "title": "File:14 Acura MDX SH-AWD.jpg",
@@ -52,6 +55,7 @@
       "width": 1200,
       "height": 675,
       "generation": "acura-mdx/acura-mdx-fourth-generation-yd8-9-ye1",
+      "generationYears": "2022–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Acura MDX (United States) front view 01.png",
@@ -67,6 +71,7 @@
       "width": 1200,
       "height": 743,
       "generation": "acura-mdx/acura-mdx-fourth-generation-yd8-9-ye1",
+      "generationYears": "2022–present",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Acura MDX SH-AWD A-Spec in Liquid Carbon Metallic, front right.jpg",
@@ -84,6 +89,7 @@
       "width": 1200,
       "height": 900,
       "generation": "acura-rdx/second-generation-tb3-4-2013",
+      "generationYears": "2013–2018",
       "photoYear": null,
       "credit": {
         "title": "File:Acura RDX at NAIAS 2012 (6677989577).jpg",
@@ -99,6 +105,7 @@
       "width": 1200,
       "height": 705,
       "generation": "acura-rdx/second-generation-tb3-4-2013",
+      "generationYears": "2013–2018",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Acura RDX in Lunar Silver Metallic, front left.jpg",
@@ -114,6 +121,7 @@
       "width": 1200,
       "height": 751,
       "generation": "acura-rdx/third-generation-tc1-2-2019",
+      "generationYears": "2019–2026",
       "photoYear": 2022,
       "credit": {
         "title": "File:'22 Acura RDX.JPG",
@@ -129,6 +137,7 @@
       "width": 1200,
       "height": 639,
       "generation": "acura-rdx/third-generation-tc1-2-2019",
+      "generationYears": "2019–2026",
       "photoYear": 2025,
       "credit": {
         "title": "File:2025 Acura RDX.jpg",
@@ -146,6 +155,7 @@
       "width": 1200,
       "height": 639,
       "generation": "audi-q5/audi-q5-8r-first-generation",
+      "generationYears": "2009–2017",
       "photoYear": 2014,
       "credit": {
         "title": "File:2014 Audi SQ5 Quattro 3.0T Technik in Glacier White Metallic, Front Left, 09-08-2023.jpg",
@@ -161,6 +171,7 @@
       "width": 1200,
       "height": 900,
       "generation": "audi-q5/audi-q5-fy-second-generation",
+      "generationYears": "2018–2025",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Audi SQ5.jpg",
@@ -176,6 +187,7 @@
       "width": 1200,
       "height": 960,
       "generation": "audi-q5/audi-q5-fy-second-generation",
+      "generationYears": "2018–2025",
       "photoYear": 2021,
       "credit": {
         "title": "File:Audi Q5 (FY) Washington DC Metro Area, USA (12).jpg",
@@ -191,6 +203,7 @@
       "width": 1200,
       "height": 960,
       "generation": "audi-q5/audi-q5-fy-second-generation",
+      "generationYears": "2018–2025",
       "photoYear": 2021,
       "credit": {
         "title": "File:Audi Q5 (FY) Washington DC Metro Area, USA (12).jpg",
@@ -208,6 +221,7 @@
       "width": 1200,
       "height": 645,
       "generation": "bmw-330i/bmw-3-series-e90",
+      "generationYears": "2006–2012",
       "photoYear": 2006,
       "credit": {
         "title": "File:2006 BMW 330Xi sedan -- 11-13-2011.jpg",
@@ -223,6 +237,7 @@
       "width": 1200,
       "height": 531,
       "generation": "bmw-330i/bmw-3-series-f30",
+      "generationYears": "2012–2018",
       "photoYear": 2017,
       "credit": {
         "title": "File:2017 BMW 340i (F30 LCI) Luxury Line sedan (2018-07-30) 02.jpg",
@@ -238,6 +253,7 @@
       "width": 1200,
       "height": 800,
       "generation": "bmw-330i/bmw-3-series-g20",
+      "generationYears": "2019–2026",
       "photoYear": 2022,
       "credit": {
         "title": "File:BMW 330i (G20) Washington DC Metro Area, USA (2).jpg",
@@ -253,6 +269,7 @@
       "width": 1200,
       "height": 800,
       "generation": "bmw-330i/bmw-3-series-g20",
+      "generationYears": "2019–2026",
       "photoYear": 2022,
       "credit": {
         "title": "File:BMW 330i (G20) Washington DC Metro Area, USA (2).jpg",
@@ -270,6 +287,7 @@
       "width": 1200,
       "height": 900,
       "generation": "bmw-x3/bmw-x3-f25",
+      "generationYears": "2011–2017",
       "photoYear": null,
       "credit": {
         "title": "File:17 BMW X3 xDrive35i.jpg",
@@ -285,6 +303,7 @@
       "width": 1200,
       "height": 692,
       "generation": "bmw-x3/bmw-x3-g01",
+      "generationYears": "2018–2024",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 BMW X3 (G01) M40i front 4.19.18.jpg",
@@ -300,6 +319,7 @@
       "width": 1200,
       "height": 673,
       "generation": "bmw-x3/bmw-x3-g01",
+      "generationYears": "2018–2024",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 BMW X3 xDrive30i (facelift), rear 12.15.21.jpg",
@@ -315,6 +335,7 @@
       "width": 1200,
       "height": 692,
       "generation": "bmw-x3/bmw-x3-g01",
+      "generationYears": "2018–2024",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 BMW X3 (G01) M40i front 4.19.18.jpg",
@@ -332,6 +353,7 @@
       "width": 1200,
       "height": 674,
       "generation": "bmw-x5/bmw-x5-e70",
+      "generationYears": "2007–2013",
       "photoYear": 2013,
       "credit": {
         "title": "File:'13 BMW E70 X5 xDrive 40d.jpg",
@@ -347,6 +369,7 @@
       "width": 1200,
       "height": 734,
       "generation": "bmw-x5/bmw-x5-f15",
+      "generationYears": "2014–2018",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 BMW X5 XDrive40E Performance in Imperial Blue Metallic, front left, 07-02-2026.jpg",
@@ -362,6 +385,7 @@
       "width": 1200,
       "height": 657,
       "generation": "bmw-x5/bmw-x5-g05",
+      "generationYears": "2019–2026",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 BMW G05 IMG 7715.jpg",
@@ -377,6 +401,7 @@
       "width": 1200,
       "height": 620,
       "generation": "bmw-x5/bmw-x5-g05",
+      "generationYears": "2019–2026",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 BMW X5.jpg",
@@ -394,6 +419,7 @@
       "width": 1200,
       "height": 844,
       "generation": "buick-enclave/buick-enclave-lambda",
+      "generationYears": "2008–2017",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 Buick Enclave -- 2012 NYIAS 1.JPG",
@@ -409,6 +435,7 @@
       "width": 1200,
       "height": 698,
       "generation": "buick-enclave/buick-enclave-c1xx",
+      "generationYears": "2018–2024",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Buick Enclave au SIAM 2018.jpg",
@@ -424,6 +451,7 @@
       "width": 1200,
       "height": 716,
       "generation": "buick-enclave/buick-enclave-c1xx",
+      "generationYears": "2018–2024",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Buick Enclave 'Essense' (facelift), front 6.1.22.jpg",
@@ -439,6 +467,7 @@
       "width": 1200,
       "height": 716,
       "generation": "buick-enclave/buick-enclave-c1xx",
+      "generationYears": "2018–2024",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Buick Enclave 'Essense' (facelift), front 6.1.22.jpg",
@@ -456,6 +485,7 @@
       "width": 1200,
       "height": 789,
       "generation": "buick-encore-gx/buick-encore-gx",
+      "generationYears": "2020–present",
       "photoYear": 2021,
       "credit": {
         "title": "File:2021 Buick Encore GX Select AWD in Burnished Bronze metallic, front left.jpg",
@@ -471,6 +501,7 @@
       "width": 1200,
       "height": 865,
       "generation": "buick-encore-gx/buick-encore-gx",
+      "generationYears": "2020–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Buick Encore GX Preferred AWD in Summit White, Front Right, 09-10-2023.jpg",
@@ -488,6 +519,7 @@
       "width": 1200,
       "height": 640,
       "generation": "buick-envista/buick-envista",
+      "generationYears": "2024–present",
       "photoYear": 2025,
       "credit": {
         "title": "File:2025 Buick Envista in White Frost Tricoat, front right, 09-20-2025.jpg",
@@ -505,6 +537,7 @@
       "width": 1200,
       "height": 900,
       "generation": "cadillac-escalade/cadillac-escalade-gmt900",
+      "generationYears": "2007–2014",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 Greater Valdosta Community Christmas Parade 108.JPG",
@@ -520,6 +553,7 @@
       "width": 1200,
       "height": 596,
       "generation": "cadillac-escalade/cadillac-escalade-k2xx",
+      "generationYears": "2015–2020",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Cadillac Escalade ESV Platinum front 4.6.19.jpg",
@@ -535,6 +569,7 @@
       "width": 1200,
       "height": 605,
       "generation": "cadillac-escalade/cadillac-escalade-t1xx",
+      "generationYears": "2021–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Cadillac Escalade ESV Premium, front 4.7.23.jpg",
@@ -550,6 +585,7 @@
       "width": 1200,
       "height": 775,
       "generation": "cadillac-escalade/cadillac-escalade-t1xx",
+      "generationYears": "2021–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Cadillac Escalade Premium Luxury in Black Raven, front left.jpg",
@@ -567,6 +603,7 @@
       "width": 1200,
       "height": 660,
       "generation": "chevrolet-blazer/chevrolet-blazer-c1xx",
+      "generationYears": "2019–2026",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Chevrolet Blazer LT AWD in Black, Front Left, 12-25-2021.jpg",
@@ -582,6 +619,7 @@
       "width": 1200,
       "height": 853,
       "generation": "chevrolet-blazer/chevrolet-blazer-c1xx",
+      "generationYears": "2019–2026",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Chevrolet Blazer RS.jpg",
@@ -599,6 +637,7 @@
       "width": 1200,
       "height": 619,
       "generation": "chevrolet-camaro/chevrolet-camaro-fifth-generation",
+      "generationYears": "2010–2015",
       "photoYear": 2014,
       "credit": {
         "title": "File:2014 Chevrolet Camaro 2LS, front left, 08-25-2023.jpg",
@@ -614,6 +653,7 @@
       "width": 1200,
       "height": 619,
       "generation": "chevrolet-camaro/chevrolet-camaro-sixth-generation",
+      "generationYears": "2016–2024",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Chevrolet Camaro RS coupe front 5.31.18.jpg",
@@ -629,6 +669,7 @@
       "width": 1200,
       "height": 900,
       "generation": "chevrolet-camaro/chevrolet-camaro-sixth-generation",
+      "generationYears": "2016–2024",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Chevrolet Camaro.jpg",
@@ -644,6 +685,7 @@
       "width": 1200,
       "height": 736,
       "generation": "chevrolet-camaro/chevrolet-camaro-sixth-generation",
+      "generationYears": "2016–2024",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Chevrolet Camaro LT1 convertible with RS package, front left, 06-08-2024.jpg",
@@ -661,6 +703,7 @@
       "width": 1200,
       "height": 923,
       "generation": "chevrolet-colorado/first-generation-2004",
+      "generationYears": "2004–2012",
       "photoYear": 2010,
       "credit": {
         "title": "File:'10 Chevrolet Colorado Extended Cab (MIAS '10).jpg",
@@ -676,6 +719,7 @@
       "width": 1200,
       "height": 759,
       "generation": "chevrolet-colorado/second-generation-rg-2011",
+      "generationYears": "2015–2022",
       "photoYear": 2019,
       "credit": {
         "title": "File:2019 Chevrolet Colorado RST front NYIAS 2019.jpg",
@@ -691,6 +735,7 @@
       "width": 1200,
       "height": 778,
       "generation": "chevrolet-colorado/second-generation-rg-2011",
+      "generationYears": "2015–2022",
       "photoYear": 2021,
       "credit": {
         "title": "File:2021 Chevrolet Colorado ZR2 in Black, Front Left, 03-06-2022.jpg",
@@ -706,6 +751,7 @@
       "width": 1200,
       "height": 927,
       "generation": "chevrolet-colorado/third-generation-2023",
+      "generationYears": "2023–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Chevrolet Colorado ZR2, front right, 07-18-2024.jpg",
@@ -723,6 +769,7 @@
       "width": 1200,
       "height": 900,
       "generation": "chevrolet-equinox/second-generation-2010",
+      "generationYears": "2010–2017",
       "photoYear": null,
       "credit": {
         "title": "File:15 Chevrolet Equinox LTZ.jpg",
@@ -738,6 +785,7 @@
       "width": 1200,
       "height": 900,
       "generation": "chevrolet-equinox/third-generation-2018",
+      "generationYears": "2018–2024",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Chevy Equinox Silver.jpg",
@@ -753,6 +801,7 @@
       "width": 1200,
       "height": 911,
       "generation": "chevrolet-equinox/third-generation-2018",
+      "generationYears": "2018–2024",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Chevrolet Equinox LT, front right, 08-07-2024.jpg",
@@ -768,6 +817,7 @@
       "width": 1200,
       "height": 911,
       "generation": "chevrolet-equinox/third-generation-2018",
+      "generationYears": "2018–2024",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Chevrolet Equinox LT, front right, 08-07-2024.jpg",
@@ -785,6 +835,7 @@
       "width": 1200,
       "height": 662,
       "generation": "chevrolet-malibu/chevrolet-malibu-eighth-generation-epsilon-ii",
+      "generationYears": "2013–2016",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 Chevrolet Malibu Eco -- 2012 DC 2.JPG",
@@ -800,6 +851,7 @@
       "width": 1200,
       "height": 676,
       "generation": "chevrolet-malibu/chevrolet-malibu-ninth-generation-e2xx",
+      "generationYears": "2016–2025",
       "photoYear": 2017,
       "credit": {
         "title": "File:2017 Chevrolet Malibu Hybrid, front right.jpg",
@@ -815,6 +867,7 @@
       "width": 1200,
       "height": 654,
       "generation": "chevrolet-malibu/chevrolet-malibu-ninth-generation-e2xx",
+      "generationYears": "2016–2025",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Chevrolet Malibu 1LT in Sterling Grey Metallic, front left, 2024-11-14.jpg",
@@ -830,6 +883,7 @@
       "width": 1200,
       "height": 743,
       "generation": "chevrolet-malibu/chevrolet-malibu-ninth-generation-e2xx",
+      "generationYears": "2016–2025",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Chevrolet Malibu LT in Moonstone Gray Metallic, front right.jpg",
@@ -847,6 +901,7 @@
       "width": 1200,
       "height": 683,
       "generation": "chevrolet-silverado/chevrolet-silverado-gmt900",
+      "generationYears": "2007–2013",
       "photoYear": 2013,
       "credit": {
         "title": "File:'13 Chevrolet Silverado Extended Cab (MIAS '13).jpg",
@@ -862,6 +917,7 @@
       "width": 1200,
       "height": 800,
       "generation": "chevrolet-silverado/chevrolet-silverado-k2xx",
+      "generationYears": "2014–2018",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Greater Valdosta Community Christmas Parade 37.jpg",
@@ -877,6 +933,7 @@
       "width": 1200,
       "height": 653,
       "generation": "chevrolet-silverado/chevrolet-silverado-t1xx",
+      "generationYears": "2019–2026",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Chevrolet Silverado K1500 LT-L, front 4.24.23.jpg",
@@ -892,6 +949,7 @@
       "width": 1200,
       "height": 833,
       "generation": "chevrolet-silverado/chevrolet-silverado-t1xx",
+      "generationYears": "2019–2026",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Chevrolet Silverado 1500 LT Trail Boss Las Vegas Fall 2026.jpg",
@@ -909,6 +967,7 @@
       "width": 1200,
       "height": 672,
       "generation": "chevrolet-suburban/chevrolet-suburban-gmt900-gmt931",
+      "generationYears": "2007–2014",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 Chevrolet Suburban 1500 LT in Silver Ice Metallic, Front Left, 12-25-2021.jpg",
@@ -924,6 +983,7 @@
       "width": 1200,
       "height": 900,
       "generation": "chevrolet-suburban/chevrolet-suburban-gmtk2yc",
+      "generationYears": "2015–2020",
       "photoYear": 2017,
       "credit": {
         "title": "File:2017 Chevrolet Suburban 5.3 LT V8, 06-21-2024.jpg",
@@ -939,6 +999,7 @@
       "width": 1200,
       "height": 714,
       "generation": "chevrolet-suburban/chevrolet-suburban-gmtt1yc",
+      "generationYears": "2021–present",
       "photoYear": 2021,
       "credit": {
         "title": "File:2021 Chevrolet Suburban High Country Front View (United States).png",
@@ -954,6 +1015,7 @@
       "width": 1200,
       "height": 825,
       "generation": "chevrolet-suburban/chevrolet-suburban-gmtt1yc",
+      "generationYears": "2021–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Chevrolet Suburban 5.3 Z71 V8, front left, 06-21-2024.jpg",
@@ -971,6 +1033,7 @@
       "width": 1200,
       "height": 879,
       "generation": "chevrolet-tahoe/chevrolet-tahoe-gmt900",
+      "generationYears": "2007–2014",
       "photoYear": 2012,
       "credit": {
         "title": "File:'12 Chevrolet Tahoe Hybrid (MIAS '12).jpg",
@@ -986,6 +1049,7 @@
       "width": 1200,
       "height": 838,
       "generation": "chevrolet-tahoe/chevrolet-tahoe-k2xx",
+      "generationYears": "2015–2020",
       "photoYear": 2016,
       "credit": {
         "title": "File:'16 Chevrolet Tahoe (Carrefour Angrignon).jpg",
@@ -1001,6 +1065,7 @@
       "width": 1200,
       "height": 731,
       "generation": "chevrolet-tahoe/chevrolet-tahoe-t1xx",
+      "generationYears": "2021–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Chevrolet Tahoe RST, front 3.7.22.jpg",
@@ -1016,6 +1081,7 @@
       "width": 1200,
       "height": 900,
       "generation": "chevrolet-tahoe/chevrolet-tahoe-t1xx",
+      "generationYears": "2021–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Chevrolet Tahoe 5.3 High Country V8, 06-20-2024.jpg",
@@ -1033,6 +1099,7 @@
       "width": 1200,
       "height": 622,
       "generation": "chevrolet-trailblazer/chevrolet-trailblazer-gmt360-mid-size-suv",
+      "generationYears": "2002–2009",
       "photoYear": 2007,
       "credit": {
         "title": "File:2007 Chevrolet TrailBlazer LS, Front Right, 08-07-2020.jpg",
@@ -1048,6 +1115,7 @@
       "width": 1200,
       "height": 747,
       "generation": "chevrolet-trailblazer/chevrolet-trailblazer-crossover-vss-f-9byc",
+      "generationYears": "2021–present",
       "photoYear": 2021,
       "credit": {
         "title": "File:2021 Chevrolet TrailBlazer RS AWD, front 7.11.20.jpg",
@@ -1063,6 +1131,7 @@
       "width": 1200,
       "height": 900,
       "generation": "chevrolet-trailblazer/chevrolet-trailblazer-crossover-vss-f-9byc",
+      "generationYears": "2021–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Chevrolet Trailblazer 1.3 LT in Sharkskin Metallic, front right, 06-09-2024.jpg",
@@ -1080,6 +1149,7 @@
       "width": 1200,
       "height": 774,
       "generation": "chevrolet-traverse/chevrolet-traverse-first-generation-lambda",
+      "generationYears": "2009–2017",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 Chevrolet Traverse LTZ -- 2012 NYIAS 1.JPG",
@@ -1095,6 +1165,7 @@
       "width": 1200,
       "height": 586,
       "generation": "chevrolet-traverse/chevrolet-traverse-second-generation-c1xx",
+      "generationYears": "2018–2024",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Chevrolet Traverse LT, front 8.11.18.jpg",
@@ -1110,6 +1181,7 @@
       "width": 1200,
       "height": 702,
       "generation": "chevrolet-traverse/chevrolet-traverse-second-generation-c1xx",
+      "generationYears": "2018–2024",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Chevrolet Traverse LS AWD in Mosaic Black Metallic, Front Left, 06-29-2023.jpg",
@@ -1125,6 +1197,7 @@
       "width": 1200,
       "height": 726,
       "generation": "chevrolet-traverse/chevrolet-traverse-third-generation-c1xx-2",
+      "generationYears": "2024–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Chevrolet Traverse RS AWD, front 10.16.24.jpg",
@@ -1143,6 +1216,7 @@
       "width": 1200,
       "height": 744,
       "generation": "chevrolet-trax/chevrolet-trax-first-generation-u200",
+      "generationYears": "2015–2022",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Chevrolet Trax LT, 08-10-2022.jpg",
@@ -1158,6 +1232,7 @@
       "width": 1200,
       "height": 800,
       "generation": "chevrolet-trax/chevrolet-trax-first-generation-u200",
+      "generationYears": "2015–2022",
       "photoYear": null,
       "credit": {
         "title": "File:Chevrolet Trax - Mondial de l'Automobile de Paris 2012 - 005.jpg",
@@ -1173,6 +1248,7 @@
       "width": 1200,
       "height": 870,
       "generation": "chevrolet-trax/chevrolet-trax-second-generation",
+      "generationYears": "2024–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Chevrolet Trax 1.2 LT in Jinx Metallic, front right, 06-09-2024.jpg",
@@ -1190,6 +1266,7 @@
       "width": 1200,
       "height": 722,
       "generation": "chrysler-pacifica/chrysler-pacifica-cs-crossover",
+      "generationYears": "2004–2008",
       "photoYear": 2006,
       "credit": {
         "title": "File:2006 Chrysler Pacifica Touring in Bright Silver Metallic, front left, 07-04-2026.jpg",
@@ -1205,6 +1282,7 @@
       "width": 1200,
       "height": 683,
       "generation": "chrysler-pacifica/chrysler-pacifica-ru-minivan",
+      "generationYears": "2017–present",
       "photoYear": 2019,
       "credit": {
         "title": "File:2019 Chrysler Pacifica Touring L, front 7.4.19.jpg",
@@ -1220,6 +1298,7 @@
       "width": 1200,
       "height": 650,
       "generation": "chrysler-pacifica/chrysler-pacifica-ru-minivan",
+      "generationYears": "2017–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Chrysler Pacifica Touring L (facelift), front 6.17.23.jpg",
@@ -1235,6 +1314,7 @@
       "width": 1200,
       "height": 685,
       "generation": "chrysler-pacifica/chrysler-pacifica-ru-minivan",
+      "generationYears": "2017–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Chrysler Pacifica Touring L RoadTripper in Bright White, front left.jpg",
@@ -1252,6 +1332,7 @@
       "width": 1200,
       "height": 864,
       "generation": "dodge-durango/third-generation-wd-2011",
+      "generationYears": "2011–present",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 Dodge Durango.jpg",
@@ -1267,6 +1348,7 @@
       "width": 1200,
       "height": 726,
       "generation": "dodge-durango/third-generation-wd-2011",
+      "generationYears": "2011–present",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Dodge Durango RT 5.7L Hemi front 4.20.19.jpg",
@@ -1282,6 +1364,7 @@
       "width": 1200,
       "height": 686,
       "generation": "dodge-durango/third-generation-wd-2011",
+      "generationYears": "2011–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Dodge Durango RT (facelift), front 6.21.22.jpg",
@@ -1297,6 +1380,7 @@
       "width": 1200,
       "height": 686,
       "generation": "dodge-durango/third-generation-wd-2011",
+      "generationYears": "2011–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Dodge Durango RT (facelift), front 6.21.22.jpg",
@@ -1314,6 +1398,7 @@
       "width": 1200,
       "height": 810,
       "generation": "ford-bronco/ford-bronco-sixth-generation-u725",
+      "generationYears": "2021–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Ford Bronco 2-Door Big Bend with Sasquatch Package, front right, 10-28-2022.jpg",
@@ -1329,6 +1414,7 @@
       "width": 1200,
       "height": 740,
       "generation": "ford-bronco/ford-bronco-sixth-generation-u725",
+      "generationYears": "2021–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Ford Bronco 2-Door Big Bend with Sasquatch Package in Oxford White, front left, 2026-10-04.jpg",
@@ -1346,6 +1432,7 @@
       "width": 1200,
       "height": 786,
       "generation": "ford-bronco-sport/ford-bronco-sport",
+      "generationYears": "2021–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Ford Bronco Sport Big Bend, front left, 09-03-2022.jpg",
@@ -1361,6 +1448,7 @@
       "width": 1200,
       "height": 839,
       "generation": "ford-bronco-sport/ford-bronco-sport",
+      "generationYears": "2021–present",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Ford Bronco Sport Heritage, front left, 09-30-2023.jpg",
@@ -1378,6 +1466,7 @@
       "width": 1200,
       "height": 673,
       "generation": "ford-escape/ford-escape-third-generation",
+      "generationYears": "2013–2019",
       "photoYear": 2014,
       "credit": {
         "title": "File:2014 Ford Escape SE in Karat Gold, Front Left, 08-30-2022.jpg",
@@ -1393,6 +1482,7 @@
       "width": 1200,
       "height": 700,
       "generation": "ford-escape/ford-escape-third-generation",
+      "generationYears": "2013–2019",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Ford Escape Titanium 2.0L front 5.19.19.jpg",
@@ -1408,6 +1498,7 @@
       "width": 1200,
       "height": 766,
       "generation": "ford-escape/ford-escape-fourth-generation",
+      "generationYears": "2020–2026",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Ford Escape Base (facelift), front 1.23.23.jpg",
@@ -1423,6 +1514,7 @@
       "width": 1200,
       "height": 664,
       "generation": "ford-escape/ford-escape-fourth-generation",
+      "generationYears": "2020–2026",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Ford Escape Active in Race Red, front left, 2025-11-20.jpg",
@@ -1440,6 +1532,7 @@
       "width": 1200,
       "height": 749,
       "generation": "ford-expedition/third-generation-2007",
+      "generationYears": "2007–2017",
       "photoYear": 2012,
       "credit": {
         "title": "File:2012 Ford Expedition -- NHTSA.jpg",
@@ -1455,6 +1548,7 @@
       "width": 1200,
       "height": 636,
       "generation": "ford-expedition/fourth-generation-2018",
+      "generationYears": "2018–2024",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Ford Expedition Max XLT, front 3.24.23.jpg",
@@ -1470,6 +1564,7 @@
       "width": 1200,
       "height": 789,
       "generation": "ford-expedition/fourth-generation-2018",
+      "generationYears": "2018–2024",
       "photoYear": 2021,
       "credit": {
         "title": "File:2021 Ford Expedition XLT MAX 4WD, front left, 06-04-2023.jpg",
@@ -1485,6 +1580,7 @@
       "width": 1200,
       "height": 678,
       "generation": "ford-expedition/fourth-generation-2018",
+      "generationYears": "2018–2024",
       "photoYear": null,
       "credit": {
         "title": "File:Ford Expedition MAX P4220635.jpg",
@@ -1502,6 +1598,7 @@
       "width": 1200,
       "height": 900,
       "generation": "ford-explorer/fifth-generation-u502-2011",
+      "generationYears": "2011–2019",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 Ford Explorer Sport @ the 2012 New York International Auto Show (6905508896).jpg",
@@ -1517,6 +1614,7 @@
       "width": 1200,
       "height": 814,
       "generation": "ford-explorer/fifth-generation-u502-2011",
+      "generationYears": "2011–2019",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Ford Explorer au SIAM 2018.jpg",
@@ -1532,6 +1630,7 @@
       "width": 1200,
       "height": 569,
       "generation": "ford-explorer/sixth-generation-u625-2020",
+      "generationYears": "2020–present",
       "photoYear": 2020,
       "credit": {
         "title": "File:2020 Ford Explorer ST, front 8.24.19.jpg",
@@ -1547,6 +1646,7 @@
       "width": 1200,
       "height": 678,
       "generation": "ford-explorer/sixth-generation-u625-2020",
+      "generationYears": "2020–present",
       "photoYear": 2025,
       "credit": {
         "title": "File:2025 Ford Explorer ST-Line, front 8.21.25.jpg",
@@ -1564,6 +1664,7 @@
       "width": 1200,
       "height": 747,
       "generation": "ford-f-150/ford-f-150-twelfth-generation",
+      "generationYears": "2009–2014",
       "photoYear": 2012,
       "credit": {
         "title": "File:2012 Ford F-150 XLT in Tuxedo Black Metallic, front left, 05-20-2026.jpg",
@@ -1579,6 +1680,7 @@
       "width": 1200,
       "height": 753,
       "generation": "ford-f-150/ford-f-150-thirteenth-generation",
+      "generationYears": "2015–2020",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Ford F150 Platinum FX4 Crew Cab in Ruby Red, front left.jpg",
@@ -1594,6 +1696,7 @@
       "width": 1200,
       "height": 661,
       "generation": "ford-f-150/ford-f-150-fourteenth-generation",
+      "generationYears": "2021–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Ford F-150 Lightning Lariat in Atlas Blue Metallic, Front Right, 08-06-2022.jpg",
@@ -1609,6 +1712,7 @@
       "width": 1200,
       "height": 814,
       "generation": "ford-f-150/ford-f-150-fourteenth-generation",
+      "generationYears": "2021–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Ford F-150 XLT front view (cropped).jpg",
@@ -1626,6 +1730,7 @@
       "width": 1200,
       "height": 703,
       "generation": "ford-maverick/ford-maverick-pickup-truck",
+      "generationYears": "2022–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Ford Maverick XL, Area 51 (front right).jpg",
@@ -1641,6 +1746,7 @@
       "width": 1200,
       "height": 692,
       "generation": "ford-maverick/ford-maverick-pickup-truck",
+      "generationYears": "2022–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Ford Maverick XL, front left, 08-21-2026.jpg",
@@ -1658,6 +1764,7 @@
       "width": 1200,
       "height": 800,
       "generation": "ford-mustang/ford-mustang-fifth-generation",
+      "generationYears": "2005–2014",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 Ford Mustang V6 Coupe (14255523818).jpg",
@@ -1673,6 +1780,7 @@
       "width": 1200,
       "height": 641,
       "generation": "ford-mustang/ford-mustang-sixth-generation",
+      "generationYears": "2015–2023",
       "photoYear": 2017,
       "credit": {
         "title": "File:2017 Ford Mustang EcoBoost in Ruby Red Metallic, front right.jpg",
@@ -1688,6 +1796,7 @@
       "width": 1200,
       "height": 803,
       "generation": "ford-mustang/ford-mustang-sixth-generation",
+      "generationYears": "2015–2023",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Ford Mustang GT California Special, front left side, 55th Annual All Ford Day.jpg",
@@ -1703,6 +1812,7 @@
       "width": 1200,
       "height": 694,
       "generation": "ford-mustang/ford-mustang-seventh-generation",
+      "generationYears": "2024–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Ford Mustang GT Fastback Nite Pony Package in Vapor Blue Metallic, front right, 2025-04-18.jpg",
@@ -1720,6 +1830,7 @@
       "width": 1200,
       "height": 583,
       "generation": "ford-mustang-mach-e/ford-mustang-mach-e",
+      "generationYears": "2021–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Ford Mustang Mach-E GT Performance Edition in Space White Metallic, front left, 2023-07-10.jpg",
@@ -1735,6 +1846,7 @@
       "width": 1200,
       "height": 583,
       "generation": "ford-mustang-mach-e/ford-mustang-mach-e",
+      "generationYears": "2021–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Ford Mustang Mach-E GT Performance Edition in Space White Metallic, front left, 2023-07-10.jpg",
@@ -1752,6 +1864,7 @@
       "width": 1200,
       "height": 753,
       "generation": "ford-ranger/ford-ranger-americas-third-generation",
+      "generationYears": "1998–2011",
       "photoYear": 2008,
       "credit": {
         "title": "File:2008 Ford Ranger XLT 4x2 Supercab 4-dr in Redfire Met., front left.jpg",
@@ -1767,6 +1880,7 @@
       "width": 1200,
       "height": 900,
       "generation": "ford-ranger/ford-ranger-t6-p375-north-america",
+      "generationYears": "2019–2023",
       "photoYear": 2019,
       "credit": {
         "title": "File:2019 Ford Ranger Lariat crew cab.jpg",
@@ -1782,6 +1896,7 @@
       "width": 1200,
       "height": 900,
       "generation": "ford-ranger/ford-ranger-t6-p703-north-america",
+      "generationYears": "2024–present",
       "photoYear": null,
       "credit": {
         "title": "File:24 Ford Ranger Lariat.jpg",
@@ -1799,6 +1914,7 @@
       "width": 1200,
       "height": 815,
       "generation": "gmc-acadia/first-generation-2007",
+      "generationYears": "2007–2016",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 GMC Acadia Denali -- 2012 NYIAS.JPG",
@@ -1814,6 +1930,7 @@
       "width": 1200,
       "height": 653,
       "generation": "gmc-acadia/second-generation-2017",
+      "generationYears": "2017–2023",
       "photoYear": 2019,
       "credit": {
         "title": "File:2019 GMC Acadia Denali AWD, front 10.11.19.jpg",
@@ -1829,6 +1946,7 @@
       "width": 1200,
       "height": 772,
       "generation": "gmc-acadia/second-generation-2017",
+      "generationYears": "2017–2023",
       "photoYear": 2020,
       "credit": {
         "title": "File:2020 GMC Acadia.jpg",
@@ -1844,6 +1962,7 @@
       "width": 1200,
       "height": 741,
       "generation": "gmc-acadia/third-generation-2024",
+      "generationYears": "2024–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 GMC Acadia base, front 2.22.25.jpg",
@@ -1861,6 +1980,7 @@
       "width": 1200,
       "height": 564,
       "generation": "gmc-canyon/gmc-canyon-gmt355",
+      "generationYears": "2004–2012",
       "photoYear": 2010,
       "credit": {
         "title": "File:2010 GMC Canyon SLE-1 Extended Cab 2WD in Pure Silver Metallic, Front Left, 08-25-2023.jpg",
@@ -1876,6 +1996,7 @@
       "width": 1200,
       "height": 640,
       "generation": "gmc-canyon/gmc-canyon-gmt31xx",
+      "generationYears": "2015–2022",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 GMC Canyon Denali SWB 4-Door 3.6L front 5.19.19.jpg",
@@ -1891,6 +2012,7 @@
       "width": 1200,
       "height": 898,
       "generation": "gmc-canyon/gmc-canyon-gmt31xx",
+      "generationYears": "2015–2022",
       "photoYear": null,
       "credit": {
         "title": "File:GMC Canyon P4250781.jpg",
@@ -1906,6 +2028,7 @@
       "width": 1200,
       "height": 674,
       "generation": "gmc-canyon/gmc-canyon-gmt31xx-2",
+      "generationYears": "2023–present",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 GMC Canyon.jpg",
@@ -1923,6 +2046,7 @@
       "width": 1200,
       "height": 639,
       "generation": "gmc-sierra/gmc-sierra-gmt900",
+      "generationYears": "2007–2013",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 GMC Sierra 1500 Nevada Edition, Front Right, 04-13-2021.jpg",
@@ -1938,6 +2062,7 @@
       "width": 1200,
       "height": 565,
       "generation": "gmc-sierra/gmc-sierra-k2xx",
+      "generationYears": "2014–2019",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 GMC Sierra K1500 SLE Z71, Front Right, 09-17-2020.jpg",
@@ -1953,6 +2078,7 @@
       "width": 1200,
       "height": 675,
       "generation": "gmc-sierra/gmc-sierra-t1xx",
+      "generationYears": "2019–2026",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 GMC Sierra Denali front view.jpg",
@@ -1968,6 +2094,7 @@
       "width": 1200,
       "height": 675,
       "generation": "gmc-sierra/gmc-sierra-t1xx",
+      "generationYears": "2019–2026",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 GMC Sierra 2500HD Denali front view.jpg",
@@ -1985,6 +2112,7 @@
       "width": 1200,
       "height": 900,
       "generation": "gmc-terrain/gmc-terrain-first-generation-theta",
+      "generationYears": "2010–2017",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 GMC Terrain Denali @ the 2012 New York International Auto Show (7047951729).jpg",
@@ -2000,6 +2128,7 @@
       "width": 1200,
       "height": 642,
       "generation": "gmc-terrain/gmc-terrain-second-generation",
+      "generationYears": "2018–2024",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 GMC Terrain SLT front 3.17.18.jpg",
@@ -2015,6 +2144,7 @@
       "width": 1200,
       "height": 771,
       "generation": "gmc-terrain/gmc-terrain-second-generation",
+      "generationYears": "2018–2024",
       "photoYear": 2021,
       "credit": {
         "title": "File:2021 GMC Terrain SLT AWD in Ebony Twilight Metallic, front right.jpg",
@@ -2030,6 +2160,7 @@
       "width": 1200,
       "height": 771,
       "generation": "gmc-terrain/gmc-terrain-second-generation",
+      "generationYears": "2018–2024",
       "photoYear": 2021,
       "credit": {
         "title": "File:2021 GMC Terrain SLT AWD in Ebony Twilight Metallic, front right.jpg",
@@ -2047,6 +2178,7 @@
       "width": 1200,
       "height": 793,
       "generation": "gmc-yukon/gmc-yukon-gmt900-gmt922",
+      "generationYears": "2007–2014",
       "photoYear": 2011,
       "credit": {
         "title": "File:2011 GMC Yukon Denali Hybrid -- 2011 DC.jpg",
@@ -2062,6 +2194,7 @@
       "width": 1200,
       "height": 761,
       "generation": "gmc-yukon/gmc-yukon-gmtk2ug",
+      "generationYears": "2015–2020",
       "photoYear": 2020,
       "credit": {
         "title": "File:2020 GMC Yukon SLT 4WD in silver, front left.jpg",
@@ -2077,6 +2210,7 @@
       "width": 1200,
       "height": 773,
       "generation": "gmc-yukon/gmc-yukon-gmtt1ug",
+      "generationYears": "2021–present",
       "photoYear": 2021,
       "credit": {
         "title": "File:2021 GMC Yukon Denali in Hunter Metallic, front left.jpg",
@@ -2092,6 +2226,7 @@
       "width": 1200,
       "height": 800,
       "generation": "gmc-yukon/gmc-yukon-gmtt1ug",
+      "generationYears": "2021–present",
       "photoYear": 2025,
       "credit": {
         "title": "File:2025 GMC Yukon AT4 Facelift.jpg",
@@ -2109,6 +2244,7 @@
       "width": 1200,
       "height": 773,
       "generation": "honda-accord/honda-accord-ninth-generation",
+      "generationYears": "2013–2017",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 Accord LX.jpg",
@@ -2124,6 +2260,7 @@
       "width": 1200,
       "height": 642,
       "generation": "honda-accord/honda-accord-tenth-generation",
+      "generationYears": "2018–2022",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Honda Accord front 4.1.18.jpg",
@@ -2139,6 +2276,7 @@
       "width": 1200,
       "height": 675,
       "generation": "honda-accord/honda-accord-tenth-generation",
+      "generationYears": "2018–2022",
       "photoYear": 2021,
       "credit": {
         "title": "File:2021 Honda Accord EL.jpg",
@@ -2154,6 +2292,7 @@
       "width": 1200,
       "height": 504,
       "generation": "honda-accord/honda-accord-eleventh-generation",
+      "generationYears": "2023–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Honda Accord EX, front left.jpg",
@@ -2171,6 +2310,7 @@
       "width": 1200,
       "height": 791,
       "generation": "honda-civic/honda-civic-ninth-generation",
+      "generationYears": "2012–2015",
       "photoYear": 2012,
       "credit": {
         "title": "File:2012 Honda Civic LX Sedan in Alabaster Silver Metallic, front right, 2025-06-14.jpg",
@@ -2186,6 +2326,7 @@
       "width": 1200,
       "height": 655,
       "generation": "honda-civic/honda-civic-tenth-generation",
+      "generationYears": "2016–2021",
       "photoYear": 2017,
       "credit": {
         "title": "File:2017 Honda Civic EX-T coupe front 1.21.19.jpg",
@@ -2201,6 +2342,7 @@
       "width": 1200,
       "height": 641,
       "generation": "honda-civic/honda-civic-eleventh-generation",
+      "generationYears": "2022–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Honda Civic Hatchback EX-L in Platinum White Pearl, front right (2).jpg",
@@ -2216,6 +2358,7 @@
       "width": 1200,
       "height": 626,
       "generation": "honda-civic/honda-civic-eleventh-generation",
+      "generationYears": "2022–present",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Honda Civic Sport Sedan in Rallye Red, front right, 2024-09-29.jpg",
@@ -2233,6 +2376,7 @@
       "width": 1200,
       "height": 797,
       "generation": "honda-cr-v/honda-cr-v-fourth-generation",
+      "generationYears": "2012–2016",
       "photoYear": 2014,
       "credit": {
         "title": "File:2014-03-04 Geneva Motor Show 1168.JPG",
@@ -2248,6 +2392,7 @@
       "width": 1200,
       "height": 900,
       "generation": "honda-cr-v/honda-cr-v-fifth-generation",
+      "generationYears": "2017–2022",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Honda CR-V 1.5 TC-P 2WD (4).jpg",
@@ -2263,6 +2408,7 @@
       "width": 1200,
       "height": 664,
       "generation": "honda-cr-v/honda-cr-v-fifth-generation",
+      "generationYears": "2017–2022",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Honda CR-V EX-L (facelift), front 3.31.23.jpg",
@@ -2278,6 +2424,7 @@
       "width": 1200,
       "height": 683,
       "generation": "honda-cr-v/honda-cr-v-sixth-generation",
+      "generationYears": "2023–present",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Honda CR-V EX AWD in Lunar Silver Metallic, front left.jpg",
@@ -2295,6 +2442,7 @@
       "width": 1200,
       "height": 726,
       "generation": "honda-hr-v/honda-hr-v-second-generation-ru",
+      "generationYears": "2016–2022",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Honda HR-V SE i-VTEC 1.5 Front.jpg",
@@ -2310,6 +2458,7 @@
       "width": 1200,
       "height": 645,
       "generation": "honda-hr-v/honda-hr-v-second-generation-ru",
+      "generationYears": "2016–2022",
       "photoYear": 2021,
       "credit": {
         "title": "File:2021 Honda HR-V 1.8 EX 2WD CVT.jpg",
@@ -2325,6 +2474,7 @@
       "width": 1200,
       "height": 675,
       "generation": "honda-hr-v/honda-hr-v-north-america-rz-zr-v-based",
+      "generationYears": "2023–present",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Honda HR-V LX AWD, front right, 11-13-2022 (cropped).jpg",
@@ -2342,6 +2492,7 @@
       "width": 1200,
       "height": 735,
       "generation": "honda-odyssey/honda-odyssey-rl5",
+      "generationYears": "2011–2017",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 Honda Odyssey LX 3.5L, front 5.26.19.jpg",
@@ -2357,6 +2508,7 @@
       "width": 1200,
       "height": 651,
       "generation": "honda-odyssey/honda-odyssey-rl6",
+      "generationYears": "2018–present",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Honda Odyssey Touring 3.5L, front 8.18.19.jpg",
@@ -2372,6 +2524,7 @@
       "width": 1200,
       "height": 671,
       "generation": "honda-odyssey/honda-odyssey-rl6",
+      "generationYears": "2018–present",
       "photoYear": 2021,
       "credit": {
         "title": "File:2021 Honda Odyssey (United States).jpg",
@@ -2387,6 +2540,7 @@
       "width": 1200,
       "height": 728,
       "generation": "honda-odyssey/honda-odyssey-rl6",
+      "generationYears": "2018–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Honda Odyssey Elite in Sonic Gray Pearl, front left.jpg",
@@ -2404,6 +2558,7 @@
       "width": 1200,
       "height": 785,
       "generation": "honda-passport/third-generation-yf7-8-2019",
+      "generationYears": "2019–2025",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Honda Passport EX-L AWD with HPD Bronze Package, rear right, 09-02-2022.jpg",
@@ -2419,6 +2574,7 @@
       "width": 1200,
       "height": 900,
       "generation": "honda-passport/third-generation-yf7-8-2019",
+      "generationYears": "2019–2025",
       "photoYear": null,
       "credit": {
         "title": "File:19 Honda Passport EX-L.jpg",
@@ -2436,6 +2592,7 @@
       "width": 1200,
       "height": 700,
       "generation": "honda-pilot/second-generation-yf3-4-2009",
+      "generationYears": "2009–2015",
       "photoYear": 2014,
       "credit": {
         "title": "File:2014 Honda Pilot Touring in Alabaster Silver Metallic, Front Left, 06-30-2023.jpg",
@@ -2451,6 +2608,7 @@
       "width": 1200,
       "height": 702,
       "generation": "honda-pilot/third-generation-yf5-6-2016",
+      "generationYears": "2016–2022",
       "photoYear": 2017,
       "credit": {
         "title": "File:2017 Honda Pilot AWD front 6.15.18.jpg",
@@ -2466,6 +2624,7 @@
       "width": 1200,
       "height": 900,
       "generation": "honda-pilot/third-generation-yf5-6-2016",
+      "generationYears": "2016–2022",
       "photoYear": 2021,
       "credit": {
         "title": "File:2021 Honda Pilot EX-L.jpg",
@@ -2481,6 +2640,7 @@
       "width": 1200,
       "height": 821,
       "generation": "honda-pilot/fourth-generation-yg1-2-2023",
+      "generationYears": "2023–present",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Honda Pilot Touring in Crystal Black Pearl, Front Left, 04-07-2023.jpg",
@@ -2498,6 +2658,7 @@
       "width": 1200,
       "height": 764,
       "generation": "honda-ridgeline/honda-ridgeline-first-generation",
+      "generationYears": "2006–2014",
       "photoYear": 2012,
       "credit": {
         "title": "File:2012-2014 Honda Ridgeline RTL front-end.jpg",
@@ -2513,6 +2674,7 @@
       "width": 1200,
       "height": 859,
       "generation": "honda-ridgeline/honda-ridgeline-second-generation",
+      "generationYears": "2017–present",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Honda Ridgeline RTL-T-on ice cropped.jpg",
@@ -2528,6 +2690,7 @@
       "width": 1200,
       "height": 596,
       "generation": "honda-ridgeline/honda-ridgeline-second-generation",
+      "generationYears": "2017–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Honda Ridgeline HPD in Radiant Red Metallic II, Front Left, 10-28-2023.jpg",
@@ -2543,6 +2706,7 @@
       "width": 1200,
       "height": 675,
       "generation": "honda-ridgeline/honda-ridgeline-second-generation",
+      "generationYears": "2017–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Honda Ridgeline front view.jpg",
@@ -2560,6 +2724,7 @@
       "width": 1200,
       "height": 523,
       "generation": "hyundai-elantra/fifth-generation-md-ud-jk-2010",
+      "generationYears": "2011–2016",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 Hyundai Elantra, Front Left, 10-16-2020.jpg",
@@ -2575,6 +2740,7 @@
       "width": 1200,
       "height": 606,
       "generation": "hyundai-elantra/sixth-generation-ad-2015",
+      "generationYears": "2017–2020",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Hyundai Elantra GL SE in Marina Blue, front left, 2024-07-29.jpg",
@@ -2590,6 +2756,7 @@
       "width": 1200,
       "height": 684,
       "generation": "hyundai-elantra/seventh-generation-cn7-2020",
+      "generationYears": "2021–2026",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Hyundai Elantra Limited in Silver, front left, 04-04-2026.jpg",
@@ -2605,6 +2772,7 @@
       "width": 1200,
       "height": 589,
       "generation": "hyundai-elantra/seventh-generation-cn7-2020",
+      "generationYears": "2021–2026",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Hyundai Elantra SEL, front right, 07-25-2026.jpg",
@@ -2622,6 +2790,7 @@
       "width": 1200,
       "height": 735,
       "generation": "hyundai-ioniq-5/hyundai-ioniq-5",
+      "generationYears": "2022–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Hyundai IONIQ 5 Preferred Long Range AWD in Cyber Grey, front left, 2024-03-31.jpg",
@@ -2637,6 +2806,7 @@
       "width": 1200,
       "height": 735,
       "generation": "hyundai-ioniq-5/hyundai-ioniq-5",
+      "generationYears": "2022–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Hyundai IONIQ 5 Preferred Long Range AWD in Cyber Grey, front left, 2024-03-31.jpg",
@@ -2654,6 +2824,7 @@
       "width": 1200,
       "height": 614,
       "generation": "hyundai-ioniq-6/hyundai-ioniq-6-ce-pre-facelift",
+      "generationYears": "2023–2025",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Hyundai Ioniq 6 Limited, front 4.27.23.jpg",
@@ -2671,6 +2842,7 @@
       "width": 1200,
       "height": 768,
       "generation": "hyundai-kona/first-generation-os-2017",
+      "generationYears": "2018–2023",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Hyundai Kona Preferred in Tangerine Comet, Front Left, 06-12-2022.jpg",
@@ -2686,6 +2858,7 @@
       "width": 1200,
       "height": 563,
       "generation": "hyundai-kona/first-generation-os-2017",
+      "generationYears": "2018–2023",
       "photoYear": 2020,
       "credit": {
         "title": "File:2020 Hyundai Kona SEL, Front Left, 07-20-2021.jpg",
@@ -2701,6 +2874,7 @@
       "width": 1200,
       "height": 887,
       "generation": "hyundai-kona/second-generation-sx2-2023",
+      "generationYears": "2024–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Hyundai Kona SEL, front right, 05-18-2024.jpg",
@@ -2718,6 +2892,7 @@
       "width": 1200,
       "height": 675,
       "generation": "hyundai-palisade/first-generation-lx2-2018",
+      "generationYears": "2020–2025",
       "photoYear": 2020,
       "credit": {
         "title": "File:2020 Hyundai Palisade 08-11-2019 2.jpg",
@@ -2733,6 +2908,7 @@
       "width": 1200,
       "height": 675,
       "generation": "hyundai-palisade/first-generation-lx2-2018",
+      "generationYears": "2020–2025",
       "photoYear": 2020,
       "credit": {
         "title": "File:2020 Hyundai Palisade 08-11-2019 2.jpg",
@@ -2750,6 +2926,7 @@
       "width": 1200,
       "height": 801,
       "generation": "hyundai-santa-cruz/hyundai-santa-cruz",
+      "generationYears": "2022–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Hyundai Santa Cruz 2.5T Limited (United States) front view (cropped).jpg",
@@ -2765,6 +2942,7 @@
       "width": 1200,
       "height": 667,
       "generation": "hyundai-santa-cruz/hyundai-santa-cruz",
+      "generationYears": "2022–present",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Hyundai Santa Cruz SEL Premium, front left, 02-05-2022.jpg",
@@ -2782,6 +2960,7 @@
       "width": 1200,
       "height": 702,
       "generation": "hyundai-santa-fe/third-generation-dm-nc-2012",
+      "generationYears": "2013–2018",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 Hyundai Santa Fe 2.0T Limited in Titanium Silver, front left, 2024-09-29.jpg",
@@ -2797,6 +2976,7 @@
       "width": 1200,
       "height": 791,
       "generation": "hyundai-santa-fe/third-generation-dm-nc-2012",
+      "generationYears": "2013–2018",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Hyundai Santa Fe Sport 4WD in Becketts Black, front right.jpg",
@@ -2812,6 +2992,7 @@
       "width": 1200,
       "height": 762,
       "generation": "hyundai-santa-fe/fourth-generation-tm-2018",
+      "generationYears": "2019–2023",
       "photoYear": 2020,
       "credit": {
         "title": "File:2020 Hyundai Santa Fe SEL, front right.jpg",
@@ -2827,6 +3008,7 @@
       "width": 1200,
       "height": 650,
       "generation": "hyundai-santa-fe/fifth-generation-mx5-2023",
+      "generationYears": "2024–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Hyundai Santa Fe (MX5) 02.jpg",
@@ -2844,6 +3026,7 @@
       "width": 1200,
       "height": 900,
       "generation": "hyundai-sonata/sixth-generation-yf-2009",
+      "generationYears": "2011–2014",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 Hyundai Sonata Hybrid with US Government license plates (Front-Left).jpg",
@@ -2859,6 +3042,7 @@
       "width": 1200,
       "height": 820,
       "generation": "hyundai-sonata/seventh-generation-lf-2014",
+      "generationYears": "2015–2019",
       "photoYear": 2018,
       "credit": {
         "title": "File:'18 Hyundai Sonata Inside Crossgate Mall.jpg",
@@ -2874,6 +3058,7 @@
       "width": 1200,
       "height": 900,
       "generation": "hyundai-sonata/eighth-generation-dn8-2019",
+      "generationYears": "2020–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Hyundai Sonata 2.5 6AT grey front view in Brunei.jpg",
@@ -2889,6 +3074,7 @@
       "width": 1200,
       "height": 507,
       "generation": "hyundai-sonata/eighth-generation-dn8-2019",
+      "generationYears": "2020–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Hyundai Sonata SEL, front right.jpg",
@@ -2906,6 +3092,7 @@
       "width": 1200,
       "height": 728,
       "generation": "hyundai-tucson/second-generation-lm-2009",
+      "generationYears": "2010–2015",
       "photoYear": 2014,
       "credit": {
         "title": "File:2014 Hyundai Tucson GLS AWD in Garnet Red, Front Right, 05-18-2023.jpg",
@@ -2921,6 +3108,7 @@
       "width": 1200,
       "height": 649,
       "generation": "hyundai-tucson/third-generation-tl-2015",
+      "generationYears": "2016–2021",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Hyundai Tucson Go! SE T-GDi 1.6 Front.jpg",
@@ -2936,6 +3124,7 @@
       "width": 1200,
       "height": 693,
       "generation": "hyundai-tucson/fourth-generation-nx4-2020",
+      "generationYears": "2022–2026",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Hyundai Tucson SEL, front 5.2.22.jpg",
@@ -2951,6 +3140,7 @@
       "width": 1200,
       "height": 665,
       "generation": "hyundai-tucson/fourth-generation-nx4-2020",
+      "generationYears": "2022–2026",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Hyundai Tucson Preferred in Ultimate Red, front left, 2024-09-30.jpg",
@@ -2968,6 +3158,7 @@
       "width": 1200,
       "height": 816,
       "generation": "hyundai-venue/hyundai-venue-qx",
+      "generationYears": "2020–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Hyundai Venue Preferred in Polar White, Front Left2, 09-27-2022.jpg",
@@ -2983,6 +3174,7 @@
       "width": 1200,
       "height": 816,
       "generation": "hyundai-venue/hyundai-venue-qx",
+      "generationYears": "2020–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Hyundai Venue Preferred in Polar White, Front Left2, 09-27-2022.jpg",
@@ -3000,6 +3192,7 @@
       "width": 1200,
       "height": 698,
       "generation": "jeep-compass/jeep-compass-mk49",
+      "generationYears": "2007–2017",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 Jeep Compass North Edition in Deep Cherry Red Crystal Pearl, front left, 2025-04-27.jpg",
@@ -3015,6 +3208,7 @@
       "width": 1200,
       "height": 992,
       "generation": "jeep-compass/jeep-compass-mp",
+      "generationYears": "2017–2027",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Jeep Compass (MP MY18) Sport wagon (2018-05-05) 02.jpg",
@@ -3030,6 +3224,7 @@
       "width": 1200,
       "height": 684,
       "generation": "jeep-compass/jeep-compass-mp",
+      "generationYears": "2017–2027",
       "photoYear": 2019,
       "credit": {
         "title": "File:2019 Jeep Compass Limited 2.4L, front 7.6.19.jpg",
@@ -3045,6 +3240,7 @@
       "width": 1200,
       "height": 741,
       "generation": "jeep-compass/jeep-compass-mp",
+      "generationYears": "2017–2027",
       "photoYear": 2025,
       "credit": {
         "title": "File:2025 Jeep Compass Sport in Bright White, front right, 2025-09-07.jpg",
@@ -3062,6 +3258,7 @@
       "width": 1200,
       "height": 730,
       "generation": "jeep-gladiator/jeep-gladiator-jt",
+      "generationYears": "2020–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Jeep Gladiator Mojave in Sting-Grey, Front Right, 03-06-2022.jpg",
@@ -3077,6 +3274,7 @@
       "width": 1200,
       "height": 718,
       "generation": "jeep-gladiator/jeep-gladiator-jt",
+      "generationYears": "2020–present",
       "photoYear": 2026,
       "credit": {
         "title": "File:2026 Jeep Gladiator Sport S in Mojito!, front left, 2026-05-03.jpg",
@@ -3094,6 +3292,7 @@
       "width": 1200,
       "height": 900,
       "generation": "jeep-grand-cherokee/jeep-grand-cherokee-wk2",
+      "generationYears": "2011–2022",
       "photoYear": 2013,
       "credit": {
         "title": "File:Grand-Cherokee-Summit.jpg",
@@ -3109,6 +3308,7 @@
       "width": 1200,
       "height": 900,
       "generation": "jeep-grand-cherokee/jeep-grand-cherokee-wk2",
+      "generationYears": "2011–2022",
       "photoYear": 2017,
       "credit": {
         "title": "File:19 Jeep Grand Cherokee Summit.jpg",
@@ -3124,6 +3324,7 @@
       "width": 1200,
       "height": 736,
       "generation": "jeep-grand-cherokee/jeep-grand-cherokee-wl",
+      "generationYears": "2022–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Jeep Grand Cherokee Summit Reserve 4x4 in Bright White, Front Left, 01-16-2022.jpg",
@@ -3139,6 +3340,7 @@
       "width": 1200,
       "height": 750,
       "generation": "jeep-grand-cherokee/jeep-grand-cherokee-wl",
+      "generationYears": "2022–present",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Jeep Grand Cherokee L Altitude 4x4, front left, 09-09-2023.jpg",
@@ -3156,6 +3358,7 @@
       "width": 1200,
       "height": 858,
       "generation": "jeep-wrangler/jeep-wrangler-jk",
+      "generationYears": "2007–2018",
       "photoYear": 2014,
       "credit": {
         "title": "File:'14 Jeep Wrangler (Salon auto Carrefour Angrignon).jpg",
@@ -3171,6 +3374,7 @@
       "width": 1200,
       "height": 900,
       "generation": "jeep-wrangler/jeep-wrangler-jl",
+      "generationYears": "2018–present",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Jeep Wrangler JL 3-door 2.2 Multijet II 200.jpg",
@@ -3186,6 +3390,7 @@
       "width": 1200,
       "height": 870,
       "generation": "jeep-wrangler/jeep-wrangler-jl",
+      "generationYears": "2018–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Jeep Wrangler Unlimited Sahara 4xe front.jpg",
@@ -3201,6 +3406,7 @@
       "width": 1200,
       "height": 683,
       "generation": "jeep-wrangler/jeep-wrangler-jl",
+      "generationYears": "2018–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Jeep Wrangler, front NYIAS 2023.jpg",
@@ -3218,6 +3424,7 @@
       "width": 1200,
       "height": 602,
       "generation": "kia-carnival/fourth-generation-ka4-2020",
+      "generationYears": "2022–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Kia Carnival LX in Silky Silver, front left (cropped).jpg",
@@ -3233,6 +3440,7 @@
       "width": 1200,
       "height": 805,
       "generation": "kia-carnival/fourth-generation-ka4-2020",
+      "generationYears": "2022–present",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Kia Carnival LX, front right, 02-06-2023.jpg",
@@ -3250,6 +3458,7 @@
       "width": 1200,
       "height": 702,
       "generation": "kia-ev6/kia-ev6",
+      "generationYears": "2022–present",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Kia EV6 GT, front 12.20.24.jpg",
@@ -3265,6 +3474,7 @@
       "width": 1200,
       "height": 900,
       "generation": "kia-ev6/kia-ev6",
+      "generationYears": "2022–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:22 Kia EV6 GT-Line.jpg",
@@ -3282,6 +3492,7 @@
       "width": 1200,
       "height": 740,
       "generation": "kia-forte/first-generation-td-2008",
+      "generationYears": "2010–2013",
       "photoYear": 2011,
       "credit": {
         "title": "File:2011 Kia Forte SX hatchback -- 06-23-2011 front.jpg",
@@ -3297,6 +3508,7 @@
       "width": 1200,
       "height": 746,
       "generation": "kia-forte/second-generation-yd-2012",
+      "generationYears": "2014–2018",
       "photoYear": 2017,
       "credit": {
         "title": "File:2017 Kia Forte.jpg",
@@ -3312,6 +3524,7 @@
       "width": 1200,
       "height": 691,
       "generation": "kia-forte/third-generation-bd-2018",
+      "generationYears": "2019–2024",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Kia Forte LXS in Aurora Black Pearl, front right.jpg",
@@ -3327,6 +3540,7 @@
       "width": 1200,
       "height": 895,
       "generation": "kia-forte/third-generation-bd-2018",
+      "generationYears": "2019–2024",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Kia Forte LXS, front right, 09-12-2026.jpg",
@@ -3344,6 +3558,7 @@
       "width": 1200,
       "height": 603,
       "generation": "kia-k5/fifth-generation-dl3-2019",
+      "generationYears": "2021–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Kia K5 GT-Line in Pacific Blue, Front Left, 09-05-2022.jpg",
@@ -3359,6 +3574,7 @@
       "width": 1200,
       "height": 603,
       "generation": "kia-k5/fifth-generation-dl3-2019",
+      "generationYears": "2021–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Kia K5 GT-Line in Pacific Blue, Front Left, 09-05-2022.jpg",
@@ -3376,6 +3592,7 @@
       "width": 1200,
       "height": 747,
       "generation": "kia-niro/first-generation-de-2016",
+      "generationYears": "2017–2022",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Kia Niro FE Eco-Hybrid, front 5.12.19.jpg",
@@ -3391,6 +3608,7 @@
       "width": 1200,
       "height": 800,
       "generation": "kia-niro/first-generation-de-2016",
+      "generationYears": "2017–2022",
       "photoYear": null,
       "credit": {
         "title": "File:Geneva International Motor Show 2018, Le Grand-Saconnex (1X7A1902).jpg",
@@ -3406,6 +3624,7 @@
       "width": 1200,
       "height": 694,
       "generation": "kia-niro/second-generation-sg2-2021",
+      "generationYears": "2023–present",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Kia Niro EX, front 1.2.23.jpg",
@@ -3423,6 +3642,7 @@
       "width": 1200,
       "height": 628,
       "generation": "kia-seltos/first-generation-sp2-2019",
+      "generationYears": "2021–2026",
       "photoYear": 2022,
       "credit": {
         "title": "File:'22 Kia Seltos AWD.jpg",
@@ -3438,6 +3658,7 @@
       "width": 1200,
       "height": 654,
       "generation": "kia-seltos/first-generation-sp2-2019",
+      "generationYears": "2021–2026",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Kia Seltos LX in Fusion Black, Front Left, 05-23-2023.jpg",
@@ -3455,6 +3676,7 @@
       "width": 1200,
       "height": 584,
       "generation": "kia-sorento/second-generation-xm-2009",
+      "generationYears": "2011–2015",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 Kia Sorento (XM MY13) Si wagon (2018-09-28) 01.jpg",
@@ -3470,6 +3692,7 @@
       "width": 1200,
       "height": 960,
       "generation": "kia-sorento/third-generation-um-2014",
+      "generationYears": "2016–2020",
       "photoYear": null,
       "credit": {
         "title": "File:Kia Sorento (UM) Washington DC Metro Area, USA (4).jpg",
@@ -3485,6 +3708,7 @@
       "width": 1200,
       "height": 748,
       "generation": "kia-sorento/fourth-generation-mq4-2020",
+      "generationYears": "2021–present",
       "photoYear": 2021,
       "credit": {
         "title": "File:2021 Kia Sorento SX AWD, front 1.14.20.jpg",
@@ -3500,6 +3724,7 @@
       "width": 1200,
       "height": 675,
       "generation": "kia-sorento/fourth-generation-mq4-2020",
+      "generationYears": "2021–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Kia Sorento front view.jpg",
@@ -3517,6 +3742,7 @@
       "width": 1200,
       "height": 892,
       "generation": "kia-soul/first-generation-am-2008",
+      "generationYears": "2010–2013",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 Kia Soul, Front Left, 03-16-2021.jpg",
@@ -3532,6 +3758,7 @@
       "width": 1200,
       "height": 771,
       "generation": "kia-soul/second-generation-ps-2013",
+      "generationYears": "2014–2019",
       "photoYear": 2014,
       "credit": {
         "title": "File:2014 Kia Soul EX in Bright SIlver Metallic, Front Right, 10-01-2023.jpg",
@@ -3547,6 +3774,7 @@
       "width": 1200,
       "height": 754,
       "generation": "kia-soul/third-generation-sk3-2019",
+      "generationYears": "2020–2025",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Kia Soul EX in Steel Gray, front right.jpg",
@@ -3562,6 +3790,7 @@
       "width": 1200,
       "height": 754,
       "generation": "kia-soul/third-generation-sk3-2019",
+      "generationYears": "2020–2025",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Kia Soul EX in Steel Gray, front right.jpg",
@@ -3579,6 +3808,7 @@
       "width": 1200,
       "height": 728,
       "generation": "kia-sportage/third-generation-sl-2010",
+      "generationYears": "2011–2016",
       "photoYear": 2011,
       "credit": {
         "title": "File:2011 Kia Sportage EX -- 08-16-2010.jpg",
@@ -3594,6 +3824,7 @@
       "width": 1200,
       "height": 800,
       "generation": "kia-sportage/fourth-generation-ql-2015",
+      "generationYears": "2017–2022",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Kia Sportage GT-Line S CRDi I facelift 1.6 Rear.jpg",
@@ -3609,6 +3840,7 @@
       "width": 1200,
       "height": 800,
       "generation": "kia-sportage/fourth-generation-ql-2015",
+      "generationYears": "2017–2022",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Kia Sportage GT-Line S CRDi I facelift 1.6 Rear.jpg",
@@ -3624,6 +3856,7 @@
       "width": 1200,
       "height": 816,
       "generation": "kia-sportage/fifth-generation-nq5-2021",
+      "generationYears": "2023–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Kia Sportage X Line in Jungle Green, front right.jpg",
@@ -3641,6 +3874,7 @@
       "width": 1200,
       "height": 701,
       "generation": "kia-telluride/kia-telluride-on-first-generation",
+      "generationYears": "2020–2025",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Kia Telluride EX (facelift), front 4.16.23.jpg",
@@ -3656,6 +3890,7 @@
       "width": 1200,
       "height": 701,
       "generation": "kia-telluride/kia-telluride-on-first-generation",
+      "generationYears": "2020–2025",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Kia Telluride EX (facelift), front 4.16.23.jpg",
@@ -3673,6 +3908,7 @@
       "width": 1200,
       "height": 673,
       "generation": "lexus-es/sixth-generation-xv60-2012",
+      "generationYears": "2013–2018",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 Lexus ES 300h Silver Metallic.jpg",
@@ -3688,6 +3924,7 @@
       "width": 1200,
       "height": 673,
       "generation": "lexus-es/sixth-generation-xv60-2012",
+      "generationYears": "2013–2018",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 Lexus ES 300h Silver Metallic.jpg",
@@ -3703,6 +3940,7 @@
       "width": 1200,
       "height": 625,
       "generation": "lexus-es/seventh-generation-xz10-2018",
+      "generationYears": "2019–2025",
       "photoYear": 2021,
       "credit": {
         "title": "File:2021 Lexus ES 250 AWD, front 5.1.23.jpg",
@@ -3718,6 +3956,7 @@
       "width": 1200,
       "height": 793,
       "generation": "lexus-es/seventh-generation-xz10-2018",
+      "generationYears": "2019–2025",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Lexus ES 300h Executive in Sonic Chrome, front left.jpg",
@@ -3735,6 +3974,7 @@
       "width": 1200,
       "height": 740,
       "generation": "lexus-nx/second-generation-az20-2021",
+      "generationYears": "2022–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Lexus NX 250 Luxury 2.5 AAZA20R (20220317).jpg",
@@ -3750,6 +3990,7 @@
       "width": 1200,
       "height": 800,
       "generation": "lexus-nx/second-generation-az20-2021",
+      "generationYears": "2022–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Lexus NX.jpg",
@@ -3767,6 +4008,7 @@
       "width": 1200,
       "height": 738,
       "generation": "lexus-rx/lexus-rx-al10",
+      "generationYears": "2010–2015",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 Lexus RX350, Front Left, 09-14-2020.jpg",
@@ -3782,6 +4024,7 @@
       "width": 1200,
       "height": 670,
       "generation": "lexus-rx/lexus-rx-al20",
+      "generationYears": "2016–2022",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Lexus RX350, Front Right, 10-22-2020.jpg",
@@ -3797,6 +4040,7 @@
       "width": 1200,
       "height": 670,
       "generation": "lexus-rx/lexus-rx-al20",
+      "generationYears": "2016–2022",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Lexus RX350, Front Right, 10-22-2020.jpg",
@@ -3812,6 +4056,7 @@
       "width": 1200,
       "height": 675,
       "generation": "lexus-rx/lexus-rx-fifth-generation-ala10-alh10",
+      "generationYears": "2023–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Lexus RX 350h Premier AWD in Sonic Quartz, front right.jpg",
@@ -3829,6 +4074,7 @@
       "width": 1200,
       "height": 800,
       "generation": "mazda-3/second-generation-bl-2008",
+      "generationYears": "2010–2013",
       "photoYear": 2012,
       "credit": {
         "title": "File:2012 ASA AutoX Event 00002 (6958208186).jpg",
@@ -3844,6 +4090,7 @@
       "width": 1200,
       "height": 831,
       "generation": "mazda-3/third-generation-bm-bn-by-2013",
+      "generationYears": "2014–2018",
       "photoYear": 2016,
       "credit": {
         "title": "File:2016 Mazda3 i Sport.jpg",
@@ -3859,6 +4106,7 @@
       "width": 1200,
       "height": 654,
       "generation": "mazda-3/fourth-generation-bp-2019",
+      "generationYears": "2019–present",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Mazda3 Sport GS in Platinum Quartz Metallic, Front Left, 10-09-2023.jpg",
@@ -3874,6 +4122,7 @@
       "width": 1200,
       "height": 772,
       "generation": "mazda-3/fourth-generation-bp-2019",
+      "generationYears": "2019–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Mazda3 2.0L Fastback in Platinum Quartz, 06-09-2024.jpg",
@@ -3891,6 +4140,7 @@
       "width": 1200,
       "height": 734,
       "generation": "mazda-cx-30/mazda-cx-30",
+      "generationYears": "2020–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Mazda CX-30 Select in Platinum Quartz, front left.jpg",
@@ -3906,6 +4156,7 @@
       "width": 1200,
       "height": 734,
       "generation": "mazda-cx-30/mazda-cx-30",
+      "generationYears": "2020–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Mazda CX-30 Select in Platinum Quartz, front left.jpg",
@@ -3923,6 +4174,7 @@
       "width": 1200,
       "height": 860,
       "generation": "mazda-cx-5/first-generation-ke-2012",
+      "generationYears": "2013–2016",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 Mazda CX-5 Sport -- 07-13-2012.JPG",
@@ -3938,6 +4190,7 @@
       "width": 1200,
       "height": 648,
       "generation": "mazda-cx-5/second-generation-kf-2016",
+      "generationYears": "2017–2025",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Mazda CX-5 2.5L, 4.5.20.jpg",
@@ -3953,6 +4206,7 @@
       "width": 1200,
       "height": 772,
       "generation": "mazda-cx-5/second-generation-kf-2016",
+      "generationYears": "2017–2025",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Mazda CX-5 2.0 Sport in Sport Red Crystal, 06-09-2024.jpg",
@@ -3968,6 +4222,7 @@
       "width": 1200,
       "height": 772,
       "generation": "mazda-cx-5/second-generation-kf-2016",
+      "generationYears": "2017–2025",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Mazda CX-5 2.0 Sport in Sport Red Crystal, 06-09-2024.jpg",
@@ -3985,6 +4240,7 @@
       "width": 1200,
       "height": 749,
       "generation": "mazda-cx-50/mazda-cx-50",
+      "generationYears": "2023–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Mazda CX-50 Premium 4WD in Wind Chill Pearl, front left.jpg",
@@ -4002,6 +4258,7 @@
       "width": 1200,
       "height": 675,
       "generation": "mazda-cx-90/mazda-cx-90",
+      "generationYears": "2024–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Mazda CX-90 3.3 e-Skyactiv-G AWD HEV Turbo Exclusive in Platinum Quartz, front left, 06-22-2024.jpg",
@@ -4019,6 +4276,7 @@
       "width": 1200,
       "height": 860,
       "generation": "mercedes-benz-c-class/mercedes-benz-c-class-w204",
+      "generationYears": "2008–2014",
       "photoYear": 2012,
       "credit": {
         "title": "File:2012 Mercedes-Benz C250 -- 06-06-2012 2.JPG",
@@ -4034,6 +4292,7 @@
       "width": 1200,
       "height": 900,
       "generation": "mercedes-benz-c-class/mercedes-benz-c-class-w205",
+      "generationYears": "2015–2021",
       "photoYear": 2018,
       "credit": {
         "title": "File:21 Mercedes-Benz C300 Base.jpg",
@@ -4049,6 +4308,7 @@
       "width": 1200,
       "height": 822,
       "generation": "mercedes-benz-c-class/mercedes-benz-c-class-w206",
+      "generationYears": "2022–present",
       "photoYear": null,
       "credit": {
         "title": "File:MERCEDES-BENZ C-CLASS LWB (W206) China (17).jpg",
@@ -4064,6 +4324,7 @@
       "width": 1200,
       "height": 675,
       "generation": "mercedes-benz-c-class/mercedes-benz-c-class-w206",
+      "generationYears": "2022–present",
       "photoYear": 2026,
       "credit": {
         "title": "File:2026 Mercedes-Benz C-Class C220d AMG Line Night Edition.jpg",
@@ -4081,6 +4342,7 @@
       "width": 1200,
       "height": 690,
       "generation": "mercedes-benz-glc-class/mercedes-benz-glc-x253",
+      "generationYears": "2016–2022",
       "photoYear": 2019,
       "credit": {
         "title": "File:2019 Mercedes-Benz GLC 300 4Matic in Mojave Silver Metallic, front right, 2024-11-14.jpg",
@@ -4096,6 +4358,7 @@
       "width": 1200,
       "height": 574,
       "generation": "mercedes-benz-glc-class/mercedes-benz-glc-x253",
+      "generationYears": "2016–2022",
       "photoYear": 2022,
       "credit": {
         "title": "File:Mercedes-Benz GLC 300 4MATIC.tif",
@@ -4111,6 +4374,7 @@
       "width": 1200,
       "height": 679,
       "generation": "mercedes-benz-glc-class/mercedes-benz-glc-x254",
+      "generationYears": "2023–present",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Mercedes-Benz GLC, front 11.11.23.jpg",
@@ -4128,6 +4392,7 @@
       "width": 1200,
       "height": 765,
       "generation": "mitsubishi-outlander/mitsubishi-outlander-second-generation-cw",
+      "generationYears": "2007–2013",
       "photoYear": 2011,
       "credit": {
         "title": "File:2011 Mitsubishi Outlander GT -- 08-19-2011.jpg",
@@ -4143,6 +4408,7 @@
       "width": 1200,
       "height": 525,
       "generation": "mitsubishi-outlander/mitsubishi-outlander-third-generation-gf",
+      "generationYears": "2014–2021",
       "photoYear": 2019,
       "credit": {
         "title": "File:2019 Mitsubishi Outlander, front right side.jpg",
@@ -4158,6 +4424,7 @@
       "width": 1200,
       "height": 675,
       "generation": "mitsubishi-outlander/mitsubishi-outlander-fourth-generation-gm-gn",
+      "generationYears": "2022–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Mitsubishi Outlander SE Launch Edition (United States) front view 04.png",
@@ -4173,6 +4440,7 @@
       "width": 1200,
       "height": 928,
       "generation": "mitsubishi-outlander/mitsubishi-outlander-fourth-generation-gm-gn",
+      "generationYears": "2022–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Mitsubishi Outlander Ralliart, front left, 06-26-2026.jpg",
@@ -4190,6 +4458,7 @@
       "width": 1200,
       "height": 900,
       "generation": "nissan-altima/fifth-generation-l33-2012",
+      "generationYears": "2013–2018",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 Nissan Altima @ the 2012 New York International Auto Show (7047905649).jpg",
@@ -4205,6 +4474,7 @@
       "width": 1200,
       "height": 532,
       "generation": "nissan-altima/fifth-generation-l33-2012",
+      "generationYears": "2013–2018",
       "photoYear": 2017,
       "credit": {
         "title": "File:2017 Nissan Altima (US) front 3.16.18.jpg",
@@ -4220,6 +4490,7 @@
       "width": 1200,
       "height": 711,
       "generation": "nissan-altima/sixth-generation-l34-2018",
+      "generationYears": "2019–present",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Nissan Altima SR in Brilliant Silver Metallic, front right.jpg",
@@ -4235,6 +4506,7 @@
       "width": 1200,
       "height": 788,
       "generation": "nissan-altima/sixth-generation-l34-2018",
+      "generationYears": "2019–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Nissan Altima SR, front left, 05-05-2025.jpg",
@@ -4252,6 +4524,7 @@
       "width": 1200,
       "height": 858,
       "generation": "nissan-frontier/nissan-frontier-d40",
+      "generationYears": "2005–2021",
       "photoYear": null,
       "credit": {
         "title": "File:Nissan Frontier Extended Cab.jpg",
@@ -4267,6 +4540,7 @@
       "width": 1200,
       "height": 858,
       "generation": "nissan-frontier/nissan-frontier-d40",
+      "generationYears": "2005–2021",
       "photoYear": null,
       "credit": {
         "title": "File:Nissan Frontier Extended Cab.jpg",
@@ -4282,6 +4556,7 @@
       "width": 1200,
       "height": 765,
       "generation": "nissan-frontier/nissan-frontier-d41",
+      "generationYears": "2022–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Nissan Frontier SV 4x4 in Glacier White, front left, 07-16-2022.jpg",
@@ -4297,6 +4572,7 @@
       "width": 1200,
       "height": 725,
       "generation": "nissan-frontier/nissan-frontier-d41",
+      "generationYears": "2022–present",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Nissan Frontier Crew Cab PRO-4S in Cardinal Red, front left.jpg",
@@ -4314,6 +4590,7 @@
       "width": 1200,
       "height": 825,
       "generation": "nissan-kicks/global-market-p15-2016",
+      "generationYears": "2018–2025",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Nissan Kicks au SIAM 2018.jpg",
@@ -4329,6 +4606,7 @@
       "width": 1200,
       "height": 774,
       "generation": "nissan-kicks/global-market-p15-2016",
+      "generationYears": "2018–2025",
       "photoYear": 2020,
       "credit": {
         "title": "File:2020 Nissan Kicks front view (United States) (1) (cropped).png",
@@ -4344,6 +4622,7 @@
       "width": 1200,
       "height": 548,
       "generation": "nissan-kicks/global-market-p15-2016",
+      "generationYears": "2018–2025",
       "photoYear": null,
       "credit": {
         "title": "File:Nissan Kicks 1.6 Sense 2018.jpg",
@@ -4361,6 +4640,7 @@
       "width": 1200,
       "height": 797,
       "generation": "nissan-leaf/nissan-leaf-ze0-aze0-first-generation",
+      "generationYears": "2011–2017",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 Nissan Leaf 2012 LA Show.jpg",
@@ -4376,6 +4656,7 @@
       "width": 1200,
       "height": 705,
       "generation": "nissan-leaf/nissan-leaf-ze1-second-generation",
+      "generationYears": "2018–2025",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Nissan Leaf SV, front 12.31.19.jpg",
@@ -4391,6 +4672,7 @@
       "width": 1200,
       "height": 769,
       "generation": "nissan-leaf/nissan-leaf-ze1-second-generation",
+      "generationYears": "2018–2025",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Nissan Leaf in White, front left (NYIAS 2022).jpg",
@@ -4406,6 +4688,7 @@
       "width": 1200,
       "height": 874,
       "generation": "nissan-leaf/nissan-leaf-ze1-second-generation",
+      "generationYears": "2018–2025",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Nissan Leaf SV PLUS, front left, 03-23-2025.jpg",
@@ -4423,6 +4706,7 @@
       "width": 1200,
       "height": 634,
       "generation": "nissan-murano/second-generation-z51-2007",
+      "generationYears": "2009–2014",
       "photoYear": 2011,
       "credit": {
         "title": "File:2011 Nissan Murano SL AWD in Ebony, Front Left, 05-18-2023.jpg",
@@ -4438,6 +4722,7 @@
       "width": 1200,
       "height": 675,
       "generation": "nissan-murano/third-generation-z52-2015",
+      "generationYears": "2015–2024",
       "photoYear": 2020,
       "credit": {
         "title": "File:2020 Nissan Murano (United States) front view 01.png",
@@ -4453,6 +4738,7 @@
       "width": 1200,
       "height": 675,
       "generation": "nissan-murano/third-generation-z52-2015",
+      "generationYears": "2015–2024",
       "photoYear": 2020,
       "credit": {
         "title": "File:2020 Nissan Murano (United States) front view 01.png",
@@ -4468,6 +4754,7 @@
       "width": 1200,
       "height": 898,
       "generation": "nissan-murano/third-generation-z52-2015",
+      "generationYears": "2015–2024",
       "photoYear": null,
       "credit": {
         "title": "File:Nissan Murano P4220650.jpg",
@@ -4485,6 +4772,7 @@
       "width": 1200,
       "height": 900,
       "generation": "nissan-pathfinder/nissan-pathfinder-r52",
+      "generationYears": "2013–2020",
       "photoYear": null,
       "credit": {
         "title": "File:Nissan Pathfinder 3.5 Exclusive 4WD 2014 (23907689909).jpg",
@@ -4500,6 +4788,7 @@
       "width": 1200,
       "height": 710,
       "generation": "nissan-pathfinder/nissan-pathfinder-r52",
+      "generationYears": "2013–2020",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Nissan Pathfinder (R52 MY18) ST 2WD wagon (2018-08-06) 01.jpg",
@@ -4515,6 +4804,7 @@
       "width": 1200,
       "height": 760,
       "generation": "nissan-pathfinder/nissan-pathfinder-r53",
+      "generationYears": "2022–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Nissan Pathfinder SV, front 6.2.22.jpg",
@@ -4530,6 +4820,7 @@
       "width": 1200,
       "height": 884,
       "generation": "nissan-pathfinder/nissan-pathfinder-r53",
+      "generationYears": "2022–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Nissan Pathfinder Rock Creek, front right, 02-02-2025.jpg",
@@ -4547,6 +4838,7 @@
       "width": 1200,
       "height": 772,
       "generation": "nissan-rogue/first-generation-s35-2008",
+      "generationYears": "2008–2013",
       "photoYear": 2011,
       "credit": {
         "title": "File:2011 Nissan Rogue S -- 03-31-2011.jpg",
@@ -4562,6 +4854,7 @@
       "width": 1200,
       "height": 795,
       "generation": "nissan-rogue/second-generation-t32-2014",
+      "generationYears": "2014–2020",
       "photoYear": 2017,
       "credit": {
         "title": "File:2017 Nissan Rogue, Front Right, 09-13-2020.jpg",
@@ -4577,6 +4870,7 @@
       "width": 1200,
       "height": 743,
       "generation": "nissan-rogue/third-generation-t33-2021",
+      "generationYears": "2021–2027",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Nissan Rogue.jpg",
@@ -4592,6 +4886,7 @@
       "width": 1200,
       "height": 714,
       "generation": "nissan-rogue/third-generation-t33-2021",
+      "generationYears": "2021–2027",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Nissan Rogue SV Moonroof in Gun Metallic, front right, 2026-06-14.jpg",
@@ -4609,6 +4904,7 @@
       "width": 1200,
       "height": 660,
       "generation": "nissan-sentra/seventh-generation-b17-2012",
+      "generationYears": "2013–2019",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 Nissan Sentra SR in Metallic Blue, Front Right, 06-04-2023.jpg",
@@ -4624,6 +4920,7 @@
       "width": 1200,
       "height": 596,
       "generation": "nissan-sentra/seventh-generation-b17-2012",
+      "generationYears": "2013–2019",
       "photoYear": 2017,
       "credit": {
         "title": "File:2017 Nissan Sentra SV front 4.18.19.jpg",
@@ -4639,6 +4936,7 @@
       "width": 1200,
       "height": 800,
       "generation": "nissan-sentra/eighth-generation-b18-2019",
+      "generationYears": "2020–2025",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Cleveland Auto Show (52790283343).jpg",
@@ -4654,6 +4952,7 @@
       "width": 1200,
       "height": 676,
       "generation": "nissan-sentra/eighth-generation-b18-2019",
+      "generationYears": "2020–2025",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Nissan Sentra SV (facelift), front 11.29.24.jpg",
@@ -4671,6 +4970,7 @@
       "width": 1200,
       "height": 671,
       "generation": "nissan-versa/nissan-versa-sedan-n17-almera",
+      "generationYears": "2012–2019",
       "photoYear": 2012,
       "credit": {
         "title": "File:2012 Nissan Versa SL sedan -- 10-12-2011.jpg",
@@ -4686,6 +4986,7 @@
       "width": 1200,
       "height": 726,
       "generation": "nissan-versa/nissan-versa-sedan-n17-almera",
+      "generationYears": "2012–2019",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Nissan Versa in cyan (resprayed), front left, 10-11-2025.jpg",
@@ -4701,6 +5002,7 @@
       "width": 1200,
       "height": 675,
       "generation": "nissan-versa/nissan-versa-sedan-n18",
+      "generationYears": "2020–2025",
       "photoYear": 2021,
       "credit": {
         "title": "File:2021 Nissan Versa SR (United States) front view.png",
@@ -4716,6 +5018,7 @@
       "width": 1200,
       "height": 675,
       "generation": "nissan-versa/nissan-versa-sedan-n18",
+      "generationYears": "2020–2025",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Nissan Versa front view.jpg",
@@ -4733,6 +5036,7 @@
       "width": 1200,
       "height": 800,
       "generation": "ram-1500/ram-1500-ds",
+      "generationYears": "2009–2018",
       "photoYear": 2012,
       "credit": {
         "title": "File:2012 New York Auto Show (8557430483).jpg",
@@ -4748,6 +5052,7 @@
       "width": 1200,
       "height": 691,
       "generation": "ram-1500/ram-1500-ds",
+      "generationYears": "2009–2018",
       "photoYear": 2017,
       "credit": {
         "title": "File:2017 Ram 1500 Express Crew Cab, front left, 09-02-2022.jpg",
@@ -4763,6 +5068,7 @@
       "width": 1200,
       "height": 770,
       "generation": "ram-1500/ram-1500-dt",
+      "generationYears": "2019–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 RAM 1500 Sport GT in Flame Red, front right, 2026-06-28.jpg",
@@ -4778,6 +5084,7 @@
       "width": 1200,
       "height": 690,
       "generation": "ram-1500/ram-1500-dt",
+      "generationYears": "2019–present",
       "photoYear": 2025,
       "credit": {
         "title": "File:2025 RAM 1500 eTorque Crew Cab Short Box Off-Roader Value Package in Forged Blue Metallic, front left, 2025-08-24.jpg",
@@ -4795,6 +5102,7 @@
       "width": 1200,
       "height": 1002,
       "generation": "subaru-ascent/subaru-ascent",
+      "generationYears": "2019–present",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Subaru Ascent au S.I.A.M. 2023.jpg",
@@ -4810,6 +5118,7 @@
       "width": 1200,
       "height": 1002,
       "generation": "subaru-ascent/subaru-ascent",
+      "generationYears": "2019–present",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Subaru Ascent au S.I.A.M. 2023.jpg",
@@ -4827,6 +5136,7 @@
       "width": 1200,
       "height": 852,
       "generation": "subaru-crosstrek/subaru-crosstrek-gt",
+      "generationYears": "2018–2023",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Subaru Crosstrek.jpg",
@@ -4842,6 +5152,7 @@
       "width": 1200,
       "height": 667,
       "generation": "subaru-crosstrek/subaru-crosstrek-gt",
+      "generationYears": "2018–2023",
       "photoYear": 2021,
       "credit": {
         "title": "File:2021 Subaru Crosstrek Sport in Crystal White Pearl, Front Left, 07-17-2022.jpg",
@@ -4857,6 +5168,7 @@
       "width": 1200,
       "height": 900,
       "generation": "subaru-crosstrek/subaru-crosstrek-gu",
+      "generationYears": "2024–present",
       "photoYear": null,
       "credit": {
         "title": "File:Subaru Crosstrek 2.0i-S Eyesight 2023 (8).jpg",
@@ -4874,6 +5186,7 @@
       "width": 1200,
       "height": 800,
       "generation": "subaru-forester/third-generation-sh-2008",
+      "generationYears": "2009–2013",
       "photoYear": 2012,
       "credit": {
         "title": "File:2012 Washington Auto Show (6802029563).jpg",
@@ -4889,6 +5202,7 @@
       "width": 1200,
       "height": 900,
       "generation": "subaru-forester/fourth-generation-sj-2012",
+      "generationYears": "2014–2018",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Subaru Forester 2.0 i-P (5).jpg",
@@ -4904,6 +5218,7 @@
       "width": 1200,
       "height": 650,
       "generation": "subaru-forester/fifth-generation-sk-2018",
+      "generationYears": "2019–2025",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Subaru Forester Wilderness, front 6.18.22.jpg",
@@ -4919,6 +5234,7 @@
       "width": 1200,
       "height": 649,
       "generation": "subaru-forester/fifth-generation-sk-2018",
+      "generationYears": "2019–2025",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Subaru Forester Sport, front 3.24.23.jpg",
@@ -4936,6 +5252,7 @@
       "width": 1200,
       "height": 698,
       "generation": "subaru-impreza/fourth-generation-gj-gp-2011",
+      "generationYears": "2012–2016",
       "photoYear": 2012,
       "credit": {
         "title": "File:2012 Subaru Impreza sedan -- 2012 DC front.JPG",
@@ -4951,6 +5268,7 @@
       "width": 1200,
       "height": 900,
       "generation": "subaru-impreza/fifth-generation-gk-gt-2016",
+      "generationYears": "2017–2023",
       "photoYear": null,
       "credit": {
         "title": "File:19 Subaru Impreza 2.0i.jpg",
@@ -4966,6 +5284,7 @@
       "width": 1200,
       "height": 900,
       "generation": "subaru-impreza/fifth-generation-gk-gt-2016",
+      "generationYears": "2017–2023",
       "photoYear": null,
       "credit": {
         "title": "File:19 Subaru Impreza 2.0i.jpg",
@@ -4981,6 +5300,7 @@
       "width": 1200,
       "height": 754,
       "generation": "subaru-impreza/sixth-generation-gu-2023",
+      "generationYears": "2024–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Subaru Impreza au SIAM 2023.JPG",
@@ -4998,6 +5318,7 @@
       "width": 1200,
       "height": 704,
       "generation": "subaru-legacy/subaru-legacy-fifth-generation",
+      "generationYears": "2010–2014",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 Subaru Legacy 2.5i Limited in Twilight Blue Metallic, front right, 05-20-2026.jpg",
@@ -5013,6 +5334,7 @@
       "width": 1200,
       "height": 747,
       "generation": "subaru-legacy/subaru-legacy-sixth-generation",
+      "generationYears": "2015–2019",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Subaru Legacy 2.5i Touring in Ice Silver Metallic, front right, 2024-10-28.jpg",
@@ -5028,6 +5350,7 @@
       "width": 1200,
       "height": 866,
       "generation": "subaru-legacy/subaru-legacy-seventh-generation",
+      "generationYears": "2020–2025",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Subaru Legacy au SIAM 2023.JPG",
@@ -5043,6 +5366,7 @@
       "width": 1200,
       "height": 866,
       "generation": "subaru-legacy/subaru-legacy-seventh-generation",
+      "generationYears": "2020–2025",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Subaru Legacy au SIAM 2023.JPG",
@@ -5060,6 +5384,7 @@
       "width": 1200,
       "height": 796,
       "generation": "subaru-outback/fourth-generation-br-bm-2009",
+      "generationYears": "2010–2014",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 Subaru Outback -- 2012 NYIAS.JPG",
@@ -5075,6 +5400,7 @@
       "width": 1200,
       "height": 840,
       "generation": "subaru-outback/fifth-generation-bs-2014",
+      "generationYears": "2015–2019",
       "photoYear": 2019,
       "credit": {
         "title": "File:2019 Subaru Outback 2.5i Limited, front right, 08-27-2024.jpg",
@@ -5090,6 +5416,7 @@
       "width": 1200,
       "height": 787,
       "generation": "subaru-outback/sixth-generation-bt-2019",
+      "generationYears": "2020–2025",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Subaru Outback Premium, front right, 09-09-2023.jpg",
@@ -5105,6 +5432,7 @@
       "width": 1200,
       "height": 656,
       "generation": "subaru-outback/sixth-generation-bt-2019",
+      "generationYears": "2020–2025",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Subaru Outback Convenience in Magnetite Grey Metallic, front left, 2025-05-01.jpg",
@@ -5122,6 +5450,7 @@
       "width": 1200,
       "height": 647,
       "generation": "tesla-model-3/tesla-model-3",
+      "generationYears": "2017–present",
       "photoYear": 2019,
       "credit": {
         "title": "File:2019 Tesla Model 3 Long Range Dual Motor in Red Multi-Coat, front left, 2021-05-30.jpg",
@@ -5137,6 +5466,7 @@
       "width": 1200,
       "height": 683,
       "generation": "tesla-model-3/tesla-model-3",
+      "generationYears": "2017–present",
       "photoYear": 2023,
       "credit": {
         "title": "File:Tesla Model 3 parked, front driver side-height crop.jpg",
@@ -5152,6 +5482,7 @@
       "width": 1200,
       "height": 600,
       "generation": "tesla-model-3/tesla-model-3",
+      "generationYears": "2017–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Tesla Model 3 Performance front view 03.png",
@@ -5169,6 +5500,7 @@
       "width": 1200,
       "height": 711,
       "generation": "tesla-model-s/tesla-model-s",
+      "generationYears": "2012–2026",
       "photoYear": 2014,
       "credit": {
         "title": "File:2014 Tesla Model S P85.jpg",
@@ -5184,6 +5516,7 @@
       "width": 1200,
       "height": 675,
       "generation": "tesla-model-s/tesla-model-s",
+      "generationYears": "2012–2026",
       "photoYear": 2019,
       "credit": {
         "title": "File:2019 Tesla Model S 100D (United States).jpg",
@@ -5199,6 +5532,7 @@
       "width": 1200,
       "height": 900,
       "generation": "tesla-model-s/tesla-model-s",
+      "generationYears": "2012–2026",
       "photoYear": 2021,
       "credit": {
         "title": "File:17 Tesla Model S 75.jpg",
@@ -5214,6 +5548,7 @@
       "width": 1200,
       "height": 792,
       "generation": "tesla-model-s/tesla-model-s",
+      "generationYears": "2012–2026",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Tesla Model S (99028).jpg",
@@ -5231,6 +5566,7 @@
       "width": 1200,
       "height": 805,
       "generation": "tesla-model-x/tesla-model-x",
+      "generationYears": "2016–2026",
       "photoYear": 2017,
       "credit": {
         "title": "File:2017 Tesla Model X 100D in Catalina White, Front Left, 04-30-2023.jpg",
@@ -5246,6 +5582,7 @@
       "width": 1200,
       "height": 900,
       "generation": "tesla-model-x/tesla-model-x",
+      "generationYears": "2016–2026",
       "photoYear": 2016,
       "credit": {
         "title": "File:Tesla Model X P100DL side view.jpg",
@@ -5261,6 +5598,7 @@
       "width": 1200,
       "height": 900,
       "generation": "tesla-model-x/tesla-model-x",
+      "generationYears": "2016–2026",
       "photoYear": 2016,
       "credit": {
         "title": "File:Tesla Model X P100DL side view.jpg",
@@ -5278,6 +5616,7 @@
       "width": 1200,
       "height": 629,
       "generation": "tesla-model-y/tesla-model-y",
+      "generationYears": "2020–present",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Tesla Model Y, front 11.11.23.jpg",
@@ -5293,6 +5632,7 @@
       "width": 1200,
       "height": 596,
       "generation": "tesla-model-y/tesla-model-y",
+      "generationYears": "2020–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Tesla Model Y Long Range, front left, 08-21-2026.jpg",
@@ -5310,6 +5650,7 @@
       "width": 1200,
       "height": 673,
       "generation": "toyota-4runner/fifth-generation-n280-2009",
+      "generationYears": "2010–2024",
       "photoYear": 2014,
       "credit": {
         "title": "File:2014 Toyota 4Runner Limited 4.0L front 4.20.19.jpg",
@@ -5325,6 +5666,7 @@
       "width": 1200,
       "height": 681,
       "generation": "toyota-4runner/fifth-generation-n280-2009",
+      "generationYears": "2010–2024",
       "photoYear": 2019,
       "credit": {
         "title": "File:2019 Toyota 4Runner SR5 4.0L front 6.16.19.jpg",
@@ -5340,6 +5682,7 @@
       "width": 1200,
       "height": 675,
       "generation": "toyota-4runner/fifth-generation-n280-2009",
+      "generationYears": "2010–2024",
       "photoYear": null,
       "credit": {
         "title": "File:Toyota 4Runner GRN280 Limited Magnetic Gray Metallic 01.jpg",
@@ -5355,6 +5698,7 @@
       "width": 1200,
       "height": 675,
       "generation": "toyota-4runner/fifth-generation-n280-2009",
+      "generationYears": "2010–2024",
       "photoYear": null,
       "credit": {
         "title": "File:Toyota 4Runner GRN280 Limited Magnetic Gray Metallic 01.jpg",
@@ -5372,6 +5716,7 @@
       "width": 1200,
       "height": 900,
       "generation": "toyota-bz4x/toyota-bz4x-ea10-pre-facelift",
+      "generationYears": "2023–2025",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Toyota bZ4X EV (1).jpg",
@@ -5389,6 +5734,7 @@
       "width": 1200,
       "height": 500,
       "generation": "toyota-camry/toyota-camry-xv50",
+      "generationYears": "2012–2017",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 Toyota Camry LE in Crème Brûlée Mica, Front Left.jpg",
@@ -5404,6 +5750,7 @@
       "width": 1200,
       "height": 559,
       "generation": "toyota-camry/toyota-camry-xv70",
+      "generationYears": "2018–2024",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Toyota Camry SE front (2) 3.16.18.jpg",
@@ -5419,6 +5766,7 @@
       "width": 1200,
       "height": 839,
       "generation": "toyota-camry/toyota-camry-xv70",
+      "generationYears": "2018–2024",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Toyota Camry XSE, front right, 08-30-2026.jpg",
@@ -5434,6 +5782,7 @@
       "width": 1200,
       "height": 839,
       "generation": "toyota-camry/toyota-camry-xv70",
+      "generationYears": "2018–2024",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Toyota Camry XSE, front right, 08-30-2026.jpg",
@@ -5451,6 +5800,7 @@
       "width": 1200,
       "height": 539,
       "generation": "toyota-corolla/toyota-corolla-e140",
+      "generationYears": "2009–2013",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 Toyota Corolla CE Convenience Package in Barcelona Red Metallic, Front Left, 08-22-2023.jpg",
@@ -5466,6 +5816,7 @@
       "width": 1200,
       "height": 692,
       "generation": "toyota-corolla/toyota-corolla-e170",
+      "generationYears": "2014–2019",
       "photoYear": 2019,
       "credit": {
         "title": "File:2019 Toyota Corolla (facelift), front 3.24.23.jpg",
@@ -5481,6 +5832,7 @@
       "width": 1200,
       "height": 663,
       "generation": "toyota-corolla/toyota-corolla-e210",
+      "generationYears": "2019–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Toyota Corolla L in Classic Silver Metallic, Front Right, 03-20-2022.jpg",
@@ -5496,6 +5848,7 @@
       "width": 1200,
       "height": 900,
       "generation": "toyota-corolla/toyota-corolla-e210",
+      "generationYears": "2019–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Toyota Corolla LE.jpg",
@@ -5513,6 +5866,7 @@
       "width": 1200,
       "height": 689,
       "generation": "toyota-corolla-cross/toyota-corolla-cross",
+      "generationYears": "2022–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Toyota Corolla Cross L AWD, Front Left, 11-21-2021.jpg",
@@ -5528,6 +5882,7 @@
       "width": 1200,
       "height": 765,
       "generation": "toyota-corolla-cross/toyota-corolla-cross",
+      "generationYears": "2022–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Toyota Corolla Cross LE AWD in Wind Chill Pearl, front left.jpg",
@@ -5545,6 +5900,7 @@
       "width": 1200,
       "height": 691,
       "generation": "toyota-grand-highlander/toyota-grand-highlander",
+      "generationYears": "2024–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Toyota Grand Highlander Platinum Hybrid Max, front NYIAS 2023.jpg",
@@ -5562,6 +5918,7 @@
       "width": 1200,
       "height": 532,
       "generation": "toyota-highlander/toyota-highlander-xu40",
+      "generationYears": "2008–2013",
       "photoYear": 2012,
       "credit": {
         "title": "File:2012 Toyota Highlander SE, Front Left, 09-24-2020.jpg",
@@ -5577,6 +5934,7 @@
       "width": 1200,
       "height": 744,
       "generation": "toyota-highlander/toyota-highlander-xu50",
+      "generationYears": "2014–2019",
       "photoYear": 2019,
       "credit": {
         "title": "File:2019 Toyota Highlander SE in Blizzard Pearl, front left, 07-02-2026.jpg",
@@ -5592,6 +5950,7 @@
       "width": 1200,
       "height": 901,
       "generation": "toyota-highlander/toyota-highlander-xu70",
+      "generationYears": "2020–2026",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Toyota Highlander XLE 3.5.jpg",
@@ -5607,6 +5966,7 @@
       "width": 1200,
       "height": 731,
       "generation": "toyota-highlander/toyota-highlander-xu70",
+      "generationYears": "2020–2026",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Toyota Highlander LE AWD in Magnetic Gray Met., front left.jpg",
@@ -5624,6 +5984,7 @@
       "width": 1200,
       "height": 900,
       "generation": "toyota-prius/toyota-prius-xw30",
+      "generationYears": "2010–2015",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013-07-12 10 45 51 A Prius in the Wilderness... on Charleston-Jarbidge Road (Elko County Route 748) at Coon Creek Summit, Nevada (sign in background).JPG",
@@ -5639,6 +6000,7 @@
       "width": 1200,
       "height": 800,
       "generation": "toyota-prius/toyota-prius-xw50",
+      "generationYears": "2016–2022",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Toyota Prius (facelift).jpg",
@@ -5654,6 +6016,7 @@
       "width": 1200,
       "height": 900,
       "generation": "toyota-prius/toyota-prius-xw50",
+      "generationYears": "2016–2022",
       "photoYear": null,
       "credit": {
         "title": "File:Toyota PRIUS S (DAA-ZVW50-AHXEB) & PRIUS S\"Touring Selection\" (DAA-ZVW51-AHXEB(T)) front.jpg",
@@ -5669,6 +6032,7 @@
       "width": 1200,
       "height": 784,
       "generation": "toyota-prius/fifth-generation-xw60-2022",
+      "generationYears": "2023–present",
       "photoYear": 2025,
       "credit": {
         "title": "File:2025 Toyota Prius LE, front right, 09-06-2025.jpg",
@@ -5686,6 +6050,7 @@
       "width": 1200,
       "height": 732,
       "generation": "toyota-prius-prime/toyota-prius-prime-xw50",
+      "generationYears": "2017–2022",
       "photoYear": 2017,
       "credit": {
         "title": "File:2017 Toyota Prius Prime front 6.20.18.jpg",
@@ -5701,6 +6066,7 @@
       "width": 1200,
       "height": 732,
       "generation": "toyota-prius-prime/toyota-prius-prime-xw50",
+      "generationYears": "2017–2022",
       "photoYear": 2017,
       "credit": {
         "title": "File:2017 Toyota Prius Prime front 6.20.18.jpg",
@@ -5716,6 +6082,7 @@
       "width": 1200,
       "height": 900,
       "generation": "toyota-prius-prime/toyota-prius-prime-prius-plug-in-hybrid-xw60",
+      "generationYears": "2023–present",
       "photoYear": 2026,
       "credit": {
         "title": "File:2026 Prius Plug-in Hybrid plugged into a charging station 2.jpg",
@@ -5733,6 +6100,7 @@
       "width": 1200,
       "height": 900,
       "generation": "toyota-rav4/fourth-generation-xa40-2012",
+      "generationYears": "2013–2018",
       "photoYear": 2012,
       "credit": {
         "title": "File:15 Toyota RAV4 Limited.jpg",
@@ -5748,6 +6116,7 @@
       "width": 1200,
       "height": 754,
       "generation": "toyota-rav4/fourth-generation-xa40-2012",
+      "generationYears": "2013–2018",
       "photoYear": 2016,
       "credit": {
         "title": "File:2016 Toyota RAV4 XLE AWD, front left, 11-15-2022.jpg",
@@ -5763,6 +6132,7 @@
       "width": 1200,
       "height": 578,
       "generation": "toyota-rav4/fifth-generation-xa50-2018",
+      "generationYears": "2019–2025",
       "photoYear": 2021,
       "credit": {
         "title": "File:2021 Toyota RAV4 XLE AWD, front right.jpg",
@@ -5778,6 +6148,7 @@
       "width": 1200,
       "height": 900,
       "generation": "toyota-rav4/fifth-generation-xa50-2018",
+      "generationYears": "2019–2025",
       "photoYear": null,
       "credit": {
         "title": "File:19 Toyota RAV4 LE.jpg",
@@ -5795,6 +6166,7 @@
       "width": 1200,
       "height": 718,
       "generation": "toyota-rav4-prime/toyota-rav4-prime-xa50",
+      "generationYears": "2021–2025",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Toyota RAV4 Prime XSE Premium in Silver Sky with Midnight Black roof, front left.jpg",
@@ -5810,6 +6182,7 @@
       "width": 1200,
       "height": 718,
       "generation": "toyota-rav4-prime/toyota-rav4-prime-xa50",
+      "generationYears": "2021–2025",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Toyota RAV4 Prime XSE Premium in Silver Sky with Midnight Black roof, front left.jpg",
@@ -5827,6 +6200,7 @@
       "width": 1200,
       "height": 597,
       "generation": "toyota-sienna/third-generation-xl30-2010",
+      "generationYears": "2011–2020",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 Toyota Sienna, front 8.11.19.jpg",
@@ -5842,6 +6216,7 @@
       "width": 1200,
       "height": 753,
       "generation": "toyota-sienna/third-generation-xl30-2010",
+      "generationYears": "2011–2020",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Toyota Sienna XLE front 6.20.18.jpg",
@@ -5857,6 +6232,7 @@
       "width": 1200,
       "height": 778,
       "generation": "toyota-sienna/fourth-generation-xl40-2020",
+      "generationYears": "2021–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Toyota Sienna XSE, front 3.29.22.jpg",
@@ -5872,6 +6248,7 @@
       "width": 1200,
       "height": 778,
       "generation": "toyota-sienna/fourth-generation-xl40-2020",
+      "generationYears": "2021–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Toyota Sienna XSE, front 3.29.22.jpg",
@@ -5889,6 +6266,7 @@
       "width": 1200,
       "height": 867,
       "generation": "toyota-tacoma/second-generation-n220-n240-n250-n260-n270-2004",
+      "generationYears": "2005–2015",
       "photoYear": 2012,
       "credit": {
         "title": "File:2012 Toyota Tacoma -- 10-19-2011.jpg",
@@ -5904,6 +6282,7 @@
       "width": 1200,
       "height": 633,
       "generation": "toyota-tacoma/third-generation-n240-n260-n300-n310-n320-n330-2015",
+      "generationYears": "2016–2023",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Toyota Tacoma TRD Sport Double Cab 3.5L front, Hagerty 6.1.19.jpg",
@@ -5919,6 +6298,7 @@
       "width": 1200,
       "height": 608,
       "generation": "toyota-tacoma/third-generation-n240-n260-n300-n310-n320-n330-2015",
+      "generationYears": "2016–2023",
       "photoYear": 2019,
       "credit": {
         "title": "File:2019 Toyota Tacoma SR5 4WD Access Cab, front right.jpg",
@@ -5934,6 +6314,7 @@
       "width": 1200,
       "height": 675,
       "generation": "toyota-tacoma/fourth-generation-n400-2023",
+      "generationYears": "2024–present",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Toyota Tacoma TRD Sport front view.jpg",
@@ -5951,6 +6332,7 @@
       "width": 1200,
       "height": 900,
       "generation": "toyota-tundra/second-generation-xk50-2006",
+      "generationYears": "2007–2021",
       "photoYear": 2013,
       "credit": {
         "title": "File:General Taylor Street, Uptown New Orleans 26 December 2024 - 17.jpg",
@@ -5966,6 +6348,7 @@
       "width": 1200,
       "height": 733,
       "generation": "toyota-tundra/second-generation-xk50-2006",
+      "generationYears": "2007–2021",
       "photoYear": 2017,
       "credit": {
         "title": "File:2017 Toyota Tundra SR 4WD Double Cab in Super White, front right.jpg",
@@ -5981,6 +6364,7 @@
       "width": 1200,
       "height": 674,
       "generation": "toyota-tundra/third-generation-xk70-2021",
+      "generationYears": "2022–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Toyota Tundra 1794 Edition TRD Crew Cab 4X4 in Celestial Silver, front left.jpg",
@@ -5996,6 +6380,7 @@
       "width": 1200,
       "height": 773,
       "generation": "toyota-tundra/third-generation-xk70-2021",
+      "generationYears": "2022–present",
       "photoYear": 2025,
       "credit": {
         "title": "File:2025 Toyota Tundra 4WD Las Vegas Fall 2026.jpg",
@@ -6013,6 +6398,7 @@
       "width": 1200,
       "height": 595,
       "generation": "volkswagen-atlas/volkswagen-atlas-first-generation-ca1",
+      "generationYears": "2018–2026",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Volkswagen Atlas SE, front 3.24.23.jpg",
@@ -6028,6 +6414,7 @@
       "width": 1200,
       "height": 659,
       "generation": "volkswagen-atlas/volkswagen-atlas-first-generation-ca1",
+      "generationYears": "2018–2026",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Volkswagen Atlas Cross Sport Trendline in Pure White, Front Left, 01-16-2023.jpg",
@@ -6043,6 +6430,7 @@
       "width": 1200,
       "height": 796,
       "generation": "volkswagen-atlas/volkswagen-atlas-first-generation-ca1",
+      "generationYears": "2018–2026",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Volkswagen Atlas 4Motion SEL Premium R-Line in Opal White.jpg",
@@ -6060,6 +6448,7 @@
       "width": 1200,
       "height": 633,
       "generation": "volkswagen-id-4/volkswagen-id-4",
+      "generationYears": "2021–2026",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Volkswagen ID.4 Pro S, front left, 08-03-2024 (cropped).jpg",
@@ -6075,6 +6464,7 @@
       "width": 1200,
       "height": 633,
       "generation": "volkswagen-id-4/volkswagen-id-4",
+      "generationYears": "2021–2026",
       "photoYear": 2023,
       "credit": {
         "title": "File:2023 Volkswagen ID.4 Pro S, front left, 08-03-2024 (cropped).jpg",
@@ -6092,6 +6482,7 @@
       "width": 1200,
       "height": 680,
       "generation": "volkswagen-jetta/volkswagen-jetta-a6",
+      "generationYears": "2011–2018",
       "photoYear": 2013,
       "credit": {
         "title": "File:2013 Volkswagen Jetta Trendline+ in Platinum Grey Metallic, front left, 2024-11-01.jpg",
@@ -6107,6 +6498,7 @@
       "width": 1200,
       "height": 637,
       "generation": "volkswagen-jetta/volkswagen-jetta-a6",
+      "generationYears": "2011–2018",
       "photoYear": 2016,
       "credit": {
         "title": "File:2016 Volkswagen Jetta S TSI, front right, 09-02-2022.jpg",
@@ -6122,6 +6514,7 @@
       "width": 1200,
       "height": 692,
       "generation": "volkswagen-jetta/volkswagen-jetta-a7",
+      "generationYears": "2019–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Volkswagen Jetta Comfortline Sport in Platinum Grey Metallic, Front Right, 04-24-2022.jpg",
@@ -6137,6 +6530,7 @@
       "width": 1200,
       "height": 650,
       "generation": "volkswagen-jetta/volkswagen-jetta-a7",
+      "generationYears": "2019–present",
       "photoYear": 2025,
       "credit": {
         "title": "File:2025 Volkswagen Jetta in Monterey Blue Pearl, front right, 04-26-2025.jpg",
@@ -6154,6 +6548,7 @@
       "width": 1200,
       "height": 856,
       "generation": "volkswagen-taos/volkswagen-taos",
+      "generationYears": "2022–present",
       "photoYear": 2022,
       "credit": {
         "title": "File:2022 Volkswagen Taos SE 4Motion, front right, 05-24-2026.jpg",
@@ -6169,6 +6564,7 @@
       "width": 1200,
       "height": 748,
       "generation": "volkswagen-taos/volkswagen-taos",
+      "generationYears": "2022–present",
       "photoYear": 2025,
       "credit": {
         "title": "File:2025 Volkswagen Taos 4motion SE in Deep Black Pearl, front left.jpg",
@@ -6186,6 +6582,7 @@
       "width": 1200,
       "height": 750,
       "generation": "volkswagen-tiguan/volkswagen-tiguan-5n-first-generation",
+      "generationYears": "2009–2018",
       "photoYear": 2012,
       "credit": {
         "title": "File:2012 Volkswagen Tiguan -- 03-16-2012 1.JPG",
@@ -6201,6 +6598,7 @@
       "width": 1200,
       "height": 840,
       "generation": "volkswagen-tiguan/volkswagen-tiguan-ad-bw-second-generation-north-america-lwb",
+      "generationYears": "2018–2024",
       "photoYear": 2018,
       "credit": {
         "title": "File:2018 Volkswagen Tiguan S 4Motion (US), front left.jpg",
@@ -6216,6 +6614,7 @@
       "width": 1200,
       "height": 900,
       "generation": "volkswagen-tiguan/volkswagen-tiguan-ad-bw-second-generation-north-america-lwb",
+      "generationYears": "2018–2024",
       "photoYear": null,
       "credit": {
         "title": "File:20 Volkswagen Tiguan SEL 4Motion.jpg",
@@ -6231,6 +6630,7 @@
       "width": 1200,
       "height": 754,
       "generation": "volkswagen-tiguan/volkswagen-tiguan-ad-bw-second-generation-north-america-lwb",
+      "generationYears": "2018–2024",
       "photoYear": 2024,
       "credit": {
         "title": "File:2024 Volkswagen Tiguan 4Motion SE R-Line Black, rear left.jpg",
