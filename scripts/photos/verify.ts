@@ -2,8 +2,10 @@
  * Step 5: verify and pick. For each model year a car page shows, choose a
  * photo of the right generation, checked by Jev, with its credit and license.
  *
- *   npm run with:secrets -- npm run photos:verify                 every car
- *   npm run with:secrets -- npm run photos:verify -- honda-civic   one or more cars
+ *   npm run photos:verify                 every car
+ *   npm run photos:verify -- honda-civic   one or more cars
+ *
+ * Needs OPENROUTER_API_KEY in the environment.
  *
  * A photo is used only when two independent signals agree: Commons files it
  * under the generation, and Jev, seeing only the image, names that generation
