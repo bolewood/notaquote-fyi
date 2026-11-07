@@ -99,6 +99,56 @@ HLDI publishes a new three-year window of insurance loss results by make and mod
    - The worked example on `/methodology#why-percentages-differ` still reads right (it's generated from the Legacy page). If the Legacy no longer has model-level results, switch the example to another car and update `docs/hldi-review.md`.
 7. **Ship.** Add a CHANGELOG entry and a line on the What's changed page ("Car results now use HLDI's 2023–25 models"), open a PR titled "HLDI refresh (YEAR)", and tag the merge commit `data-YEAR.01`.
 
+## Photo library
+
+Each car page will get a credited, openly licensed photo of the right generation of the car. Before any photo, the library maps every model year to a generation, from sources anyone can check:
+
+- `data/photos/series.json` (hand-maintained): each car's English Wikipedia article and Wikidata item, plus any hand entries (below). Scripts add new cars but never overwrite an entry.
+- `data/photos/generations.json` (generated): each car's generations with US model years, the Wikipedia article and revision they come from, and the Commons category for its photos. Don't edit it; fix the car in `series.json` and regenerate.
+- `data/photos/coverage.json` and `docs/photo-coverage.md` (generated): every catalog model year mapped to one generation, with gaps, overlaps, split years, facelift evidence and "Needs attention".
+
+Requests go to Wikipedia, Wikidata and Commons one at a time, with a User-Agent that names this repo, and are cached in `data/photos/.cache/` (not committed; delete it to refetch).
+
+### Adding a car
+
+1. Add it to `data/car-pages.json` as usual (step 7 above).
+2. Run `npm run photos:add -- <slug>`. It finds the car's article, reads its generations and US model years, and rebuilds the coverage report.
+3. Read the car's lines under "Needs attention" in `docs/photo-coverage.md`. Most cars need nothing. If something's flagged, fix it in the car's `series.json` entry:
+   - **Wrong article** (a shared name, an overview article): set `wikipedia` and `wikidata` to the right ones, then run `photos:add` again.
+   - **Generations the parser can't read** (one name covering different vehicles, an article without US model years): list them under `generations`, each with `label`, `from`, `to` (null if still on sale), `article`, `commons`, and a `source`, a quote or URL for the US model years. Hand-entered years without a source are flagged.
+   - **A badge twin** (GMC Canyon and Chevrolet Colorado, Yukon and Tahoe, Escalade): the shared article gives the right years, but the photos must carry this car's badge. Give each generation its own brand's `commons` category, and list the other car's slug under `twins` (on both cars), so the photo review can tell them apart. A `commons` set by hand is always kept, even a whole-model one, so add a `note` saying why.
+   - **Sections that aren't this car** (an electric spin-off, a Raptor): add a pattern to `exclude`.
+   - **Catalog years the US model wasn't sold** (a skipped year, a listing ahead of launch): `notSold` with `years`, `note` and `source`.
+   - Set `status` to `"checked"` once a person or a review has confirmed the entry.
+4. Look at the car's row in the "Every car" table. Busy Commons categories keep their photos in subcategories (by year, body style or market), so the table counts usable files one level down too. Some go deeper: the US Camry XV50 photos are three levels down, under "Toyota Camry (XV50, North America, 2011)" and "(…, 2014)". A shown generation with almost no files may need a better category.
+5. Run `npm test`. The photo-library test fails if any year a car page shows has no generation, or no Commons category.
+
+### Choosing the photos
+
+Two more steps pick a photo for every model year a car page shows. Both need `OPENROUTER_API_KEY`, which comes from 1Password: run them through `npm run with:secrets -- …`. Never print the key.
+
+1. `npm run photos:candidates [-- <slug>…]` lists the openly licensed photos (public domain, CC0, CC BY, CC BY-SA) in each shown generation's Commons category and the usable subcategories under it, up to four levels down. It skips racing, police, taxi, concept and other-market subcategories, and files under 1200×700. The list goes to `data/photos/.cache/` (not committed).
+2. `npm run with:secrets -- npm run photos:verify [-- <slug>…]` asks Jev (TypeSafe's decision model, through OpenRouter) about candidates, best first. Jev sees only the image, never the filename or category, and answers:
+   - which generation of the car this is, or a badge twin, a different model, or no single car;
+   - whether it shows the outside of one whole car, a recognizable face or a readable plate;
+   - whether it's a taxi, police car, race car or wreck, and how good the photo is.
+
+   A photo is used only when Commons and Jev agree on the generation, Jev's confidence is at least `GATE` in `scripts/photos/verify.ts`, it shows a whole car, and nobody's face is recognizable. Photos from near a shown year are reviewed first, and each shown year gets the accepted photo nearest to its year, so a year after a facelift gets the facelifted car. Accepted photos get one more question (is the car registered outside the US and Canada?). Each year then takes the best-suited photo (`suitability()` in `verify.ts`): close in model year, a US or Canadian car, not a rear view, no readable plate, and a good photo. Verify keeps reviewing (up to 150 photos) while a shown year has no well-suited photo within two years of it. The result, with credit, license and the exact file version, is `data/photos/manifest.json`.
+
+   Some generations look so much like their neighbors that Jev is rarely sure (the 2017–2022 Prius Prime, several Subarus). If a generation has no photo at `GATE` after 150 reviews, verify takes one at `FALLBACK_GATE` where Commons and Jev still agree, and lists it at the end of its output as "worth a look". Open those on Commons before a release.
+
+3. `npm run photos:download` brings the repo in line with the manifest: one WebP per chosen photo in `public/car-photos/` (1200 pixels wide, named by the Commons file's sha1, with EXIF and GPS data removed), and `data/photos/images.json`, which says which photo each car page year shows and its credit (title, author, license, Commons page, "Resized and converted to WebP"). It first checks each pick is still on Commons with the same sha1 and a usable license; one that isn't is left out and listed, so rerun `photos:verify` for that car. It deletes photos the manifest no longer uses, and rerunning it with nothing changed downloads nothing. Run it monthly too: Commons sometimes deletes a file (often a dealer photo uploaded without permission), and a file with a pending deletion request is left out before that happens.
+
+   Wherever a photo appears on the site, show its credit: the author, the license (linked to `licenseUrl`) and a link to the Commons page (`source`). CC BY and CC BY-SA require it, and `images.json` has all of it for each photo.
+
+Answers are cached by file, so rerunning costs nothing; a fresh review of every car costs about a dollar.
+
+**Changing the model or the questions.** The model is pinned in `scripts/photos/jev.ts` (with the endpoint, an OpenRouter alpha; if it moves, that file is the only one to change). Before changing either, run `npm run with:secrets -- npm run photos:eval`. It asks the same questions about photos whose answer Commons already knows, on hard cases (neighboring generations, badge twins, plug-in versions), and reports how often an answer at each confidence is right. Set `GATE` from that table, and look at the disagreements yourself: Commons is sometimes the one that's wrong.
+
+### Each fall (new model years)
+
+After the vehicle catalog refresh (step 2 of the annual refresh), run `npm run photos:generations` and then `npm run photos:coverage`. New model years show up as gaps, or past the end of a generation still marked "present". Wikipedia usually has the new generation by then; if not, add a hand entry with a manufacturer source, or wait. Then work through "Recheck each fall" in `docs/photo-coverage.md`: `notSold` years that were predictions, generations that ended recently (did a new model year appear?), and entries a review marked `confidence: "medium"`. Update or clear each one.
+
 ## Changelog rules
 
 - **`CHANGELOG.md`** (repo) records every release that changes data or math. Newest first, dated, grouped as *Data*, *Math*, *Site*. It's for contributors and anyone auditing a number.

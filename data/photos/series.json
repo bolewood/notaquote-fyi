@@ -1,0 +1,2350 @@
+{
+  "acura-integra": {
+    "wikipedia": "Acura Integra (2023)",
+    "wikidata": "Q1426408",
+    "status": "checked",
+    "note": "'Acura Integra' redirects to 'Honda Integra' (the 1986–2006 car). The fifth-generation section there points ({{main}}) to 'Acura Integra (2023)', which is the right article.",
+    "generations": [
+      {
+        "label": "Acura Integra (DE4/DE5)",
+        "from": 2023,
+        "to": null,
+        "article": "Acura Integra (2023)",
+        "commons": "Acura Integra DE4",
+        "source": "Infobox model_years: \"2023–present\" (Acura Integra (2023))",
+        "note": "Acura-badged category; its subcategory 'Acura Integra Type S' (DE5, 14 files) adds more photos. The 2026 refresh is in the same generation. Don't use Honda Integra/Civic categories."
+      }
+    ]
+  },
+  "acura-mdx": {
+    "wikipedia": "Acura MDX",
+    "wikidata": "Q1422815",
+    "status": "checked",
+    "generations": [
+      {
+        "label": "Acura MDX (first generation, YD1)",
+        "from": 2001,
+        "to": 2006,
+        "article": "Acura MDX",
+        "section": "First generation (YD1; 2001)",
+        "commons": "Acura MDX (1st generation)",
+        "source": "Infobox model_years: \"2001–2006\" (Acura MDX, First generation section)"
+      },
+      {
+        "label": "Acura MDX (second generation, YD2)",
+        "from": 2007,
+        "to": 2013,
+        "article": "Acura MDX",
+        "section": "Second generation (YD2; 2007)",
+        "commons": "Acura MDX (2nd generation)",
+        "source": "Infobox model_years: \"2007–2013\" (Acura MDX, Second generation section)"
+      },
+      {
+        "label": "Acura MDX (third generation, YD3/4/7)",
+        "from": 2014,
+        "to": 2020,
+        "article": "Acura MDX",
+        "section": "Third generation (YD3/4/7; 2014)",
+        "commons": "Acura MDX (3rd generation)",
+        "source": "Infobox model_years: \"2014–2020\" (Acura MDX, Third generation section)"
+      },
+      {
+        "label": "Acura MDX (fourth generation, YD8/9/YE1)",
+        "from": 2022,
+        "to": null,
+        "article": "Acura MDX",
+        "section": "Fourth generation (YD8/9/YE1; 2022)",
+        "commons": "Acura MDX (4th generation)",
+        "source": "Infobox model_years: \"2022–present\" (Acura MDX, Fourth generation section); fueleconomy.gov lists MDX 2022–2026"
+      }
+    ],
+    "notSold": {
+      "years": [
+        2021
+      ],
+      "note": "Acura skipped the 2021 model year for the MDX: the 2020 third generation was followed directly by the 2022 fourth generation.",
+      "source": "Acura MDX article, Fourth generation: 'Skipping the 2021 model year, the fourth-generation MDX ... went into bulk production on January 12, 2021, for the 2022 model year'; fueleconomy.gov has no 2021 MDX"
+    }
+  },
+  "acura-rdx": {
+    "wikipedia": "Acura RDX",
+    "wikidata": "Q344792",
+    "status": "auto"
+  },
+  "audi-q5": {
+    "wikipedia": "Audi Q5",
+    "wikidata": "Q758769",
+    "status": "checked",
+    "note": "2025 split year: fueleconomy.gov's 2025 Audi list mixes FY names ('Q5 Plug-In Hybrid quattro', 'Q5 Sportback S line quattro') with GU names ('Q5 TFSI quattro', 'Q5 Sportback TFSI quattro'). The FY's first US model year (2018) comes from article text ('launched in North America in 2018').",
+    "generations": [
+      {
+        "label": "Audi Q5 (8R, first generation)",
+        "from": 2009,
+        "to": 2017,
+        "article": "Audi Q5",
+        "section": "First generation (Typ 8R; 2008)",
+        "commons": "Audi Q5 8R",
+        "source": "Article: \"The US model went on sale in March 2009 as a 2009 model year vehicle.\" (infobox has production only: \"July 2008–2017\")",
+        "note": "2013 facelift subcategory 'Audi Q5 (2012)'; pre-facelift 'Audi Q5 (2008)'."
+      },
+      {
+        "label": "Audi Q5 (FY, second generation)",
+        "from": 2018,
+        "to": 2025,
+        "article": "Audi Q5",
+        "section": "Second generation (Typ FY; 2016)",
+        "commons": "Audi Q5 FY",
+        "source": "Article, North America: \"The second generation Q5 was launched in North America in 2018\"; third-generation section: \"launched in April 2025 as the 'All-New' 2025 Audi Q5 alongside the previous generation 2025 model year in North America\" (citing https://www.caranddriver.com/reviews/a65009609/2025-audi-q5-sq5-drive/)",
+        "note": "Split year 2025: the FY was sold as a 2025 model alongside the all-new GU 2025 Q5. 2021 facelift (US 2021 MY) is in subcategory 'Audi Q5 (2021)'. The category also holds the Chinese Q5L; exclude it."
+      },
+      {
+        "label": "Audi Q5 (GU, third generation)",
+        "from": 2025,
+        "to": null,
+        "article": "Audi Q5",
+        "section": "Third generation (Type GU; 2025)",
+        "commons": "Audi Q5 GU",
+        "source": "Infobox model_years: \"2025–present\"; \"launched in April 2025 as the 'All-New' 2025 Audi Q5 alongside the previous generation 2025 model year in North America\"",
+        "note": "Split year 2025 (see FY)."
+      }
+    ]
+  },
+  "bmw-330i": {
+    "wikipedia": "BMW 3 Series",
+    "wikidata": "Q466066",
+    "status": "auto"
+  },
+  "bmw-x3": {
+    "wikipedia": "BMW X3",
+    "wikidata": "Q796780",
+    "status": "checked",
+    "note": "Commons files X3 generations under BMW chassis codes (BMW E83/F25/G01/G45). The parser's 'no Commons' for F25/G01 was wrong. A 2027 X3 is confirmed (BMW USA announced the 2027 X3 M50 xDrive; https://www.auto123.com/en/news/2027-bmw-x3-m50-xdrive-debuts/74276/).",
+    "generations": [
+      {
+        "label": "BMW X3 (E83)",
+        "from": 2004,
+        "to": 2010,
+        "article": "BMW X3",
+        "section": "First generation (E83; 2003)",
+        "commons": "BMW E83",
+        "source": "Infobox model_years: \"2004–2010\"",
+        "note": "The US got the facelift (LCI) for the 2007 model year. Subcategory: X3 Cross Country (E83). 'BMW X3 (E83)' exists but is empty."
+      },
+      {
+        "label": "BMW X3 (F25)",
+        "from": 2011,
+        "to": 2017,
+        "article": "BMW X3",
+        "section": "Second generation (F25; 2010)",
+        "commons": "BMW F25",
+        "source": "Infobox model_years: \"2011–2017\"",
+        "note": "Avoid the 'Alpina XD3 (F25)', police and development-mule subcategories."
+      },
+      {
+        "label": "BMW X3 (G01)",
+        "from": 2018,
+        "to": 2024,
+        "article": "BMW X3",
+        "section": "Third generation (G01; 2017)",
+        "commons": "BMW G01",
+        "source": "Infobox model_years: \"2018–2024\"",
+        "note": "Avoid the 'BMW G08' subcategory: that is the China-built iX3 EV. Subcategories also include X3 M, M40i, 30e and Alpina."
+      },
+      {
+        "label": "BMW X3 (G45)",
+        "from": 2025,
+        "to": null,
+        "article": "BMW X3 (G45)",
+        "commons": "BMW G45",
+        "source": "Infobox model_years: \"2025–present\" (BMW X3 (G45)); BMW X3 article: 'sales commenced in late 2024 for the 2025 model year in the North American ... markets'",
+        "note": "Avoid the development-mule subcategory. Don't use the iX3 (NA5) categories: it is a separate electric model."
+      }
+    ]
+  },
+  "bmw-x5": {
+    "wikipedia": "BMW X5",
+    "wikidata": "Q796778",
+    "status": "checked",
+    "note": "Wikipedia's per-generation infoboxes give 2000–2007 and 2007–2014, overlapping at 2007 and 2014. fueleconomy.gov's 2007 list has only E70 trims (3.0si/4.8i), so E53 ends at 2006. For 2014 I used the F15 (E70 production ended July 2013; no E70 trims, X5 M included, are listed for 2014). Commons uses bare chassis codes ('BMW E53', not 'BMW X5 (E53)').",
+    "generations": [
+      {
+        "label": "BMW X5 (E53)",
+        "from": 2000,
+        "to": 2006,
+        "article": "BMW X5 (E53)",
+        "commons": "BMW E53",
+        "source": "E53 infobox model_years \"2000–2007\" but production \"September 1999 – September 2006\"; Autoblog's generations overview lists E53 as 2000–2006 model years (https://www.autoblog.com/features/bmw-x5-generations-overview); fueleconomy.gov lists only 'X5 3.0si' and 'X5 4.8i' (E70 trims) for 2007 BMW.",
+        "note": "Not a split year in 2007: E53 production ended in September 2006, and the US 2007 X5 was the E70 (launched late 2006). The infobox's '2007' end looks like a production/European convention. 'BMW X5 (E53)' on Commons exists but is empty (0 files), so use 'BMW E53'."
+      },
+      {
+        "label": "BMW X5 (E70)",
+        "from": 2007,
+        "to": 2013,
+        "article": "BMW X5 (E70)",
+        "commons": "BMW E70",
+        "source": "E70 infobox model_years \"2007–2014\", production \"7 July 2006 – 28 July 2013\"; Autoblog lists E70 as 2007–2013; fueleconomy.gov 2014 BMW list includes 'X5 sDrive35i' (F15-only trim) and no X5 M.",
+        "note": "The infobox's 2014 end isn't supported for the US: E70 production ended July 2013, the fueleconomy.gov 2014 list has no X5 M, and it includes the F15-only sDrive35i, so the US 2014 X5 is the F15. 'BMW X5 (E70)' on Commons is empty; use 'BMW E70'. The 2011 LCI facelift is the same generation."
+      },
+      {
+        "label": "BMW X5 (F15)",
+        "from": 2014,
+        "to": 2018,
+        "article": "BMW X5 (F15)",
+        "commons": "BMW F15",
+        "source": "F15 infobox model_years: \"2014–2018\""
+      },
+      {
+        "label": "BMW X5 (G05)",
+        "from": 2019,
+        "to": 2026,
+        "article": "BMW X5 (G05)",
+        "commons": "BMW G05",
+        "source": "G05 infobox model_years: \"2019–2026\"",
+        "note": "LCI facelift for MY2024 is the same generation."
+      },
+      {
+        "label": "BMW X5 (G65)",
+        "from": 2027,
+        "to": null,
+        "article": "BMW X5 (G65)",
+        "commons": "BMW G65",
+        "source": "G65 infobox model_years: \"2027\"; production \"August 2026 – present\"",
+        "note": "'BMW G65' has 0 files and 2 subcategories ('BMW G65 X5 M60e' is empty; 'BMW iX5' is the electric variant). There are effectively no photos yet. Fall back to the parent 'BMW X5' or wait."
+      }
+    ]
+  },
+  "buick-enclave": {
+    "wikipedia": "Buick Enclave",
+    "wikidata": "Q24055",
+    "status": "checked",
+    "note": "The parent 'Buick Enclave' category has 0 files directly; use the generation subcategories.",
+    "generations": [
+      {
+        "label": "Buick Enclave (Lambda)",
+        "from": 2008,
+        "to": 2017,
+        "article": "Buick Enclave",
+        "section": "First generation (2008)",
+        "commons": "Buick Enclave (Lambda)",
+        "source": "Infobox model_years: \"2008–2017\"",
+        "note": "2013 refresh is in the same generation."
+      },
+      {
+        "label": "Buick Enclave (C1XX)",
+        "from": 2018,
+        "to": 2024,
+        "article": "Buick Enclave",
+        "section": "Second generation (2018) / North America (2018)",
+        "commons": "Buick Enclave (C1XX)",
+        "source": "Infobox model_years: \"2018–2024\" (North America (2018) sub-infobox)",
+        "note": "Avoid the 'Buick Enclave (China)' subcategory: it is a different, shorter vehicle. 'Enclave Avenir (C1XX)' is fine."
+      },
+      {
+        "label": "Buick Enclave (third generation)",
+        "from": 2025,
+        "to": null,
+        "article": "Buick Enclave",
+        "section": "Third generation (2025)",
+        "commons": "Buick Enclave (C1XX-2)",
+        "source": "Infobox model_years: \"2025–present\"",
+        "note": "I checked the files: all are 2025 Enclaves. The 2027 Enclave is a carryover (GM Authority: production began July 2026 at Lansing Delta Township)."
+      }
+    ],
+    "notSold": {
+      "years": [
+        2007
+      ],
+      "note": "There was no 2007 model year: the Enclave went on sale in calendar 2007 as a 2008 model.",
+      "source": "Buick Enclave article: 'Sales in the United States and Canada began in 2007 during the 2008 model year'; infobox model_years \"2008–present\""
+    }
+  },
+  "buick-encore-gx": {
+    "wikipedia": "Buick Encore GX",
+    "wikidata": "Q65046637",
+    "status": "auto"
+  },
+  "buick-envista": {
+    "wikipedia": "Buick Envista",
+    "wikidata": "Q113659133",
+    "status": "auto"
+  },
+  "cadillac-escalade": {
+    "wikipedia": "Cadillac Escalade",
+    "wikidata": "Q830369",
+    "status": "checked",
+    "note": "All categories are Cadillac-badged. The XX-suffixed categories are empty shells; the UL (short-wheelbase) categories hold the photos. ESV categories are separate (e.g. 'Cadillac Escalade ESV (GMTT1YL)').",
+    "generations": [
+      {
+        "label": "Cadillac Escalade (GMT800)",
+        "from": 2002,
+        "to": 2006,
+        "article": "Cadillac Escalade",
+        "section": "Second generation (2001)",
+        "commons": "Cadillac Escalade (GMT820)",
+        "source": "Infobox model_years: \"2002–2006\"",
+        "note": "'Cadillac Escalade (GMT 820)' (with a space) exists but is empty."
+      },
+      {
+        "label": "Cadillac Escalade (GMT900)",
+        "from": 2007,
+        "to": 2014,
+        "article": "Cadillac Escalade",
+        "section": "Third generation (2007)",
+        "commons": "Cadillac Escalade (GMT926)",
+        "source": "Infobox model_years: \"2007–2014<br />2009–2013 (Hybrid)\"",
+        "note": "The parser's stray '2007–2013' is the Hybrid (and the EXT pickup, which ended in 2013). Exclude 'Cadillac Escalade EXT (GMT946)' and ESV categories for the standard Escalade."
+      },
+      {
+        "label": "Cadillac Escalade (K2XX)",
+        "from": 2015,
+        "to": 2020,
+        "article": "Cadillac Escalade",
+        "section": "Fourth generation (2015)",
+        "commons": "Cadillac Escalade (GMTK2UL)",
+        "source": "Infobox model_years: \"2015–2020\"",
+        "note": "'Cadillac Escalade (GMTK2XX)' exists but is empty; use GMTK2UL (the short-wheelbase code)."
+      },
+      {
+        "label": "Cadillac Escalade (T1XX)",
+        "from": 2021,
+        "to": null,
+        "article": "Cadillac Escalade",
+        "section": "Fifth generation (2021)",
+        "commons": "Cadillac Escalade (GMTT1UL)",
+        "source": "Infobox model_years: \"2021–present\"",
+        "note": "'Cadillac Escalade (GMTT1XX)' exists but is empty; use GMTT1UL. The 2025 facelift is the same generation. Escalade IQ (EV) is a separate model."
+      }
+    ],
+    "twins": [
+      "chevrolet-tahoe",
+      "gmc-yukon",
+      "chevrolet-suburban"
+    ]
+  },
+  "chevrolet-blazer": {
+    "wikipedia": "Chevrolet Blazer (crossover)",
+    "wikidata": "Q525558",
+    "status": "checked",
+    "confidence": "medium",
+    "note": "Medium confidence on 2027. The newest reports (GM Authority April 2026 headline, Banner Chevrolet page, Edmunds 2028 preview) say no 2027 gas Blazer. An older auto123 article (fetched) says the opposite: \"the Blazer will in fact be offered, as a near-identical copy of the 2026 model\" for 2027. I believe GM Authority's April 2026 report replaced that plan, but I couldn't find a GM press release. The Wikipedia infobox still says '2019–present'. If the catalog's 2027 entry is really the Blazer EV, it belongs to a different vehicle.",
+    "generations": [
+      {
+        "label": "Chevrolet Blazer (C1XX)",
+        "from": 2019,
+        "to": 2026,
+        "article": "Chevrolet Blazer (crossover)",
+        "commons": "Chevrolet Blazer (C1XX)",
+        "source": "Infobox model_years: \"2019–present\" (Chevrolet Blazer (crossover)); end year 2026 based on reports that there is no 2027 gas Blazer (see notSold)",
+        "note": "2023 facelift is in the same generation. Avoid the 'Chevrolet Blazer (China)' subcategory: its 7-seat Chinese version looks different. Also don't use 'Chevrolet Blazer EV' (separate model)."
+      }
+    ],
+    "notSold": {
+      "years": [
+        2027
+      ],
+      "note": "No 2027 model year for the gas Blazer. 2026 production at Ramos Arizpe, Mexico was reported to end September 30, 2026, and a refreshed Blazer returns as a 2028 model built at Spring Hill, Tennessee. A 2027 Blazer EV exists, but it is a separate vehicle.",
+      "source": "Banner Chevrolet (dealer research page, fetched): \"There won't be a gas-powered Blazer for the 2027 model year.\" (https://www.bannerchevy.com/research/detail/new-chevy-blazer-preview); GM Authority, April 2026: 'There Won't Be A 2027 Chevy Blazer After All' (https://gmauthority.com/blog/2026/04/there-wont-be-a-2027-chevy-blazer-after-all/, headline only; page blocked)"
+    }
+  },
+  "chevrolet-camaro": {
+    "wikipedia": "Chevrolet Camaro",
+    "wikidata": "Q332448",
+    "status": "auto"
+  },
+  "chevrolet-colorado": {
+    "wikipedia": "Chevrolet Colorado",
+    "wikidata": "Q1071143",
+    "status": "auto",
+    "twins": [
+      "gmc-canyon"
+    ]
+  },
+  "chevrolet-equinox": {
+    "wikipedia": "Chevrolet Equinox",
+    "wikidata": "Q1071199",
+    "status": "auto"
+  },
+  "chevrolet-malibu": {
+    "wikipedia": "Chevrolet Malibu",
+    "wikidata": "Q287723",
+    "status": "checked",
+    "note": "Two split years: 2008 (Malibu Classic) and 2016 (Malibu Limited). Both outgoing versions were fleet-oriented and carried a suffixed name, so the reviewer may instead map those years only to the new generation. Discontinued after the 2025 model year (production ended November 2024), which matches the catalog.",
+    "generations": [
+      {
+        "label": "Chevrolet Malibu (sixth generation, GMX380)",
+        "from": 2004,
+        "to": 2008,
+        "article": "Chevrolet Malibu",
+        "section": "Sixth generation (GMX380; 2004)",
+        "commons": "Chevrolet Malibu (2004–2007)",
+        "source": "Infobox model_years: \"2004–2007<br>2008 (Malibu Classic)\"",
+        "note": "Split year 2008: the outgoing car continued as the fleet-only 2008 'Malibu Classic' alongside the new 2008 Malibu. If the reviewer prefers the retail car, end this generation at 2007. Category title uses an en dash ('2004–2007'); the hyphen version is empty. Subcategories: Malibu MAXX and Malibu SS."
+      },
+      {
+        "label": "Chevrolet Malibu (seventh generation, Epsilon)",
+        "from": 2008,
+        "to": 2012,
+        "article": "Chevrolet Malibu",
+        "section": "Seventh generation (2008)",
+        "commons": "Chevrolet Malibu (2008-2011)",
+        "source": "Infobox model_years: \"2008–2012\"",
+        "note": "Split year 2008 (see the sixth generation). The Commons category says 2008-2011 (hyphen), but it is the only seventh-generation category; 2012 cars look the same. Subcategories: LS/LT/LTZ/Hybrid."
+      },
+      {
+        "label": "Chevrolet Malibu (eighth generation, Epsilon II)",
+        "from": 2013,
+        "to": 2016,
+        "article": "Chevrolet Malibu",
+        "section": "Eighth generation (2013)",
+        "commons": "Chevrolet Malibu (Epsilon II)",
+        "source": "Infobox model_years: \"2013–2015<br />2016 (Malibu Limited)\"",
+        "note": "Split year 2016: the outgoing car was sold for 2016 as the 'Malibu Limited' (mostly fleet) alongside the new ninth-generation 2016 Malibu. Avoid the 'Chevrolet Malibu (China)' subcategory."
+      },
+      {
+        "label": "Chevrolet Malibu (ninth generation, E2XX)",
+        "from": 2016,
+        "to": 2025,
+        "article": "Chevrolet Malibu",
+        "section": "Ninth generation (2016)",
+        "commons": "Chevrolet Malibu (E2XX)",
+        "source": "Infobox model_years: \"2016–2025 (North America)\"",
+        "note": "Split year 2016 (see the eighth generation). 2019 refresh is in the same generation. The 'Malibu XL' subcategory is the Chinese-market name; avoid it."
+      }
+    ]
+  },
+  "chevrolet-silverado": {
+    "wikipedia": "Chevrolet Silverado",
+    "wikidata": "Q871329",
+    "status": "checked",
+    "note": "Parser's 'nothing for 2006' was wrong: 2006 is the GMT800. Strictly, 2019 could also be a split year (1500 LD = K2XX) if you count the LD as the same model.",
+    "generations": [
+      {
+        "label": "Chevrolet Silverado (GMT800)",
+        "from": 1999,
+        "to": 2007,
+        "article": "Chevrolet Silverado (first generation)",
+        "commons": "Chevrolet Silverado (GMT800) pickups",
+        "source": "Infobox model_years: \"1999–2006 (1500)<br>1999–2004 (2500)<br>2001–2006 (HD)<br>2007 (Classic; all models)\" (Chevrolet Silverado (first generation))",
+        "note": "Split year 2007: the GMT800 'Silverado Classic' was sold alongside the new GMT900 as a 2007 model. The bare 'Chevrolet Silverado (GMT800)' category has only 5 files; the 'pickups' subcategory is the one to use. HD (GMT880) trucks are in 'Chevrolet Silverado (GMT880, pickup)'."
+      },
+      {
+        "label": "Chevrolet Silverado (GMT900)",
+        "from": 2007,
+        "to": 2013,
+        "article": "Chevrolet Silverado (second generation)",
+        "commons": "Chevrolet Silverado (GMT901)",
+        "source": "Infobox model_years: \"2007–2013\" (Chevrolet Silverado (second generation))",
+        "note": "Split year 2007 with the Classic. GMT901 is the light-duty 1500. The HD (GMT911) kept this body through 2014."
+      },
+      {
+        "label": "Chevrolet Silverado (K2XX)",
+        "from": 2014,
+        "to": 2018,
+        "article": "Chevrolet Silverado",
+        "section": "Third-generation Silverado / fourth-generation Sierra (GMT K2XX; 2014)",
+        "commons": "Chevrolet Silverado (GMTK2XX)",
+        "source": "Infobox model_years: \"2014–2018 (1500) / 2019 (1500 LD) / 2015–2019 (HD)\" (Chevrolet Silverado, Third generation section)",
+        "note": "The parent holds only 2 files; the photos are in its subcategories by cab: 'Chevrolet Silverado (GMTK2CC)' (crew cab, 162), '(GMTK2EC)' (double cab, 96), '(GMTK2RC)' (regular cab, 25), plus HD. If you need one flat category, use GMTK2CC. A carryover K2XX was also sold for 2019 as the 'Silverado 1500 LD' (fleet-oriented, separate name), so I mapped 2019 to T1XX."
+      },
+      {
+        "label": "Chevrolet Silverado (T1XX)",
+        "from": 2019,
+        "to": 2026,
+        "article": "Chevrolet Silverado",
+        "section": "Fourth-generation Silverado / fifth-generation Sierra (GMT T1XX; 2019)",
+        "commons": "Chevrolet Silverado (GMTT1XX)",
+        "source": "Infobox model_years: \"2019–2026 (1500) / 2020–present (2500, 3500)\" (Chevrolet Silverado, Fourth generation section)",
+        "note": "A fifth-generation 1500 starts with the 2027 model year (infobox model_years \"2027\"), which is outside the catalog."
+      }
+    ],
+    "twins": [
+      "gmc-sierra"
+    ]
+  },
+  "chevrolet-suburban": {
+    "wikipedia": "Chevrolet Suburban",
+    "wikidata": "Q859501",
+    "status": "checked",
+    "note": "Commons uses GM's long-wheelbase platform codes for the Suburban (GMT830, GMT931, K2YC, T1YC).",
+    "generations": [
+      {
+        "label": "Chevrolet Suburban (GMT800/GMT830)",
+        "from": 2000,
+        "to": 2006,
+        "article": "Chevrolet Suburban",
+        "section": "Ninth generation (2000)",
+        "commons": "Chevrolet Suburban (GMT830)",
+        "source": "Infobox model_years: \"2000–2006\"",
+        "note": "GMT830 is the GM code for the 2000–2006 Suburban. 'Chevrolet Suburban (GMT800)' exists but is empty. Avoid the police-service subcategory."
+      },
+      {
+        "label": "Chevrolet Suburban (GMT900/GMT931)",
+        "from": 2007,
+        "to": 2014,
+        "article": "Chevrolet Suburban",
+        "section": "Tenth generation (2007)",
+        "commons": "Chevrolet Suburban (GMT931)",
+        "source": "Infobox model_years: \"2007–2014\"",
+        "note": "Avoid the police-service subcategory."
+      },
+      {
+        "label": "Chevrolet Suburban (GMTK2YC)",
+        "from": 2015,
+        "to": 2020,
+        "article": "Chevrolet Suburban",
+        "section": "Eleventh generation (2015)",
+        "commons": "Chevrolet Suburban (GMTK2YC)",
+        "source": "Infobox model_years: \"2015–2020\"",
+        "note": "Replaces the NYPD category the parser found. Subcategories: police service and Suburban HD; avoid both. 'Chevrolet Suburban (GMTK2XX)' exists but is empty."
+      },
+      {
+        "label": "Chevrolet Suburban (GMTT1YC)",
+        "from": 2021,
+        "to": null,
+        "article": "Chevrolet Suburban",
+        "section": "Twelfth generation (2021)",
+        "commons": "Chevrolet Suburban (GMTT1YC)",
+        "source": "Infobox model_years: \"2021–present\"",
+        "note": "2025 refresh is in the same generation. The 2027 Suburban carries over this generation (GM Authority / GM-Trucks 2027 coverage: production began September 2026 at Arlington). 'Chevrolet Suburban (GMTT1XX)' exists but is empty."
+      }
+    ],
+    "twins": [
+      "chevrolet-tahoe",
+      "gmc-yukon",
+      "cadillac-escalade"
+    ]
+  },
+  "chevrolet-tahoe": {
+    "wikipedia": "Chevrolet Tahoe",
+    "wikidata": "Q910928",
+    "status": "checked",
+    "generations": [
+      {
+        "label": "Chevrolet Tahoe (GMT800)",
+        "from": 2000,
+        "to": 2006,
+        "article": "Chevrolet Tahoe",
+        "section": "Second generation (2000)",
+        "commons": "Chevrolet Tahoe (GMT820)",
+        "source": "Infobox model_years: \"2000–2006\" (Chevrolet Tahoe, Second generation section)",
+        "note": "GMT820 is the Tahoe's code within GMT800."
+      },
+      {
+        "label": "Chevrolet Tahoe (GMT900)",
+        "from": 2007,
+        "to": 2014,
+        "article": "Chevrolet Tahoe",
+        "section": "Third generation (2007)",
+        "commons": "Chevrolet Tahoe (GMT921)",
+        "source": "Infobox model_years: \"2007–2014\" (Chevrolet Tahoe, Third generation section)"
+      },
+      {
+        "label": "Chevrolet Tahoe (K2XX)",
+        "from": 2015,
+        "to": 2020,
+        "article": "Chevrolet Tahoe",
+        "section": "Fourth generation (2015)",
+        "commons": "Chevrolet Tahoe (GMTK2UC)",
+        "source": "Infobox model_years: \"2015–2020\" (Chevrolet Tahoe, Fourth generation section)",
+        "note": "'Chevrolet Tahoe (GMTK2XX)' exists but is empty (0 files); K2UC is the Tahoe code."
+      },
+      {
+        "label": "Chevrolet Tahoe (T1XX)",
+        "from": 2021,
+        "to": null,
+        "article": "Chevrolet Tahoe",
+        "section": "Fifth generation (2021)",
+        "commons": "Chevrolet Tahoe (GMTT1UC)",
+        "source": "Infobox model_years: \"2021–present\" (Chevrolet Tahoe, Fifth generation section); fueleconomy.gov lists 2027 Tahoe",
+        "note": "Includes the 2025 refresh. GM Authority calls the 2027 the seventh model year of the fifth generation (carryover). 'Chevrolet Tahoe (GMTT1XX)' is empty."
+      }
+    ],
+    "twins": [
+      "gmc-yukon",
+      "cadillac-escalade",
+      "chevrolet-suburban"
+    ]
+  },
+  "chevrolet-trailblazer": {
+    "wikipedia": "Chevrolet Trailblazer",
+    "wikidata": "Q94572715",
+    "status": "checked",
+    "note": "'Chevrolet Trailblazer' is a set-index page; the real articles are 'Chevrolet TrailBlazer (SUV)' and 'Chevrolet Trailblazer (crossover)'. 2010–2020 is a gap in the US, which matches the catalog.",
+    "generations": [
+      {
+        "label": "Chevrolet TrailBlazer (GMT360, mid-size SUV)",
+        "from": 2002,
+        "to": 2009,
+        "article": "Chevrolet TrailBlazer (SUV)",
+        "section": "First generation (KC; 2001)",
+        "commons": "Chevrolet TrailBlazer (GMT360)",
+        "source": "Infobox model_years: \"2002–2009 (U.S. and Canada)\" (Chevrolet TrailBlazer (SUV), First generation section); fueleconomy.gov lists TrailBlazer 2005–2009 and none for 2010",
+        "note": "Body-on-frame mid-size SUV. Its subcategories include police and EXT/SS variants."
+      },
+      {
+        "label": "Chevrolet Trailblazer (crossover, VSS-F 9BYC)",
+        "from": 2021,
+        "to": null,
+        "article": "Chevrolet Trailblazer (crossover)",
+        "commons": "Chevrolet TrailBlazer (VSS-S)",
+        "source": "Infobox model_years: \"2021–present (North America)\" (Chevrolet Trailblazer (crossover)); fueleconomy.gov lists Trailblazer 2021–2027",
+        "note": "A different vehicle that only shares the name (subcompact crossover). Commons files it under the platform name 'VSS-S'; the category is tagged subcompact crossover and GM VSS-S platform."
+      }
+    ]
+  },
+  "chevrolet-traverse": {
+    "wikipedia": "Chevrolet Traverse",
+    "wikidata": "Q1071327",
+    "status": "checked",
+    "note": "The parser's 2024 overlap is real (Traverse Limited). The Commons categories exist under platform names (Lambda / C1XX / C1XX-2), which is why the parser didn't find them.",
+    "generations": [
+      {
+        "label": "Chevrolet Traverse (first generation, Lambda)",
+        "from": 2009,
+        "to": 2017,
+        "article": "Chevrolet Traverse",
+        "section": "First generation (2009)",
+        "commons": "Chevrolet Traverse (Lambda)",
+        "source": "Infobox model_years: \"2009–2017\""
+      },
+      {
+        "label": "Chevrolet Traverse (second generation, C1XX)",
+        "from": 2018,
+        "to": 2024,
+        "article": "Chevrolet Traverse",
+        "section": "Second generation (2018)",
+        "commons": "Chevrolet Traverse (C1XX)",
+        "source": "Infobox model_years: \"2018–2024 (North America)\", aka \"Chevrolet Traverse Limited (2024)\"",
+        "note": "Split year 2024: a shortened 2024 model year of the outgoing car was sold as the 'Chevrolet Traverse Limited' alongside the new third-generation 2024 Traverse."
+      },
+      {
+        "label": "Chevrolet Traverse (third generation, C1XX-2)",
+        "from": 2024,
+        "to": null,
+        "article": "Chevrolet Traverse",
+        "section": "Third generation (2024)",
+        "commons": "Chevrolet Traverse (C1XX-2)",
+        "source": "Infobox model_years: \"2024–present\"; \"first customer deliveries commenced in April 2024 as a 2024 model year\"",
+        "note": "Split year 2024 (see the previous generation). For a single 2024 photo, prefer this generation, since the 'Traverse' badge in 2024 mostly meant the new model; the old one was 'Traverse Limited'."
+      }
+    ]
+  },
+  "chevrolet-trax": {
+    "wikipedia": "Chevrolet Trax",
+    "wikidata": "Q1071315",
+    "status": "checked",
+    "note": "The first-generation Commons category is global, so it includes Korean, European and Holden-badged Trax and some Tracker photos. Filter for US-spec cars.",
+    "generations": [
+      {
+        "label": "Chevrolet Trax (first generation, U200)",
+        "from": 2015,
+        "to": 2022,
+        "article": "Chevrolet Trax",
+        "section": "First generation (U200; 2013)",
+        "commons": "Chevrolet Trax (first generation)",
+        "source": "Infobox model_years: \"2013–2022 (Canada, Mexico)<br />2015–2022 (U.S.)\""
+      },
+      {
+        "label": "Chevrolet Trax (second generation)",
+        "from": 2024,
+        "to": null,
+        "article": "Chevrolet Trax",
+        "section": "Second generation (2023)",
+        "commons": "Chevrolet Trax (second generation)",
+        "source": "Infobox model_years: \"2024–present (North America)\"; \"sales beginning in the second quarter of 2023 for the 2024 model year\"",
+        "note": "A facelift was unveiled on 9 October 2026 (Wikipedia section '2027 facelift'), so 2027 is the same generation with new styling, and current Commons photos are pre-facelift."
+      }
+    ],
+    "notSold": {
+      "years": [
+        2013,
+        2014,
+        2023
+      ],
+      "note": "2013–2014: the Trax was sold only in Canada and Mexico; it reached the US for the 2015 model year. 2023: there was no 2023 model year. GM discontinued the first generation after MY2022 and launched the second generation as a 2024 model.",
+      "source": "Chevrolet Trax article: \"The Trax became available in Canada, Mexico, ... for the 2013 model year and was released in the United States for the 2015 model year.\" / \"General Motors discontinued the first-generation Trax ... following the 2022 model year in North America\" (citing https://www.thecarconnection.com/news/1135344_chevy-trax-buick-encore-to-be-discontinued-after-2022); fueleconomy.gov lists no Chevrolet Trax for 2014 or 2023"
+    }
+  },
+  "chrysler-pacifica": {
+    "wikipedia": "Chrysler Pacifica (minivan)",
+    "wikidata": "Q25114477",
+    "status": "checked",
+    "note": "The 'wikipedia' field is set to the minivan article because it covers most catalog years. The crossover has its own article.",
+    "generations": [
+      {
+        "label": "Chrysler Pacifica (CS crossover)",
+        "from": 2004,
+        "to": 2008,
+        "article": "Chrysler Pacifica (crossover)",
+        "commons": "Chrysler Pacifica (CS)",
+        "source": "Chrysler Pacifica (crossover) infobox model_years: \"2004–2008\"; production \"January 2003 – November 2007\"",
+        "note": "A different vehicle from the 2017+ minivan."
+      },
+      {
+        "label": "Chrysler Pacifica (RU minivan)",
+        "from": 2017,
+        "to": null,
+        "article": "Chrysler Pacifica (minivan)",
+        "commons": "Chrysler Pacifica (RU)",
+        "source": "Chrysler Pacifica (minivan) infobox model_years: \"2017–present\"",
+        "note": "Includes the Pacifica Hybrid ('Chrysler Pacifica Hybrid' category; Waymo cars are a separate category)."
+      }
+    ],
+    "notSold": {
+      "years": [
+        2009
+      ],
+      "note": "The Pacifica crossover ended after the 2008 model year (production ended November 2007). There was no 2009 Pacifica, and the nameplate was absent until the 2017 minivan.",
+      "source": "Chrysler Pacifica (crossover) infobox model_years: \"2004–2008\", production \"January 2003 – November 2007\" (https://en.wikipedia.org/wiki/Chrysler_Pacifica_(crossover)); fueleconomy.gov lists no Chrysler Pacifica for 2009"
+    }
+  },
+  "dodge-durango": {
+    "wikipedia": "Dodge Durango",
+    "wikidata": "Q973654",
+    "status": "auto"
+  },
+  "ford-bronco": {
+    "wikipedia": "Ford Bronco",
+    "wikidata": "Q534238",
+    "status": "checked",
+    "note": "Commons uses ordinal naming '(6th generation)', not the U725 code.",
+    "generations": [
+      {
+        "label": "Ford Bronco (sixth generation, U725)",
+        "from": 2021,
+        "to": null,
+        "article": "Ford Bronco",
+        "section": "Sixth generation (U725; 2021)",
+        "commons": "Ford Bronco (6th generation)",
+        "source": "Infobox model_years: \"2021–present\" (Sixth generation section)",
+        "note": "Subcategory 'Ford Bronco Raptor'. Not the Bronco Sport (a separate model, 'Ford Bronco Sport')."
+      }
+    ]
+  },
+  "ford-bronco-sport": {
+    "wikipedia": "Ford Bronco Sport",
+    "wikidata": "Q90665373",
+    "status": "auto"
+  },
+  "ford-escape": {
+    "wikipedia": "Ford Escape",
+    "wikidata": "Q680524",
+    "status": "checked",
+    "note": "'Ford Escape ZD (North America)' exists but is empty (0 files); don't use it.",
+    "generations": [
+      {
+        "label": "Ford Escape (first generation)",
+        "from": 2001,
+        "to": 2007,
+        "article": "Ford Escape",
+        "section": "First generation (2001)",
+        "commons": "Ford Escape (first generation)",
+        "source": "Infobox model_years: \"2001–2007\"",
+        "note": "The catalog years are the 2005–2007 facelift. The category mixes 2001–2004 pre-facelift cars and possibly Asia-Pacific ZB/ZC/ZD Escapes, so prefer files named 2005–2007. 1 subcategory: Escape Hybrid (first generation)."
+      },
+      {
+        "label": "Ford Escape (second generation)",
+        "from": 2008,
+        "to": 2012,
+        "article": "Ford Escape",
+        "section": "Second generation (2008)",
+        "commons": "Ford Escape (second generation)",
+        "source": "Infobox model_years: \"2008–2012\"",
+        "note": "Subcategories: NYPD and Hybrid. Avoid NYPD-livery photos."
+      },
+      {
+        "label": "Ford Escape (third generation)",
+        "from": 2013,
+        "to": 2019,
+        "article": "Ford Escape",
+        "section": "Third generation (2013)",
+        "commons": "Ford Escape (third generation)",
+        "source": "Infobox model_years: \"2013–2019\"",
+        "note": "2017 refresh is in the same generation."
+      },
+      {
+        "label": "Ford Escape (fourth generation)",
+        "from": 2020,
+        "to": 2026,
+        "article": "Ford Escape",
+        "section": "Fourth generation (2020)",
+        "commons": "Ford Escape (fourth generation)",
+        "source": "Infobox model_years: \"2020–2026\"",
+        "note": "2023 refresh is in the same generation. Subcategories include '4th gen, China' (avoid it) and NYC taxis."
+      }
+    ],
+    "notSold": {
+      "years": [
+        2027
+      ],
+      "note": "Escape discontinued after the 2026 model year. US production ended in December 2025 at Louisville Assembly, and no 2027 model exists.",
+      "source": "Ford Escape article, Discontinuation section: 'Ford Escape production ended in the United States in December 2025 ... The 2026 model year represents a final inventory phase-out'; also the lead: 'Ford would discontinue the Escape after model year 2026' (https://www.caranddriver.com/news/a65654346/ford-escape-lincoln-corsair-dead-after-2026/)"
+    }
+  },
+  "ford-expedition": {
+    "wikipedia": "Ford Expedition",
+    "wikidata": "Q1339764",
+    "status": "auto"
+  },
+  "ford-explorer": {
+    "wikipedia": "Ford Explorer",
+    "wikidata": "Q598084",
+    "status": "auto"
+  },
+  "ford-f-150": {
+    "wikipedia": "Ford F-Series",
+    "wikidata": "Q1146685",
+    "status": "checked",
+    "note": "The parser's mapping is correct. 'Ford F-150' redirects to 'Ford F-Series'. Each generation has its own article (linked by {{Main}} from F-Series sections), and I quoted those infoboxes.",
+    "generations": [
+      {
+        "label": "Ford F-150 (eleventh generation)",
+        "from": 2004,
+        "to": 2008,
+        "article": "Ford F-Series (eleventh generation)",
+        "commons": "Ford F-150 (eleventh generation)",
+        "source": "Infobox model_years: \"2004–2008\" (Ford F-Series (eleventh generation))"
+      },
+      {
+        "label": "Ford F-150 (twelfth generation)",
+        "from": 2009,
+        "to": 2014,
+        "article": "Ford F-Series (twelfth generation)",
+        "commons": "Ford F-150 (twelfth generation)",
+        "source": "Infobox model_years: \"2009–2014\"",
+        "note": "Avoid the 'twelfth generation clones' subcategory (Chinese copies)."
+      },
+      {
+        "label": "Ford F-150 (thirteenth generation)",
+        "from": 2015,
+        "to": 2020,
+        "article": "Ford F-Series (thirteenth generation)",
+        "commons": "Ford F-150 (thirteenth generation)",
+        "source": "Infobox model_years: \"2015–2020\"",
+        "note": "2018 refresh is in the same generation."
+      },
+      {
+        "label": "Ford F-150 (fourteenth generation)",
+        "from": 2021,
+        "to": null,
+        "article": "Ford F-Series (fourteenth generation)",
+        "commons": "Ford F-150 (fourteenth generation)",
+        "source": "Infobox model_years: \"2021–present\"",
+        "note": "2024 refresh is in the same generation. The Lightning EV is part of this generation in Wikipedia; exclude Lightning photos if the catalog lists it separately."
+      }
+    ]
+  },
+  "ford-maverick": {
+    "wikipedia": "Ford Maverick (2022)",
+    "wikidata": "Q11101117",
+    "status": "checked",
+    "note": "The 2022+ pickup's article is 'Ford Maverick (2022)'; 'Ford Maverick' is a different page.",
+    "generations": [
+      {
+        "label": "Ford Maverick (pickup truck)",
+        "from": 2022,
+        "to": null,
+        "article": "Ford Maverick (2022)",
+        "commons": "Ford Maverick (pickup truck)",
+        "source": "Infobox model_years: \"2022–present\" (Ford Maverick (2022))",
+        "note": "Single generation. The 2025 refresh (new front fascia, Lobo trim) is in the same generation. Subcategories: Lobo, Tremor and XLT. Don't use 'Ford Maverick (first generation)', '(second generation)', '(Australia)', '(Brazil)' or '(SUV)': those are other vehicles."
+      }
+    ]
+  },
+  "ford-mustang": {
+    "wikipedia": "Ford Mustang",
+    "wikidata": "Q183476",
+    "status": "auto"
+  },
+  "ford-mustang-mach-e": {
+    "wikipedia": "Ford Mustang Mach-E",
+    "wikidata": "Q75419891",
+    "status": "auto"
+  },
+  "ford-ranger": {
+    "wikipedia": "Ford Ranger (Americas)",
+    "wikidata": "Q5467909",
+    "status": "checked",
+    "note": "'Ford Ranger (Americas)' is the best overview of the US truck. It says 1983–2012 overall, but the US and Canada ended with 2011. The 2019+ articles live under 'Ford Ranger (T6)'.",
+    "generations": [
+      {
+        "label": "Ford Ranger (Americas, third generation)",
+        "from": 1998,
+        "to": 2011,
+        "article": "Ford Ranger (Americas)",
+        "section": "Third generation (1998)",
+        "commons": "Ford Ranger (2006)",
+        "source": "Infobox model_years: \"1998–2011 (USA & Canada)<br>1998–2012 (South America and Mexico)\" (Ford Ranger (Americas), Third generation section); fueleconomy.gov lists Ranger 2010–2011 and none for 2012",
+        "note": "'Ford Ranger (2006)' is the facelift subcategory of 'Ford Ranger (third generation)' (under 'Ford Ranger (Americas)'), which matches the catalog's 2006–2011 trucks exactly. Don't use the international PJ/PK Ranger categories: that's a different truck."
+      },
+      {
+        "label": "Ford Ranger (T6, P375; North America)",
+        "from": 2019,
+        "to": 2023,
+        "article": "Ford Ranger (T6)",
+        "section": "First generation (P375/PX; 2011)",
+        "commons": "Ford Ranger (fourth generation)",
+        "source": "Infobox model_years: \"2019–2023 (North America)\" (Ford Ranger (T6), First generation section)",
+        "note": "The Commons category 'Ford Ranger (fourth generation)' is the North American P375 (child of 'Ford Ranger (Americas)'). The global 'Ford Ranger (T6, P375)' has 501 files but is mostly non-US trucks with different fronts."
+      },
+      {
+        "label": "Ford Ranger (T6, P703; North America)",
+        "from": 2024,
+        "to": null,
+        "article": "Ford Ranger (T6)",
+        "section": "Second generation (P703/RA; 2022)",
+        "commons": "Ford Ranger (T6, P703)",
+        "source": "Infobox model_years: \"2024–present (North America)\" (Ford Ranger (T6), Second generation section); fueleconomy.gov lists 2024 Ranger incl. Raptor",
+        "note": "Global category (Australia, Argentina, Europe, etc.); there's no US subcategory ('Ford Ranger (fifth generation)' redirects here). Many files are diesel/Wildtrak trucks from other markets; same body, but the badging and trims differ. 'Ford Ranger Raptor (P703)' is a subcategory."
+      }
+    ]
+  },
+  "gmc-acadia": {
+    "wikipedia": "GMC Acadia",
+    "wikidata": "Q936505",
+    "status": "auto"
+  },
+  "gmc-canyon": {
+    "wikipedia": "Chevrolet Colorado",
+    "wikidata": "Q1071143",
+    "status": "checked",
+    "note": "Badge twin of the Chevrolet Colorado: same Wikipedia article and years, but photos must be GMC-badged, so each generation uses a GMC Canyon category. GMC skipped 2013–2014 between generations (the catalog doesn't list them).",
+    "generations": [
+      {
+        "label": "GMC Canyon (GMT355)",
+        "from": 2004,
+        "to": 2012,
+        "article": "Chevrolet Colorado",
+        "section": "First generation (2004)",
+        "commons": "GMC Canyon (GMT355)",
+        "source": "Chevrolet Colorado article, First generation (2004) infobox model_years"
+      },
+      {
+        "label": "GMC Canyon (GMT31XX)",
+        "from": 2015,
+        "to": 2022,
+        "article": "Chevrolet Colorado",
+        "section": "Second generation (RG; 2011)",
+        "commons": "GMC Canyon (GMT31XX)",
+        "source": "Chevrolet Colorado article, Second generation (RG; 2011) section: North American model years 2015–2022"
+      },
+      {
+        "label": "GMC Canyon (GMT31XX-2)",
+        "from": 2023,
+        "to": null,
+        "article": "Chevrolet Colorado",
+        "section": "Third generation (2023)",
+        "commons": "GMC Canyon (GMT31XX-2)",
+        "source": "Chevrolet Colorado article, Third generation (2023) infobox model_years"
+      }
+    ],
+    "twins": [
+      "chevrolet-colorado"
+    ]
+  },
+  "gmc-sierra": {
+    "wikipedia": "Chevrolet Silverado",
+    "wikidata": "Q871329",
+    "status": "checked",
+    "note": "GMC Sierra redirects to Chevrolet Silverado. All categories above are GMC-badged. Commons uses GM platform codes: the GMT900 1500 is 'GMT902', K2XX is 'GMTK2XX', T1XX is 'GMTT1XX'. The 2006 GMT800 photos are mostly in the '(GMT800) pickups' subcategory.",
+    "generations": [
+      {
+        "label": "GMC Sierra (GMT800)",
+        "from": 1999,
+        "to": 2007,
+        "article": "Chevrolet Silverado (first generation)",
+        "commons": "GMC Sierra (GMT800) pickups",
+        "source": "Chevrolet Silverado (first generation) infobox model_years: \"1999–2006 (1500) ... 2007 (Classic; all models)\"",
+        "note": "Split year 2007: the GMT800 continued as the 2007 'Sierra Classic' alongside the new GMT900 2007 Sierra. The parent 'GMC Sierra (GMT800)' has only 1 file plus this subcategory; HD trucks are in 'GMC Sierra (GMT880)' (11 files)."
+      },
+      {
+        "label": "GMC Sierra (GMT900)",
+        "from": 2007,
+        "to": 2013,
+        "article": "Chevrolet Silverado (second generation)",
+        "commons": "GMC Sierra (GMT902)",
+        "source": "Chevrolet Silverado (second generation) infobox model_years: \"2007–2013\" (HD production 2007–2014)",
+        "note": "Split year 2007 (see GMT800). The HD version is in 'GMC Sierra HD (GMT912)' under 'GMC Sierra (GMT902/GMT912)'."
+      },
+      {
+        "label": "GMC Sierra (K2XX)",
+        "from": 2014,
+        "to": 2019,
+        "article": "Chevrolet Silverado",
+        "section": "Third-generation Silverado / fourth-generation Sierra (GMT K2XX; 2014)",
+        "commons": "GMC Sierra (GMTK2XX)",
+        "source": "Infobox model_years: \"2014–2018 (1500) / 2019 (1500 LD) / 2015–2019 (HD)\", aka \"Chevrolet Silverado LD/GMC Sierra Limited (2019)\"",
+        "note": "Split year 2019: the K2XX Sierra 1500 continued as the 2019 'Sierra Limited' alongside the new T1XX 2019 Sierra 1500. HD trucks: 'GMC Sierra HD (GMTK2HG)'."
+      },
+      {
+        "label": "GMC Sierra (T1XX)",
+        "from": 2019,
+        "to": 2026,
+        "article": "Chevrolet Silverado",
+        "section": "Fourth-generation Silverado / fifth-generation Sierra (GMT T1XX; 2019)",
+        "commons": "GMC Sierra (GMTT1XX)",
+        "source": "Infobox model_years: \"2019–2026 (1500) / 2020–present (2500, 3500)\"",
+        "note": "Split year 2019 (see K2XX). The 2022 mid-cycle refresh is the same generation (the pre-refresh 2022 'Sierra 1500 Limited' is also T1XX). A sixth-generation Sierra 1500 is listed with model_years \"2027\", outside the catalog's range."
+      }
+    ],
+    "twins": [
+      "chevrolet-silverado"
+    ]
+  },
+  "gmc-terrain": {
+    "wikipedia": "GMC Terrain",
+    "wikidata": "Q1485959",
+    "status": "checked",
+    "note": "Check the Commons D2UX/D2XX swap above. I read the category members to confirm it.",
+    "generations": [
+      {
+        "label": "GMC Terrain (first generation, Theta)",
+        "from": 2010,
+        "to": 2017,
+        "article": "GMC Terrain",
+        "section": "First generation (2010)",
+        "commons": "GMC Terrain (Theta)",
+        "source": "Infobox model_years: \"2010–2017\" (GMC Terrain, First generation section)"
+      },
+      {
+        "label": "GMC Terrain (second generation)",
+        "from": 2018,
+        "to": 2024,
+        "article": "GMC Terrain",
+        "section": "Second generation (2018)",
+        "commons": "GMC Terrain (D2UX)",
+        "source": "Infobox model_years: \"2018–2024\" (GMC Terrain, Second generation section)",
+        "note": "Watch the naming: Commons files the 2018–2024 Terrain under 'D2UX' (sort key 2; files are 2018–2024 cars), even though Wikipedia lists D2XX as its platform."
+      },
+      {
+        "label": "GMC Terrain (third generation)",
+        "from": 2025,
+        "to": null,
+        "article": "GMC Terrain",
+        "section": "Third generation (2025)",
+        "commons": "GMC Terrain (D2XX)",
+        "source": "Infobox model_years: \"2025–present\" (GMC Terrain, Third generation section); fueleconomy.gov lists 2027 Terrain",
+        "note": "Commons 'GMC Terrain (D2XX)' holds the 2025+ cars (sort key 3; files are named 2025/2026 GMC Terrain). Few files."
+      }
+    ],
+    "notSold": {
+      "years": [
+        2009
+      ],
+      "note": "There was no 2009 Terrain: production began August 10, 2009 for the 2010 model year.",
+      "source": "GMC Terrain infobox: production \"August 10, 2009 – 2017\", model_years \"2010–2017\"; fueleconomy.gov has no 2009 Terrain (lists 2010 onward)"
+    }
+  },
+  "gmc-yukon": {
+    "wikipedia": "Chevrolet Tahoe",
+    "wikidata": "Q910928",
+    "status": "checked",
+    "note": "'GMC Yukon' redirects to 'Chevrolet Tahoe', where the Yukon shares generation sections. All Commons categories above are GMC-badged. The file counts are small (14–31), but the Denali subcategories add more photos. Don't use the Yukon XL categories (GMT830, GMT932, GMTK2YG, GMTT1YG): the XL is the long Suburban-based model and might be a separate catalog entry.",
+    "generations": [
+      {
+        "label": "GMC Yukon (GMT800/GMT820)",
+        "from": 2000,
+        "to": 2006,
+        "article": "Chevrolet Tahoe",
+        "section": "Second generation (2000)",
+        "commons": "GMC Yukon (GMT820)",
+        "source": "Infobox model_years: \"2000–2006\" (Chevrolet Tahoe, Second generation section)",
+        "note": "GMC-badged category. 'GMC Yukon (GMT800)' exists but is empty. Subcategory: Yukon Denali (GMT820)."
+      },
+      {
+        "label": "GMC Yukon (GMT900/GMT922)",
+        "from": 2007,
+        "to": 2014,
+        "article": "Chevrolet Tahoe",
+        "section": "Third generation (2007)",
+        "commons": "GMC Yukon (GMT922)",
+        "source": "Infobox model_years: \"2007–2014\" (Chevrolet Tahoe, Third generation section)",
+        "note": "Subcategories: Yukon Denali (GMT922) and Yukon Hybrid. A separate NYPD category exists; avoid it."
+      },
+      {
+        "label": "GMC Yukon (GMTK2UG)",
+        "from": 2015,
+        "to": 2020,
+        "article": "Chevrolet Tahoe",
+        "section": "Fourth generation (2015)",
+        "commons": "GMC Yukon (GMTK2UG)",
+        "source": "Infobox model_years: \"2015–2020\" (Chevrolet Tahoe, Fourth generation section)",
+        "note": "'GMC Yukon (GMTK2XX)' exists but is empty. Subcategory: Yukon Denali (GMTK2UG)."
+      },
+      {
+        "label": "GMC Yukon (GMTT1UG)",
+        "from": 2021,
+        "to": null,
+        "article": "Chevrolet Tahoe",
+        "section": "Fifth generation (2021)",
+        "commons": "GMC Yukon (GMTT1UG)",
+        "source": "Infobox model_years: \"2021–present\" (Chevrolet Tahoe, Fifth generation section)",
+        "note": "2025 facelift is in the same generation. The 2027 Yukon carries over (GM Authority: 2027 production scheduled from September 8, 2026 at Arlington). 'GMC Yukon (GMTT1XX)' exists but is empty. Subcategory: Yukon Denali (GMTT1UG)."
+      }
+    ],
+    "twins": [
+      "chevrolet-tahoe",
+      "cadillac-escalade",
+      "chevrolet-suburban"
+    ]
+  },
+  "honda-accord": {
+    "wikipedia": "Honda Accord",
+    "wikidata": "Q463632",
+    "status": "checked",
+    "note": "2027 Accord is unconfirmed for the US as of Nov 2026, but if it comes it is the same generation (mid-cycle refresh).",
+    "generations": [
+      {
+        "label": "Honda Accord (North America seventh generation)",
+        "from": 2003,
+        "to": 2007,
+        "article": "Honda Accord (North America seventh generation)",
+        "commons": "Honda Accord (2002, North America)",
+        "source": "Infobox model_years: \"2003–2007\" (Honda Accord (North America seventh generation))",
+        "note": "Catalog years 2006–2007 are the facelifted cars; the article's own Commons link is the whole-model 'Honda Accord' category, so use this NA-specific one instead."
+      },
+      {
+        "label": "Honda Accord (North America eighth generation)",
+        "from": 2008,
+        "to": 2012,
+        "article": "Honda Accord (North America eighth generation)",
+        "commons": "Honda Accord (2007, North America)",
+        "source": "Infobox model_years: \"2008–2012\" (Honda Accord (North America eighth generation))"
+      },
+      {
+        "label": "Honda Accord (ninth generation)",
+        "from": 2013,
+        "to": 2017,
+        "article": "Honda Accord (ninth generation)",
+        "commons": "Honda Accord (2013, North America)",
+        "source": "Infobox model_years: \"2013–2017\" (Honda Accord (ninth generation))",
+        "note": "Parent 'Honda Accord (2013)' has 0 files (only subcategories), so use the NA subcategory."
+      },
+      {
+        "label": "Honda Accord (tenth generation)",
+        "from": 2018,
+        "to": 2022,
+        "article": "Honda Accord",
+        "section": "Tenth generation (2017)",
+        "commons": "Honda Accord (2017)",
+        "source": "Infobox model_years: \"2018–2022\" (Honda Accord, Tenth generation section)",
+        "note": "There's no NA subcategory. A few files may show the China-market car."
+      },
+      {
+        "label": "Honda Accord (eleventh generation)",
+        "from": 2023,
+        "to": null,
+        "article": "Honda Accord",
+        "section": "Eleventh generation (2023)",
+        "commons": "Honda Accord (2022)",
+        "source": "Infobox model_years: \"2023–present\" (Honda Accord, Eleventh generation section)",
+        "note": "Commons names it by reveal year (2022). A refreshed 2027 Accord has been shown in Japan; the US 2027 is not yet listed on fueleconomy.gov (2026 is). Any US 2027 will still be this generation."
+      }
+    ]
+  },
+  "honda-civic": {
+    "wikipedia": "Honda Civic",
+    "wikidata": "Q216747",
+    "status": "auto"
+  },
+  "honda-cr-v": {
+    "wikipedia": "Honda CR-V",
+    "wikidata": "Q255461",
+    "status": "checked",
+    "note": "The overview article's gen 3–6 sections have no infobox; the model years come from the per-generation articles.",
+    "generations": [
+      {
+        "label": "Honda CR-V (second generation)",
+        "from": 2002,
+        "to": 2006,
+        "article": "Honda CR-V",
+        "section": "Second generation (2002)",
+        "commons": "Honda CR-V (2nd generation)",
+        "source": "Infobox model_years: \"2002–2006\" (Honda CR-V, Second generation section)",
+        "note": "Subcategories include China-market and clone cars; the main category is fine."
+      },
+      {
+        "label": "Honda CR-V (third generation)",
+        "from": 2007,
+        "to": 2011,
+        "article": "Honda CR-V (third generation)",
+        "commons": "Honda CR-V (3rd generation)",
+        "source": "Infobox model_years: \"2007–2011 (US)\" (Honda CR-V (third generation))"
+      },
+      {
+        "label": "Honda CR-V (fourth generation)",
+        "from": 2012,
+        "to": 2016,
+        "article": "Honda CR-V (fourth generation)",
+        "commons": "Honda CR-V (4th generation)",
+        "source": "Infobox model_years: \"2012–2016\" (Honda CR-V (fourth generation))"
+      },
+      {
+        "label": "Honda CR-V (fifth generation)",
+        "from": 2017,
+        "to": 2022,
+        "article": "Honda CR-V (fifth generation)",
+        "commons": "Honda CR-V (5th generation)",
+        "source": "Infobox model_years: \"2017–2022\" (Honda CR-V (fifth generation))"
+      },
+      {
+        "label": "Honda CR-V (sixth generation)",
+        "from": 2023,
+        "to": null,
+        "article": "Honda CR-V (sixth generation)",
+        "commons": "Honda CR-V (6th generation)",
+        "source": "Infobox model_years: \"2023–present\" (Honda CR-V (sixth generation)); fueleconomy.gov lists 2027 CR-V"
+      }
+    ]
+  },
+  "honda-hr-v": {
+    "wikipedia": "Honda HR-V",
+    "wikidata": "Q1426415",
+    "status": "checked",
+    "note": "The parser's 'Honda HR-V (third generation)' article is the international RV model; it was never sold in the US. A facelift of the RZ HR-V may show up in the catalog's later years, but it stays the same generation.",
+    "generations": [
+      {
+        "label": "Honda HR-V (second generation, RU)",
+        "from": 2016,
+        "to": 2022,
+        "article": "Honda HR-V",
+        "section": "Second generation (RU; 2013)",
+        "commons": "Honda HR-V (2nd generation)",
+        "source": "Infobox model_years: \"2016–2022\" (Honda HR-V, Second generation section)",
+        "note": "Global RU model (Vezel in Japan); no North America subcategory, so the category includes non-US cars and Vezel-adjacent photos."
+      },
+      {
+        "label": "Honda HR-V (North America, RZ / ZR-V-based)",
+        "from": 2023,
+        "to": null,
+        "article": "Honda ZR-V",
+        "section": "North America",
+        "commons": "Honda HR-V (3rd generation, North America)",
+        "source": "Honda ZR-V infobox model_years: \"2023–present\", aka \"Honda HR-V (North America and China)\"; Honda HR-V article: \"A separate North American HR-V model was unveiled on 4 April 2022 and went on sale on 7 June 2022 for the 2023 model year.\"",
+        "note": "The US HR-V from 2023 is the Civic-based RZ (sold elsewhere as the Honda ZR-V), not the international third-generation RV HR-V/Vezel. Do not use 'Honda HR-V (3rd generation)' or '(3rd generation, international)'."
+      }
+    ]
+  },
+  "honda-odyssey": {
+    "wikipedia": "Honda Odyssey (North America)",
+    "wikidata": "Q5892599",
+    "status": "checked",
+    "note": "Don't use the RB/RC Odyssey categories (Japan/International). The 2027 Odyssey exists (carryover RL6; new-2027 dealer inventory and pricing on autofinder.com and carpro.com), but I found no hondanews.com release.",
+    "generations": [
+      {
+        "label": "Honda Odyssey (RL3/RL4)",
+        "from": 2005,
+        "to": 2010,
+        "article": "Honda Odyssey (North America)",
+        "section": "Third generation (RL3/4; 2005)",
+        "commons": "Honda Odyssey RL3",
+        "source": "Infobox model_years: \"2005–2010\"",
+        "note": "No separate RL4 category exists; RL3 covers this generation. 2008 refresh is in the same generation."
+      },
+      {
+        "label": "Honda Odyssey (RL5)",
+        "from": 2011,
+        "to": 2017,
+        "article": "Honda Odyssey (North America)",
+        "section": "Fourth generation (RL5; 2011)",
+        "commons": "Honda Odyssey RL5",
+        "source": "Infobox model_years: \"2011–2017\"",
+        "note": "2014 refresh is in the same generation."
+      },
+      {
+        "label": "Honda Odyssey (RL6)",
+        "from": 2018,
+        "to": null,
+        "article": "Honda Odyssey (North America)",
+        "section": "Fifth generation (RL6; 2018)",
+        "commons": "Honda Odyssey RL6",
+        "source": "Infobox model_years: \"2018–present\"",
+        "note": "2021 and 2025 refreshes are in the same generation."
+      }
+    ]
+  },
+  "honda-passport": {
+    "wikipedia": "Honda Passport",
+    "wikidata": "Q3272026",
+    "status": "auto"
+  },
+  "honda-pilot": {
+    "wikipedia": "Honda Pilot",
+    "wikidata": "Q3139963",
+    "status": "auto"
+  },
+  "honda-ridgeline": {
+    "wikipedia": "Honda Ridgeline",
+    "wikidata": "Q1626665",
+    "status": "auto"
+  },
+  "hyundai-elantra": {
+    "wikipedia": "Hyundai Elantra",
+    "wikidata": "Q482530",
+    "status": "auto"
+  },
+  "hyundai-ioniq-5": {
+    "wikipedia": "Hyundai Ioniq 5",
+    "wikidata": "Q99342695",
+    "status": "auto"
+  },
+  "hyundai-ioniq-6": {
+    "wikipedia": "Hyundai Ioniq 6",
+    "wikidata": "Q112577811",
+    "status": "checked",
+    "note": "If the catalog later adds 2027 for the Ioniq 6 N, use the Commons category 'Hyundai Ioniq 6 N' (99 files): it's the facelifted CE body.",
+    "generations": [
+      {
+        "label": "Hyundai Ioniq 6 (CE, pre-facelift)",
+        "from": 2023,
+        "to": 2025,
+        "article": "Hyundai Ioniq 6",
+        "commons": "Hyundai Ioniq 6 (2022)",
+        "source": "Infobox model_years: \"2023–present <br> 2023–2025 (US)\" (Hyundai Ioniq 6)",
+        "note": "US cars never got the 2025 facelift. Parent 'Hyundai Ioniq 6' has 0 files."
+      }
+    ],
+    "notSold": {
+      "years": [
+        2026
+      ],
+      "note": "Hyundai dropped the regular Ioniq 6 in the US after the 2025 model year; there is no 2026 US Ioniq 6. The only US version still planned is the Ioniq 6 N, which fueleconomy.gov lists as a 2027 model.",
+      "source": "Hyundai Ioniq 6 article, North America section ('discontinued in the U.S. market after the 2025 model year', citing insideevs.com/news/789015/hyundai-ioniq-6-dead and driving.ca, March 2026); cars.com/articles/hyundai-discontinues-ioniq-6-for-2026-will-only-offer-high-performance-n-version-in-u-s-522184; fueleconomy.gov has no 2026 Ioniq 6 and a '2027 Ioniq 6 N'"
+    }
+  },
+  "hyundai-kona": {
+    "wikipedia": "Hyundai Kona",
+    "wikidata": "Q30322680",
+    "status": "auto"
+  },
+  "hyundai-palisade": {
+    "wikipedia": "Hyundai Palisade",
+    "wikidata": "Q55735991",
+    "status": "auto"
+  },
+  "hyundai-santa-cruz": {
+    "wikipedia": "Hyundai Santa Cruz",
+    "wikidata": "Q97619529",
+    "status": "auto"
+  },
+  "hyundai-santa-fe": {
+    "wikipedia": "Hyundai Santa Fe",
+    "wikidata": "Q489852",
+    "status": "auto"
+  },
+  "hyundai-sonata": {
+    "wikipedia": "Hyundai Sonata",
+    "wikidata": "Q482458",
+    "status": "auto"
+  },
+  "hyundai-tucson": {
+    "wikipedia": "Hyundai Tucson",
+    "wikidata": "Q482430",
+    "status": "auto"
+  },
+  "hyundai-venue": {
+    "wikipedia": "Hyundai Venue",
+    "wikidata": "Q62381823",
+    "status": "checked",
+    "note": "The second generation (QU2, Nov 2025) is India/international only. The US Venue is still the first generation for 2026 (Carvana and Cars.com) and 2027 (fueleconomy.gov lists a 2027 Venue; Cars.com shows a 2027 SE/SEL). The parser's 'QU2 2025-present' is production years for other markets.",
+    "generations": [
+      {
+        "label": "Hyundai Venue (QX)",
+        "from": 2020,
+        "to": null,
+        "article": "Hyundai Venue",
+        "section": "First generation (QX; 2019)",
+        "commons": "Hyundai Venue",
+        "source": "Infobox model_years: \"2020–present\" (Hyundai Venue, First generation (QX) section); fueleconomy.gov lists Venue for 2025, 2026 and 2027",
+        "note": "There's no QX-specific Commons category; the whole-model category holds QX photos (all markets, many Indian-market cars), and the second generation is in the separate subcategory 'Hyundai Venue II' (4 files), so don't use that one."
+      }
+    ]
+  },
+  "jeep-compass": {
+    "wikipedia": "Jeep Compass",
+    "wikidata": "Q1686208",
+    "status": "checked",
+    "note": "The 2027 US model year isn't on fueleconomy.gov yet; I relied on the Wikipedia infobox \"2017–2027 (USA)\" and the J4U being 2028+.",
+    "generations": [
+      {
+        "label": "Jeep Compass (MK49)",
+        "from": 2007,
+        "to": 2017,
+        "article": "Jeep Compass",
+        "section": "First generation (MK49; 2006)",
+        "commons": "Jeep Compass (MK)",
+        "source": "Infobox model_years: \"2007–2017\" (Jeep Compass, First generation section)",
+        "note": "Split year 2017: the old MK Compass and the new MP ('New Compass') were both sold as 2017 models; fueleconomy.gov 2017 lists both 'Compass' and 'New Compass'."
+      },
+      {
+        "label": "Jeep Compass (MP)",
+        "from": 2017,
+        "to": 2027,
+        "article": "Jeep Compass",
+        "section": "Second generation (MP/552; 2016)",
+        "commons": "Jeep Compass (MP)",
+        "source": "Infobox model_years: \"2017–2027 (USA)\" (Jeep Compass, Second generation section); fueleconomy.gov lists Compass for 2017–2026",
+        "note": "Split year 2017 with the MK. The third generation (J4U/J4D) isn't sold in the US yet: the article says US production at Belvidere starts December 2027 for the 2028 model year, so the US 2025–2027 Compass is still the MP."
+      }
+    ],
+    "notSold": {
+      "years": [
+        2006
+      ],
+      "note": "There was no 2006 Compass: the first car was built May 30, 2006 as a 2007 model.",
+      "source": "Jeep Compass article: 'introduced in 2006 for the 2007 model year'; 'The first Compass was assembled on May 30, 2006'; fueleconomy.gov has no 2006 Compass"
+    }
+  },
+  "jeep-gladiator": {
+    "wikipedia": "Jeep Gladiator (JT)",
+    "wikidata": "Q60795112",
+    "status": "checked",
+    "note": "Changed the article from 'Jeep Gladiator' (older vehicles / SJ) to 'Jeep Gladiator (JT)'.",
+    "generations": [
+      {
+        "label": "Jeep Gladiator (JT)",
+        "from": 2020,
+        "to": null,
+        "article": "Jeep Gladiator (JT)",
+        "commons": "Jeep Gladiator (JT)",
+        "source": "Infobox model_years: \"2020–present\" (Jeep Gladiator (JT)); fueleconomy.gov lists Gladiator 2020–2027",
+        "note": "Includes the 2025 refresh."
+      }
+    ]
+  },
+  "jeep-grand-cherokee": {
+    "wikipedia": "Jeep Grand Cherokee",
+    "wikidata": "Q1129521",
+    "status": "checked",
+    "note": "Mapping decision: the slug is the regular Grand Cherokee, so the generation follows the two-row model. 2021 = WK2 only (the L was a separate three-row nameplate that year). 2022 = split (WK2-based 'Grand Cherokee WK' + new WL). The 'Jeep Grand Cherokee (WL)' article title redirects to the main article. fueleconomy.gov's 2022 Jeep list confirms the split: 'Grand Cherokee 2WD/4WD/4xe' (WL), 'Grand Cherokee L', and 'Grand Cherokee WK 2WD/4WD' (WK2).",
+    "generations": [
+      {
+        "label": "Jeep Grand Cherokee (WK)",
+        "from": 2005,
+        "to": 2010,
+        "article": "Jeep Grand Cherokee (WK)",
+        "commons": "Jeep Grand Cherokee (WK)",
+        "source": "Jeep Grand Cherokee (WK) infobox model_years: \"2005–2010\""
+      },
+      {
+        "label": "Jeep Grand Cherokee (WK2)",
+        "from": 2011,
+        "to": 2022,
+        "article": "Jeep Grand Cherokee (WK2)",
+        "commons": "Jeep Grand Cherokee (WK2)",
+        "source": "Jeep Grand Cherokee (WK2) infobox model_years: \"2011–2022\", aka \"Jeep Grand Cherokee WK (2022)\"",
+        "note": "Split year 2022: the carryover two-row WK2 was sold as the 2022 'Grand Cherokee WK' alongside the new two-row WL 2022 Grand Cherokee. Most photos are in the subcategories: 'Jeep Grand Cherokee (WK2, 2010)' 110 files (2011–2013), '(WK2, 2013)' 107 files (2014–2016 facelift), '(WK2, 2017)' 168 files (2017–2022)."
+      },
+      {
+        "label": "Jeep Grand Cherokee (WL)",
+        "from": 2022,
+        "to": null,
+        "article": "Jeep Grand Cherokee",
+        "section": "Fifth generation (WL; 2021)",
+        "commons": "Jeep Grand Cherokee (WL)",
+        "source": "Infobox model_years: \"2021–present (Grand Cherokee L)<br />2022–present (Grand Cherokee)\"",
+        "note": "Two-row WL from MY2022 (split year with the WK2 'WK'). The three-row Grand Cherokee L started in MY2021, but in 2021 the regular (two-row) Grand Cherokee was still the WK2, so 2021 maps to WK2. 'Jeep Grand Cherokee L' (65 files) is a subcategory of WL; exclude it for the regular two-row model, or accept it if the catalog's slug covers the L."
+      }
+    ]
+  },
+  "jeep-wrangler": {
+    "wikipedia": "Jeep Wrangler",
+    "wikidata": "Q1353305",
+    "status": "auto"
+  },
+  "kia-carnival": {
+    "wikipedia": "Kia Carnival",
+    "wikidata": "Q488173",
+    "status": "auto"
+  },
+  "kia-ev6": {
+    "wikipedia": "Kia EV6",
+    "wikidata": "Q105975708",
+    "status": "auto"
+  },
+  "kia-forte": {
+    "wikipedia": "Kia Forte",
+    "wikidata": "Q489621",
+    "status": "auto"
+  },
+  "kia-k5": {
+    "wikipedia": "Kia K5",
+    "wikidata": "Q12586722",
+    "status": "auto"
+  },
+  "kia-niro": {
+    "wikipedia": "Kia Niro",
+    "wikidata": "Q22754238",
+    "status": "auto"
+  },
+  "kia-seltos": {
+    "wikipedia": "Kia Seltos",
+    "wikidata": "Q65044174",
+    "status": "auto"
+  },
+  "kia-sorento": {
+    "wikipedia": "Kia Sorento",
+    "wikidata": "Q489836",
+    "status": "auto"
+  },
+  "kia-soul": {
+    "wikipedia": "Kia Soul",
+    "wikidata": "Q420780",
+    "status": "auto"
+  },
+  "kia-sportage": {
+    "wikipedia": "Kia Sportage",
+    "wikidata": "Q145527",
+    "status": "auto"
+  },
+  "kia-telluride": {
+    "wikipedia": "Kia Telluride",
+    "wikidata": "Q23058524",
+    "status": "checked",
+    "note": "LQ2 Commons coverage is thin (9 files plus 1 subcategory).",
+    "generations": [
+      {
+        "label": "Kia Telluride (ON, first generation)",
+        "from": 2020,
+        "to": 2025,
+        "article": "Kia Telluride",
+        "section": "First generation (ON; 2020)",
+        "commons": "Kia Telluride (ON)",
+        "source": "Infobox model_years: \"2020–2025\" (citing https://www.kbb.com/car-news/kia-teases-new-telluride-skips-a-model-year/)",
+        "note": "2023 refresh (facelift) is the same generation."
+      },
+      {
+        "label": "Kia Telluride (LQ2, second generation)",
+        "from": 2027,
+        "to": null,
+        "article": "Kia Telluride",
+        "section": "Second generation (LQ2; 2027)",
+        "commons": "Kia Telluride (LQ2)",
+        "source": "Infobox model_years: \"2027–present\"; Kia America press release 2025-11-10 'Kia Reveals The Next-Generation 2027 Telluride SUV' (https://www.kiamedia.com/us/en/media/pressreleases/23839/)"
+      }
+    ],
+    "notSold": {
+      "years": [
+        2026
+      ],
+      "note": "Kia skipped the 2026 model year for the Telluride. The first generation ended with MY2025 (production ran to January 2026), and the second generation launched as MY2027.",
+      "source": "https://www.kbb.com/car-news/kia-teases-new-telluride-skips-a-model-year/ (cited in the Kia Telluride infobox); fueleconomy.gov lists no Kia Telluride for 2026 (2027 is listed)"
+    }
+  },
+  "lexus-es": {
+    "wikipedia": "Lexus ES",
+    "wikidata": "Q577397",
+    "status": "auto"
+  },
+  "lexus-nx": {
+    "wikipedia": "Lexus NX",
+    "wikidata": "Q16325434",
+    "status": "auto"
+  },
+  "lexus-rx": {
+    "wikipedia": "Lexus RX",
+    "wikidata": "Q660273",
+    "status": "checked",
+    "generations": [
+      {
+        "label": "Lexus RX (XU30)",
+        "from": 2004,
+        "to": 2009,
+        "article": "Lexus RX",
+        "section": "Second generation (XU30; 2003)",
+        "commons": "Lexus RX (XU30)",
+        "source": "Infobox model_years: \"2004–2009\" (Lexus RX, Second generation section)",
+        "note": "More in subcategories (RX 330, RX 350 GSU30/35, RX 400h)."
+      },
+      {
+        "label": "Lexus RX (AL10)",
+        "from": 2010,
+        "to": 2015,
+        "article": "Lexus RX",
+        "section": "Third generation (AL10; 2008)",
+        "commons": "Lexus RX (AL10)",
+        "source": "Infobox model_years: \"2010–2015\" (Lexus RX, Third generation section)",
+        "note": "More in subcategories (RX 350 GGL10/15, RX 450h GYL10/15, F Sport)."
+      },
+      {
+        "label": "Lexus RX (AL20)",
+        "from": 2016,
+        "to": 2022,
+        "article": "Lexus RX",
+        "section": "Fourth generation (AL20; 2015)",
+        "commons": "Lexus RX (AL20)",
+        "source": "Infobox model_years: \"2016–2022\" (Lexus RX, Fourth generation section)",
+        "note": "More in subcategories (RX 350 GGL20/25, RX 450h, RX L)."
+      },
+      {
+        "label": "Lexus RX (fifth generation, ALA10/ALH10)",
+        "from": 2023,
+        "to": null,
+        "article": "Lexus RX",
+        "section": "Fifth generation (ALA10/ALH10; 2022)",
+        "commons": "Lexus RX (AL10, 2022)",
+        "source": "Infobox model_years: \"2023–present\" (Lexus RX, Fifth generation section); fueleconomy.gov lists 2026 RX",
+        "note": "Commons names the fifth generation 'Lexus RX (AL10, 2022)'; 'Lexus RX (AL30)' is a category redirect to it. More photos in subcategories (RX 350 TALA10/15, RX 350h, RX 450h+, RX 500h)."
+      }
+    ]
+  },
+  "mazda-3": {
+    "wikipedia": "Mazda3",
+    "wikidata": "Q911466",
+    "status": "auto"
+  },
+  "mazda-cx-30": {
+    "wikipedia": "Mazda CX-30",
+    "wikidata": "Q61993966",
+    "status": "auto"
+  },
+  "mazda-cx-5": {
+    "wikipedia": "Mazda CX-5",
+    "wikidata": "Q1580031",
+    "status": "auto"
+  },
+  "mazda-cx-50": {
+    "wikipedia": "Mazda CX-50",
+    "wikidata": "Q109601206",
+    "status": "auto"
+  },
+  "mazda-cx-90": {
+    "wikipedia": "Mazda CX-90",
+    "wikidata": "Q116526635",
+    "status": "auto"
+  },
+  "mercedes-benz-c-class": {
+    "wikipedia": "Mercedes-Benz C-Class",
+    "wikidata": "Q331694",
+    "status": "checked",
+    "note": "W520 is left out. The battery-electric C-Class (W520; Wikipedia 'Mercedes-Benz C-Class Electric') was revealed April 20, 2026 as a 2027 model, with US sales from early 2027, and Mercedes does market it as a C-Class. But the gasoline W206 continues for 2027 (fueleconomy.gov 2027 C300), so 2027 maps to W206 to keep one generation per year. If the catalog ever separates the EV (e.g. 'C-Class Electric' / C 400), use Commons 'Mercedes-Benz W520' (7 files).",
+    "generations": [
+      {
+        "label": "Mercedes-Benz C-Class (W203)",
+        "from": 2001,
+        "to": 2007,
+        "article": "Mercedes-Benz C-Class (W203)",
+        "commons": "Mercedes-Benz W203 (2004–2007)",
+        "source": "Infobox model_years: \"2001–2007\" (Mercedes-Benz C-Class (W203))",
+        "note": "The catalog's 2006–2007 are facelift cars, so I used the facelift subcategory. Generation parent: 'Mercedes-Benz W203' (37 files + subcategories)."
+      },
+      {
+        "label": "Mercedes-Benz C-Class (W204)",
+        "from": 2008,
+        "to": 2014,
+        "article": "Mercedes-Benz C-Class (W204)",
+        "commons": "Mercedes-Benz W204",
+        "source": "Infobox model_years: \"2008–2014<br />2012–2015 (coupe)\" (Mercedes-Benz C-Class (W204))",
+        "note": "The parent has few direct files; use the subcategories 'Mercedes-Benz W204 (2007)' (301, pre-facelift: 2008–2011 MY) and 'Mercedes-Benz W204 (2010)' (150, facelift: 2012–2014 MY). The C204 coupe ran to 2015."
+      },
+      {
+        "label": "Mercedes-Benz C-Class (W205)",
+        "from": 2015,
+        "to": 2021,
+        "article": "Mercedes-Benz C-Class (W205)",
+        "commons": "Mercedes-Benz W205",
+        "source": "Infobox model_years: \"2015–2021<br />2017–2023 (coupé and cabriolet)\" (Mercedes-Benz C-Class (W205))",
+        "note": "Use the subcategories 'Mercedes-Benz W205 (2014)' (197, pre-facelift) and 'Mercedes-Benz W205 (2018)' (119, facelift). The W205-based coupe/cabriolet stayed on sale through 2023, overlapping the W206 sedan."
+      },
+      {
+        "label": "Mercedes-Benz C-Class (W206)",
+        "from": 2022,
+        "to": null,
+        "article": "Mercedes-Benz C-Class (W206)",
+        "commons": "Mercedes-Benz W206",
+        "source": "Infobox model_years: \"2022–present\" (Mercedes-Benz C-Class (W206)); fueleconomy.gov lists C300 / C300 4matic for 2025, 2026 and 2027",
+        "note": "The 2027 US gasoline C-Class is the facelifted W206 (2026 facelift)."
+      }
+    ]
+  },
+  "mercedes-benz-glc-class": {
+    "wikipedia": "Mercedes-Benz GLC",
+    "wikidata": "Q20634916",
+    "status": "checked",
+    "note": "This is the SUV mapping. The GLC Coupé changed later: the C253 coupe was sold through 2023 and the C254 coupe started as a 2024 model, so a catalog that mixes in coupes would have an off-by-one in 2023. The new electric GLC (X540, 'GLC with EQ Technology') is a separate model; keep it out of 2026/2027 GLC photos. 2027 gas GLC 300 SUVs are in US dealer inventory (cars.com 2027 GLC 300 research page), so it is still on sale.",
+    "generations": [
+      {
+        "label": "Mercedes-Benz GLC (X253)",
+        "from": 2016,
+        "to": 2022,
+        "article": "Mercedes-Benz GLC",
+        "section": "First generation (X253/C253/V253; 2015)",
+        "commons": "Mercedes-Benz X253",
+        "source": "Infobox model_years: \"2016–2022\"",
+        "note": "The parent category has 0 files directly; the photos are in subcategories 'Mercedes-Benz X253 (2015-2019)' (176 files, pre-facelift) and 'Mercedes-Benz X253 (2019–2022)' (71 files, facelift; US 2020+). Use them by year. Avoid 'Mercedes-Benz X253 L' (Chinese long-wheelbase version). The X253 SUV ended with the 2022 model year in the US."
+      },
+      {
+        "label": "Mercedes-Benz GLC (X254)",
+        "from": 2023,
+        "to": null,
+        "article": "Mercedes-Benz GLC",
+        "section": "Second generation (X254/C254/V254; 2022)",
+        "commons": "Mercedes-Benz X254",
+        "source": "No model_years in the X254 infobox (production 2022–present). US model year from the MBUSA release 'Mercedes-Benz USA Announces Pricing and Packaging Structures for 2023 GLC SUV' (republished at https://www.conceptcarz.com/a49675/mercedes-benz-pricing-packaging-2023-glc-suv.aspx): \"The new generation 2023 GLC SUV will arrive in U.S. dealerships in spring 2023.\" (The original media.mbusa.com URL now returns 404.)",
+        "note": "First US model year is 2023, not 2022 (2022 was the production start). Subcategory: Mercedes-AMG X254."
+      }
+    ]
+  },
+  "mitsubishi-outlander": {
+    "wikipedia": "Mitsubishi Outlander",
+    "wikidata": "Q1044544",
+    "status": "checked",
+    "note": "The 2013/2014 boundary is not a split year: the 2013 US Outlander was the last second-generation year (per the North America model_years), and the third generation arrived as a 2014 model. Wikipedia's third-generation '2013–2021' reflects other markets. The Outlander Sport (ASX) is a different vehicle with its own categories. fueleconomy.gov lists 'Outlander 2WD/4WD' for 2013, so 2013 was sold as a second-generation car.",
+    "generations": [
+      {
+        "label": "Mitsubishi Outlander (first generation, CU)",
+        "from": 2003,
+        "to": 2006,
+        "article": "Mitsubishi Outlander",
+        "section": "First generation (CU/ZE/ZF; 2001)",
+        "commons": "Mitsubishi Outlander (first generation)",
+        "source": "Infobox production: \"2003–2006 (Outlander)\" (no model_years field); text: \"The Outlander was arrived in 2003 in North America\". US model years were 2003–2006.",
+        "note": "US model years 2003–2006. The category may include Japanese Airtrek photos."
+      },
+      {
+        "label": "Mitsubishi Outlander (second generation, CW)",
+        "from": 2007,
+        "to": 2013,
+        "article": "Mitsubishi Outlander",
+        "section": "Second generation (CW/ZG/ZH; 2006)",
+        "commons": "Mitsubishi Outlander (second generation)",
+        "source": "Infobox model_years: \"2007–2013 (North America)\"",
+        "note": "2010 facelift (US): subcategory 'Mitsubishi Outlander (second generation, facelift)'."
+      },
+      {
+        "label": "Mitsubishi Outlander (third generation, GF)",
+        "from": 2014,
+        "to": 2021,
+        "article": "Mitsubishi Outlander",
+        "section": "Third generation (GF/GG/ZJ/ZK/ZL; 2012)",
+        "commons": "Mitsubishi Outlander (third generation)",
+        "source": "Infobox model_years \"2013–2021\" is not market-specific; for the US, the 2nd-gen infobox gives \"2007–2013 (North America)\" and cars.com (Nov 2012): '2014 Mitsubishi Outlander ... to bow at LA Auto Show' (https://www.cars.com/articles/2012/11/2014-mitsubishi-outlander-2013-outlander-sport-limited-edition-to-bow-at-la-auto-show)",
+        "note": "The US third generation started with MY2014. Photos are in the facelift subcategories '(third generation, 2012)', '(third generation, 2015)' (US 2016 MY facelift), and '(third generation, 2018)' (US 2019 MY)."
+      },
+      {
+        "label": "Mitsubishi Outlander (fourth generation, GM/GN)",
+        "from": 2022,
+        "to": null,
+        "article": "Mitsubishi Outlander",
+        "section": "Fourth generation (GM/GN/ZM; 2021)",
+        "commons": "Mitsubishi Outlander (fourth generation)",
+        "source": "Infobox model_years: \"2022–present\""
+      }
+    ]
+  },
+  "nissan-altima": {
+    "wikipedia": "Nissan Altima",
+    "wikidata": "Q636791",
+    "status": "auto"
+  },
+  "nissan-frontier": {
+    "wikipedia": "Nissan Frontier (North America)",
+    "wikidata": "Q105453076",
+    "status": "checked",
+    "note": "'Nissan Frontier' on Wikipedia is a disambiguation page, which is why the parser found nothing. Use 'Nissan Frontier (North America)'. Avoid 'Nissan Frontier (D23)' (non-US Navara) and 'Nissan Frontier Pro'.",
+    "generations": [
+      {
+        "label": "Nissan Frontier (D40)",
+        "from": 2005,
+        "to": 2021,
+        "article": "Nissan Navara",
+        "section": "Second generation (D40; 2004)",
+        "commons": "Nissan Frontier (D40)",
+        "source": "Nissan Navara, D40 infobox model_years: \"2005–2021 (North America)\"; production \"October 2004 – June 2021 (United States)\"",
+        "note": "The 2020 powertrain update (new V6) is the same D40 body."
+      },
+      {
+        "label": "Nissan Frontier (D41)",
+        "from": 2022,
+        "to": null,
+        "article": "Nissan Frontier (North America)",
+        "section": "Third generation (D41; 2022)",
+        "commons": "Nissan Frontier (D41)",
+        "source": "Nissan Frontier (North America) infobox model_years: \"2022–present\"",
+        "note": "'Nissan Frontier (D41)' redirects to 'Nissan Frontier (North America)'. A 2025 model-year facelift is the same generation."
+      }
+    ]
+  },
+  "nissan-kicks": {
+    "wikipedia": "Nissan Kicks",
+    "wikidata": "Q26186522",
+    "status": "auto"
+  },
+  "nissan-leaf": {
+    "wikipedia": "Nissan Leaf",
+    "wikidata": "Q911323",
+    "status": "checked",
+    "note": "'Category:Nissan Leaf in the United States' also exists and may help pick US-spec photos. The parser's '2011-2011' came from the first generation having its own article; the infobox there says 2011–2017.",
+    "generations": [
+      {
+        "label": "Nissan Leaf (ZE0/AZE0, first generation)",
+        "from": 2011,
+        "to": 2017,
+        "article": "Nissan Leaf (first generation)",
+        "commons": "Nissan Leaf (ZE0)",
+        "source": "Nissan Leaf (first generation) infobox model_years: \"2011–2017\"",
+        "note": "Includes the 2013+ AZE0 update (US-built at Smyrna); same body."
+      },
+      {
+        "label": "Nissan Leaf (ZE1, second generation)",
+        "from": 2018,
+        "to": 2025,
+        "article": "Nissan Leaf",
+        "section": "Second generation (ZE1; 2017)",
+        "commons": "Nissan Leaf (ZE1)",
+        "source": "Infobox model_years: \"2018 – 2025\""
+      },
+      {
+        "label": "Nissan Leaf (ZE2, third generation)",
+        "from": 2026,
+        "to": null,
+        "article": "Nissan Leaf",
+        "section": "Third generation (ZE2; 2025)",
+        "commons": "Nissan Leaf (ZE2)",
+        "source": "Infobox model_years: \"2026–present\"",
+        "note": "Crossover body; a different shape from earlier Leafs."
+      }
+    ]
+  },
+  "nissan-murano": {
+    "wikipedia": "Nissan Murano",
+    "wikidata": "Q1278086",
+    "status": "auto"
+  },
+  "nissan-pathfinder": {
+    "wikipedia": "Nissan Pathfinder",
+    "wikidata": "Q1419007",
+    "status": "checked",
+    "generations": [
+      {
+        "label": "Nissan Pathfinder (R51)",
+        "from": 2005,
+        "to": 2012,
+        "article": "Nissan Pathfinder",
+        "section": "Third generation (R51; 2004)",
+        "commons": "Nissan Pathfinder (R51)",
+        "source": "Infobox model_years: \"2005–2012 (North America)\"",
+        "note": "The category also has non-US and facelifted R51s; avoid its 'Nissan Dunehawk' subcategory."
+      },
+      {
+        "label": "Nissan Pathfinder (R52)",
+        "from": 2013,
+        "to": 2020,
+        "article": "Nissan Pathfinder",
+        "section": "Fourth generation (R52; 2012)",
+        "commons": "Nissan Pathfinder (R52)",
+        "source": "Infobox model_years: \"2013–2020\"",
+        "note": "2017 refresh is in the same generation. Subcategories: Concept and Rock Creek; avoid the concept."
+      },
+      {
+        "label": "Nissan Pathfinder (R53)",
+        "from": 2022,
+        "to": null,
+        "article": "Nissan Pathfinder",
+        "section": "Fifth generation (R53; 2021) / Global version (2021)",
+        "commons": "Nissan Pathfinder (R53)",
+        "source": "Infobox model_years: \"2022–present\"",
+        "note": "Avoid the 'Nissan Pathfinder (China)' subcategory. A 2027 Pathfinder is confirmed (carryover, plus a 40th-anniversary Special Edition): https://www.kbb.com/car-news/2027-nissan-pathfinder-special-edition-celebrates-40-year-history/"
+      }
+    ],
+    "notSold": {
+      "years": [
+        2021
+      ],
+      "note": "Nissan skipped the 2021 model year: the R52 ended with 2020 and the R53 launched as a 2022 model.",
+      "source": "Nissan Pathfinder article: 'the 2021 model year was entirely skipped'; https://www.thecarconnection.com/news/1131160_nissan-pathfinder-skips-2021-model-year-in-advance-of-2022-redesign"
+    }
+  },
+  "nissan-rogue": {
+    "wikipedia": "Nissan Rogue",
+    "wikidata": "Q1993846",
+    "status": "auto"
+  },
+  "nissan-sentra": {
+    "wikipedia": "Nissan Sentra",
+    "wikidata": "Q719974",
+    "status": "auto"
+  },
+  "nissan-versa": {
+    "wikipedia": "Nissan Versa",
+    "wikidata": "Q26261942",
+    "status": "checked",
+    "note": "Overlap: the Versa Note hatchback (Nissan Note E12; infobox model_years \"2014–2019 (North America)\", Nissan Note article, 'Second generation (E12; 2012)' section; Commons 'Nissan Versa Note', 31 files) was sold alongside the N17 sedan. To keep one generation per year I mapped 2014–2019 to the sedan. If the catalog means the hatchback, use the Versa Note. fueleconomy.gov lists 'Versa' for 2007–2025 and nothing for 2026.",
+    "generations": [
+      {
+        "label": "Nissan Versa (C11, Tiida)",
+        "from": 2007,
+        "to": 2012,
+        "article": "Nissan Tiida",
+        "section": "First generation (C11; 2004)",
+        "commons": "Nissan Versa (C11)",
+        "source": "Infobox model_years: \"2007–2011 (sedan) / 2007–2012 (hatchback)\" (Nissan Tiida, First generation section)",
+        "note": "Split year 2012: the 2012 Versa hatchback was still C11 while the 2012 Versa sedan was the new N17. Most photos are in the subcategories 'Nissan Versa (C11) hatchback' (61) and 'Nissan Versa (C11) sedan' (36)."
+      },
+      {
+        "label": "Nissan Versa sedan (N17, Almera)",
+        "from": 2012,
+        "to": 2019,
+        "article": "Nissan Almera",
+        "section": "Third generation (N17; 2011)",
+        "commons": "Nissan Versa (N17)",
+        "source": "Infobox model_years: \"2012–2019 (North America)\" (Nissan Almera, Third generation (N17) section)",
+        "note": "Split year 2012 with the C11 hatchback. From 2014 to 2019 the hatchback was the separate Versa Note (E12); see comments."
+      },
+      {
+        "label": "Nissan Versa sedan (N18)",
+        "from": 2020,
+        "to": 2025,
+        "article": "Nissan Almera",
+        "section": "Fourth generation (N18; 2019, N19; 2026)",
+        "commons": "Nissan Versa (N18)",
+        "source": "Infobox model_years: \"2020–2025 (North America)\" (Nissan Almera, Fourth generation section); Nissan Versa article: discontinued in the US after the 2025 model year (caranddriver.com/news/a69850700)"
+      }
+    ]
+  },
+  "ram-1500": {
+    "wikipedia": "Ram pickup",
+    "wikidata": "Q1211586",
+    "status": "checked",
+    "note": "2019 is not a split year: the 2019–2024 DS was sold under a different name ('Ram 1500 Classic', aimed at commercial/value buyers), so 2019–2024 map only to the DT. If the catalog has a separate 'Ram 1500 Classic' entry, map it to DS 2019–2024 with Commons 'Ram 1500 Classic (DS)' (40 files). The Classic ended after 2024 (Reuters, August 2024, cited in the Ram pickup article). A 2027 Ram 1500 (DT) is confirmed (Stellantis 'What's New for 2027: Ram 1500', https://media.stellantisnorthamerica.com/newsrelease.do?id=27864). The 'wikipedia' field uses the overview article 'Ram pickup'; the per-generation articles are 'Ram 1500 (DS)' and 'Ram 1500 (DT)'.",
+    "generations": [
+      {
+        "label": "Ram 1500 (DS)",
+        "from": 2009,
+        "to": 2018,
+        "article": "Ram 1500 (DS)",
+        "commons": "Ram 1500 (DS)",
+        "source": "Infobox model_years: \"2009–2024\" (Ram 1500 (DS)); Ram pickup article: 'For 2019, the fourth-generation 1500 remained in production alongside the new fifth-generation 1500 and was renamed the Ram 1500 Classic'",
+        "note": "Ends at 2018 for the regular Ram 1500; from 2019 the DS was sold only as the 'Ram 1500 Classic'. The category also has 2009–2010 Dodge-badged trucks (Ram became its own brand around 2010), so prefer files of 2013+ trucks (the 2013 refresh is the catalog's first year). Avoid its 'Ram 1500 Classic (DS)' subcategory for 2013–2018."
+      },
+      {
+        "label": "Ram 1500 (DT)",
+        "from": 2019,
+        "to": null,
+        "article": "Ram 1500 (DT)",
+        "commons": "Ram 1500 (DT)",
+        "source": "Infobox model_years: \"2019–present\" (Ram 1500 (DT))",
+        "note": "2025 refresh is in the same generation. Subcategories RHO, Rumble Bee and TRX are performance variants; base 1500 photos are preferable."
+      }
+    ]
+  },
+  "subaru-ascent": {
+    "wikipedia": "Subaru Ascent",
+    "wikidata": "Q48799438",
+    "status": "auto"
+  },
+  "subaru-crosstrek": {
+    "wikipedia": "Subaru Crosstrek",
+    "wikidata": "Q2119417",
+    "status": "checked",
+    "note": "'Subaru Crosstrek (XV)' exists but is empty (0 files). A 2027 Crosstrek is confirmed (Subaru press release, July 9, 2026: https://media.subaru.com/pressrelease/2473/1/subaru-crosstrek-pricing-holds-steady-26995-msrp-2027).",
+    "generations": [
+      {
+        "label": "Subaru Crosstrek (GP)",
+        "from": 2013,
+        "to": 2017,
+        "article": "Subaru Crosstrek",
+        "section": "First generation (GP; 2012)",
+        "commons": "Subaru XV Crosstrek",
+        "source": "Infobox model_years: \"2013–2017 (North America)\" (Subaru Crosstrek, First generation section)",
+        "note": "North America sold it as the 'XV Crosstrek' for 2013–2015 and as plain 'Crosstrek' from 2016 (article: 'Subaru dropped the XV moniker in North America, marketing it simply as the Crosstrek for the 2016 model year'). The category holds North American cars (2013–2017 files, including '16/'17 Crosstrek) plus a 1-file Hybrid subcategory. Fallback: 'Subaru XV (GP)' (142 files), but those are mostly XV-badged cars from outside North America."
+      },
+      {
+        "label": "Subaru Crosstrek (GT)",
+        "from": 2018,
+        "to": 2023,
+        "article": "Subaru Crosstrek",
+        "section": "Second generation (GT; 2017)",
+        "commons": "Subaru Crosstrek (GT)",
+        "source": "Infobox model_years: \"2018–2023 (North America)\""
+      },
+      {
+        "label": "Subaru Crosstrek (GU)",
+        "from": 2024,
+        "to": null,
+        "article": "Subaru Crosstrek",
+        "section": "Third generation (GU; 2022)",
+        "commons": "Subaru Crosstrek (GU)",
+        "source": "Infobox model_years: \"2024–present (North America)\"",
+        "note": "Has 3 subcategories (e-BOXER and others). e-BOXER is a non-US version."
+      }
+    ]
+  },
+  "subaru-forester": {
+    "wikipedia": "Subaru Forester",
+    "wikidata": "Q1324599",
+    "status": "auto"
+  },
+  "subaru-impreza": {
+    "wikipedia": "Subaru Impreza",
+    "wikidata": "Q391342",
+    "status": "auto"
+  },
+  "subaru-legacy": {
+    "wikipedia": "Subaru Legacy",
+    "wikidata": "Q603323",
+    "status": "auto"
+  },
+  "subaru-outback": {
+    "wikipedia": "Subaru Outback",
+    "wikidata": "Q1536958",
+    "status": "auto"
+  },
+  "tesla-model-3": {
+    "wikipedia": "Tesla Model 3",
+    "wikidata": "Q7705507",
+    "status": "checked",
+    "note": "Tesla years are production/delivery years. Some pre-refresh US cars built in late 2023 may carry 2024 model-year VINs. I didn't verify this, but it only matters when picking photos by styling.",
+    "generations": [
+      {
+        "label": "Tesla Model 3",
+        "from": 2017,
+        "to": null,
+        "article": "Tesla Model 3",
+        "commons": "Tesla Model 3",
+        "source": "Infobox production: \"2017–present\" (no model_years field; Tesla doesn't use conventional model-year changeovers, so these are production years). Article: \"Beginning in October 2023 (most markets) or January 2024 (US market), Model 3 cars were delivered with changes for the 'Highland' refresh.\"",
+        "note": "One generation (production years). The 2024 'Highland' refresh is a facelift, not a new generation; in the US it was delivered from January 2024. For matching photos to styling, use the subcategories 'Tesla Model 3 (2017–2023)' (479 files) for 2017–2023 and 'Tesla Model 3 (2023–)' (155 files) for 2024 onward. The parent has only 9 files; 'Tesla Model 3 (2023)' exists but is empty."
+      }
+    ]
+  },
+  "tesla-model-s": {
+    "wikipedia": "Tesla Model S",
+    "wikidata": "Q1463050",
+    "status": "checked",
+    "note": "Wikipedia's model_years starts at 2013 because most early cars were sold as 2013 models, but the first 2012 deliveries (Signature series) are listed on fueleconomy.gov as 2012 models, so the catalog's 2012 is valid. Tesla years are loose; the facelift boundaries are production dates.",
+    "generations": [
+      {
+        "label": "Tesla Model S",
+        "from": 2012,
+        "to": 2026,
+        "article": "Tesla Model S",
+        "commons": "Tesla Model S",
+        "source": "Infobox model_years: \"2013–2026\"; production: \"June 2012 – May 2026\". 2012 added because fueleconomy.gov lists a 2012 Tesla Model S (Signature cars delivered from June 22, 2012).",
+        "note": "One generation with two facelifts. The parent has 162 files plus subcategories by design: 'Tesla Model S (2012–2016)' (334 files, original nose: 2012–2016), 'Tesla Model S (2016–2021)' (131, April 2016 facelift sold as 2017 MY per the article), and 'Tesla Model S (2021–)' (11, 2021 refresh/Plaid). Production ended May 2026, so 2026 is the last year."
+      }
+    ]
+  },
+  "tesla-model-x": {
+    "wikipedia": "Tesla Model X",
+    "wikidata": "Q1634161",
+    "status": "checked",
+    "note": "Production ended in May 2026 (InsideEVs, cited in the infobox), so 2026 is the last year. The Wikipedia article doesn't describe the 2021 refresh in detail. The parent 'Tesla Model X' category (28 files) also has interior and concept subcategories; avoid the concept and SpaceX ones.",
+    "generations": [
+      {
+        "label": "Tesla Model X",
+        "from": 2016,
+        "to": 2026,
+        "article": "Tesla Model X",
+        "commons": "Tesla Model X (2016)",
+        "source": "Infobox production: \"2015 – May 2026\" (no model_years field). Text: first deliveries September 29, 2015; 'In January 2026, Tesla announced that the Model X would be discontinued'.",
+        "note": "Tesla doesn't use model years conventionally, so these are production years mapped to the catalog. The first cars were delivered in September 2015 as 2016 models (EPA lists a '2016 Tesla Model X'). One generation throughout. The 2021 'Palladium' refresh (new interior with yoke/horizontal screen, Plaid trim, small exterior changes) is not a new generation, and Commons has no separate refresh category. 'Tesla Model X (2016)' is the only generation-level category and seems to cover all years."
+      }
+    ]
+  },
+  "tesla-model-y": {
+    "wikipedia": "Tesla Model Y",
+    "wikidata": "Q42298250",
+    "status": "checked",
+    "note": "The 2025/2026 split is fuzzy: US cars built in early 2025 before the refresh are MY2025 pre-facelift, and the refresh launched as MY2026 (notebookcheck.net, '2026 Tesla Model Y is the official name for the Juniper refresh release').",
+    "generations": [
+      {
+        "label": "Tesla Model Y",
+        "from": 2020,
+        "to": null,
+        "article": "Tesla Model Y",
+        "commons": "Tesla Model Y",
+        "source": "Infobox production: \"January 2020 – present\" (PRODUCTION years: Tesla; there's no model_years field). fueleconomy.gov lists Model Y for every model year 2020–2026.",
+        "note": "Facelift, not a new generation: the 2025 refresh ('Juniper', launched Jan 10, 2025; US deliveries from March 2025) is sold in the US as the 2026 Model Y (VIN 10th digit 'T'). Refresh photos are in the subcategory 'Tesla Model Y (2025)' (123 files). For 2026+ prefer that subcategory; for 2020–2025 use the parent's direct files."
+      }
+    ]
+  },
+  "toyota-4runner": {
+    "wikipedia": "Toyota 4Runner",
+    "wikidata": "Q1342063",
+    "status": "auto"
+  },
+  "toyota-bz4x": {
+    "wikipedia": "Toyota bZ4X",
+    "wikidata": "Q106481505",
+    "status": "checked",
+    "note": "The parser probably failed because the article heading has no generation sections. If the catalog later adds 2026+, use 'Toyota bZ4X (2025)' (facelift, sold as 'Toyota bZ' in the US).",
+    "generations": [
+      {
+        "label": "Toyota bZ4X (EA10, pre-facelift)",
+        "from": 2023,
+        "to": 2025,
+        "article": "Toyota bZ4X",
+        "section": "Original models",
+        "commons": "Toyota bZ4X",
+        "source": "Infobox model_years: \"2023–present\"; North America: on sale mid-2022 \"for the 2023 model year\"; IIHS rated \"The 2025 model year bZ4x\"",
+        "note": "One generation. From MY2026 the facelift is sold in the US as the 'Toyota bZ' (Commons 'Toyota bZ4X (2025)', 35 files). That is outside the catalog's 2023–2025 range, so avoid that subcategory. The parent category mixes concepts and global cars."
+      }
+    ]
+  },
+  "toyota-camry": {
+    "wikipedia": "Toyota Camry",
+    "wikidata": "Q500035",
+    "status": "auto"
+  },
+  "toyota-corolla": {
+    "wikipedia": "Toyota Corolla",
+    "wikidata": "Q243543",
+    "status": "auto"
+  },
+  "toyota-corolla-cross": {
+    "wikipedia": "Toyota Corolla Cross",
+    "wikidata": "Q97094785",
+    "status": "auto"
+  },
+  "toyota-grand-highlander": {
+    "wikipedia": "Toyota Grand Highlander",
+    "wikidata": "Q117007632",
+    "status": "auto"
+  },
+  "toyota-highlander": {
+    "wikipedia": "Toyota Highlander",
+    "wikidata": "Q1421661",
+    "status": "checked",
+    "confidence": "medium",
+    "note": "2001–2026 is high confidence. 2027 is uncertain. In September 2026 a Toyota spokesperson reportedly said the EV launch was still '2027' (https://electrek.co/2026/09/03/toyota-denies-delaying-highlander-ev-suv-again/). Gas/hybrid production continues through December 2026, possibly longer, and those cars could carry 2027 VINs. The fueleconomy.gov 2027 Toyota list is still partial (no RAV4 or 4Runner yet), so a missing Highlander isn't conclusive. Re-check in early 2027.",
+    "generations": [
+      {
+        "label": "Toyota Highlander (XU20)",
+        "from": 2001,
+        "to": 2007,
+        "article": "Toyota Highlander",
+        "section": "First generation (XU20; 2000)",
+        "commons": "Toyota Highlander (XU20)",
+        "source": "Infobox model_years: \"2001–2007\" (First generation section)",
+        "note": "Includes the Highlander Hybrid (2006–2007; subcategory 'Toyota Highlander Hybrid (XU20)')."
+      },
+      {
+        "label": "Toyota Highlander (XU40)",
+        "from": 2008,
+        "to": 2013,
+        "article": "Toyota Highlander",
+        "section": "Second generation (XU40; 2007)",
+        "commons": "Toyota Highlander (XU40)",
+        "source": "Infobox model_years: \"2008–2013\""
+      },
+      {
+        "label": "Toyota Highlander (XU50)",
+        "from": 2014,
+        "to": 2019,
+        "article": "Toyota Highlander",
+        "section": "Third generation (XU50; 2013)",
+        "commons": "Toyota Highlander (XU50)",
+        "source": "Infobox model_years: \"2014–2019\" (\"2014–2021 (China)\")"
+      },
+      {
+        "label": "Toyota Highlander (XU70)",
+        "from": 2020,
+        "to": 2026,
+        "article": "Toyota Highlander",
+        "section": "Fourth generation (XU70; 2019)",
+        "commons": "Toyota Highlander (XU70)",
+        "source": "Infobox model_years: \"2020–2026\""
+      }
+    ],
+    "notSold": {
+      "years": [
+        2027
+      ],
+      "note": "As of November 2026, no 2027 model-year Highlander has been announced for sale or certified. The gas/hybrid XU70's last model year is 2026 (Wikipedia model_years \"2020–2026\"; fueleconomy.gov lists Highlander AWD / Hybrid for 2026 but no Highlander for 2027). The battery-electric fifth generation (and its Subaru Getaway twin) was revealed in February 2026 as the '2027 Highlander' but was delayed in mid-2026 to the US 2028 model year. The catalog's 2027 listing probably reflects the original EV announcement. If a 2027 Highlander does appear, it will be either an XU70 carryover or the EV (Wikipedia: 'Fifth generation (2026)'; Commons 'Toyota Highlander (electric)').",
+      "source": "Toyota Highlander, Fifth generation section: infobox model_years \"2028\"; \"In mid-2026, Toyota announced that the Highlander would be delayed until 2027 (for the US 2028 model year)\" (https://electrek.co/2026/09/14/toyota-delaying-highlander-ev-creates-bigger-problem/); https://www.kbb.com/car-news/2027-toyota-highlander-ev-delayed-as-hybrid-sales-surge/; fueleconomy.gov model menu, year=2027 make=Toyota (no Highlander)"
+    }
+  },
+  "toyota-prius": {
+    "wikipedia": "Toyota Prius",
+    "wikidata": "Q213115",
+    "status": "auto",
+    "twins": [
+      "toyota-prius-prime"
+    ]
+  },
+  "toyota-prius-prime": {
+    "wikipedia": "Toyota Prius Plug-in Hybrid",
+    "wikidata": "Q7830860",
+    "status": "checked",
+    "note": "Decision: 2025–2027 are mapped to the XW60, because the name changed but the car didn't and Toyota says so. A strict reading of rule 1 ('not sold under this name') would put 2025–2027 in notSold. The reviewer should decide whether the catalog's prius-prime slug covers the renamed car. 'Category:Toyota Prius Prime' is empty (0 files).",
+    "generations": [
+      {
+        "label": "Toyota Prius Prime (XW50)",
+        "from": 2017,
+        "to": 2022,
+        "article": "Toyota Prius Plug-in Hybrid",
+        "section": "Second generation (XW50; 2016)",
+        "commons": "Toyota Prius (XW50) Plug-in Hybrid",
+        "source": "Infobox model_years: \"2017–2022\"; aka \"Toyota Prius Prime (North America, South Korea, and New Zealand)\"",
+        "note": "The parser's 'Toyota Prius Plug-in Hybrid (second generation)' category is empty (0 files). Use this one. Its subcategory 'Prius PHV GR Sport' is Japan-only; avoid it."
+      },
+      {
+        "label": "Toyota Prius Prime / Prius Plug-in Hybrid (XW60)",
+        "from": 2023,
+        "to": null,
+        "article": "Toyota Prius Plug-in Hybrid",
+        "section": "Third generation (XW60; 2023)",
+        "commons": "Toyota Prius (XW60) Plug-in Hybrid",
+        "source": "Infobox model_years: \"2023–present\"; aka \"Toyota Prius Prime (North America, 2023–2024)\"; text: \"In 2024, for the 2025 model year, the Prius Prime was renamed Prius Plug-in Hybrid\" (https://www.caranddriver.com/news/a62387953/2025-toyota-rav4-prius-prime-plug-in-hybrid-name-change/)",
+        "note": "Same vehicle, renamed: sold as 'Prius Prime' for 2023–2024 and as 'Prius Plug-in Hybrid' for 2025 onward. A 2027 Prius Plug-in Hybrid is confirmed (https://pressroom.toyota.com/2027-toyota-prius-plug-in-hybrid-combines-electrified-performance-and-everyday-efficiency/)."
+      }
+    ],
+    "twins": [
+      "toyota-prius"
+    ]
+  },
+  "toyota-rav4": {
+    "wikipedia": "Toyota RAV4",
+    "wikidata": "Q819982",
+    "status": "auto",
+    "twins": [
+      "toyota-rav4-prime"
+    ]
+  },
+  "toyota-rav4-prime": {
+    "wikipedia": "Toyota RAV4",
+    "wikidata": "Q819982",
+    "status": "checked",
+    "note": "The plug-in RAV4 is its own Commons category (\"Toyota RAV4 Plug-in Hybrid\"), not the regular RAV4's: it has a different front end. Renamed RAV4 PHEV for 2025. Its 'GR Sport' subcategories are a non-US trim.",
+    "generations": [
+      {
+        "label": "Toyota RAV4 Prime (XA50)",
+        "from": 2021,
+        "to": 2025,
+        "article": "Toyota RAV4",
+        "section": "Fifth generation (XA50; 2018)",
+        "commons": "Toyota RAV4 Plug-in Hybrid (XA50)",
+        "source": "fueleconomy.gov model lists: first US year 2021 (\"RAV4 Prime 4WD\"); 2025 \"RAV4 PHEV AWD\"; none for 2020"
+      },
+      {
+        "label": "Toyota RAV4 Plug-in Hybrid (XA60)",
+        "from": 2026,
+        "to": null,
+        "article": "Toyota RAV4",
+        "section": "Sixth generation (XA60; 2025)",
+        "commons": "Toyota RAV4 Plug-in Hybrid (XA60)",
+        "source": "Toyota RAV4 article, Sixth generation (XA60; 2025) infobox model_years (2026–present)",
+        "note": "As of November 2026, fueleconomy.gov has no 2026 plug-in RAV4 listed; recheck. Not shown on the car page yet (it shows 2022 and 2024)."
+      }
+    ],
+    "twins": [
+      "toyota-rav4"
+    ]
+  },
+  "toyota-sienna": {
+    "wikipedia": "Toyota Sienna",
+    "wikidata": "Q1139368",
+    "status": "auto"
+  },
+  "toyota-tacoma": {
+    "wikipedia": "Toyota Tacoma",
+    "wikidata": "Q1581540",
+    "status": "auto"
+  },
+  "toyota-tundra": {
+    "wikipedia": "Toyota Tundra",
+    "wikidata": "Q1353337",
+    "status": "auto"
+  },
+  "volkswagen-atlas": {
+    "wikipedia": "Volkswagen Atlas",
+    "wikidata": "Q27765737",
+    "status": "checked",
+    "confidence": "medium",
+    "note": "The years are solid (high). Medium is for the second-generation photo source: someone should eyeball the Teramont Pro images, or wait for US Atlas uploads.",
+    "generations": [
+      {
+        "label": "Volkswagen Atlas (first generation, CA1)",
+        "from": 2018,
+        "to": 2026,
+        "article": "Volkswagen Atlas",
+        "section": "First generation (2017)",
+        "commons": "Volkswagen Atlas",
+        "source": "Infobox model_years: \"2018–2026\" (Volkswagen Atlas, First generation section)",
+        "note": "There's no first-generation Commons category; the whole-model 'Volkswagen Atlas' category currently holds only first-gen photos. Its subcategories include the Atlas Cross Sport (a separate 2-row model) and a concept; leave those out. 'Volkswagen Teramont (1st generation)' (7 files) is the Chinese-market twin."
+      },
+      {
+        "label": "Volkswagen Atlas (second generation)",
+        "from": 2027,
+        "to": null,
+        "article": "Volkswagen Atlas",
+        "section": "Second generation (2025)",
+        "commons": "Volkswagen Teramont Pro",
+        "source": "Infobox model_years: \"2027–\" (Volkswagen Atlas, Second generation section); fueleconomy.gov lists 2027 Atlas",
+        "note": "Badge caveat: Commons has no Atlas-named second-generation category and no 2027 Atlas files (search found none). The Wikipedia infobox for this generation says aka \"Volkswagen Teramont Pro (China)\" (SAIC-VW, unveiled Feb 17, 2025; the US Atlas was introduced March 31, 2026), so 'Volkswagen Teramont Pro' shows the same vehicle with the same VW brand. But the rear script says Teramont and the fascia/trim may differ from US cars. Fall back to 'Volkswagen Atlas' if that's not acceptable (but it only has first-gen photos)."
+      }
+    ]
+  },
+  "volkswagen-id-4": {
+    "wikipedia": "Volkswagen ID.4",
+    "wikidata": "Q86668068",
+    "status": "checked",
+    "note": "'Inventory into 2027' means 2026 models sold during calendar 2027. It is not a 2027 model year.",
+    "generations": [
+      {
+        "label": "Volkswagen ID.4",
+        "from": 2021,
+        "to": 2026,
+        "article": "Volkswagen ID.4",
+        "commons": "Volkswagen ID.4",
+        "source": "Infobox model_years: \"2021–2026\"",
+        "note": "Single generation. This is the model-level category: mostly European cars, which look the same as US ones apart from plates. Avoid its subcategories ID.4 Crozz and ID.4 X (Chinese versions). No US-specific Commons category exists."
+      }
+    ],
+    "notSold": {
+      "years": [
+        2027
+      ],
+      "note": "No 2027 model year. VW ended US ID.4 production at Chattanooga in April 2026; remaining 2026 inventory is being sold 'into 2027'.",
+      "source": "Volkswagen ID.4 article, North America section, citing https://arstechnica.com/cars/2026/04/volkswagen-ends-id-4-production-in-tennessee-to-build-atlas-suv/ ('Volkswagen stops building ID.4s in the US, has inventory \"into 2027\"'); infobox model_years 2021–2026"
+    }
+  },
+  "volkswagen-jetta": {
+    "wikipedia": "Volkswagen Jetta",
+    "wikidata": "Q697152",
+    "status": "auto"
+  },
+  "volkswagen-taos": {
+    "wikipedia": "Volkswagen Taos",
+    "wikidata": "Q56402691",
+    "status": "auto"
+  },
+  "volkswagen-tiguan": {
+    "wikipedia": "Volkswagen Tiguan",
+    "wikidata": "Q782671",
+    "status": "checked",
+    "note": "The parser's 'CT1 2024-present' is the European car's production year; the US 2025 model is Tayron L-based. No gap in 2017 (Tiguan Limited).",
+    "generations": [
+      {
+        "label": "Volkswagen Tiguan (5N, first generation)",
+        "from": 2009,
+        "to": 2018,
+        "article": "Volkswagen Tiguan",
+        "section": "First generation (5N; 2007)",
+        "commons": "Volkswagen Tiguan I",
+        "source": "Infobox model_years: \"2009–2016 (North America)\" / \"2017–2018 (North America, Tiguan Limited)\"; \"Volkswagen of America announced that it would continue to sell its outgoing Tiguan alongside the second generation model, rebranding it as the Volkswagen Tiguan Limited ... discontinued after the 2018 model year.\"",
+        "note": "2017 = 5N (sold as the 'Tiguan Limited'); split year 2018 (5N Tiguan Limited alongside the new long-wheelbase AD/BW Tiguan). The parent category has 0 files; photos are in the subcategories 'Volkswagen Tiguan (2007)' (138 files, 2009–2011 US) and 'Volkswagen Tiguan (2011)' (134 files, facelift, 2012–2018 US)."
+      },
+      {
+        "label": "Volkswagen Tiguan (AD/BW, second generation, North America LWB)",
+        "from": 2018,
+        "to": 2024,
+        "article": "Volkswagen Tiguan",
+        "section": "Second generation (AD/BW; 2016)",
+        "commons": "Volkswagen Tiguan II (North America)",
+        "source": "Infobox model_years: \"2018–2024 (North America)\"; \"sales starting in summer 2017 for the 2018 model year\"",
+        "note": "Split year 2018 (see the first generation). The US car is the long-wheelbase version (the Allspace elsewhere); the 2022 facelift is the same generation."
+      },
+      {
+        "label": "Volkswagen Tiguan (third generation, North America; Tayron L-based)",
+        "from": 2025,
+        "to": null,
+        "article": "Volkswagen Tayron",
+        "section": "North America (Tiguan)",
+        "commons": "Volkswagen Tiguan III (North America)",
+        "source": "Volkswagen Tayron article, North America (Tiguan): \"In North America, the third-generation Tiguan, introduced for the 2025 model year, is closely related to the Chinese-market Tayron L\"; Tayron Mk2 infobox aka \"Volkswagen Tiguan (North America and Brazil)\"",
+        "note": "The US third-generation Tiguan is a long-wheelbase model that differs from the European Tiguan Mk3 (CT1). Use the North America subcategory, not 'Volkswagen Tiguan III'."
+      }
+    ]
+  }
+}
