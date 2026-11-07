@@ -29,6 +29,7 @@ const GROUPS: { heading: string; links: { href: string; label: string; external?
       { href: "/privacy", label: "Privacy" },
       { href: "/disclaimer", label: "What this site is (and isn't)" },
       { href: "/data-licenses", label: "Data licenses" },
+      { href: "/photo-credits", label: "Photo credits" },
     ],
   },
   {

@@ -84,6 +84,13 @@ export default function DataLicensesPage() {
         4.0 licenses; reusing them requires HLDI&apos;s permission.
       </p>
 
+      <h2>Car photos</h2>
+      <p>
+        The car photos come from Wikimedia Commons, shared by their photographers under open licenses (CC0, public
+        domain, CC BY or CC BY-SA). They aren&apos;t covered by this project&apos;s MIT or CC BY 4.0 licenses; each keeps
+        its own. <Link href="/photo-credits">Photo credits</Link> lists who took each one and its license.
+      </p>
+
       <h2>Everything else</h2>
       <p>
         The adjustments are worked out from the public sources on the <Link href="/sources">Where the numbers come from</Link> page. Where we
