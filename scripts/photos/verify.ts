@@ -19,7 +19,9 @@
  */
 import { readFile, writeFile } from "node:fs/promises"
 import { CANDIDATES_FILE, type Candidate, type GenerationCandidates } from "./candidates"
-import { generationKey, loadLibrary, marketCheck, questionsFor, reviewPhoto, type Library } from "./review"
+import { libraryCars } from "./cars"
+import { bodyCheck, generationKey, loadLibrary, marketCheck, questionsFor, reviewPhoto, type Library } from "./review"
+import type { BodyStyle } from "./series"
 import { readSeries } from "./series"
 
 export const MANIFEST_FILE = "data/photos/manifest.json"
@@ -80,12 +82,34 @@ export type Manifest = Record<string, { name: string; years: Record<string, Mani
 
 type Reviewed = { candidate: Candidate; pick: PhotoPick | null }
 
+/** Words that mark a version with a look of its own: an electric F-150 Lightning, a plug-in Prius. */
+const ELECTRIC_WORDS = ["lightning", "electric", "ev", "bev", "mach-e", "e-tron", "iq"]
+const PLUG_IN_WORDS = ["plug-in", "phev", "phv", "prime"]
+
+/**
+ * Whether a candidate (by its filename and Commons categories) is a version with another powertrain than
+ * the one the car page prices. Words in the car's own name ("Prius Prime") don't count.
+ */
+export function otherPowertrain(candidate: Pick<Candidate, "title" | "path">, powertrain: string, carName: string): boolean {
+  if (powertrain === "electric") return false
+  const words = powertrain === "plug-in-hybrid" ? ELECTRIC_WORDS : [...ELECTRIC_WORDS, ...PLUG_IN_WORDS]
+  const own = carName.toLowerCase().split(/\s+/)
+  const text = [candidate.title, ...candidate.path].join(" | ").toLowerCase()
+  return words.some((word) => !own.includes(word) && new RegExp(`(^|[^a-z0-9])${word}([^a-z0-9]|$)`).test(text))
+}
+
 /** A pick that suits a year well: within `years` of it, a US or Canadian car, not a rear view. */
 function fits(pick: PhotoPick, year: number, years: number): boolean {
   return pick.photoYear !== null && Math.abs(pick.photoYear - year) <= years && (pick.foreign ?? 0) < 0.5 && !/\b(rear|back|behind)\b/i.test(pick.file)
 }
 
-async function reviewGeneration(library: Library, slug: string, found: GenerationCandidates, wantYears: number[]): Promise<Reviewed[]> {
+async function reviewGeneration(
+  library: Library,
+  slug: string,
+  found: GenerationCandidates,
+  wantYears: number[],
+  rules: { body: BodyStyle | null; powertrain: string; carName: string },
+): Promise<Reviewed[]> {
   const questions = questionsFor(library, slug)
   const key = generationKey(found.generation)
   const reviewed: Reviewed[] = []
@@ -95,7 +119,9 @@ async function reviewGeneration(library: Library, slug: string, found: Generatio
     const year = photoYear(candidate)
     return year !== null && wantYears.some((want) => Math.abs(want - year) <= 1) ? 1.5 : 0
   }
-  const order = [...found.candidates].sort((a, b) => b.prior + near(b) - (a.prior + near(a)))
+  const order = [...found.candidates]
+    .filter((candidate) => !otherPowertrain(candidate, rules.powertrain, rules.carName))
+    .sort((a, b) => b.prior + near(b) - (a.prior + near(a)))
   for (const [index, candidate] of order.slice(0, EXTENDED_REVIEWS).entries()) {
     // Past MAX_REVIEWS, go on (to EXTENDED_REVIEWS) only while a shown year has no well-suited photo at GATE within two years of it.
     if (index >= MAX_REVIEWS) {
@@ -120,8 +146,13 @@ async function reviewGeneration(library: Library, slug: string, found: Generatio
       special: noul("special"),
       quality: quality?.type === "score" ? quality.score : 0,
     }
-    const accepted =
+    let accepted =
       answer.type === "choice" && answer.choice === key && jev.confidence >= FALLBACK_GATE && jev.exterior >= 0.5 && jev.special < 0.5 && jev.face < 0.5
+    // A car that comes in several bodies: the photo has to show the one the page prices.
+    if (accepted && rules.body) {
+      const body = await bodyCheck(candidate)
+      accepted = body !== null && body.body === rules.body && body.confidence >= 0.5
+    }
     reviewed.push({
       candidate,
       pick: accepted
@@ -187,6 +218,7 @@ async function main() {
     // first run
   }
   let reviews = 0
+  const powertrains = new Map(libraryCars().map((car) => [car.slug, car.powertrain]))
   for (const car of library.coverage.values()) {
     if (wanted.length && !wanted.includes(car.slug)) continue
     const years: Record<string, ManifestYear | null> = {}
@@ -196,7 +228,13 @@ async function main() {
     for (const [id, wantYears] of byGeneration) {
       const found = pool[id]
       if (!found) continue
-      const reviewed = await reviewGeneration(library, car.slug, found, wantYears)
+      const entry = library.series[car.slug]
+      const body = wantYears.map((year) => entry?.bodyByYear?.[year]).find(Boolean) ?? entry?.body ?? null
+      const reviewed = await reviewGeneration(library, car.slug, found, wantYears, {
+        body,
+        powertrain: powertrains.get(car.slug) ?? "combustion",
+        carName: car.name,
+      })
       reviews += reviewed.length
       picksByGeneration.set(id, reviewed.flatMap((item) => (item.pick ? [item.pick] : [])))
     }

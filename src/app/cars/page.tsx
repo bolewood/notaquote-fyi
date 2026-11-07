@@ -2,9 +2,11 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { Breadcrumbs } from "@/components/breadcrumbs"
+import { CarThumb, PhotoCreditsNote } from "@/components/car-photo"
 import { TrustArticle } from "@/components/trust-article"
 import { SERVER_CATALOG } from "@/lib/agent-catalog"
 import { carFigures, carPages, CLAIMS_YEARS, type CarFigures } from "@/lib/car-pages"
+import { carPhoto } from "@/lib/car-photos"
 import { estimateDollars, signedDollars } from "@/lib/format"
 import { pageMetadata } from "@/lib/site-meta"
 
@@ -102,8 +104,9 @@ export default function CarsIndexPage() {
                 {group.cars.map((f) => (
                   <tr key={f.page.slug} className="border-b border-border/60">
                     <th scope="row" className="pr-3 font-normal">
-                      <Link href={`/cars/${f.page.slug}`} className="inline-flex min-h-11 items-center py-1">
-                        {f.page.name}
+                      <Link href={`/cars/${f.page.slug}`} className="inline-flex min-h-11 items-center gap-3 py-1">
+                        <CarThumb photo={carPhoto(f.page.slug, f.page.pick.year)} />
+                        <span>{f.page.name}</span>
                       </Link>
                     </th>
                     <td className="py-2 pr-3 text-right whitespace-nowrap tabular-nums">{estimateDollars(f.adult.likely)}</td>
@@ -115,6 +118,7 @@ export default function CarsIndexPage() {
           </div>
         </section>
       ))}
+      <PhotoCreditsNote />
     </TrustArticle>
   )
 }

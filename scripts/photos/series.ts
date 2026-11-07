@@ -15,6 +15,8 @@ import { selectCars } from "./cars"
 
 export const SERIES_FILE = "data/photos/series.json"
 
+export type BodyStyle = "sedan" | "hatchback" | "coupe" | "convertible" | "wagon" | "suv" | "pickup" | "van"
+
 export type SeriesEntry = {
   /** English Wikipedia article for the model (the whole nameplate). */
   wikipedia: string
@@ -30,6 +32,13 @@ export type SeriesEntry = {
    * RAV4 and RAV4 Prime. The photo review names each as its own answer, so a twin's photo isn't taken for this car.
    */
   twins?: string[]
+  /**
+   * The body style the car pages price, for a car Commons shows in several (a Civic sedan, not the
+   * hatchback or coupe). A photo of another body is turned down. `bodyByYear` overrides it for a model
+   * year whose car comes in another body (the 2024 Impreza is a hatchback only).
+   */
+  body?: BodyStyle
+  bodyByYear?: Record<string, BodyStyle>
   /** Section headings, article titles or Commons subcategories (regular expressions) that aren't this car, like "Electric" or "Raptor". */
   exclude?: string[]
   /**

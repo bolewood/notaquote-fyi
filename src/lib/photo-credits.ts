@@ -4,18 +4,9 @@
  * CC0, public domain, CC BY or CC BY-SA; the BY licenses require a credit
  * wherever a photo is shown, and this is where the site gives it.
  */
-import images from "../../data/photos/images.json"
+import { PHOTOS, type PhotoCredit, type PhotoLibrary } from "./car-photos"
 
-export type PhotoCredit = {
-  title: string
-  author: string
-  license: string
-  licenseUrl: string | null
-  source: string
-  changes: string
-}
-
-type ImageEntry = { src: string; width: number; height: number; generation: string; photoYear: number | null; credit: PhotoCredit }
+export type { PhotoCredit }
 
 /** One photo and the model years of one car it's shown for. */
 export type CreditedPhoto = { src: string; years: number[]; credit: PhotoCredit }
@@ -23,10 +14,8 @@ export type CreditedPhoto = { src: string; years: number[]; credit: PhotoCredit 
 /** A car's photos, in the order of the years they're shown for. */
 export type CarCredits = { slug: string; photos: CreditedPhoto[] }
 
-const IMAGES = images as Record<string, Record<string, ImageEntry | null>>
-
 /** Every car with photos, sorted by slug; a photo shown for several years is listed once. */
-export function photoCredits(source: Record<string, Record<string, ImageEntry | null>> = IMAGES): CarCredits[] {
+export function photoCredits(source: PhotoLibrary = PHOTOS): CarCredits[] {
   return Object.entries(source)
     .map(([slug, years]) => {
       const bySrc = new Map<string, CreditedPhoto>()

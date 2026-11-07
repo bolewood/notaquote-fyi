@@ -3,6 +3,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ArrowRight } from "lucide-react"
 import { Breadcrumbs } from "@/components/breadcrumbs"
+import { CarHeroPhoto, CarThumb, PhotoCreditsNote } from "@/components/car-photo"
 import { HldiChip, HldiLegend } from "@/components/charts/hldi-chip"
 import { averageBandNote } from "@/lib/hldi"
 import { VehicleFixLink } from "@/components/how-we-got-this"
@@ -10,7 +11,8 @@ import { JsonLdScript } from "@/components/json-ld"
 import { TrustArticle } from "@/components/trust-article"
 import { SERVER_CATALOG } from "@/lib/agent-catalog"
 import { carContent, noindexCarSlugs } from "@/lib/car-content"
-import { carFigures, carPages } from "@/lib/car-pages"
+import { carFigures, carPageBySlug, carPages } from "@/lib/car-pages"
+import { carPhoto } from "@/lib/car-photos"
 import { longDate } from "@/lib/format"
 import { vehicleMatchWords } from "@/lib/pricing"
 import { DEFAULT_SCENARIO } from "@/lib/scenario"
@@ -38,20 +40,32 @@ export async function generateMetadata({ params }: PageProps<"/cars/[slug]">): P
   })
 }
 
-function SimilarList({ cars }: { cars: readonly { slug: string | null; name: string; price: string }[] }) {
+/** The photo for a similar car's page year. */
+function similarPhoto(slug: string) {
+  const page = carPageBySlug(SERVER_CATALOG, slug)
+  return page ? carPhoto(slug, page.pick.year) : null
+}
+
+function SimilarList({ cars, thisPhoto }: { cars: readonly { slug: string | null; name: string; price: string }[]; thisPhoto: ReturnType<typeof carPhoto> }) {
   return (
     <ul className="divide-y divide-border/70 border-y border-border/70">
       {cars.map((car) =>
         car.slug ? (
           <li key={car.slug}>
             <Link href={`/cars/${car.slug}`} className="plain flex min-h-11 flex-wrap items-center justify-between gap-x-4 py-2 hover:text-primary">
-              <span className="link">{car.name}</span>
+              <span className="flex items-center gap-3">
+                <CarThumb photo={similarPhoto(car.slug)} className="w-14" />
+                <span className="link">{car.name}</span>
+              </span>
               <span className="money text-sm text-muted-foreground">{car.price}</span>
             </Link>
           </li>
         ) : (
           <li key="this-car" aria-current="page" className="flex min-h-11 flex-wrap items-center justify-between gap-x-4 py-2 font-semibold">
-            <span>{car.name}</span>
+            <span className="flex items-center gap-3">
+              <CarThumb photo={thisPhoto} className="w-14" />
+              <span>{car.name}</span>
+            </span>
             <span className="money text-sm">{car.price}</span>
           </li>
         ),
@@ -65,6 +79,7 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
   if (!f) notFound()
   const { page } = f
   const c = carContent(f)
+  const photo = carPhoto(page.slug, page.pick.year)
   const whatIfHref = encodeSharePath({
     page: "/",
     scenario: DEFAULT_SCENARIO,
@@ -111,6 +126,7 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
         <p className="money text-sm text-muted-foreground">{c.range}</p>
         <p className="text-sm text-muted-foreground">{c.averageLine}</p>
       </div>
+      {photo ? <CarHeroPhoto photo={photo} carName={page.shortName} /> : null}
       <p className="text-sm text-muted-foreground">
         {c.about} <span data-shared="">{c.driverNote}</span> <Link href="/states">{c.stateLine}</Link>
       </p>
@@ -211,7 +227,12 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
               {c.years.map((row) => (
                 <tr key={row.year} className="border-b border-border/60">
                   <th scope="row" className="py-2 pr-3 font-normal">
-                    {row.year} {row.trim} <span className="text-muted-foreground">({row.age})</span>
+                    <span className="flex items-center gap-3">
+                      <CarThumb photo={carPhoto(page.slug, Number(row.year))} />
+                      <span>
+                        {row.year} {row.trim} <span className="text-muted-foreground">({row.age})</span>
+                      </span>
+                    </span>
                   </th>
                   <td className="py-2 pr-3 text-right whitespace-nowrap tabular-nums">{row.adult}</td>
                   <td className="py-2 pr-3 text-right whitespace-nowrap tabular-nums">{row.liability}</td>
@@ -223,7 +244,14 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
           </table>
         </div>
       ) : null}
-      {c.years.length > 1 ? <p className="text-sm text-muted-foreground">{c.yearsNote}</p> : null}
+      {c.years.length > 1 ? (
+        <p className="text-sm text-muted-foreground">
+          {c.yearsNote}{" "}
+          <span data-shared="">
+            Each photo shows that year&apos;s generation of the car. <Link href="/photo-credits">Photo credits</Link>.
+          </span>
+        </p>
+      ) : null}
       {c.trims ? (
         <>
           <p>{c.trims.text}</p>
@@ -253,7 +281,8 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
         <>
           <h2 id="similar">{c.similarHeading}</h2>
           {c.groupRank ? <p>{c.groupRank}</p> : null}
-          <SimilarList cars={c.similar} />
+          <SimilarList cars={c.similar} thisPhoto={photo} />
+          <PhotoCreditsNote />
         </>
       ) : null}
 

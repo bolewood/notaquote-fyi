@@ -44,3 +44,15 @@ test("a near-year, US, front photo beats a foreign, far or rear one", () => {
   assert.ok(at({}) > at({ file: "File:2024 Car, rear left.jpg" }), "a rear view ranks lower")
   assert.ok(at({ photoYear: 2023 }) > at({ foreign: 0.8 }), "a US car a year off beats a foreign car of the year")
 })
+
+test("a gas or hybrid car page skips electric and plug-in versions, but not its own name", async () => {
+  const { otherPowertrain } = await import("./verify")
+  const photo = (title: string, path: string[] = []) => ({ title, path })
+  assert.equal(otherPowertrain(photo("File:2022 Ford F-150 Lightning Lariat.jpg"), "combustion", "Ford F-150"), true)
+  assert.equal(otherPowertrain(photo("File:2022 Ford F-150 XLT.jpg"), "combustion", "Ford F-150"), false)
+  assert.equal(otherPowertrain(photo("File:Prius.jpg", ["Toyota Prius (XW50) Plug-in Hybrid"]), "hybrid", "Toyota Prius"), true)
+  assert.equal(otherPowertrain(photo("File:2023 Toyota Prius Prime SE.jpg"), "plug-in-hybrid", "Toyota Prius Prime"), false)
+  assert.equal(otherPowertrain(photo("File:Kona Electric.jpg"), "electric", "Hyundai Kona Electric"), false)
+  assert.equal(otherPowertrain(photo("File:2023 Kia EV6 GT.jpg"), "combustion", "Kia Sportage"), false, "EV6 isn't the word EV")
+  assert.equal(otherPowertrain(photo("File:2024 Chevrolet Blazer EV RS.jpg"), "combustion", "Chevrolet Blazer"), true)
+})

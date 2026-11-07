@@ -112,7 +112,8 @@
   "bmw-330i": {
     "wikipedia": "BMW 3 Series",
     "wikidata": "Q466066",
-    "status": "auto"
+    "status": "auto",
+    "body": "sedan"
   },
   "bmw-x3": {
     "wikipedia": "BMW X3",
@@ -349,7 +350,8 @@
   "chevrolet-camaro": {
     "wikipedia": "Chevrolet Camaro",
     "wikidata": "Q332448",
-    "status": "auto"
+    "status": "auto",
+    "body": "coupe"
   },
   "chevrolet-colorado": {
     "wikipedia": "Chevrolet Colorado",
@@ -410,7 +412,8 @@
         "source": "Infobox model_years: \"2016–2025 (North America)\"",
         "note": "Split year 2016 (see the eighth generation). 2019 refresh is in the same generation. The 'Malibu XL' subcategory is the Chinese-market name; avoid it."
       }
-    ]
+    ],
+    "body": "sedan"
   },
   "chevrolet-silverado": {
     "wikipedia": "Chevrolet Silverado",
@@ -854,7 +857,8 @@
   "ford-mustang": {
     "wikipedia": "Ford Mustang",
     "wikidata": "Q183476",
-    "status": "auto"
+    "status": "auto",
+    "body": "coupe"
   },
   "ford-mustang-mach-e": {
     "wikipedia": "Ford Mustang Mach-E",
@@ -1140,12 +1144,14 @@
         "source": "Infobox model_years: \"2023–present\" (Honda Accord, Eleventh generation section)",
         "note": "Commons names it by reveal year (2022). A refreshed 2027 Accord has been shown in Japan; the US 2027 is not yet listed on fueleconomy.gov (2026 is). Any US 2027 will still be this generation."
       }
-    ]
+    ],
+    "body": "sedan"
   },
   "honda-civic": {
     "wikipedia": "Honda Civic",
     "wikidata": "Q216747",
-    "status": "auto"
+    "status": "auto",
+    "body": "sedan"
   },
   "honda-cr-v": {
     "wikipedia": "Honda CR-V",
@@ -1281,7 +1287,8 @@
   "hyundai-elantra": {
     "wikipedia": "Hyundai Elantra",
     "wikidata": "Q482530",
-    "status": "auto"
+    "status": "auto",
+    "body": "sedan"
   },
   "hyundai-ioniq-5": {
     "wikipedia": "Hyundai Ioniq 5",
@@ -1335,7 +1342,8 @@
   "hyundai-sonata": {
     "wikipedia": "Hyundai Sonata",
     "wikidata": "Q482458",
-    "status": "auto"
+    "status": "auto",
+    "body": "sedan"
   },
   "hyundai-tucson": {
     "wikipedia": "Hyundai Tucson",
@@ -1465,12 +1473,14 @@
   "kia-forte": {
     "wikipedia": "Kia Forte",
     "wikidata": "Q489621",
-    "status": "auto"
+    "status": "auto",
+    "body": "sedan"
   },
   "kia-k5": {
     "wikipedia": "Kia K5",
     "wikidata": "Q12586722",
-    "status": "auto"
+    "status": "auto",
+    "body": "sedan"
   },
   "kia-niro": {
     "wikipedia": "Kia Niro",
@@ -1534,7 +1544,8 @@
   "lexus-es": {
     "wikipedia": "Lexus ES",
     "wikidata": "Q577397",
-    "status": "auto"
+    "status": "auto",
+    "body": "sedan"
   },
   "lexus-nx": {
     "wikipedia": "Lexus NX",
@@ -1591,7 +1602,8 @@
   "mazda-3": {
     "wikipedia": "Mazda3",
     "wikidata": "Q911466",
-    "status": "auto"
+    "status": "auto",
+    "body": "sedan"
   },
   "mazda-cx-30": {
     "wikipedia": "Mazda CX-30",
@@ -1655,7 +1667,8 @@
         "source": "Infobox model_years: \"2022–present\" (Mercedes-Benz C-Class (W206)); fueleconomy.gov lists C300 / C300 4matic for 2025, 2026 and 2027",
         "note": "The 2027 US gasoline C-Class is the facelifted W206 (2026 facelift)."
       }
-    ]
+    ],
+    "body": "sedan"
   },
   "mercedes-benz-glc-class": {
     "wikipedia": "Mercedes-Benz GLC",
@@ -1735,7 +1748,8 @@
   "nissan-altima": {
     "wikipedia": "Nissan Altima",
     "wikidata": "Q636791",
-    "status": "auto"
+    "status": "auto",
+    "body": "sedan"
   },
   "nissan-frontier": {
     "wikipedia": "Nissan Frontier (North America)",
@@ -1863,7 +1877,8 @@
   "nissan-sentra": {
     "wikipedia": "Nissan Sentra",
     "wikidata": "Q719974",
-    "status": "auto"
+    "status": "auto",
+    "body": "sedan"
   },
   "nissan-versa": {
     "wikipedia": "Nissan Versa",
@@ -1900,7 +1915,8 @@
         "commons": "Nissan Versa (N18)",
         "source": "Infobox model_years: \"2020–2025 (North America)\" (Nissan Almera, Fourth generation section); Nissan Versa article: discontinued in the US after the 2025 model year (caranddriver.com/news/a69850700)"
       }
-    ]
+    ],
+    "body": "sedan"
   },
   "ram-1500": {
     "wikipedia": "Ram pickup",
@@ -1978,12 +1994,17 @@
   "subaru-impreza": {
     "wikipedia": "Subaru Impreza",
     "wikidata": "Q391342",
-    "status": "auto"
+    "status": "auto",
+    "body": "sedan",
+    "bodyByYear": {
+      "2024": "hatchback"
+    }
   },
   "subaru-legacy": {
     "wikipedia": "Subaru Legacy",
     "wikidata": "Q603323",
-    "status": "auto"
+    "status": "auto",
+    "body": "sedan"
   },
   "subaru-outback": {
     "wikipedia": "Subaru Outback",
@@ -2089,7 +2110,8 @@
   "toyota-corolla": {
     "wikipedia": "Toyota Corolla",
     "wikidata": "Q243543",
-    "status": "auto"
+    "status": "auto",
+    "body": "sedan"
   },
   "toyota-corolla-cross": {
     "wikipedia": "Toyota Corolla Cross",
@@ -2160,7 +2182,8 @@
     "status": "auto",
     "twins": [
       "toyota-prius-prime"
-    ]
+    ],
+    "body": "hatchback"
   },
   "toyota-prius-prime": {
     "wikipedia": "Toyota Prius Plug-in Hybrid",
@@ -2302,7 +2325,8 @@
   "volkswagen-jetta": {
     "wikipedia": "Volkswagen Jetta",
     "wikidata": "Q697152",
-    "status": "auto"
+    "status": "auto",
+    "body": "sedan"
   },
   "volkswagen-taos": {
     "wikipedia": "Volkswagen Taos",
