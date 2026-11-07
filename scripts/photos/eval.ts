@@ -6,7 +6,7 @@
  * report how often an answer at each confidence is right, to pick the gate
  * photos:verify uses.
  *
- *   npm run with:secrets -- npm run photos:eval
+ *   npm run photos:eval   (needs OPENROUTER_API_KEY in the environment)
  *
  * Needs photos:candidates first. Answers are cached, so a rerun is free.
  * Commons labels are sometimes wrong too: look at the disagreements before

@@ -9,7 +9,7 @@
  * answers don't shift when a new Jev comes out; to upgrade, change MODEL and
  * rerun photos:eval before trusting the new answers.
  *
- * Needs OPENROUTER_API_KEY in the environment: `npm run with:secrets -- …`.
+ * Needs OPENROUTER_API_KEY in the environment (set it however you keep secrets).
  * The key is never logged.
  */
 import { createHash } from "node:crypto"
@@ -61,7 +61,7 @@ export async function decide(state: StatePart[] | (() => Promise<StatePart[]>), 
     // not asked yet
   }
   const key = process.env.OPENROUTER_API_KEY
-  if (!key) throw new Error("OPENROUTER_API_KEY isn't set: run this with `npm run with:secrets -- …`")
+  if (!key) throw new Error("OPENROUTER_API_KEY isn't set: put your OpenRouter key in the environment and run this again")
   const parts = typeof state === "function" ? await state() : state
   let lastError = ""
   for (let attempt = 0; attempt < 4; attempt += 1) {

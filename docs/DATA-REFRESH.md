@@ -125,10 +125,10 @@ Requests go to Wikipedia, Wikidata and Commons one at a time, with a User-Agent 
 
 ### Choosing the photos
 
-Two more steps pick a photo for every model year a car page shows. Both need `OPENROUTER_API_KEY`, which comes from 1Password: run them through `npm run with:secrets -- …`. Never print the key.
+Three more steps pick and fetch a photo for every model year a car page shows. `photos:verify` asks a model on OpenRouter, and so does `photos:eval` (below), so they need an `OPENROUTER_API_KEY` in your environment: set it however you keep secrets (a password manager's command-line tool, say), not in a file in the repo. Never print the key.
 
 1. `npm run photos:candidates [-- <slug>…]` lists the openly licensed photos (public domain, CC0, CC BY, CC BY-SA) in each shown generation's Commons category and the usable subcategories under it, up to four levels down. It skips racing, police, taxi, concept and other-market subcategories, and files under 1200×700. The list goes to `data/photos/.cache/` (not committed).
-2. `npm run with:secrets -- npm run photos:verify [-- <slug>…]` asks Jev (TypeSafe's decision model, through OpenRouter) about candidates, best first. Jev sees only the image, never the filename or category, and answers:
+2. `npm run photos:verify [-- <slug>…]` asks Jev (TypeSafe's decision model, through OpenRouter) about candidates, best first. Jev sees only the image, never the filename or category, and answers:
    - which generation of the car this is, or a badge twin, a different model, or no single car;
    - whether it shows the outside of one whole car, a recognizable face or a readable plate;
    - whether it's a taxi, police car, race car or wreck, and how good the photo is.
@@ -143,7 +143,7 @@ Two more steps pick a photo for every model year a car page shows. Both need `OP
 
 Answers are cached by file, so rerunning costs nothing; a fresh review of every car costs about a dollar.
 
-**Changing the model or the questions.** The model is pinned in `scripts/photos/jev.ts` (with the endpoint, an OpenRouter alpha; if it moves, that file is the only one to change). Before changing either, run `npm run with:secrets -- npm run photos:eval`. It asks the same questions about photos whose answer Commons already knows, on hard cases (neighboring generations, badge twins, plug-in versions), and reports how often an answer at each confidence is right. Set `GATE` from that table, and look at the disagreements yourself: Commons is sometimes the one that's wrong.
+**Changing the model or the questions.** The model is pinned in `scripts/photos/jev.ts` (with the endpoint, an OpenRouter alpha; if it moves, that file is the only one to change). Before changing either, run `npm run photos:eval` (it needs the key too). It asks the same questions about photos whose answer Commons already knows, on hard cases (neighboring generations, badge twins, plug-in versions), and reports how often an answer at each confidence is right. Set `GATE` from that table, and look at the disagreements yourself: Commons is sometimes the one that's wrong.
 
 ### Each fall (new model years)
 
