@@ -38,6 +38,7 @@ const STATIC_PAGES: readonly [string, string][] = [
   ["/privacy", DATA_DATES.sources],
   ["/disclaimer", DATA_DATES.sources],
   ["/data-licenses", SOURCES_UPDATED],
+  ["/photo-credits", SOURCES_UPDATED],
   ["/corrections", DATA_DATES.sources],
 ]
 
