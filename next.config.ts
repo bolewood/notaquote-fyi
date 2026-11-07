@@ -4,12 +4,12 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: ["127.0.0.1"],
   // No floating dev badge over the page (it gets in the way of screenshots).
   devIndicators: false,
-  // Car photos are pre-sized (320, 640 and 1200 pixels) by `npm run photos:download`; the loader picks one.
+  // Car photos are pre-sized (160, 320, 640 and 1200 pixels) by `npm run photos:download`; the loader picks one.
   images: {
     loader: "custom",
     loaderFile: "./src/lib/car-photo-loader.ts",
     deviceSizes: [640, 1200],
-    imageSizes: [320],
+    imageSizes: [160, 320],
   },
   async headers() {
     return [

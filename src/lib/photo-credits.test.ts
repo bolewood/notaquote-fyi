@@ -2,7 +2,7 @@ import assert from "node:assert/strict"
 import test from "node:test"
 import { photoCount, photoCredits, photoName } from "./photo-credits"
 
-const credit = (title: string) => ({ title, author: "A", license: "CC0", licenseUrl: null, source: "https://commons.wikimedia.org/x", changes: "Resized and converted to WebP" })
+const credit = (title: string) => ({ title, author: "A", license: "CC0", licenseUrl: null, source: "https://commons.wikimedia.org/x", changes: "Resized, converted to WebP, and cropped for display" })
 const entry = (src: string, title: string) => ({ src, width: 1200, height: 800, generation: "g", generationYears: "2018–2024", photoYear: null, credit: credit(title) })
 
 test("a photo shown for several years is credited once, with every year", () => {

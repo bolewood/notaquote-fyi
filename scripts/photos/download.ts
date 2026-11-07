@@ -30,7 +30,7 @@ const WIDTH = 1200
  * Smaller copies next to each photo ("<sha1>-320.webp", "<sha1>-640.webp"), so a thumbnail or a phone
  * doesn't download the 1200-pixel file. src/lib/car-photo-loader.ts picks one for each srcset width.
  */
-export const VARIANT_WIDTHS = [320, 640] as const
+export const VARIANT_WIDTHS = [160, 320, 640] as const
 
 export type Credit = {
   /** "File:2019 Toyota Camry LE in white, front left.jpg" */
@@ -182,7 +182,7 @@ async function main() {
                 license: pick.license,
                 licenseUrl: pick.licenseUrl,
                 source: pick.descriptionUrl,
-                changes: "Resized and converted to WebP",
+                changes: "Resized, converted to WebP, and cropped for display",
               },
             }
           : null

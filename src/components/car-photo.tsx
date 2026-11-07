@@ -9,7 +9,8 @@ import { licenseLabel, type CarPhoto } from "@/lib/car-photos"
  */
 export function CarHeroPhoto({ photo, carName, className }: { photo: CarPhoto; carName: string; className?: string }) {
   const { credit } = photo
-  const what = `${photo.photoYear ? `A ${photo.photoYear}` : "A"} ${carName}`
+  // The generation is verified; the exact model year in the photo isn't, so the caption doesn't claim one.
+  const what = `A ${carName} from the ${photo.generationYears} generation`
   return (
     <figure className={cn("grid gap-2", className)} data-testid="car-photo">
       <Image
@@ -23,7 +24,7 @@ export function CarHeroPhoto({ photo, carName, className }: { photo: CarPhoto; c
         className="aspect-video w-full rounded-2xl bg-muted object-cover ring-1 ring-border"
       />
       <figcaption className="text-xs leading-snug text-muted-foreground">
-        {what}, from the {photo.generationYears} generation. Photo:{" "}
+        {what}. Photo:{" "}
         <a href={credit.source} rel="noreferrer">
           {credit.author}
         </a>
@@ -35,7 +36,10 @@ export function CarHeroPhoto({ photo, carName, className }: { photo: CarPhoto; c
         ) : (
           licenseLabel(credit)
         )}
-        , <span data-shared="">via Wikimedia Commons.</span>
+        ,{" "}
+        <span data-shared="">
+          via Wikimedia Commons, cropped (<Link href="/photo-credits">credits</Link>).
+        </span>
       </figcaption>
     </figure>
   )
@@ -53,7 +57,7 @@ export function CarThumb({ photo, className }: { photo: CarPhoto | null; classNa
       width={photo.width}
       height={photo.height}
       alt=""
-      sizes="96px"
+      sizes="64px"
       className={cn("aspect-[3/2] w-16 shrink-0 rounded-md bg-muted object-cover", className)}
     />
   )

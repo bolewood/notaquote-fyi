@@ -117,7 +117,6 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
           dateModified: CAR_PAGES_UPDATED,
         })}
       />
-      {photo ? <CarHeroPhoto photo={photo} carName={page.shortName} /> : null}
       <div className="grid gap-1 rounded-2xl bg-card p-5 ring-1 ring-border" data-testid="car-estimate">
         <p className="text-sm font-medium text-muted-foreground">{c.estimateLabel}</p>
         <p>
@@ -127,6 +126,7 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
         <p className="money text-sm text-muted-foreground">{c.range}</p>
         <p className="text-sm text-muted-foreground">{c.averageLine}</p>
       </div>
+      {photo ? <CarHeroPhoto photo={photo} carName={page.shortName} /> : null}
       <p className="text-sm text-muted-foreground">
         {c.about} <span data-shared="">{c.driverNote}</span> <Link href="/states">{c.stateLine}</Link>
       </p>

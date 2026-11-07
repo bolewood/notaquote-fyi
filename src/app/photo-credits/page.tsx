@@ -54,8 +54,8 @@ export default function PhotoCreditsPage() {
       <h2>How we use them</h2>
       <p>
         Each photo shows the generation of the car sold in the model years listed with it. A few show a version sold in
-        another country, or one from just before or after a mid-cycle restyle. We resized each one and saved it in
-        a smaller file format (WebP), and we didn&apos;t change anything else. The photos aren&apos;t covered by this
+        another country, or one from just before or after a mid-cycle restyle. We resized each one, saved it in a
+        smaller file format (WebP), and crop it to fit the page; we didn&apos;t change anything else. The photos aren&apos;t covered by this
         project&apos;s own licenses (see <Link href="/data-licenses">Data licenses</Link>): each keeps the license shown
         next to it. To reuse one, follow its link to Commons and use it on those terms.
       </p>
