@@ -13,6 +13,7 @@
   --color-range-low: var(--range-low);
   --color-range-likely: var(--range-likely);
   --color-range-high: var(--range-high);
+  --color-band-muted: var(--band-muted);
   --color-sun: var(--sun);
   --color-sun-soft: var(--sun-soft);
   --color-sun-ink: var(--sun-ink);
@@ -51,6 +52,12 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* No figure on the site is set smaller than 13px. */
+@theme {
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: calc(1.125 / 0.8125);
+}
+
 :root {
   --background: oklch(0.982 0.008 80);
   --foreground: oklch(0.24 0.025 255);
@@ -63,6 +70,7 @@
   --range-low: oklch(0.5 0.11 250);
   --range-likely: oklch(0.42 0.11 255);
   --range-high: oklch(0.5 0.13 35);
+  --band-muted: oklch(0.8 0.012 255);
   --secondary: oklch(0.95 0.012 80);
   --secondary-foreground: oklch(0.24 0.025 255);
   --muted: oklch(0.955 0.01 80);
@@ -183,8 +191,8 @@
     gap: 0.25rem;
     border-radius: 999px;
     padding: 0.2rem 0.6rem;
-    font-size: 0.8rem;
-    font-weight: 650;
+    font-size: 0.8125rem;
+    font-weight: 600;
     line-height: 1.2;
     white-space: nowrap;
   }
@@ -257,7 +265,7 @@
     background: var(--card);
     color: var(--foreground);
     font-size: 0.9rem;
-    font-weight: 550;
+    font-weight: 500;
     line-height: 1.2;
     white-space: nowrap;
     cursor: pointer;
@@ -302,7 +310,7 @@
     background: var(--card);
     color: var(--foreground);
     font-size: 0.875rem;
-    font-weight: 520;
+    font-weight: 500;
     line-height: 1.2;
     text-align: left;
     cursor: pointer;
@@ -374,7 +382,7 @@
     padding: 0.4rem 0.75rem;
     border-radius: 999px;
     font-size: 0.9rem;
-    font-weight: 560;
+    font-weight: 500;
     color: var(--muted-foreground);
     white-space: nowrap;
     cursor: pointer;
@@ -417,7 +425,6 @@
 
   .money {
     font-variant-numeric: tabular-nums;
-    letter-spacing: -0.02em;
   }
 
   .scroll-row {

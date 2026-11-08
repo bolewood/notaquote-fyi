@@ -569,6 +569,7 @@ function CalculatorReady() {
                 estimate={nowEstimate}
                 startKind={startKind}
                 startShortLine={start ? startShort(start, state) : undefined}
+                typical={start && start.kind !== "yours" ? { annual: start.annual, state } : undefined}
                 shared={linked !== null && linked.premium !== null}
                 waiting={premiumInvalid}
                 eyebrow={linked !== null ? null : isExample ? "Example estimate" : "Your starting estimate"}
@@ -1077,6 +1078,7 @@ function NowFigure({
   estimate,
   startKind,
   startShortLine,
+  typical,
   shared,
   waiting,
   eyebrow,
@@ -1085,6 +1087,8 @@ function NowFigure({
   estimate: Estimate
   startKind: StartKind
   startShortLine?: string
+  /** The state's typical price, when that's where we started: drawn as a tick on the bar. */
+  typical?: { annual: number; state: string }
   /** The premium came from a shared link: it's the sender's, not the visitor's. */
   shared: boolean
   /** The premium field has text we can't read yet: dim the old figures. */
@@ -1116,12 +1120,26 @@ function NowFigure({
       {ownNumber ? null : (
         <>
           <RangeBar
-            className="mt-3"
+            className="mt-3.5"
             low={estimate.low}
             likely={estimate.likely}
             high={estimate.high}
-            min={Math.round(estimate.low * 0.9)}
-            max={Math.round(estimate.high * 1.05)}
+            // Scaled from the best guess, not the range, so a wide range looks wide.
+            min={Math.round(Math.min(estimate.low, typical?.annual ?? estimate.low, estimate.likely * 0.6) * 0.95)}
+            max={Math.round(Math.max(estimate.high, estimate.likely * 1.6) * 1.02)}
+            labels
+            marker={
+              typical
+                ? {
+                    value: typical.annual,
+                    label: (
+                      <>
+                        {typical.state} typical <span className="font-semibold text-foreground">{estimateDollars(typical.annual)}</span>
+                      </>
+                    ),
+                  }
+                : undefined
+            }
           />
           <p className="mt-2 text-xs leading-snug text-muted-foreground">{RANGE_NOTE}</p>
         </>
@@ -1162,6 +1180,18 @@ function resultBridge(input: {
     },
     neutral: (part) => input.neutral && (part.key === "coverage" || part.key === "deductible"),
   })
+}
+
+/**
+ * "Tesla Model Y instead of Toyota Camry: higher crash-repair losses…" → the change, and why, so the
+ * reason gets its own line. A parenthesis counts only when it has words in it: "Newer car (2025)" stays whole.
+ */
+function splitReason(label: string): { main: string; reason: string | null } {
+  const capital = (text: string) => text.charAt(0).toUpperCase() + text.slice(1)
+  const colon = label.indexOf(": ")
+  if (colon > 0) return { main: label.slice(0, colon), reason: capital(label.slice(colon + 2)) }
+  const match = /^(.*?)\s*\(([^()]*[a-z]{3}[^()]*)\)$/i.exec(label)
+  return match ? { main: match[1], reason: capital(match[2]) } : { main: label, reason: null }
 }
 
 function WhatIfResult({
@@ -1247,6 +1277,13 @@ function WhatIfResult({
           : "text-muted-foreground"
   // A piece that rounds to $0 doesn't explain anything.
   const shownParts = parts.filter((part) => Math.round(part.amount / 10) !== 0)
+  // "Switching to a 2025 Tesla Model Y costs about / $630 more a year". With several
+  // changes the label is a list, so "about" stays next to the number.
+  // Only for a label that reads as a subject ("Moving to Texas", "Raising your deductible…"), not "With two
+  // at-fault accidents" or "Licensed under a year", which can't be followed by "costs".
+  const leadIn = Boolean(label && /^[A-Z][a-z]+ing\b/.test(label)) && !changesLabel && hasAmount && mode !== "teen-own" && direction !== "same"
+  const smallWord = "text-xl font-medium tracking-normal text-muted-foreground"
+  const several = shownParts.length > 1
   const bridge = hasAmount ? resultBridge({ mode, current, next, parts, ownNumber, plural, neutral }) : null
   return (
     <div className="pop-in grid gap-6" key={headline}>
@@ -1263,25 +1300,26 @@ function WhatIfResult({
           ))}
         </div>
       ) : null}
-      <div className="grid gap-1">
-        {label ? <p className="text-base font-medium text-muted-foreground">{label}</p> : null}
+      <div className="grid gap-1.5">
+        {label ? <p className="text-base font-medium text-muted-foreground">{leadIn ? `${label} costs about` : label}</p> : null}
         <h3 ref={headingRef} tabIndex={-1} className="outline-none" data-testid="what-if-headline" aria-label={headline}>
           {!hasAmount ? (
             <span className="block text-2xl leading-snug font-semibold tracking-tight text-balance">{headline}</span>
           ) : mode === "teen-own" ? (
-            <span className="flex flex-wrap items-baseline gap-x-2 text-4xl leading-tight font-semibold tracking-tight sm:text-[2.75rem]">
-              <span className="text-lg font-medium text-muted-foreground">about</span>
-              <span className="money">{estimateDollars(next.likely)}</span>
-              <span className="text-lg font-medium text-muted-foreground">a year</span>
+            <span className="flex flex-wrap items-baseline gap-x-2.5">
+              <span className={smallWord}>about</span>
+              <span className="money text-4xl leading-tight font-semibold tracking-tight sm:text-[2.75rem]">{estimateDollars(next.likely)}</span>
+              <span className={smallWord}>a year</span>
             </span>
           ) : direction === "same" ? (
             <span className="block text-4xl leading-tight font-semibold tracking-tight">About the same</span>
           ) : (
-            <span className={cn("flex flex-wrap items-baseline gap-x-2 text-4xl leading-tight font-semibold tracking-tight sm:text-[2.75rem]", tone)}>
-              <span className="text-lg font-medium text-muted-foreground">about</span>
-              <span className="money">{dollars(Math.abs(rounded))}</span>
-              <span>{direction === "up" ? "more" : "less"}</span>
-              <span className="text-lg font-medium text-muted-foreground">a year</span>
+            <span className="flex flex-wrap items-baseline gap-x-2.5">
+              {leadIn ? null : <span className={smallWord}>about</span>}
+              <span className={cn("money text-4xl leading-tight font-semibold tracking-tight sm:text-[2.75rem]", tone)}>
+                {dollars(Math.abs(rounded))} {direction === "up" ? "more" : "less"}
+              </span>
+              <span className={smallWord}>a year</span>
             </span>
           )}
         </h3>
@@ -1314,16 +1352,29 @@ function WhatIfResult({
         <div className="grid gap-2" data-testid="what-if-parts">
           <p className="text-sm font-semibold">What makes the difference</p>
           <ul className="grid text-sm">
-            {shownParts.map((part) => (
-              <li key={part.label} className="flex items-baseline justify-between gap-4 border-b border-border/70 py-1.5 last:border-b-0">
-                <span>{part.label}</span>
-                <span className={cn("money font-semibold whitespace-nowrap", partTone(part))}>
-                  {signedDollars(part.amount)}
-                </span>
+            {shownParts.map((part) => {
+              const { main, reason } = splitReason(part.label)
+              return (
+                <li
+                  key={part.label}
+                  className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-4 border-b border-border/70 py-2.5 last:border-b-0"
+                >
+                  <span className="grid gap-0.5">
+                    <span>{main}</span>
+                    {reason ? <span className="text-xs text-muted-foreground">{reason}</span> : null}
+                  </span>
+                  <span className={cn("money font-semibold whitespace-nowrap", partTone(part))}>{signedDollars(part.amount)}</span>
+                </li>
+              )
+            })}
+            {several && mode !== "teen-own" ? (
+              <li className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-4 border-t border-border pt-2.5">
+                <span className="font-semibold">Total</span>
+                <span className={cn("money font-semibold whitespace-nowrap", tone)}>{signedDollars(delta)}</span>
               </li>
-            ))}
+            ) : null}
           </ul>
-          {shownParts.length > 1 ? (
+          {several ? (
             <p className="text-xs text-muted-foreground">
               Each piece is rounded to the nearest $10 a year, so they may not add up exactly.
             </p>
@@ -1331,30 +1382,42 @@ function WhatIfResult({
         </div>
       ) : null}
 
-      <dl className="grid gap-4 rounded-2xl bg-muted/60 p-4">
-        <div className="grid gap-1.5">
-          <div className="flex flex-wrap items-baseline justify-between gap-x-3">
-            <dt className="text-sm text-muted-foreground">{mode === "teen-own" ? "Your car now" : "Where you started"}</dt>
-            <dd className="money text-sm text-muted-foreground">
-              <span className="text-base font-semibold text-foreground">{nowWords}</span> a year
-              {ownNumber ? null : <span> · {rangeWords(current.low, current.high)}</span>}
+      <dl className="grid gap-4 rounded-2xl bg-muted/60 px-5 pt-4.5 pb-4">
+        <div className="grid grid-cols-[8.75rem_minmax(0,1fr)] items-start gap-x-5 max-sm:grid-cols-1 max-sm:gap-y-1.5">
+          <div className="grid gap-0.5">
+            <dt className="text-xs text-muted-foreground">{mode === "teen-own" ? "Your car now" : "Where you started"}</dt>
+            <dd className="money text-base font-semibold">
+              {nowWords} <span className="text-xs font-normal text-muted-foreground">a year</span>
             </dd>
           </div>
-          {ownNumber ? null : <RangeBar low={current.low} likely={current.likely} high={current.high} min={min} max={max} tone="muted" />}
+          {ownNumber ? (
+            <p className="pt-0.5 text-xs text-muted-foreground">{sender ? "What the sender pays now" : "What you pay now"}</p>
+          ) : (
+            <RangeBar labels low={current.low} likely={current.likely} high={current.high} min={min} max={max} tone="muted" />
+          )}
         </div>
-        <div className="grid gap-1.5">
-          <div className="flex flex-wrap items-baseline justify-between gap-x-3">
-            <dt className="text-sm font-semibold">
+        <div className="grid grid-cols-[8.75rem_minmax(0,1fr)] items-start gap-x-5 max-sm:grid-cols-1 max-sm:gap-y-1.5">
+          <div className="grid gap-0.5">
+            <dt className="text-xs font-semibold">
               {mode === "teen-own" ? "Their own policy" : mode === "teen-added" ? "With your teen" : plural ? "With these changes" : "With this change"}
             </dt>
-            <dd className="money text-sm text-muted-foreground" data-testid="what-if-yearly">
-              <span className="text-lg font-semibold text-foreground">{estimateDollars(next.likely)}</span> a year ·{" "}
-              {rangeWords(next.low, next.high)}
+            <dd className="money text-base font-semibold" data-testid="what-if-yearly">
+              {estimateDollars(next.likely)} <span className="text-xs font-normal text-muted-foreground">a year</span>
             </dd>
           </div>
-          <RangeBar low={next.low} likely={next.likely} high={next.high} min={min} max={max} tone="sun" />
+          <RangeBar labels low={next.low} likely={next.likely} high={next.high} min={min} max={max} tone="sun" />
         </div>
-        <p className="text-sm text-muted-foreground">Estimated yearly ranges. {RANGE_NOTE}</p>
+        <div className="grid gap-1.5 text-xs text-muted-foreground sm:pl-[10rem]">
+          <div className="flex flex-wrap gap-x-5 gap-y-2" aria-hidden="true">
+            <span className="inline-flex items-center gap-1.5">
+              <span className="size-2.5 rounded-full bg-muted-foreground" /> Our central estimate
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <span className="h-2 w-5.5 rounded-full bg-band-muted" /> Estimated range
+            </span>
+          </div>
+          <p>Estimated yearly ranges. Actual quotes can fall outside them.</p>
+        </div>
       </dl>
       {versionPicker}
 
