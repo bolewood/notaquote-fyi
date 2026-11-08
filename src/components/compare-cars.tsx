@@ -56,7 +56,7 @@ import {
 import { DATA_UPDATED, DISCLAIMER } from "@/lib/copy"
 import { recordCount, recordMountedCount } from "@/lib/counts"
 import { typicalStart } from "@/lib/factor-engine"
-import { dollars, estimateDollars, monthlyDollars, rangeWords, signedDollars } from "@/lib/format"
+import { dollars, estimateDollars, monthlyDollars, rangeDollars, signedDollars } from "@/lib/format"
 import {
   distinctReasons,
   driverOnlyEstimate,
@@ -330,7 +330,8 @@ function CompareCarsReady() {
   const maxYearly = parseMaxYearly(maxText)
   const visible = sortRows(filterRows(rows, { maxYearly, starredOnly }), sort)
   const { gaps, cheapest } = gapsToCheapest(visible)
-  const topAmount = Math.max(1, ...visible.map(shownAmount))
+  // The gap column's bars start at the cheapest car and run to the priciest one in the list.
+  const maxGap = Math.max(1, ...visible.map((row) => gaps.get(row.key) ?? 0))
   const starredCount = list.cars.filter((car) => car.starred).length
   const hidden = rows.length - visible.length
   const added = mode === "added"
@@ -339,6 +340,7 @@ function CompareCarsReady() {
     cheapest && visible.length > 1 ? visible.filter((row) => shownAmount(row) === shownAmount(cheapest)).map((row) => row.key) : [],
   )
   const lowestLabel = lowestKeys.size > 1 ? "Tied for lowest estimate" : "Lowest estimate"
+  const gapHeader = cheapest && visible.length > 1 && lowestKeys.size < 2 ? `More than the ${cheapest.car.model}` : "More than the cheapest"
   // Show or hide the chart; remembered in this browser (held in memory if storage is refused).
   const { shown: showChart, setShown: toggleChart } = useCompareChartShown()
   const age = AGE_BANDS.find((band) => band.id === driver.age)?.label ?? driver.age
@@ -775,7 +777,7 @@ function CompareCarsReady() {
                   </caption>
                   <thead>
                     <tr className="text-sm text-muted-foreground">
-                      <th scope="col" className="sticky top-0 z-10 w-14 border-b border-border bg-card py-2.5 pl-3">
+                      <th scope="col" className="sticky top-0 z-10 w-13 border-b border-border bg-card py-2.5 pl-3">
                         <span className="sr-only">Starred</span>
                       </th>
                       <SortHeader label="Car" sortKey="car" sort={sort} onSort={setSort} className="print:w-[30%]" />
@@ -786,19 +788,19 @@ function CompareCarsReady() {
                         sort={sort}
                         onSort={setSort}
                         align="right"
-                        className="hidden w-28 pr-5 xl:table-cell print:hidden"
+                        className="hidden w-24 xl:table-cell print:hidden"
                       />
+                      <th scope="col" className="sticky top-0 z-10 hidden w-40 border-b border-border bg-card py-2.5 pr-3 pl-5 font-medium xl:table-cell print:hidden">
+                        {gapHeader}
+                      </th>
                       <SortHeader
-                        label={added ? "Total with teen" : "Estimated range"}
+                        label={added ? "Total with teen, about" : "Estimated range"}
                         sortKey={added ? "policy" : "range"}
                         sort={sort}
                         onSort={setSort}
-                        className="w-48 pl-4"
+                        className="w-44"
                       />
-                      <th scope="col" className="sticky top-0 z-10 hidden w-36 border-b border-border bg-card py-2.5 pr-3 font-medium xl:table-cell print:hidden">
-                        vs. the cheapest
-                      </th>
-                      <th scope="col" className="no-print sticky top-0 z-10 w-14 border-b border-border bg-card py-2.5 pr-4">
+                      <th scope="col" className="no-print sticky top-0 z-10 w-13 border-b border-border bg-card py-2.5 pr-3">
                         <span className="sr-only">Remove</span>
                       </th>
                       <th scope="col" className="hidden w-[24%] border-b border-border py-2.5 pl-3 font-medium print:table-cell">
@@ -814,7 +816,7 @@ function CompareCarsReady() {
                         <Fragment key={row.key}>
                           <tr
                             className={cn(
-                              "border-b border-border/70 align-middle transition-colors hover:bg-muted/40",
+                              "h-15 border-b border-border/70 align-middle transition-colors hover:bg-muted/40",
                               row.starred && "bg-star/10 hover:bg-star/15",
                             )}
                             data-testid="compare-row"
@@ -822,10 +824,10 @@ function CompareCarsReady() {
                             <td className="py-3 pl-3">
                               <StarButton row={row} pop={popKey === row.key} onToggle={() => star(row)} />
                             </td>
-                            <td className="py-3 pr-3">
+                            <td className="px-3 py-3">
                               <button
                                 type="button"
-                                className="grid w-full min-w-0 text-left"
+                                className="grid w-full min-w-0 gap-px text-left"
                                 aria-expanded={openRow === row.key}
                                 data-focus-key={row.key}
                                 onClick={() => setOpenRow(openRow === row.key ? null : row.key)}
@@ -834,38 +836,55 @@ function CompareCarsReady() {
                                 {version ? <span className="truncate text-xs text-muted-foreground">{version}</span> : null}
                               </button>
                             </td>
-                            <td className="money py-3 pr-3 text-right whitespace-nowrap">
-                              <span className="block text-lg leading-tight font-semibold">{mainAmount(row)}</span>
+                            <td className="money px-3 py-3 text-right whitespace-nowrap">
+                              <span className="block text-lg leading-6 font-semibold">{mainAmount(row)}</span>
                               <span className="block text-xs text-muted-foreground xl:hidden">{monthAmount(row)} a month</span>
-                              <span className="print-exact mt-1.5 ml-auto block h-1.5 w-full max-w-24 rounded-full bg-muted" aria-hidden="true">
-                                <span
-                                  className="block h-full rounded-full bg-primary/70"
-                                  style={{ width: `${Math.max(4, (shownAmount(row) / topAmount) * 100)}%` }}
-                                />
-                              </span>
+                              {/* Below xl and in print the gap column is hidden, so the tag stays here. */}
                               {lowest ? (
-                                <span className="tag mt-1.5 bg-down-soft text-down">
-                                  {lowestLabel}
+                                <span className="tag mt-1 bg-down-soft text-down xl:hidden print:inline-flex">
+                                  {lowestKeys.size > 1 ? "Tied for cheapest" : lowestLabel}
                                 </span>
                               ) : null}
                             </td>
-                            <td className="money hidden py-3 pr-5 text-right text-muted-foreground xl:table-cell print:hidden">
+                            <td className="money hidden px-3 py-3 text-right text-muted-foreground xl:table-cell print:hidden">
                               {monthAmount(row)}
                             </td>
-                            <td className="money py-3 pr-4 pl-4 text-sm text-muted-foreground">
+                            <td className="hidden py-3 pr-3 pl-5 text-sm xl:table-cell print:hidden">
+                              {(() => {
+                                const gap = gaps.get(row.key) ?? 0
+                                // Tied cars say so, all of them; the one cheapest car gets the tag.
+                                if (lowest)
+                                  return lowestKeys.size > 1 ? (
+                                    <span className="tag bg-down-soft text-down">Tied for cheapest</span>
+                                  ) : (
+                                    <span className="tag bg-down-soft text-down">{lowestLabel}</span>
+                                  )
+                                if (!cheapest || visible.length < 2) return null
+                                if (Math.round(gap / 10) === 0) return <span className="text-muted-foreground">Same price</span>
+                                return (
+                                  <span className="grid grid-cols-[4.5rem_auto] items-center gap-x-2">
+                                    <span className="print-exact relative h-2 border-l border-input" aria-hidden="true">
+                                      <span
+                                        className="absolute inset-y-0 left-0 rounded-r-full bg-primary/55"
+                                        style={{ width: `${(gap / maxGap) * 100}%` }}
+                                      />
+                                    </span>
+                                    <span className="money whitespace-nowrap">{signedDollars(gap)}</span>
+                                  </span>
+                                )
+                              })()}
+                            </td>
+                            <td className="money px-3 py-3 text-sm">
                               {added ? (
                                 <>
-                                  <span className="block text-foreground">About {estimateDollars(row.likely)}</span>
-                                  <span className="block text-xs">{rangeWords(row.low, row.high)}</span>
+                                  <span className="block">{estimateDollars(row.likely)}</span>
+                                  <span className="block text-xs text-muted-foreground">{rangeDollars(row.low, row.high)}</span>
                                 </>
                               ) : (
-                                rangeWords(row.low, row.high)
+                                <span className="text-muted-foreground">{rangeDollars(row.low, row.high)}</span>
                               )}
                             </td>
-                            <td className="hidden py-3 pr-3 text-sm text-muted-foreground xl:table-cell print:hidden">
-                              {gapWords(row) ?? "The cheapest here"}
-                            </td>
-                            <td className="no-print py-3 pr-4 text-right">
+                            <td className="no-print py-3 pr-3 text-right">
                               <button
                                 type="button"
                                 className="icon-btn"
@@ -1176,13 +1195,13 @@ function SortHeader({
   return (
     <th
       scope="col"
-      className={cn("sticky top-0 z-10 border-b border-border bg-card py-1.5 pr-3 font-medium", align === "right" && "text-right", className)}
+      className={cn("sticky top-0 z-10 border-b border-border bg-card px-3 py-1.5 font-medium", align === "right" && "text-right", className)}
       aria-sort={active ? (sort.direction === "asc" ? "ascending" : "descending") : "none"}
     >
       <button
         type="button"
         className={cn(
-          "inline-flex min-h-9 items-center gap-1 rounded-md px-1 whitespace-nowrap hover:text-foreground",
+          "inline-flex min-h-9 items-center gap-1 rounded-md whitespace-nowrap hover:text-foreground",
           active && "text-foreground",
           align === "right" && "flex-row-reverse",
         )}
