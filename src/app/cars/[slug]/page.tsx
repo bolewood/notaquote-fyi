@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: PageProps<"/cars/[slug]">): P
   if (!f) return {}
   const content = carContent(f)
   return pageMetadata({
-    title: content.title,
+    title: content.searchTitle,
     description: content.description,
     path: `/cars/${f.page.slug}`,
     image: null,

@@ -17,6 +17,7 @@ import { uniqueness, type UniquenessReport } from "./uniqueness"
 import { differenceWords, dollars, estimateDollars, monthlyDollars, rangeDollars, shownYearly, signedDollars } from "./format"
 import { HLDI_COVERAGES, hldiReport, listWords, priceMeaning, SOFTENING_REASON, type HldiRating } from "./hldi"
 import { lossPushesVsAverage } from "./pricing"
+import { DESCRIPTION_MAX, SEARCH_PROMISE, TITLE_MAX } from "./site-meta"
 import { ordinal } from "./state-content"
 
 const POWERTRAIN_WORDS: Record<string, string> = {
@@ -74,8 +75,20 @@ function peerGroupWords(f: CarFigures): string {
 // ---------------------------------------------------------------------------
 // Headline pieces
 
+/** The page's heading: the question it answers. */
 export function carTitle(f: CarFigures): string {
   return `How much is insurance on ${articleFor(f.page.shortName)} ${f.page.shortName}?`
+}
+
+/**
+ * The title search results show: the words people search ("Ford Escape insurance cost"), then the
+ * answer. The page's own heading keeps the question (carTitle).
+ */
+export function carSearchTitle(f: CarFigures): string {
+  // The figure is for one model year: name it, so a "2008 Escape" searcher doesn't take it for theirs.
+  const answer = `insurance cost: about ${estimateDollars(f.adult.likely)} a year`
+  const dated = `${f.page.name} ${answer}`
+  return dated.length <= TITLE_MAX ? dated : `${f.page.shortName} ${answer}`
 }
 
 function vsAverageDelta(f: CarFigures): number {
@@ -116,7 +129,12 @@ export function becauseWords(f: CarFigures): string {
 export function carDescription(f: CarFigures): string {
   // Search snippets are short: "an average car its age" says the same thing in fewer words.
   const vs = vsAverageWords(f).replace("an average car of the same age", "an average car its age")
-  return `A ${f.page.name}: about ${estimateDollars(f.adult.likely)} a year for a 45-year-old, ${vs}. Adding a teen: about ${differenceWords(f.teen.increase)}.`
+  const figures = `A ${f.page.name}: about ${estimateDollars(f.adult.likely)} a year for a 45-year-old`
+  const teen = `Adding a teen: about ${differenceWords(f.teen.increase)}.`
+  // The promise when it fits; the comparison with an average car when that fits too.
+  for (const text of [`${figures}, ${vs}. ${teen} ${SEARCH_PROMISE}`, `${figures}. ${teen} ${SEARCH_PROMISE}`, `${figures}, ${vs}. ${teen}`])
+    if (text.length <= DESCRIPTION_MAX) return text
+  return `${figures}. ${teen}`
 }
 
 export function leadText(f: CarFigures): string {
@@ -290,7 +308,10 @@ export function carNotes(f: CarFigures): string[] {
 }
 
 export type CarContent = {
+  /** The page's heading. */
   title: string
+  /** The title search results show. */
+  searchTitle: string
   description: string
   lead: string
   estimateLabel: string
@@ -455,6 +476,7 @@ export function carContent(f: CarFigures): CarContent {
 
   return {
     title: carTitle(f),
+    searchTitle: carSearchTitle(f),
     description: carDescription(f),
     lead: leadText(f),
     estimateLabel: `${page.name} (${pickedTrim}), national average`,
