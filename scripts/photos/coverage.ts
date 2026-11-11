@@ -52,6 +52,9 @@ async function categoryStats(categories: readonly string[]): Promise<Map<string,
   return out
 }
 
+/** Each car's generations, for the site (see src/lib/car-generations.ts). */
+export const SITE_GENERATIONS_FILE = "data/photos/site-generations.json"
+
 export type CarCoverage = {
   slug: string
   name: string
@@ -153,6 +156,25 @@ async function main() {
     })
   }
   await writeFile("data/photos/coverage.json", `${JSON.stringify(coverage, null, 2)}\n`)
+  // A small copy for the site: each car's generations and the catalog years each covers (not the years
+  // the US didn't get), for the "by generation" section on car pages.
+  const forSite = Object.fromEntries(
+    coverage.map((car) => [
+      car.slug,
+      car.generations
+        .map((g) => ({
+          id: g.id,
+          label: g.label,
+          from: g.from,
+          to: g.to,
+          years: Object.entries(car.years)
+            .filter(([, ids]) => ids.includes(g.id))
+            .map(([year]) => Number(year)),
+        }))
+        .filter((g) => g.years.length > 0),
+    ]),
+  )
+  await writeFile(SITE_GENERATIONS_FILE, `${JSON.stringify(forSite, null, 1)}\n`)
 
   // A readable summary.
   const clean = coverage.filter((car) => car.issues.length === 0)

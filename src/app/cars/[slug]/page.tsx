@@ -3,7 +3,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ArrowRight } from "lucide-react"
 import { Breadcrumbs } from "@/components/breadcrumbs"
-import { CarHeroPhoto, CarThumb, PhotoCreditsNote } from "@/components/car-photo"
+import { CarHeroPhoto, CarThumb, GenerationPhoto, PhotoCreditsNote } from "@/components/car-photo"
 import { HldiChip, HldiLegend } from "@/components/charts/hldi-chip"
 import { averageBandNote } from "@/lib/hldi"
 import { VehicleFixLink } from "@/components/how-we-got-this"
@@ -12,8 +12,9 @@ import { TrustArticle } from "@/components/trust-article"
 import { SERVER_CATALOG } from "@/lib/agent-catalog"
 import { carContent, noindexCarSlugs } from "@/lib/car-content"
 import { carFigures, carPageBySlug, carPages } from "@/lib/car-pages"
+import { carGenerations, type CarGeneration } from "@/lib/car-generations"
 import { carPhoto } from "@/lib/car-photos"
-import { longDate } from "@/lib/format"
+import { estimateDollars, longDate } from "@/lib/format"
 import { vehicleMatchWords } from "@/lib/pricing"
 import { DEFAULT_SCENARIO } from "@/lib/scenario"
 import { encodeSharePath } from "@/lib/share-link"
@@ -46,13 +47,140 @@ function similarPhoto(slug: string) {
   return page ? carPhoto(slug, page.pick.year) : null
 }
 
-function SimilarList({ cars, thisPhoto }: { cars: readonly { slug: string | null; name: string; price: string }[]; thisPhoto: ReturnType<typeof carPhoto> }) {
+/** "$1,390–$1,470", or "$1,930" when both ends round to the same figure. */
+function spanDollars(span: { low: number; high: number }): string {
+  const low = estimateDollars(span.low)
+  const high = estimateDollars(span.high)
+  return low === high ? low : `${low}–${high}`
+}
+
+/** "2008–2012", "2020–present", or one year. */
+function yearSpan(from: number, to: number | null): string {
+  return to === from ? `${from}` : `${from}–${to ?? "present"}`
+}
+
+/** "2025 and 2026" or "2025, 2026 and 2027": years in a sentence. */
+function yearWords(years: number[]): string {
+  return years.length < 2 ? String(years[0] ?? "") : `${years.slice(0, -1).join(", ")} and ${years.at(-1)}`
+}
+
+/**
+ * Every US generation of the car the catalog covers, newest first, each with its model years, photo and
+ * what those years cost to insure for the page's example driver (one row per model year).
+ */
+function Generations({ generations, carName }: { generations: CarGeneration[]; carName: string }) {
+  const newestFirst = [...generations].reverse()
+  const oldest = generations[0]
+  // "Where our data starts" only when the oldest generation began before the catalog does.
+  const catalogStart = oldest.firstListed > oldest.from ? oldest.firstListed : null
+  const borrowed = generations.flatMap((g) => g.years.filter((row) => row.borrowed).map((row) => row.year))
+  return (
+    <>
+      <h2 id="generations">{carName} by generation</h2>
+      <p data-shared="">
+        {catalogStart
+          ? `Each generation sold in the US since ${catalogStart}, where our data starts, and what its model years cost to insure.`
+          : "Each generation sold in the US, and what its model years cost to insure."}{" "}
+        It&apos;s the same driver as above: a 45-year-old with a clean record and full coverage, at the national typical price. Each model
+        year uses the HLDI report that covers it.
+      </p>
+      <ol className="grid gap-5" data-testid="car-generations">
+        {newestFirst.map((g) => {
+          const years = yearSpan(g.from, g.to)
+          const label = `${years} ${carName}${g.name ? `, ${g.name.charAt(0).toLowerCase()}${g.name.slice(1)}` : ""}`
+          return (
+            <li key={g.id} className="grid grid-cols-[6rem_minmax(0,1fr)] items-start gap-x-4 gap-y-1 sm:grid-cols-[8rem_minmax(0,1fr)]">
+              <GenerationPhoto photo={g.photo} alt={label} />
+              <div className="grid gap-1">
+                <h3 className="!mt-0 grid text-base font-semibold">
+                  <span>
+                    {years} {carName}
+                  </span>
+                  {g.name ? <span className="text-sm font-normal text-muted-foreground">{g.name}</span> : null}
+                </h3>
+                <p className="text-sm">
+                  {g.adult && g.teen ? (
+                    <>
+                      About <span className="money font-semibold">{spanDollars(g.adult)}</span> a year; adding a 16-year-old,{" "}
+                      <span className="money font-semibold">{spanDollars(g.teen)}</span> more.
+                    </>
+                  ) : null}
+                  {g.firstListed > g.from ? (
+                    <span className="text-muted-foreground"> Our data starts with the {g.firstListed} model year.</span>
+                  ) : null}
+                  {g.missing.length > 0 ? (
+                    <span className="text-muted-foreground">
+                      {" "}
+                      HLDI has no results of its own for the {yearWords(g.missing)} {carName}, so we don&apos;t price{" "}
+                      {g.missing.length === 1 ? "it" : "them"} here.
+                    </span>
+                  ) : null}
+                </p>
+              </div>
+              {g.years.length > 0 ? (
+                <details className="col-span-2 text-sm sm:col-span-1 sm:col-start-2">
+                  <summary className="cursor-pointer text-muted-foreground hover:text-foreground">Each model year</summary>
+                  <table className="mt-2 w-full max-w-sm border-collapse text-left">
+                    <thead data-shared="">
+                      <tr className="border-b border-border text-muted-foreground">
+                        <th scope="col" className="py-1.5 pr-3 font-medium">
+                          Model year
+                        </th>
+                        <th scope="col" className="py-1.5 pr-3 text-right font-medium">
+                          A year
+                        </th>
+                        <th scope="col" className="py-1.5 text-right font-medium">
+                          Adding a teen
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {g.years.map((row) => (
+                        <tr key={row.year} className="border-b border-border/60 last:border-b-0">
+                          <th scope="row" className="py-1.5 pr-3 font-normal">
+                            {row.year} {carName}
+                            {row.borrowed ? " *" : ""}
+                          </th>
+                          <td className="money py-1.5 pr-3 text-right">{estimateDollars(row.adult)}</td>
+                          <td className="money py-1.5 text-right">+{estimateDollars(row.teen)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </details>
+              ) : null}
+            </li>
+          )
+        })}
+      </ol>
+      <p className="text-sm text-muted-foreground">
+        {borrowed.length > 0
+          ? `* HLDI hasn't published results for the ${yearWords(borrowed)} ${carName} yet, so ${borrowed.length === 1 ? "that year uses" : "those years use"} its newest results for this car. `
+          : ""}
+        <span data-shared="">
+          Generations and their US model years are from Wikipedia. <Link href="/photo-credits">Photo credits</Link>.
+        </span>
+      </p>
+    </>
+  )
+}
+
+function SimilarList({
+  cars,
+  thisPhoto,
+}: {
+  cars: readonly { slug: string | null; name: string; price: string }[]
+  thisPhoto: ReturnType<typeof carPhoto>
+}) {
   return (
     <ul className="divide-y divide-border/70 border-y border-border/70">
       {cars.map((car) =>
         car.slug ? (
           <li key={car.slug}>
-            <Link href={`/cars/${car.slug}`} className="plain flex min-h-11 flex-wrap items-center justify-between gap-x-4 py-2 hover:text-primary">
+            <Link
+              href={`/cars/${car.slug}`}
+              className="plain flex min-h-11 flex-wrap items-center justify-between gap-x-4 py-2 hover:text-primary"
+            >
               <span className="flex items-center gap-3">
                 <CarThumb photo={similarPhoto(car.slug)} className="w-14" />
                 <span className="link">{car.name}</span>
@@ -61,7 +189,11 @@ function SimilarList({ cars, thisPhoto }: { cars: readonly { slug: string | null
             </Link>
           </li>
         ) : (
-          <li key="this-car" aria-current="page" className="flex min-h-11 flex-wrap items-center justify-between gap-x-4 py-2 font-semibold">
+          <li
+            key="this-car"
+            aria-current="page"
+            className="flex min-h-11 flex-wrap items-center justify-between gap-x-4 py-2 font-semibold"
+          >
             <span className="flex items-center gap-3">
               <CarThumb photo={thisPhoto} className="w-14" />
               <span>{car.name}</span>
@@ -80,6 +212,7 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
   const { page } = f
   const c = carContent(f)
   const photo = carPhoto(page.slug, page.pick.year)
+  const generations = carGenerations(SERVER_CATALOG, f)
   const whatIfHref = encodeSharePath({
     page: "/",
     scenario: DEFAULT_SCENARIO,
@@ -120,8 +253,7 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
       <div className="grid gap-1 rounded-2xl bg-card p-5 ring-1 ring-border" data-testid="car-estimate">
         <p className="text-sm font-medium text-muted-foreground">{c.estimateLabel}</p>
         <p>
-          <span className="money text-3xl font-semibold">{c.estimate}</span>{" "}
-          <span className="text-muted-foreground">{c.monthly}</span>
+          <span className="money text-3xl font-semibold">{c.estimate}</span> <span className="text-muted-foreground">{c.monthly}</span>
         </p>
         <p className="money text-sm text-muted-foreground">{c.range}</p>
         <p className="text-sm text-muted-foreground">{c.averageLine}</p>
@@ -138,7 +270,10 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
           <p>{c.hldi.intro}</p>
           <ul className="grid gap-0 rounded-2xl bg-card px-5 py-2 text-sm ring-1 ring-border" data-testid="car-hldi">
             {c.hldi.rows.map((row) => (
-              <li key={row.name} className="grid gap-x-4 gap-y-0.5 border-b border-border/70 py-2.5 last:border-b-0 sm:grid-cols-[minmax(0,1fr)_auto]">
+              <li
+                key={row.name}
+                className="grid gap-x-4 gap-y-0.5 border-b border-border/70 py-2.5 last:border-b-0 sm:grid-cols-[minmax(0,1fr)_auto]"
+              >
                 <span className="min-w-0">
                   <span className="font-medium" data-shared="">
                     {row.name}
@@ -269,12 +404,13 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
 
       <p>{c.otherDrivers}</p>
 
+      {generations.length > 0 ? <Generations generations={generations} carName={page.shortName} /> : null}
+
       <h2 id="teen">{c.teenHeading}</h2>
       <p>{c.teen}</p>
       <p>{c.teenRank}</p>
       <p className="text-sm text-muted-foreground" data-shared="">
-        {c.teenNote}{" "}
-        <Link href="/guides/cheapest-cars-to-insure-for-teens">Cheapest cars to insure for a teen</Link>.
+        {c.teenNote} <Link href="/guides/cheapest-cars-to-insure-for-teens">Cheapest cars to insure for a teen</Link>.
       </p>
 
       {c.similar.length > 1 ? (
@@ -301,8 +437,7 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
         ))}
       </ul>
       <p className="text-sm text-muted-foreground" data-shared="">
-        <Link href="/states">All 50 states and DC</Link> · Updated{" "}
-        <time dateTime={CAR_PAGES_UPDATED}>{longDate(CAR_PAGES_UPDATED)}</time>.
+        <Link href="/states">All 50 states and DC</Link> · Updated <time dateTime={CAR_PAGES_UPDATED}>{longDate(CAR_PAGES_UPDATED)}</time>.
       </p>
 
       <div className="flex flex-wrap gap-3 pt-2" data-shared="">
