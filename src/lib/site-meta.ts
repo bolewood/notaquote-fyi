@@ -19,6 +19,12 @@ export const SITE_NAME = "NotAQuote.FYI"
 export const TITLE_MAX = 60
 export const DESCRIPTION_MAX = 155
 
+/**
+ * Why a searcher can click without being sold to. "Not a quote" means no ZIP code, phone number or
+ * sales call; search results say so where there's room.
+ */
+export const SEARCH_PROMISE = "No ZIP code, no phone number, no sales calls."
+
 export type SocialImage = { url: string; alt: string }
 
 /** The site's own social image (src/app/opengraph-image.tsx). */

@@ -16,7 +16,7 @@ import {
   shownYearly,
 } from "./format"
 import { stateName, type StateCode } from "./scenario"
-import { DESCRIPTION_MAX, SITE_NAME, TITLE_MAX, type FaqItem } from "./site-meta"
+import { DESCRIPTION_MAX, SEARCH_PROMISE, SITE_NAME, TITLE_MAX, type FaqItem } from "./site-meta"
 import { inSentence, TEEN_TOP, type StateFigures } from "./state-pages"
 import { liabilityShorthand, NO_FAULT_CHOICE, stateMinimumAssumption, type StateRule } from "./state-rules"
 import type { TeenPriced } from "./teen-cars"
@@ -101,6 +101,9 @@ export function shortName(code: StateCode): string {
 export function stateTitle(f: StateFigures): string {
   const name = shortName(f.code)
   const question = `How much is car insurance in ${name}?`
+  // The answer, when it fits: a figure is a reason to click.
+  const answered = `${question} About ${estimateDollars(f.start.annual)} a year`
+  if (answered.length <= TITLE_MAX) return answered
   if (question.length + SITE_NAME.length + 3 <= TITLE_MAX) return question
   return `${name} car insurance cost & minimums`
 }
@@ -137,6 +140,9 @@ export function stateDescription(f: StateFigures): string {
   const min = minimumWords(f.rule, "cell")
   const teen = ` Teen add-on: about ${differenceWords(f.teen.added.increase)}.`
   const long = `Average car insurance in ${name}: ${naic(f.baseline.annual)} a year for full coverage in ${f.baseline.dataYear}, about ${estimateDollars(f.start.annual)} today. Minimums: ${min}.`
+  const promise = ` ${SEARCH_PROMISE}`
+  if (long.length + teen.length + promise.length <= DESCRIPTION_MAX) return long + teen + promise
+  if (long.length + promise.length <= DESCRIPTION_MAX) return long + promise
   if (long.length + teen.length <= DESCRIPTION_MAX) return long + teen
   if (long.length <= DESCRIPTION_MAX) return long
   const short = `Average car insurance in ${name}: ${naic(f.baseline.annual)} a year in ${f.baseline.dataYear}, about ${estimateDollars(f.start.annual)} today. Minimums: ${min}.`

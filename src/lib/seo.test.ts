@@ -571,8 +571,11 @@ test("every page has a unique title of at most 60 characters and a description o
     assert.ok(description.length > 50 && description.length <= DESCRIPTION_MAX, `${page.path}: description is ${description.length} characters`)
     assert.ok(page.metadata.alternates?.canonical, `${page.path} has no canonical address`)
   }
-  assert.equal(fullTitle(pages.find((page) => page.path === "ohio")!.metadata), "How much is car insurance in Ohio? · NotAQuote.FYI")
-  assert.equal(fullTitle(pages.find((page) => page.path === "district-of-columbia")!.metadata), "How much is car insurance in DC? · NotAQuote.FYI")
+  // The answer goes in the title when it fits (the figure changes with each data refresh).
+  assert.match(fullTitle(pages.find((page) => page.path === "ohio")!.metadata), /^How much is car insurance in Ohio\? About \$[\d,]+ a year$/)
+  assert.match(fullTitle(pages.find((page) => page.path === "district-of-columbia")!.metadata), /^How much is car insurance in DC\? About \$[\d,]+ a year$/)
+  // Car pages lead with the words people search, then the figure.
+  assert.match(fullTitle(pages.find((page) => page.path === "ford-escape")!.metadata), /^\d{4} Ford Escape insurance cost: about \$[\d,]+ a year$/)
 })
 
 test("state page titles, H1s, and FAQs answer the cost question with figures from StateFigures", async () => {

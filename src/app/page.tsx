@@ -14,7 +14,7 @@ import { statePath } from "@/lib/state-pages"
 const DESCRIPTION = `What would a new car, a teen driver, or a move do to your car insurance? An estimate from ${SOURCE_COUNT} public sources. No ads, no account. Not a quote.`
 
 export const metadata: Metadata = pageMetadata({
-  title: "NotAQuote.FYI: car insurance what-ifs for families",
+  title: "NotAQuote.FYI: car insurance estimates, no sales calls",
   absoluteTitle: true,
   description: DESCRIPTION,
   path: "/",
