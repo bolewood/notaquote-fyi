@@ -312,7 +312,22 @@
         "changes": "Resized, converted to WebP, and cropped for display"
       }
     },
-    "ford-escape/ford-escape-second-generation": null
+    "ford-escape/ford-escape-second-generation": {
+      "src": "/car-photos/8db4259d3e9d1a9d5355f9bc666e7ec33e67c899.webp",
+      "width": 1200,
+      "height": 876,
+      "generation": "ford-escape/ford-escape-second-generation",
+      "generationYears": "2008–2012",
+      "photoYear": null,
+      "credit": {
+        "title": "File:Ford - Escape .jpg",
+        "author": "Bull-Doser",
+        "license": "Public domain",
+        "licenseUrl": null,
+        "source": "https://commons.wikimedia.org/wiki/File:Ford_-_Escape_.jpg",
+        "changes": "Resized, converted to WebP, and cropped for display"
+      }
+    }
   },
   "ford-expedition": {
     "ford-expedition/second-generation-2003": {
@@ -744,7 +759,22 @@
   "kia-k5": {},
   "kia-niro": {},
   "kia-seltos": {
-    "kia-seltos/second-generation-sp3-2025": null
+    "kia-seltos/second-generation-sp3-2025": {
+      "src": "/car-photos/0448ddae3524d0fd413fe21133bbe936bb17e0c9.webp",
+      "width": 1200,
+      "height": 677,
+      "generation": "kia-seltos/second-generation-sp3-2025",
+      "generationYears": "2026–present",
+      "photoYear": null,
+      "credit": {
+        "title": "File:Kia Seltos X-line.jpg",
+        "author": "Gokul Kalloor",
+        "license": "CC0",
+        "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+        "source": "https://commons.wikimedia.org/wiki/File:Kia_Seltos_X-line.jpg",
+        "changes": "Resized, converted to WebP, and cropped for display"
+      }
+    }
   },
   "kia-sorento": {
     "kia-sorento/first-generation-bl-2002": {
