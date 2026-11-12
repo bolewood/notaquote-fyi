@@ -282,14 +282,6 @@ export const RENDERED_CAR_FLOOR = { page: 0.18, jaccard: 0.42, words: 740 } as c
  * drops under the cap, so the list only shrinks.
  */
 export const CAR_OVERLAP_ALLOWED: Readonly<Record<string, number>> = {
-  "kia-forte / nissan-sentra": 0.467,
-  "subaru-crosstrek / subaru-outback": 0.459,
-  "ford-escape / kia-seltos": 0.443,
-  "honda-pilot / subaru-ascent": 0.442,
-  "honda-accord / volkswagen-jetta": 0.435,
-  "chevrolet-trailblazer / volkswagen-taos": 0.435,
-  "hyundai-sonata / toyota-camry": 0.434,
-  "hyundai-elantra / nissan-sentra": 0.431,
 }
 
 /** "a / b" with the two slugs in alphabetical order, so a pair has one name. */

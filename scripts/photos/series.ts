@@ -38,6 +38,8 @@ export type SeriesEntry = {
    * year whose car comes in another body (the 2024 Impreza is a hatchback only).
    */
   body?: BodyStyle
+  /** Commons files a person turned down after review ("File:…"): verify never picks them. */
+  photoExclude?: string[]
   bodyByYear?: Record<string, BodyStyle>
   /** Section headings, article titles or Commons subcategories (regular expressions) that aren't this car, like "Electric" or "Raptor". */
   exclude?: string[]

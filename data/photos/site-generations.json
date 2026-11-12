@@ -1,0 +1,4880 @@
+{
+ "honda-civic": [
+  {
+   "id": "honda-civic/honda-civic-eighth-generation",
+   "label": "Honda Civic (eighth generation)",
+   "from": 2006,
+   "to": 2011,
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011
+   ]
+  },
+  {
+   "id": "honda-civic/honda-civic-ninth-generation",
+   "label": "Honda Civic (ninth generation)",
+   "from": 2012,
+   "to": 2015,
+   "years": [
+    2012,
+    2013,
+    2014,
+    2015
+   ]
+  },
+  {
+   "id": "honda-civic/honda-civic-tenth-generation",
+   "label": "Honda Civic (tenth generation)",
+   "from": 2016,
+   "to": 2021,
+   "years": [
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021
+   ]
+  },
+  {
+   "id": "honda-civic/honda-civic-eleventh-generation",
+   "label": "Honda Civic (eleventh generation)",
+   "from": 2022,
+   "to": null,
+   "years": [
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "toyota-corolla": [
+  {
+   "id": "toyota-corolla/toyota-corolla-e120",
+   "label": "Toyota Corolla (E120)",
+   "from": 2003,
+   "to": 2008,
+   "years": [
+    2006,
+    2007,
+    2008
+   ]
+  },
+  {
+   "id": "toyota-corolla/toyota-corolla-e140",
+   "label": "Toyota Corolla (E140)",
+   "from": 2009,
+   "to": 2013,
+   "years": [
+    2009,
+    2010,
+    2011,
+    2012,
+    2013
+   ]
+  },
+  {
+   "id": "toyota-corolla/toyota-corolla-e170",
+   "label": "Toyota Corolla (E170)",
+   "from": 2014,
+   "to": 2019,
+   "years": [
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019
+   ]
+  },
+  {
+   "id": "toyota-corolla/toyota-corolla-e210",
+   "label": "Toyota Corolla (E210)",
+   "from": 2019,
+   "to": null,
+   "years": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "toyota-camry": [
+  {
+   "id": "toyota-camry/toyota-camry-xv30",
+   "label": "Toyota Camry (XV30)",
+   "from": 2002,
+   "to": 2006,
+   "years": [
+    2006
+   ]
+  },
+  {
+   "id": "toyota-camry/toyota-camry-xv40",
+   "label": "Toyota Camry (XV40)",
+   "from": 2007,
+   "to": 2011,
+   "years": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011
+   ]
+  },
+  {
+   "id": "toyota-camry/toyota-camry-xv50",
+   "label": "Toyota Camry (XV50)",
+   "from": 2012,
+   "to": 2017,
+   "years": [
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017
+   ]
+  },
+  {
+   "id": "toyota-camry/toyota-camry-xv70",
+   "label": "Toyota Camry (XV70)",
+   "from": 2018,
+   "to": 2024,
+   "years": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "id": "toyota-camry/toyota-camry-xv80",
+   "label": "Toyota Camry (XV80)",
+   "from": 2025,
+   "to": null,
+   "years": [
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "honda-accord": [
+  {
+   "id": "honda-accord/honda-accord-north-america-seventh-generation",
+   "label": "Honda Accord (North America seventh generation)",
+   "from": 2003,
+   "to": 2007,
+   "years": [
+    2006,
+    2007
+   ]
+  },
+  {
+   "id": "honda-accord/honda-accord-north-america-eighth-generation",
+   "label": "Honda Accord (North America eighth generation)",
+   "from": 2008,
+   "to": 2012,
+   "years": [
+    2008,
+    2009,
+    2010,
+    2011,
+    2012
+   ]
+  },
+  {
+   "id": "honda-accord/honda-accord-ninth-generation",
+   "label": "Honda Accord (ninth generation)",
+   "from": 2013,
+   "to": 2017,
+   "years": [
+    2013,
+    2014,
+    2015,
+    2016,
+    2017
+   ]
+  },
+  {
+   "id": "honda-accord/honda-accord-tenth-generation",
+   "label": "Honda Accord (tenth generation)",
+   "from": 2018,
+   "to": 2022,
+   "years": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022
+   ]
+  },
+  {
+   "id": "honda-accord/honda-accord-eleventh-generation",
+   "label": "Honda Accord (eleventh generation)",
+   "from": 2023,
+   "to": null,
+   "years": [
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "mazda-3": [
+  {
+   "id": "mazda-3/first-generation-bk-2003",
+   "label": "First generation (BK; 2003)",
+   "from": 2004,
+   "to": 2009,
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009
+   ]
+  },
+  {
+   "id": "mazda-3/second-generation-bl-2008",
+   "label": "Second generation (BL; 2008)",
+   "from": 2010,
+   "to": 2013,
+   "years": [
+    2010,
+    2011,
+    2012,
+    2013
+   ]
+  },
+  {
+   "id": "mazda-3/third-generation-bm-bn-by-2013",
+   "label": "Third generation (BM/BN/BY; 2013)",
+   "from": 2014,
+   "to": 2018,
+   "years": [
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ]
+  },
+  {
+   "id": "mazda-3/fourth-generation-bp-2019",
+   "label": "Fourth generation (BP; 2019)",
+   "from": 2019,
+   "to": null,
+   "years": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ]
+  }
+ ],
+ "subaru-impreza": [
+  {
+   "id": "subaru-impreza/subaru-impreza-second-generation",
+   "label": "Subaru Impreza (second generation)",
+   "from": 2002,
+   "to": 2007,
+   "years": [
+    2006,
+    2007
+   ]
+  },
+  {
+   "id": "subaru-impreza/third-generation-ge-gh-gr-gv-2007",
+   "label": "Third generation (GE, GH, GR, GV; 2007)",
+   "from": 2008,
+   "to": 2011,
+   "years": [
+    2008,
+    2009,
+    2010,
+    2011
+   ]
+  },
+  {
+   "id": "subaru-impreza/fourth-generation-gj-gp-2011",
+   "label": "Fourth generation (GJ, GP; 2011)",
+   "from": 2012,
+   "to": 2016,
+   "years": [
+    2012,
+    2013,
+    2014,
+    2015,
+    2016
+   ]
+  },
+  {
+   "id": "subaru-impreza/fifth-generation-gk-gt-2016",
+   "label": "Fifth generation (GK, GT; 2016)",
+   "from": 2017,
+   "to": 2023,
+   "years": [
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023
+   ]
+  },
+  {
+   "id": "subaru-impreza/sixth-generation-gu-2023",
+   "label": "Sixth generation (GU; 2023)",
+   "from": 2024,
+   "to": null,
+   "years": [
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "hyundai-elantra": [
+  {
+   "id": "hyundai-elantra/third-generation-xd-2000",
+   "label": "Third generation (XD; 2000)",
+   "from": 2001,
+   "to": 2006,
+   "years": [
+    2006
+   ]
+  },
+  {
+   "id": "hyundai-elantra/fourth-generation-hd-2006",
+   "label": "Fourth generation (HD; 2006)",
+   "from": 2007,
+   "to": 2010,
+   "years": [
+    2007,
+    2008,
+    2009,
+    2010
+   ]
+  },
+  {
+   "id": "hyundai-elantra/fifth-generation-md-ud-jk-2010",
+   "label": "Fifth generation (MD/UD/JK; 2010)",
+   "from": 2011,
+   "to": 2016,
+   "years": [
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016
+   ]
+  },
+  {
+   "id": "hyundai-elantra/sixth-generation-ad-2015",
+   "label": "Sixth generation (AD; 2015)",
+   "from": 2017,
+   "to": 2020,
+   "years": [
+    2017,
+    2018,
+    2019,
+    2020
+   ]
+  },
+  {
+   "id": "hyundai-elantra/seventh-generation-cn7-2020",
+   "label": "Seventh generation (CN7; 2020)",
+   "from": 2021,
+   "to": 2026,
+   "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "hyundai-elantra/eighth-generation-cn8-2026",
+   "label": "Eighth generation (CN8; 2026)",
+   "from": 2027,
+   "to": 2027,
+   "years": [
+    2027
+   ]
+  }
+ ],
+ "kia-forte": [
+  {
+   "id": "kia-forte/first-generation-td-2008",
+   "label": "First generation (TD; 2008)",
+   "from": 2010,
+   "to": 2013,
+   "years": [
+    2010,
+    2011,
+    2012,
+    2013
+   ]
+  },
+  {
+   "id": "kia-forte/second-generation-yd-2012",
+   "label": "Second generation (YD; 2012)",
+   "from": 2014,
+   "to": 2018,
+   "years": [
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ]
+  },
+  {
+   "id": "kia-forte/third-generation-bd-2018",
+   "label": "Third generation (BD; 2018)",
+   "from": 2019,
+   "to": 2024,
+   "years": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+   ]
+  }
+ ],
+ "toyota-prius": [
+  {
+   "id": "toyota-prius/toyota-prius-xw20",
+   "label": "Toyota Prius (XW20)",
+   "from": 2004,
+   "to": 2009,
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009
+   ]
+  },
+  {
+   "id": "toyota-prius/toyota-prius-xw30",
+   "label": "Toyota Prius (XW30)",
+   "from": 2010,
+   "to": 2015,
+   "years": [
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015
+   ]
+  },
+  {
+   "id": "toyota-prius/toyota-prius-xw50",
+   "label": "Toyota Prius (XW50)",
+   "from": 2016,
+   "to": 2022,
+   "years": [
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022
+   ]
+  },
+  {
+   "id": "toyota-prius/fifth-generation-xw60-2022",
+   "label": "Fifth generation (XW60; 2022)",
+   "from": 2023,
+   "to": null,
+   "years": [
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "nissan-sentra": [
+  {
+   "id": "nissan-sentra/fifth-generation-b15-1999",
+   "label": "Fifth generation (B15; 1999)",
+   "from": 2000,
+   "to": 2006,
+   "years": [
+    2006
+   ]
+  },
+  {
+   "id": "nissan-sentra/sixth-generation-b16-2006",
+   "label": "Sixth generation (B16; 2006)",
+   "from": 2007,
+   "to": 2012,
+   "years": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012
+   ]
+  },
+  {
+   "id": "nissan-sentra/seventh-generation-b17-2012",
+   "label": "Seventh generation (B17; 2012)",
+   "from": 2013,
+   "to": 2019,
+   "years": [
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019
+   ]
+  },
+  {
+   "id": "nissan-sentra/eighth-generation-b18-2019",
+   "label": "Eighth generation (B18; 2019)",
+   "from": 2020,
+   "to": 2025,
+   "years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "nissan-sentra/ninth-generation-b19-2026",
+   "label": "Ninth generation (B19; 2026)",
+   "from": 2026,
+   "to": null,
+   "years": [
+    2026,
+    2027
+   ]
+  }
+ ],
+ "volkswagen-jetta": [
+  {
+   "id": "volkswagen-jetta/volkswagen-jetta-a5",
+   "label": "Volkswagen Jetta (A5)",
+   "from": 2006,
+   "to": 2010,
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009,
+    2010
+   ]
+  },
+  {
+   "id": "volkswagen-jetta/volkswagen-jetta-a6",
+   "label": "Volkswagen Jetta (A6)",
+   "from": 2011,
+   "to": 2018,
+   "years": [
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ]
+  },
+  {
+   "id": "volkswagen-jetta/volkswagen-jetta-a7",
+   "label": "Volkswagen Jetta (A7)",
+   "from": 2019,
+   "to": null,
+   "years": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "kia-soul": [
+  {
+   "id": "kia-soul/first-generation-am-2008",
+   "label": "First generation (AM; 2008)",
+   "from": 2010,
+   "to": 2013,
+   "years": [
+    2010,
+    2011,
+    2012,
+    2013
+   ]
+  },
+  {
+   "id": "kia-soul/second-generation-ps-2013",
+   "label": "Second generation (PS; 2013)",
+   "from": 2014,
+   "to": 2019,
+   "years": [
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019
+   ]
+  },
+  {
+   "id": "kia-soul/third-generation-sk3-2019",
+   "label": "Third generation (SK3; 2019)",
+   "from": 2020,
+   "to": 2025,
+   "years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ]
+  }
+ ],
+ "subaru-crosstrek": [
+  {
+   "id": "subaru-crosstrek/subaru-crosstrek-gp",
+   "label": "Subaru Crosstrek (GP)",
+   "from": 2013,
+   "to": 2017,
+   "years": [
+    2016,
+    2017
+   ]
+  },
+  {
+   "id": "subaru-crosstrek/subaru-crosstrek-gt",
+   "label": "Subaru Crosstrek (GT)",
+   "from": 2018,
+   "to": 2023,
+   "years": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023
+   ]
+  },
+  {
+   "id": "subaru-crosstrek/subaru-crosstrek-gu",
+   "label": "Subaru Crosstrek (GU)",
+   "from": 2024,
+   "to": null,
+   "years": [
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "honda-hr-v": [
+  {
+   "id": "honda-hr-v/honda-hr-v-second-generation-ru",
+   "label": "Honda HR-V (second generation, RU)",
+   "from": 2016,
+   "to": 2022,
+   "years": [
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022
+   ]
+  },
+  {
+   "id": "honda-hr-v/honda-hr-v-north-america-rz-zr-v-based",
+   "label": "Honda HR-V (North America, RZ / ZR-V-based)",
+   "from": 2023,
+   "to": null,
+   "years": [
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "hyundai-kona": [
+  {
+   "id": "hyundai-kona/first-generation-os-2017",
+   "label": "First generation (OS; 2017)",
+   "from": 2018,
+   "to": 2023,
+   "years": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023
+   ]
+  },
+  {
+   "id": "hyundai-kona/second-generation-sx2-2023",
+   "label": "Second generation (SX2; 2023)",
+   "from": 2024,
+   "to": null,
+   "years": [
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "toyota-rav4": [
+  {
+   "id": "toyota-rav4/third-generation-xa30-2005",
+   "label": "Third generation (XA30; 2005)",
+   "from": 2006,
+   "to": 2012,
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012
+   ]
+  },
+  {
+   "id": "toyota-rav4/fourth-generation-xa40-2012",
+   "label": "Fourth generation (XA40; 2012)",
+   "from": 2013,
+   "to": 2018,
+   "years": [
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ]
+  },
+  {
+   "id": "toyota-rav4/fifth-generation-xa50-2018",
+   "label": "Fifth generation (XA50; 2018)",
+   "from": 2019,
+   "to": 2025,
+   "years": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "toyota-rav4/sixth-generation-xa60-2025",
+   "label": "Sixth generation (XA60; 2025)",
+   "from": 2026,
+   "to": null,
+   "years": [
+    2026,
+    2027
+   ]
+  }
+ ],
+ "honda-cr-v": [
+  {
+   "id": "honda-cr-v/honda-cr-v-second-generation",
+   "label": "Honda CR-V (second generation)",
+   "from": 2002,
+   "to": 2006,
+   "years": [
+    2006
+   ]
+  },
+  {
+   "id": "honda-cr-v/honda-cr-v-third-generation",
+   "label": "Honda CR-V (third generation)",
+   "from": 2007,
+   "to": 2011,
+   "years": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011
+   ]
+  },
+  {
+   "id": "honda-cr-v/honda-cr-v-fourth-generation",
+   "label": "Honda CR-V (fourth generation)",
+   "from": 2012,
+   "to": 2016,
+   "years": [
+    2012,
+    2013,
+    2014,
+    2015,
+    2016
+   ]
+  },
+  {
+   "id": "honda-cr-v/honda-cr-v-fifth-generation",
+   "label": "Honda CR-V (fifth generation)",
+   "from": 2017,
+   "to": 2022,
+   "years": [
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022
+   ]
+  },
+  {
+   "id": "honda-cr-v/honda-cr-v-sixth-generation",
+   "label": "Honda CR-V (sixth generation)",
+   "from": 2023,
+   "to": null,
+   "years": [
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "subaru-forester": [
+  {
+   "id": "subaru-forester/second-generation-sg-2002",
+   "label": "Second generation (SG; 2002)",
+   "from": 2003,
+   "to": 2008,
+   "years": [
+    2006,
+    2007,
+    2008
+   ]
+  },
+  {
+   "id": "subaru-forester/third-generation-sh-2008",
+   "label": "Third generation (SH; 2008)",
+   "from": 2009,
+   "to": 2013,
+   "years": [
+    2009,
+    2010,
+    2011,
+    2012,
+    2013
+   ]
+  },
+  {
+   "id": "subaru-forester/fourth-generation-sj-2012",
+   "label": "Fourth generation (SJ; 2012)",
+   "from": 2014,
+   "to": 2018,
+   "years": [
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ]
+  },
+  {
+   "id": "subaru-forester/fifth-generation-sk-2018",
+   "label": "Fifth generation (SK; 2018)",
+   "from": 2019,
+   "to": 2025,
+   "years": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "subaru-forester/sixth-generation-sl-2024",
+   "label": "Sixth generation (SL; 2024)",
+   "from": 2025,
+   "to": null,
+   "years": [
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "subaru-outback": [
+  {
+   "id": "subaru-outback/third-generation-bl-bp-2003",
+   "label": "Third generation (BL/BP; 2003)",
+   "from": 2004,
+   "to": 2009,
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009
+   ]
+  },
+  {
+   "id": "subaru-outback/fourth-generation-br-bm-2009",
+   "label": "Fourth generation (BR/BM; 2009)",
+   "from": 2010,
+   "to": 2014,
+   "years": [
+    2010,
+    2011,
+    2012,
+    2013,
+    2014
+   ]
+  },
+  {
+   "id": "subaru-outback/fifth-generation-bs-2014",
+   "label": "Fifth generation (BS; 2014)",
+   "from": 2015,
+   "to": 2019,
+   "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019
+   ]
+  },
+  {
+   "id": "subaru-outback/sixth-generation-bt-2019",
+   "label": "Sixth generation (BT; 2019)",
+   "from": 2020,
+   "to": 2025,
+   "years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "subaru-outback/seventh-generation-bu-2025",
+   "label": "Seventh generation (BU; 2025)",
+   "from": 2026,
+   "to": null,
+   "years": [
+    2026,
+    2027
+   ]
+  }
+ ],
+ "mazda-cx-5": [
+  {
+   "id": "mazda-cx-5/first-generation-ke-2012",
+   "label": "First generation (KE; 2012)",
+   "from": 2013,
+   "to": 2016,
+   "years": [
+    2013,
+    2014,
+    2015,
+    2016
+   ]
+  },
+  {
+   "id": "mazda-cx-5/second-generation-kf-2016",
+   "label": "Second generation (KF; 2016)",
+   "from": 2017,
+   "to": 2025,
+   "years": [
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "mazda-cx-5/third-generation-km-2025",
+   "label": "Third generation (KM; 2025)",
+   "from": 2026,
+   "to": null,
+   "years": [
+    2026
+   ]
+  }
+ ],
+ "hyundai-tucson": [
+  {
+   "id": "hyundai-tucson/first-generation-jm-2004",
+   "label": "First generation (JM; 2004)",
+   "from": 2005,
+   "to": 2009,
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009
+   ]
+  },
+  {
+   "id": "hyundai-tucson/second-generation-lm-2009",
+   "label": "Second generation (LM; 2009)",
+   "from": 2010,
+   "to": 2015,
+   "years": [
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015
+   ]
+  },
+  {
+   "id": "hyundai-tucson/third-generation-tl-2015",
+   "label": "Third generation (TL; 2015)",
+   "from": 2016,
+   "to": 2021,
+   "years": [
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021
+   ]
+  },
+  {
+   "id": "hyundai-tucson/fourth-generation-nx4-2020",
+   "label": "Fourth generation (NX4; 2020)",
+   "from": 2022,
+   "to": 2026,
+   "years": [
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "hyundai-tucson/fifth-generation-nx5-2026",
+   "label": "Fifth generation (NX5; 2026)",
+   "from": 2027,
+   "to": 2027,
+   "years": [
+    2027
+   ]
+  }
+ ],
+ "kia-sportage": [
+  {
+   "id": "kia-sportage/second-generation-je-km-2004",
+   "label": "Second generation (JE/KM; 2004)",
+   "from": 2005,
+   "to": 2010,
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009,
+    2010
+   ]
+  },
+  {
+   "id": "kia-sportage/third-generation-sl-2010",
+   "label": "Third generation (SL; 2010)",
+   "from": 2011,
+   "to": 2016,
+   "years": [
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016
+   ]
+  },
+  {
+   "id": "kia-sportage/fourth-generation-ql-2015",
+   "label": "Fourth generation (QL; 2015)",
+   "from": 2017,
+   "to": 2022,
+   "years": [
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022
+   ]
+  },
+  {
+   "id": "kia-sportage/fifth-generation-nq5-2021",
+   "label": "Fifth generation (NQ5; 2021)",
+   "from": 2023,
+   "to": null,
+   "years": [
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "chevrolet-equinox": [
+  {
+   "id": "chevrolet-equinox/first-generation-2005",
+   "label": "First generation (2005)",
+   "from": 2005,
+   "to": 2009,
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009
+   ]
+  },
+  {
+   "id": "chevrolet-equinox/second-generation-2010",
+   "label": "Second generation (2010)",
+   "from": 2010,
+   "to": 2017,
+   "years": [
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017
+   ]
+  },
+  {
+   "id": "chevrolet-equinox/third-generation-2018",
+   "label": "Third generation (2018)",
+   "from": 2018,
+   "to": 2024,
+   "years": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "id": "chevrolet-equinox/fourth-generation-2025",
+   "label": "Fourth generation (2025)",
+   "from": 2025,
+   "to": null,
+   "years": [
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "ford-escape": [
+  {
+   "id": "ford-escape/ford-escape-first-generation",
+   "label": "Ford Escape (first generation)",
+   "from": 2001,
+   "to": 2007,
+   "years": [
+    2006,
+    2007
+   ]
+  },
+  {
+   "id": "ford-escape/ford-escape-second-generation",
+   "label": "Ford Escape (second generation)",
+   "from": 2008,
+   "to": 2012,
+   "years": [
+    2008,
+    2009,
+    2010,
+    2011,
+    2012
+   ]
+  },
+  {
+   "id": "ford-escape/ford-escape-third-generation",
+   "label": "Ford Escape (third generation)",
+   "from": 2013,
+   "to": 2019,
+   "years": [
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019
+   ]
+  },
+  {
+   "id": "ford-escape/ford-escape-fourth-generation",
+   "label": "Ford Escape (fourth generation)",
+   "from": 2020,
+   "to": 2026,
+   "years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ]
+  }
+ ],
+ "nissan-rogue": [
+  {
+   "id": "nissan-rogue/first-generation-s35-2008",
+   "label": "First generation (S35; 2008)",
+   "from": 2008,
+   "to": 2013,
+   "years": [
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013
+   ]
+  },
+  {
+   "id": "nissan-rogue/second-generation-t32-2014",
+   "label": "Second generation (T32; 2014)",
+   "from": 2014,
+   "to": 2020,
+   "years": [
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020
+   ]
+  },
+  {
+   "id": "nissan-rogue/third-generation-t33-2021",
+   "label": "Third generation (T33; 2021)",
+   "from": 2021,
+   "to": 2027,
+   "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  },
+  {
+   "id": "nissan-rogue/fourth-generation-t34-2027",
+   "label": "Fourth generation (T34; 2027)",
+   "from": 2027,
+   "to": 2027,
+   "years": [
+    2027
+   ]
+  }
+ ],
+ "toyota-highlander": [
+  {
+   "id": "toyota-highlander/toyota-highlander-xu20",
+   "label": "Toyota Highlander (XU20)",
+   "from": 2001,
+   "to": 2007,
+   "years": [
+    2006,
+    2007
+   ]
+  },
+  {
+   "id": "toyota-highlander/toyota-highlander-xu40",
+   "label": "Toyota Highlander (XU40)",
+   "from": 2008,
+   "to": 2013,
+   "years": [
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013
+   ]
+  },
+  {
+   "id": "toyota-highlander/toyota-highlander-xu50",
+   "label": "Toyota Highlander (XU50)",
+   "from": 2014,
+   "to": 2019,
+   "years": [
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019
+   ]
+  },
+  {
+   "id": "toyota-highlander/toyota-highlander-xu70",
+   "label": "Toyota Highlander (XU70)",
+   "from": 2020,
+   "to": 2026,
+   "years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ]
+  }
+ ],
+ "tesla-model-y": [
+  {
+   "id": "tesla-model-y/tesla-model-y",
+   "label": "Tesla Model Y",
+   "from": 2020,
+   "to": null,
+   "years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "ford-f-150": [
+  {
+   "id": "ford-f-150/ford-f-150-eleventh-generation",
+   "label": "Ford F-150 (eleventh generation)",
+   "from": 2004,
+   "to": 2008,
+   "years": [
+    2006,
+    2007,
+    2008
+   ]
+  },
+  {
+   "id": "ford-f-150/ford-f-150-twelfth-generation",
+   "label": "Ford F-150 (twelfth generation)",
+   "from": 2009,
+   "to": 2014,
+   "years": [
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014
+   ]
+  },
+  {
+   "id": "ford-f-150/ford-f-150-thirteenth-generation",
+   "label": "Ford F-150 (thirteenth generation)",
+   "from": 2015,
+   "to": 2020,
+   "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020
+   ]
+  },
+  {
+   "id": "ford-f-150/ford-f-150-fourteenth-generation",
+   "label": "Ford F-150 (fourteenth generation)",
+   "from": 2021,
+   "to": null,
+   "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ]
+  }
+ ],
+ "toyota-tacoma": [
+  {
+   "id": "toyota-tacoma/second-generation-n220-n240-n250-n260-n270-2004",
+   "label": "Second generation (N220/N240/N250/N260/N270; 2004)",
+   "from": 2005,
+   "to": 2015,
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015
+   ]
+  },
+  {
+   "id": "toyota-tacoma/third-generation-n240-n260-n300-n310-n320-n330-2015",
+   "label": "Third generation (N240/N260/N300/N310/N320/N330; 2015)",
+   "from": 2016,
+   "to": 2023,
+   "years": [
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023
+   ]
+  },
+  {
+   "id": "toyota-tacoma/fourth-generation-n400-2023",
+   "label": "Fourth generation (N400; 2023)",
+   "from": 2024,
+   "to": null,
+   "years": [
+    2024,
+    2025,
+    2026
+   ]
+  }
+ ],
+ "jeep-wrangler": [
+  {
+   "id": "jeep-wrangler/jeep-wrangler-tj",
+   "label": "Jeep Wrangler (TJ)",
+   "from": 1997,
+   "to": 2006,
+   "years": [
+    2006
+   ]
+  },
+  {
+   "id": "jeep-wrangler/jeep-wrangler-jk",
+   "label": "Jeep Wrangler (JK)",
+   "from": 2007,
+   "to": 2018,
+   "years": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ]
+  },
+  {
+   "id": "jeep-wrangler/jeep-wrangler-jl",
+   "label": "Jeep Wrangler (JL)",
+   "from": 2018,
+   "to": null,
+   "years": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "ford-mustang": [
+  {
+   "id": "ford-mustang/ford-mustang-fifth-generation",
+   "label": "Ford Mustang (fifth generation)",
+   "from": 2005,
+   "to": 2014,
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014
+   ]
+  },
+  {
+   "id": "ford-mustang/ford-mustang-sixth-generation",
+   "label": "Ford Mustang (sixth generation)",
+   "from": 2015,
+   "to": 2023,
+   "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023
+   ]
+  },
+  {
+   "id": "ford-mustang/ford-mustang-seventh-generation",
+   "label": "Ford Mustang (seventh generation)",
+   "from": 2024,
+   "to": null,
+   "years": [
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "tesla-model-3": [
+  {
+   "id": "tesla-model-3/tesla-model-3",
+   "label": "Tesla Model 3",
+   "from": 2017,
+   "to": null,
+   "years": [
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "hyundai-ioniq-5": [
+  {
+   "id": "hyundai-ioniq-5/hyundai-ioniq-5",
+   "label": "Hyundai Ioniq 5",
+   "from": 2022,
+   "to": null,
+   "years": [
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "toyota-corolla-cross": [
+  {
+   "id": "toyota-corolla-cross/toyota-corolla-cross",
+   "label": "Toyota Corolla Cross",
+   "from": 2022,
+   "to": null,
+   "years": [
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "nissan-altima": [
+  {
+   "id": "nissan-altima/third-generation-l31-2001",
+   "label": "Third generation (L31; 2001)",
+   "from": 2002,
+   "to": 2006,
+   "years": [
+    2006
+   ]
+  },
+  {
+   "id": "nissan-altima/fourth-generation-l32-2006",
+   "label": "Fourth generation (L32; 2006)",
+   "from": 2007,
+   "to": 2012,
+   "years": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012
+   ]
+  },
+  {
+   "id": "nissan-altima/fifth-generation-l33-2012",
+   "label": "Fifth generation (L33; 2012)",
+   "from": 2013,
+   "to": 2018,
+   "years": [
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ]
+  },
+  {
+   "id": "nissan-altima/sixth-generation-l34-2018",
+   "label": "Sixth generation (L34; 2018)",
+   "from": 2019,
+   "to": null,
+   "years": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "nissan-versa": [
+  {
+   "id": "nissan-versa/nissan-versa-c11-tiida",
+   "label": "Nissan Versa (C11, Tiida)",
+   "from": 2007,
+   "to": 2012,
+   "years": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012
+   ]
+  },
+  {
+   "id": "nissan-versa/nissan-versa-sedan-n17-almera",
+   "label": "Nissan Versa sedan (N17, Almera)",
+   "from": 2012,
+   "to": 2019,
+   "years": [
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019
+   ]
+  },
+  {
+   "id": "nissan-versa/nissan-versa-sedan-n18",
+   "label": "Nissan Versa sedan (N18)",
+   "from": 2020,
+   "to": 2025,
+   "years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ]
+  }
+ ],
+ "nissan-kicks": [
+  {
+   "id": "nissan-kicks/global-market-p15-2016",
+   "label": "Global market (P15; 2016)",
+   "from": 2018,
+   "to": 2025,
+   "years": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "nissan-kicks/second-generation-p16-2024",
+   "label": "Second generation (P16; 2024)",
+   "from": 2025,
+   "to": null,
+   "years": [
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "kia-k5": [
+  {
+   "id": "kia-k5/fifth-generation-dl3-2019",
+   "label": "Fifth generation (DL3; 2019)",
+   "from": 2021,
+   "to": null,
+   "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "hyundai-sonata": [
+  {
+   "id": "hyundai-sonata/fifth-generation-nf-2004",
+   "label": "Fifth generation (NF; 2004)",
+   "from": 2006,
+   "to": 2010,
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009,
+    2010
+   ]
+  },
+  {
+   "id": "hyundai-sonata/sixth-generation-yf-2009",
+   "label": "Sixth generation (YF; 2009)",
+   "from": 2011,
+   "to": 2014,
+   "years": [
+    2011,
+    2012,
+    2013,
+    2014
+   ]
+  },
+  {
+   "id": "hyundai-sonata/seventh-generation-lf-2014",
+   "label": "Seventh generation (LF; 2014)",
+   "from": 2015,
+   "to": 2019,
+   "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019
+   ]
+  },
+  {
+   "id": "hyundai-sonata/eighth-generation-dn8-2019",
+   "label": "Eighth generation (DN8; 2019)",
+   "from": 2020,
+   "to": null,
+   "years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "chevrolet-malibu": [
+  {
+   "id": "chevrolet-malibu/chevrolet-malibu-sixth-generation-gmx380",
+   "label": "Chevrolet Malibu (sixth generation, GMX380)",
+   "from": 2004,
+   "to": 2008,
+   "years": [
+    2006,
+    2007,
+    2008
+   ]
+  },
+  {
+   "id": "chevrolet-malibu/chevrolet-malibu-seventh-generation-epsilon",
+   "label": "Chevrolet Malibu (seventh generation, Epsilon)",
+   "from": 2008,
+   "to": 2012,
+   "years": [
+    2008,
+    2009,
+    2010,
+    2011,
+    2012
+   ]
+  },
+  {
+   "id": "chevrolet-malibu/chevrolet-malibu-eighth-generation-epsilon-ii",
+   "label": "Chevrolet Malibu (eighth generation, Epsilon II)",
+   "from": 2013,
+   "to": 2016,
+   "years": [
+    2013,
+    2014,
+    2015,
+    2016
+   ]
+  },
+  {
+   "id": "chevrolet-malibu/chevrolet-malibu-ninth-generation-e2xx",
+   "label": "Chevrolet Malibu (ninth generation, E2XX)",
+   "from": 2016,
+   "to": 2025,
+   "years": [
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ]
+  }
+ ],
+ "chevrolet-trax": [
+  {
+   "id": "chevrolet-trax/chevrolet-trax-first-generation-u200",
+   "label": "Chevrolet Trax (first generation, U200)",
+   "from": 2015,
+   "to": 2022,
+   "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022
+   ]
+  },
+  {
+   "id": "chevrolet-trax/chevrolet-trax-second-generation",
+   "label": "Chevrolet Trax (second generation)",
+   "from": 2024,
+   "to": null,
+   "years": [
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "buick-envista": [
+  {
+   "id": "buick-envista/buick-envista",
+   "label": "Buick Envista",
+   "from": 2024,
+   "to": null,
+   "years": [
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "subaru-legacy": [
+  {
+   "id": "subaru-legacy/subaru-legacy-fourth-generation",
+   "label": "Subaru Legacy (fourth generation)",
+   "from": 2005,
+   "to": 2009,
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009
+   ]
+  },
+  {
+   "id": "subaru-legacy/subaru-legacy-fifth-generation",
+   "label": "Subaru Legacy (fifth generation)",
+   "from": 2010,
+   "to": 2014,
+   "years": [
+    2010,
+    2011,
+    2012,
+    2013,
+    2014
+   ]
+  },
+  {
+   "id": "subaru-legacy/subaru-legacy-sixth-generation",
+   "label": "Subaru Legacy (sixth generation)",
+   "from": 2015,
+   "to": 2019,
+   "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019
+   ]
+  },
+  {
+   "id": "subaru-legacy/subaru-legacy-seventh-generation",
+   "label": "Subaru Legacy (seventh generation)",
+   "from": 2020,
+   "to": 2025,
+   "years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ]
+  }
+ ],
+ "kia-seltos": [
+  {
+   "id": "kia-seltos/first-generation-sp2-2019",
+   "label": "First generation (SP2; 2019)",
+   "from": 2021,
+   "to": 2026,
+   "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "kia-seltos/second-generation-sp3-2025",
+   "label": "Second generation (SP3; 2025)",
+   "from": 2026,
+   "to": null,
+   "years": [
+    2026,
+    2027
+   ]
+  }
+ ],
+ "hyundai-venue": [
+  {
+   "id": "hyundai-venue/hyundai-venue-qx",
+   "label": "Hyundai Venue (QX)",
+   "from": 2020,
+   "to": null,
+   "years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "chevrolet-camaro": [
+  {
+   "id": "chevrolet-camaro/chevrolet-camaro-fifth-generation",
+   "label": "Chevrolet Camaro (fifth generation)",
+   "from": 2010,
+   "to": 2015,
+   "years": [
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015
+   ]
+  },
+  {
+   "id": "chevrolet-camaro/chevrolet-camaro-sixth-generation",
+   "label": "Chevrolet Camaro (sixth generation)",
+   "from": 2016,
+   "to": 2024,
+   "years": [
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+   ]
+  }
+ ],
+ "toyota-prius-prime": [
+  {
+   "id": "toyota-prius-prime/toyota-prius-prime-xw50",
+   "label": "Toyota Prius Prime (XW50)",
+   "from": 2017,
+   "to": 2022,
+   "years": [
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022
+   ]
+  },
+  {
+   "id": "toyota-prius-prime/toyota-prius-prime-prius-plug-in-hybrid-xw60",
+   "label": "Toyota Prius Prime / Prius Plug-in Hybrid (XW60)",
+   "from": 2023,
+   "to": null,
+   "years": [
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "toyota-rav4-prime": [
+  {
+   "id": "toyota-rav4-prime/toyota-rav4-prime-xa50",
+   "label": "Toyota RAV4 Prime (XA50)",
+   "from": 2021,
+   "to": 2025,
+   "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "toyota-rav4-prime/toyota-rav4-plug-in-hybrid-xa60",
+   "label": "Toyota RAV4 Plug-in Hybrid (XA60)",
+   "from": 2026,
+   "to": null,
+   "years": [
+    2026,
+    2027
+   ]
+  }
+ ],
+ "nissan-leaf": [
+  {
+   "id": "nissan-leaf/nissan-leaf-ze0-aze0-first-generation",
+   "label": "Nissan Leaf (ZE0/AZE0, first generation)",
+   "from": 2011,
+   "to": 2017,
+   "years": [
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017
+   ]
+  },
+  {
+   "id": "nissan-leaf/nissan-leaf-ze1-second-generation",
+   "label": "Nissan Leaf (ZE1, second generation)",
+   "from": 2018,
+   "to": 2025,
+   "years": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "nissan-leaf/nissan-leaf-ze2-third-generation",
+   "label": "Nissan Leaf (ZE2, third generation)",
+   "from": 2026,
+   "to": null,
+   "years": [
+    2026,
+    2027
+   ]
+  }
+ ],
+ "hyundai-ioniq-6": [
+  {
+   "id": "hyundai-ioniq-6/hyundai-ioniq-6-ce-pre-facelift",
+   "label": "Hyundai Ioniq 6 (CE, pre-facelift)",
+   "from": 2023,
+   "to": 2025,
+   "years": [
+    2023,
+    2024,
+    2025
+   ]
+  }
+ ],
+ "kia-ev6": [
+  {
+   "id": "kia-ev6/kia-ev6",
+   "label": "Kia EV6",
+   "from": 2022,
+   "to": null,
+   "years": [
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "kia-niro": [
+  {
+   "id": "kia-niro/first-generation-de-2016",
+   "label": "First generation (DE; 2016)",
+   "from": 2017,
+   "to": 2022,
+   "years": [
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022
+   ]
+  },
+  {
+   "id": "kia-niro/second-generation-sg2-2021",
+   "label": "Second generation (SG2; 2021)",
+   "from": 2023,
+   "to": null,
+   "years": [
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "ford-mustang-mach-e": [
+  {
+   "id": "ford-mustang-mach-e/ford-mustang-mach-e",
+   "label": "Ford Mustang Mach-E",
+   "from": 2021,
+   "to": null,
+   "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "volkswagen-id-4": [
+  {
+   "id": "volkswagen-id-4/volkswagen-id-4",
+   "label": "Volkswagen ID.4",
+   "from": 2021,
+   "to": 2026,
+   "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ]
+  }
+ ],
+ "toyota-bz4x": [
+  {
+   "id": "toyota-bz4x/toyota-bz4x-ea10-pre-facelift",
+   "label": "Toyota bZ4X (EA10, pre-facelift)",
+   "from": 2023,
+   "to": 2025,
+   "years": [
+    2023,
+    2024,
+    2025
+   ]
+  }
+ ],
+ "tesla-model-s": [
+  {
+   "id": "tesla-model-s/tesla-model-s",
+   "label": "Tesla Model S",
+   "from": 2012,
+   "to": 2026,
+   "years": [
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ]
+  }
+ ],
+ "tesla-model-x": [
+  {
+   "id": "tesla-model-x/tesla-model-x",
+   "label": "Tesla Model X",
+   "from": 2016,
+   "to": 2026,
+   "years": [
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ]
+  }
+ ],
+ "honda-pilot": [
+  {
+   "id": "honda-pilot/first-generation-yf1-2-2003",
+   "label": "First generation (YF1/2; 2003)",
+   "from": 2003,
+   "to": 2008,
+   "years": [
+    2006,
+    2007,
+    2008
+   ]
+  },
+  {
+   "id": "honda-pilot/second-generation-yf3-4-2009",
+   "label": "Second generation (YF3/4; 2009)",
+   "from": 2009,
+   "to": 2015,
+   "years": [
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015
+   ]
+  },
+  {
+   "id": "honda-pilot/third-generation-yf5-6-2016",
+   "label": "Third generation (YF5/6; 2016)",
+   "from": 2016,
+   "to": 2022,
+   "years": [
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022
+   ]
+  },
+  {
+   "id": "honda-pilot/fourth-generation-yg1-2-2023",
+   "label": "Fourth generation (YG1/2; 2023)",
+   "from": 2023,
+   "to": null,
+   "years": [
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "honda-passport": [
+  {
+   "id": "honda-passport/third-generation-yf7-8-2019",
+   "label": "Third generation (YF7/8; 2019)",
+   "from": 2019,
+   "to": 2025,
+   "years": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "honda-passport/fourth-generation-yf9-2026",
+   "label": "Fourth generation (YF9; 2026)",
+   "from": 2026,
+   "to": null,
+   "years": [
+    2026,
+    2027
+   ]
+  }
+ ],
+ "toyota-4runner": [
+  {
+   "id": "toyota-4runner/fourth-generation-n210-2002",
+   "label": "Fourth generation (N210; 2002)",
+   "from": 2003,
+   "to": 2009,
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009
+   ]
+  },
+  {
+   "id": "toyota-4runner/fifth-generation-n280-2009",
+   "label": "Fifth generation (N280; 2009)",
+   "from": 2010,
+   "to": 2024,
+   "years": [
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "id": "toyota-4runner/sixth-generation-n500-2024",
+   "label": "Sixth generation (N500; 2024)",
+   "from": 2025,
+   "to": null,
+   "years": [
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "toyota-grand-highlander": [
+  {
+   "id": "toyota-grand-highlander/toyota-grand-highlander",
+   "label": "Toyota Grand Highlander",
+   "from": 2024,
+   "to": null,
+   "years": [
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "subaru-ascent": [
+  {
+   "id": "subaru-ascent/subaru-ascent",
+   "label": "Subaru Ascent",
+   "from": 2019,
+   "to": null,
+   "years": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "mazda-cx-30": [
+  {
+   "id": "mazda-cx-30/mazda-cx-30",
+   "label": "Mazda CX-30",
+   "from": 2020,
+   "to": null,
+   "years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ]
+  }
+ ],
+ "mazda-cx-50": [
+  {
+   "id": "mazda-cx-50/mazda-cx-50",
+   "label": "Mazda CX-50",
+   "from": 2023,
+   "to": null,
+   "years": [
+    2023,
+    2024,
+    2025,
+    2026
+   ]
+  }
+ ],
+ "mazda-cx-90": [
+  {
+   "id": "mazda-cx-90/mazda-cx-90",
+   "label": "Mazda CX-90",
+   "from": 2024,
+   "to": null,
+   "years": [
+    2024,
+    2025,
+    2026
+   ]
+  }
+ ],
+ "hyundai-santa-fe": [
+  {
+   "id": "hyundai-santa-fe/first-generation-sm-2000",
+   "label": "First generation (SM; 2000)",
+   "from": 2001,
+   "to": 2006,
+   "years": [
+    2006
+   ]
+  },
+  {
+   "id": "hyundai-santa-fe/second-generation-cm-2005",
+   "label": "Second generation (CM; 2005)",
+   "from": 2007,
+   "to": 2012,
+   "years": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012
+   ]
+  },
+  {
+   "id": "hyundai-santa-fe/third-generation-dm-nc-2012",
+   "label": "Third generation (DM/NC; 2012)",
+   "from": 2013,
+   "to": 2018,
+   "years": [
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ]
+  },
+  {
+   "id": "hyundai-santa-fe/fourth-generation-tm-2018",
+   "label": "Fourth generation (TM; 2018)",
+   "from": 2019,
+   "to": 2023,
+   "years": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023
+   ]
+  },
+  {
+   "id": "hyundai-santa-fe/fifth-generation-mx5-2023",
+   "label": "Fifth generation (MX5; 2023)",
+   "from": 2024,
+   "to": null,
+   "years": [
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "hyundai-palisade": [
+  {
+   "id": "hyundai-palisade/first-generation-lx2-2018",
+   "label": "First generation (LX2; 2018)",
+   "from": 2020,
+   "to": 2025,
+   "years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "hyundai-palisade/second-generation-lx3-2024",
+   "label": "Second generation (LX3; 2024)",
+   "from": 2026,
+   "to": null,
+   "years": [
+    2026,
+    2027
+   ]
+  }
+ ],
+ "kia-telluride": [
+  {
+   "id": "kia-telluride/kia-telluride-on-first-generation",
+   "label": "Kia Telluride (ON, first generation)",
+   "from": 2020,
+   "to": 2025,
+   "years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "kia-telluride/kia-telluride-lq2-second-generation",
+   "label": "Kia Telluride (LQ2, second generation)",
+   "from": 2027,
+   "to": null,
+   "years": [
+    2027
+   ]
+  }
+ ],
+ "kia-sorento": [
+  {
+   "id": "kia-sorento/first-generation-bl-2002",
+   "label": "First generation (BL; 2002)",
+   "from": 2003,
+   "to": 2009,
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009
+   ]
+  },
+  {
+   "id": "kia-sorento/second-generation-xm-2009",
+   "label": "Second generation (XM; 2009)",
+   "from": 2011,
+   "to": 2015,
+   "years": [
+    2011,
+    2012,
+    2013,
+    2014,
+    2015
+   ]
+  },
+  {
+   "id": "kia-sorento/third-generation-um-2014",
+   "label": "Third generation (UM; 2014)",
+   "from": 2016,
+   "to": 2020,
+   "years": [
+    2016,
+    2017,
+    2018,
+    2019,
+    2020
+   ]
+  },
+  {
+   "id": "kia-sorento/fourth-generation-mq4-2020",
+   "label": "Fourth generation (MQ4; 2020)",
+   "from": 2021,
+   "to": null,
+   "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "chevrolet-trailblazer": [
+  {
+   "id": "chevrolet-trailblazer/chevrolet-trailblazer-gmt360-mid-size-suv",
+   "label": "Chevrolet TrailBlazer (GMT360, mid-size SUV)",
+   "from": 2002,
+   "to": 2009,
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009
+   ]
+  },
+  {
+   "id": "chevrolet-trailblazer/chevrolet-trailblazer-crossover-vss-f-9byc",
+   "label": "Chevrolet Trailblazer (crossover, VSS-F 9BYC)",
+   "from": 2021,
+   "to": null,
+   "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "chevrolet-blazer": [
+  {
+   "id": "chevrolet-blazer/chevrolet-blazer-c1xx",
+   "label": "Chevrolet Blazer (C1XX)",
+   "from": 2019,
+   "to": 2026,
+   "years": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ]
+  }
+ ],
+ "chevrolet-traverse": [
+  {
+   "id": "chevrolet-traverse/chevrolet-traverse-first-generation-lambda",
+   "label": "Chevrolet Traverse (first generation, Lambda)",
+   "from": 2009,
+   "to": 2017,
+   "years": [
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017
+   ]
+  },
+  {
+   "id": "chevrolet-traverse/chevrolet-traverse-second-generation-c1xx",
+   "label": "Chevrolet Traverse (second generation, C1XX)",
+   "from": 2018,
+   "to": 2024,
+   "years": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "id": "chevrolet-traverse/chevrolet-traverse-third-generation-c1xx-2",
+   "label": "Chevrolet Traverse (third generation, C1XX-2)",
+   "from": 2024,
+   "to": null,
+   "years": [
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "chevrolet-tahoe": [
+  {
+   "id": "chevrolet-tahoe/chevrolet-tahoe-gmt800",
+   "label": "Chevrolet Tahoe (GMT800)",
+   "from": 2000,
+   "to": 2006,
+   "years": [
+    2006
+   ]
+  },
+  {
+   "id": "chevrolet-tahoe/chevrolet-tahoe-gmt900",
+   "label": "Chevrolet Tahoe (GMT900)",
+   "from": 2007,
+   "to": 2014,
+   "years": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014
+   ]
+  },
+  {
+   "id": "chevrolet-tahoe/chevrolet-tahoe-k2xx",
+   "label": "Chevrolet Tahoe (K2XX)",
+   "from": 2015,
+   "to": 2020,
+   "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020
+   ]
+  },
+  {
+   "id": "chevrolet-tahoe/chevrolet-tahoe-t1xx",
+   "label": "Chevrolet Tahoe (T1XX)",
+   "from": 2021,
+   "to": null,
+   "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "chevrolet-suburban": [
+  {
+   "id": "chevrolet-suburban/chevrolet-suburban-gmt800-gmt830",
+   "label": "Chevrolet Suburban (GMT800/GMT830)",
+   "from": 2000,
+   "to": 2006,
+   "years": [
+    2006
+   ]
+  },
+  {
+   "id": "chevrolet-suburban/chevrolet-suburban-gmt900-gmt931",
+   "label": "Chevrolet Suburban (GMT900/GMT931)",
+   "from": 2007,
+   "to": 2014,
+   "years": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014
+   ]
+  },
+  {
+   "id": "chevrolet-suburban/chevrolet-suburban-gmtk2yc",
+   "label": "Chevrolet Suburban (GMTK2YC)",
+   "from": 2015,
+   "to": 2020,
+   "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020
+   ]
+  },
+  {
+   "id": "chevrolet-suburban/chevrolet-suburban-gmtt1yc",
+   "label": "Chevrolet Suburban (GMTT1YC)",
+   "from": 2021,
+   "to": null,
+   "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "ford-explorer": [
+  {
+   "id": "ford-explorer/fourth-generation-u251-2006",
+   "label": "Fourth generation (U251; 2006)",
+   "from": 2006,
+   "to": 2010,
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009,
+    2010
+   ]
+  },
+  {
+   "id": "ford-explorer/fifth-generation-u502-2011",
+   "label": "Fifth generation (U502; 2011)",
+   "from": 2011,
+   "to": 2019,
+   "years": [
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019
+   ]
+  },
+  {
+   "id": "ford-explorer/sixth-generation-u625-2020",
+   "label": "Sixth generation (U625; 2020)",
+   "from": 2020,
+   "to": null,
+   "years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "ford-bronco": [
+  {
+   "id": "ford-bronco/ford-bronco-sixth-generation-u725",
+   "label": "Ford Bronco (sixth generation, U725)",
+   "from": 2021,
+   "to": null,
+   "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "ford-bronco-sport": [
+  {
+   "id": "ford-bronco-sport/ford-bronco-sport",
+   "label": "Ford Bronco Sport",
+   "from": 2021,
+   "to": null,
+   "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "ford-expedition": [
+  {
+   "id": "ford-expedition/second-generation-2003",
+   "label": "Second generation (2003)",
+   "from": 2003,
+   "to": 2006,
+   "years": [
+    2006
+   ]
+  },
+  {
+   "id": "ford-expedition/third-generation-2007",
+   "label": "Third generation (2007)",
+   "from": 2007,
+   "to": 2017,
+   "years": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017
+   ]
+  },
+  {
+   "id": "ford-expedition/fourth-generation-2018",
+   "label": "Fourth generation (2018)",
+   "from": 2018,
+   "to": 2024,
+   "years": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "id": "ford-expedition/fifth-generation-2025",
+   "label": "Fifth generation (2025)",
+   "from": 2025,
+   "to": null,
+   "years": [
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "gmc-terrain": [
+  {
+   "id": "gmc-terrain/gmc-terrain-first-generation-theta",
+   "label": "GMC Terrain (first generation, Theta)",
+   "from": 2010,
+   "to": 2017,
+   "years": [
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017
+   ]
+  },
+  {
+   "id": "gmc-terrain/gmc-terrain-second-generation",
+   "label": "GMC Terrain (second generation)",
+   "from": 2018,
+   "to": 2024,
+   "years": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "id": "gmc-terrain/gmc-terrain-third-generation",
+   "label": "GMC Terrain (third generation)",
+   "from": 2025,
+   "to": null,
+   "years": [
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "gmc-acadia": [
+  {
+   "id": "gmc-acadia/first-generation-2007",
+   "label": "First generation (2007)",
+   "from": 2007,
+   "to": 2016,
+   "years": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016
+   ]
+  },
+  {
+   "id": "gmc-acadia/second-generation-2017",
+   "label": "Second generation (2017)",
+   "from": 2017,
+   "to": 2023,
+   "years": [
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023
+   ]
+  },
+  {
+   "id": "gmc-acadia/third-generation-2024",
+   "label": "Third generation (2024)",
+   "from": 2024,
+   "to": null,
+   "years": [
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "gmc-yukon": [
+  {
+   "id": "gmc-yukon/gmc-yukon-gmt800-gmt820",
+   "label": "GMC Yukon (GMT800/GMT820)",
+   "from": 2000,
+   "to": 2006,
+   "years": [
+    2006
+   ]
+  },
+  {
+   "id": "gmc-yukon/gmc-yukon-gmt900-gmt922",
+   "label": "GMC Yukon (GMT900/GMT922)",
+   "from": 2007,
+   "to": 2014,
+   "years": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014
+   ]
+  },
+  {
+   "id": "gmc-yukon/gmc-yukon-gmtk2ug",
+   "label": "GMC Yukon (GMTK2UG)",
+   "from": 2015,
+   "to": 2020,
+   "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020
+   ]
+  },
+  {
+   "id": "gmc-yukon/gmc-yukon-gmtt1ug",
+   "label": "GMC Yukon (GMTT1UG)",
+   "from": 2021,
+   "to": null,
+   "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "jeep-grand-cherokee": [
+  {
+   "id": "jeep-grand-cherokee/jeep-grand-cherokee-wk",
+   "label": "Jeep Grand Cherokee (WK)",
+   "from": 2005,
+   "to": 2010,
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009,
+    2010
+   ]
+  },
+  {
+   "id": "jeep-grand-cherokee/jeep-grand-cherokee-wk2",
+   "label": "Jeep Grand Cherokee (WK2)",
+   "from": 2011,
+   "to": 2022,
+   "years": [
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022
+   ]
+  },
+  {
+   "id": "jeep-grand-cherokee/jeep-grand-cherokee-wl",
+   "label": "Jeep Grand Cherokee (WL)",
+   "from": 2022,
+   "to": null,
+   "years": [
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "jeep-compass": [
+  {
+   "id": "jeep-compass/jeep-compass-mk49",
+   "label": "Jeep Compass (MK49)",
+   "from": 2007,
+   "to": 2017,
+   "years": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017
+   ]
+  },
+  {
+   "id": "jeep-compass/jeep-compass-mp",
+   "label": "Jeep Compass (MP)",
+   "from": 2017,
+   "to": 2027,
+   "years": [
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "nissan-pathfinder": [
+  {
+   "id": "nissan-pathfinder/nissan-pathfinder-r51",
+   "label": "Nissan Pathfinder (R51)",
+   "from": 2005,
+   "to": 2012,
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012
+   ]
+  },
+  {
+   "id": "nissan-pathfinder/nissan-pathfinder-r52",
+   "label": "Nissan Pathfinder (R52)",
+   "from": 2013,
+   "to": 2020,
+   "years": [
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020
+   ]
+  },
+  {
+   "id": "nissan-pathfinder/nissan-pathfinder-r53",
+   "label": "Nissan Pathfinder (R53)",
+   "from": 2022,
+   "to": null,
+   "years": [
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "nissan-murano": [
+  {
+   "id": "nissan-murano/first-generation-z50-2002",
+   "label": "First generation (Z50; 2002)",
+   "from": 2003,
+   "to": 2007,
+   "years": [
+    2006,
+    2007
+   ]
+  },
+  {
+   "id": "nissan-murano/second-generation-z51-2007",
+   "label": "Second generation (Z51; 2007)",
+   "from": 2009,
+   "to": 2014,
+   "years": [
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014
+   ]
+  },
+  {
+   "id": "nissan-murano/third-generation-z52-2015",
+   "label": "Third generation (Z52; 2015)",
+   "from": 2015,
+   "to": 2024,
+   "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "id": "nissan-murano/fourth-generation-z53-2025",
+   "label": "Fourth generation (Z53; 2025)",
+   "from": 2025,
+   "to": null,
+   "years": [
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "volkswagen-tiguan": [
+  {
+   "id": "volkswagen-tiguan/volkswagen-tiguan-5n-first-generation",
+   "label": "Volkswagen Tiguan (5N, first generation)",
+   "from": 2009,
+   "to": 2018,
+   "years": [
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ]
+  },
+  {
+   "id": "volkswagen-tiguan/volkswagen-tiguan-ad-bw-second-generation-north-america-lwb",
+   "label": "Volkswagen Tiguan (AD/BW, second generation, North America LWB)",
+   "from": 2018,
+   "to": 2024,
+   "years": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "id": "volkswagen-tiguan/volkswagen-tiguan-third-generation-north-america-tayron-l-based",
+   "label": "Volkswagen Tiguan (third generation, North America; Tayron L-based)",
+   "from": 2025,
+   "to": null,
+   "years": [
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "volkswagen-atlas": [
+  {
+   "id": "volkswagen-atlas/volkswagen-atlas-first-generation-ca1",
+   "label": "Volkswagen Atlas (first generation, CA1)",
+   "from": 2018,
+   "to": 2026,
+   "years": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "volkswagen-atlas/volkswagen-atlas-second-generation",
+   "label": "Volkswagen Atlas (second generation)",
+   "from": 2027,
+   "to": null,
+   "years": [
+    2027
+   ]
+  }
+ ],
+ "volkswagen-taos": [
+  {
+   "id": "volkswagen-taos/volkswagen-taos",
+   "label": "Volkswagen Taos",
+   "from": 2022,
+   "to": null,
+   "years": [
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "buick-encore-gx": [
+  {
+   "id": "buick-encore-gx/buick-encore-gx",
+   "label": "Buick Encore GX",
+   "from": 2020,
+   "to": null,
+   "years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "buick-enclave": [
+  {
+   "id": "buick-enclave/buick-enclave-lambda",
+   "label": "Buick Enclave (Lambda)",
+   "from": 2008,
+   "to": 2017,
+   "years": [
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017
+   ]
+  },
+  {
+   "id": "buick-enclave/buick-enclave-c1xx",
+   "label": "Buick Enclave (C1XX)",
+   "from": 2018,
+   "to": 2024,
+   "years": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "id": "buick-enclave/buick-enclave-third-generation",
+   "label": "Buick Enclave (third generation)",
+   "from": 2025,
+   "to": null,
+   "years": [
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "dodge-durango": [
+  {
+   "id": "dodge-durango/second-generation-hb-2004",
+   "label": "Second generation (HB; 2004)",
+   "from": 2004,
+   "to": 2009,
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009
+   ]
+  },
+  {
+   "id": "dodge-durango/third-generation-wd-2011",
+   "label": "Third generation (WD; 2011)",
+   "from": 2011,
+   "to": null,
+   "years": [
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "mitsubishi-outlander": [
+  {
+   "id": "mitsubishi-outlander/mitsubishi-outlander-first-generation-cu",
+   "label": "Mitsubishi Outlander (first generation, CU)",
+   "from": 2003,
+   "to": 2006,
+   "years": [
+    2006
+   ]
+  },
+  {
+   "id": "mitsubishi-outlander/mitsubishi-outlander-second-generation-cw",
+   "label": "Mitsubishi Outlander (second generation, CW)",
+   "from": 2007,
+   "to": 2013,
+   "years": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013
+   ]
+  },
+  {
+   "id": "mitsubishi-outlander/mitsubishi-outlander-third-generation-gf",
+   "label": "Mitsubishi Outlander (third generation, GF)",
+   "from": 2014,
+   "to": 2021,
+   "years": [
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021
+   ]
+  },
+  {
+   "id": "mitsubishi-outlander/mitsubishi-outlander-fourth-generation-gm-gn",
+   "label": "Mitsubishi Outlander (fourth generation, GM/GN)",
+   "from": 2022,
+   "to": null,
+   "years": [
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "chevrolet-silverado": [
+  {
+   "id": "chevrolet-silverado/chevrolet-silverado-gmt800",
+   "label": "Chevrolet Silverado (GMT800)",
+   "from": 1999,
+   "to": 2007,
+   "years": [
+    2006,
+    2007
+   ]
+  },
+  {
+   "id": "chevrolet-silverado/chevrolet-silverado-gmt900",
+   "label": "Chevrolet Silverado (GMT900)",
+   "from": 2007,
+   "to": 2013,
+   "years": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013
+   ]
+  },
+  {
+   "id": "chevrolet-silverado/chevrolet-silverado-k2xx",
+   "label": "Chevrolet Silverado (K2XX)",
+   "from": 2014,
+   "to": 2018,
+   "years": [
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ]
+  },
+  {
+   "id": "chevrolet-silverado/chevrolet-silverado-t1xx",
+   "label": "Chevrolet Silverado (T1XX)",
+   "from": 2019,
+   "to": 2026,
+   "years": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ]
+  }
+ ],
+ "ram-1500": [
+  {
+   "id": "ram-1500/ram-1500-ds",
+   "label": "Ram 1500 (DS)",
+   "from": 2009,
+   "to": 2018,
+   "years": [
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ]
+  },
+  {
+   "id": "ram-1500/ram-1500-dt",
+   "label": "Ram 1500 (DT)",
+   "from": 2019,
+   "to": null,
+   "years": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "gmc-sierra": [
+  {
+   "id": "gmc-sierra/gmc-sierra-gmt800",
+   "label": "GMC Sierra (GMT800)",
+   "from": 1999,
+   "to": 2007,
+   "years": [
+    2006,
+    2007
+   ]
+  },
+  {
+   "id": "gmc-sierra/gmc-sierra-gmt900",
+   "label": "GMC Sierra (GMT900)",
+   "from": 2007,
+   "to": 2013,
+   "years": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013
+   ]
+  },
+  {
+   "id": "gmc-sierra/gmc-sierra-k2xx",
+   "label": "GMC Sierra (K2XX)",
+   "from": 2014,
+   "to": 2019,
+   "years": [
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019
+   ]
+  },
+  {
+   "id": "gmc-sierra/gmc-sierra-t1xx",
+   "label": "GMC Sierra (T1XX)",
+   "from": 2019,
+   "to": 2026,
+   "years": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ]
+  }
+ ],
+ "toyota-tundra": [
+  {
+   "id": "toyota-tundra/first-generation-xk30-xk40-1999",
+   "label": "First generation (XK30/XK40; 1999)",
+   "from": 2000,
+   "to": 2006,
+   "years": [
+    2006
+   ]
+  },
+  {
+   "id": "toyota-tundra/second-generation-xk50-2006",
+   "label": "Second generation (XK50; 2006)",
+   "from": 2007,
+   "to": 2021,
+   "years": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021
+   ]
+  },
+  {
+   "id": "toyota-tundra/third-generation-xk70-2021",
+   "label": "Third generation (XK70; 2021)",
+   "from": 2022,
+   "to": null,
+   "years": [
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ]
+  }
+ ],
+ "ford-ranger": [
+  {
+   "id": "ford-ranger/ford-ranger-americas-third-generation",
+   "label": "Ford Ranger (Americas, third generation)",
+   "from": 1998,
+   "to": 2011,
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011
+   ]
+  },
+  {
+   "id": "ford-ranger/ford-ranger-t6-p375-north-america",
+   "label": "Ford Ranger (T6, P375; North America)",
+   "from": 2019,
+   "to": 2023,
+   "years": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023
+   ]
+  },
+  {
+   "id": "ford-ranger/ford-ranger-t6-p703-north-america",
+   "label": "Ford Ranger (T6, P703; North America)",
+   "from": 2024,
+   "to": null,
+   "years": [
+    2024,
+    2025,
+    2026
+   ]
+  }
+ ],
+ "ford-maverick": [
+  {
+   "id": "ford-maverick/ford-maverick-pickup-truck",
+   "label": "Ford Maverick (pickup truck)",
+   "from": 2022,
+   "to": null,
+   "years": [
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ]
+  }
+ ],
+ "chevrolet-colorado": [
+  {
+   "id": "chevrolet-colorado/first-generation-2004",
+   "label": "First generation (2004)",
+   "from": 2004,
+   "to": 2012,
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012
+   ]
+  },
+  {
+   "id": "chevrolet-colorado/second-generation-rg-2011",
+   "label": "Second generation (RG; 2011)",
+   "from": 2015,
+   "to": 2022,
+   "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022
+   ]
+  },
+  {
+   "id": "chevrolet-colorado/third-generation-2023",
+   "label": "Third generation (2023)",
+   "from": 2023,
+   "to": null,
+   "years": [
+    2023,
+    2024,
+    2025,
+    2026
+   ]
+  }
+ ],
+ "gmc-canyon": [
+  {
+   "id": "gmc-canyon/gmc-canyon-gmt355",
+   "label": "GMC Canyon (GMT355)",
+   "from": 2004,
+   "to": 2012,
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012
+   ]
+  },
+  {
+   "id": "gmc-canyon/gmc-canyon-gmt31xx",
+   "label": "GMC Canyon (GMT31XX)",
+   "from": 2015,
+   "to": 2022,
+   "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022
+   ]
+  },
+  {
+   "id": "gmc-canyon/gmc-canyon-gmt31xx-2",
+   "label": "GMC Canyon (GMT31XX-2)",
+   "from": 2023,
+   "to": null,
+   "years": [
+    2023,
+    2024,
+    2025,
+    2026
+   ]
+  }
+ ],
+ "nissan-frontier": [
+  {
+   "id": "nissan-frontier/nissan-frontier-d40",
+   "label": "Nissan Frontier (D40)",
+   "from": 2005,
+   "to": 2021,
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021
+   ]
+  },
+  {
+   "id": "nissan-frontier/nissan-frontier-d41",
+   "label": "Nissan Frontier (D41)",
+   "from": 2022,
+   "to": null,
+   "years": [
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "honda-ridgeline": [
+  {
+   "id": "honda-ridgeline/honda-ridgeline-first-generation",
+   "label": "Honda Ridgeline (first generation)",
+   "from": 2006,
+   "to": 2014,
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014
+   ]
+  },
+  {
+   "id": "honda-ridgeline/honda-ridgeline-second-generation",
+   "label": "Honda Ridgeline (second generation)",
+   "from": 2017,
+   "to": null,
+   "years": [
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ]
+  }
+ ],
+ "jeep-gladiator": [
+  {
+   "id": "jeep-gladiator/jeep-gladiator-jt",
+   "label": "Jeep Gladiator (JT)",
+   "from": 2020,
+   "to": null,
+   "years": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "hyundai-santa-cruz": [
+  {
+   "id": "hyundai-santa-cruz/hyundai-santa-cruz",
+   "label": "Hyundai Santa Cruz",
+   "from": 2022,
+   "to": null,
+   "years": [
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "honda-odyssey": [
+  {
+   "id": "honda-odyssey/honda-odyssey-rl3-rl4",
+   "label": "Honda Odyssey (RL3/RL4)",
+   "from": 2005,
+   "to": 2010,
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009,
+    2010
+   ]
+  },
+  {
+   "id": "honda-odyssey/honda-odyssey-rl5",
+   "label": "Honda Odyssey (RL5)",
+   "from": 2011,
+   "to": 2017,
+   "years": [
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017
+   ]
+  },
+  {
+   "id": "honda-odyssey/honda-odyssey-rl6",
+   "label": "Honda Odyssey (RL6)",
+   "from": 2018,
+   "to": null,
+   "years": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "toyota-sienna": [
+  {
+   "id": "toyota-sienna/second-generation-xl20-2003",
+   "label": "Second generation (XL20; 2003)",
+   "from": 2004,
+   "to": 2010,
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009,
+    2010
+   ]
+  },
+  {
+   "id": "toyota-sienna/third-generation-xl30-2010",
+   "label": "Third generation (XL30; 2010)",
+   "from": 2011,
+   "to": 2020,
+   "years": [
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020
+   ]
+  },
+  {
+   "id": "toyota-sienna/fourth-generation-xl40-2020",
+   "label": "Fourth generation (XL40; 2020)",
+   "from": 2021,
+   "to": null,
+   "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "chrysler-pacifica": [
+  {
+   "id": "chrysler-pacifica/chrysler-pacifica-cs-crossover",
+   "label": "Chrysler Pacifica (CS crossover)",
+   "from": 2004,
+   "to": 2008,
+   "years": [
+    2006,
+    2007,
+    2008
+   ]
+  },
+  {
+   "id": "chrysler-pacifica/chrysler-pacifica-ru-minivan",
+   "label": "Chrysler Pacifica (RU minivan)",
+   "from": 2017,
+   "to": null,
+   "years": [
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "kia-carnival": [
+  {
+   "id": "kia-carnival/fourth-generation-ka4-2020",
+   "label": "Fourth generation (KA4; 2020)",
+   "from": 2022,
+   "to": null,
+   "years": [
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "lexus-rx": [
+  {
+   "id": "lexus-rx/lexus-rx-xu30",
+   "label": "Lexus RX (XU30)",
+   "from": 2004,
+   "to": 2009,
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009
+   ]
+  },
+  {
+   "id": "lexus-rx/lexus-rx-al10",
+   "label": "Lexus RX (AL10)",
+   "from": 2010,
+   "to": 2015,
+   "years": [
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015
+   ]
+  },
+  {
+   "id": "lexus-rx/lexus-rx-al20",
+   "label": "Lexus RX (AL20)",
+   "from": 2016,
+   "to": 2022,
+   "years": [
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022
+   ]
+  },
+  {
+   "id": "lexus-rx/lexus-rx-fifth-generation-ala10-alh10",
+   "label": "Lexus RX (fifth generation, ALA10/ALH10)",
+   "from": 2023,
+   "to": null,
+   "years": [
+    2023,
+    2024,
+    2025,
+    2026
+   ]
+  }
+ ],
+ "lexus-nx": [
+  {
+   "id": "lexus-nx/first-generation-az10-2014",
+   "label": "First generation (AZ10; 2014)",
+   "from": 2015,
+   "to": 2021,
+   "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021
+   ]
+  },
+  {
+   "id": "lexus-nx/second-generation-az20-2021",
+   "label": "Second generation (AZ20; 2021)",
+   "from": 2022,
+   "to": null,
+   "years": [
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ]
+  }
+ ],
+ "lexus-es": [
+  {
+   "id": "lexus-es/fourth-generation-xv30-2001",
+   "label": "Fourth generation (XV30; 2001)",
+   "from": 2002,
+   "to": 2006,
+   "years": [
+    2006
+   ]
+  },
+  {
+   "id": "lexus-es/fifth-generation-xv40-2006",
+   "label": "Fifth generation (XV40; 2006)",
+   "from": 2007,
+   "to": 2012,
+   "years": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012
+   ]
+  },
+  {
+   "id": "lexus-es/sixth-generation-xv60-2012",
+   "label": "Sixth generation (XV60; 2012)",
+   "from": 2013,
+   "to": 2018,
+   "years": [
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ]
+  },
+  {
+   "id": "lexus-es/seventh-generation-xz10-2018",
+   "label": "Seventh generation (XZ10; 2018)",
+   "from": 2019,
+   "to": 2025,
+   "years": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "lexus-es/eighth-generation-xz20-2025",
+   "label": "Eighth generation (XZ20; 2025)",
+   "from": 2026,
+   "to": null,
+   "years": [
+    2026
+   ]
+  }
+ ],
+ "bmw-330i": [
+  {
+   "id": "bmw-330i/bmw-3-series-e46",
+   "label": "BMW 3 Series (E46)",
+   "from": 1998,
+   "to": 2006,
+   "years": [
+    2006
+   ]
+  },
+  {
+   "id": "bmw-330i/bmw-3-series-e90",
+   "label": "BMW 3 Series (E90)",
+   "from": 2006,
+   "to": 2012,
+   "years": [
+    2006
+   ]
+  },
+  {
+   "id": "bmw-330i/bmw-3-series-f30",
+   "label": "BMW 3 Series (F30)",
+   "from": 2012,
+   "to": 2018,
+   "years": [
+    2017,
+    2018
+   ]
+  },
+  {
+   "id": "bmw-330i/bmw-3-series-g20",
+   "label": "BMW 3 Series (G20)",
+   "from": 2019,
+   "to": 2026,
+   "years": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ]
+  }
+ ],
+ "bmw-x3": [
+  {
+   "id": "bmw-x3/bmw-x3-e83",
+   "label": "BMW X3 (E83)",
+   "from": 2004,
+   "to": 2010,
+   "years": [
+    2006,
+    2007,
+    2008,
+    2009,
+    2010
+   ]
+  },
+  {
+   "id": "bmw-x3/bmw-x3-f25",
+   "label": "BMW X3 (F25)",
+   "from": 2011,
+   "to": 2017,
+   "years": [
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017
+   ]
+  },
+  {
+   "id": "bmw-x3/bmw-x3-g01",
+   "label": "BMW X3 (G01)",
+   "from": 2018,
+   "to": 2024,
+   "years": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+   ]
+  },
+  {
+   "id": "bmw-x3/bmw-x3-g45",
+   "label": "BMW X3 (G45)",
+   "from": 2025,
+   "to": null,
+   "years": [
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "bmw-x5": [
+  {
+   "id": "bmw-x5/bmw-x5-e53",
+   "label": "BMW X5 (E53)",
+   "from": 2000,
+   "to": 2006,
+   "years": [
+    2006
+   ]
+  },
+  {
+   "id": "bmw-x5/bmw-x5-e70",
+   "label": "BMW X5 (E70)",
+   "from": 2007,
+   "to": 2013,
+   "years": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013
+   ]
+  },
+  {
+   "id": "bmw-x5/bmw-x5-f15",
+   "label": "BMW X5 (F15)",
+   "from": 2014,
+   "to": 2018,
+   "years": [
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ]
+  },
+  {
+   "id": "bmw-x5/bmw-x5-g05",
+   "label": "BMW X5 (G05)",
+   "from": 2019,
+   "to": 2026,
+   "years": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ]
+  },
+  {
+   "id": "bmw-x5/bmw-x5-g65",
+   "label": "BMW X5 (G65)",
+   "from": 2027,
+   "to": null,
+   "years": [
+    2027
+   ]
+  }
+ ],
+ "mercedes-benz-c-class": [
+  {
+   "id": "mercedes-benz-c-class/mercedes-benz-c-class-w203",
+   "label": "Mercedes-Benz C-Class (W203)",
+   "from": 2001,
+   "to": 2007,
+   "years": [
+    2006,
+    2007
+   ]
+  },
+  {
+   "id": "mercedes-benz-c-class/mercedes-benz-c-class-w204",
+   "label": "Mercedes-Benz C-Class (W204)",
+   "from": 2008,
+   "to": 2014,
+   "years": [
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014
+   ]
+  },
+  {
+   "id": "mercedes-benz-c-class/mercedes-benz-c-class-w205",
+   "label": "Mercedes-Benz C-Class (W205)",
+   "from": 2015,
+   "to": 2021,
+   "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021
+   ]
+  },
+  {
+   "id": "mercedes-benz-c-class/mercedes-benz-c-class-w206",
+   "label": "Mercedes-Benz C-Class (W206)",
+   "from": 2022,
+   "to": null,
+   "years": [
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "mercedes-benz-glc-class": [
+  {
+   "id": "mercedes-benz-glc-class/mercedes-benz-glc-x253",
+   "label": "Mercedes-Benz GLC (X253)",
+   "from": 2016,
+   "to": 2022,
+   "years": [
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022
+   ]
+  },
+  {
+   "id": "mercedes-benz-glc-class/mercedes-benz-glc-x254",
+   "label": "Mercedes-Benz GLC (X254)",
+   "from": 2023,
+   "to": null,
+   "years": [
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "audi-q5": [
+  {
+   "id": "audi-q5/audi-q5-8r-first-generation",
+   "label": "Audi Q5 (8R, first generation)",
+   "from": 2009,
+   "to": 2017,
+   "years": [
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017
+   ]
+  },
+  {
+   "id": "audi-q5/audi-q5-fy-second-generation",
+   "label": "Audi Q5 (FY, second generation)",
+   "from": 2018,
+   "to": 2025,
+   "years": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ]
+  },
+  {
+   "id": "audi-q5/audi-q5-gu-third-generation",
+   "label": "Audi Q5 (GU, third generation)",
+   "from": 2025,
+   "to": null,
+   "years": [
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ],
+ "acura-mdx": [
+  {
+   "id": "acura-mdx/acura-mdx-first-generation-yd1",
+   "label": "Acura MDX (first generation, YD1)",
+   "from": 2001,
+   "to": 2006,
+   "years": [
+    2006
+   ]
+  },
+  {
+   "id": "acura-mdx/acura-mdx-second-generation-yd2",
+   "label": "Acura MDX (second generation, YD2)",
+   "from": 2007,
+   "to": 2013,
+   "years": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013
+   ]
+  },
+  {
+   "id": "acura-mdx/acura-mdx-third-generation-yd3-4-7",
+   "label": "Acura MDX (third generation, YD3/4/7)",
+   "from": 2014,
+   "to": 2020,
+   "years": [
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020
+   ]
+  },
+  {
+   "id": "acura-mdx/acura-mdx-fourth-generation-yd8-9-ye1",
+   "label": "Acura MDX (fourth generation, YD8/9/YE1)",
+   "from": 2022,
+   "to": null,
+   "years": [
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ]
+  }
+ ],
+ "acura-rdx": [
+  {
+   "id": "acura-rdx/first-generation-tb1-2-2007",
+   "label": "First generation (TB1/2; 2007)",
+   "from": 2007,
+   "to": 2012,
+   "years": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012
+   ]
+  },
+  {
+   "id": "acura-rdx/second-generation-tb3-4-2013",
+   "label": "Second generation (TB3/4; 2013)",
+   "from": 2013,
+   "to": 2018,
+   "years": [
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018
+   ]
+  },
+  {
+   "id": "acura-rdx/third-generation-tc1-2-2019",
+   "label": "Third generation (TC1/2; 2019)",
+   "from": 2019,
+   "to": 2026,
+   "years": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ]
+  }
+ ],
+ "acura-integra": [
+  {
+   "id": "acura-integra/acura-integra-de4-de5",
+   "label": "Acura Integra (DE4/DE5)",
+   "from": 2023,
+   "to": null,
+   "years": [
+    2023,
+    2024,
+    2025,
+    2026
+   ]
+  }
+ ],
+ "cadillac-escalade": [
+  {
+   "id": "cadillac-escalade/cadillac-escalade-gmt800",
+   "label": "Cadillac Escalade (GMT800)",
+   "from": 2002,
+   "to": 2006,
+   "years": [
+    2006
+   ]
+  },
+  {
+   "id": "cadillac-escalade/cadillac-escalade-gmt900",
+   "label": "Cadillac Escalade (GMT900)",
+   "from": 2007,
+   "to": 2014,
+   "years": [
+    2007,
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014
+   ]
+  },
+  {
+   "id": "cadillac-escalade/cadillac-escalade-k2xx",
+   "label": "Cadillac Escalade (K2XX)",
+   "from": 2015,
+   "to": 2020,
+   "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020
+   ]
+  },
+  {
+   "id": "cadillac-escalade/cadillac-escalade-t1xx",
+   "label": "Cadillac Escalade (T1XX)",
+   "from": 2021,
+   "to": null,
+   "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026,
+    2027
+   ]
+  }
+ ]
+}

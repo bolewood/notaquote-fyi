@@ -2,6 +2,7 @@
  * The car photo library (data/photos/images.json, built by `npm run photos:download`): for each car page,
  * a photo of the right generation for each model year the page shows, with its credit.
  */
+import generationImages from "../../data/photos/generation-images.json"
 import images from "../../data/photos/images.json"
 
 export type PhotoCredit = {
@@ -29,6 +30,9 @@ export type CarPhoto = {
 export type PhotoLibrary = Record<string, Record<string, CarPhoto | null>>
 
 export const PHOTOS = images as PhotoLibrary
+
+/** Photos for generations no model-year row shows, by car and generation id: for the "by generation" section. */
+export const GENERATION_PHOTOS = generationImages as PhotoLibrary
 
 /** The photo for a car page's model year, if there is one. */
 export function carPhoto(slug: string, year: number, library: PhotoLibrary = PHOTOS): CarPhoto | null {

@@ -82,7 +82,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "acura-mdx": {
     "name": "Acura MDX",
@@ -378,6 +379,88 @@
               "plate": 0.07,
               "special": 0.04,
               "quality": 2.82
+            }
+          }
+        ]
+      }
+    },
+    "generations": {
+      "acura-mdx/acura-mdx-first-generation-yd1": {
+        "generation": "acura-mdx/acura-mdx-first-generation-yd1",
+        "picks": [
+          {
+            "file": "File:2004-2006 Acura MDX -- 04-11-2012.JPG",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2004-2006_Acura_MDX_--_04-11-2012.JPG",
+            "sha1": "77427851001184b6d942fb6bd1806d6cc70d3cc2",
+            "timestamp": "2012-05-05T16:01:21Z",
+            "width": 1924,
+            "height": 1285,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "IFCAR",
+            "credit": "Own work",
+            "photoYear": 2004,
+            "gate": 0.8,
+            "foreign": 0.06,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794455240-PDfAShBft5YtADFCMy7X",
+              "confidence": 0.89,
+              "exterior": 0.93,
+              "face": 0.03,
+              "plate": 0.18,
+              "special": 0.02,
+              "quality": 2.58
+            }
+          },
+          {
+            "file": "File:Acura MDX '01-'03.JPG",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Acura_MDX_%2701-%2703.JPG",
+            "sha1": "22113238e9df8b430443d9b37ea4efc6e31005ba",
+            "timestamp": "2010-06-02T20:47:33Z",
+            "width": 2183,
+            "height": 1527,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "Bull-Doser",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.04,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794455226-h55cfzxrZNn1XTWY18VM",
+              "confidence": 0.81,
+              "exterior": 0.84,
+              "face": 0.07,
+              "plate": 0.03,
+              "special": 0.22,
+              "quality": 2.4
+            }
+          },
+          {
+            "file": "File:2001-03 Acura MDX 2.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2001-03_Acura_MDX_2.jpg",
+            "sha1": "9a65144add2efcca626cfb94064a0f8c0b7b073a",
+            "timestamp": "2007-01-16T01:36:40Z",
+            "width": 2692,
+            "height": 1656,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "IFCAR",
+            "credit": "Own work",
+            "photoYear": 2001,
+            "gate": 0.8,
+            "foreign": 0.04,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794455218-NJvpc3vhAEaUtaSseooF",
+              "confidence": 0.87,
+              "exterior": 0.88,
+              "face": 0.05,
+              "plate": 0.07,
+              "special": 0.02,
+              "quality": 2.55
             }
           }
         ]
@@ -707,6 +790,38 @@
           }
         ]
       }
+    },
+    "generations": {
+      "acura-rdx/first-generation-tb1-2-2007": {
+        "generation": "acura-rdx/first-generation-tb1-2-2007",
+        "picks": [
+          {
+            "file": "File:2009 Acura RDX in Polished Metal Metallic, front right.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2009_Acura_RDX_in_Polished_Metal_Metallic,_front_right.jpg",
+            "sha1": "a89279e4dbca6e119d1550fce8e806f6616d2dad",
+            "timestamp": "2023-06-20T03:34:17Z",
+            "width": 5212,
+            "height": 3200,
+            "license": "CC BY-SA 3.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+            "artist": "Mr.choppers",
+            "credit": "Own work",
+            "photoYear": 2009,
+            "gate": 0.8,
+            "foreign": 0.01,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794455242-Oht8dcOF76vKoM6iFCpv",
+              "confidence": 0.99,
+              "exterior": 0.9,
+              "face": 0.04,
+              "plate": 0.67,
+              "special": 0.02,
+              "quality": 2.76
+            }
+          }
+        ]
+      }
     }
   },
   "audi-q5": {
@@ -1028,6 +1143,88 @@
               "plate": 0.04,
               "special": 0.02,
               "quality": 1.15
+            }
+          }
+        ]
+      }
+    },
+    "generations": {
+      "audi-q5/audi-q5-gu-third-generation": {
+        "generation": "audi-q5/audi-q5-gu-third-generation",
+        "picks": [
+          {
+            "file": "File:Audi Q5 2.0 TDI quattro S line (GU) – f 13102025.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Audi_Q5_2.0_TDI_quattro_S_line_(GU)_%E2%80%93_f_13102025.jpg",
+            "sha1": "f09b8e7b1dcdfba2d702ecec5d23b6668830b525",
+            "timestamp": "2025-10-13T20:42:08Z",
+            "width": 4073,
+            "height": 2301,
+            "license": "CC BY-SA 3.0 de",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
+            "artist": "© M 93",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.6,
+            "foreign": 0.98,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794455176-t5ykIxXRCCaXT5aDNJhZ",
+              "confidence": 0.69,
+              "exterior": 0.92,
+              "face": 0.03,
+              "plate": 0.04,
+              "special": 0.05,
+              "quality": 2.86
+            }
+          },
+          {
+            "file": "File:Audi Q5 Sportback 2.0 TDI quattro Advanced (GU) – f 29032026.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Audi_Q5_Sportback_2.0_TDI_quattro_Advanced_(GU)_%E2%80%93_f_29032026.jpg",
+            "sha1": "80d3f4072033d7f31400fbddcf36f0cdc4be4877",
+            "timestamp": "2026-03-29T22:06:09Z",
+            "width": 4071,
+            "height": 2156,
+            "license": "CC BY-SA 3.0 de",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
+            "artist": "© M 93",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.6,
+            "foreign": 0.98,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794455204-a9HLRcPRjNWWwwIZFOgo",
+              "confidence": 0.61,
+              "exterior": 0.9,
+              "face": 0.04,
+              "plate": 0.04,
+              "special": 0.04,
+              "quality": 2.81
+            }
+          },
+          {
+            "file": "File:Audi Q5 GU DSC 9271.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Audi_Q5_GU_DSC_9271.jpg",
+            "sha1": "7b072dfc28be1d2849fd410935021014ba8d8e15",
+            "timestamp": "2025-05-25T19:51:45Z",
+            "width": 4512,
+            "height": 3446,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Alexander Migl",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.6,
+            "foreign": 0.62,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794455172-xCgyU4r6BUxbfqFCSwso",
+              "confidence": 0.68,
+              "exterior": 0.54,
+              "face": 0.08,
+              "plate": 0.02,
+              "special": 0.04,
+              "quality": 2.78
             }
           }
         ]
@@ -1357,7 +1554,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "bmw-x3": {
     "name": "BMW X3",
@@ -1678,6 +1876,118 @@
               "plate": 0.41,
               "special": 0.02,
               "quality": 2.69
+            }
+          }
+        ]
+      }
+    },
+    "generations": {
+      "bmw-x3/bmw-x3-e83": {
+        "generation": "bmw-x3/bmw-x3-e83",
+        "picks": [
+          {
+            "file": "File:2008-2009 BMW X3 (E83) xDrive30d Lifestyle 02.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2008-2009_BMW_X3_(E83)_xDrive30d_Lifestyle_02.jpg",
+            "sha1": "e0c2f7bdaadc6e93127485b3e97ac82e65b24bae",
+            "timestamp": "2009-09-05T07:05:29Z",
+            "width": 2868,
+            "height": 2016,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "OSX",
+            "credit": "Own work",
+            "photoYear": 2008,
+            "gate": 0.8,
+            "foreign": 0.92,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794455014-XhTtUgnI2YwIadROXlSB",
+              "confidence": 0.99,
+              "exterior": 0.54,
+              "face": 0.05,
+              "plate": 0.96,
+              "special": 0.05,
+              "quality": 2.68
+            }
+          },
+          {
+            "file": "File:2008-2009 BMW X3 (E83) xDrive30d Lifestyle 01.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2008-2009_BMW_X3_(E83)_xDrive30d_Lifestyle_01.jpg",
+            "sha1": "acd64eed37d1013edfdac5869a2c81b918367a8f",
+            "timestamp": "2009-09-05T07:04:43Z",
+            "width": 2848,
+            "height": 1916,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "OSX",
+            "credit": "Own work",
+            "photoYear": 2008,
+            "gate": 0.8,
+            "foreign": 0.92,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794455015-RTPXFvScta5uYOKQJQXJ",
+              "confidence": 0.93,
+              "exterior": 0.91,
+              "face": 0.04,
+              "plate": 0.91,
+              "special": 0.03,
+              "quality": 2.67
+            }
+          },
+          {
+            "file": "File:2007 BMW X3 SE 2.0 (Drity example).jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2007_BMW_X3_SE_2.0_(Drity_example).jpg",
+            "sha1": "a2fc113b232f1943425e94aadc10c9ad1ae3e4da",
+            "timestamp": "2018-12-02T18:06:11Z",
+            "width": 4329,
+            "height": 2497,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Vauxford",
+            "credit": "Own work",
+            "photoYear": 2007,
+            "gate": 0.8,
+            "foreign": 0.97,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794455013-nwPGvOToSPZGuyAUzE2a",
+              "confidence": 0.98,
+              "exterior": 0.75,
+              "face": 0.05,
+              "plate": 0.02,
+              "special": 0.12,
+              "quality": 2.64
+            }
+          }
+        ]
+      },
+      "bmw-x3/bmw-x3-g45": {
+        "generation": "bmw-x3/bmw-x3-g45",
+        "picks": [
+          {
+            "file": "File:BMW G45 X3 M50 Auto Zuerich 2024 DSC 6679.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:BMW_G45_X3_M50_Auto_Zuerich_2024_DSC_6679.jpg",
+            "sha1": "4dd6327d0d0c9005c197f355c2d0e4318b919754",
+            "timestamp": "2024-11-12T18:03:23Z",
+            "width": 4125,
+            "height": 2978,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Alexander-93",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.78,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794455095-AKVKM5wq6llQa93gUf0N",
+              "confidence": 0.81,
+              "exterior": 0.74,
+              "face": 0.04,
+              "plate": 0.95,
+              "special": 0.31,
+              "quality": 2.79
             }
           }
         ]
@@ -2007,6 +2317,89 @@
           }
         ]
       }
+    },
+    "generations": {
+      "bmw-x5/bmw-x5-e53": {
+        "generation": "bmw-x5/bmw-x5-e53",
+        "picks": [
+          {
+            "file": "File:BMW X5 in der BMW Welt Bild 1 2026-10-18.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:BMW_X5_in_der_BMW_Welt_Bild_1_2026-10-18.jpg",
+            "sha1": "06e32a9eb3758c811c5c238ac1c5a6e65172f667",
+            "timestamp": "2026-10-18T22:04:21Z",
+            "width": 7008,
+            "height": 4672,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Strubbl",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.44,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794455105-bZprCSjP7xBd3aEyJ2Bh",
+              "confidence": 0.99,
+              "exterior": 0.85,
+              "face": 0.23,
+              "plate": 0.97,
+              "special": 0.19,
+              "quality": 2.75
+            }
+          },
+          {
+            "file": "File:2005 BMW X5 Sport D Auto.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2005_BMW_X5_Sport_D_Auto.jpg",
+            "sha1": "604cb6ffd0e21ddbfea502319f982c5d4cbb512a",
+            "timestamp": "2024-08-31T17:13:28Z",
+            "width": 4774,
+            "height": 2660,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Calreyn88",
+            "credit": "Own work",
+            "photoYear": 2005,
+            "gate": 0.8,
+            "foreign": 0.98,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794455099-zHcojPdA2E4bN0eXhawk",
+              "confidence": 0.95,
+              "exterior": 0.85,
+              "face": 0.02,
+              "plate": 0.97,
+              "special": 0.23,
+              "quality": 2.67
+            }
+          },
+          {
+            "file": "File:BMW E53 X5 3.0 Titanium Silver Metallic (6).jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:BMW_E53_X5_3.0_Titanium_Silver_Metallic_(6).jpg",
+            "sha1": "507906751cde3bb13e0975dfeed2e6a533c6faf3",
+            "timestamp": "2025-06-17T08:03:54Z",
+            "width": 3963,
+            "height": 2972,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Damian B Oh",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.86,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794455128-al9wbgi4onN5R7Gw4bQ5",
+              "confidence": 0.91,
+              "exterior": 0.52,
+              "face": 0.05,
+              "plate": 0.49,
+              "special": 0.03,
+              "quality": 2.69
+            }
+          }
+        ]
+      },
+      "bmw-x5/bmw-x5-g65": null
     }
   },
   "buick-enclave": {
@@ -2332,6 +2725,38 @@
           }
         ]
       }
+    },
+    "generations": {
+      "buick-enclave/buick-enclave-third-generation": {
+        "generation": "buick-enclave/buick-enclave-third-generation",
+        "picks": [
+          {
+            "file": "File:2025 Buick Enclave front view.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2025_Buick_Enclave_front_view.jpg",
+            "sha1": "59cfa5e8ac6a6b1699abcb043ba871a374eb0590",
+            "timestamp": "2024-08-20T21:57:37Z",
+            "width": 4080,
+            "height": 2296,
+            "license": "CC BY 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+            "artist": "Deathpallie325",
+            "credit": "Own work",
+            "photoYear": 2025,
+            "gate": 0.8,
+            "foreign": 0.02,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454849-OCWEZtAfufamqYwYG3fU",
+              "confidence": 0.9,
+              "exterior": 0.84,
+              "face": 0.05,
+              "plate": 0.04,
+              "special": 0.04,
+              "quality": 2.58
+            }
+          }
+        ]
+      }
     }
   },
   "buick-encore-gx": {
@@ -2497,7 +2922,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "buick-envista": {
     "name": "Buick Envista",
@@ -2582,7 +3008,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "cadillac-escalade": {
     "name": "Cadillac Escalade",
@@ -2907,6 +3334,38 @@
           }
         ]
       }
+    },
+    "generations": {
+      "cadillac-escalade/cadillac-escalade-gmt800": {
+        "generation": "cadillac-escalade/cadillac-escalade-gmt800",
+        "picks": [
+          {
+            "file": "File:2nd-Cadillac Escalade.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2nd-Cadillac_Escalade.jpg",
+            "sha1": "046a89c8d6e4067462f518a346c4be5665803ae7",
+            "timestamp": "2007-05-27T23:09:22Z",
+            "width": 1756,
+            "height": 1192,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "IFCAR",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.04,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794455282-GVH4fHTnlaojZrdTQj8s",
+              "confidence": 0.84,
+              "exterior": 0.92,
+              "face": 0.03,
+              "plate": 0.02,
+              "special": 0.02,
+              "quality": 2.74
+            }
+          }
+        ]
+      }
     }
   },
   "chevrolet-blazer": {
@@ -3072,7 +3531,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "chevrolet-camaro": {
     "name": "Chevrolet Camaro",
@@ -3397,7 +3857,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "chevrolet-colorado": {
     "name": "Chevrolet Colorado",
@@ -3722,7 +4183,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "chevrolet-equinox": {
     "name": "Chevrolet Equinox",
@@ -4043,6 +4505,68 @@
               "plate": 0.01,
               "special": 0.02,
               "quality": 2.46
+            }
+          }
+        ]
+      }
+    },
+    "generations": {
+      "chevrolet-equinox/first-generation-2005": {
+        "generation": "chevrolet-equinox/first-generation-2005",
+        "picks": [
+          {
+            "file": "File:2009 Chevrolet Equinox in Navy Blue Metallic, front left, 09-20-2025.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2009_Chevrolet_Equinox_in_Navy_Blue_Metallic,_front_left,_09-20-2025.jpg",
+            "sha1": "0492ea4c5ffb42401175d01d408481de40d9ea11",
+            "timestamp": "2025-09-21T21:29:58Z",
+            "width": 3496,
+            "height": 1972,
+            "license": "CC0",
+            "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+            "artist": "Cutlass",
+            "credit": "Own work",
+            "photoYear": 2009,
+            "gate": 0.8,
+            "foreign": 0.06,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794453714-pBzPlSldSOqnSJPQwu4U",
+              "confidence": 0.95,
+              "exterior": 0.83,
+              "face": 0.03,
+              "plate": 0.31,
+              "special": 0.02,
+              "quality": 2.7
+            }
+          }
+        ]
+      },
+      "chevrolet-equinox/fourth-generation-2025": {
+        "generation": "chevrolet-equinox/fourth-generation-2025",
+        "picks": [
+          {
+            "file": "File:2025 Chevrolet Equinox LT AWD Convenience Package II in Cacti Green, front right, 2025-05-06.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2025_Chevrolet_Equinox_LT_AWD_Convenience_Package_II_in_Cacti_Green,_front_right,_2025-05-06.jpg",
+            "sha1": "00c11f6dadc065b0e0f78d9a56c1c2f8a481c669",
+            "timestamp": "2025-05-07T02:01:01Z",
+            "width": 4600,
+            "height": 2735,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Elise240SX",
+            "credit": "Own work",
+            "photoYear": 2025,
+            "gate": 0.8,
+            "foreign": 0.02,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794453715-FDu38qM0TqiwtBgUScCy",
+              "confidence": 0.83,
+              "exterior": 0.89,
+              "face": 0.07,
+              "plate": 0.14,
+              "special": 0.03,
+              "quality": 2.66
             }
           }
         ]
@@ -4372,6 +4896,118 @@
           }
         ]
       }
+    },
+    "generations": {
+      "chevrolet-malibu/chevrolet-malibu-sixth-generation-gmx380": {
+        "generation": "chevrolet-malibu/chevrolet-malibu-sixth-generation-gmx380",
+        "picks": [
+          {
+            "file": "File:Malibu2006.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Malibu2006.jpg",
+            "sha1": "b6865eb427b7f42be946440a77e8a04c4103da4b",
+            "timestamp": "2012-04-29T13:34:22Z",
+            "width": 1409,
+            "height": 777,
+            "license": "CC BY-SA 2.5",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.5",
+            "artist": "Original uploader was Roc 1981 at fr.wikipedia",
+            "credit": "Transferred from fr.wikipedia; transferred to Commons by User:Bloody-libu using CommonsHelper.",
+            "photoYear": 2007,
+            "gate": 0.6,
+            "foreign": 0.04,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794453928-PZn5pPrgFuu7o4p7Xa1i",
+              "confidence": 0.69,
+              "exterior": 0.93,
+              "face": 0.05,
+              "plate": 0.03,
+              "special": 0.02,
+              "quality": 2.72
+            }
+          },
+          {
+            "file": "File:Chevrolet Malibu SS.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Chevrolet_Malibu_SS.jpg",
+            "sha1": "5ddbf552df023510806fdd97544ccfadcdda9437",
+            "timestamp": "2007-02-13T01:51:28Z",
+            "width": 2036,
+            "height": 1144,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "IFCAR",
+            "credit": "Own work",
+            "photoYear": 2007,
+            "gate": 0.6,
+            "foreign": 0.04,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794453930-USmg10eGAhHSEBGmLbKM",
+              "confidence": 0.75,
+              "exterior": 0.89,
+              "face": 0.04,
+              "plate": 0.22,
+              "special": 0.03,
+              "quality": 2.56
+            }
+          },
+          {
+            "file": "File:06-07 Chevrolet Malibu.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:06-07_Chevrolet_Malibu.jpg",
+            "sha1": "0ae1b2e018eba88b4c92c35ee15a9cbf1acab10d",
+            "timestamp": "2007-08-26T13:24:10Z",
+            "width": 1876,
+            "height": 1116,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "IFCAR",
+            "credit": "Own work",
+            "photoYear": 2007,
+            "gate": 0.6,
+            "foreign": 0.06,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794453925-tyQRyPMY08CeLpXmG6XO",
+              "confidence": 0.63,
+              "exterior": 0.92,
+              "face": 0.12,
+              "plate": 0.11,
+              "special": 0.02,
+              "quality": 2.46
+            }
+          }
+        ]
+      },
+      "chevrolet-malibu/chevrolet-malibu-seventh-generation-epsilon": {
+        "generation": "chevrolet-malibu/chevrolet-malibu-seventh-generation-epsilon",
+        "picks": [
+          {
+            "file": "File:2010 Chevrolet Malibu LS in Silver Ice Metallic, front right, 2024-11-14.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2010_Chevrolet_Malibu_LS_in_Silver_Ice_Metallic,_front_right,_2024-11-14.jpg",
+            "sha1": "5b08a06747170b95f861a33033dabc1418f37a05",
+            "timestamp": "2024-11-14T20:53:52Z",
+            "width": 4143,
+            "height": 2405,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Elise240SX",
+            "credit": "Own work",
+            "photoYear": 2010,
+            "gate": 0.8,
+            "foreign": 0.02,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794453946-yttIlXLf7Q1SDbQ0zEZ2",
+              "confidence": 0.82,
+              "exterior": 0.91,
+              "face": 0.05,
+              "plate": 0.31,
+              "special": 0.02,
+              "quality": 2.53
+            }
+          }
+        ]
+      }
     }
   },
   "chevrolet-silverado": {
@@ -4693,6 +5329,38 @@
               "plate": 0.04,
               "special": 0.03,
               "quality": 2.59
+            }
+          }
+        ]
+      }
+    },
+    "generations": {
+      "chevrolet-silverado/chevrolet-silverado-gmt800": {
+        "generation": "chevrolet-silverado/chevrolet-silverado-gmt800",
+        "picks": [
+          {
+            "file": "File:2006 Chevrolet Silverado 1500, Front Left, 04-10-2021.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2006_Chevrolet_Silverado_1500,_Front_Left,_04-10-2021.jpg",
+            "sha1": "a2206d7fc78c3b59ed89eae8a4616e12eda841f9",
+            "timestamp": "2021-04-11T17:48:33Z",
+            "width": 2916,
+            "height": 1512,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "SsmIntrigue",
+            "credit": "Own work",
+            "photoYear": 2006,
+            "gate": 0.8,
+            "foreign": 0.01,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454890-8FgV58jIYpsUhRe1saY2",
+              "confidence": 0.99,
+              "exterior": 0.87,
+              "face": 0.06,
+              "plate": 0.23,
+              "special": 0.03,
+              "quality": 2.58
             }
           }
         ]
@@ -5022,6 +5690,88 @@
           }
         ]
       }
+    },
+    "generations": {
+      "chevrolet-suburban/chevrolet-suburban-gmt800-gmt830": {
+        "generation": "chevrolet-suburban/chevrolet-suburban-gmt800-gmt830",
+        "picks": [
+          {
+            "file": "File:Chevrolet Suburban, Front Right, 06-05-2021.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Chevrolet_Suburban,_Front_Right,_06-05-2021.jpg",
+            "sha1": "35f2ba34c0924759bc6346bd6d486a3285cc6b16",
+            "timestamp": "2021-07-08T19:44:42Z",
+            "width": 2988,
+            "height": 1800,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "SsmIntrigue",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.05,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454567-EwO8pEStj9kJ0KauQfz4",
+              "confidence": 0.94,
+              "exterior": 0.76,
+              "face": 0.07,
+              "plate": 0.03,
+              "special": 0.44,
+              "quality": 2.75
+            }
+          },
+          {
+            "file": "File:Chevrolet Suburban GMT830 5.3 LS Onyx Black 01.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Chevrolet_Suburban_GMT830_5.3_LS_Onyx_Black_01.jpg",
+            "sha1": "91efb205d53cf5e874ae9f49da3c722640d701b3",
+            "timestamp": "2025-12-26T12:46:21Z",
+            "width": 4608,
+            "height": 2962,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Ethan Llamas",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.05,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454579-cvKnhGbiP04gnjGaVth6",
+              "confidence": 0.96,
+              "exterior": 0.74,
+              "face": 0.03,
+              "plate": 0.25,
+              "special": 0.09,
+              "quality": 2.67
+            }
+          },
+          {
+            "file": "File:Chevrolet Suburban GMT830 5.3 LS Onyx Black 02.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Chevrolet_Suburban_GMT830_5.3_LS_Onyx_Black_02.jpg",
+            "sha1": "e0edc80c563f2061a507e9515dc607acb0f73065",
+            "timestamp": "2025-12-26T12:46:29Z",
+            "width": 4398,
+            "height": 2828,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Ethan Llamas",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.13,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454583-SGMLUvxYDN99RFsoiHbL",
+              "confidence": 0.9,
+              "exterior": 0.68,
+              "face": 0.03,
+              "plate": 0.02,
+              "special": 0.05,
+              "quality": 2.67
+            }
+          }
+        ]
+      }
     }
   },
   "chevrolet-tahoe": {
@@ -5347,6 +6097,38 @@
           }
         ]
       }
+    },
+    "generations": {
+      "chevrolet-tahoe/chevrolet-tahoe-gmt800": {
+        "generation": "chevrolet-tahoe/chevrolet-tahoe-gmt800",
+        "picks": [
+          {
+            "file": "File:2005 Tahoe LS front.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2005_Tahoe_LS_front.jpg",
+            "sha1": "881e3e619b2fa1335b5c6cb124d4872454b709d3",
+            "timestamp": "2012-11-17T12:10:59Z",
+            "width": 3264,
+            "height": 2448,
+            "license": "CC BY-SA 2.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+            "artist": "lostinfog",
+            "credit": "Flickr: 2005 Tahoe LS",
+            "photoYear": 2005,
+            "gate": 0.8,
+            "foreign": 0.02,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454563-8X2F3qcdJwQE5GsssZKM",
+              "confidence": 0.92,
+              "exterior": 0.74,
+              "face": 0.35,
+              "plate": 0.89,
+              "special": 0.11,
+              "quality": 2.76
+            }
+          }
+        ]
+      }
     }
   },
   "chevrolet-trailblazer": {
@@ -5592,7 +6374,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "chevrolet-traverse": {
     "name": "Chevrolet Traverse",
@@ -5917,7 +6700,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "chevrolet-trax": {
     "name": "Chevrolet Trax",
@@ -6163,7 +6947,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "chrysler-pacifica": {
     "name": "Chrysler Pacifica",
@@ -6488,7 +7273,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "dodge-durango": {
     "name": "Dodge Durango",
@@ -6813,6 +7599,38 @@
           }
         ]
       }
+    },
+    "generations": {
+      "dodge-durango/second-generation-hb-2004": {
+        "generation": "dodge-durango/second-generation-hb-2004",
+        "picks": [
+          {
+            "file": "File:2007-2008 Dodge Durango.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2007-2008_Dodge_Durango.jpg",
+            "sha1": "5da05d134c79f6cb6a9429395785a7630510e85b",
+            "timestamp": "2008-06-12T15:13:43Z",
+            "width": 2454,
+            "height": 1560,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "IFCAR",
+            "credit": "Own work",
+            "photoYear": 2007,
+            "gate": 0.8,
+            "foreign": 0.03,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454850-GKArj4If7e9bbhjwBRhM",
+              "confidence": 0.97,
+              "exterior": 0.86,
+              "face": 0.07,
+              "plate": 0.02,
+              "special": 0.02,
+              "quality": 2.66
+            }
+          }
+        ]
+      }
     }
   },
   "ford-bronco": {
@@ -6978,7 +7796,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "ford-bronco-sport": {
     "name": "Ford Bronco Sport",
@@ -7143,7 +7962,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "ford-escape": {
     "name": "Ford Escape",
@@ -7468,6 +8288,39 @@
           }
         ]
       }
+    },
+    "generations": {
+      "ford-escape/ford-escape-first-generation": {
+        "generation": "ford-escape/ford-escape-first-generation",
+        "picks": [
+          {
+            "file": "File:2006 Ford Escape 2.3 XLS 2WD in Diamond White, front left.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2006_Ford_Escape_2.3_XLS_2WD_in_Diamond_White,_front_left.jpg",
+            "sha1": "6a41316f50dff98d73548e2421869bee848989e4",
+            "timestamp": "2024-10-20T10:45:16Z",
+            "width": 3411,
+            "height": 2558,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Ethan Llamas",
+            "credit": "Own work",
+            "photoYear": 2006,
+            "gate": 0.8,
+            "foreign": 0.12,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794453718-isMucYdRLDEaKwuiq5eB",
+              "confidence": 0.83,
+              "exterior": 0.67,
+              "face": 0.06,
+              "plate": 0.26,
+              "special": 0.06,
+              "quality": 2.67
+            }
+          }
+        ]
+      },
+      "ford-escape/ford-escape-second-generation": null
     }
   },
   "ford-expedition": {
@@ -7793,6 +8646,39 @@
           }
         ]
       }
+    },
+    "generations": {
+      "ford-expedition/second-generation-2003": {
+        "generation": "ford-expedition/second-generation-2003",
+        "picks": [
+          {
+            "file": "File:2003-2006 Ford Expedition -- 11-25-2009.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2003-2006_Ford_Expedition_--_11-25-2009.jpg",
+            "sha1": "8493d10c8b48021ff5f8c35380c21783339e6d6b",
+            "timestamp": "2009-11-26T17:03:32Z",
+            "width": 1407,
+            "height": 911,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "IFCAR",
+            "credit": "Own work",
+            "photoYear": 2003,
+            "gate": 0.8,
+            "foreign": 0.07,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454668-32r4Eux2QFiclgHpLAyv",
+              "confidence": 0.86,
+              "exterior": 0.87,
+              "face": 0.06,
+              "plate": 0.02,
+              "special": 0.02,
+              "quality": 2.25
+            }
+          }
+        ]
+      },
+      "ford-expedition/fifth-generation-2025": null
     }
   },
   "ford-explorer": {
@@ -8114,6 +9000,88 @@
               "plate": 0.03,
               "special": 0.18,
               "quality": 2.83
+            }
+          }
+        ]
+      }
+    },
+    "generations": {
+      "ford-explorer/fourth-generation-u251-2006": {
+        "generation": "ford-explorer/fourth-generation-u251-2006",
+        "picks": [
+          {
+            "file": "File:2008 Ford Explorer Ironman.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2008_Ford_Explorer_Ironman.jpg",
+            "sha1": "8896e843d934eb28773db8422685c7fd7aa9445f",
+            "timestamp": "2008-09-09T02:38:45Z",
+            "width": 1668,
+            "height": 852,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "IFCAR",
+            "credit": "Own work",
+            "photoYear": 2008,
+            "gate": 0.8,
+            "foreign": 0.03,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454606-XDz3kCtMUzXh5vNO0P6m",
+              "confidence": 0.9,
+              "exterior": 0.91,
+              "face": 0.06,
+              "plate": 0.86,
+              "special": 0.1,
+              "quality": 2.6
+            }
+          },
+          {
+            "file": "File:2007 Ford Explorer 4.0 V6 XLT (53547038287).jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2007_Ford_Explorer_4.0_V6_XLT_(53547038287).jpg",
+            "sha1": "be23614c79a8e1a8ff59b2b0ddbcaf202d9a8cd3",
+            "timestamp": "2024-02-23T23:26:38Z",
+            "width": 2048,
+            "height": 1448,
+            "license": "CC BY 2.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+            "artist": "Rutger van der Maar",
+            "credit": "2007 Ford Explorer 4.0 V6 XLT",
+            "photoYear": 2007,
+            "gate": 0.8,
+            "foreign": 0.98,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454601-U7PlGr8lCBuQ0fnPWmtf",
+              "confidence": 0.82,
+              "exterior": 0.86,
+              "face": 0.08,
+              "plate": 0.98,
+              "special": 0.02,
+              "quality": 2.59
+            }
+          },
+          {
+            "file": "File:2007 Ford Explorer 4.0 V6 XLT (53547038282).jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2007_Ford_Explorer_4.0_V6_XLT_(53547038282).jpg",
+            "sha1": "c6bd581569633a101a5d329e4c7eaa00c22534d9",
+            "timestamp": "2024-02-23T23:26:40Z",
+            "width": 2048,
+            "height": 1448,
+            "license": "CC BY 2.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+            "artist": "Rutger van der Maar",
+            "credit": "2007 Ford Explorer 4.0 V6 XLT",
+            "photoYear": 2007,
+            "gate": 0.8,
+            "foreign": 0.99,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454604-4F6Z3qPTBUEg6PiKgLil",
+              "confidence": 0.82,
+              "exterior": 0.77,
+              "face": 0.11,
+              "plate": 0.97,
+              "special": 0.02,
+              "quality": 2.44
             }
           }
         ]
@@ -8443,6 +9411,38 @@
           }
         ]
       }
+    },
+    "generations": {
+      "ford-f-150/ford-f-150-eleventh-generation": {
+        "generation": "ford-f-150/ford-f-150-eleventh-generation",
+        "picks": [
+          {
+            "file": "File:'07-'08 Ford F-150 Crew Cab King Ranch.JPG",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:%2707-%2708_Ford_F-150_Crew_Cab_King_Ranch.JPG",
+            "sha1": "50bc5bc856b00256c60fc17e0efa3941e2e472c1",
+            "timestamp": "2008-10-29T05:35:50Z",
+            "width": 2057,
+            "height": 1369,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "Bull-Doser",
+            "credit": "Own work",
+            "photoYear": 2007,
+            "gate": 0.8,
+            "foreign": 0.02,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794453846-5WYS3vqFyFVfqtXtPnTK",
+              "confidence": 0.87,
+              "exterior": 0.78,
+              "face": 0.05,
+              "plate": 0.89,
+              "special": 0.03,
+              "quality": 2.48
+            }
+          }
+        ]
+      }
     }
   },
   "ford-maverick": {
@@ -8608,7 +9608,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "ford-mustang": {
     "name": "Ford Mustang",
@@ -8883,7 +9884,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "ford-mustang-mach-e": {
     "name": "Ford Mustang Mach-E",
@@ -9048,7 +10050,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "ford-ranger": {
     "name": "Ford Ranger",
@@ -9243,7 +10246,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "gmc-acadia": {
     "name": "GMC Acadia",
@@ -9568,7 +10572,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "gmc-canyon": {
     "name": "GMC Canyon",
@@ -9893,7 +10898,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "gmc-sierra": {
     "name": "GMC Sierra",
@@ -10214,6 +11220,38 @@
               "plate": 0.02,
               "special": 0.05,
               "quality": 2.08
+            }
+          }
+        ]
+      }
+    },
+    "generations": {
+      "gmc-sierra/gmc-sierra-gmt800": {
+        "generation": "gmc-sierra/gmc-sierra-gmt800",
+        "picks": [
+          {
+            "file": "File:2006 GMC Sierra 1500 SLE in Medium Green, Front Right, 07-15-2022.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2006_GMC_Sierra_1500_SLE_in_Medium_Green,_Front_Right,_07-15-2022.jpg",
+            "sha1": "12040df0767f58e8bcbfae36da8621b6061eb0fa",
+            "timestamp": "2022-07-19T07:16:32Z",
+            "width": 3882,
+            "height": 2831,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Elise240SX",
+            "credit": "Own work",
+            "photoYear": 2006,
+            "gate": 0.8,
+            "foreign": 0.01,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454891-CSzw4pk5IGqaaeDSIEei",
+              "confidence": 0.93,
+              "exterior": 0.63,
+              "face": 0.1,
+              "plate": 0.31,
+              "special": 0.05,
+              "quality": 2.54
             }
           }
         ]
@@ -10543,6 +11581,38 @@
           }
         ]
       }
+    },
+    "generations": {
+      "gmc-terrain/gmc-terrain-third-generation": {
+        "generation": "gmc-terrain/gmc-terrain-third-generation",
+        "picks": [
+          {
+            "file": "File:2025 GMC Terrain front view.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2025_GMC_Terrain_front_view.jpg",
+            "sha1": "f99a84db38948e1c58d187025a28d6c9f2a92cb6",
+            "timestamp": "2025-05-11T23:06:36Z",
+            "width": 4080,
+            "height": 2296,
+            "license": "CC BY 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+            "artist": "Deathpallie325",
+            "credit": "Own work",
+            "photoYear": 2025,
+            "gate": 0.8,
+            "foreign": 0.03,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454690-Jo0mTKwR3S1hnuEz4WPa",
+              "confidence": 0.91,
+              "exterior": 0.62,
+              "face": 0.04,
+              "plate": 0.04,
+              "special": 0.05,
+              "quality": 2.32
+            }
+          }
+        ]
+      }
     }
   },
   "gmc-yukon": {
@@ -10864,6 +11934,88 @@
               "plate": 0.82,
               "special": 0.21,
               "quality": 2.69
+            }
+          }
+        ]
+      }
+    },
+    "generations": {
+      "gmc-yukon/gmc-yukon-gmt800-gmt820": {
+        "generation": "gmc-yukon/gmc-yukon-gmt800-gmt820",
+        "picks": [
+          {
+            "file": "File:GMC Yukon Denali GMT800.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:GMC_Yukon_Denali_GMT800.jpg",
+            "sha1": "efada232bfdafd5efcbc2e8ea7d14406c564bee7",
+            "timestamp": "2008-06-03T17:32:06Z",
+            "width": 2048,
+            "height": 1388,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "IFCAR",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.02,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454733-1eMWsEFpZV7KbCeIXrs6",
+              "confidence": 0.92,
+              "exterior": 0.92,
+              "face": 0.09,
+              "plate": 0.05,
+              "special": 0.02,
+              "quality": 2.64
+            }
+          },
+          {
+            "file": "File:GMC Yukon (GMT800) Washington DC Metro Area, USA.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:GMC_Yukon_(GMT800)_Washington_DC_Metro_Area,_USA.jpg",
+            "sha1": "06ac62e37120cdc8fe422648f69a42732844996e",
+            "timestamp": "2025-01-24T15:56:31Z",
+            "width": 2700,
+            "height": 2160,
+            "license": "CC BY 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+            "artist": "OWS Photography",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.03,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454712-CnkvhHFlcDCIQV77LDaW",
+              "confidence": 0.93,
+              "exterior": 0.93,
+              "face": 0.2,
+              "plate": 0.02,
+              "special": 0.04,
+              "quality": 2.62
+            }
+          },
+          {
+            "file": "File:GMC Yukon SLT GMT800.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:GMC_Yukon_SLT_GMT800.jpg",
+            "sha1": "8e01b4da58f85ffec5febce25fcd2ebd9379843a",
+            "timestamp": "2009-04-19T17:21:10Z",
+            "width": 2718,
+            "height": 1758,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "IFCAR",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.01,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454710-Y3krGnl2Wp6B0qFUOcxs",
+              "confidence": 0.98,
+              "exterior": 0.87,
+              "face": 0.03,
+              "plate": 0.13,
+              "special": 0.07,
+              "quality": 2.6
             }
           }
         ]
@@ -11193,6 +12345,118 @@
           }
         ]
       }
+    },
+    "generations": {
+      "honda-accord/honda-accord-north-america-seventh-generation": {
+        "generation": "honda-accord/honda-accord-north-america-seventh-generation",
+        "picks": [
+          {
+            "file": "File:2003 Honda Accord Sedan EX-L in Redondo Red Pearl, Front Right, 07-15-2023.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2003_Honda_Accord_Sedan_EX-L_in_Redondo_Red_Pearl,_Front_Right,_07-15-2023.jpg",
+            "sha1": "8d05fac1e2a6f3f3a0a299be9a7dd2f4df96e130",
+            "timestamp": "2023-07-20T02:34:47Z",
+            "width": 2166,
+            "height": 1314,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Elise240SX",
+            "credit": "Own work",
+            "photoYear": 2003,
+            "gate": 0.8,
+            "foreign": 0.02,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794422571-JbklOKksp0XKkvxqnlcL",
+              "confidence": 0.87,
+              "exterior": 0.94,
+              "face": 0.22,
+              "plate": 0.16,
+              "special": 0.02,
+              "quality": 2.77
+            }
+          },
+          {
+            "file": "File:2006 Honda Accord (MY07) VTi sedan (2015-07-09).jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2006_Honda_Accord_(MY07)_VTi_sedan_(2015-07-09).jpg",
+            "sha1": "7a491c12d81f804ce5c9330457c09dc3fbcd4b20",
+            "timestamp": "2016-06-21T07:05:11Z",
+            "width": 4080,
+            "height": 2369,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "OSX",
+            "credit": "Own work",
+            "photoYear": 2006,
+            "gate": 0.8,
+            "foreign": 0.98,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794422523-oAQ9Gl2F4D15pPovqlBo",
+              "confidence": 0.8,
+              "exterior": 0.86,
+              "face": 0.03,
+              "plate": 0.95,
+              "special": 0.02,
+              "quality": 2.72
+            }
+          },
+          {
+            "file": "File:2003 Honda Accord EX V6, Front Right, 11-07-2021.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2003_Honda_Accord_EX_V6,_Front_Right,_11-07-2021.jpg",
+            "sha1": "46def390f336bbe8769903ad9f9e95415a64d59c",
+            "timestamp": "2021-11-07T22:43:35Z",
+            "width": 4056,
+            "height": 2232,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Elise240SX",
+            "credit": "Own work",
+            "photoYear": 2003,
+            "gate": 0.8,
+            "foreign": 0.02,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794422562-ru8FbMAbdUbXwg7djJcC",
+              "confidence": 0.85,
+              "exterior": 0.89,
+              "face": 0.07,
+              "plate": 0.18,
+              "special": 0.05,
+              "quality": 2.64
+            }
+          }
+        ]
+      },
+      "honda-accord/honda-accord-north-america-eighth-generation": {
+        "generation": "honda-accord/honda-accord-north-america-eighth-generation",
+        "picks": [
+          {
+            "file": "File:2010 Honda Accord LX Sedan in Crystal Black Pearl, Front Left, 10-28-2023.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2010_Honda_Accord_LX_Sedan_in_Crystal_Black_Pearl,_Front_Left,_10-28-2023.jpg",
+            "sha1": "d96c3b81930921d2ff92fa268f1ecbb3a59f0adb",
+            "timestamp": "2023-10-30T13:48:31Z",
+            "width": 3770,
+            "height": 2004,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Elise240SX",
+            "credit": "Own work",
+            "photoYear": 2010,
+            "gate": 0.8,
+            "foreign": 0.04,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794422770-v1r5hJtl5Z936m1LAV7r",
+              "confidence": 0.88,
+              "exterior": 0.87,
+              "face": 0.04,
+              "plate": 0.18,
+              "special": 0.02,
+              "quality": 2.49
+            }
+          }
+        ]
+      }
     }
   },
   "honda-civic": {
@@ -11514,6 +12778,38 @@
               "plate": 0.79,
               "special": 0.07,
               "quality": 2.83
+            }
+          }
+        ]
+      }
+    },
+    "generations": {
+      "honda-civic/honda-civic-eighth-generation": {
+        "generation": "honda-civic/honda-civic-eighth-generation",
+        "picks": [
+          {
+            "file": "File:2009 Honda Civic DX-G Sedan in Tango Red Pearl, front left, 2025-07-04.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2009_Honda_Civic_DX-G_Sedan_in_Tango_Red_Pearl,_front_left,_2025-07-04.jpg",
+            "sha1": "1aa04c695814d00cb6444bec23eb327b12ad068b",
+            "timestamp": "2025-07-05T06:20:16Z",
+            "width": 5162,
+            "height": 3018,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Elise240SX",
+            "credit": "Own work",
+            "photoYear": 2009,
+            "gate": 0.8,
+            "foreign": 0.02,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794421972-QefpS6g4ethydiUm9yMG",
+              "confidence": 0.93,
+              "exterior": 0.95,
+              "face": 0.04,
+              "plate": 0.47,
+              "special": 0.03,
+              "quality": 2.82
             }
           }
         ]
@@ -11843,6 +13139,118 @@
           }
         ]
       }
+    },
+    "generations": {
+      "honda-cr-v/honda-cr-v-second-generation": {
+        "generation": "honda-cr-v/honda-cr-v-second-generation",
+        "picks": [
+          {
+            "file": "File:'05 Honda CR-V EX.JPG",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:%2705_Honda_CR-V_EX.JPG",
+            "sha1": "bbb9f72fa4db910b655d2c14edeca78b33f7a484",
+            "timestamp": "2009-02-16T09:38:36Z",
+            "width": 2065,
+            "height": 1440,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "Bull-Doser",
+            "credit": "Own work",
+            "photoYear": 2005,
+            "gate": 0.8,
+            "foreign": 0.03,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794432317-iHv2Jz6HifO4tQ1viftL",
+              "confidence": 0.94,
+              "exterior": 0.75,
+              "face": 0.05,
+              "plate": 0.03,
+              "special": 0.05,
+              "quality": 2.4
+            }
+          }
+        ]
+      },
+      "honda-cr-v/honda-cr-v-third-generation": {
+        "generation": "honda-cr-v/honda-cr-v-third-generation",
+        "picks": [
+          {
+            "file": "File:2010 Honda CR-V EX-L -- 04-24-2010.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2010_Honda_CR-V_EX-L_--_04-24-2010.jpg",
+            "sha1": "79f975e98db2fe2d876b079a93e0acd1d99cd020",
+            "timestamp": "2010-04-29T15:25:09Z",
+            "width": 2190,
+            "height": 1408,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "IFCAR",
+            "credit": "Own work",
+            "photoYear": 2010,
+            "gate": 0.8,
+            "foreign": 0.02,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794432378-l2pp8EExvRqYM0gZFHgy",
+              "confidence": 0.94,
+              "exterior": 0.92,
+              "face": 0.03,
+              "plate": 0.63,
+              "special": 0.03,
+              "quality": 2.74
+            }
+          },
+          {
+            "file": "File:2010 Honda CR-V EX Automatic 2.0.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2010_Honda_CR-V_EX_Automatic_2.0.jpg",
+            "sha1": "04048eed2f8d628f664d83d8a6cbe0dc34e67855",
+            "timestamp": "2017-09-29T16:28:26Z",
+            "width": 3940,
+            "height": 2164,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Vauxford",
+            "credit": "Own work",
+            "photoYear": 2010,
+            "gate": 0.8,
+            "foreign": 0.94,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794432366-DVVWzHNEoxpMO8h9XlMm",
+              "confidence": 0.88,
+              "exterior": 0.84,
+              "face": 0.05,
+              "plate": 0.04,
+              "special": 0.03,
+              "quality": 2.78
+            }
+          },
+          {
+            "file": "File:2010-2012 Honda CR-V 2.4, Kelapa Gading, North Jakarta.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2010-2012_Honda_CR-V_2.4,_Kelapa_Gading,_North_Jakarta.jpg",
+            "sha1": "aa390561a644c4fd80033f356b2a5682d2049730",
+            "timestamp": "2019-06-17T05:49:36Z",
+            "width": 4160,
+            "height": 3120,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Alex Neman",
+            "credit": "Own work",
+            "photoYear": 2010,
+            "gate": 0.8,
+            "foreign": 0.97,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794432359-ZCcBrVPdfbz7EDQnR4Cx",
+              "confidence": 0.84,
+              "exterior": 0.88,
+              "face": 0.03,
+              "plate": 0.96,
+              "special": 0.02,
+              "quality": 2.37
+            }
+          }
+        ]
+      }
     }
   },
   "honda-hr-v": {
@@ -12088,7 +13496,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "honda-odyssey": {
     "name": "Honda Odyssey",
@@ -12413,6 +13822,38 @@
           }
         ]
       }
+    },
+    "generations": {
+      "honda-odyssey/honda-odyssey-rl3-rl4": {
+        "generation": "honda-odyssey/honda-odyssey-rl3-rl4",
+        "picks": [
+          {
+            "file": "File:2009 Honda Odyssey Touring, Front Left, 05-12-2021.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2009_Honda_Odyssey_Touring,_Front_Left,_05-12-2021.jpg",
+            "sha1": "dba0932dca97b09d02c69d8cd17cfa85e94acbb4",
+            "timestamp": "2021-06-06T18:01:37Z",
+            "width": 3288,
+            "height": 1404,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "SsmIntrigue",
+            "credit": "Own work",
+            "photoYear": 2009,
+            "gate": 0.8,
+            "foreign": 0.09,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454895-7tuDry2gde7Sn9SvBD7b",
+              "confidence": 0.92,
+              "exterior": 0.92,
+              "face": 0.1,
+              "plate": 0.11,
+              "special": 0.23,
+              "quality": 2.56
+            }
+          }
+        ]
+      }
     }
   },
   "honda-passport": {
@@ -12574,6 +14015,38 @@
               "plate": 0.14,
               "special": 0.02,
               "quality": 2.74
+            }
+          }
+        ]
+      }
+    },
+    "generations": {
+      "honda-passport/fourth-generation-yf9-2026": {
+        "generation": "honda-passport/fourth-generation-yf9-2026",
+        "picks": [
+          {
+            "file": "File:Honda Passport TrailSport Elite (front view) at Osaka Auto Messe 2026.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Honda_Passport_TrailSport_Elite_(front_view)_at_Osaka_Auto_Messe_2026.jpg",
+            "sha1": "1327c5e4cafdb5fdc88e58115edced8996e59f11",
+            "timestamp": "2026-02-15T05:13:40Z",
+            "width": 3382,
+            "height": 1902,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Aos.1905",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.6,
+            "foreign": 0.08,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454114-dJTiXuDkex8ms7nZeqbc",
+              "confidence": 0.76,
+              "exterior": 0.62,
+              "face": 0.15,
+              "plate": 0.8,
+              "special": 0.25,
+              "quality": 2.7
             }
           }
         ]
@@ -12903,6 +14376,38 @@
           }
         ]
       }
+    },
+    "generations": {
+      "honda-pilot/first-generation-yf1-2-2003": {
+        "generation": "honda-pilot/first-generation-yf1-2-2003",
+        "picks": [
+          {
+            "file": "File:2008 Honda Pilot SE in Billet Silver Metallic, front left, 07-04-2026.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2008_Honda_Pilot_SE_in_Billet_Silver_Metallic,_front_left,_07-04-2026.jpg",
+            "sha1": "609f4d85dcf6f58465e645be047565c559367b79",
+            "timestamp": "2026-07-05T17:33:41Z",
+            "width": 4920,
+            "height": 3280,
+            "license": "CC0",
+            "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+            "artist": "Cutlass",
+            "credit": "Own work",
+            "photoYear": 2008,
+            "gate": 0.8,
+            "foreign": 0.01,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454106-qu2UBqz4z149vS4ZkRLz",
+              "confidence": 0.84,
+              "exterior": 0.89,
+              "face": 0.07,
+              "plate": 0.52,
+              "special": 0.02,
+              "quality": 2.75
+            }
+          }
+        ]
+      }
     }
   },
   "honda-ridgeline": {
@@ -13228,7 +14733,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "hyundai-elantra": {
     "name": "Hyundai Elantra",
@@ -13553,6 +15059,169 @@
           }
         ]
       }
+    },
+    "generations": {
+      "hyundai-elantra/third-generation-xd-2000": {
+        "generation": "hyundai-elantra/third-generation-xd-2000",
+        "picks": [
+          {
+            "file": "File:'04-'06 Hyundai Elantra Hatchback -- Front (Orange Julep '10).jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:%2704-%2706_Hyundai_Elantra_Hatchback_--_Front_(Orange_Julep_%2710).jpg",
+            "sha1": "4e840eb35ebeaa3a1f843f22b359d8d8bb2fed14",
+            "timestamp": "2010-05-26T20:07:59Z",
+            "width": 2401,
+            "height": 1481,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "Bull-Doser",
+            "credit": "Own work.",
+            "photoYear": 2004,
+            "gate": 0.8,
+            "foreign": 0.12,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794423260-s5mjRQKRh9LQ9gP29VkP",
+              "confidence": 0.87,
+              "exterior": 0.89,
+              "face": 0.05,
+              "plate": 0.11,
+              "special": 0.04,
+              "quality": 2.01
+            }
+          },
+          {
+            "file": "File:2003 Hyundai Elantra GLS in Pewter, front right, 11-05-2023.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2003_Hyundai_Elantra_GLS_in_Pewter,_front_right,_11-05-2023.jpg",
+            "sha1": "a808ad39ce5deafdd209c036f9e96f0a467aa7ba",
+            "timestamp": "2025-02-24T20:37:27Z",
+            "width": 2756,
+            "height": 1798,
+            "license": "CC0",
+            "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+            "artist": "Cutlass",
+            "credit": "Own work",
+            "photoYear": 2003,
+            "gate": 0.8,
+            "foreign": 0.05,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794423258-O1vt8bRUPr68JQizFbgB",
+              "confidence": 0.92,
+              "exterior": 0.88,
+              "face": 0.04,
+              "plate": 0.02,
+              "special": 0.05,
+              "quality": 2.68
+            }
+          },
+          {
+            "file": "File:2005 Hyundai Elantra GLS in Sterling, rear left, 11-05-2023.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2005_Hyundai_Elantra_GLS_in_Sterling,_rear_left,_11-05-2023.jpg",
+            "sha1": "db0534807516016d4759d6a34871d89677ebccf3",
+            "timestamp": "2025-02-24T20:41:06Z",
+            "width": 3180,
+            "height": 1957,
+            "license": "CC0",
+            "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+            "artist": "Cutlass",
+            "credit": "Own work",
+            "photoYear": 2005,
+            "gate": 0.8,
+            "foreign": 0.02,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794423255-T9WED0jVGkY1FcHtlSky",
+              "confidence": 0.82,
+              "exterior": 0.77,
+              "face": 0.04,
+              "plate": 0.08,
+              "special": 0.34,
+              "quality": 2.59
+            }
+          }
+        ]
+      },
+      "hyundai-elantra/fourth-generation-hd-2006": {
+        "generation": "hyundai-elantra/fourth-generation-hd-2006",
+        "picks": [
+          {
+            "file": "File:2010 Hyundai Elantra (MIAS '10).jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2010_Hyundai_Elantra_(MIAS_%2710).jpg",
+            "sha1": "02a63fa0a028584df9662a1b694c33a3ec4b638c",
+            "timestamp": "2010-01-30T05:11:48Z",
+            "width": 2125,
+            "height": 1585,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "Bull-Doser",
+            "credit": "Own work",
+            "photoYear": 2010,
+            "gate": 0.6,
+            "foreign": 0.44,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794423308-1oYJsq8FCas9duEjeHid",
+              "confidence": 0.74,
+              "exterior": 0.64,
+              "face": 0.05,
+              "plate": 0.03,
+              "special": 0.08,
+              "quality": 2.54
+            }
+          },
+          {
+            "file": "File:2007 Hyundai Elantra GL in Regatta Blue, Front Right, 07-31-2022.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2007_Hyundai_Elantra_GL_in_Regatta_Blue,_Front_Right,_07-31-2022.jpg",
+            "sha1": "85f9aa926efca37b4b22918ab964ac28247d3892",
+            "timestamp": "2022-08-09T04:01:31Z",
+            "width": 4136,
+            "height": 2854,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Elise240SX",
+            "credit": "Own work",
+            "photoYear": 2007,
+            "gate": 0.6,
+            "foreign": 0.13,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794423310-YKzDODnVZDFFefAYLw6W",
+              "confidence": 0.76,
+              "exterior": 0.74,
+              "face": 0.05,
+              "plate": 0.03,
+              "special": 0.39,
+              "quality": 2.67
+            }
+          },
+          {
+            "file": "File:2007-Hyundai-Elantra.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2007-Hyundai-Elantra.jpg",
+            "sha1": "a180b3976ac1576d3fed4a997ee0876cc23cc78c",
+            "timestamp": "2007-01-27T01:29:02Z",
+            "width": 2400,
+            "height": 1304,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "IFCAR",
+            "credit": "Own work",
+            "photoYear": 2007,
+            "gate": 0.6,
+            "foreign": 0.08,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794430116-f9t3rxPR91KyMrRIdTVj",
+              "confidence": 0.63,
+              "exterior": 0.88,
+              "face": 0.05,
+              "plate": 0.04,
+              "special": 0.02,
+              "quality": 2.65
+            }
+          }
+        ]
+      },
+      "hyundai-elantra/eighth-generation-cn8-2026": null
     }
   },
   "hyundai-ioniq-5": {
@@ -13718,7 +15387,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "hyundai-ioniq-6": {
     "name": "Hyundai Ioniq 6",
@@ -13803,7 +15473,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "hyundai-kona": {
     "name": "Hyundai Kona",
@@ -14048,7 +15719,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "hyundai-palisade": {
     "name": "Hyundai Palisade",
@@ -14209,6 +15881,88 @@
               "plate": 0.03,
               "special": 0.03,
               "quality": 2.5
+            }
+          }
+        ]
+      }
+    },
+    "generations": {
+      "hyundai-palisade/second-generation-lx3-2024": {
+        "generation": "hyundai-palisade/second-generation-lx3-2024",
+        "picks": [
+          {
+            "file": "File:2026 Hyundai Palisade XRT Pro (USDM).jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2026_Hyundai_Palisade_XRT_Pro_(USDM).jpg",
+            "sha1": "b1d106898e31636bfa0e0062da02e41fc67beba9",
+            "timestamp": "2025-11-23T05:09:50Z",
+            "width": 3817,
+            "height": 2147,
+            "license": "CC BY 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+            "artist": "Masamiotter",
+            "credit": "Own work",
+            "photoYear": 2026,
+            "gate": 0.6,
+            "foreign": 0.04,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454181-PUflbaxnWsFUQU01rXeR",
+              "confidence": 0.63,
+              "exterior": 0.85,
+              "face": 0.06,
+              "plate": 0.02,
+              "special": 0.09,
+              "quality": 2.81
+            }
+          },
+          {
+            "file": "File:2026 Hyundai Palisade Calligraphy, front right, 09-12-2026.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2026_Hyundai_Palisade_Calligraphy,_front_right,_09-12-2026.jpg",
+            "sha1": "b7fdfb6e1b9b19229c5e86712f116ed3cc084763",
+            "timestamp": "2026-09-13T01:25:33Z",
+            "width": 4432,
+            "height": 3370,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "MercurySable99",
+            "credit": "Own work",
+            "photoYear": 2026,
+            "gate": 0.6,
+            "foreign": 0.05,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454178-3hw5QDxsFzsgSPMbyugI",
+              "confidence": 0.72,
+              "exterior": 0.92,
+              "face": 0.04,
+              "plate": 0.05,
+              "special": 0.05,
+              "quality": 2.79
+            }
+          },
+          {
+            "file": "File:2026 Hyundai Palisade XRT Pro in Titan Green, front right, 2026-08-09.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2026_Hyundai_Palisade_XRT_Pro_in_Titan_Green,_front_right,_2026-08-09.jpg",
+            "sha1": "1eae00c75472db72b22b435698d7fed32ef6dc11",
+            "timestamp": "2026-08-10T03:43:33Z",
+            "width": 5180,
+            "height": 3382,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Elise240SX",
+            "credit": "Own work",
+            "photoYear": 2026,
+            "gate": 0.6,
+            "foreign": 0.05,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454177-gwo22ZnxCQbq4d0Fh7hZ",
+              "confidence": 0.73,
+              "exterior": 0.88,
+              "face": 0.1,
+              "plate": 0.59,
+              "special": 0.06,
+              "quality": 2.7
             }
           }
         ]
@@ -14378,7 +16132,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "hyundai-santa-fe": {
     "name": "Hyundai Santa Fe",
@@ -14699,6 +16454,68 @@
               "plate": 0.87,
               "special": 0.15,
               "quality": 2.79
+            }
+          }
+        ]
+      }
+    },
+    "generations": {
+      "hyundai-santa-fe/first-generation-sm-2000": {
+        "generation": "hyundai-santa-fe/first-generation-sm-2000",
+        "picks": [
+          {
+            "file": "File:2005 Hyundai Santa Fe GLS, front left, 03-21-2026.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2005_Hyundai_Santa_Fe_GLS,_front_left,_03-21-2026.jpg",
+            "sha1": "5edb9ec0945adf5a57890832bf54589cad41a4a6",
+            "timestamp": "2026-03-21T20:30:17Z",
+            "width": 3767,
+            "height": 2591,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "MercurySable99",
+            "credit": "Own work",
+            "photoYear": 2005,
+            "gate": 0.8,
+            "foreign": 0.05,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454174-Bn1PPWM3kxFeQQ8KRGUf",
+              "confidence": 0.85,
+              "exterior": 0.88,
+              "face": 0.05,
+              "plate": 0.03,
+              "special": 0.2,
+              "quality": 2.41
+            }
+          }
+        ]
+      },
+      "hyundai-santa-fe/second-generation-cm-2005": {
+        "generation": "hyundai-santa-fe/second-generation-cm-2005",
+        "picks": [
+          {
+            "file": "File:2009 Hyundai Santa Fe 2.7L GL in Natural Khaki, front right, 2025-07-06.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2009_Hyundai_Santa_Fe_2.7L_GL_in_Natural_Khaki,_front_right,_2025-07-06.jpg",
+            "sha1": "e3a2b69d7ee9f3c12b24892c868fa0d0e2e88d9e",
+            "timestamp": "2025-08-24T13:50:56Z",
+            "width": 5194,
+            "height": 3398,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Elise240SX",
+            "credit": "Own work",
+            "photoYear": 2009,
+            "gate": 0.8,
+            "foreign": 0.06,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454175-sS3XaGDqQgsHPGIyXGGS",
+              "confidence": 0.88,
+              "exterior": 0.79,
+              "face": 0.09,
+              "plate": 0.02,
+              "special": 0.1,
+              "quality": 2.6
             }
           }
         ]
@@ -15028,6 +16845,38 @@
           }
         ]
       }
+    },
+    "generations": {
+      "hyundai-sonata/fifth-generation-nf-2004": {
+        "generation": "hyundai-sonata/fifth-generation-nf-2004",
+        "picks": [
+          {
+            "file": "File:2009 Hyundai Sonata GLS, Front Left, 08-08-2021.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2009_Hyundai_Sonata_GLS,_Front_Left,_08-08-2021.jpg",
+            "sha1": "78ad1f11d10f1e6dcf7ed603a23a8dfadd06c513",
+            "timestamp": "2021-08-08T22:49:53Z",
+            "width": 4140,
+            "height": 2304,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Elise240SX",
+            "credit": "Own work",
+            "photoYear": 2009,
+            "gate": 0.8,
+            "foreign": 0.03,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794453906-zLDBG7VDyjXqqrjlSQ0X",
+              "confidence": 0.81,
+              "exterior": 0.94,
+              "face": 0.05,
+              "plate": 0.87,
+              "special": 0.08,
+              "quality": 2.73
+            }
+          }
+        ]
+      }
     }
   },
   "hyundai-tucson": {
@@ -15353,6 +17202,39 @@
           }
         ]
       }
+    },
+    "generations": {
+      "hyundai-tucson/first-generation-jm-2004": {
+        "generation": "hyundai-tucson/first-generation-jm-2004",
+        "picks": [
+          {
+            "file": "File:2007 Hyundai Tucson ViVa V6 AWD in Platinum, front left, 2024-11-20.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2007_Hyundai_Tucson_ViVa_V6_AWD_in_Platinum,_front_left,_2024-11-20.jpg",
+            "sha1": "7c9138c380be4d7333a500d0f20cfa9299f3e007",
+            "timestamp": "2024-11-21T21:35:03Z",
+            "width": 5001,
+            "height": 3112,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Elise240SX",
+            "credit": "Own work",
+            "photoYear": 2007,
+            "gate": 0.8,
+            "foreign": 0.01,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794433455-Yb7l7ynUAhwEqklZUeZr",
+              "confidence": 0.95,
+              "exterior": 0.88,
+              "face": 0.11,
+              "plate": 0.32,
+              "special": 0.03,
+              "quality": 2.62
+            }
+          }
+        ]
+      },
+      "hyundai-tucson/fifth-generation-nx5-2026": null
     }
   },
   "hyundai-venue": {
@@ -15518,7 +17400,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "jeep-compass": {
     "name": "Jeep Compass",
@@ -15843,7 +17726,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "jeep-gladiator": {
     "name": "Jeep Gladiator",
@@ -16008,7 +17892,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "jeep-grand-cherokee": {
     "name": "Jeep Grand Cherokee",
@@ -16329,6 +18214,38 @@
               "plate": 0.03,
               "special": 0.03,
               "quality": 2.49
+            }
+          }
+        ]
+      }
+    },
+    "generations": {
+      "jeep-grand-cherokee/jeep-grand-cherokee-wk": {
+        "generation": "jeep-grand-cherokee/jeep-grand-cherokee-wk",
+        "picks": [
+          {
+            "file": "File:2007 Jeep Grand Cherokee Laredo in Red Rock Crystal Pearlcoat, front left, 06-13-2026.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2007_Jeep_Grand_Cherokee_Laredo_in_Red_Rock_Crystal_Pearlcoat,_front_left,_06-13-2026.jpg",
+            "sha1": "35beb8723afe378865bfcd528f50b91eabaf2f67",
+            "timestamp": "2026-06-13T19:32:17Z",
+            "width": 5200,
+            "height": 3472,
+            "license": "CC0",
+            "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+            "artist": "Cutlass",
+            "credit": "Own work",
+            "photoYear": 2007,
+            "gate": 0.8,
+            "foreign": 0.03,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454735-NU56Bp5ZWAoebbtoE9kx",
+              "confidence": 0.98,
+              "exterior": 0.84,
+              "face": 0.11,
+              "plate": 0.89,
+              "special": 0.06,
+              "quality": 2.78
             }
           }
         ]
@@ -16658,6 +18575,38 @@
           }
         ]
       }
+    },
+    "generations": {
+      "jeep-wrangler/jeep-wrangler-tj": {
+        "generation": "jeep-wrangler/jeep-wrangler-tj",
+        "picks": [
+          {
+            "file": "File:2005 Jeep Wrangler Renegade Auto (32630339456).jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2005_Jeep_Wrangler_Renegade_Auto_(32630339456).jpg",
+            "sha1": "909f4d1fe31bf462af74316ed2be63b8f59c9190",
+            "timestamp": "2017-03-19T21:48:17Z",
+            "width": 3989,
+            "height": 2521,
+            "license": "CC BY 2.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+            "artist": "GPS 56 from New Zealand",
+            "credit": "2005 Jeep Wrangler Renegade Auto",
+            "photoYear": 2005,
+            "gate": 0.8,
+            "foreign": 0.18,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794453852-2OS5wwGrpG5kgdskdW92",
+              "confidence": 1,
+              "exterior": 0.89,
+              "face": 0.13,
+              "plate": 0.94,
+              "special": 0.03,
+              "quality": 2.71
+            }
+          }
+        ]
+      }
     }
   },
   "kia-carnival": {
@@ -16823,7 +18772,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "kia-ev6": {
     "name": "Kia EV6",
@@ -16988,7 +18938,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "kia-forte": {
     "name": "Kia Forte",
@@ -17313,7 +19264,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "kia-k5": {
     "name": "Kia K5",
@@ -17478,7 +19430,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "kia-niro": {
     "name": "Kia Niro",
@@ -17723,7 +19676,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "kia-seltos": {
     "name": "Kia Seltos",
@@ -17888,6 +19842,9 @@
           }
         ]
       }
+    },
+    "generations": {
+      "kia-seltos/second-generation-sp3-2025": null
     }
   },
   "kia-sorento": {
@@ -18213,6 +20170,88 @@
           }
         ]
       }
+    },
+    "generations": {
+      "kia-sorento/first-generation-bl-2002": {
+        "generation": "kia-sorento/first-generation-bl-2002",
+        "picks": [
+          {
+            "file": "File:2007-2008 Kia Sorento LX.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2007-2008_Kia_Sorento_LX.jpg",
+            "sha1": "9080509b7b2b4012ea71508d748c29a751412e29",
+            "timestamp": "2009-01-07T19:43:38Z",
+            "width": 2628,
+            "height": 1722,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "IFCAR",
+            "credit": "Own work",
+            "photoYear": 2007,
+            "gate": 0.8,
+            "foreign": 0.03,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454553-hqeSgSiz6VkC3fXA31gf",
+              "confidence": 0.86,
+              "exterior": 0.81,
+              "face": 0.03,
+              "plate": 0.13,
+              "special": 0.02,
+              "quality": 2.62
+            }
+          },
+          {
+            "file": "File:2007-2008 Kia Sorento (BL) EX 01.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2007-2008_Kia_Sorento_(BL)_EX_01.jpg",
+            "sha1": "d7372af26188f27f1e18f9f0dc6a948ea4844af8",
+            "timestamp": "2008-10-19T02:09:21Z",
+            "width": 3042,
+            "height": 2271,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "OSX",
+            "credit": "Own work",
+            "photoYear": 2007,
+            "gate": 0.8,
+            "foreign": 0.98,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454548-Wozo6upikmFCMQmRvvMR",
+              "confidence": 0.9,
+              "exterior": 0.65,
+              "face": 0.11,
+              "plate": 0.97,
+              "special": 0.38,
+              "quality": 2.71
+            }
+          },
+          {
+            "file": "File:2009 Kia Sorento (BL MY08) EX Limited CRDi wagon (2015-05-29) 01.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2009_Kia_Sorento_(BL_MY08)_EX_Limited_CRDi_wagon_(2015-05-29)_01.jpg",
+            "sha1": "ce1adde0eb7285753c00007fb56ab907ad89376f",
+            "timestamp": "2015-06-05T09:42:52Z",
+            "width": 4112,
+            "height": 3088,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "OSX",
+            "credit": "Own work",
+            "photoYear": 2009,
+            "gate": 0.8,
+            "foreign": 0.95,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454545-33xocQXPGrz7yaAESEOY",
+              "confidence": 0.89,
+              "exterior": 0.9,
+              "face": 0.07,
+              "plate": 0.95,
+              "special": 0.02,
+              "quality": 2.71
+            }
+          }
+        ]
+      }
     }
   },
   "kia-soul": {
@@ -18513,7 +20552,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "kia-sportage": {
     "name": "Kia Sportage",
@@ -18788,6 +20828,38 @@
           }
         ]
       }
+    },
+    "generations": {
+      "kia-sportage/second-generation-je-km-2004": {
+        "generation": "kia-sportage/second-generation-je-km-2004",
+        "picks": [
+          {
+            "file": "File:2007 Kia Sportage LX in Steel Silver, front left, 08-08-2026.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2007_Kia_Sportage_LX_in_Steel_Silver,_front_left,_08-08-2026.jpg",
+            "sha1": "0735ece1ea3fd73d10ca4a243367aaead9a4050e",
+            "timestamp": "2026-08-08T23:42:03Z",
+            "width": 5008,
+            "height": 3288,
+            "license": "CC0",
+            "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+            "artist": "Cutlass",
+            "credit": "Own work",
+            "photoYear": 2007,
+            "gate": 0.8,
+            "foreign": 0.34,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794453712-edTawHlKWvBRoJOdgL6m",
+              "confidence": 0.96,
+              "exterior": 0.88,
+              "face": 0.04,
+              "plate": 0.05,
+              "special": 0.1,
+              "quality": 2.73
+            }
+          }
+        ]
+      }
     }
   },
   "kia-telluride": {
@@ -18953,6 +21025,9 @@
           }
         ]
       }
+    },
+    "generations": {
+      "kia-telluride/kia-telluride-lq2-second-generation": null
     }
   },
   "lexus-es": {
@@ -19278,6 +21353,198 @@
           }
         ]
       }
+    },
+    "generations": {
+      "lexus-es/fourth-generation-xv30-2001": {
+        "generation": "lexus-es/fourth-generation-xv30-2001",
+        "picks": [
+          {
+            "file": "File:2004 Lexus ES 330 in Millenium Silver Metallic, front left, 11-07-2026.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2004_Lexus_ES_330_in_Millenium_Silver_Metallic,_front_left,_11-07-2026.jpg",
+            "sha1": "c6f0a6eb8bd2cc7cbd7357aa9bfd332773a46342",
+            "timestamp": "2026-11-09T22:39:02Z",
+            "width": 5168,
+            "height": 2896,
+            "license": "CC0",
+            "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+            "artist": "Cutlass",
+            "credit": "Own work",
+            "photoYear": 2004,
+            "gate": 0.6,
+            "foreign": 0.03,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454917-LShpljVuskRzXGaXknz7",
+              "confidence": 0.67,
+              "exterior": 0.92,
+              "face": 0.05,
+              "plate": 0.11,
+              "special": 0.44,
+              "quality": 2.59
+            }
+          },
+          {
+            "file": "File:Lexus ES300 Bahrain.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Lexus_ES300_Bahrain.jpg",
+            "sha1": "11315983fbc3226b5d36b0860f966c4318d208f0",
+            "timestamp": "2023-03-15T05:45:00Z",
+            "width": 3446,
+            "height": 2584,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Mohammed Hamad",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.6,
+            "foreign": 0.96,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454939-wFogiraBCnIq5465k4ZS",
+              "confidence": 0.73,
+              "exterior": 0.95,
+              "face": 0.04,
+              "plate": 0.96,
+              "special": 0.09,
+              "quality": 2.34
+            }
+          }
+        ]
+      },
+      "lexus-es/fifth-generation-xv40-2006": {
+        "generation": "lexus-es/fifth-generation-xv40-2006",
+        "picks": [
+          {
+            "file": "File:2010 Lexus ES350 -- 02-22-2010.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2010_Lexus_ES350_--_02-22-2010.jpg",
+            "sha1": "fd1a375e83ebabb62036fe8bcd3c70b765a5fdb1",
+            "timestamp": "2010-02-22T18:58:38Z",
+            "width": 2716,
+            "height": 1564,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "IFCAR",
+            "credit": "Own work",
+            "photoYear": 2010,
+            "gate": 0.8,
+            "foreign": 0.03,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454963-ZCLN2ooTwZEZXJRlOGdO",
+              "confidence": 0.95,
+              "exterior": 0.89,
+              "face": 0.05,
+              "plate": 0.19,
+              "special": 0.02,
+              "quality": 2.59
+            }
+          },
+          {
+            "file": "File:2010 Lexus ES 350 (GSV40) 1X7A6160.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2010_Lexus_ES_350_(GSV40)_1X7A6160.jpg",
+            "sha1": "841e3d09b3528ef8220aec78bd79abe20f6ac097",
+            "timestamp": "2022-11-13T17:05:11Z",
+            "width": 5366,
+            "height": 2642,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Alexander Migl",
+            "credit": "Own work",
+            "photoYear": 2010,
+            "gate": 0.8,
+            "foreign": 0.99,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454961-t7WObi17i6UhQrSDAAfH",
+              "confidence": 0.84,
+              "exterior": 0.87,
+              "face": 0.04,
+              "plate": 0.97,
+              "special": 0.14,
+              "quality": 2.77
+            }
+          }
+        ]
+      },
+      "lexus-es/eighth-generation-xz20-2025": {
+        "generation": "lexus-es/eighth-generation-xz20-2025",
+        "picks": [
+          {
+            "file": "File:Lexus ES 350h, Auto 2025, Zurich (20251029-P1074476).jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Lexus_ES_350h,_Auto_2025,_Zurich_(20251029-P1074476).jpg",
+            "sha1": "63b1a094ad3399366deada7c65e20cae0e2c78c1",
+            "timestamp": "2025-10-31T06:55:26Z",
+            "width": 5184,
+            "height": 3888,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+            "artist": "Matti Blume",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.33,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454982-9byJSLV7CX760PoewU9b",
+              "confidence": 0.88,
+              "exterior": 0.59,
+              "face": 0.21,
+              "plate": 0.95,
+              "special": 0.23,
+              "quality": 2.57
+            }
+          },
+          {
+            "file": "File:Lexus ES 350h (XZ20) Auto Zuerich 2025 DSC 3061.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Lexus_ES_350h_(XZ20)_Auto_Zuerich_2025_DSC_3061.jpg",
+            "sha1": "9d18bc6b4be1b909a2c52feff93279b591560cdd",
+            "timestamp": "2025-11-10T14:19:10Z",
+            "width": 4903,
+            "height": 3248,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Alexander Migl",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.67,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454984-1X8orfTkdJdvDyeKIANQ",
+              "confidence": 0.85,
+              "exterior": 0.85,
+              "face": 0.06,
+              "plate": 0.93,
+              "special": 0.17,
+              "quality": 2.68
+            }
+          },
+          {
+            "file": "File:Lexus ES VIII 001 (cropped).jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Lexus_ES_VIII_001_(cropped).jpg",
+            "sha1": "32d6011f4122c1a61e623e716b4c83716b02aa15",
+            "timestamp": "2025-10-01T14:41:06Z",
+            "width": 3493,
+            "height": 1820,
+            "license": "CC0",
+            "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+            "artist": "JustAnotherCarDesigner",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.63,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454997-QgRn03YedF8UMynZpHRY",
+              "confidence": 0.84,
+              "exterior": 0.77,
+              "face": 0.14,
+              "plate": 0.92,
+              "special": 0.41,
+              "quality": 2.68
+            }
+          }
+        ]
+      }
     }
   },
   "lexus-nx": {
@@ -19439,6 +21706,63 @@
               "plate": 0.93,
               "special": 0.16,
               "quality": 2.75
+            }
+          }
+        ]
+      }
+    },
+    "generations": {
+      "lexus-nx/first-generation-az10-2014": {
+        "generation": "lexus-nx/first-generation-az10-2014",
+        "picks": [
+          {
+            "file": "File:2018 Lexus NX 300 2.8L front (2) 3.24.19.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2018_Lexus_NX_300_2.8L_front_(2)_3.24.19.jpg",
+            "sha1": "7738a2535b348debbe04def43ad5dfce7fbf8dbe",
+            "timestamp": "2019-03-26T23:41:39Z",
+            "width": 4489,
+            "height": 2418,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Kevauto",
+            "credit": "Own work",
+            "photoYear": 2018,
+            "gate": 0.8,
+            "foreign": 0.03,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454914-KsRAASJ2cJQ9CWTMGn9J",
+              "confidence": 0.85,
+              "exterior": 0.84,
+              "face": 0.08,
+              "plate": 0.07,
+              "special": 0.02,
+              "quality": 2.68
+            }
+          },
+          {
+            "file": "File:2017 Lexus NX 300h Luxury CVT 2.5 Front.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2017_Lexus_NX_300h_Luxury_CVT_2.5_Front.jpg",
+            "sha1": "a567dbfcc88836a4873ae2ec4218a95f059e86bc",
+            "timestamp": "2018-10-17T21:10:31Z",
+            "width": 4680,
+            "height": 2570,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Vauxford",
+            "credit": "Own work",
+            "photoYear": 2017,
+            "gate": 0.8,
+            "foreign": 0.88,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454912-VlgrLJBfbIZZZRjhXpK6",
+              "confidence": 0.8,
+              "exterior": 0.76,
+              "face": 0.03,
+              "plate": 0.08,
+              "special": 0.02,
+              "quality": 2.8
             }
           }
         ]
@@ -19768,6 +22092,63 @@
           }
         ]
       }
+    },
+    "generations": {
+      "lexus-rx/lexus-rx-xu30": {
+        "generation": "lexus-rx/lexus-rx-xu30",
+        "picks": [
+          {
+            "file": "File:2009 Lexus RX350 Pebble Beach.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2009_Lexus_RX350_Pebble_Beach.jpg",
+            "sha1": "a322a8fef13c09dd8376bb501dd31cef1fb6593f",
+            "timestamp": "2008-12-28T19:13:10Z",
+            "width": 2238,
+            "height": 1380,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "IFCAR",
+            "credit": "Own work",
+            "photoYear": 2009,
+            "gate": 0.8,
+            "foreign": 0.01,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454906-K5mTGPySNZgg0ZRyr7RS",
+              "confidence": 0.81,
+              "exterior": 0.88,
+              "face": 0.05,
+              "plate": 0.28,
+              "special": 0.02,
+              "quality": 2.67
+            }
+          },
+          {
+            "file": "File:2009 Lexus RX350 Premium Package in Classic Silver Metallic, Front Left, 03-17-2023.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2009_Lexus_RX350_Premium_Package_in_Classic_Silver_Metallic,_Front_Left,_03-17-2023.jpg",
+            "sha1": "2b3b43e43de3adc30070dcca873047c4e4aef7b9",
+            "timestamp": "2023-03-20T14:55:23Z",
+            "width": 3567,
+            "height": 1625,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Elise240SX",
+            "credit": "Own work",
+            "photoYear": 2009,
+            "gate": 0.8,
+            "foreign": 0.72,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454898-cD16YMDfg65NHYlcXozp",
+              "confidence": 0.9,
+              "exterior": 0.85,
+              "face": 0.09,
+              "plate": 0.59,
+              "special": 0.03,
+              "quality": 2.59
+            }
+          }
+        ]
+      }
     }
   },
   "mazda-3": {
@@ -20068,6 +22449,38 @@
           }
         ]
       }
+    },
+    "generations": {
+      "mazda-3/first-generation-bk-2003": {
+        "generation": "mazda-3/first-generation-bk-2003",
+        "picks": [
+          {
+            "file": "File:'09 Mazda3 2.3 Sedan.JPG",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:%2709_Mazda3_2.3_Sedan.JPG",
+            "sha1": "5ce550ea8a0bef974b3365fae31f8c8e3d8955e3",
+            "timestamp": "2009-01-14T05:10:48Z",
+            "width": 2185,
+            "height": 1464,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "Bull-Doser",
+            "credit": "Own work",
+            "photoYear": 2009,
+            "gate": 0.8,
+            "foreign": 0.12,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794423008-A002Zrievf9mPjF75lZJ",
+              "confidence": 0.84,
+              "exterior": 0.89,
+              "face": 0.04,
+              "plate": 0.01,
+              "special": 0.06,
+              "quality": 2.39
+            }
+          }
+        ]
+      }
     }
   },
   "mazda-cx-30": {
@@ -20233,7 +22646,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "mazda-cx-5": {
     "name": "Mazda CX-5",
@@ -20558,6 +22972,38 @@
           }
         ]
       }
+    },
+    "generations": {
+      "mazda-cx-5/third-generation-km-2025": {
+        "generation": "mazda-cx-5/third-generation-km-2025",
+        "picks": [
+          {
+            "file": "File:2026 Mazda CX-5 e-SKYACTIV G 2.5 L.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2026_Mazda_CX-5_e-SKYACTIV_G_2.5_L.jpg",
+            "sha1": "50fd4d90203ebd6c29d03b6a5ae7754e858f9ed1",
+            "timestamp": "2026-09-08T09:22:04Z",
+            "width": 5007,
+            "height": 2709,
+            "license": "CC0",
+            "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+            "artist": "TTTNIS",
+            "credit": "Own work",
+            "photoYear": 2026,
+            "gate": 0.6,
+            "foreign": 0.42,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794433226-pXQs9IyQOCh5NTMI7f14",
+              "confidence": 0.62,
+              "exterior": 0.87,
+              "face": 0.1,
+              "plate": 0.94,
+              "special": 0.21,
+              "quality": 2.88
+            }
+          }
+        ]
+      }
     }
   },
   "mazda-cx-50": {
@@ -20643,7 +23089,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "mazda-cx-90": {
     "name": "Mazda CX-90",
@@ -20728,7 +23175,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "mercedes-benz-c-class": {
     "name": "Mercedes-Benz C-Class",
@@ -21053,6 +23501,38 @@
           }
         ]
       }
+    },
+    "generations": {
+      "mercedes-benz-c-class/mercedes-benz-c-class-w203": {
+        "generation": "mercedes-benz-c-class/mercedes-benz-c-class-w203",
+        "picks": [
+          {
+            "file": "File:2006 Mercedes-Benz C280 4Matic in Iridium Silver Metallic, Front Left, 06-11-2022.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2006_Mercedes-Benz_C280_4Matic_in_Iridium_Silver_Metallic,_Front_Left,_06-11-2022.jpg",
+            "sha1": "534bce48003ad94fdeaabefdb2dbb30eddc5d086",
+            "timestamp": "2022-06-21T03:05:28Z",
+            "width": 3268,
+            "height": 1617,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Elise240SX",
+            "credit": "Own work",
+            "photoYear": 2006,
+            "gate": 0.8,
+            "foreign": 0.03,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794455147-lmf77THEb5WmTRf0MsWh",
+              "confidence": 0.98,
+              "exterior": 0.91,
+              "face": 0.05,
+              "plate": 0.09,
+              "special": 0.04,
+              "quality": 2.62
+            }
+          }
+        ]
+      }
     }
   },
   "mercedes-benz-glc-class": {
@@ -21298,7 +23778,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "mitsubishi-outlander": {
     "name": "Mitsubishi Outlander",
@@ -21619,6 +24100,38 @@
               "plate": 0.03,
               "special": 0.04,
               "quality": 2.88
+            }
+          }
+        ]
+      }
+    },
+    "generations": {
+      "mitsubishi-outlander/mitsubishi-outlander-first-generation-cu": {
+        "generation": "mitsubishi-outlander/mitsubishi-outlander-first-generation-cu",
+        "picks": [
+          {
+            "file": "File:'03-'05 Mitsubishi Outlander.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:%2703-%2705_Mitsubishi_Outlander.jpg",
+            "sha1": "f9cf001ed96470a77c3861b1840bcbfa6520f319",
+            "timestamp": "2010-12-09T05:19:12Z",
+            "width": 2114,
+            "height": 1427,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "Bull-Doser",
+            "credit": "Own work.",
+            "photoYear": 2003,
+            "gate": 0.8,
+            "foreign": 0.03,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454888-eIvgExk5RfqUI4I9sDok",
+              "confidence": 0.87,
+              "exterior": 0.75,
+              "face": 0.07,
+              "plate": 0.02,
+              "special": 0.13,
+              "quality": 2.37
             }
           }
         ]
@@ -21948,6 +24461,39 @@
           }
         ]
       }
+    },
+    "generations": {
+      "nissan-altima/third-generation-l31-2001": null,
+      "nissan-altima/fourth-generation-l32-2006": {
+        "generation": "nissan-altima/fourth-generation-l32-2006",
+        "picks": [
+          {
+            "file": "File:2009 Nissan Altima 2.5 S in Winter Frost Pearl, Front Left, 01-30-2022.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2009_Nissan_Altima_2.5_S_in_Winter_Frost_Pearl,_Front_Left,_01-30-2022.jpg",
+            "sha1": "f5c8a4592ea3c82c53c2c383271800411dbb7974",
+            "timestamp": "2022-03-22T13:52:46Z",
+            "width": 4140,
+            "height": 2052,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Elise240SX",
+            "credit": "Own work",
+            "photoYear": 2009,
+            "gate": 0.8,
+            "foreign": 0.02,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794453900-j4jfQ9RHsI95dKZbqmGU",
+              "confidence": 0.84,
+              "exterior": 0.86,
+              "face": 0.05,
+              "plate": 0.21,
+              "special": 0.21,
+              "quality": 2.47
+            }
+          }
+        ]
+      }
     }
   },
   "nissan-frontier": {
@@ -22273,7 +24819,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "nissan-kicks": {
     "name": "Nissan Kicks",
@@ -22514,6 +25061,38 @@
               "plate": 0.02,
               "special": 0.03,
               "quality": 2.66
+            }
+          }
+        ]
+      }
+    },
+    "generations": {
+      "nissan-kicks/second-generation-p16-2024": {
+        "generation": "nissan-kicks/second-generation-p16-2024",
+        "picks": [
+          {
+            "file": "File:2025 Nissan Kicks SR, front 4.12.25.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2025_Nissan_Kicks_SR,_front_4.12.25.jpg",
+            "sha1": "cca421acee334e2ac7041c79bc5ed61868d8aeba",
+            "timestamp": "2025-05-03T04:01:30Z",
+            "width": 3190,
+            "height": 1946,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Kevauto",
+            "credit": "Own work",
+            "photoYear": 2025,
+            "gate": 0.8,
+            "foreign": 0.07,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794453904-ipJqdEmdwptRrZQxrgUR",
+              "confidence": 0.87,
+              "exterior": 0.81,
+              "face": 0.08,
+              "plate": 0.17,
+              "special": 0.14,
+              "quality": 2.67
             }
           }
         ]
@@ -22843,6 +25422,9 @@
           }
         ]
       }
+    },
+    "generations": {
+      "nissan-leaf/nissan-leaf-ze2-third-generation": null
     }
   },
   "nissan-murano": {
@@ -23164,6 +25746,118 @@
               "plate": 0.18,
               "special": 0.02,
               "quality": 2.61
+            }
+          }
+        ]
+      }
+    },
+    "generations": {
+      "nissan-murano/first-generation-z50-2002": {
+        "generation": "nissan-murano/first-generation-z50-2002",
+        "picks": [
+          {
+            "file": "File:2005 Nissan Murano, Front Right, 09-06-2021.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2005_Nissan_Murano,_Front_Right,_09-06-2021.jpg",
+            "sha1": "50ed6f9fb7cfc844bb2b93c82b34cf31c90b1202",
+            "timestamp": "2021-09-24T06:59:37Z",
+            "width": 4068,
+            "height": 2340,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Elise240SX",
+            "credit": "Own work",
+            "photoYear": 2005,
+            "gate": 0.8,
+            "foreign": 0.07,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454793-ALsrmA1FRp9cjUPy9Szs",
+              "confidence": 0.83,
+              "exterior": 0.89,
+              "face": 0.04,
+              "plate": 0.96,
+              "special": 0.1,
+              "quality": 2.77
+            }
+          }
+        ]
+      },
+      "nissan-murano/fourth-generation-z53-2025": {
+        "generation": "nissan-murano/fourth-generation-z53-2025",
+        "picks": [
+          {
+            "file": "File:25 Nissan Murano SL.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:25_Nissan_Murano_SL.jpg",
+            "sha1": "2b65629a33cb379776cae0b025a4dfca22255486",
+            "timestamp": "2026-05-10T02:01:34Z",
+            "width": 4128,
+            "height": 3096,
+            "license": "CC0",
+            "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+            "artist": "HJUdall",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.07,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454803-9f2Yo5gRqqMuwM3tRfu8",
+              "confidence": 0.87,
+              "exterior": 0.95,
+              "face": 0.04,
+              "plate": 0.02,
+              "special": 0.09,
+              "quality": 2.84
+            }
+          },
+          {
+            "file": "File:2026 Nissan Murano SV Japan.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2026_Nissan_Murano_SV_Japan.jpg",
+            "sha1": "7942d01a1fdf4e978a247e2a52e273b93df3b736",
+            "timestamp": "2026-07-13T13:01:17Z",
+            "width": 4946,
+            "height": 2347,
+            "license": "CC0",
+            "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+            "artist": "TTTNIS",
+            "credit": "Own work",
+            "photoYear": 2026,
+            "gate": 0.8,
+            "foreign": 0.54,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454796-sPrEMqTeTu0U0QgNu1Is",
+              "confidence": 0.94,
+              "exterior": 0.78,
+              "face": 0.15,
+              "plate": 0.52,
+              "special": 0.24,
+              "quality": 2.59
+            }
+          },
+          {
+            "file": "File:2025 Nissan Murano (Rear) NYC Auto Show.png",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2025_Nissan_Murano_(Rear)_NYC_Auto_Show.png",
+            "sha1": "f745f0836879965c158a0e9025831a8d4d879f91",
+            "timestamp": "2025-05-02T21:24:29Z",
+            "width": 4272,
+            "height": 2848,
+            "license": "CC BY 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+            "artist": "Raszbeary",
+            "credit": "Own work",
+            "photoYear": 2025,
+            "gate": 0.8,
+            "foreign": 0.03,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454798-qvMKJJPKohGQnERC0qvP",
+              "confidence": 0.98,
+              "exterior": 0.6,
+              "face": 0.27,
+              "plate": 0.93,
+              "special": 0.48,
+              "quality": 2.67
             }
           }
         ]
@@ -23493,6 +26187,88 @@
           }
         ]
       }
+    },
+    "generations": {
+      "nissan-pathfinder/nissan-pathfinder-r51": {
+        "generation": "nissan-pathfinder/nissan-pathfinder-r51",
+        "picks": [
+          {
+            "file": "File:Moscow, Nissan Pathfinder (R51) Feb 2026 02.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Moscow,_Nissan_Pathfinder_(R51)_Feb_2026_02.jpg",
+            "sha1": "e6873f4925dea9654a4cb8f1479cc8e230960503",
+            "timestamp": "2026-02-19T21:10:05Z",
+            "width": 3600,
+            "height": 2363,
+            "license": "CC0",
+            "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+            "artist": "Retired electrician",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.42,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454786-78QKyiGVuPPNK3VL2v6y",
+              "confidence": 0.86,
+              "exterior": 0.89,
+              "face": 0.09,
+              "plate": 0.04,
+              "special": 0.03,
+              "quality": 2.54
+            }
+          },
+          {
+            "file": "File:2012 Nissan Pathfinder S in Super Black Metallic, Front Right, 04-03-2022.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2012_Nissan_Pathfinder_S_in_Super_Black_Metallic,_Front_Right,_04-03-2022.jpg",
+            "sha1": "62b21b62b3c952798cdd67af8e9439141fbc6780",
+            "timestamp": "2022-04-08T03:54:40Z",
+            "width": 3870,
+            "height": 2471,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Elise240SX",
+            "credit": "Own work",
+            "photoYear": 2012,
+            "gate": 0.8,
+            "foreign": 0.06,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454751-cdoTRKJ7Gbh9th2IaFGe",
+              "confidence": 0.9,
+              "exterior": 0.85,
+              "face": 0.14,
+              "plate": 0.06,
+              "special": 0.05,
+              "quality": 2.52
+            }
+          },
+          {
+            "file": "File:Moscow, Nissan Pathfinder (R51) Feb 2026 03.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Moscow,_Nissan_Pathfinder_(R51)_Feb_2026_03.jpg",
+            "sha1": "032b81480572477a00fb0ceda58765837fd143ab",
+            "timestamp": "2026-02-19T21:10:05Z",
+            "width": 3600,
+            "height": 2327,
+            "license": "CC0",
+            "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+            "artist": "Retired electrician",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.41,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454783-F3SlRV2r4sgYRczNi4Zz",
+              "confidence": 0.82,
+              "exterior": 0.95,
+              "face": 0.33,
+              "plate": 0.02,
+              "special": 0.02,
+              "quality": 2.46
+            }
+          }
+        ]
+      }
     }
   },
   "nissan-rogue": {
@@ -23818,6 +26594,9 @@
           }
         ]
       }
+    },
+    "generations": {
+      "nissan-rogue/fourth-generation-t34-2027": null
     }
   },
   "nissan-sentra": {
@@ -24143,6 +26922,69 @@
           }
         ]
       }
+    },
+    "generations": {
+      "nissan-sentra/fifth-generation-b15-1999": {
+        "generation": "nissan-sentra/fifth-generation-b15-1999",
+        "picks": [
+          {
+            "file": "File:2006 Nissan Sentra 1.8 S in Brilliant Aluminum Clearcoat Metallic, front left, 07-04-2026.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2006_Nissan_Sentra_1.8_S_in_Brilliant_Aluminum_Clearcoat_Metallic,_front_left,_07-04-2026.jpg",
+            "sha1": "da86dbc9a6ec9d26e8e5a9226ac4241573d772b4",
+            "timestamp": "2026-07-05T18:18:40Z",
+            "width": 5048,
+            "height": 2896,
+            "license": "CC0",
+            "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+            "artist": "Cutlass",
+            "credit": "Own work",
+            "photoYear": 2006,
+            "gate": 0.8,
+            "foreign": 0.03,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794431122-iFhLqvtiusxU70u29lmq",
+              "confidence": 0.84,
+              "exterior": 0.94,
+              "face": 0.03,
+              "plate": 0.53,
+              "special": 0.11,
+              "quality": 2.67
+            }
+          }
+        ]
+      },
+      "nissan-sentra/sixth-generation-b16-2006": {
+        "generation": "nissan-sentra/sixth-generation-b16-2006",
+        "picks": [
+          {
+            "file": "File:2011 Nissan Sentra 2.0 S in Brilliant Silver, Front Left, 09-10-2023.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2011_Nissan_Sentra_2.0_S_in_Brilliant_Silver,_Front_Left,_09-10-2023.jpg",
+            "sha1": "315c9760b76893c5206fe62de5db8185b576e2af",
+            "timestamp": "2023-09-11T04:20:35Z",
+            "width": 3706,
+            "height": 2003,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Elise240SX",
+            "credit": "Own work",
+            "photoYear": 2011,
+            "gate": 0.8,
+            "foreign": 0.12,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794431490-0DKRuyi7tNoko22sadL4",
+              "confidence": 0.88,
+              "exterior": 0.9,
+              "face": 0.04,
+              "plate": 0.95,
+              "special": 0.03,
+              "quality": 2.66
+            }
+          }
+        ]
+      },
+      "nissan-sentra/ninth-generation-b19-2026": null
     }
   },
   "nissan-versa": {
@@ -24464,6 +27306,38 @@
               "plate": 0.77,
               "special": 0.06,
               "quality": 2.73
+            }
+          }
+        ]
+      }
+    },
+    "generations": {
+      "nissan-versa/nissan-versa-c11-tiida": {
+        "generation": "nissan-versa/nissan-versa-c11-tiida",
+        "picks": [
+          {
+            "file": "File:2010 Nissan Versa 1.6 S Sedan in Magnetic Gray, Front Left, 10-12-2022.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2010_Nissan_Versa_1.6_S_Sedan_in_Magnetic_Gray,_Front_Left,_10-12-2022.jpg",
+            "sha1": "2ee46b9330f1586274e2b85650a91fac4d66cc6c",
+            "timestamp": "2022-10-12T20:39:24Z",
+            "width": 3739,
+            "height": 1946,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Elise240SX",
+            "credit": "Own work",
+            "photoYear": 2010,
+            "gate": 0.8,
+            "foreign": 0.03,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794453901-UDevhMJCtqoeUKsDawPC",
+              "confidence": 0.81,
+              "exterior": 0.92,
+              "face": 0.06,
+              "plate": 0.13,
+              "special": 0.02,
+              "quality": 2.56
             }
           }
         ]
@@ -24793,7 +27667,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "subaru-ascent": {
     "name": "Subaru Ascent",
@@ -24958,7 +27833,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "subaru-crosstrek": {
     "name": "Subaru Crosstrek",
@@ -25174,6 +28050,38 @@
               "plate": 0.74,
               "special": 0.22,
               "quality": 2.42
+            }
+          }
+        ]
+      }
+    },
+    "generations": {
+      "subaru-crosstrek/subaru-crosstrek-gp": {
+        "generation": "subaru-crosstrek/subaru-crosstrek-gp",
+        "picks": [
+          {
+            "file": "File:2016 Crosstrek.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2016_Crosstrek.jpg",
+            "sha1": "293c3958a5fa2a2995a5fde456fd953c88f6824f",
+            "timestamp": "2019-03-02T18:37:15Z",
+            "width": 3264,
+            "height": 2448,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "FirefoxSupraJ29",
+            "credit": "Own work",
+            "photoYear": 2016,
+            "gate": 0.8,
+            "foreign": 0.08,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794431617-H64IQUktKmesv4NfDyxz",
+              "confidence": 0.9,
+              "exterior": 0.95,
+              "face": 0.03,
+              "plate": 0.07,
+              "special": 0.05,
+              "quality": 2.14
             }
           }
         ]
@@ -25503,6 +28411,143 @@
           }
         ]
       }
+    },
+    "generations": {
+      "subaru-forester/second-generation-sg-2002": {
+        "generation": "subaru-forester/second-generation-sg-2002",
+        "picks": [
+          {
+            "file": "File:2004 Subaru Forester 2.5XS - Front.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2004_Subaru_Forester_2.5XS_-_Front.jpg",
+            "sha1": "1ecef727c3720882936a8bf259bc62d01fce666d",
+            "timestamp": "2019-05-15T01:07:29Z",
+            "width": 5333,
+            "height": 3000,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Casey Hofford",
+            "credit": "Own work",
+            "photoYear": 2004,
+            "gate": 0.8,
+            "foreign": 0.04,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794432443-FjvmF0xH6EDdQyegDb9h",
+              "confidence": 0.89,
+              "exterior": 0.83,
+              "face": 0.11,
+              "plate": 0.03,
+              "special": 0.02,
+              "quality": 2.08
+            }
+          },
+          {
+            "file": "File:2003 Subaru Forester (SG MY04) XS wagon (2015-07-03) 01.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2003_Subaru_Forester_(SG_MY04)_XS_wagon_(2015-07-03)_01.jpg",
+            "sha1": "66999738915bf9d82ad5d423e7baf7d90f75ee16",
+            "timestamp": "2015-07-15T18:42:26Z",
+            "width": 4272,
+            "height": 2856,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "OSX",
+            "credit": "Own work",
+            "photoYear": 2003,
+            "gate": 0.8,
+            "foreign": 0.98,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794432654-6YLOjOGarN8Yiu8XTOV7",
+              "confidence": 0.86,
+              "exterior": 0.95,
+              "face": 0.04,
+              "plate": 0.97,
+              "special": 0.02,
+              "quality": 2.76
+            }
+          },
+          {
+            "file": "File:Subaru Forester (SG) ca 2007 provenance Aude.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Subaru_Forester_(SG)_ca_2007_provenance_Aude.jpg",
+            "sha1": "849913b10421296b92de147913cefa41d63bc598",
+            "timestamp": "2020-01-11T19:57:07Z",
+            "width": 4524,
+            "height": 2244,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Charles01",
+            "credit": "Own work",
+            "photoYear": 2002,
+            "gate": 0.8,
+            "foreign": 0.98,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794432628-h3k1zwmlA9rp3pDy7cdJ",
+              "confidence": 0.8,
+              "exterior": 0.93,
+              "face": 0.04,
+              "plate": 0.96,
+              "special": 0.03,
+              "quality": 2.66
+            }
+          }
+        ]
+      },
+      "subaru-forester/sixth-generation-sl-2024": {
+        "generation": "subaru-forester/sixth-generation-sl-2024",
+        "picks": [
+          {
+            "file": "File:The frontview of Subaru FORESTER X-BREAK S：HEV EX (5AA-SLG) with Adventure Style Package parts.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:The_frontview_of_Subaru_FORESTER_X-BREAK_S%EF%BC%9AHEV_EX_(5AA-SLG)_with_Adventure_Style_Package_parts.jpg",
+            "sha1": "c02d9a1d4d08e6afb59ac640902e50dbf6b096a1",
+            "timestamp": "2025-05-12T14:07:28Z",
+            "width": 2560,
+            "height": 1920,
+            "license": "CC0",
+            "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+            "artist": "Tokumeigakarinoaoshima",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.6,
+            "foreign": 0.54,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794433003-TOUETT8eDK4U7Kjh3DZS",
+              "confidence": 0.6,
+              "exterior": 0.71,
+              "face": 0.08,
+              "plate": 0.02,
+              "special": 0.26,
+              "quality": 2.7
+            }
+          },
+          {
+            "file": "File:Subaru Forester SL 2.5 e-BOXER S-HEV Autumn Green Metallic.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Subaru_Forester_SL_2.5_e-BOXER_S-HEV_Autumn_Green_Metallic.jpg",
+            "sha1": "7913f6863d1cd7ec4d18c01af18aad8a5a8b29ac",
+            "timestamp": "2026-06-20T01:58:37Z",
+            "width": 4644,
+            "height": 2612,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Ethan Llamas",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.6,
+            "foreign": 0.72,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794432911-JtwqsQz0ymcssA8Hy2mq",
+              "confidence": 0.6,
+              "exterior": 0.81,
+              "face": 0.1,
+              "plate": 0.97,
+              "special": 0.07,
+              "quality": 2.77
+            }
+          }
+        ]
+      }
     }
   },
   "subaru-impreza": {
@@ -25774,6 +28819,118 @@
               "plate": 0.63,
               "special": 0.16,
               "quality": 2.43
+            }
+          }
+        ]
+      }
+    },
+    "generations": {
+      "subaru-impreza/subaru-impreza-second-generation": {
+        "generation": "subaru-impreza/subaru-impreza-second-generation",
+        "picks": [
+          {
+            "file": "File:2006 Subaru Impreza (GD9 MY06) sedan (2011-11-17).jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2006_Subaru_Impreza_(GD9_MY06)_sedan_(2011-11-17).jpg",
+            "sha1": "790a6d6d9dd887dd540fc0555be0cb6f8494837d",
+            "timestamp": "2012-01-05T21:21:53Z",
+            "width": 3612,
+            "height": 1624,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "OSX",
+            "credit": "Own work",
+            "photoYear": 2006,
+            "gate": 0.8,
+            "foreign": 0.93,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794423025-FhcjJPIfdD5mrXF0Z3Q0",
+              "confidence": 0.8,
+              "exterior": 0.8,
+              "face": 0.02,
+              "plate": 0.97,
+              "special": 0.1,
+              "quality": 2.73
+            }
+          },
+          {
+            "file": "File:2006 Subaru Impreza STi 2.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2006_Subaru_Impreza_STi_2.jpg",
+            "sha1": "a7a6e6d2e68f34047ffec90643d8cde484af65f7",
+            "timestamp": "2026-02-24T11:33:13Z",
+            "width": 8160,
+            "height": 4914,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Calreyn88",
+            "credit": "Own work",
+            "photoYear": 2006,
+            "gate": 0.8,
+            "foreign": 0.98,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794423044-pvHdfsB3DzfaxoFLyA0r",
+              "confidence": 0.85,
+              "exterior": 0.9,
+              "face": 0.04,
+              "plate": 0.98,
+              "special": 0.49,
+              "quality": 2.68
+            }
+          },
+          {
+            "file": "File:2006 Subaru Impreza (GDF MY06) WRX STI sedan (2011-11-17).jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2006_Subaru_Impreza_(GDF_MY06)_WRX_STI_sedan_(2011-11-17).jpg",
+            "sha1": "4071f9af0e2f22bf72b5da74087cb8d93599ba41",
+            "timestamp": "2012-01-05T21:24:24Z",
+            "width": 3572,
+            "height": 1784,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "OSX",
+            "credit": "Own work",
+            "photoYear": 2006,
+            "gate": 0.8,
+            "foreign": 0.96,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794423073-4tI5rRPTKYVKCvuDHlvq",
+              "confidence": 0.8,
+              "exterior": 0.56,
+              "face": 0.04,
+              "plate": 0.97,
+              "special": 0.17,
+              "quality": 2.65
+            }
+          }
+        ]
+      },
+      "subaru-impreza/third-generation-ge-gh-gr-gv-2007": {
+        "generation": "subaru-impreza/third-generation-ge-gh-gr-gv-2007",
+        "picks": [
+          {
+            "file": "File:2011 Subaru Impreza 2.5i, front left, 09-27-2026.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2011_Subaru_Impreza_2.5i,_front_left,_09-27-2026.jpg",
+            "sha1": "11840be01312cdbb60db05079be4aa743c48061d",
+            "timestamp": "2026-10-02T23:09:20Z",
+            "width": 5314,
+            "height": 3298,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "BuickRiviera99",
+            "credit": "Own work",
+            "photoYear": 2011,
+            "gate": 0.8,
+            "foreign": 0.02,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794423233-MWRSBZdl26LsdaEOKy87",
+              "confidence": 0.81,
+              "exterior": 0.93,
+              "face": 0.06,
+              "plate": 0.95,
+              "special": 0.02,
+              "quality": 2.71
             }
           }
         ]
@@ -26103,6 +29260,38 @@
           }
         ]
       }
+    },
+    "generations": {
+      "subaru-legacy/subaru-legacy-fourth-generation": {
+        "generation": "subaru-legacy/subaru-legacy-fourth-generation",
+        "picks": [
+          {
+            "file": "File:Subaru Legacy 2.0R 2006.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Subaru_Legacy_2.0R_2006.jpg",
+            "sha1": "7bc4e6cbd2b2b5da48efad91e593a88d77ae8b26",
+            "timestamp": "2025-07-25T23:50:36Z",
+            "width": 5000,
+            "height": 2825,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "RL GNZLZ",
+            "credit": "https://www.flickr.com/photos/juanelo242a/54647121848/",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.68,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794453980-UttcxIS6oK9DiKdq1XLZ",
+              "confidence": 0.84,
+              "exterior": 0.88,
+              "face": 0.12,
+              "plate": 0.04,
+              "special": 0.09,
+              "quality": 2.63
+            }
+          }
+        ]
+      }
     }
   },
   "subaru-outback": {
@@ -26428,6 +29617,64 @@
           }
         ]
       }
+    },
+    "generations": {
+      "subaru-outback/third-generation-bl-bp-2003": {
+        "generation": "subaru-outback/third-generation-bl-bp-2003",
+        "picks": [
+          {
+            "file": "File:2005-2007 Subaru Outback 3.0 R sedan.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2005-2007_Subaru_Outback_3.0_R_sedan.jpg",
+            "sha1": "34df4c124e88ff82c18284dc8875862f5e02e89f",
+            "timestamp": "2022-04-08T16:49:38Z",
+            "width": 4512,
+            "height": 2676,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "MercurySable99",
+            "credit": "Own work",
+            "photoYear": 2005,
+            "gate": 0.8,
+            "foreign": 0.07,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794433093-MOfDzUECNvF5NcYTqV3f",
+              "confidence": 0.82,
+              "exterior": 0.91,
+              "face": 0.03,
+              "plate": 0.02,
+              "special": 0.04,
+              "quality": 2.62
+            }
+          },
+          {
+            "file": "File:3rd Subaru Outback sedan.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:3rd_Subaru_Outback_sedan.jpg",
+            "sha1": "c9e880615737fc72ad72647ea3a84a7af8e24619",
+            "timestamp": "2009-04-30T16:32:40Z",
+            "width": 2022,
+            "height": 1140,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "IFCAR",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.05,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794433116-6nlpUQZevwsg11YqQAjq",
+              "confidence": 0.91,
+              "exterior": 0.84,
+              "face": 0.04,
+              "plate": 0.07,
+              "special": 0.03,
+              "quality": 2.52
+            }
+          }
+        ]
+      },
+      "subaru-outback/seventh-generation-bu-2025": null
     }
   },
   "tesla-model-3": {
@@ -26673,7 +29920,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "tesla-model-s": {
     "name": "Tesla Model S",
@@ -26998,7 +30246,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "tesla-model-x": {
     "name": "Tesla Model X",
@@ -27243,7 +30492,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "tesla-model-y": {
     "name": "Tesla Model Y",
@@ -27408,7 +30658,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "toyota-4runner": {
     "name": "Toyota 4Runner",
@@ -27733,6 +30984,168 @@
           }
         ]
       }
+    },
+    "generations": {
+      "toyota-4runner/fourth-generation-n210-2002": {
+        "generation": "toyota-4runner/fourth-generation-n210-2002",
+        "picks": [
+          {
+            "file": "File:03-05 Toyota 4Runner SR5.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:03-05_Toyota_4Runner_SR5.jpg",
+            "sha1": "46c634beceb440c2055301bec99eed989476963b",
+            "timestamp": "2007-12-27T19:15:23Z",
+            "width": 1996,
+            "height": 1296,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "IFCAR",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.04,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454158-FXGe27B1KhkTA6ewTedj",
+              "confidence": 0.94,
+              "exterior": 0.9,
+              "face": 0.06,
+              "plate": 0.29,
+              "special": 0.02,
+              "quality": 2.54
+            }
+          },
+          {
+            "file": "File:Toyota 4Runner SR5 2004 (13858805053).jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Toyota_4Runner_SR5_2004_(13858805053).jpg",
+            "sha1": "d2c6b6d9623a57916f32905fd0590dc26f704d2c",
+            "timestamp": "2014-08-07T08:13:51Z",
+            "width": 3200,
+            "height": 2400,
+            "license": "CC BY-SA 2.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+            "artist": "order_242 from Chile",
+            "credit": "Toyota 4Runner SR5 2004",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.07,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454145-YGWF5DdNgE6NZlwayr6f",
+              "confidence": 0.81,
+              "exterior": 0.92,
+              "face": 0.08,
+              "plate": 0.02,
+              "special": 0.02,
+              "quality": 2.02
+            }
+          },
+          {
+            "file": "File:2003-2005 Toyota 4Runner V8.JPG",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2003-2005_Toyota_4Runner_V8.JPG",
+            "sha1": "eae9004737b7ae1d78b49c2544f935cd6beb56a1",
+            "timestamp": "2013-12-21T22:57:47Z",
+            "width": 2270,
+            "height": 1547,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "Bull-Doser",
+            "credit": "Own work",
+            "photoYear": 2003,
+            "gate": 0.8,
+            "foreign": 0.05,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454154-K60ABnP1Q0g2oci6J3O0",
+              "confidence": 0.94,
+              "exterior": 0.72,
+              "face": 0.14,
+              "plate": 0.01,
+              "special": 0.14,
+              "quality": 2.53
+            }
+          }
+        ]
+      },
+      "toyota-4runner/sixth-generation-n500-2024": {
+        "generation": "toyota-4runner/sixth-generation-n500-2024",
+        "picks": [
+          {
+            "file": "File:Toyota 4Runner Trailhunter Sonoma 2025.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Toyota_4Runner_Trailhunter_Sonoma_2025.jpg",
+            "sha1": "5d18364c99c66f3f5209970cce1518ab62ec8e8f",
+            "timestamp": "2025-07-14T07:13:08Z",
+            "width": 3588,
+            "height": 2553,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "TaurusEmerald",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.03,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454172-N3QbwczlikcGcKIAiA1m",
+              "confidence": 0.94,
+              "exterior": 0.7,
+              "face": 0.11,
+              "plate": 0.03,
+              "special": 0.46,
+              "quality": 2.74
+            }
+          },
+          {
+            "file": "File:25 Toyota 4Runner TRD Sport (1).jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:25_Toyota_4Runner_TRD_Sport_(1).jpg",
+            "sha1": "be7775373f75fdcbaf5cef87768e17be7947a07e",
+            "timestamp": "2026-04-03T05:11:39Z",
+            "width": 4128,
+            "height": 3096,
+            "license": "CC0",
+            "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+            "artist": "HJUdall",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.04,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454166-IUh9d7kcMLyHhwVEjqsZ",
+              "confidence": 0.87,
+              "exterior": 0.92,
+              "face": 0.04,
+              "plate": 0.02,
+              "special": 0.18,
+              "quality": 2.71
+            }
+          },
+          {
+            "file": "File:25 Toyota 4Runner TRD Sport LA.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:25_Toyota_4Runner_TRD_Sport_LA.jpg",
+            "sha1": "19871b4f0c86107d7656d8bb2236f1690780303c",
+            "timestamp": "2024-11-26T01:41:14Z",
+            "width": 5184,
+            "height": 3888,
+            "license": "CC0",
+            "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+            "artist": "HJUdall",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.05,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454163-7LQmj2H2Swb4vgPNKA5m",
+              "confidence": 0.95,
+              "exterior": 0.85,
+              "face": 0.07,
+              "plate": 0.04,
+              "special": 0.41,
+              "quality": 2.46
+            }
+          }
+        ]
+      }
     }
   },
   "toyota-bz4x": {
@@ -27818,7 +31231,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "toyota-camry": {
     "name": "Toyota Camry",
@@ -28139,6 +31553,98 @@
               "plate": 0.92,
               "special": 0.05,
               "quality": 2.58
+            }
+          }
+        ]
+      }
+    },
+    "generations": {
+      "toyota-camry/toyota-camry-xv30": {
+        "generation": "toyota-camry/toyota-camry-xv30",
+        "picks": [
+          {
+            "file": "File:'00-'01 & '02-'04 Toyota Camry Taxicabs.JPG",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:%2700-%2701_%26_%2702-%2704_Toyota_Camry_Taxicabs.JPG",
+            "sha1": "4a8a857c72ec0d58c4d6eb3d68471d1d5b2d3c02",
+            "timestamp": "2008-07-28T23:41:08Z",
+            "width": 2560,
+            "height": 1129,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "Bull-Doser",
+            "credit": "Own work",
+            "photoYear": 2000,
+            "gate": 0.8,
+            "foreign": 0.05,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794422389-pQlJ8EwUauKrxnZw83qU",
+              "confidence": 0.85,
+              "exterior": 0.8,
+              "face": 0.26,
+              "plate": 0.46,
+              "special": 0.19,
+              "quality": 1.98
+            }
+          }
+        ]
+      },
+      "toyota-camry/toyota-camry-xv40": {
+        "generation": "toyota-camry/toyota-camry-xv40",
+        "picks": [
+          {
+            "file": "File:2009 Toyota Camry SE in Black, front left, 2026-10-27.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2009_Toyota_Camry_SE_in_Black,_front_left,_2026-10-27.jpg",
+            "sha1": "256e990b545c403b1673c7cd7fa8177520e3d5cc",
+            "timestamp": "2026-10-27T18:41:53Z",
+            "width": 4018,
+            "height": 2108,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Elise240SX",
+            "credit": "Own work",
+            "photoYear": 2009,
+            "gate": 0.8,
+            "foreign": 0.15,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794422428-78tJk0F4C88zl8awO2Os",
+              "confidence": 0.94,
+              "exterior": 0.91,
+              "face": 0.03,
+              "plate": 0.23,
+              "special": 0.09,
+              "quality": 2.77
+            }
+          }
+        ]
+      },
+      "toyota-camry/toyota-camry-xv80": {
+        "generation": "toyota-camry/toyota-camry-xv80",
+        "picks": [
+          {
+            "file": "File:2025 Toyota Camry HEV.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2025_Toyota_Camry_HEV.jpg",
+            "sha1": "e30bcac9902a2d66b011c45982804087ccdb3137",
+            "timestamp": "2025-03-31T04:13:17Z",
+            "width": 6000,
+            "height": 4000,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Wlb5V",
+            "credit": "Own work",
+            "photoYear": 2025,
+            "gate": 0.8,
+            "foreign": 0.06,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794422481-CiehoGVS8vP9K2drJ84l",
+              "confidence": 0.82,
+              "exterior": 0.92,
+              "face": 0.05,
+              "plate": 0.2,
+              "special": 0.08,
+              "quality": 1.96
             }
           }
         ]
@@ -28468,6 +31974,38 @@
           }
         ]
       }
+    },
+    "generations": {
+      "toyota-corolla/toyota-corolla-e120": {
+        "generation": "toyota-corolla/toyota-corolla-e120",
+        "picks": [
+          {
+            "file": "File:Toyota Corolla 1.6 XLi 2002 (13412508745).jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Toyota_Corolla_1.6_XLi_2002_(13412508745).jpg",
+            "sha1": "bd186ffe0803b916d8b00921dc4218cf67191807",
+            "timestamp": "2014-08-07T08:19:19Z",
+            "width": 2048,
+            "height": 1536,
+            "license": "CC BY-SA 2.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+            "artist": "order_242 from Chile",
+            "credit": "Toyota Corolla 1.6 XLi 2002",
+            "photoYear": null,
+            "gate": 0.6,
+            "foreign": 0.79,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794422109-sFzBeMFRLYMNmL3JeYYi",
+              "confidence": 0.72,
+              "exterior": 0.95,
+              "face": 0.05,
+              "plate": 0.42,
+              "special": 0.08,
+              "quality": 2.43
+            }
+          }
+        ]
+      }
     }
   },
   "toyota-corolla-cross": {
@@ -28633,7 +32171,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "toyota-grand-highlander": {
     "name": "Toyota Grand Highlander",
@@ -28718,7 +32257,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "toyota-highlander": {
     "name": "Toyota Highlander",
@@ -29043,6 +32583,88 @@
           }
         ]
       }
+    },
+    "generations": {
+      "toyota-highlander/toyota-highlander-xu20": {
+        "generation": "toyota-highlander/toyota-highlander-xu20",
+        "picks": [
+          {
+            "file": "File:2009-03-26 Toyota Highlander SB on N Gregson St in Durham.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2009-03-26_Toyota_Highlander_SB_on_N_Gregson_St_in_Durham.jpg",
+            "sha1": "23147884db3ca549e385d67c4054fc6c21d92a50",
+            "timestamp": "2009-04-08T19:38:45Z",
+            "width": 3507,
+            "height": 2338,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Ildar Sagdejev (Specious)",
+            "credit": "Own work",
+            "photoYear": 2009,
+            "gate": 0.8,
+            "foreign": 0.08,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794453830-KiWsMY6LaOEYDDcxIw7J",
+              "confidence": 0.8,
+              "exterior": 0.96,
+              "face": 0.13,
+              "plate": 0.02,
+              "special": 0.02,
+              "quality": 2.16
+            }
+          },
+          {
+            "file": "File:2004 Toyota Highlander Limited in Black Onyx, Front Left, 05-06-2023.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2004_Toyota_Highlander_Limited_in_Black_Onyx,_Front_Left,_05-06-2023.jpg",
+            "sha1": "de0c008aee5eba86835ad285c108f3088f9002ef",
+            "timestamp": "2023-05-10T13:09:16Z",
+            "width": 2403,
+            "height": 1621,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Elise240SX",
+            "credit": "Own work",
+            "photoYear": 2004,
+            "gate": 0.8,
+            "foreign": 0.02,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794453826-VtdBA4HCal6LWvX1XhqY",
+              "confidence": 0.83,
+              "exterior": 0.94,
+              "face": 0.04,
+              "plate": 0.22,
+              "special": 0.02,
+              "quality": 2.72
+            }
+          },
+          {
+            "file": "File:2003 Toyota Highlander Limited, Front Right, 03-21-2021.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2003_Toyota_Highlander_Limited,_Front_Right,_03-21-2021.jpg",
+            "sha1": "c74a49d4fedc5f674646ba4ce33bee5a49828148",
+            "timestamp": "2021-03-25T23:55:18Z",
+            "width": 3648,
+            "height": 2340,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "SsmIntrigue",
+            "credit": "Own work",
+            "photoYear": 2003,
+            "gate": 0.8,
+            "foreign": 0.03,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794453820-ZYDO1w3RpoCAhupk8wRL",
+              "confidence": 0.84,
+              "exterior": 0.84,
+              "face": 0.08,
+              "plate": 0.13,
+              "special": 0.02,
+              "quality": 2.78
+            }
+          }
+        ]
+      }
     }
   },
   "toyota-prius": {
@@ -29268,6 +32890,88 @@
           }
         ]
       }
+    },
+    "generations": {
+      "toyota-prius/toyota-prius-xw20": {
+        "generation": "toyota-prius/toyota-prius-xw20",
+        "picks": [
+          {
+            "file": "File:2005 Toyota Prius T Spirit VVT-i Automatic 1.5 Front.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2005_Toyota_Prius_T_Spirit_VVT-i_Automatic_1.5_Front.jpg",
+            "sha1": "63e055c1e2a138d9aa8d1d9f92bc9956b7b36c8f",
+            "timestamp": "2019-10-09T23:03:19Z",
+            "width": 4508,
+            "height": 2530,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Vauxford",
+            "credit": "Own work",
+            "photoYear": 2005,
+            "gate": 0.6,
+            "foreign": 0.93,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794430351-U9uijlfX1kMder0TpdVg",
+              "confidence": 0.62,
+              "exterior": 0.95,
+              "face": 0.07,
+              "plate": 0.02,
+              "special": 0.04,
+              "quality": 2.81
+            }
+          },
+          {
+            "file": "File:2005 Toyota Prius T Sprint VV-I Automatic 1.5 Front.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2005_Toyota_Prius_T_Sprint_VV-I_Automatic_1.5_Front.jpg",
+            "sha1": "fd1ef02f12c39b696fa578fc9ca8489c1bf132e2",
+            "timestamp": "2017-09-21T00:33:15Z",
+            "width": 4067,
+            "height": 1915,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Vauxford",
+            "credit": "Own work",
+            "photoYear": 2005,
+            "gate": 0.6,
+            "foreign": 0.96,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794430361-ZfPNsOm1GxwMwarNLdnG",
+              "confidence": 0.62,
+              "exterior": 0.95,
+              "face": 0.06,
+              "plate": 0.04,
+              "special": 0.02,
+              "quality": 2.71
+            }
+          },
+          {
+            "file": "File:Toyota Prius front 20071025.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Toyota_Prius_front_20071025.jpg",
+            "sha1": "7afc3ff1237e93ed7772fbe675abf32bd0a4b8ac",
+            "timestamp": "2007-10-27T14:53:17Z",
+            "width": 1584,
+            "height": 1002,
+            "license": "CC BY-SA 3.0",
+            "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+            "artist": "Rudolf Stricker",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.6,
+            "foreign": 0.89,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794430697-XCbidkggERFMNw8S1kmI",
+              "confidence": 0.6,
+              "exterior": 0.91,
+              "face": 0.07,
+              "plate": 0.02,
+              "special": 0.02,
+              "quality": 2.68
+            }
+          }
+        ]
+      }
     }
   },
   "toyota-prius-prime": {
@@ -29463,7 +33167,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "toyota-rav4": {
     "name": "Toyota RAV4",
@@ -29788,6 +33493,118 @@
           }
         ]
       }
+    },
+    "generations": {
+      "toyota-rav4/third-generation-xa30-2005": {
+        "generation": "toyota-rav4/third-generation-xa30-2005",
+        "picks": [
+          {
+            "file": "File:2010 Toyota Rav4 Limited in Blizzard Pearl Tri-Coat, Front Left, 08-21-2022.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2010_Toyota_Rav4_Limited_in_Blizzard_Pearl_Tri-Coat,_Front_Left,_08-21-2022.jpg",
+            "sha1": "48386c8eb79a91086f9eb9942dc73984fb5e6553",
+            "timestamp": "2022-08-28T03:15:35Z",
+            "width": 3572,
+            "height": 2077,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Elise240SX",
+            "credit": "Own work",
+            "photoYear": 2010,
+            "gate": 0.8,
+            "foreign": 0.03,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794431675-f2cbPbsmZo8KWV0hDA65",
+              "confidence": 0.92,
+              "exterior": 0.88,
+              "face": 0.06,
+              "plate": 0.36,
+              "special": 0.09,
+              "quality": 2.58
+            }
+          }
+        ]
+      },
+      "toyota-rav4/sixth-generation-xa60-2025": {
+        "generation": "toyota-rav4/sixth-generation-xa60-2025",
+        "picks": [
+          {
+            "file": "File:Japan-Mobility-Show-2025-RuinDig 3246.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Japan-Mobility-Show-2025-RuinDig_3246.jpg",
+            "sha1": "50855fb7c8f3fc809133e39f1de1ffd74db336e1",
+            "timestamp": "2026-01-10T11:01:33Z",
+            "width": 3648,
+            "height": 2736,
+            "license": "CC BY 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+            "artist": "RuinDig/Yuki Uchida",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.6,
+            "foreign": 0.48,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794431953-Wt6B9cPFgENDExLGL2qk",
+              "confidence": 0.66,
+              "exterior": 0.52,
+              "face": 0.17,
+              "plate": 0.8,
+              "special": 0.14,
+              "quality": 2.69
+            }
+          },
+          {
+            "file": "File:Japan Mobility Show Kansai 2025 (18) - Toyota RAV4 HEV CORE (XA60).jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Japan_Mobility_Show_Kansai_2025_(18)_-_Toyota_RAV4_HEV_CORE_(XA60).jpg",
+            "sha1": "b9b31b216deb2860b5162ae080db89fdb69cecdb",
+            "timestamp": "2025-12-10T14:41:11Z",
+            "width": 2560,
+            "height": 1920,
+            "license": "CC0",
+            "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+            "artist": "Tokumeigakarinoaoshima",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.6,
+            "foreign": 0.48,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794432046-uSWCbAGpKePwyLD6Wc1H",
+              "confidence": 0.63,
+              "exterior": 0.79,
+              "face": 0.41,
+              "plate": 0.9,
+              "special": 0.14,
+              "quality": 2.65
+            }
+          },
+          {
+            "file": "File:Japan Mobility Show Kansai 2025 (20) - Toyota RAV4 HEV CORE (XA60).jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Japan_Mobility_Show_Kansai_2025_(20)_-_Toyota_RAV4_HEV_CORE_(XA60).jpg",
+            "sha1": "35bbd3add03dd7a35ab70019c3595bb1288be5db",
+            "timestamp": "2025-12-10T14:41:16Z",
+            "width": 2560,
+            "height": 1920,
+            "license": "CC0",
+            "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+            "artist": "Tokumeigakarinoaoshima",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.6,
+            "foreign": 0.31,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794432061-uKVDaWCtusUv5gZ6hhyt",
+              "confidence": 0.64,
+              "exterior": 0.61,
+              "face": 0.43,
+              "plate": 0.8,
+              "special": 0.35,
+              "quality": 2.61
+            }
+          }
+        ]
+      }
     }
   },
   "toyota-rav4-prime": {
@@ -29949,6 +33766,63 @@
               "plate": 0.18,
               "special": 0.03,
               "quality": 2.66
+            }
+          }
+        ]
+      }
+    },
+    "generations": {
+      "toyota-rav4-prime/toyota-rav4-plug-in-hybrid-xa60": {
+        "generation": "toyota-rav4-prime/toyota-rav4-plug-in-hybrid-xa60",
+        "picks": [
+          {
+            "file": "File:Toyota RAV4 Core Plug-in Hybrid (XA60) Auto Zuerich 2025 DSC 3567.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Toyota_RAV4_Core_Plug-in_Hybrid_(XA60)_Auto_Zuerich_2025_DSC_3567.jpg",
+            "sha1": "15b56b4b037b1c3a173a2d85501832bd4f84bbb5",
+            "timestamp": "2025-11-05T21:21:00Z",
+            "width": 4719,
+            "height": 2936,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Alexander Migl",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.32,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454021-OiXN8rgmGvwY8CBlfDW3",
+              "confidence": 0.86,
+              "exterior": 0.67,
+              "face": 0.06,
+              "plate": 0.9,
+              "special": 0.15,
+              "quality": 2.68
+            }
+          },
+          {
+            "file": "File:Toyota RAV4 Core Plug-in Hybrid (XA60) Auto Zuerich 2025 DSC 3565.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Toyota_RAV4_Core_Plug-in_Hybrid_(XA60)_Auto_Zuerich_2025_DSC_3565.jpg",
+            "sha1": "10a1d5e08694dd4110133adae31cd147e5f60ac1",
+            "timestamp": "2025-11-05T21:17:48Z",
+            "width": 4838,
+            "height": 3299,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Alexander Migl",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.24,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454019-5qnpBkYSNHdeON0m5fUt",
+              "confidence": 0.81,
+              "exterior": 0.66,
+              "face": 0.1,
+              "plate": 0.88,
+              "special": 0.15,
+              "quality": 2.63
             }
           }
         ]
@@ -30278,6 +34152,38 @@
           }
         ]
       }
+    },
+    "generations": {
+      "toyota-sienna/second-generation-xl20-2003": {
+        "generation": "toyota-sienna/second-generation-xl20-2003",
+        "picks": [
+          {
+            "file": "File:2008 Toyota Sienna CE in Blue Mirage Metallic, Front Left, 07-05-2022.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2008_Toyota_Sienna_CE_in_Blue_Mirage_Metallic,_Front_Left,_07-05-2022.jpg",
+            "sha1": "a81e1b6096f326374e284df27bf7f28e664675d8",
+            "timestamp": "2024-07-17T23:06:25Z",
+            "width": 3222,
+            "height": 1868,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Elise240SX",
+            "credit": "Own work",
+            "photoYear": 2008,
+            "gate": 0.8,
+            "foreign": 0.06,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454896-9WOUGg89zDhMhTsLvJqV",
+              "confidence": 0.85,
+              "exterior": 0.92,
+              "face": 0.07,
+              "plate": 0.32,
+              "special": 0.02,
+              "quality": 2.75
+            }
+          }
+        ]
+      }
     }
   },
   "toyota-tacoma": {
@@ -30603,7 +34509,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "toyota-tundra": {
     "name": "Toyota Tundra",
@@ -30928,6 +34835,9 @@
           }
         ]
       }
+    },
+    "generations": {
+      "toyota-tundra/first-generation-xk30-xk40-1999": null
     }
   },
   "volkswagen-atlas": {
@@ -31173,6 +35083,38 @@
           }
         ]
       }
+    },
+    "generations": {
+      "volkswagen-atlas/volkswagen-atlas-second-generation": {
+        "generation": "volkswagen-atlas/volkswagen-atlas-second-generation",
+        "picks": [
+          {
+            "file": "File:Volkswagen Teramont Pro (途昂Pro) R-Line 01 China 2025-03-27.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Volkswagen_Teramont_Pro_(%E9%80%94%E6%98%82Pro)_R-Line_01_China_2025-03-27.jpg",
+            "sha1": "88c5543158e57e01428b5aeed5d8bcd841880f25",
+            "timestamp": "2025-05-15T22:06:21Z",
+            "width": 1300,
+            "height": 855,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Navigator84",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.6,
+            "foreign": 0.61,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454846-NNuJ3zZh7mfslZfGtswr",
+              "confidence": 0.61,
+              "exterior": 0.86,
+              "face": 0.07,
+              "plate": 0.02,
+              "special": 0.15,
+              "quality": 2.68
+            }
+          }
+        ]
+      }
     }
   },
   "volkswagen-id-4": {
@@ -31338,7 +35280,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "volkswagen-jetta": {
     "name": "Volkswagen Jetta",
@@ -31663,6 +35606,63 @@
           }
         ]
       }
+    },
+    "generations": {
+      "volkswagen-jetta/volkswagen-jetta-a5": {
+        "generation": "volkswagen-jetta/volkswagen-jetta-a5",
+        "picks": [
+          {
+            "file": "File:2007 Volkswagen Jetta 2.5 in Blue Graphite, front left, 09-03-2023.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2007_Volkswagen_Jetta_2.5_in_Blue_Graphite,_front_left,_09-03-2023.jpg",
+            "sha1": "77413ac3d0014f7a8c8e3a41afe8583c60e60201",
+            "timestamp": "2025-02-27T01:15:28Z",
+            "width": 2768,
+            "height": 1680,
+            "license": "CC0",
+            "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+            "artist": "Cutlass",
+            "credit": "Own work",
+            "photoYear": 2007,
+            "gate": 0.8,
+            "foreign": 0.15,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794431546-mI4d39hNdK5rJYdjLa4w",
+              "confidence": 0.96,
+              "exterior": 0.85,
+              "face": 0.17,
+              "plate": 0.41,
+              "special": 0.35,
+              "quality": 2.57
+            }
+          },
+          {
+            "file": "File:2007 Volkswagen Jetta Sport TDi 2.0 Front.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2007_Volkswagen_Jetta_Sport_TDi_2.0_Front.jpg",
+            "sha1": "37d433af10971b379ee51f227d1b4b25ad9c5450",
+            "timestamp": "2018-07-10T17:15:31Z",
+            "width": 4435,
+            "height": 2536,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Vauxford",
+            "credit": "Own work",
+            "photoYear": 2007,
+            "gate": 0.8,
+            "foreign": 0.95,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794431535-NYcLjinSFwQfzKbHkm6Z",
+              "confidence": 0.86,
+              "exterior": 0.9,
+              "face": 0.06,
+              "plate": 0.73,
+              "special": 0.02,
+              "quality": 2.63
+            }
+          }
+        ]
+      }
     }
   },
   "volkswagen-taos": {
@@ -31828,7 +35828,8 @@
           }
         ]
       }
-    }
+    },
+    "generations": {}
   },
   "volkswagen-tiguan": {
     "name": "Volkswagen Tiguan",
@@ -32149,6 +36150,38 @@
               "plate": 0.97,
               "special": 0.02,
               "quality": 2.49
+            }
+          }
+        ]
+      }
+    },
+    "generations": {
+      "volkswagen-tiguan/volkswagen-tiguan-third-generation-north-america-tayron-l-based": {
+        "generation": "volkswagen-tiguan/volkswagen-tiguan-third-generation-north-america-tayron-l-based",
+        "picks": [
+          {
+            "file": "File:2025 Volkswagen Tiguan Comfortline 4MOTION in Ascot Grey, front right, 2025-05-18.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:2025_Volkswagen_Tiguan_Comfortline_4MOTION_in_Ascot_Grey,_front_right,_2025-05-18.jpg",
+            "sha1": "5b773527d1cf045fbebf93f5c89c334036a17be3",
+            "timestamp": "2025-05-20T09:33:50Z",
+            "width": 5364,
+            "height": 3048,
+            "license": "CC BY-SA 4.0",
+            "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+            "artist": "Elise240SX",
+            "credit": "Own work",
+            "photoYear": 2025,
+            "gate": 0.8,
+            "foreign": 0.04,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794454833-hzciUtJrKwrAaqPxkmSL",
+              "confidence": 0.92,
+              "exterior": 0.93,
+              "face": 0.07,
+              "plate": 0.02,
+              "special": 0.03,
+              "quality": 2.74
             }
           }
         ]

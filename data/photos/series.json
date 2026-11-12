@@ -212,6 +212,11 @@
         "source": "G65 infobox model_years: \"2027\"; production \"August 2026 – present\"",
         "note": "'BMW G65' has 0 files and 2 subcategories ('BMW G65 X5 M60e' is empty; 'BMW iX5' is the electric variant). There are effectively no photos yet. Fall back to the parent 'BMW X5' or wait."
       }
+    ],
+    "photoExclude": [
+      "File:BMW iX5 front left - Autowizja.jpg",
+      "File:BMW iX5 (G65) front - Autowizja.jpg",
+      "File:BMW iX5 (G65) front dark - Autowizja.jpg"
     ]
   },
   "buick-enclave": {
@@ -782,7 +787,10 @@
       ],
       "note": "Escape discontinued after the 2026 model year. US production ended in December 2025 at Louisville Assembly, and no 2027 model exists.",
       "source": "Ford Escape article, Discontinuation section: 'Ford Escape production ended in the United States in December 2025 ... The 2026 model year represents a final inventory phase-out'; also the lead: 'Ford would discontinue the Escape after model year 2026' (https://www.caranddriver.com/news/a65654346/ford-escape-lincoln-corsair-dead-after-2026/)"
-    }
+    },
+    "photoExclude": [
+      "File:Los Angeles County Fire Department Ford Escape lifeguard vehicle.jpg"
+    ]
   },
   "ford-expedition": {
     "wikipedia": "Ford Expedition",
@@ -1490,7 +1498,10 @@
   "kia-seltos": {
     "wikipedia": "Kia Seltos",
     "wikidata": "Q65044174",
-    "status": "auto"
+    "status": "auto",
+    "photoExclude": [
+      "File:Kia Seltos SP3i Test Vehicle (8).jpg"
+    ]
   },
   "kia-sorento": {
     "wikipedia": "Kia Sorento",

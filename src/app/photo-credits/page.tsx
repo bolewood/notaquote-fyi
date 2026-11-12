@@ -34,7 +34,10 @@ function Credit({ photo }: { photo: CreditedPhoto }) {
       ) : (
         credit.license.toLowerCase() === "public domain" ? "in the public domain" : credit.license
       )}
-      . For the {yearList(photo.years)} model {photo.years.length > 1 ? "years" : "year"}.
+      .{" "}
+      {photo.years.length > 0
+        ? `For the ${yearList(photo.years)} model ${photo.years.length > 1 ? "years" : "year"}.`
+        : `For the ${photo.generationYears} generation.`}
     </li>
   )
 }
