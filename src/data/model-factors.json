@@ -13701,7 +13701,7 @@
           "high": 174,
           "basis": "assumed",
           "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Smallcar 4-door\", used for the EPA-based class \"Small car\". Which HLDI class stands in for which EPA class is our judgment. HLDI's bodily-injury figure (139) measures how often injury claims happen (claim frequency), not overall losses, because injury severity takes too long to develop. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
+          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Smallcar 4-door\", used for the EPA-based class \"Small car\". Which HLDI class stands in for which EPA class is our judgment. HLDI's bodily-injury figure (139) measures how often injury claims happen (claim frequency), not overall losses. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
           "n": null
         },
         "propertyDamage": {
@@ -13750,7 +13750,7 @@
           "high": 173,
           "basis": "assumed",
           "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Midsizecar 4-door\", used for the EPA-based class \"Midsize car\". Which HLDI class stands in for which EPA class is our judgment. HLDI's bodily-injury figure (138) measures how often injury claims happen (claim frequency), not overall losses, because injury severity takes too long to develop. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
+          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Midsizecar 4-door\", used for the EPA-based class \"Midsize car\". Which HLDI class stands in for which EPA class is our judgment. HLDI's bodily-injury figure (138) measures how often injury claims happen (claim frequency), not overall losses. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
           "n": null
         },
         "propertyDamage": {
@@ -13799,7 +13799,7 @@
           "high": 173,
           "basis": "assumed",
           "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Midsizecar 4-door\", used for the EPA-based class \"Large car\". Which HLDI class stands in for which EPA class is our judgment. EPA sizes cars by interior room, so its large class includes hatchbacks such as the Hyundai Ioniq; HLDI sizes by footprint and weight, so we use HLDI's midsize average. HLDI's bodily-injury figure (138) measures how often injury claims happen (claim frequency), not overall losses, because injury severity takes too long to develop. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
+          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Midsizecar 4-door\", used for the EPA-based class \"Large car\". Which HLDI class stands in for which EPA class is our judgment. EPA sizes cars by interior room, so its large class includes hatchbacks such as the Hyundai Ioniq; HLDI sizes by footprint and weight, so we use HLDI's midsize average. HLDI's bodily-injury figure (138) measures how often injury claims happen (claim frequency), not overall losses. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
           "n": null
         },
         "propertyDamage": {
@@ -13848,7 +13848,7 @@
           "high": 99,
           "basis": "assumed",
           "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Midsize sports car\", used for the EPA-based class \"Two-seater\". Which HLDI class stands in for which EPA class is our judgment. HLDI's bodily-injury figure (79) measures how often injury claims happen (claim frequency), not overall losses, because injury severity takes too long to develop. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
+          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Midsize sports car\", used for the EPA-based class \"Two-seater\". Which HLDI class stands in for which EPA class is our judgment. HLDI's bodily-injury figure (79) measures how often injury claims happen (claim frequency), not overall losses. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
           "n": null
         },
         "propertyDamage": {
@@ -13897,7 +13897,7 @@
           "high": 121,
           "basis": "assumed",
           "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Small SUV\", used for the EPA-based class \"Small SUV\". Which HLDI class stands in for which EPA class is our judgment. HLDI's bodily-injury figure (97) measures how often injury claims happen (claim frequency), not overall losses, because injury severity takes too long to develop. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
+          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Small SUV\", used for the EPA-based class \"Small SUV\". Which HLDI class stands in for which EPA class is our judgment. HLDI's bodily-injury figure (97) measures how often injury claims happen (claim frequency), not overall losses. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
           "n": null
         },
         "propertyDamage": {
@@ -13946,7 +13946,7 @@
           "high": 105,
           "basis": "assumed",
           "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Large SUV\", used for the EPA-based class \"Standard SUV\". Which HLDI class stands in for which EPA class is our judgment. HLDI's bodily-injury figure (84) measures how often injury claims happen (claim frequency), not overall losses, because injury severity takes too long to develop. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
+          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Large SUV\", used for the EPA-based class \"Standard SUV\". Which HLDI class stands in for which EPA class is our judgment. HLDI's bodily-injury figure (84) measures how often injury claims happen (claim frequency), not overall losses. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
           "n": null
         },
         "propertyDamage": {
@@ -13995,7 +13995,7 @@
           "high": 109,
           "basis": "assumed",
           "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Midsize SUV\", used for the EPA-based class \"SUV\". Which HLDI class stands in for which EPA class is our judgment. HLDI's bodily-injury figure (87) measures how often injury claims happen (claim frequency), not overall losses, because injury severity takes too long to develop. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
+          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Midsize SUV\", used for the EPA-based class \"SUV\". Which HLDI class stands in for which EPA class is our judgment. HLDI's bodily-injury figure (87) measures how often injury claims happen (claim frequency), not overall losses. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
           "n": null
         },
         "propertyDamage": {
@@ -14044,7 +14044,7 @@
           "high": 120,
           "basis": "assumed",
           "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"All small pickups\", used for the EPA-based class \"Small pickup\". Which HLDI class stands in for which EPA class is our judgment. HLDI's bodily-injury figure (96) measures how often injury claims happen (claim frequency), not overall losses, because injury severity takes too long to develop. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
+          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"All small pickups\", used for the EPA-based class \"Small pickup\". Which HLDI class stands in for which EPA class is our judgment. HLDI's bodily-injury figure (96) measures how often injury claims happen (claim frequency), not overall losses. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
           "n": null
         },
         "propertyDamage": {
@@ -14093,7 +14093,7 @@
           "high": 125,
           "basis": "assumed",
           "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"All large pickups\", used for the EPA-based class \"Full-size pickup\". Which HLDI class stands in for which EPA class is our judgment. HLDI's bodily-injury figure (100) measures how often injury claims happen (claim frequency), not overall losses, because injury severity takes too long to develop. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
+          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"All large pickups\", used for the EPA-based class \"Full-size pickup\". Which HLDI class stands in for which EPA class is our judgment. HLDI's bodily-injury figure (100) measures how often injury claims happen (claim frequency), not overall losses. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
           "n": null
         },
         "propertyDamage": {
@@ -14142,7 +14142,7 @@
           "high": 111,
           "basis": "assumed",
           "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Very large Minivan\", used for the EPA-based class \"Minivan\". Which HLDI class stands in for which EPA class is our judgment. HLDI's bodily-injury figure (89) measures how often injury claims happen (claim frequency), not overall losses, because injury severity takes too long to develop. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
+          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Very large Minivan\", used for the EPA-based class \"Minivan\". Which HLDI class stands in for which EPA class is our judgment. HLDI's bodily-injury figure (89) measures how often injury claims happen (claim frequency), not overall losses. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
           "n": null
         },
         "propertyDamage": {
@@ -14191,7 +14191,7 @@
           "high": 118,
           "basis": "assumed",
           "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Very large van\", used for the EPA-based class \"Van\". Which HLDI class stands in for which EPA class is our judgment. HLDI's bodily-injury figure (94) measures how often injury claims happen (claim frequency), not overall losses, because injury severity takes too long to develop. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
+          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Very large van\", used for the EPA-based class \"Van\". Which HLDI class stands in for which EPA class is our judgment. HLDI's bodily-injury figure (94) measures how often injury claims happen (claim frequency), not overall losses. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
           "n": null
         },
         "propertyDamage": {
@@ -14240,7 +14240,7 @@
           "high": 109,
           "basis": "assumed",
           "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Midsize SUV\", used for the EPA-based class \"Special purpose vehicle\". Which HLDI class stands in for which EPA class is our judgment. HLDI's bodily-injury figure (87) measures how often injury claims happen (claim frequency), not overall losses, because injury severity takes too long to develop. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
+          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Midsize SUV\", used for the EPA-based class \"Special purpose vehicle\". Which HLDI class stands in for which EPA class is our judgment. HLDI's bodily-injury figure (87) measures how often injury claims happen (claim frequency), not overall losses. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
           "n": null
         },
         "propertyDamage": {
@@ -14391,7 +14391,7 @@
           "high": 119,
           "basis": "assumed",
           "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Midsize luxury car\", used for the class \"Small car\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. HLDI's bodily-injury figure (95) measures how often injury claims happen (claim frequency), not overall losses, because injury severity takes too long to develop. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
+          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Midsize luxury car\", used for the class \"Small car\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. HLDI's bodily-injury figure (95) measures how often injury claims happen (claim frequency), not overall losses. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
           "n": null
         },
         "propertyDamage": {
@@ -14440,7 +14440,7 @@
           "high": 119,
           "basis": "assumed",
           "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Midsize luxury car\", used for the class \"Midsize car\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. HLDI's bodily-injury figure (95) measures how often injury claims happen (claim frequency), not overall losses, because injury severity takes too long to develop. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
+          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Midsize luxury car\", used for the class \"Midsize car\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. HLDI's bodily-injury figure (95) measures how often injury claims happen (claim frequency), not overall losses. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
           "n": null
         },
         "propertyDamage": {
@@ -14489,7 +14489,7 @@
           "high": 113,
           "basis": "assumed",
           "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Large luxury car\", used for the class \"Large car\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. HLDI's bodily-injury figure (90) measures how often injury claims happen (claim frequency), not overall losses, because injury severity takes too long to develop. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
+          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Large luxury car\", used for the class \"Large car\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. HLDI's bodily-injury figure (90) measures how often injury claims happen (claim frequency), not overall losses. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
           "n": null
         },
         "propertyDamage": {
@@ -14538,7 +14538,7 @@
           "high": 158,
           "basis": "assumed",
           "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Large sports car\", used for the class \"Two-seater\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. HLDI's bodily-injury figure (126) measures how often injury claims happen (claim frequency), not overall losses, because injury severity takes too long to develop. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
+          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Large sports car\", used for the class \"Two-seater\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. HLDI's bodily-injury figure (126) measures how often injury claims happen (claim frequency), not overall losses. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
           "n": null
         },
         "propertyDamage": {
@@ -14587,7 +14587,7 @@
           "high": 120,
           "basis": "assumed",
           "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Small luxury SUV\", used for the class \"Small SUV\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. HLDI's bodily-injury figure (96) measures how often injury claims happen (claim frequency), not overall losses, because injury severity takes too long to develop. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
+          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Small luxury SUV\", used for the class \"Small SUV\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. HLDI's bodily-injury figure (96) measures how often injury claims happen (claim frequency), not overall losses. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
           "n": null
         },
         "propertyDamage": {
@@ -14636,7 +14636,7 @@
           "high": 93,
           "basis": "assumed",
           "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Midsize luxury SUV\", used for the class \"SUV\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. HLDI's bodily-injury figure (74) measures how often injury claims happen (claim frequency), not overall losses, because injury severity takes too long to develop. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
+          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Midsize luxury SUV\", used for the class \"SUV\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. HLDI's bodily-injury figure (74) measures how often injury claims happen (claim frequency), not overall losses. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
           "n": null
         },
         "propertyDamage": {
@@ -14685,7 +14685,7 @@
           "high": 96,
           "basis": "assumed",
           "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Large luxury SUV\", used for the class \"Standard SUV\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. HLDI's bodily-injury figure (77) measures how often injury claims happen (claim frequency), not overall losses, because injury severity takes too long to develop. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
+          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Large luxury SUV\", used for the class \"Standard SUV\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. HLDI's bodily-injury figure (77) measures how often injury claims happen (claim frequency), not overall losses. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
           "n": null
         },
         "propertyDamage": {
@@ -14734,7 +14734,7 @@
           "high": 93,
           "basis": "assumed",
           "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Midsize luxury SUV\", used for the class \"Special purpose vehicle\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. HLDI's bodily-injury figure (74) measures how often injury claims happen (claim frequency), not overall losses, because injury severity takes too long to develop. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
+          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Midsize luxury SUV\", used for the class \"Special purpose vehicle\" from makes HLDI mostly files as luxury or sports cars (see vehicle-families.json). The mapping is our judgment. HLDI's bodily-injury figure (74) measures how often injury claims happen (claim frequency), not overall losses. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
           "n": null
         },
         "propertyDamage": {
@@ -14832,7 +14832,7 @@
           "high": 99,
           "basis": "assumed",
           "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Midsize sports car\", used for two-doors and convertibles in the class \"Small car\" from makes HLDI mostly files as luxury or sports cars. The mapping is our judgment. HLDI's bodily-injury figure (79) measures how often injury claims happen (claim frequency), not overall losses, because injury severity takes too long to develop. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
+          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Midsize sports car\", used for two-doors and convertibles in the class \"Small car\" from makes HLDI mostly files as luxury or sports cars. The mapping is our judgment. HLDI's bodily-injury figure (79) measures how often injury claims happen (claim frequency), not overall losses. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
           "n": null
         },
         "propertyDamage": {
@@ -14881,7 +14881,7 @@
           "high": 99,
           "basis": "assumed",
           "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Midsize sports car\", used for two-doors and convertibles in the class \"Midsize car\" from makes HLDI mostly files as luxury or sports cars. The mapping is our judgment. HLDI's bodily-injury figure (79) measures how often injury claims happen (claim frequency), not overall losses, because injury severity takes too long to develop. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
+          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Midsize sports car\", used for two-doors and convertibles in the class \"Midsize car\" from makes HLDI mostly files as luxury or sports cars. The mapping is our judgment. HLDI's bodily-injury figure (79) measures how often injury claims happen (claim frequency), not overall losses. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
           "n": null
         },
         "propertyDamage": {
@@ -14930,7 +14930,7 @@
           "high": 158,
           "basis": "assumed",
           "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Large sports car\", used for two-doors and convertibles in the class \"Large car\" from makes HLDI mostly files as luxury or sports cars. The mapping is our judgment. HLDI's bodily-injury figure (126) measures how often injury claims happen (claim frequency), not overall losses, because injury severity takes too long to develop. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
+          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Large sports car\", used for two-doors and convertibles in the class \"Large car\" from makes HLDI mostly files as luxury or sports cars. The mapping is our judgment. HLDI's bodily-injury figure (126) measures how often injury claims happen (claim frequency), not overall losses. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
           "n": null
         },
         "propertyDamage": {
@@ -14979,7 +14979,7 @@
           "high": 99,
           "basis": "assumed",
           "sources": [],
-          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Midsize sports car\", used for two-doors and convertibles in the class \"Two-seater\" from makes HLDI mostly files as luxury or sports cars. The mapping is our judgment. HLDI's bodily-injury figure (79) measures how often injury claims happen (claim frequency), not overall losses, because injury severity takes too long to develop. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
+          "derivation": "Our estimate. No public source yet; help wanted. HLDI 2022–24 class average \"Midsize sports car\", used for two-doors and convertibles in the class \"Two-seater\" from makes HLDI mostly files as luxury or sports cars. The mapping is our judgment. HLDI's bodily-injury figure (79) measures how often injury claims happen (claim frequency), not overall losses. We assume a model's average injury claim severity is about average (1.00, range 0.80 to 1.25) to combine it with property-damage overall losses.",
           "n": null
         },
         "propertyDamage": {

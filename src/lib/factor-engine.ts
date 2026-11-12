@@ -1208,7 +1208,7 @@ const GROUP_FAMILY: Record<GroupId, "driver" | "geography" | "coverage" | "vehic
 }
 
 function describeVehicle(facts: VehicleFacts | "average"): string {
-  if (facts === "average") return "an average car"
+  if (facts === "average") return "the average passenger vehicle"
   return vehicleLabel({ year: facts.year, make: facts.make, model: facts.model, trim: "" })
 }
 
@@ -1920,6 +1920,15 @@ export type PublishedFactorGroup = {
   rows: PublishedFactorRow[]
 }
 
+/** HLDI publishes insurance loss results for each car, not prices: its figures say so instead of "From published prices". */
+export const CLAIMS_WORDS = "Based on insurance loss data"
+
+/** A factor's basis in words, with HLDI's loss data named as such. */
+export function basisWords(basis: FactorBasis, sources: readonly string[]): string {
+  if (basis === "sourced" && sources.length > 0 && sources.every((id) => id.startsWith("hldi-"))) return CLAIMS_WORDS
+  return BASIS_WORDS[basis]
+}
+
 export const BASIS_WORDS: Record<FactorBasis, string> = {
   reference: "Measured from here",
   sourced: "From published prices",
@@ -1946,7 +1955,7 @@ function publishedRow(cell: FactorCell, label: string = cell.label): PublishedFa
     key: label,
     value: formatHundredths(cell.value),
     change: changeWords(cell.value),
-    confidence: BASIS_WORDS[cell.basis],
+    confidence: basisWords(cell.basis, cell.sources),
     range: cell.low === cell.high ? "—" : rangePercentWords(cell.low, cell.high),
     basis: cell.basis,
     sources: cell.sources,
@@ -2010,7 +2019,7 @@ export function publishedFactorGroups(): PublishedFactorGroup[] {
     Object.values(rows).flatMap((row) => [publishedRow(row.liability), publishedRow(row.physical)])
   groups.push({
     family: "Kinds of cars, when we don't have the exact model",
-    note: "From HLDI's insurance loss results (overall losses for collision, comprehensive, and property damage; how often claims happen for bodily injury), compared with the average car. We use these when we don't have figures for the exact model. The last two rows show how we treat injury claim severity and how much of a car's liability record we count; each isn't one of the 26 adjustments.",
+    note: "From HLDI's insurance loss results (overall losses for collision, comprehensive, and property damage; how often claims happen for bodily injury), compared with the average passenger vehicle in that model year range. We use these when we don't have figures for the exact model. The last two rows show how we treat injury claim severity and how much of a car's liability record we count; each isn't one of the 26 adjustments.",
     rows: [
       ...classRows(bundle.vehicle.classes),
       ...classRows(bundle.vehicle.luxuryClasses),

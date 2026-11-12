@@ -15,7 +15,7 @@ import {
 } from "./car-pages"
 import { uniqueness, type UniquenessReport } from "./uniqueness"
 import { differenceWords, dollars, estimateDollars, monthlyDollars, rangeDollars, shownYearly, signedDollars } from "./format"
-import { HLDI_COVERAGES, hldiReport, listWords, priceMeaning, SOFTENING_REASON, type HldiRating } from "./hldi"
+import { HLDI_AVERAGE, HLDI_COVERAGES, HLDI_FACTORS, hldiReport, listWords, priceMeaning, SOFTENING_REASON, type HldiRating } from "./hldi"
 import { lossPushesVsAverage } from "./pricing"
 import { DESCRIPTION_MAX, SEARCH_PROMISE, TITLE_MAX } from "./site-meta"
 import { ordinal } from "./state-content"
@@ -95,15 +95,15 @@ function vsAverageDelta(f: CarFigures): number {
   return f.adult.likely - f.averageCar.likely
 }
 
-/** "$200 less than an average car of the same age", or "about the same as an average car of the same age". */
+/** "$200 less than the average passenger vehicle in that model year range" (HLDI's term), or "about the same as …". */
 export function vsAverageWords(f: CarFigures): string {
   const delta = vsAverageDelta(f)
-  if (aboutTheSame(delta, f.averageCar.likely)) return "about the same as an average car of the same age"
-  return `${differenceWords(delta).replace(" a year", "")} than an average car of the same age`
+  if (aboutTheSame(delta, f.averageCar.likely)) return `about the same as ${HLDI_AVERAGE}`
+  return `${differenceWords(delta).replace(" a year", "")} than ${HLDI_AVERAGE}`
 }
 
-/** The car's losses are close to an average car's: nothing stands out. */
-export const CLOSE_TO_AVERAGE = "its losses are close to an average car's"
+/** The car's losses are close to the average passenger vehicle's: nothing stands out. */
+export const CLOSE_TO_AVERAGE = "its losses are close to the average passenger vehicle's"
 
 /**
  * Why, in one clause, in HLDI's coverages and from the car's own factors (so
@@ -127,11 +127,11 @@ export function becauseWords(f: CarFigures): string {
 }
 
 export function carDescription(f: CarFigures): string {
-  // Search snippets are short: "an average car its age" says the same thing in fewer words.
-  const vs = vsAverageWords(f).replace("an average car of the same age", "an average car its age")
+  // Search snippets are short: "the average passenger vehicle its age" says the same thing in fewer words.
+  const vs = vsAverageWords(f).replace(HLDI_AVERAGE, "the average passenger vehicle its age")
   const figures = `A ${f.page.name}: about ${estimateDollars(f.adult.likely)} a year for a 45-year-old`
   const teen = `Adding a teen: about ${differenceWords(f.teen.increase)}.`
-  // The promise when it fits; the comparison with an average car when that fits too.
+  // The promise when it fits; the comparison with the average passenger vehicle when that fits too.
   for (const text of [`${figures}, ${vs}. ${teen} ${SEARCH_PROMISE}`, `${figures}. ${teen} ${SEARCH_PROMISE}`, `${figures}, ${vs}. ${teen}`])
     if (text.length <= DESCRIPTION_MAX) return text
   return `${figures}. ${teen}`
@@ -182,8 +182,8 @@ export function teenText(f: CarFigures): string {
   const car = f.teen.increase
   const average = f.teenAverageCar.increase
   const vs = aboutTheSame(car - average, average)
-    ? "about the same as adding a teen with an average car of the same age"
-    : `${differenceWords(car - average).replace(" a year", "")} than adding a teen with an average car of the same age`
+    ? `about the same as adding a teen with ${HLDI_AVERAGE}`
+    : `${differenceWords(car - average).replace(" a year", "")} than adding a teen with ${HLDI_AVERAGE}`
   const ownTeen = f.years[0]?.teenOwn.likely
   const own = ownTeen && ownTeen > car ? ownTeen : null
   if (f.teenRank.rank <= 40) {
@@ -341,6 +341,8 @@ export type CarContent = {
     rows: { name: string; helper: string; rating: HldiRating | "Insufficient data"; percent: string; peers: string }[]
     /** Coverages HLDI doesn't publish for this car. */
     missing: string
+    /** HLDI's "many factors" sentence, the same on every page. */
+    factors: string
     source: string
     url: string | null
   } | null
@@ -410,8 +412,8 @@ function hldiContent(f: CarFigures): CarContent["hldi"] {
   const series = report.series
   const intro =
     series.length === 1
-      ? `The Highway Loss Data Institute (HLDI) compares each model's insurance losses with an average car's. For the ${series[0]}, on HLDI's scale where 100 is an average car and lower is better, it reports`
-      : `The Highway Loss Data Institute (HLDI) compares each model's insurance losses with an average car's. HLDI lists this model as ${series.length} versions (${joinWords(series)}). Taking the middle of them, on HLDI's scale where 100 is an average car and lower is better, it reports`
+      ? `The Highway Loss Data Institute (HLDI) compares each model's insurance losses with ${HLDI_AVERAGE}. For the ${series[0]}, on HLDI's scale where 100 is that average vehicle and lower is better, it reports`
+      : `The Highway Loss Data Institute (HLDI) compares each model's insurance losses with ${HLDI_AVERAGE}. HLDI lists this model as ${series.length} versions (${joinWords(series)}). Taking the middle of them, on HLDI's scale where 100 is that average vehicle and lower is better, it reports`
   const shown = new Set(report.rows.map((row) => row.key))
   const missing = ["collision", "comprehensive", "propertyDamage", "bodilyInjury"].filter((key) => !shown.has(key as never))
   const missingNames: Record<string, string> = {
@@ -456,6 +458,7 @@ function hldiContent(f: CarFigures): CarContent["hldi"] {
       missing.length > 0
         ? `HLDI doesn't publish a result for ${listWords(missing.map((key) => missingNames[key]))} on this model, so ${missing.length === 1 ? "it's" : "they're"} marked “Insufficient data”.`
         : "",
+    factors: HLDI_FACTORS,
     source: `Source: HLDI, insurance losses by make and model, ${report.modelYears} models`,
     url: report.url,
   }
@@ -485,9 +488,9 @@ export function carContent(f: CarFigures): CarContent {
     range: `Estimated range: ${rangeDollars(f.adult.low, f.adult.high)}. Actual quotes can fall outside it.`,
     averageLine:
       oldest && oldest.year < year
-        ? `An average car of the same age (what HLDI's ${window} results measure against) runs about ${estimateDollars(f.averageCar.likely)} a year. A used ${oldest.year} ${model} drops to about ${estimateDollars(oldest.adult.likely)} (see the table below).`
-        : `An average car of the same age (what HLDI's ${window} results measure against) runs about ${estimateDollars(f.averageCar.likely)} a year.`,
-    about: `Priced for the ${year} ${pickedTrim}, the newest year covered by HLDI's loss data (${window} models), for a 45-year-old driver with a clean record and full coverage.`,
+        ? `The average passenger vehicle in HLDI's ${window} model year range (what HLDI's results measure against) runs about ${estimateDollars(f.averageCar.likely)} a year. A used ${oldest.year} ${model} drops to about ${estimateDollars(oldest.adult.likely)} (see the table below).`
+        : `The average passenger vehicle in HLDI's ${window} model year range (what HLDI's results measure against) runs about ${estimateDollars(f.averageCar.likely)} a year.`,
+    about: `Priced for the ${year} ${pickedTrim} from the most recent HLDI report that applies to the vehicle model (${window} models), for a 45-year-old driver with a clean record and full coverage.`,
     driverNote: EXAMPLE_DRIVER_NOTE,
     stateLine: `Each state raises or lowers every car's price by the same percentage, so ${callName(f)}'s rank is the same in every state.`,
     yearsHeading: `A used ${page.shortName}, by model year`,

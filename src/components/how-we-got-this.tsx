@@ -41,7 +41,7 @@ export function HowWeGotThis({
             // The car: HLDI's own results first, then what we estimate they mean for price.
             const report = step.group === "vehicle" ? hldiReport(estimate.vehicle) : null
             const meaning = report ? priceMeaning(estimate.vehicle, "it", null) : null
-            const fromAverage = step.from === "an average car"
+            const fromAverage = step.from === "the average passenger vehicle"
             return (
               <li key={`${step.group}-${step.title}`} className="grid gap-0.5 py-2.5">
                 {report && meaning ? (
