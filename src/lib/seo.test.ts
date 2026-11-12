@@ -351,7 +351,7 @@ test("a car's lead never contradicts its own numbers", () => {
       const up = vs.includes("more than")
       if (because.startsWith("because of")) assert.match(because, up ? /higher|more|pricier/ : /lower|fewer|less|cheaper/, page.slug)
     }
-    assert.doesNotMatch(carMainText(f), /\$\d+ (more|less) than an average car of the same age: its losses/, page.slug)
+    assert.doesNotMatch(carMainText(f), /\$\d+ (more|less) than the average passenger vehicle in that model year range: its losses/, page.slug)
   }
 })
 

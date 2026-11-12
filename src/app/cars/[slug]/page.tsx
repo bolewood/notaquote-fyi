@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import { CarHeroPhoto, CarThumb, GenerationPhoto, PhotoCreditsNote } from "@/components/car-photo"
 import { HldiChip, HldiLegend } from "@/components/charts/hldi-chip"
-import { averageBandNote } from "@/lib/hldi"
+import { averageBandNote, OLDER_REPORTS } from "@/lib/hldi"
 import { VehicleFixLink } from "@/components/how-we-got-this"
 import { JsonLdScript } from "@/components/json-ld"
 import { TrustArticle } from "@/components/trust-article"
@@ -82,7 +82,7 @@ function Generations({ generations, carName }: { generations: CarGeneration[]; c
           ? `Each generation sold in the US since ${catalogStart}, where our data starts, and what its model years cost to insure.`
           : "Each generation sold in the US, and what its model years cost to insure."}{" "}
         It&apos;s the same driver as above: a 45-year-old with a clean record and full coverage, at the national typical price. Each model
-        year uses the HLDI report that covers it.
+        year uses the HLDI report that covers it. {OLDER_REPORTS}
       </p>
       <ol className="grid gap-5" data-testid="car-generations">
         {newestFirst.map((g) => {
@@ -300,6 +300,9 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
           </div>
           {c.hldi.missing ? <p className="text-sm text-muted-foreground">{c.hldi.missing}</p> : null}
           <p className="text-sm text-muted-foreground" data-shared="">
+            {c.hldi.factors}
+          </p>
+          <p className="text-sm text-muted-foreground" data-shared="">
             {c.hldi.url ? (
               <a href={c.hldi.url} rel="noreferrer">
                 {c.hldi.source}
@@ -383,7 +386,7 @@ export default async function CarPage({ params }: PageProps<"/cars/[slug]">) {
         <p className="text-sm text-muted-foreground">
           {c.yearsNote}{" "}
           <span data-shared="">
-            Each photo shows that year&apos;s generation of the car. <Link href="/photo-credits">Photo credits</Link>.
+            {OLDER_REPORTS} Each photo shows that year&apos;s generation of the car. <Link href="/photo-credits">Photo credits</Link>.
           </span>
         </p>
       ) : null}

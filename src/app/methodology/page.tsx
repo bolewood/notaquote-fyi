@@ -6,6 +6,7 @@ import { FactorTables } from "@/components/factor-tables"
 import { RecordTrustView } from "@/components/record-trust-view"
 import { TrustArticle } from "@/components/trust-article"
 import { DATA_UPDATED, MODEL_VERSION, SOURCE_COUNT } from "@/lib/copy"
+import { HLDI_FACTORS, OLDER_REPORTS } from "@/lib/hldi"
 import { estimate, FACTOR_BUNDLE, formatDollars, typicalStart } from "@/lib/factor-engine"
 import { estimateDollars, rangeDollars } from "@/lib/format"
 import { HelpWantedList } from "@/components/help-wanted-list"
@@ -130,14 +131,14 @@ export default function MethodologyPage() {
       <h3 id="the-car" className="scroll-mt-4">The car</h3>
       <p>
         <strong>In short:</strong> an insurance-industry research group, the Highway Loss Data Institute (HLDI), publishes
-        how much insurers pay out for each car model compared with an average car. Cars with higher losses cost more to
+        how much insurers pay out for each car model compared with the average passenger vehicle in that model year range. Cars with higher losses cost more to
         insure, so we move the price up or down to match. These are loss results, not prices.
       </p>
 
       {/* HLDI review text, to be replaced with HLDI's revised paragraph. */}
       <div className="rounded-2xl bg-card p-5 ring-1 ring-border" data-testid="hldi-review-text">
         <p>
-          HLDI publishes how each model&apos;s insurance losses compare with an average car&apos;s, for each coverage
+          HLDI publishes how each model&apos;s insurance losses compare with the average passenger vehicle in that model year range, for each coverage
           separately: overall losses (how often claims happen times how much they cost) for crash repairs (collision),
           non-crash damage (comprehensive: theft, weather, fire, vandalism, glass, and animal strikes), and damage to
           others&apos; property (property damage liability), and how often injury claims are filed for injuries to others
@@ -146,10 +147,12 @@ export default function MethodologyPage() {
       </div>
 
       <p>
-        For each car&apos;s model year, we use the most recent HLDI report whose three-year window includes that year (for
-        example, the 2020–22 report for a 2020 car, or 2022–24 for a 2023 car), and use the nearest report only when no
-        window covers the year.
+        For each car&apos;s model year, we use the most recent HLDI report that applies to the vehicle model: the one whose
+        three-year window includes that year (for example, the 2020–22 report for a 2020 car, or 2022–24 for a 2023 car).
+        We use the nearest report only when no window covers the year.
       </p>
+      <p>{OLDER_REPORTS}</p>
+      <p>{HLDI_FACTORS}</p>
 
       <p>
         HLDI also publishes medical payments and personal injury protection (PIP) results. We don&apos;t use them,
@@ -167,13 +170,13 @@ export default function MethodologyPage() {
         <li>
           For the liability part, we combine damage to others&apos; property with how often injury claims are filed,
           weighted about {weights.property}% and {weights.injury}%, assuming a model&apos;s injury claims cost about as much
-          as an average car&apos;s (and widening the range for that).
+          as the average passenger vehicle&apos;s (and widening the range for that).
         </li>
         <li>
           We count only part of each combined result, because a car&apos;s loss record is only one of many things insurers
           weigh, and how each weighs it is a trade secret. On the liability side we count about half, and never move it
           more than {100 - FACTOR_BUNDLE.vehicle.liabilityFloor}% below or {FACTOR_BUNDLE.vehicle.liabilityCap - 100}% above
-          an average car. On the damage side, how much we count was fitted to published prices, so it differs from car to
+          the average passenger vehicle. On the damage side, how much we count was fitted to published prices, so it differs from car to
           car.
         </li>
       </ul>

@@ -75,10 +75,14 @@ export default function DataLicensesPage() {
         index for car insurance, which is public domain.
       </p>
 
-      <h2>Car loss data</h2>
+      <h2>Insurance loss data</h2>
       <p>
-        We keep the Highway Loss Data Institute&apos;s published results for the car models we price, with credit and a
-        link to the Insurance Institute for Highway Safety (IIHS). We&apos;ve asked IIHS for permission to use this data
+        Our estimate for each car is based on the Highway Loss Data Institute&apos;s (HLDI) insurance loss data for the car
+        models we price. We credit HLDI and link to{" "}
+        <a href="https://www.iihs.org/research-areas/auto-insurance/insurance-losses-by-make-and-model" rel="noreferrer">
+          HLDI&apos;s insurance loss results
+        </a>
+        , published by the Insurance Institute for Highway Safety (IIHS). We&apos;ve asked IIHS for permission to use this data
         and are waiting to hear back. If they say no, we&apos;ll take it out. As for the HLDI source files in{" "}
         <code>data/factors/sources/</code>: These are HLDI&apos;s data, not covered by this project&apos;s MIT or CC BY
         4.0 licenses; reusing them requires HLDI&apos;s permission.

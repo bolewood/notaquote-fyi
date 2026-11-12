@@ -6,6 +6,7 @@
  */
 import type { VehicleFacts } from "./catalog-class"
 import {
+  CLAIMS_WORDS,
   BASIS_WORDS,
   compareVehicles,
   estimate,
@@ -543,7 +544,7 @@ export function basisWords(basis: keyof typeof BASIS_WORDS): string {
 }
 
 /** How we know a car's step when it comes from HLDI's per-model loss results. */
-export const CLAIMS_WORDS = "Based on insurance loss data"
+export { CLAIMS_WORDS }
 
 /** Which state's published prices a source is. */
 const SURVEY_STATES: Record<string, string> = {

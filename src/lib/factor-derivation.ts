@@ -1050,7 +1050,7 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
           high: biHigh,
           basis: "assumed",
           sources: [],
-          derivation: `Our estimate. No public source yet; help wanted. ${words} HLDI's bodily-injury figure (${subtotal.bodily_injury || "—"}) measures how often injury claims happen (claim frequency), not overall losses, because injury severity takes too long to develop. We assume a model's average injury claim severity is about average (1.00, range ${(injurySeverity.low / 100).toFixed(2)} to ${(injurySeverity.high / 100).toFixed(2)}) to combine it with property-damage overall losses.`,
+          derivation: `Our estimate. No public source yet; help wanted. ${words} HLDI's bodily-injury figure (${subtotal.bodily_injury || "—"}) measures how often injury claims happen (claim frequency), not overall losses. We assume a model's average injury claim severity is about average (1.00, range ${(injurySeverity.low / 100).toFixed(2)} to ${(injurySeverity.high / 100).toFixed(2)}) to combine it with property-damage overall losses.`,
           n: null,
         },
         propertyDamage: {

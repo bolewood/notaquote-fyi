@@ -477,3 +477,14 @@ export function averageBandNote(bands: typeof HLDI_RATING_BANDS = HLDI_RATING_BA
   const span = below === above ? `within about ${below}% of average` : `from about ${below}% better to about ${above}% worse than average`
   return `HLDI rates results ${span} as “Average.”`
 }
+
+/** HLDI's wording for what its index compares with: use it, not "an average car". */
+export const HLDI_AVERAGE = "the average passenger vehicle in that model year range"
+
+/** HLDI's wording. */
+export const HLDI_FACTORS =
+  "There are many factors that impact insurance losses. A vehicle that costs more to repair, or crashes more often, may affect the collision (coverage for fixing your vehicle) portion of the insurance premium."
+
+/** HLDI's caveat about older model years, in its wording. */
+export const OLDER_REPORTS =
+  "HLDI's reports for older model years reflect those vehicles when they were fairly new. Insurers likely use more current data for older model years, and a redesign can make the latest data an imperfect comparison."

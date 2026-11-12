@@ -116,7 +116,7 @@ export default function TeenCarsGuide() {
       <h2 id="why">Why some cars cost less</h2>
       <p>
         Insurers pay out more for some cars than others. The Highway Loss Data Institute (HLDI) publishes how each
-        model&apos;s insurance losses compare with an average car&apos;s, one coverage at a time: crash repairs, non-crash
+        model&apos;s insurance losses compare with the average passenger vehicle in that model year range, one coverage at a time: crash repairs, non-crash
         damage (theft, weather, fire, vandalism, glass, and animal strikes), and damage to others&apos; property, plus how
         often injury claims are filed. HLDI rates each one from &ldquo;substantially better than average&rdquo; to
         &ldquo;substantially worse than average&rdquo;.
@@ -148,7 +148,7 @@ export default function TeenCarsGuide() {
         </>
       ) : (
         <p>
-          We don&apos;t have HLDI&apos;s loss results for each model right now, so every car here is priced as an average car of its
+          We don&apos;t have HLDI&apos;s loss results for each model right now, so every car here is priced as the average passenger vehicle of its
           kind (small SUV, midsize car, and so on), and cars of the same kind tie. A newer car still costs more to replace
           than an older one.
         </p>

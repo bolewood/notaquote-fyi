@@ -171,7 +171,7 @@ test("the CSV starts with who and not-a-quote, then one line per row in the show
   assert.match(lines[0], /^Driver,A 16–18-year-old/)
   assert.match(lines[1], /^Please note,"This is an estimate to help you plan, not a quote\."/)
   assert.equal(lines[2], "")
-  assert.equal(lines[3], 'Car,Version,Starred,Yearly estimate ($),Monthly estimate ($),"Range, low ($)","Range, high ($)",Why (compared with an average car)')
+  assert.equal(lines[3], 'Car,Version,Starred,Yearly estimate ($),Monthly estimate ($),"Range, low ($)","Range, high ($)",Why (compared with the average passenger vehicle)')
   for (const [index, row] of rows.entries()) {
     const cells = lines[index + 4].split(",")
     assert.equal(cells[0], row.name)

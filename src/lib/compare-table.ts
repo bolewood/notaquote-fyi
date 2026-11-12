@@ -160,7 +160,7 @@ export const CSV_COLUMNS: Record<CompareMode, readonly string[]> = {
     "Monthly estimate ($)",
     "Range, low ($)",
     "Range, high ($)",
-    "Why (compared with an average car)",
+    "Why (compared with the average passenger vehicle)",
   ],
   added: [
     "Car",
@@ -171,7 +171,7 @@ export const CSV_COLUMNS: Record<CompareMode, readonly string[]> = {
     "This car's total a year, with your teen ($)",
     "Total range, low ($)",
     "Total range, high ($)",
-    "Why (compared with an average car)",
+    "Why (compared with the average passenger vehicle)",
   ],
 }
 
