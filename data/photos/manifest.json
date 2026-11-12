@@ -8320,7 +8320,36 @@
           }
         ]
       },
-      "ford-escape/ford-escape-second-generation": null
+      "ford-escape/ford-escape-second-generation": {
+        "generation": "ford-escape/ford-escape-second-generation",
+        "picks": [
+          {
+            "file": "File:Ford - Escape .jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Ford_-_Escape_.jpg",
+            "sha1": "8db4259d3e9d1a9d5355f9bc666e7ec33e67c899",
+            "timestamp": "2010-07-23T04:59:04Z",
+            "width": 2161,
+            "height": 1577,
+            "license": "Public domain",
+            "licenseUrl": null,
+            "artist": "Bull-Doser",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.05,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794485217-ztWiddfLueBwlKdNPDYB",
+              "confidence": 0.83,
+              "exterior": 0.77,
+              "face": 0.31,
+              "plate": 0.02,
+              "special": 0.02,
+              "quality": 2.56
+            }
+          }
+        ]
+      }
     }
   },
   "ford-expedition": {
@@ -19844,7 +19873,36 @@
       }
     },
     "generations": {
-      "kia-seltos/second-generation-sp3-2025": null
+      "kia-seltos/second-generation-sp3-2025": {
+        "generation": "kia-seltos/second-generation-sp3-2025",
+        "picks": [
+          {
+            "file": "File:Kia Seltos X-line.jpg",
+            "descriptionUrl": "https://commons.wikimedia.org/wiki/File:Kia_Seltos_X-line.jpg",
+            "sha1": "0448ddae3524d0fd413fe21133bbe936bb17e0c9",
+            "timestamp": "2025-12-10T10:39:20Z",
+            "width": 1916,
+            "height": 1080,
+            "license": "CC0",
+            "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+            "artist": "Gokul Kalloor",
+            "credit": "Own work",
+            "photoYear": null,
+            "gate": 0.8,
+            "foreign": 0.62,
+            "jev": {
+              "model": "typesafe/jev-1.14-20261014",
+              "id": "gen-dec-1794485221-nSGNv3YKR8bZTsJBRdPg",
+              "confidence": 0.84,
+              "exterior": 0.94,
+              "face": 0.07,
+              "plate": 0.85,
+              "special": 0.32,
+              "quality": 2.67
+            }
+          }
+        ]
+      }
     }
   },
   "kia-sorento": {
