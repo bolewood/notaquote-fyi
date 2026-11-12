@@ -55,4 +55,6 @@ test("a gas or hybrid car page skips electric and plug-in versions, but not its 
   assert.equal(otherPowertrain(photo("File:Kona Electric.jpg"), "electric", "Hyundai Kona Electric"), false)
   assert.equal(otherPowertrain(photo("File:2023 Kia EV6 GT.jpg"), "combustion", "Kia Sportage"), false, "EV6 isn't the word EV")
   assert.equal(otherPowertrain(photo("File:2024 Chevrolet Blazer EV RS.jpg"), "combustion", "Chevrolet Blazer"), true)
+  assert.equal(otherPowertrain(photo("File:BMW iX5 (G65) front.jpg"), "combustion", "BMW X5"), true)
+  assert.equal(otherPowertrain(photo("File:2025 BMW X5 xDrive40i.jpg"), "combustion", "BMW X5"), false)
 })

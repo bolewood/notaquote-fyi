@@ -69,7 +69,6 @@ export async function decide(state: StatePart[] | (() => Promise<StatePart[]>), 
       method: "POST",
       headers: { "content-type": "application/json", authorization: `Bearer ${key}` },
       body: JSON.stringify({ model: MODEL, state: parts, questions }),
-      signal: AbortSignal.timeout(60_000),
     })
     const text = await response.text()
     if (response.ok) {

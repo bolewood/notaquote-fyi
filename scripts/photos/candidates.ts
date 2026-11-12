@@ -205,7 +205,8 @@ async function main() {
     if (wanted.length && !wanted.includes(car.slug)) continue
     const skip = (series[car.slug]?.exclude ?? []).map((pattern) => new RegExp(pattern, "i"))
     for (const g of car.generations) {
-      if (!g.shown || !g.commons) continue
+      // Every generation: the shown ones for the year rows, the rest for the "by generation" section.
+      if (!g.commons) continue
       const { candidates, categoriesWalked } = await generationCandidates(g.commons, skip)
       existing[g.id] = { slug: car.slug, generation: g.id, label: g.label, commons: g.commons, candidates, categoriesWalked }
       console.log(`  ${g.id}: ${candidates.length} usable photos in ${categoriesWalked} categories`)

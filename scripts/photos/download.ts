@@ -20,10 +20,11 @@ import sharp from "sharp"
 import { licenseOk, restrictionsOk, stripHtml } from "./candidates"
 import { api, chunks, fetchRetry, getJson, USER_AGENT } from "./http"
 import { GENERATIONS_FILE, type CarGenerations } from "./generations"
-import { MANIFEST_FILE, type Manifest, type PhotoPick } from "./verify"
+import { MANIFEST_FILE, type Manifest, type ManifestYear, type PhotoPick } from "./verify"
 
 export const IMAGE_DIR = "public/car-photos"
 export const IMAGES_FILE = "data/photos/images.json"
+export const GENERATION_IMAGES_FILE = "data/photos/generation-images.json"
 /** Wide enough for a sharp card on a large screen; Commons originals are often 6000 pixels. */
 const WIDTH = 1200
 /**
@@ -127,7 +128,9 @@ const exists = (file: string) =>
 async function main() {
   const manifest = JSON.parse(await readFile(MANIFEST_FILE, "utf8")) as Manifest
   const chosen = new Map<string, PhotoPick>()
-  for (const car of Object.values(manifest)) for (const year of Object.values(car.years)) if (year) chosen.set(year.picks[0].sha1, year.picks[0])
+  for (const car of Object.values(manifest))
+    for (const value of [...Object.values(car.years), ...Object.values(car.generations ?? {})])
+      if (value) chosen.set(value.picks[0].sha1, value.picks[0])
   const problems = await recheck([...chosen.values()])
 
   await mkdir(IMAGE_DIR, { recursive: true })
@@ -162,33 +165,36 @@ async function main() {
     const g = generations[id.split("/")[0]]?.generations.find((item) => item.id === id)
     return g ? (g.to === g.from ? `${g.from}` : `${g.from}–${g.to ?? "present"}`) : ""
   }
+  const entry = (value: ManifestYear | null): ImageEntry | null => {
+    const pick = value?.picks[0]
+    const size = pick ? sizes.get(pick.sha1) : undefined
+    return value && pick && size
+      ? {
+          src: `/car-photos/${pick.sha1}.webp`,
+          ...size,
+          generation: value.generation,
+          generationYears: generationYears(value.generation),
+          photoYear: pick.photoYear,
+          credit: {
+            title: pick.file,
+            author: cleanAuthor(pick.artist) ?? "See the file page",
+            license: pick.license,
+            licenseUrl: pick.licenseUrl,
+            source: pick.descriptionUrl,
+            changes: "Resized, converted to WebP, and cropped for display",
+          },
+        }
+      : null
+  }
   const images: Record<string, Record<string, ImageEntry | null>> = {}
+  // Generations no shown year falls in, by generation id: for the "by generation" section.
+  const generationImages: Record<string, Record<string, ImageEntry | null>> = {}
   for (const [slug, car] of Object.entries(manifest)) {
-    images[slug] = {}
-    for (const [year, value] of Object.entries(car.years)) {
-      const pick = value?.picks[0]
-      const size = pick ? sizes.get(pick.sha1) : undefined
-      images[slug][year] =
-        value && pick && size
-          ? {
-              src: `/car-photos/${pick.sha1}.webp`,
-              ...size,
-              generation: value.generation,
-              generationYears: generationYears(value.generation),
-              photoYear: pick.photoYear,
-              credit: {
-                title: pick.file,
-                author: cleanAuthor(pick.artist) ?? "See the file page",
-                license: pick.license,
-                licenseUrl: pick.licenseUrl,
-                source: pick.descriptionUrl,
-                changes: "Resized, converted to WebP, and cropped for display",
-              },
-            }
-          : null
-    }
+    images[slug] = Object.fromEntries(Object.entries(car.years).map(([year, value]) => [year, entry(value)]))
+    generationImages[slug] = Object.fromEntries(Object.entries(car.generations ?? {}).map(([id, value]) => [id, entry(value)]))
   }
   await writeFile(IMAGES_FILE, `${JSON.stringify(images, null, 2)}\n`)
+  await writeFile(GENERATION_IMAGES_FILE, `${JSON.stringify(generationImages, null, 2)}\n`)
   console.log(`${sizes.size} photos (${fetched} new, ${removed} removed) in ${IMAGE_DIR}`)
   for (const [file, reason] of problems) console.log(`  left out ${file}: ${reason}`)
 }

@@ -74,7 +74,16 @@ export function PhotoCreditsNote({ className }: { className?: string }) {
 
 /** A generation's photo in the "by generation" list, or an empty frame when the library has none yet. */
 export function GenerationPhoto({ photo, alt, className }: { photo: CarPhoto | null; alt: string; className?: string }) {
-  if (!photo) return <span aria-hidden="true" className={cn("block aspect-[3/2] w-full rounded-lg bg-muted", className)} />
+  if (!photo)
+    return (
+      <span
+        aria-hidden="true"
+        data-shared=""
+        className={cn("grid aspect-[3/2] w-full place-items-center rounded-lg bg-muted text-xs text-muted-foreground", className)}
+      >
+        No photo yet
+      </span>
+    )
   return (
     <Image
       src={photo.src}

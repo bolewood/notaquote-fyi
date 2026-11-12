@@ -9,7 +9,7 @@ import siteGenerations from "../../data/photos/site-generations.json"
 import { preferredTrim } from "./agent-cars"
 import type { VehicleCatalog } from "./catalog"
 import { vehicleFacts } from "./catalog-class"
-import { PHOTOS, type CarPhoto, type PhotoLibrary } from "./car-photos"
+import { GENERATION_PHOTOS, PHOTOS, type CarPhoto, type PhotoLibrary } from "./car-photos"
 import { adultDriver, type CarFigures } from "./car-pages"
 import { estimate, teenAddedToPolicy, vehicleRelativity } from "./factor-engine"
 
@@ -87,12 +87,12 @@ export type CarGeneration = {
   photo: CarPhoto | null
 }
 
-/** The photo the library picked for this generation: the one for its newest shown year. */
+/** The photo the library picked for this generation: the one for its newest shown year, or its own. */
 function generationPhoto(slug: string, id: string, library: PhotoLibrary): CarPhoto | null {
   const entries = Object.entries(library[slug] ?? {})
     .filter(([, photo]) => photo?.generation === id)
     .sort(([a], [b]) => Number(b) - Number(a))
-  return entries[0]?.[1] ?? null
+  return entries[0]?.[1] ?? GENERATION_PHOTOS[slug]?.[id] ?? null
 }
 
 /** The page's generations, oldest first, each priced year by year. Empty when the library has none. */

@@ -78,12 +78,20 @@ export type PhotoPick = {
 }
 
 export type ManifestYear = { generation: string; picks: PhotoPick[] }
-export type Manifest = Record<string, { name: string; years: Record<string, ManifestYear | null> }>
+/**
+ * Per car: a photo for each model year the page's table shows, and one for each other generation
+ * (by generation id) for the page's "by generation" section.
+ */
+export type Manifest = Record<
+  string,
+  { name: string; years: Record<string, ManifestYear | null>; generations?: Record<string, ManifestYear | null> }
+>
 
 type Reviewed = { candidate: Candidate; pick: PhotoPick | null }
 
 /** Words that mark a version with a look of its own: an electric F-150 Lightning, a plug-in Prius. */
-const ELECTRIC_WORDS = ["lightning", "electric", "ev", "bev", "mach-e", "e-tron", "iq"]
+// BMW names its electric versions with an i: iX, iX3, iX5, i4, i5, i7.
+const ELECTRIC_WORDS = ["lightning", "electric", "ev", "bev", "mach-e", "e-tron", "iq", "ix", "ix1", "ix2", "ix3", "ix5", "i4", "i5", "i7"]
 const PLUG_IN_WORDS = ["plug-in", "phev", "phv", "prime"]
 
 /**
@@ -108,7 +116,7 @@ async function reviewGeneration(
   slug: string,
   found: GenerationCandidates,
   wantYears: number[],
-  rules: { body: BodyStyle | null; powertrain: string; carName: string },
+  rules: { body: BodyStyle | null; powertrain: string; carName: string; enough?: number },
 ): Promise<Reviewed[]> {
   const questions = questionsFor(library, slug)
   const key = generationKey(found.generation)
@@ -121,6 +129,7 @@ async function reviewGeneration(
   }
   const order = [...found.candidates]
     .filter((candidate) => !otherPowertrain(candidate, rules.powertrain, rules.carName))
+    .filter((candidate) => !library.series[slug]?.photoExclude?.includes(candidate.title))
     .sort((a, b) => b.prior + near(b) - (a.prior + near(a)))
   for (const [index, candidate] of order.slice(0, EXTENDED_REVIEWS).entries()) {
     // Past MAX_REVIEWS, go on (to EXTENDED_REVIEWS) only while a shown year has no well-suited photo at GATE within two years of it.
@@ -177,7 +186,12 @@ async function reviewGeneration(
     const latest = reviewed.at(-1)!
     if (latest.pick) latest.pick.foreign = await marketCheck(latest.candidate)
     const picks = reviewed.flatMap((item) => (item.pick && item.pick.gate === GATE ? [item.pick] : []))
-    const covered = wantYears.every((year) => picks.filter((pick) => fits(pick, year, 1)).length >= PER_YEAR)
+    // A model-year row wants PER_YEAR photos within a year of it; a generation's own photo needs one good one.
+    const covered =
+      rules.enough === undefined
+        ? wantYears.every((year) => picks.filter((pick) => fits(pick, year, 1)).length >= PER_YEAR)
+        : wantYears.every((year) => picks.filter((pick) => fits(pick, year, 2)).length >= rules.enough!)
+    if (rules.enough !== undefined && index >= MAX_REVIEWS && picks.length > 0) break
     if (covered) break
   }
   return reviewed
@@ -244,19 +258,52 @@ async function main() {
       const picks = id ? bestFor(year, picksByGeneration.get(id) ?? []) : []
       years[year] = id && picks.length ? { generation: id, picks } : null
     }
-    manifest[car.slug] = { name: car.name, years }
+    // Generations no shown year falls in: one photo each, from near the middle of its catalog years.
+    const generations: Record<string, ManifestYear | null> = {}
+    for (const g of car.generations) {
+      if (byGeneration.has(g.id)) continue
+      const catalogYears = Object.entries(car.years)
+        .filter(([, ids]) => ids.includes(g.id))
+        .map(([year]) => Number(year))
+      const found = pool[g.id]
+      if (catalogYears.length === 0 || !found) {
+        generations[g.id] = null
+        continue
+      }
+      const middle = catalogYears[Math.floor(catalogYears.length / 2)]
+      const entry = library.series[car.slug]
+      const body = entry?.bodyByYear?.[middle] ?? entry?.body ?? null
+      const reviewed = await reviewGeneration(library, car.slug, found, [middle], {
+        body,
+        powertrain: powertrains.get(car.slug) ?? "combustion",
+        carName: car.name,
+        enough: 1,
+      })
+      reviews += reviewed.length
+      const picks = bestFor(middle, reviewed.flatMap((item) => (item.pick ? [item.pick] : [])))
+      generations[g.id] = picks.length ? { generation: g.id, picks } : null
+    }
+    manifest[car.slug] = { name: car.name, years, generations }
     // Saved after every car, so an interrupted run keeps what it did (and its Jev answers are cached).
     await writeFile(MANIFEST_FILE, `${JSON.stringify(Object.fromEntries(Object.entries(manifest).sort(([x], [y]) => x.localeCompare(y))), null, 2)}\n`)
     const missing = Object.entries(years).filter(([, value]) => !value).map(([year]) => year)
-    console.log(`  ${car.slug}: ${car.shownYears.length - missing.length}/${car.shownYears.length} years${missing.length ? ` (none for ${missing.join(", ")})` : ""}`)
+    const genMissing = Object.entries(generations).filter(([, value]) => !value).map(([id]) => id.split("/")[1])
+    console.log(
+      `  ${car.slug}: ${car.shownYears.length - missing.length}/${car.shownYears.length} years${missing.length ? ` (none for ${missing.join(", ")})` : ""}` +
+        `, ${Object.keys(generations).length - genMissing.length}/${Object.keys(generations).length} other generations${genMissing.length ? ` (none for ${genMissing.join(", ")})` : ""}`,
+    )
   }
   const sorted = Object.fromEntries(Object.entries(manifest).sort(([a], [b]) => a.localeCompare(b)))
   await writeFile(MANIFEST_FILE, `${JSON.stringify(sorted, null, 2)}\n`)
   const all = Object.values(sorted).flatMap((car) => Object.values(car.years))
-  const fallback = Object.entries(sorted).flatMap(([slug, car]) =>
-    Object.entries(car.years).flatMap(([year, value]) => (value && value.picks[0].gate !== GATE ? [`${slug} ${year}`] : [])),
+  const fallback = Object.entries(sorted).flatMap(([slug, car]) => [
+    ...Object.entries(car.years).flatMap(([year, value]) => (value && value.picks[0].gate !== GATE ? [`${slug} ${year}`] : [])),
+    ...Object.entries(car.generations ?? {}).flatMap(([id, value]) => (value && value.picks[0].gate !== GATE ? [id] : [])),
+  ])
+  const others = Object.values(sorted).flatMap((car) => Object.values(car.generations ?? {}))
+  console.log(
+    `${all.filter(Boolean).length}/${all.length} shown years and ${others.filter(Boolean).length}/${others.length} other generations have a photo; ${reviews} photos reviewed (cached ones are free)`,
   )
-  console.log(`${all.filter(Boolean).length}/${all.length} shown years have a photo; ${reviews} photos reviewed (cached ones are free)`)
   if (fallback.length) console.log(`Picked at the fallback gate (${FALLBACK_GATE}), worth a look: ${fallback.join(", ")}`)
 }
 

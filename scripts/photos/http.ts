@@ -21,13 +21,14 @@ async function pace() {
 
 /**
  * fetch, retried when the connection itself fails (a timeout, a dropped
- * network): up to 5 tries over about a minute. HTTP errors are returned as
- * usual, for the caller to handle.
+ * network): up to 5 tries over about a minute. Each try gets its own
+ * `timeoutMs` (a signal made once would already be spent on the retries).
+ * HTTP errors are returned as usual, for the caller to handle.
  */
-export async function fetchRetry(url: string, init?: RequestInit): Promise<Response> {
+export async function fetchRetry(url: string, init?: RequestInit, timeoutMs = 60_000): Promise<Response> {
   for (let attempt = 1; ; attempt += 1) {
     try {
-      return await fetch(url, init)
+      return await fetch(url, { ...init, signal: AbortSignal.timeout(timeoutMs) })
     } catch (error) {
       if (attempt >= 5) throw error
       await new Promise((resolve) => setTimeout(resolve, 4000 * attempt))

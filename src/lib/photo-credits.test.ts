@@ -10,7 +10,7 @@ test("a photo shown for several years is credited once, with every year", () => 
     "b-car": { "2022": entry("/x.webp", "File:X.jpg"), "2018": entry("/x.webp", "File:X.jpg"), "2013": null },
     "a-car": { "2024": entry("/y.webp", "File:Y.jpg") },
     "c-car": { "2013": null },
-  })
+  }, {})
   assert.deepEqual(cars.map((car) => car.slug), ["a-car", "b-car"])
   assert.deepEqual(cars[1].photos.map((photo) => photo.years), [[2018, 2022]])
   assert.equal(photoCount(cars), 2)
@@ -32,4 +32,16 @@ test("every photo the site has carries a full credit", () => {
       assert.match(credit.license, /^(CC0|Public domain|CC BY(-SA)? \d\.\d)/, `${photo.src}: license "${credit.license}"`)
       if (/^CC BY/.test(credit.license)) assert.ok(credit.licenseUrl, `${photo.src}: a CC BY license needs its link`)
     }
+})
+
+test("a photo shown only for a generation is credited with that generation's years", () => {
+  const generationOnly = { ...entry("/g.webp", "File:G.jpg"), generationYears: "2008–2012" }
+  const cars = photoCredits({ "a-car": { "2024": entry("/y.webp", "File:Y.jpg") } }, { "a-car": { "a-car/second": generationOnly } })
+  assert.deepEqual(
+    cars[0].photos.map((photo) => [photo.src, photo.years, photo.generationYears]),
+    [
+      ["/y.webp", [2024], undefined],
+      ["/g.webp", [], "2008–2012"],
+    ],
+  )
 })

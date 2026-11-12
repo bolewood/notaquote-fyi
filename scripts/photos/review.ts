@@ -74,11 +74,15 @@ export function questionsFor(library: Library, slug: string): Record<string, Que
   }
 }
 
+/** Errors that mean "skip this photo", not "stop the run": Jev refusing an image, or Commons not serving one. */
+const SKIPPABLE = /HTTP 400|kept refusing the thumbnail|: HTTP 4\d\d$/
+
 let lastImageFetch = 0
 
 /** The candidate's Commons thumbnail (about 1024 pixels wide), held in memory only. */
 async function thumbnail(candidate: Candidate): Promise<Buffer> {
-  const wait = lastImageFetch + 250 - Date.now()
+  // Wikimedia rate-limits image downloads: keep them about half a second apart.
+  const wait = lastImageFetch + 500 - Date.now()
   if (wait > 0) await new Promise((resolve) => setTimeout(resolve, wait))
   lastImageFetch = Date.now()
   for (let attempt = 0; attempt < 4; attempt += 1) {
@@ -92,11 +96,11 @@ async function thumbnail(candidate: Candidate): Promise<Buffer> {
 
 /**
  * Ask a car's questions about one candidate (cached by the file's sha1, so a
- * rerun is free). Null when Jev refuses the image itself (HTTP 400): skip it.
+ * rerun is free). Null when the image can't be reviewed (Jev refuses it, or Commons won't serve it): skip it.
  */
 export async function reviewPhoto(questions: Record<string, Question>, candidate: Candidate): Promise<Decision | null> {
   return decide(async () => [{ type: "text", text: "A photo of a car." }, imagePart(await thumbnail(candidate))], questions, `sha1:${candidate.sha1}`).catch((error: Error) => {
-    if (!/HTTP 400/.test(error.message)) throw error
+    if (!SKIPPABLE.test(error.message)) throw error
     console.log(`  skipped ${candidate.title}: ${error.message.slice(0, 160)}`)
     return null
   })
@@ -116,7 +120,7 @@ export async function marketCheck(candidate: Candidate): Promise<number | null> 
   }
   const decision = await decide(async () => [{ type: "text", text: "A photo of a car." }, imagePart(await thumbnail(candidate))], questions, `market:${candidate.sha1}`).catch(
     (error: Error) => {
-      if (!/HTTP 400/.test(error.message)) throw error
+      if (!SKIPPABLE.test(error.message)) throw error
       return null
     },
   )
@@ -142,7 +146,7 @@ export async function bodyCheck(candidate: Candidate): Promise<{ body: string; c
   }
   const decision = await decide(async () => [{ type: "text", text: "A photo of a car." }, imagePart(await thumbnail(candidate))], questions, `body:${candidate.sha1}`).catch(
     (error: Error) => {
-      if (!/HTTP 400/.test(error.message)) throw error
+      if (!SKIPPABLE.test(error.message)) throw error
       return null
     },
   )
