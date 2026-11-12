@@ -37,6 +37,10 @@ NotAQuote.FYI should make one kind of question easy: *"What would happen to my i
 ### 6. Community feedback loop
 - Replace the disabled Supabase corrections queue with "Suggest a fix" links that open a prefilled GitHub issue for the exact number, state, or vehicle in question. There's no backend to run, and everything happens in the open.
 
+### 7. Renters and homeowners (planned)
+- **Renters (HO-4):** a sourced range for a renters policy in every state, with coverage, deductible, and liability adjustments measured from California, Texas, and Maryland sample premiums. See [prd-renters.md](prd-renters.md).
+- **Homeowners (HO-3) pilot:** five states (CA, TX, FL, MD, SC), labeled experimental, with a wider range and a plain explanation of what's about the area and what's about the house. Starts after renters meets its validation targets. See [prd-homeowners.md](prd-homeowners.md).
+
 ## Status (September 22, 2026)
 
 Workstreams 1–6 are built and reviewed. What's left is ongoing data work, which is exactly where contributors can help:
@@ -59,3 +63,5 @@ The data is refreshed once a year. The recipe is [DATA-REFRESH.md](DATA-REFRESH.
 
 ## Backlog
 - SEO pass: page titles and descriptions, social preview images, structured data, and Search Console setup. See the GitHub issue.
+- Condo insurance (HO-6), after the homeowners pilot.
+- A 50-state audit of regulator home and renters rate guides, so more states get measured adjustments.
