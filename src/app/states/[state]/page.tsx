@@ -39,6 +39,7 @@ import {
 import { inSentence, STATE_SLUGS, stateBySlug, stateFigures, statePath, TEEN_TOP } from "@/lib/state-pages"
 import { STATE_BASELINE_SOURCES } from "@/lib/state-baselines"
 import { flagCell, noFaultCell, type StateRule } from "@/lib/state-rules"
+import { FACTOR_NAMES, RATING_FACTORS, ratingRule, statusWords } from "@/lib/rating-rules"
 import type { StateSurveySection } from "@/lib/state-surveys"
 import { TEEN_LIST_YEAR } from "@/lib/teen-cars"
 
@@ -332,6 +333,7 @@ export default async function StatePage({ params }: PageProps<"/states/[state]">
       ) : (
         <p>We haven&rsquo;t checked this state&apos;s minimums yet.</p>
       )}
+      <RatingRulesBox code={f.code} short={short} />
 
       <h2 id="teen">{teenHeading(f)}</h2>
       <div className="grid gap-1 rounded-2xl bg-sun-soft p-5" data-testid="state-teen">
@@ -485,5 +487,37 @@ export default async function StatePage({ params }: PageProps<"/states/[state]">
         ) : null}
       </ul>
     </TrustArticle>
+  )
+}
+
+/** What insurers in this state may use to set a price, for the factors we've reviewed. */
+function RatingRulesBox({ code, short }: { code: string; short: string }) {
+  const reviewed = RATING_FACTORS.flatMap((factor) => {
+    const rule = ratingRule(code, factor)
+    return rule ? [{ factor, rule }] : []
+  })
+  return (
+    <div className="grid gap-2" data-testid="state-rating-rules">
+      <p className="font-semibold">What insurers in {short} can use to set your price</p>
+      {reviewed.length > 0 ? (
+        <ul className="bullets">
+          {reviewed.map(({ factor, rule }) => (
+            <li key={factor}>
+              <strong>
+                {FACTOR_NAMES[factor]}: {statusWords(rule).charAt(0).toLowerCase() + statusWords(rule).slice(1)}.
+              </strong>{" "}
+              {rule.summary}{" "}
+              <a href={rule.source.url} rel="noreferrer">
+                {rule.source.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+      <p className="text-sm text-muted-foreground">
+        <Link href={`/what-we-dont-ask#state-${code}`}>What each state lets insurers use</Link>, and how much those things
+        can move a price.
+      </p>
+    </div>
   )
 }

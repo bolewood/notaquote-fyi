@@ -11,6 +11,7 @@ import { CATALOG_RETRIEVED_ON } from "./catalog-meta"
 import { PUBLISHER, SITE_ORIGIN } from "./copy"
 import { STATE_BASELINE_DATA_YEAR, STATE_BASELINE_SOURCES, STATE_BASELINES_CHECKED_ON } from "./state-baselines"
 import { STATE_RULES_CHECKED_ON } from "./state-rules"
+import { RATING_RULES_CHECKED_ON } from "./rating-rules"
 import { GITHUB_REPO_URL } from "./suggest-fix"
 
 export const SITE_NAME = "NotAQuote.FYI"
@@ -297,6 +298,7 @@ const MANIFEST_DATE = sourceManifest.version.replace(/^manifest-/, "")
 export const DATA_DATES = {
   factors: factorBundle.checkedOn,
   stateRules: STATE_RULES_CHECKED_ON,
+  ratingRules: RATING_RULES_CHECKED_ON,
   stateBaselines: STATE_BASELINES_CHECKED_ON,
   catalog: CATALOG_RETRIEVED_ON,
   sources: MANIFEST_DATE,
@@ -308,11 +310,14 @@ export const DATA_DATES = {
  * from `new Date()` at build time.
  */
 export const HOME_CONTENT_UPDATED = "2026-11-05"
-export const STATE_PAGES_CONTENT_UPDATED = "2026-11-05"
+export const STATE_PAGES_CONTENT_UPDATED = "2026-11-15"
 export const CAR_PAGES_CONTENT_UPDATED = "2026-11-05"
 export const GUIDES_CONTENT_UPDATED = "2026-11-05"
 /** The /about page: who made the site and what they promise. A change to a promise bumps this. */
 export const ABOUT_CONTENT_UPDATED = "2026-11-05"
+
+/** The /what-we-dont-ask page's words and structure. */
+export const WHAT_WE_DONT_ASK_CONTENT_UPDATED = "2026-11-15"
 
 /** Pages whose numbers come from the engine alone (what-if, compare, how it works). */
 export const ENGINE_UPDATED = newest(DATA_DATES.factors, DATA_DATES.stateBaselines, DATA_DATES.catalog)
@@ -321,7 +326,10 @@ export const ENGINE_UPDATED = newest(DATA_DATES.factors, DATA_DATES.stateBaselin
 export const HOME_UPDATED = newest(ENGINE_UPDATED, HOME_CONTENT_UPDATED)
 
 /** State pages and /states: the engine, the state rules, and the state-page content revision. */
-export const STATE_PAGES_UPDATED = newest(ENGINE_UPDATED, DATA_DATES.stateRules, STATE_PAGES_CONTENT_UPDATED)
+export const STATE_PAGES_UPDATED = newest(ENGINE_UPDATED, DATA_DATES.stateRules, DATA_DATES.ratingRules, STATE_PAGES_CONTENT_UPDATED)
+
+/** /what-we-dont-ask: the engine, the survey files, the state rating rules, and the page's own words. */
+export const WHAT_WE_DONT_ASK_UPDATED = newest(ENGINE_UPDATED, DATA_DATES.ratingRules, WHAT_WE_DONT_ASK_CONTENT_UPDATED)
 
 /** Car pages and /cars: the engine plus the car-page content revision. */
 export const CAR_PAGES_UPDATED = newest(ENGINE_UPDATED, CAR_PAGES_CONTENT_UPDATED)

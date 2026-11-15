@@ -86,3 +86,17 @@ Some laws pass years before they take effect. Those live in each row's `schedule
 ## Fixing a row
 
 The step-by-step guide is in [CONTRIBUTING.md](../../CONTRIBUTING.md#a-state-rule-minimum-coverage-and-required-coverages). In short: edit the row in `state-rules.json`, add a quote to `evidence.json`, set the dates, and run `npx tsx --test src/lib/state-rules.test.ts`. The tests check the shape of every row, that dates line up, and a small labeled block of pinned values for well-verified rows. Blanking a figure you can't confirm is always a valid edit.
+
+## What insurers may use to set a price (`rating-rules.json`)
+
+A separate file, because it's checked separately from the minimums above. It answers one question per state and factor: may car insurers use this to set your price? It feeds `/what-we-dont-ask` and the "What insurers can use" box on each state page.
+
+- **Factors:** `credit`, `gender`, `age`, `maritalStatus`, `educationOccupation`, `territory`, `priorInsurance`.
+- **Status:** `banned` (can't be used to set a car insurance price), `limited` (allowed with meaningful limits, for example "can't be the only reason for a higher price"), or `no-ban-found` (the quoted law expressly allows it, or a law that once banned it was repealed).
+- **Every entry needs** a one-sentence `summary` in plain words, a `source` (`label` and an https `url` to the law itself: a statute, regulation, or court opinion on an official site or a faithful mirror), and a short `quote` from that source. Add `effective` (YYYY-MM-DD) for rules that start in the future or started recently.
+- **Optional `moreSources`:** a list of `{ label, url, quote }` for other laws that qualify the main one, such as an exception (California's senior-course discount) or the approved list a ban depends on. Same rules: an https link to the law and a short quote copied exactly.
+- **Missing means not reviewed.** A factor that isn't listed for a state shows as "Not reviewed yet." It's never read as allowed. Don't add an entry from a secondary source (a news story, an insurer's blog, or a chart that summarizes laws); use it as a lead and quote the law.
+- **Dates:** the top-level `checkedOn` and `version` (`rating-rules-YYYY-MM-DD`) move together. An entry can carry its own `checkedOn` if it was checked earlier.
+- `src/lib/rating-rules.ts` checks the file when it loads, so a broken entry stops the build with a message saying what to fix.
+
+To add or fix a state, open the state-rule issue form or a pull request with the law's link and the quote.

@@ -18,6 +18,7 @@ import {
   GUIDES_UPDATED,
   ABOUT_CONTENT_UPDATED,
   HOME_UPDATED,
+  WHAT_WE_DONT_ASK_UPDATED,
   SOURCES_UPDATED,
   STATE_PAGES_UPDATED,
 } from "./site-meta"
@@ -38,6 +39,7 @@ const STATIC_PAGES: readonly [string, string][] = [
   ["/privacy", DATA_DATES.sources],
   ["/disclaimer", DATA_DATES.sources],
   ["/data-licenses", SOURCES_UPDATED],
+  ["/what-we-dont-ask", WHAT_WE_DONT_ASK_UPDATED],
   ["/photo-credits", SOURCES_UPDATED],
   ["/corrections", DATA_DATES.sources],
 ]

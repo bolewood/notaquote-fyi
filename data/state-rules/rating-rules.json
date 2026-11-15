@@ -1,0 +1,376 @@
+{
+  "version": "rating-rules-2026-11-15",
+  "checkedOn": "2026-11-15",
+  "about": "What each state lets car insurers use to set a price. Every entry quotes the law it comes from. A factor that isn't listed for a state hasn't been reviewed yet; it is never read as allowed.",
+  "states": {
+    "CA": {
+      "credit": {
+        "status": "banned",
+        "summary": "Credit isn't on California's approved list of pricing factors, so insurers can't use it to set your car insurance price.",
+        "source": {
+          "label": "Cal. Ins. Code § 1861.02(a)",
+          "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=1861.02"
+        },
+        "quote": "Those other factors that the commissioner may adopt by regulation and that have a substantial relationship to the risk of loss. ... Notwithstanding any other provision of law, the use of any criterion without approval shall constitute unfair discrimination.",
+        "moreSources": [
+          {
+            "label": "10 CCR § 2632.5(d), the list of optional factors",
+            "url": "https://www.law.cornell.edu/regulations/california/10-CCR-2632.5",
+            "quote": "In addition to the rating factors set forth in subdivision (c), an insurer's class plan, and all rates and premiums determined in accordance therewith, may utilize the following optional rating factors (the \"Optional Factors\"):"
+          }
+        ]
+      },
+      "gender": {
+        "status": "banned",
+        "summary": "Gender isn't on California's approved list of pricing factors, so insurers can't use it to set your car insurance price.",
+        "source": {
+          "label": "Cal. Ins. Code § 1861.02(a)",
+          "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=1861.02"
+        },
+        "quote": "Those other factors that the commissioner may adopt by regulation and that have a substantial relationship to the risk of loss. ... Notwithstanding any other provision of law, the use of any criterion without approval shall constitute unfair discrimination.",
+        "moreSources": [
+          {
+            "label": "10 CCR § 2632.5(d), the list of optional factors",
+            "url": "https://www.law.cornell.edu/regulations/california/10-CCR-2632.5",
+            "quote": "In addition to the rating factors set forth in subdivision (c), an insurer's class plan, and all rates and premiums determined in accordance therewith, may utilize the following optional rating factors (the \"Optional Factors\"):"
+          }
+        ]
+      },
+      "age": {
+        "status": "banned",
+        "summary": "Age isn't an approved factor; insurers use your driving record, miles, and experience instead, except a required discount for drivers 55 and older who take a mature-driver course.",
+        "source": {
+          "label": "Cal. Ins. Code § 1861.02(a)",
+          "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=1861.02"
+        },
+        "quote": "(1) The insured’s driving safety record. (2) The number of miles he or she drives annually. (3) The number of years of driving experience the insured has had.",
+        "moreSources": [
+          {
+            "label": "Cal. Ins. Code § 11628.3(a)",
+            "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=11628.3",
+            "quote": "every admitted insurer shall provide for an appropriate percentage of reduction in premium rates for motor vehicle liability insurance for principal operators who are 55 years of age or older and who produce proof of successful completion of the mature driver improvement course"
+          }
+        ]
+      },
+      "educationOccupation": {
+        "status": "limited",
+        "summary": "Your job and education aren't approved pricing factors on their own, but insurers may sell group plans by occupation and give good-student discounts.",
+        "source": {
+          "label": "Cal. Ins. Code § 1861.12",
+          "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=1861.12"
+        },
+        "quote": "Any insurer may issue any insurance coverage on a group plan, without restriction as to the purpose of the group, occupation or type of group.",
+        "moreSources": [
+          {
+            "label": "Cal. Ins. Code § 1861.02(a)",
+            "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=1861.02",
+            "quote": "Notwithstanding any other provision of law, the use of any criterion without approval shall constitute unfair discrimination."
+          },
+          {
+            "label": "10 CCR § 2632.5",
+            "url": "https://www.law.cornell.edu/regulations/california/10-CCR-2632.5",
+            "quote": "Academic standing of the rated driver"
+          }
+        ]
+      },
+      "priorInsurance": {
+        "status": "banned",
+        "summary": "Insurers can't charge you more just because you didn't have car insurance before.",
+        "source": {
+          "label": "Cal. Ins. Code § 1861.02(c)",
+          "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=1861.02"
+        },
+        "quote": "The absence of prior automobile insurance coverage, in and of itself, shall not be a criterion for determining eligibility for a Good Driver Discount policy, or generally for automobile rates, premiums, or insurability."
+      },
+      "maritalStatus": {
+        "status": "no-ban-found",
+        "summary": "California lets insurers use your marital status as one of its approved optional pricing factors.",
+        "source": {
+          "label": "10 CCR § 2632.5(d)",
+          "url": "https://www.law.cornell.edu/regulations/california/10-CCR-2632.5"
+        },
+        "quote": "may utilize the following optional rating factors (the \"Optional Factors\"): ... (9) Marital status of the rated driver;"
+      }
+    },
+    "HI": {
+      "credit": {
+        "status": "banned",
+        "summary": "Insurers can't use your credit to set your car insurance price.",
+        "source": {
+          "label": "Haw. Rev. Stat. § 431:10C-207",
+          "url": "https://www.capitol.hawaii.gov/hrscurrent/Vol09_Ch0431-0435H/HRS0431/HRS_0431-0010C-0207.htm"
+        },
+        "quote": "No insurer shall base any standard or rating plan, in whole or in part, directly or indirectly, upon a person's race, creed, ethnic extraction, age, sex, length of driving experience, credit bureau rating, marital status, or physical handicap."
+      },
+      "gender": {
+        "status": "banned",
+        "summary": "Insurers can't use your gender to set your car insurance price.",
+        "source": {
+          "label": "Haw. Rev. Stat. § 431:10C-207",
+          "url": "https://www.capitol.hawaii.gov/hrscurrent/Vol09_Ch0431-0435H/HRS0431/HRS_0431-0010C-0207.htm"
+        },
+        "quote": "No insurer shall base any standard or rating plan, in whole or in part, directly or indirectly, upon a person's race, creed, ethnic extraction, age, sex, length of driving experience, credit bureau rating, marital status, or physical handicap."
+      },
+      "age": {
+        "status": "banned",
+        "summary": "Insurers can't use your age or how many years you've been driving to set your car insurance price.",
+        "source": {
+          "label": "Haw. Rev. Stat. § 431:10C-207",
+          "url": "https://www.capitol.hawaii.gov/hrscurrent/Vol09_Ch0431-0435H/HRS0431/HRS_0431-0010C-0207.htm"
+        },
+        "quote": "No insurer shall base any standard or rating plan, in whole or in part, directly or indirectly, upon a person's race, creed, ethnic extraction, age, sex, length of driving experience, credit bureau rating, marital status, or physical handicap."
+      },
+      "maritalStatus": {
+        "status": "banned",
+        "summary": "Insurers can't use your marital status to set your car insurance price.",
+        "source": {
+          "label": "Haw. Rev. Stat. § 431:10C-207",
+          "url": "https://www.capitol.hawaii.gov/hrscurrent/Vol09_Ch0431-0435H/HRS0431/HRS_0431-0010C-0207.htm"
+        },
+        "quote": "No insurer shall base any standard or rating plan, in whole or in part, directly or indirectly, upon a person's race, creed, ethnic extraction, age, sex, length of driving experience, credit bureau rating, marital status, or physical handicap."
+      }
+    },
+    "ID": {
+      "credit": {
+        "status": "limited",
+        "summary": "Insurers can use credit, but the price for the worst credit can't be more than twice the price for the best credit.",
+        "source": {
+          "label": "IDAPA 18.02.01.100.01.b",
+          "url": "https://adminrules.idaho.gov/rules/current/18/180201.pdf"
+        },
+        "quote": "the insurer is to ensure the premium rate using the highest credit factor does not exceed twice the premium using the lowest credit factor, all noncredit factors being unchanged"
+      }
+    },
+    "MA": {
+      "credit": {
+        "status": "banned",
+        "summary": "Insurers can't use your credit report information to set your car insurance price.",
+        "source": {
+          "label": "211 CMR 79.04(13)",
+          "url": "https://www.law.cornell.edu/regulations/massachusetts/211-CMR-79-04"
+        },
+        "quote": "No credit information contained on a consumer report obtained from a consumer reporting agency pursuant to M.G.L. c. 93, § 50 shall be used in private passenger motor vehicle insurance: (a) rating"
+      },
+      "gender": {
+        "status": "banned",
+        "summary": "Insurers can't use your sex or gender identity to set your car insurance price.",
+        "source": {
+          "label": "211 CMR 79.04(11)",
+          "url": "https://www.law.cornell.edu/regulations/massachusetts/211-CMR-79-04"
+        },
+        "quote": "Rates, rating plans or modification of any of the foregoing based in whole or in part on any of the following factors shall be deemed to violate public policy ... (a) sex; ... (l) gender identity"
+      },
+      "age": {
+        "status": "banned",
+        "summary": "Insurers can't use your age to set your car insurance price, except to give the required discount to drivers 65 or older.",
+        "source": {
+          "label": "211 CMR 79.04(11)",
+          "url": "https://www.law.cornell.edu/regulations/massachusetts/211-CMR-79-04"
+        },
+        "quote": "Rates, rating plans or modification of any of the foregoing based in whole or in part on any of the following factors shall be deemed to violate public policy ... (g) age, except to produce the reduction in Rates for insureds 65 years of age or older required by M.G.L. c. 175E, § 4"
+      },
+      "maritalStatus": {
+        "status": "banned",
+        "summary": "Insurers can't use your marital status to set your car insurance price.",
+        "source": {
+          "label": "211 CMR 79.04(11)",
+          "url": "https://www.law.cornell.edu/regulations/massachusetts/211-CMR-79-04"
+        },
+        "quote": "Rates, rating plans or modification of any of the foregoing based in whole or in part on any of the following factors shall be deemed to violate public policy ... (b) marital status"
+      },
+      "educationOccupation": {
+        "status": "banned",
+        "summary": "Insurers can't use your job, income, education or whether you own a home to set your car insurance price.",
+        "source": {
+          "label": "211 CMR 79.04(11)",
+          "url": "https://www.law.cornell.edu/regulations/massachusetts/211-CMR-79-04"
+        },
+        "quote": "Rates, rating plans or modification of any of the foregoing based in whole or in part on any of the following factors shall be deemed to violate public policy ... (h) occupation; (i) income; (j) education; (k) homeownership"
+      }
+    },
+    "MD": {
+      "credit": {
+        "status": "limited",
+        "summary": "Insurers can use your credit to price a new car policy, but can't use it to raise your price at renewal or to drop you.",
+        "source": {
+          "label": "Md. Code, Ins. § 27-501(e-2)(3)",
+          "url": "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gin&section=27-501&enactments=false"
+        },
+        "quote": "refuse to underwrite, cancel, refuse to renew, or increase the renewal premium based, in whole or in part, on the credit history of the insured or applicant"
+      }
+    },
+    "MI": {
+      "credit": {
+        "status": "limited",
+        "summary": "Insurers can't use your credit score to set your car insurance price, though state law still lets them use a separate credit-based insurance score.",
+        "source": {
+          "label": "Mich. Comp. Laws § 500.2162",
+          "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-500-2162"
+        },
+        "quote": "An insurer shall not use an individual's credit score to establish or maintain rates or rating classifications for automobile insurance."
+      },
+      "gender": {
+        "status": "banned",
+        "summary": "Insurers can't use your sex to set your car insurance price.",
+        "source": {
+          "label": "Mich. Comp. Laws § 500.2111(4)",
+          "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-500-2111"
+        },
+        "quote": "An insurer shall not establish or maintain rates or rating classifications for automobile insurance based on any of the following: (a) Sex. (b) Marital status. (c) Home ownership. (d) Educational level attained. (e) Occupation."
+      },
+      "maritalStatus": {
+        "status": "banned",
+        "summary": "Insurers can't use your marital status to set your car insurance price.",
+        "source": {
+          "label": "Mich. Comp. Laws § 500.2111(4)",
+          "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-500-2111"
+        },
+        "quote": "An insurer shall not establish or maintain rates or rating classifications for automobile insurance based on any of the following: (a) Sex. (b) Marital status. (c) Home ownership. (d) Educational level attained. (e) Occupation."
+      },
+      "educationOccupation": {
+        "status": "banned",
+        "summary": "Insurers can't use your job, education level or whether you own a home to set your car insurance price.",
+        "source": {
+          "label": "Mich. Comp. Laws § 500.2111(4)",
+          "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-500-2111"
+        },
+        "quote": "An insurer shall not establish or maintain rates or rating classifications for automobile insurance based on any of the following: (a) Sex. (b) Marital status. (c) Home ownership. (d) Educational level attained. (e) Occupation."
+      },
+      "territory": {
+        "status": "limited",
+        "summary": "Insurers can price by larger territory, but can't price by the postal zone where you live.",
+        "source": {
+          "label": "Mich. Comp. Laws § 500.2111(4)-(5)",
+          "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-500-2111"
+        },
+        "quote": "(f) The postal zone in which the insured resides. ... (5) Notwithstanding other provisions of this chapter, automobile insurance risks may be grouped by territory."
+      }
+    },
+    "MT": {
+      "gender": {
+        "status": "no-ban-found",
+        "summary": "Montana law lets insurers use your sex to set insurance prices when based on accepted pricing methods.",
+        "source": {
+          "label": "Mont. Code Ann. § 49-2-309(4)",
+          "url": "https://archive.legmt.gov/bills/mca/title_0490/chapter_0020/part_0030/section_0090/0490-0020-0030-0090.html"
+        },
+        "quote": "it is not a violation of the prohibition against sex or marital status discrimination in this section for a person to use accepted ratemaking methodologies based on sex or marital status in establishing insurance premium rates."
+      },
+      "maritalStatus": {
+        "status": "no-ban-found",
+        "summary": "Montana law lets insurers use your marital status to set insurance prices when based on accepted pricing methods.",
+        "source": {
+          "label": "Mont. Code Ann. § 49-2-309(4)",
+          "url": "https://archive.legmt.gov/bills/mca/title_0490/chapter_0020/part_0030/section_0090/0490-0020-0030-0090.html"
+        },
+        "quote": "it is not a violation of the prohibition against sex or marital status discrimination in this section for a person to use accepted ratemaking methodologies based on sex or marital status in establishing insurance premium rates."
+      }
+    },
+    "NC": {
+      "gender": {
+        "status": "banned",
+        "summary": "Insurers can't use your gender to set your car insurance price.",
+        "source": {
+          "label": "N.C. Gen. Stat. § 58-36-65(l)",
+          "url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_58/GS_58-36-65.html"
+        },
+        "quote": "no classification or subclassification plan for nonfleet private passenger motor vehicle insurance shall be based, in whole or in part, directly or indirectly, upon the age or gender of insureds."
+      },
+      "age": {
+        "status": "banned",
+        "summary": "Insurers can't use your age to set your car insurance price, except to offer a discount to drivers 55 or older.",
+        "source": {
+          "label": "N.C. Gen. Stat. § 58-36-65(l)",
+          "url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_58/GS_58-36-65.html"
+        },
+        "quote": "Except as provided in G.S. 58-36-30(d), no classification or subclassification plan for nonfleet private passenger motor vehicle insurance shall be based, in whole or in part, directly or indirectly, upon the age or gender of insureds."
+      },
+      "credit": {
+        "status": "limited",
+        "summary": "Credit alone can't be used to cancel a policy in force over 60 days or to require you to accept a rate above the standard one, but credit alone can earn you a discount.",
+        "source": {
+          "label": "N.C. Gen. Stat. § 58-36-90(b)",
+          "url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_58/GS_58-36-90.html"
+        },
+        "quote": "insurers shall not use credit scoring as the sole basis for terminating an existing policy or any coverage in an existing policy or subjecting a policy to consent to rate as specified in G.S. 58-36-30(b) without consideration of any other risk factors, but insurers may use credit scoring as the sole basis for discounting rates. For purposes of this subsection only, \"existing policy\" means a policy that has been in effect for more than 60 days."
+      }
+    },
+    "NY": {
+      "educationOccupation": {
+        "status": "limited",
+        "summary": "Starting November 23, 2026, insurers can't use your job, education or whether you own a home as the only reason for your car insurance price.",
+        "source": {
+          "label": "N.Y. Ins. Law § 2341",
+          "url": "https://www.nysenate.gov/legislation/laws/ISC/2341"
+        },
+        "quote": "An insurer shall not use the following factors as the sole basis for initial tier placement, tier movement, or the establishment of rates for motor vehicle insurance",
+        "effective": "2026-11-23"
+      },
+      "territory": {
+        "status": "limited",
+        "summary": "Starting November 23, 2026, insurers can't price on your ZIP code alone, but may still group nearby ZIP codes together.",
+        "source": {
+          "label": "N.Y. Ins. Law § 2341",
+          "url": "https://www.nysenate.gov/legislation/laws/ISC/2341"
+        },
+        "quote": "the zip code in which the motor vehicle is principally garaged, provided, however, that an insurer may use a group of contiguous zip codes",
+        "effective": "2026-11-23"
+      }
+    },
+    "PA": {
+      "gender": {
+        "status": "banned",
+        "summary": "Pennsylvania's top court upheld the state's ban on charging different car insurance prices based on gender.",
+        "source": {
+          "label": "Hartford Accident & Indemnity Co. v. Insurance Commissioner, 505 Pa. 571 (1984)",
+          "url": "https://law.justia.com/cases/pennsylvania/supreme-court/1984/505-pa-571-1.html"
+        },
+        "quote": "we conclude that the Commissioner's disapproval of Hartford's discriminatory sex-based rates on the ground they were \"unfair\" and contrary to established public policy was in conformity with section 3(d) of the Rate Act"
+      }
+    },
+    "TX": {
+      "credit": {
+        "status": "limited",
+        "summary": "Insurers can use your credit, but can't turn you down, cancel or refuse to renew your policy based on credit alone.",
+        "source": {
+          "label": "Tex. Ins. Code § 559.052(a)(2)",
+          "url": "https://statutes.capitol.texas.gov/Docs/IN/htm/IN.559.htm"
+        },
+        "quote": "deny, cancel, or nonrenew a policy of personal insurance solely on the basis of credit information without considering any other applicable underwriting factor independent of credit information"
+      }
+    },
+    "UT": {
+      "credit": {
+        "status": "limited",
+        "summary": "Insurers can use your credit only to lower your car insurance price or, alongside other factors, when you first apply.",
+        "source": {
+          "label": "Utah Code § 31A-22-320(2)",
+          "url": "https://le.utah.gov/xcode/Title31A/Chapter22/C31A-22-S320_1800010118000101.html"
+        },
+        "quote": "may use credit information for the purpose of: (i) if risk related factors other than credit information are considered, determining initial underwriting; or (ii) providing to an insured: (A) a reduction in rates paid by the insured"
+      }
+    },
+    "VA": {
+      "credit": {
+        "status": "limited",
+        "summary": "Insurers can use your credit, but can't count medical debt in collections, disputed items or your total available credit against you.",
+        "source": {
+          "label": "Va. Code § 38.2-2234(D)",
+          "url": "https://law.lis.virginia.gov/vacode/title38.2/chapter22/section38.2-2234/"
+        },
+        "quote": "The following factors shall not be used as credit criteria or to determine an insurance credit score for underwriting, tier placement, or rating purposes for a policy of motor vehicle insurance"
+      }
+    },
+    "WA": {
+      "credit": {
+        "status": "limited",
+        "summary": "Insurers can use your credit to set your price, but can't cancel or refuse to renew your policy because of it.",
+        "source": {
+          "label": "Rev. Code Wash. § 48.18.545(3)",
+          "url": "https://app.leg.wa.gov/RCW/default.aspx?cite=48.18.545"
+        },
+        "quote": "An insurer shall not cancel or nonrenew personal insurance based in whole or in part on a consumer's credit history or insurance score."
+      }
+    }
+  }
+}

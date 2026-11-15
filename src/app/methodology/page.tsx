@@ -265,6 +265,10 @@ export default function MethodologyPage() {
       </ul>
 
       <h2>What we don&apos;t do</h2>
+      <p>
+        <Link href="/what-we-dont-ask">What we don&apos;t ask, and how much it can matter</Link> shows how far each of
+        these can move a price, and what each state allows.
+      </p>
       <ul className="bullets">
         <li>
           <strong>We don&apos;t ask about credit.</strong> Many insurers use it where the law allows, so your real quote
