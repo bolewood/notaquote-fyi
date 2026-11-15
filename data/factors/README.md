@@ -127,6 +127,48 @@ When there's no premium you entered, the typical start in this mode says what it
 
 There's no separate "teen" switch. The 16–18 band is the teen factor, so nothing is counted twice. The good-student discount only applies under 26, and driver training under 22, so switching them on for a 65-year-old does nothing.
 
+### The next four years
+
+For a new 16-year-old, the site also shows years 1–4 of driving (ages 16 to 19, ending as the teen turns 20). These single-age numbers are a separate block in the bundle (`teenYears`), used **only** by that view. The age bands above, and every price built from them, are unchanged.
+
+**Single-age price points we found in the surveys:**
+
+| Age | Their own policy (vs. 40–64) | Source and method | Basis |
+| --- | --- | --- | --- |
+| 16 | 4.22 (2.79–5.41) | Oklahoma: Scenario A (16, single) ÷ Scenario B (21, single), 200 comparisons, median 2.20; times the 19–21 factor (Oklahoma 21 ÷ 55). | Rough |
+| 17 | 3.48 (2.68–4.54) | Filled in halfway between 16 and 18 on a multiplying scale. | Worked out from public data |
+| 18 | 2.87 (2.57–3.81) | Texas: age 18 ÷ 30, times the 26–39 factor. This *is* the 16–18 factor. | From published prices |
+| 19 | 2.51 (2.23–3.10) | Filled in a third of the way from 18 to 21. | Worked out from public data |
+| 20 | 2.20 (1.94–2.53) | Filled in two-thirds of the way from 18 to 21. | Worked out from public data |
+| 21 | 1.92 (1.69–2.06) | Oklahoma: 21 ÷ 55. This *is* the 19–21 factor. | Rough |
+
+"Filled in" means each year drops by the same share between two published ages, and the low and high edges are filled in the same way.
+
+**What else differs (confounds):**
+
+- **Oklahoma 16 ÷ 21.** Both are single, same car, coverage, company, and city. But the 16-year-old "drives to school" under 7,500 miles a year, and the 21-year-old commutes 18 miles round trip, 12,000 miles a year. Less driving costs less, so the ratio probably *understates* the 16-year-old; the top of the range reaches the direct 16 ÷ 55 comparison's upper quarter (median 4.51, 3.21–5.41, where marital status differs too). Both State Farm companies price the 16-year-old *below* the 21-year-old (about 0.54) in every city; that's what they filed, and the median absorbs it.
+- **Texas 18 ÷ 30.** Liability only, and the site shows a 16–24 band that TDI's data call rates at 18 (see "Driver age" above).
+- **Mixing states.** Age 16 and 21 come from Oklahoma, 18 from Texas. The three points line up: a straight line (on a multiplying scale) from Oklahoma's 16 to its 21 passes about 3.1 at 18, close to Texas's 2.87.
+- **Age or experience?** Every one of these profiles is a new-ish driver of that age, so age and years licensed move together. We don't separate them. California, which rates by years licensed and not age (10 CCR §2632.5), isn't used for any single age.
+
+**Why year 1 is above the one-year estimate.** The 16–18 band uses Texas's 18-year-old for the whole band. Today's estimate for a new 16-year-old on their own policy is therefore an 18-year-old's rate. In the four-year view, year 1 (age 16) comes out about 47% higher, year 2 about 21% higher, year 3 the same, and year 4 about 13% lower. The view says so plainly: "The estimate above prices drivers 16 to 18 together. The first year usually costs more than that, and it comes down from there."
+
+**Their own policy, each year:** the engine's 16–18 estimate × (age factor ÷ the 16–18 factor). Each year's range swaps the 16–18 band's spread for that age's own spread, combined in quadrature the way the engine combines spreads, so year 3 (age 18) is the estimate exactly.
+
+**Added to a parent's policy, each year:** only the teen's increase moves. Year 1 is today's increase from the 1.66 household factor. That factor comes from California's married couple with a 17-year-old licensed 1 year; California rates by years licensed, not age, so it stands for a first-year driver. Later years keep a share of that increase: age ÷ age 16 on the own-policy curve (82%, 68%, 59%, and 52% at 20). Only the increase falls, not the parents' part of the bill. No survey prices the same household before and after a teen's later years, so these shares are *our estimate*. Their range lets the drop be half as big or half again as big (17: 73%–91%; 18: 52%–84%; 19: 39%–80%; 20: 28%–76%). The increase's range combines the household starting price's spread, the 1.66 factor's spread as a share of the increase (+43% to +95% is −35% to +44% of the +66%), and that share's own spread.
+
+**The four-year total** adds the four lows, the four likely figures, and the four highs, as if every year came out high (or low) at once. That's wider than it's likely to be, on purpose.
+
+**What resets the drop.** Everything here assumes a clean record. An at-fault accident adds its own surcharge (see "Driving record"; our record factor counts accidents in the last three years), so it undoes much of the drop.
+
+**Leads we didn't use:**
+
+- **North Dakota 2026, Examples 5 and 6** each add a 16-year-old occasional driver ("A" average student), but neither has a matching household without the teen. Example 5 ÷ Example 3 (a couple both 35, different cars and mileage) is a median +45% (+26% to +83%, 115 comparisons), and Example 6 ÷ Example 2 (a single 30-year-old, different car) is +82%. Both are too confounded to use, but they're in the same territory as California's +66%.
+- **North Dakota Example 1** (age 23, single man, F-150, 15,000 miles) ÷ Example 2 (age 30, single woman, Acura, 10,000 miles) is +30%, but the car, sex, and mileage all differ.
+- **DC and Colorado** have no driver under 25.
+- **California's 17-year-old** is a years-licensed point, not an age point.
+- **Other states' rate guides.** We didn't add a new survey for this. The states we haven't checked are listed under "Sources we found but didn't use"; one that prices single teen ages (say 16, 17, and 18 for the same driver) would replace the filled-in years.
+
 ### Years licensed
 
 California's survey is the only public source that prices drivers by years licensed, but California doesn't allow age as a rating factor (10 CCR §2632.5). So a California driver licensed 2 years is usually young, and California's "2 years ÷ 13 years" figure (+127%) carries the youth effect our age factor already counts. Used as-is, a 30-year-old licensed 2 years would have cost about 88% as much as a 16-year-old.

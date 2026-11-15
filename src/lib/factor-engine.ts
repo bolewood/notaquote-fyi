@@ -43,6 +43,7 @@ import type {
   VehicleLossRow,
   VehicleWindow,
 } from "@/lib/factor-types"
+import { TEEN_YEAR_AGES } from "@/lib/factor-types"
 import { MODEL_VERSION } from "@/lib/copy"
 import { differenceWords, monthlyDollars, percentRangeWords, percentWords } from "@/lib/format"
 import { BASELINE_STATE_CODES, countrywideBaseline, stateBaseline, STATE_BASELINE_ATTRIBUTION } from "@/lib/state-baselines"
@@ -2126,6 +2127,18 @@ export function assertFactorBundleSafe(candidate: FactorBundle = bundle): void {
   for (let index = 1; index < calibration.damageCurve.length; index += 1) {
     if (calibration.damageCurve[index] < calibration.damageCurve[index - 1]) throw new Error("The damage curve must not go down")
   }
+  if (!candidate.teenYears) throw new Error("Missing teenYears")
+  for (const kind of ["own", "added"] as const) {
+    let previous = Infinity
+    for (const age of TEEN_YEAR_AGES) {
+      const cell = candidate.teenYears[kind][age]
+      if (!cell) throw new Error(`teenYears.${kind}.${age} missing`)
+      checkCell(`teenYears.${kind}.${age}`, cell)
+      if (cell.value > previous) throw new Error(`teenYears.${kind}: age ${age} costs more than the year before`)
+      previous = cell.value
+    }
+  }
+  if (candidate.teenYears.added["16"].value !== 100) throw new Error("teenYears.added: age 16 is the first year's increase, 1.00")
   checkCell("typicalStart.trend", candidate.typicalStart.trend.cell)
   for (const id of candidate.typicalStart.sources) {
     if (!sourceIds.has(id)) throw new Error(`typicalStart: unknown source ${id}`)

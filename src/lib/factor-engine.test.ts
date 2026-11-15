@@ -64,7 +64,7 @@ const JARGON = PLAIN_LANGUAGE_BANNED
 test("bundle versions line up and the guardrails pass", () => {
   assertFactorBundleSafe()
   assert.equal(DATA_BUNDLE_VERSION, FACTOR_BUNDLE_VERSION)
-  assert.equal(FACTOR_BUNDLE_VERSION, "factors-2026-09-22")
+  assert.equal(FACTOR_BUNDLE_VERSION, "factors-2026-11-15")
   assert.equal(MODEL_VERSION, "0.2.0")
 })
 

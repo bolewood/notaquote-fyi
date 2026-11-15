@@ -17,6 +17,8 @@ import {
   YearsField,
 } from "@/components/driver-fields"
 import { AskYourInsurer, AskYourInsurerPrint } from "@/components/ask-your-insurer"
+import { NextFourYears } from "@/components/next-four-years"
+import { teenFourYears, type TeenFourYears } from "@/lib/teen-years"
 import { HowWeGotThis, VehicleFixLink } from "@/components/how-we-got-this"
 import { RangeBar } from "@/components/money"
 import { HomeSkeleton, StarterCards, STARTERS_PLACEMENT, TABS, type Tab } from "@/components/page-skeleton"
@@ -960,6 +962,7 @@ function CalculatorReady() {
                     via: "whatif",
                   })}
                   ask={ask.result ?? ask.estimate}
+                  fourYears={teenFourYears(result, now, next)}
                   versionPicker={
                     changed.includes("vehicle") ? (
                       <VersionPicker idPrefix="next-car" pick={nextCar} catalog={catalog} onChange={(pick) => patchNext(pick)} compact />
@@ -1232,6 +1235,7 @@ export function WhatIfResult({
   carPageName,
   versionPicker,
   ask,
+  fourYears = null,
 }: {
   headingRef: React.RefObject<HTMLHeadingElement | null>
   mode: WhatIfMode
@@ -1271,6 +1275,8 @@ export function WhatIfResult({
   versionPicker: React.ReactNode
   /** What the "Questions to ask your insurer" list is picked for. */
   ask: AskContext
+  /** A new 16-year-old: the next four years, collapsed. */
+  fourYears?: TeenFourYears | null
 }) {
   const min = Math.round(Math.min(current.low, next.low) * 0.92)
   const max = Math.round(Math.max(current.high, next.high) * 1.04)
@@ -1472,6 +1478,7 @@ export function WhatIfResult({
           ) : null}
         </div>
       </details>
+      {fourYears ? <NextFourYears years={fourYears} className="-mt-6 -mb-2" /> : null}
       <AskYourInsurer context={ask} className="-mt-6 -mb-2" />
     </div>
   )

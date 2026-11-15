@@ -116,6 +116,8 @@ export type WhatIfResult = WhatIf & {
   mode: WhatIfMode
   /** What made the difference, one piece at a time. Sums to `delta`. */
   parts: ChangePart[]
+  /** Teen added: the engine's before and after for the teen alone (the four-year view starts from it). */
+  teenAdded?: TeenAdded
 }
 
 const TEEN_KEYS: readonly ChangeKey[] = ["age", "yearsLicensed", "goodStudent", "driverTraining"]
@@ -173,7 +175,7 @@ export function priceWhatIf(
   const headline = onlyTheTeen ? added.headline : `With these changes and your teen: ${amountWords(delta)}.`
   const others = explainChange(start, now, nowVehicle, parent, nextVehicle)
   const parts: ChangePart[] = [...others.parts, { label: "Adding your teen", amount: added.after.likely - others.last, key: "age" }]
-  return { current, next: added.after, delta, deltaRounded, headline, mode: "teen-added", parts }
+  return { current, next: added.after, delta, deltaRounded, headline, mode: "teen-added", parts, teenAdded: added }
 }
 
 function carWords(scenario: Pick<Scenario, "make" | "model">): string {

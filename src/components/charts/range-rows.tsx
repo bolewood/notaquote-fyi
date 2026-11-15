@@ -62,6 +62,7 @@ export function RangeRowsChart({
   lowestKeys,
   lowestLabel,
   extra,
+  signed,
   axisLabel,
 }: {
   rows: readonly RangeRow[]
@@ -71,8 +72,11 @@ export function RangeRowsChart({
   lowestLabel: string
   /** Teen added: the dots are the extra a year, with no range of their own. */
   extra: boolean
+  /** Show the figures as signed changes (+$1,100), with their ranges. Defaults to `extra`. */
+  signed?: boolean
   axisLabel: string
 }) {
+  const asSigned = signed ?? extra
   const values = rows.flatMap((row) => [row.value, row.low ?? row.value, row.high ?? row.value])
   // One car, or cars that all come out the same: pad the axis so it still has a sensible span.
   let lo = Math.min(...values)
@@ -84,11 +88,11 @@ export function RangeRowsChart({
     hi = hi + pad
   }
   const { min, max, ticks } = niceTicks(lo, hi, 4)
-  const tickWords = (value: number) => (extra ? signedDollars(value) : dollars(value))
+  const tickWords = (value: number) => (asSigned ? signedDollars(value) : dollars(value))
   const title = `${axisLabel}: ${rows
     .map(
       (row) =>
-        `${row.starred ? "starred, " : ""}${row.name}${lowestKeys.has(row.key) ? ` (${lowestLabel.toLowerCase()})` : ""} ${valueWords(row.value, extra)}${row.low !== null && row.high !== null ? `, range ${rangeDollars(row.low, row.high)}` : ""}`,
+        `${row.starred ? "starred, " : ""}${row.name}${lowestKeys.has(row.key) ? ` (${lowestLabel.toLowerCase()})` : ""} ${valueWords(row.value, asSigned)}${row.low !== null && row.high !== null ? `, range ${rangeDollars(row.low, row.high)}` : ""}`,
     )
     .join("; ")}.`
 
@@ -128,7 +132,7 @@ export function RangeRowsChart({
               </text>
               <Mark row={row} scale={wideScale} y={mid} extra={extra} />
               <text x="100%" y={mid + 4} fontSize={12} textAnchor="end" fill="var(--foreground)" fontWeight={600}>
-                {valueWords(row.value, extra)}
+                {valueWords(row.value, asSigned)}
               </text>
             </g>
           )
@@ -153,7 +157,7 @@ export function RangeRowsChart({
                 ))}
               </text>
               <text x="100%" y={top + 13} fontSize={12} textAnchor="end" fill="var(--foreground)" fontWeight={600}>
-                {valueWords(row.value, extra)}
+                {valueWords(row.value, asSigned)}
               </text>
               <Mark row={row} scale={narrowScale} y={top + lines.length * LINE_H + 10} extra={extra} />
             </g>
