@@ -38,8 +38,13 @@ NotAQuote.FYI should make one kind of question easy: *"What would happen to my i
 - Replace the disabled Supabase corrections queue with "Suggest a fix" links that open a prefilled GitHub issue for the exact number, state, or vehicle in question. There's no backend to run, and everything happens in the open.
 
 ### 7. Renters and homeowners (planned)
-- **Renters (HO-4):** a sourced range for a renters policy in every state, with coverage, deductible, and liability adjustments measured from California, Texas, and Maryland sample premiums. See [prd-renters.md](prd-renters.md).
-- **Homeowners (HO-3) pilot:** five states (CA, TX, FL, MD, SC), labeled experimental, with a wider range and a plain explanation of what's about the area and what's about the house. Starts after renters meets its validation targets. See [prd-homeowners.md](prd-homeowners.md).
+- **Renters (HO-4):** a sourced range for a renters policy in every state, with coverage adjustments from NAIC's averages by coverage amount, and deductible and liability adjustments measured from California and Texas sample premiums. Depends on NAIC's permission to use its figures. See [prd-renters.md](prd-renters.md).
+- **Homeowners (HO-3) pilot:** California, Texas, and Florida first, then Oklahoma, Maryland, and South Carolina once their current surveys are confirmed, labeled experimental, with a wider range and a plain explanation of what's about the area and what's about the house. Starts after renters meets its validation targets. See [prd-homeowners.md](prd-homeowners.md).
+
+### 8. From a number to a plan (planned)
+- **Teen driver plan:** compare household setups for adding a teen, see four years of cost, and leave with questions to ask your insurer. The checklist ships first. See [prd-teen-driver-plan.md](prd-teen-driver-plan.md).
+- **Policy reader and rate commons:** read your declarations page in the browser, nothing uploaded; optionally add an anonymous summary to openly published aggregate tables. The commons has its own privacy gate. See [prd-policy-reader.md](prd-policy-reader.md).
+- **Lot mode:** scan VINs on a phone and compare cars on the spot. A listing extension comes later, only if data terms allow. See [prd-lot-mode.md](prd-lot-mode.md).
 
 ## Status (September 22, 2026)
 

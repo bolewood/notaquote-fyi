@@ -2,7 +2,7 @@
 
 Status: draft, November 12, 2026. Companion: [prd-homeowners.md](prd-homeowners.md).
 
-Confidence tags on research findings: **[V]** checked against a primary source, **[L]** from a credible secondary source, **[U]** unverified. Sources are listed at the end, accessed November 7, 2026 unless noted.
+Confidence tags on research findings: **[V]** checked against a primary source, **[L]** from a credible secondary source, **[U]** unverified. Findings come from two internal research passes (November 7 and November 12, 2026); where they disagreed, this PRD says so. Sources are listed at the end.
 
 ## 1. Summary
 
@@ -10,16 +10,24 @@ NotAQuote.FYI estimates car insurance from public sources, in the browser, with 
 
 Renters comes before homeowners because the public data fits it far better:
 
-- A state-by-state average premium for HO-4 policies is published annually by the NAIC.
+- The NAIC publishes the average HO-4 premium for every state each year, broken out by how much belongings coverage the policy carries (data for 2023, published July 2026; Table 5) [V]. Renters policies cluster at low coverage amounts: 67.1% of HO-4 and HO-6 exposures are under $35,000 [V].
 - The BLS Consumer Price Index has a series that prices renters policies specifically (`CUUR0000SEHD`, tenants' and household insurance). There is no equivalent for homeowners structure coverage.
 - Several state regulators publish sample renters premiums for fixed profiles, which lets us measure how coverage amount, deductible, and liability limit move the price.
 - There's no house to value. Replacement cost, the hardest part of homeowners, doesn't apply.
 
 ### Why now
 
-Internal market research (November 2026) found no nationwide, non-commercial, open-source renters or homeowners estimator that combines public premium figures, public location-risk data, published factor weights, browser-only inputs, and a source link for every adjustment. That's a search result, not proof that none exists. The nearest alternatives are state regulator tools (California, Texas, Maryland) and commercial editorial calculators.
+Internal market research (November 2026) found no nationwide, non-commercial, open-source renters or homeowners estimator that combines public premium figures, public location-risk data, published factor weights, browser-only inputs, and a source link for every adjustment. That's a search result, not proof that none exists.
 
-Commercial comparison sites have a reason to ask for contact details: a completed quote has value even when nothing is sold. One insurer's affiliate program advertised $10 per home lead and $3 per renters lead in November 2026, and a vendor survey put typical home leads at $5–$60 (both per November 2026 research; primary links not recorded). NotAQuote sells nothing, so it can answer the question without the form.
+The nearest alternatives:
+
+- **RivoRent's renters estimator**, part of a rental-listing site. It asks only for a state and a coverage band, takes no commissions, and shows a range from NAIC's state figures brought forward with the BLS index [L]. It doesn't adjust for deductible, liability limit, or location, and it isn't open source.
+- **State regulator tools** (California and Texas cover renters). Each covers one state and a few fixed profiles, and shows a number per insurer rather than a range.
+- **Commercial editorial calculators.** Their published averages often disagree because they quietly assume different coverage, deductibles, and profiles.
+
+NotAQuote's difference is the what-if: change your coverage, deductible, liability limit, or ZIP code and see what moves, with every step sourced, in a project anyone can inspect and correct.
+
+Commercial comparison sites have a reason to ask for contact details: a completed quote has value even when nothing is sold. One insurer's affiliate program advertised $10 per home lead and $3 per renters lead, and a 2026 industry benchmark put insurance leads at $10 to $75 or more, often sold to several agents at once (per November 2026 research; secondary sources). NotAQuote sells nothing, so it can answer the question without the form.
 
 ## 2. Who it's for
 
@@ -28,21 +36,25 @@ Commercial comparison sites have a reason to ask for contact details: a complete
 - *"Is a $1,000 deductible worth it, or should I keep $500?"*
 - *"How much more is $50,000 of coverage than $20,000?"*
 - *"I already bundle with my car insurance. What's the renters part actually costing me?"*
+- *"My property manager offers renters coverage for $25 a month with the lease. Is that reasonable?"*
 
 The main audience is people renting for the first time, people moving, and parents helping a young adult set up their first apartment. That last group already uses the site for teen drivers.
+
+The lease moment matters. A 2022 industry survey cited by the National Apartment Association found about 55% of renters insured, and 75% of those buying because the landlord required it [L]. Many people decide while signing a lease, often with an add-on offered by the property manager, and have nothing independent to compare it with.
 
 ## 3. Goals and non-goals
 
 ### Goals
 1. Give a sourced yearly and monthly range for a typical renters policy in any state with NAIC data, in under a minute, with no personal data leaving the browser.
-2. In California, Texas, and Maryland, show how coverage amount, deductible, and liability limit move the price, measured from regulator sample premiums.
+2. In every state, show how belongings coverage moves the price, from NAIC's averages by coverage amount. In California and Texas (and Maryland, if its current guide covers renters), also show how deductible and liability limit move it, measured from regulator sample premiums.
 3. Explain every adjustment in plain words, with its source, date, and how sure we are, as the car estimate does.
 4. Be honest about range width. The less we can source, the wider the range.
 
 ### Non-goals
 - **Not a quote, and nothing that looks like one.** No applications, no payments, no binding, no referral links or compensation.
 - **No insurer names, rankings, or recommendations.** Regulator surveys list premiums by company; we use only medians across companies, and never show or return a per-company figure. This keeps the site clearly informational, outside insurance-producer licensing (which covers selling, soliciting, and negotiating), and away from Texas-style rules against aiding an insurance transaction. It's not a legal opinion; see Risks.
-- **No flood or earthquake estimate.** Standard renters policies exclude flood; we say so and link FEMA's flood insurance pages. Earthquake is a California add-on; v1 notes it and doesn't price it.
+- **No flood or earthquake estimate.** Standard renters policies exclude flood; we say so, and where FEMA's flood insurance claims data show flood claims in your ZIP code, the note says that too, with a link to FEMA's flood insurance pages. Earthquake is a California add-on; v1 notes it and doesn't price it.
+- **No coverage advice.** Coverage amounts are what-if inputs, not "how much you need" recommendations.
 - **No credit or claims-history inputs.** Insurers in many states use them, but the rules vary by state and we have no public measure of their effect. The range covers them, and the explanation says so.
 
 ## 4. Experience
@@ -59,7 +71,7 @@ The main audience is people renting for the first time, people moving, and paren
 |---|---|---|
 | State | 50 states + DC | none, required |
 | ZIP code | 5 digits, kept in this browser only | blank (state typical) |
-| Belongings coverage (personal property) | $15k, $25k, $40k, $60k, $100k | $25k (to confirm against the most common profile in the CA, TX, and MD surveys) |
+| Belongings coverage (personal property) | Bands matching NAIC's amount-of-insurance ranges, e.g. $15k, $20k, $25k, $35k, $50k, $80k+ | $20k–$25k (NAIC's most common HO-4 range; confirm in M0) |
 | Deductible | $250, $500, $1,000, $2,500 | $500 |
 | Liability coverage | $100k, $300k, $500k | $100k |
 | Your current premium | optional dollar amount | blank |
@@ -75,7 +87,7 @@ If you enter your current premium, we start from it, as the car calculator does.
 
 Example step wording, following `docs/VOICE.md` (no "baseline", "anchor", "relativity", or "thin"):
 
-> **Belongings: $25,000 → $40,000.** About $35 more a year. From published prices: California, Texas, and Maryland regulators' sample premiums, comparing the same renter at both coverage amounts across companies (middle of the companies, with the middle half shown as the range).
+> **Belongings: $25,000 → $40,000.** About $35 more a year. From published prices: what renters in your state paid on average at each coverage amount in 2023 (NAIC), checked against California and Texas regulators' sample premiums for the same renter at both amounts.
 
 ## 5. Model
 
@@ -98,12 +110,12 @@ Each factor uses the existing `FactorCell` shape (`value`, `low`, `high`, `basis
 
 | Factor | Source | Basis | Notes |
 |---|---|---|---|
-| State typical premium | NAIC *Dwelling Fire, Homeowners Owner-Occupied, and Homeowners Tenant and Condominium/Cooperative Unit Owner's Insurance Report*, HO-4 average premium by state | `reference` | Latest data year found: 2022. Check that every state has an HO-4 figure; this is unverified. A state without one falls back to the national average, with a wider range and an explanation. |
+| State typical premium | NAIC *Dwelling Fire, Homeowners Owner-Occupied, and Homeowners Tenant and Condominium/Cooperative Unit Owner's Insurance Report: Data for 2023* (July 2026), Table 5, HO-4 average premium by state | `reference` | The second research pass reports figures for all 50 states and DC; confirm in M0. California and Texas figures come from their insurance departments rather than statistical agents. A state without a figure falls back to the national average, with a wider range and an explanation. |
 | Trend to today | BLS CPI-U `CUUR0000SEHD`, tenants' and household insurance, monthly | `reference` | Reuse the trend pattern in `src/lib/state-baselines.ts` (`trendRatio`). The auto trend uses the motor vehicle insurance index; this is the renters equivalent. |
-| Belongings coverage | CA DOI 2026 survey (renters profiles), TX HelpInsure renters scenarios (Coverage C), MD 2026 comparison guide | `sourced` | Paired-profile derivation: profiles that differ only in coverage amount; median across companies, 25th–75th percentile as the range. |
-| Deductible | Same three surveys, where they vary it | `sourced` where varied, else `assumed` | Check which surveys vary the deductible for renters profiles. |
+| Belongings coverage | NAIC Table 5: HO-4 average premium by amount of insurance, by state [V for the countrywide page; confirm state pages in M0]. Checked against CA DOI 2026 renters profiles and TX HelpInsure renters scenarios (Coverage C). | `sourced` | NAIC's band averages are what people actually paid, so they also reflect other differences between policies (deductibles, location). The CA and TX surveys price the same renter at different amounts, so they show whether NAIC's slope is close; if they disagree, widen the range. |
+| Deductible | CA and TX surveys (and MD if it covers renters), where they vary it | `sourced` where varied, else `assumed` | Check which surveys vary the deductible for renters profiles. |
 | Liability limit | Same, where varied | `sourced` or `assumed` | Likely the thinnest; if no survey varies it, "Our best guess" with a wide range. |
-| Location within the state | FBI Crime Data Explorer (burglary and larceny rates by agency, rolled up to county), FEMA National Risk Index (county expected annual loss) | `indicative` | Kept deliberately small, capped (e.g. ±15%; to be set from the CA and TX ZIP-level sample premiums), with the range widened. FBI data need an agency-participation check: NIBRS population coverage was 64.8% in 2021, 76.9% in 2022, 83.1% in 2023 [V]. Counties below a participation threshold get no crime adjustment. |
+| Location within the state | FBI Crime Data Explorer (burglary and larceny rates by agency, rolled up to county), FEMA National Risk Index (county expected annual loss) | `indicative` | Kept deliberately small, capped (e.g. ±15%; to be set from the CA and TX ZIP-level sample premiums), with the range widened. FBI data need an agency-participation check: NIBRS covered 64.8% of the population in 2021 and about 90% in 2025, through 15,000+ agencies [V]. Agencies report by city police or county sheriff, so roll up weighted by population; counties below a participation threshold get no crime adjustment. Use FEMA's losses for perils a renters policy covers; leave out flood and earthquake. |
 | Location, validated | CA and TX sample premiums by ZIP | used for checking, not as a factor | Tests whether the indicative location factor points the right way. |
 
 Where a factor rests on only one state's survey, the explanation says so, as the car estimate does today ("From published prices in Texas (Illinois may differ)", via `basisLabel()` in `src/lib/pricing.ts`).
@@ -115,26 +127,27 @@ Same rules as the car engine: each factor that changes adds its spread, combined
 
 | Source | Data year | Reuse | Refresh |
 |---|---|---|---|
-| NAIC homeowners/tenant report, HO-4 average by state | 2022 (latest found) | Use per-state averages as facts, with credit. Don't copy the report's text or tables or commit the report. See below. | Annual, when NAIC releases the next data year |
+| NAIC homeowners/tenant report, Table 5 (HO-4 by state and by coverage amount) | 2023 (published July 2026) | **Needs NAIC's written permission** (see below). | Annual; NAIC data lag about 2.5 years |
 | BLS CPI `CUUR0000SEHD` | Monthly | Federal, public domain | Annual, with the existing price-index refresh |
 | California DOI premium survey (renters) | 2026 | Use individual figures with a locator, as in `data/factors/sources/ca-2026-*.csv` | Annual |
 | Texas HelpInsure (renters) | Current | Same, as in `tx-2025-*.csv` | Annual |
-| Maryland Insurance Administration comparison guide | Feb. 2026 | Same | Annual |
+| Maryland Insurance Administration comparison guide | Edition year and renters coverage unconfirmed (the two research passes disagree) | Same, if it covers renters | Annual |
+| OpenFEMA NFIP claims and policies in force, by ZIP | Through Sept. 2025 | Federal, public domain | Annual |
 | FBI Crime Data Explorer | Through 2025 | Federal | Annual |
 | FEMA National Risk Index | v1.20, Dec. 2025 | Federal; credit FEMA | When FEMA updates |
 | Census ZCTA-to-county relationship file | 2020 | Federal, public domain | Each decennial update |
 
 ### NAIC
-Follow the precedent already on `/data-licenses` for the NAIC auto figures ("Typical price by state"): we use the per-state averages as facts, with credit, labeled wherever they appear; we don't copy the report's text or tables, and the report isn't in the repository.
+The report's copyright page says: "No part of this book may be reproduced, stored in a retrieval system, or transmitted in any form or by any means, electronic or mechanical, including photocopying, recording, or any storage or retrieval system, without written permission from the NAIC." (checked November 12, 2026). Per-state figures kept in a public repository and sent to browsers arguably count as storing part of it, so **NAIC's written permission is the main dependency for renters.**
 
-In M0, email NAIC asking whether a free, open-source, non-commercial site may (1) show the per-state HO-4 averages with credit, (2) publish adjustments derived from them, and (3) keep those per-state figures in a public repository and send them to browsers. Record the answer in `src/data/source-manifest.json` (`licenseNote`, `lastChecked`). If NAIC objects, we take the figures out and start every estimate from the national CPI-trended survey medians instead.
+In M0, write to NAIC's Legal Division (Request to Reprint Content) asking whether a free, open-source, non-commercial site may (1) show the per-state HO-4 averages and coverage-band averages from Table 5 with credit, (2) publish adjustments derived from them, and (3) keep those figures in a public repository and send them to browsers. Offer NAIC's standard non-endorsement wording. Record the answer in `src/data/source-manifest.json` (`licenseNote`, `lastChecked`).
 
-NAIC material isn't federal public-domain data: an NAIC-derived renters premium table republished by the Insurance Information Institute carries an explicit restriction on further reprinting (per November 2026 research). That's why we use only the specific per-state averages we need, as facts, and ask.
+**If NAIC says no, there's no federal substitute for renters.** No federal source publishes renters premiums by state; the BLS index is national and shows change, not price level. Renters would shrink to the states whose regulators publish renters sample premiums (California and Texas, and Maryland if confirmed), with other states told plainly that we can't estimate them yet.
 
 ### State surveys and SERFF
-Store individual figures with locators, never the source PDFs, in the existing format: `data/factors/sources/<state>-<year>-premiums.csv` and `-profiles.csv` (`source_id, state, data_year, url, locator, territory, carrier, profile_id, annual_premium`), with a note per source in `data/factors/sources/README.md`. Carrier names stay in the CSVs, so anyone can reproduce the derivation, but no per-carrier figure reaches the UI or API.
+Check each state's terms before committing figures. Where terms allow, store individual figures with locators, never the source PDFs, in the existing format: `data/factors/sources/<state>-<year>-premiums.csv` and `-profiles.csv` (`source_id, state, data_year, url, locator, territory, carrier, profile_id, annual_premium`), with a note per source in `data/factors/sources/README.md`. Carrier names stay in the CSVs, so anyone can reproduce the derivation, but no per-carrier figure reaches the UI or API. Where a state's terms restrict copying, commit only the derived medians with locators to the source.
 
-SERFF filings are out of scope for v1.
+SERFF filings are out of scope for v1. SERFF Filing Access requires accepting a use agreement that bars redistributing filings; if they're used later, it's offline only, to check our numbers, with nothing copied into the repository.
 
 ## 7. Privacy
 
@@ -177,26 +190,26 @@ Analytics record paths only, so we measure the model, not people.
 Publish the result on `/methodology` and in `data/renters/README.md`, as `data/factors/README.md` does for cars.
 
 **Secondary:**
-- Share of estimate steps that are "From published prices" vs "Our best guess" (goal: none of the three coverage factors is a guess in CA, TX, and MD).
+- Share of estimate steps that are "From published prices" vs "Our best guess" (goal: none of the three coverage factors is a guess in CA and TX).
 - Page views on `/renters` and state pages, and searches reaching them (Search Console).
 
 ## 11. Milestones
 
 | | Milestone | Done when |
 |---|---|---|
-| M0 | Rights and data pulls | NAIC email sent; NAIC HO-4 per-state averages, BLS series, CA/TX/MD renters surveys, Census crosswalk, FBI and FEMA county tables pulled; source rows added to the manifest and `data/factors/sources/README.md`. |
+| M0 | Rights and data pulls | NAIC permission request sent; NAIC Table 5 state pages confirmed; BLS series, CA/TX renters surveys (and MD's current guide checked for renters), Census crosswalk, FBI, FEMA, and OpenFEMA tables pulled; each state's terms checked; source rows added to the manifest and `data/factors/sources/README.md`. |
 | M1 | Derivation | `renters-factors.json` built by a pure function; golden reproduction test passes; README example table matches. |
 | M2 | Calculator and pages | `/renters`, state pages, methodology section, sources rows, data-licenses entry, agent API endpoint, share links. |
 | M3 | Validation | Held-out validation run and published; thresholds met or ranges widened until they are. |
-| M4 | Launch | Slugs pinned, sitemap updated, CHANGELOG entry, DATA-REFRESH steps added, car calculator cross-link live. |
+| M4 | Launch | NAIC's written permission received and recorded (hard gate); slugs pinned, sitemap updated, CHANGELOG entry, DATA-REFRESH steps added, car calculator cross-link live. |
 
 ## 12. Risks and open questions
 
-- **NAIC permission.** Soft gate: launch with the per-state figures as facts with credit, ask in parallel, and remove them if NAIC objects (the fallback is in §6).
-- **NAIC coverage.** Unverified whether every state has an HO-4 figure in the latest report, or whether some are suppressed. Check the file in M0.
-- **Data age.** NAIC's latest data year is 2022; the CPI trend bridges to today, but state-specific changes since then aren't captured. Say so in "Why the range is this wide."
-- **Thin calibration.** Three states' surveys may not vary deductible or liability. Unvaried factors stay "Our best guess" and widen the range; recruit contributors via the existing "help wanted" issue pattern.
-- **Crime data.** FBI participation gaps (especially around 2021) can make county comparisons misleading. Use participation thresholds and cap the effect.
+- **NAIC permission.** The biggest risk, given the copyright notice in §6. **Hard gate:** build behind a feature switch, but don't launch publicly until NAIC grants written permission. If NAIC declines, renters shrinks to two or three states (§6).
+- **NAIC coverage.** The second research pass reports HO-4 figures for every state and DC; confirm in M0, including any suppressed cells.
+- **Data age.** NAIC's latest data year is 2023, about 2.5 years behind; the CPI trend bridges to today, but state-specific changes since then aren't captured. Say so in "Why the range is this wide."
+- **Thin calibration.** Two or three states' surveys may not vary deductible or liability. Unvaried factors stay "Our best guess" and widen the range; recruit contributors via the existing "help wanted" issue pattern.
+- **Crime data.** FBI participation gaps (about 10% of the population still uncovered in 2025, worse before) can make county comparisons misleading. Use participation thresholds and cap the effect.
 - **Licensing.** The non-goals keep us informational, but this isn't a 50-state legal opinion. Before launch, have counsel confirm no state treats an automated renters-price comparison as solicitation.
 - **Lead-price and traffic figures** in §1 come from secondary or vendor sources; don't repeat them on the site.
 
@@ -218,14 +231,20 @@ Publish the result on `/methodology` and in `data/renters/README.md`, as `data/f
 
 ## Sources
 
-All accessed November 7, 2026 (internal research).
+Accessed November 7 or 12, 2026 (internal research).
 
-- NAIC, *NAIC Releases Homeowners Insurance Report for 2022*: https://content.naic.org/article/naic-releases-homeowners-insurance-report-2022 and publications page: https://content.naic.org/publications
+- NAIC, *Dwelling Fire, Homeowners Owner-Occupied, and Homeowners Tenant and Condominium/Cooperative Unit Owner's Insurance Report: Data for 2023* (July 2026): https://content.naic.org/sites/default/files/publication-hmr-zu-homeowners-report.pdf (copyright notice and Table 5 checked November 12, 2026); publications page: https://content.naic.org/publications
+- NAIC Legal Division (reprint requests): https://content.naic.org/legal_home.htm
+- BLS CPI `CUUR0000SEHD` on FRED: https://fred.stlouisfed.org/series/CUUR0000SEHD
 - BLS, *Measuring Price Change in the CPI: Tenant's and Household Insurance*: https://www.bls.gov/cpi/factsheets/tenants-household-insurance.htm (series `CUUR0000SEHD`)
 - California DOI homeowners/renters comparison tool: https://interactive.web.insurance.ca.gov/apex/f?p=111:20 and profiles: https://www.insurance.ca.gov/01-consumers/105-type/9-compare-prem/homeowners-profile.cfm
 - Texas HelpInsure home FAQ: https://www.helpinsure.com/home-faq.html
 - Maryland Insurance Administration, homeowners rates and comparison guide: https://insurance.maryland.gov/Consumer/Pages/homeowners-rates.aspx
-- FBI Crime Data Explorer: https://cde.ucr.cjis.gov/ (NIBRS participation figures per FBI analysis cited in the research)
+- FBI Crime Data Explorer: https://cde.ucr.cjis.gov/ and NIBRS: https://nibrs.fbi.gov/ (participation figures per FBI releases cited in the research)
+- OpenFEMA NFIP redacted claims: https://catalog.data.gov/dataset/fima-nfip-redacted-claims-openfema
+- National Apartment Association, renters insurance survey coverage (Jan. 23, 2023): https://naahq.org/news/renters-insurance-premiums-constant
+- RivoRent renters estimator: https://www.rivo.rent/renters-insurance
+- SERFF Filing Access: https://filingaccess.serff.com/
 - FEMA National Risk Index technical documentation v1.20: https://www.fema.gov/sites/default/files/documents/fema_national-risk-index_technical-documentation.pdf
 - USFA NFIRS public data: https://www.usfa.fema.gov/nfirs/access-data/
 - NAIC producer licensing: https://content.naic.org/insurance-topics/producer-licensing
