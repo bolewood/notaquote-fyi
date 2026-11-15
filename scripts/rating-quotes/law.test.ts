@@ -225,3 +225,36 @@ test("a fetch's HTTP status maps to an outcome: bot checks aren't fatal, dead li
   assert.ok(!fatalStatuses(true).includes("NEEDS_BROWSER"), "a bot check alone never does")
   assert.deepEqual(fatalStatuses(false), ["MISSING", "NO_SNAPSHOT"])
 })
+
+test("a Colorado title PDF is cut to the cited section, and a #fragment picks which one", () => {
+  const pdf = [
+    "        10-4-615. Earlier section. (1) Text about something else that runs long enough.",
+    "",
+    "       Source: L. 2003: Entire section added.",
+    "",
+    "        10-4-616. Disclosure of credit reports. (1) (a) Insurers using new or updated credit",
+    "information in insurance underwriting or rating shall notify applicants or policyholders.",
+    "        (2) A second subsection that mentions section 10-4-617 in passing, long enough to count.",
+    "",
+    "        10-4-617. Insurers - biannual fee. (1) Each insurer pays a fee.",
+  ].join("\n")
+  const url = "https://leg.colorado.gov/sites/default/files/images/olls/crs2024-title-10.pdf#10-4-616"
+  const got = extractSection(url, pdf, "C.R.S. § 10-4-616(1)(a)", true)
+  assert.ok("text" in got, "error" in got ? got.error : "")
+  assert.match(got.text, /^10-4-616\. Disclosure of credit reports\./)
+  assert.match(got.text, /in passing/, "a cross-reference inside the section doesn't end it")
+  assert.doesNotMatch(got.text, /Earlier section|biannual fee/)
+})
+
+test("a consumer guide is cut to the part a rule cites", () => {
+  const page = `<html><body><main><h2>Insurance Tips</h2><p>Verify before you buy.</p>
+    <p>Ask for car insurance discounts: Contact your insurance provider to take advantage of all available discounts.</p>
+    <p>Getting married - Statistics have shown that single drivers are twice as likely to be involved in an accident.</p>
+    <h2>Request your CLUE Report (Comprehensive Loss Underwriting Exchange)</h2><p>Later text.</p></main></body></html>`
+  const url = "https://www.myfloridacfo.com/division/consumers/understanding-insurance/personal-automobile-insurance-overview"
+  const got = extractSection(url, page, "Florida Department of Financial Services, Personal Automobile Insurance Overview")
+  assert.ok("text" in got, "error" in got ? got.error : "")
+  assert.match(got.text, /^Ask for car insurance discounts/)
+  assert.match(got.text, /Getting married/)
+  assert.doesNotMatch(got.text, /Verify before you buy|CLUE|Later text/)
+})

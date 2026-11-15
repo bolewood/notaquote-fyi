@@ -236,6 +236,11 @@ export type SiteRule = {
   mirror?: string
   /** The site often answers a plain fetch with a bot check, or builds the page with JavaScript, so a browser may be needed. */
   needsBrowser?: boolean
+  /**
+   * The site's PDFs are laid out in columns (consumer guides, mostly). Read them in reading order
+   * instead of keeping the printed layout, which would interleave the columns line by line.
+   */
+  pdfColumns?: boolean
   /** The element that holds the law's text. */
   container?: { id?: string; className?: string; tag?: string }
   /** Where the section starts and stops inside that text, worked out from the page's address. */
@@ -304,6 +309,91 @@ export const SITE_RULES: Record<string, SiteRule> = {
     needsBrowser: true,
     // The page holds the whole chapter; the label's section number picks the part we cite.
   },
+  "www.flsenate.gov": {
+    site: "The Florida Senate, Florida Statutes",
+    terms: "The page says the information on the system is unverified and that the journals or printed bills of each chamber should be consulted for official purposes.",
+    container: { tag: "body" },
+    start: (url) => new RegExp(`^${escapeRegExp(url.pathname.split("/").pop() ?? "")} [A-Z]`, "m"),
+    end: () => /^History\.—/m,
+  },
+  "www.ilga.gov": {
+    site: "Illinois General Assembly, Illinois Compiled Statutes",
+    // The server sends an incomplete certificate chain, so Node's fetch refuses it (browsers fill the gap).
+    needsBrowser: true,
+    container: { tag: "body" },
+    start: () => /^\(\d+ ILCS /m,
+    end: () => /^\(Source:/m,
+  },
+  "codes.ohio.gov": {
+    site: "Ohio Laws and Administrative Rules (Legislative Service Commission)",
+    container: { className: "laws-body" },
+  },
+  "www.azleg.gov": {
+    site: "Arizona State Legislature, Arizona Revised Statutes",
+    container: { tag: "body" },
+  },
+  "www.oscn.net": {
+    site: "Oklahoma State Courts Network (OSCN), Oklahoma Statutes",
+    container: { id: "oscn-content" },
+    start: () => /^Cite as:/m,
+    end: () => /^Historical Data$/m,
+  },
+  "content.leg.colorado.gov": {
+    site: "Colorado General Assembly, Office of Legislative Legal Services (Colorado Revised Statutes)",
+    terms: "Each page of the PDF says \"Uncertified Printout\"; the certified statutes are the printed Colorado Revised Statutes.",
+    // The PDF holds the whole title; the label's section number picks the part we cite.
+  },
+  "leg.colorado.gov": {
+    site: "Colorado General Assembly, Office of Legislative Legal Services (Colorado Revised Statutes)",
+    terms: "Each page of the PDF says \"Uncertified Printout\"; the certified statutes are the printed Colorado Revised Statutes.",
+    // The PDF holds the whole title; the label's section number picks the part we cite.
+  },
+  // Insurance departments' consumer pages: summaries of the law, cited with "evidence": "summary".
+  "www.tdi.texas.gov": {
+    site: "Texas Department of Insurance",
+    container: { tag: "main" },
+    start: () => /^Insurance companies determine premiums and rates by looking at you$/m,
+    end: () => /^But it’s not just you$/m,
+  },
+  "www.oid.ok.gov": {
+    site: "Oklahoma Insurance Department",
+    container: { tag: "main" },
+    start: () => /^Factors Affecting Premiums and Rates$/m,
+    end: () => /^Additional Factors Influencing Insurance Costs$/m,
+  },
+  "oci.georgia.gov": {
+    site: "Georgia Office of Commissioner of Insurance and Safety Fire",
+    container: { tag: "main" },
+    start: () => /^Several Factors Will Affect Risk Rating$/m,
+    end: () => /^Ask Your Agent About Discounts$/m,
+  },
+  "idoi.illinois.gov": {
+    site: "Illinois Department of Insurance",
+    container: { tag: "main" },
+    start: () => /^Factors That May Affect The Premium$/m,
+    end: () => /^Discounts That May Be Available$/m,
+  },
+  "insurance.ohio.gov": {
+    site: "Ohio Department of Insurance",
+    // Answers our checker's user agent with a 404 page; a browser gets the guide.
+    needsBrowser: true,
+    container: { tag: "main" },
+    start: () => /^What factors do companies use to set rates\?$/m,
+    end: () => /^About Rate Regulation$/m,
+  },
+  "www.nj.gov": {
+    site: "New Jersey Department of Banking and Insurance",
+    pdfColumns: true,
+    start: (url) => guideCut(url).start,
+    end: (url) => guideCut(url).end,
+  },
+  "www.myfloridacfo.com": {
+    site: "Florida Department of Financial Services",
+    pdfColumns: true,
+    container: { tag: "main" },
+    start: (url) => guideCut(url).start,
+    end: (url) => guideCut(url).end,
+  },
   "le.utah.gov": {
     site: "Utah State Legislature",
     container: { id: "secdiv" },
@@ -318,6 +408,33 @@ export const SITE_RULES: Record<string, SiteRule> = {
     terms: "The site links a Disclaimer and a Copyright page; we copy only the statute's text, which is public.",
     container: { id: "contentWrapper" },
   },
+}
+
+/**
+ * Consumer guides run many pages; we keep only the part a rule cites. Keyed by host and path.
+ * A guide that isn't listed here is kept whole.
+ */
+const GUIDE_CUTS: Record<string, { start: RegExp; end: RegExp }> = {
+  "www.nj.gov/dobi/division_consumers/pdf/autoshopguide2026.pdf": {
+    start: /^What Affects the Cost of Auto Insurance\?/m,
+    end: /^Check If You Are Eligible for Discounts/m,
+  },
+  "www.nj.gov/dobi/division_consumers/pdf/insurescore.pdf": {
+    start: /^What about those individuals for whom a score cannot be/m,
+    end: /^How to Protect or Improve Your Credit History/m,
+  },
+  "www.myfloridacfo.com/docs-sf/consumer-services-libraries/consumerservices-documents/understanding-coverage/consumer-guides/english---automobile-insurance-toolkit.pdf": {
+    start: /^Underwriting Factors That Affect Your Insurance Policy Premium/m,
+    end: /^Other Factors Affecting/m,
+  },
+  "www.myfloridacfo.com/division/consumers/understanding-insurance/personal-automobile-insurance-overview": {
+    start: /^Ask for car insurance discounts/m,
+    end: /^Request your CLUE Report/m,
+  },
+}
+
+function guideCut(url: URL): { start: RegExp; end: RegExp } {
+  return GUIDE_CUTS[`${url.host}${url.pathname}`] ?? { start: /^/, end: /$(?![\s\S])/ }
 }
 
 /** "Tex. Ins. Code § 559.052(a)(2)" → "559.052", the section a label cites. */
@@ -335,11 +452,23 @@ const CHAPTER_CUTS: Record<string, (section: string) => { start: RegExp; end: Re
     start: new RegExp(`^Sec\\.\\s+${escapeRegExp(section)}\\.`, "m"),
     end: /^(?:Sec\. \d+\.\d+\.|SUBCHAPTER [A-Z]\.)/m,
   }),
+  "content.leg.colorado.gov": (section) => coloradoCut(section),
+  "leg.colorado.gov": (section) => coloradoCut(section),
   "adminrules.idaho.gov": (section) => ({
     // The heading is in capitals ("100. USE OF CREDIT FACTORS."); the table of contents isn't.
     start: new RegExp(`^${escapeRegExp(section)}\\.\\s+[A-Z][A-Z ,'’-]*\\.\\s*$`, "m"),
     end: /^\d{3}\.(?:\s|\s*[–-]\s*\d{3}\.)/m,
   }),
+}
+
+/** A Colorado section starts a paragraph with its number and a heading ("10-4-616. Disclosure of credit reports."). */
+function coloradoCut(section: string): { start: RegExp; end: RegExp } {
+  return {
+    start: new RegExp(`^${escapeRegExp(section)}\\.\\s+[A-Z]`, "m"),
+    // The next section's heading. The lookbehind keeps the search, which starts one character into
+    // this section's own number, from matching the rest of that number ("0-4-616.").
+    end: /(?<=\n)\d+-\d+(?:\.\d+)?-\d+(?:\.\d+)?\.\s+[A-Z]/,
+  }
 }
 
 /** The section an IDAPA label cites: "IDAPA 18.02.01.100.01.b" → "100". */

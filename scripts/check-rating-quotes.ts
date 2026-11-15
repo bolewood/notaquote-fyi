@@ -15,7 +15,7 @@
  * site rule, or a site still failing after retries). NEEDS_BROWSER (a bot
  * check) is reported, never fatal.
  */
-import { citations, extractSection, fatalStatuses, quoteFound, shortDiff, summaryTable, type CheckStatus, type Citation } from "./rating-quotes/law"
+import { citations, extractSection, fatalStatuses, quoteFound, shortDiff, SITE_RULES, summaryTable, type CheckStatus, type Citation } from "./rating-quotes/law"
 import { fetchPage, flagValue, loadSnapshots, readRulesFile } from "./rating-quotes/store"
 
 type Row = { status: CheckStatus; state: string; what: string; note?: string }
@@ -53,7 +53,8 @@ async function main(): Promise<void> {
       let problem: Row["status"] | null = null
       let note = ""
       if (!fetched.ok) {
-        problem = fetched.needsBrowser ? "NEEDS_BROWSER" : "FETCH_FAILED"
+        // Same rule as the snapshot script: a site known to need a browser is checked by hand, not failed.
+        problem = fetched.needsBrowser || SITE_RULES[new URL(url).host]?.needsBrowser ? "NEEDS_BROWSER" : "FETCH_FAILED"
         note = fetched.error
       } else {
         const extracted = extractSection(url, fetched.body, cites[0].label, fetched.isPdfText)

@@ -7,7 +7,7 @@ import { execFileSync } from "node:child_process"
 import { mkdtempSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
 import path from "node:path"
-import { classifyResponse, FETCH_RETRIES, parseSnapshot, retryDelayMs, type SnapshotMeta } from "./law"
+import { classifyResponse, FETCH_RETRIES, parseSnapshot, retryDelayMs, SITE_RULES, type SnapshotMeta } from "./law"
 
 export const ROOT = path.resolve(__dirname, "../..")
 export const RULES_PATH = path.join(ROOT, "data/state-rules/rating-rules.json")
@@ -83,7 +83,7 @@ export async function fetchPage(url: string): Promise<Fetched> {
       })
       const type = response.headers.get("content-type") ?? ""
       const isPdf = type.includes("pdf") || url.toLowerCase().endsWith(".pdf")
-      if (response.ok && isPdf) return pdfToText(Buffer.from(await response.arrayBuffer()))
+      if (response.ok && isPdf) return pdfToText(Buffer.from(await response.arrayBuffer()), !SITE_RULES[host]?.pdfColumns)
       const body = await response.text().catch(() => "")
       const outcome = classifyResponse(response.status, body)
       if (outcome === "ok") return { ok: true, body, isPdfText: false }
@@ -97,12 +97,13 @@ export async function fetchPage(url: string): Promise<Fetched> {
   return { ok: false, error: `${lastError || "fetch failed"} (after ${FETCH_RETRIES} retries)` }
 }
 
-function pdfToText(bytes: Buffer): Fetched {
+/** A PDF's text. `layout` keeps the printed layout (good for one-column statutes); off, columns come out in reading order. */
+function pdfToText(bytes: Buffer, layout = true): Fetched {
   const dir = mkdtempSync(path.join(tmpdir(), "law-pdf-"))
   try {
     const file = path.join(dir, "page.pdf")
     writeFileSync(file, bytes)
-    const text = execFileSync("pdftotext", ["-layout", "-enc", "UTF-8", file, "-"], { encoding: "utf8", maxBuffer: 50 * 1024 * 1024 })
+    const text = execFileSync("pdftotext", [...(layout ? ["-layout"] : []), "-enc", "UTF-8", file, "-"], { encoding: "utf8", maxBuffer: 50 * 1024 * 1024 })
     return { ok: true, body: text, isPdfText: true }
   } catch (error) {
     const missing = (error as NodeJS.ErrnoException).code === "ENOENT"
