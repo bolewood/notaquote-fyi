@@ -7,41 +7,39 @@ import Link from "next/link"
 import { useRef, useState } from "react"
 
 /**
+ * What happened on the last "Copy as text". The manual case is only a flag:
+ * the text box always shows the current list, so it can't fall behind when
+ * the situation changes. "Copied" remembers which text it copied, and is
+ * shown only while that's still the list on the page.
+ */
+export type CopyState = { kind: "copied"; text: string } | { kind: "manual" } | null
+
+type Clipboard = { writeText(text: string): Promise<void> } | undefined
+
+/** Copy the text, or say a manual copy is needed. Never throws. */
+export async function copyChecklist(text: string, clipboard: Clipboard): Promise<CopyState> {
+  if (!clipboard?.writeText) return { kind: "manual" }
+  try {
+    await clipboard.writeText(text)
+    return { kind: "copied", text }
+  } catch {
+    return { kind: "manual" }
+  }
+}
+
+/**
  * Questions to ask your insurer, picked for the result it follows. Collapsed
  * by default under an estimate, open on a guide. "Copy as text" and "Print"
  * record nothing and send nothing; printing uses the page's own print view.
  *
  * Takes plain data (not items with rules), so a server page can render it.
  */
-export function AskYourInsurer({
-  context,
-  open = false,
-  intro = "Picked for what you're looking at.",
-  className,
-}: {
-  context: AskContext
-  open?: boolean
-  /** One line on what the questions are picked for. */
-  intro?: string
-  className?: string
-}) {
-  const items = askItems(context)
+export function AskYourInsurer(props: { context: AskContext; open?: boolean; intro?: string; className?: string }) {
   const details = useRef<HTMLDetailsElement>(null)
-  const [status, setStatus] = useState<string | null>(null)
-  const [fallback, setFallback] = useState<string | null>(null)
-  const text = askPlainText(items)
+  const [copyState, setCopyState] = useState<CopyState>(null)
 
-  function copy() {
-    const clipboard = typeof navigator === "undefined" ? undefined : navigator.clipboard
-    const manual = () => {
-      setFallback(text)
-      setStatus("Your browser didn't let us copy. Select the text below and copy it.")
-    }
-    if (!clipboard?.writeText) return manual()
-    void clipboard.writeText(text).then(() => {
-      setFallback(null)
-      setStatus("Copied. Paste it into a note or an email.")
-    }, manual)
+  function copy(text: string) {
+    void copyChecklist(text, typeof navigator === "undefined" ? undefined : navigator.clipboard).then(setCopyState)
   }
 
   function print() {
@@ -50,8 +48,36 @@ export function AskYourInsurer({
     window.print()
   }
 
+  return <AskYourInsurerView {...props} detailsRef={details} copyState={copyState} onCopy={copy} onPrint={print} />
+}
+
+/** The checklist as drawn, for a given copy state. No state of its own. */
+export function AskYourInsurerView({
+  context,
+  open = false,
+  intro = "Picked for what you're looking at.",
+  className,
+  copyState,
+  onCopy,
+  onPrint,
+  detailsRef,
+}: {
+  context: AskContext
+  open?: boolean
+  /** One line on what the questions are picked for. */
+  intro?: string
+  className?: string
+  copyState: CopyState
+  onCopy: (text: string) => void
+  onPrint: () => void
+  detailsRef?: React.Ref<HTMLDetailsElement>
+}) {
+  const items = askItems(context)
+  const text = askPlainText(items)
+  const copied = copyState?.kind === "copied" && copyState.text === text
+  const manual = copyState?.kind === "manual"
   return (
-    <details ref={details} className={cn("disclosure", className)} open={open} data-shared data-testid="ask-your-insurer">
+    <details ref={detailsRef} className={cn("disclosure", className)} open={open} data-shared data-testid="ask-your-insurer">
       <summary className="no-print">
         {ASK_TITLE}
         <ChevronDown className="size-4" aria-hidden="true" />
@@ -63,24 +89,25 @@ export function AskYourInsurer({
         </p>
         <AskList items={items} />
         <div className="no-print flex flex-wrap items-center gap-2">
-          <button type="button" className="btn" onClick={copy} data-testid="ask-copy">
+          <button type="button" className="btn" onClick={() => onCopy(text)} data-testid="ask-copy">
             <ClipboardCopy className="size-4" aria-hidden="true" /> Copy as text
           </button>
-          <button type="button" className="btn btn-quiet" onClick={print} data-testid="ask-print">
+          <button type="button" className="btn btn-quiet" onClick={onPrint} data-testid="ask-print">
             <Printer className="size-4" aria-hidden="true" /> Print
           </button>
         </div>
-        {status ? (
+        {copied || manual ? (
           <p className="no-print text-muted-foreground" role="status">
-            {status}
+            {copied ? "Copied. Paste it into a note or an email." : "Your browser didn't let us copy. Select the text below and copy it."}
           </p>
         ) : null}
-        {fallback ? (
+        {manual ? (
           <textarea
             readOnly
             className="field-input no-print min-h-48 w-full font-mono text-xs"
-            value={fallback}
+            value={text}
             aria-label={`${ASK_TITLE}, as text`}
+            data-testid="ask-copy-text"
             onFocus={(event) => event.currentTarget.select()}
           />
         ) : null}

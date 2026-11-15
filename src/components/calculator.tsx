@@ -22,7 +22,7 @@ import { RangeBar } from "@/components/money"
 import { HomeSkeleton, StarterCards, STARTERS_PLACEMENT, TABS, type Tab } from "@/components/page-skeleton"
 import { ShareBox } from "@/components/share-box"
 import { BridgeChart } from "@/components/charts/bridge-chart"
-import { askContext, type AskContext } from "@/lib/ask-your-insurer"
+import { calculatorAskContexts, type AskContext } from "@/lib/ask-your-insurer"
 import { bridgeRows, type Bridge } from "@/lib/bridge"
 import { carName, modelTrims, resolveCar, WHAT_IF_CARS } from "@/lib/car-search"
 import { vehicleFacts } from "@/lib/catalog-class"
@@ -422,6 +422,8 @@ function CalculatorReady() {
   const start = startingPoint(situation, nowFacts)
   const startNote = start ? startLine(start) : undefined
   const state = stateName(now.state)
+  // Questions to ask your insurer: from what was priced, not from the teen-policy preference.
+  const ask = calculatorAskContexts(now, next, result)
 
   /**
    * Save the situation in this browser. A shared situation becomes the
@@ -718,7 +720,7 @@ function CalculatorReady() {
                     </div>
                   </details>
                 ) : null}
-                {nowEstimate && !result ? <AskYourInsurer context={askContext(now, situation.teenOnParentPolicy)} /> : null}
+                {nowEstimate && !result ? <AskYourInsurer context={ask.estimate} /> : null}
               </div>
             </div>
           </section>
@@ -957,7 +959,7 @@ function CalculatorReady() {
                     cars: [nowCar, nextCar].map((car) => ({ ...car, starred: false })),
                     via: "whatif",
                   })}
-                  ask={askContext(next, situation.teenOnParentPolicy)}
+                  ask={ask.result ?? ask.estimate}
                   versionPicker={
                     changed.includes("vehicle") ? (
                       <VersionPicker idPrefix="next-car" pick={nextCar} catalog={catalog} onChange={(pick) => patchNext(pick)} compact />
@@ -1055,7 +1057,7 @@ function CalculatorReady() {
             : null
         }
         changes={shown.map((key) => chipLabel(key, now, next))}
-        ask={askContext(result ? next : now, situation.teenOnParentPolicy)}
+        ask={ask.print}
       />
 
       <CarPicker

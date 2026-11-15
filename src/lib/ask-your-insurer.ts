@@ -10,6 +10,7 @@
  */
 import { SITE_ORIGIN } from "./copy"
 import { ratingRule } from "./rating-rules"
+import type { WhatIfMode } from "./pricing"
 import { hasPhysicalDamage, type CoverageId, type Incidents, type Scenario, type StateCode } from "./scenario"
 
 /**
@@ -41,6 +42,14 @@ export type AskItem = {
 export type ShownAskItem = Omit<AskItem, "shownWhen">
 
 const isTeen = (context: AskContext) => context.teen !== null
+
+/** What the state's credit rule says, for the credit questions. No state (a guide): none. */
+function creditRule(context: AskContext): "allowed" | "banned" | "unreviewed" | null {
+  if (!context.state) return null
+  const rule = ratingRule(context.state, "credit")
+  if (!rule) return "unreviewed"
+  return rule.status === "banned" ? "banned" : "allowed"
+}
 const onParentPolicy = (context: AskContext) => context.teen === "added"
 
 /** In the order they're shown. The last one always shows. */
@@ -94,17 +103,20 @@ export const ASK_ITEMS: readonly AskItem[] = [
     id: "credit-renewal",
     question: "Do you check credit again at renewal if my score has improved?",
     why: "Many insurers use credit when they set a price, and some look at it again only if you ask.",
-    // Only where the state's rule has been reviewed and isn't a ban. An unreviewed state is never read as "allowed".
-    shownWhen: (context) => {
-      if (!context.state) return false
-      const rule = ratingRule(context.state, "credit")
-      return rule !== undefined && rule.status !== "banned"
-    },
+    // Where the state's rule has been reviewed and isn't a ban.
+    shownWhen: (context) => creditRule(context) === "allowed",
+  },
+  {
+    id: "credit-renewal-if-used",
+    question: "If you use credit in pricing, will you check it again at renewal if my score has improved?",
+    why: "We haven't checked your state's credit rule yet. Where it's allowed, some insurers look at credit again only if you ask.",
+    // Not reviewed yet: asked as a condition, never stated as allowed.
+    shownWhen: (context) => creditRule(context) === "unreviewed",
   },
   {
     id: "defensive-driving",
-    question: "Would a defensive-driving course remove or reduce the extra charge for a ticket or accident?",
-    why: "Some insurers lower that charge, or give a discount, after an approved course. It's worth asking before you sign up for one.",
+    question: "Can I qualify for a defensive-driving course discount with an accident on my record? Which courses qualify?",
+    why: "Whether you qualify, and which courses count, differs by insurer. A course discount may not remove the extra charge for the accident itself.",
     shownWhen: (context) => context.incidents !== undefined && context.incidents !== "clean",
   },
   {
@@ -121,18 +133,48 @@ export function askItems(context: AskContext, items: readonly AskItem[] = ASK_IT
   return items.filter((item) => item.shownWhen(context)).map(({ id, question, why, link }) => (link ? { id, question, why, link } : { id, question, why }))
 }
 
-/** What the checklist knows about an estimate for this scenario. */
+/**
+ * What the checklist knows about an estimate for this scenario.
+ * `onParentPolicy` says whether the estimate actually prices a teen added to
+ * the parent's policy, not the visitor's preference for when one is added.
+ */
 export function askContext(
   scenario: Pick<Scenario, "age" | "state" | "coverage" | "loanLease" | "incidents">,
-  teenOnParentPolicy: boolean,
+  onParentPolicy: boolean,
 ): AskContext {
   return {
-    teen: scenario.age === "16-18" ? (teenOnParentPolicy ? "added" : "own") : null,
+    teen: scenario.age === "16-18" ? (onParentPolicy ? "added" : "own") : null,
     state: scenario.state,
     coverage: scenario.coverage,
     loanLease: scenario.loanLease,
     incidents: scenario.incidents,
   }
+}
+
+/**
+ * The calculator's context for what it shows. The base estimate (`mode` null)
+ * and an ordinary what-if price the driver's own policy, even when the
+ * driver is a teen and the visitor prefers adding teens to their policy.
+ * Only a "teen-added" result prices a teen on the parent's policy.
+ */
+export function estimateAskContext(scenario: Scenario, mode: WhatIfMode | null): AskContext {
+  return askContext(scenario, mode === "teen-added")
+}
+
+/**
+ * Every checklist the calculator shows, from what it priced: the base
+ * estimate, the what-if result, and the printed page. It takes no policy
+ * preference on purpose: only the result's own mode says a teen was added
+ * to the parent's policy.
+ */
+export function calculatorAskContexts(
+  now: Scenario,
+  next: Scenario,
+  result: { mode: WhatIfMode } | null,
+): { estimate: AskContext; result: AskContext | null; print: AskContext } {
+  const estimate = estimateAskContext(now, null)
+  const shown = result ? estimateAskContext(next, result.mode) : null
+  return { estimate, result: shown, print: shown ?? estimate }
 }
 
 export const ASK_TITLE = "Questions to ask your insurer"
