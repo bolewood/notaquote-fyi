@@ -362,31 +362,40 @@ test("a parent who isn't 40–64: year 1 follows the engine, and the shared rang
 // ---------------------------------------------------------------------------
 // Print and phones
 
-test("the printed summary carries the four years: each year, its range, the total, and the basis", () => {
-  const { years, priced, now } = addedResult(ADDED)
-  const html = renderToStaticMarkup(
-    createElement(PrintSummary, {
-      situation: ADDED,
-      nowEstimate: priced.current,
-      ownNumber: false,
-      result: { headline: priced.headline, next: priced.next, parts: priced.parts },
-      bridge: null,
-      changes: ["Teen added (16–18)"],
-      ask: calculatorAskContexts(now, { ...now, age: "16-18" }, priced).print,
-      fourYears: years,
-    }),
-  )
-  assert.match(html, /data-testid="next-four-years-print"/)
-  const text = visibleText(html)
-  for (const row of years.rows) {
-    assert.ok(text.includes(yearName(row)), yearName(row))
-    assert.ok(text.includes(rangeDollars(row.low, row.high)), `${yearName(row)} range`)
-    assert.ok(text.includes(row.basisWords), `${yearName(row)} basis`)
+test("the printed summary carries the four years, added or their own policy: each year, its range, the total, and the basis", () => {
+  const own: Situation = { ...DEFAULT_SITUATION, teenOnParentPolicy: false, scenario: { ...DEFAULT_SITUATION.scenario, state: "OK" } }
+  for (const situation of [ADDED, own]) {
+    const now = situation.scenario
+    const next: Scenario = { ...now, ...starter("adding-teen").change(now) }
+    const priced = priceWhatIf(situation, vehicleFacts(catalog, now), next, vehicleFacts(catalog, next))
+    assert.ok(priced)
+    const years = teenFourYears(priced, now, next)
+    assert.ok(years)
+    assert.equal(years.kind, situation.teenOnParentPolicy ? "added" : "own")
+    const html = renderToStaticMarkup(
+      createElement(PrintSummary, {
+        situation,
+        nowEstimate: priced.current,
+        ownNumber: false,
+        result: { headline: priced.headline, next: priced.next, parts: priced.parts },
+        bridge: null,
+        changes: ["Teen added (16–18)"],
+        ask: calculatorAskContexts(now, next, priced).print,
+        fourYears: years,
+      }),
+    )
+    assert.match(html, /data-testid="next-four-years-print"/)
+    const text = visibleText(html)
+    for (const row of years.rows) {
+      assert.ok(text.includes(yearName(row)), yearName(row))
+      assert.ok(text.includes(rangeDollars(row.low, row.high)), `${yearName(row)} range`)
+      assert.ok(text.includes(row.basisWords), `${yearName(row)} basis`)
+    }
+    assert.ok(text.includes("All four years"))
+    assert.ok(text.includes(rangeDollars(years.total.low, years.total.high)))
+    assert.doesNotMatch(text, PLAIN_LANGUAGE_BANNED)
+    assert.ok(html.indexOf("next-four-years-print") < html.indexOf("Questions to ask"), "before the checklist")
   }
-  assert.ok(text.includes("All four years"))
-  assert.ok(text.includes(rangeDollars(years.total.low, years.total.high)))
-  assert.doesNotMatch(text, PLAIN_LANGUAGE_BANNED)
-  assert.ok(html.indexOf("next-four-years-print") < html.indexOf("Questions to ask"), "before the checklist")
 })
 
 test("phones see every range: each year's and the total's, under the figure", () => {
