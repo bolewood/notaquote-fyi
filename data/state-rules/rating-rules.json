@@ -12,6 +12,36 @@
           "url": "https://www.azleg.gov/ars/20/02110.htm"
         },
         "quote": "F. An insurer shall not use the following types of credit history to calculate an insurance score to determine property or casualty premiums for insurance transactions that are subject to this article and shall not knowingly use an insurance score developed by a third party if the score is calculated using any of the following types of credit history: 1. The absence of credit history or the inability to determine the consumer's credit history unless the insurer's action is actuarially justified or the insurer treats the consumer as if the consumer had neutral credit information, as defined by the insurer. 2. Credit history or an insurance score based on collection accounts identified with a medical industry code. 3. A bankruptcy or a lien satisfaction that is more than seven years old."
+      },
+      "gender": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may use gender, though many stop counting it after a certain age, according to the Arizona insurance department.",
+        "source": {
+          "label": "Arizona Department of Insurance and Financial Institutions, 2025 Auto Premium Comparison, \"Notes to the Hypotheticals\"",
+          "url": "https://difi.az.gov/sites/default/files/2026-08/2025_Auto_Premium_Comparison.pdf"
+        },
+        "quote": "The driver's marital status and gender, after a certain age, are not even considered by many insurers for the purpose of determining the driver's premium. However, at some point, age (e.g. age 70, etc.) may become an even more important factor than previously."
+      },
+      "maritalStatus": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may use marital status, though many stop counting it after a certain age, according to the Arizona insurance department.",
+        "source": {
+          "label": "Arizona Department of Insurance and Financial Institutions, 2025 Auto Premium Comparison, \"Notes to the Hypotheticals\"",
+          "url": "https://difi.az.gov/sites/default/files/2026-08/2025_Auto_Premium_Comparison.pdf"
+        },
+        "quote": "The driver's marital status and gender, after a certain age, are not even considered by many insurers for the purpose of determining the driver's premium. However, at some point, age (e.g. age 70, etc.) may become an even more important factor than previously."
+      },
+      "age": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may use your age, and it can matter even more around 70, according to the Arizona insurance department.",
+        "source": {
+          "label": "Arizona Department of Insurance and Financial Institutions, 2025 Auto Premium Comparison, \"Notes to the Hypotheticals\"",
+          "url": "https://difi.az.gov/sites/default/files/2026-08/2025_Auto_Premium_Comparison.pdf"
+        },
+        "quote": "The driver's marital status and gender, after a certain age, are not even considered by many insurers for the purpose of determining the driver's premium. However, at some point, age (e.g. age 70, etc.) may become an even more important factor than previously."
       }
     },
     "CA": {
@@ -105,22 +135,87 @@
     },
     "CO": {
       "credit": {
-        "status": "no-ban-found",
-        "summary": "Colorado lets insurers use your credit to set your price, but they have to tell you they're using it.",
+        "status": "limited",
+        "summary": "Insurers can use your credit, but can't set your renewal price or turn you down based on credit alone.",
         "source": {
-          "label": "C.R.S. § 10-4-616(1)(a)",
-          "url": "https://leg.colorado.gov/sites/default/files/images/olls/crs2024-title-10.pdf#10-4-616"
+          "label": "C.R.S. § 10-4-116(1)(c)",
+          "url": "https://olls.info/crs/crs2026-title-10.pdf#10-4-116"
         },
-        "quote": "Insurers using new or updated credit information in insurance underwriting or rating shall notify applicants or policyholders that their credit information will be used for underwriting or rating."
+        "quote": "Base an insured's renewal rates for personal lines of property and casualty insurance upon credit information, without consideration of any other applicable factor independent of credit information;",
+        "moreSources": [
+          {
+            "label": "C.R.S. § 10-4-116(1)(b)",
+            "url": "https://olls.info/crs/crs2026-title-10.pdf#10-4-116",
+            "quote": "Deny, cancel, or fail to renew a policy of personal lines of property and casualty insurance on the basis of credit information, without consideration of any other applicable underwriting factor that is independent of credit information"
+          },
+          {
+            "label": "C.R.S. § 10-4-116(1)(h), credit details that can't count against you",
+            "url": "https://olls.info/crs/crs2026-title-10.pdf#10-4-116",
+            "quote": "Use the following as a negative factor in an insurance scoring methodology or in reviewing credit information for the purpose of underwriting or rating a policy of personal lines of property and casualty insurance:"
+          },
+          {
+            "label": "C.R.S. § 10-4-616(1)(a)",
+            "url": "https://olls.info/crs/crs2026-title-10.pdf#10-4-616",
+            "quote": "Insurers using new or updated credit information in insurance underwriting or rating shall notify applicants or policyholders that their credit information will be used for underwriting or rating."
+          }
+        ]
+      },
+      "gender": {
+        "status": "limited",
+        "summary": "Insurers can't set prices on sex alone unless claims data backs up the difference.",
+        "source": {
+          "label": "C.R.S. § 10-3-1104(1)(f)(III)",
+          "url": "https://olls.info/crs/crs2026-title-10.pdf#10-3-1104"
+        },
+        "quote": "Making or permitting to be made any classification solely on the basis of marital status or sex, unless such classification is for the purpose of insuring family units or is justified by actuarial statistics;"
+      },
+      "maritalStatus": {
+        "status": "limited",
+        "summary": "Insurers can't set prices on marital status alone unless they're insuring a family together or claims data backs it up.",
+        "source": {
+          "label": "C.R.S. § 10-3-1104(1)(f)(III)",
+          "url": "https://olls.info/crs/crs2026-title-10.pdf#10-3-1104"
+        },
+        "quote": "Making or permitting to be made any classification solely on the basis of marital status or sex, unless such classification is for the purpose of insuring family units or is justified by actuarial statistics;"
+      },
+      "age": {
+        "status": "no-ban-found",
+        "summary": "Colorado law requires a lower price for drivers 55 and older who finish an approved driver's education course.",
+        "source": {
+          "label": "C.R.S. § 10-4-632(2)",
+          "url": "https://olls.info/crs/crs2026-title-10.pdf#10-4-632"
+        },
+        "quote": "shall provide for an appropriate reduction in premium charges based on justifiable data when the vehicle is a covered vehicle and when the principal operator is fifty-five years of age or older and has successfully completed a driver's education course"
+      },
+      "territory": {
+        "status": "limited",
+        "summary": "Insurers can price by area, but can't charge neighborhoods in the same city different rates when the risk there is the same.",
+        "source": {
+          "label": "C.R.S. § 10-3-1104(1)(f)(II)",
+          "url": "https://olls.info/crs/crs2026-title-10.pdf#10-3-1104"
+        },
+        "quote": "Making or permitting any unfair discrimination between individuals of the same class or between neighborhoods within a municipality and of essentially the same hazard in the amount of premium, policy fees, or rates charged for any policy or contract of insurance"
       },
       "priorInsurance": {
         "status": "limited",
-        "summary": "Insurers can't charge new customers more just for having no prior insurance unless claims data on file with the state backs it up.",
+        "summary": "Insurers can't charge more just for a gap when you weren't required to be insured; other gaps need claims data filed with the state.",
         "source": {
           "label": "C.R.S. § 10-4-628(2)(a)(II)",
-          "url": "https://leg.colorado.gov/sites/default/files/images/olls/crs2024-title-10.pdf#10-4-628"
+          "url": "https://olls.info/crs/crs2026-title-10.pdf#10-4-628"
         },
-        "quote": "Unless actuarial justification in support of the insurer's action that has been filed with the commissioner demonstrates that there is an increase in risk, no insurer shall refuse to write a policy for a new applicant, surcharge the premium of a new applicant, or place a new applicant in a higher-priced program or plan based solely upon: (A) The fact that the applicant had no prior insurance;"
+        "quote": "Unless actuarial justification in support of the insurer's action that has been filed with the commissioner demonstrates that there is an increase in risk, no insurer shall refuse to write a policy for a new applicant, surcharge the premium of a new applicant, or place a new applicant in a higher-priced program or plan based solely upon: (A) The fact that the applicant had no prior insurance;",
+        "moreSources": [
+          {
+            "label": "C.R.S. § 10-4-628(2)(a)(IV), when you weren't required to be insured",
+            "url": "https://olls.info/crs/crs2026-title-10.pdf#10-4-628",
+            "quote": "An insurer shall not refuse to write a policy for a new applicant, surcharge the premium of a new applicant, or place a new applicant in a higher-priced program or plan solely because the applicant had no prior insurance if the applicant was not required to have insurance under section 10-4-620 or under a similar law in another state."
+          },
+          {
+            "label": "C.R.S. § 10-4-628(2)(a)(V), gaps during military deployment",
+            "url": "https://olls.info/crs/crs2026-title-10.pdf#10-4-628",
+            "quote": "An insurer shall not reduce or cancel insurance coverage except for nonpayment, refuse to issue or renew a policy, or surcharge a newly issued or renewed policy due to a covered person's failure to maintain coverage during a period in which the covered person was deployed by or called to active duty in the United States military"
+          }
+        ]
       }
     },
     "FL": {

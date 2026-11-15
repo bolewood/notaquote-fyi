@@ -7,7 +7,7 @@ import { execFileSync } from "node:child_process"
 import { mkdtempSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
 import path from "node:path"
-import { classifyResponse, FETCH_RETRIES, parseSnapshot, retryDelayMs, SITE_RULES, type SnapshotMeta } from "./law"
+import { classifyResponse, FETCH_RETRIES, parseSnapshot, retryDelayMs, SITE_RULES, type FetchFailure, type SnapshotMeta } from "./law"
 
 export const ROOT = path.resolve(__dirname, "../..")
 export const RULES_PATH = path.join(ROOT, "data/state-rules/rating-rules.json")
@@ -55,13 +55,17 @@ const TIMEOUT_MS = 30_000
 const GAP_MS = 1_500
 const lastHit = new Map<string, number>()
 
+/** Tests set RATING_CHECK_NO_WAIT=1 so a mocked failure doesn't sit through the polite gaps and retry pauses. */
+const NO_WAIT = process.env.RATING_CHECK_NO_WAIT === "1"
+
 async function politeWait(host: string): Promise<void> {
+  if (NO_WAIT) return
   const since = Date.now() - (lastHit.get(host) ?? 0)
   if (since < GAP_MS) await new Promise((resolve) => setTimeout(resolve, GAP_MS - since))
   lastHit.set(host, Date.now())
 }
 
-export type Fetched = { ok: true; body: string; isPdfText: boolean } | { ok: false; error: string; needsBrowser?: boolean }
+export type Fetched = { ok: true; body: string; isPdfText: boolean } | ({ ok: false } & FetchFailure)
 
 /**
  * One page: HTML as text, or a PDF's text (through pdftotext). A network error
@@ -72,8 +76,10 @@ export type Fetched = { ok: true; body: string; isPdfText: boolean } | { ok: fal
 export async function fetchPage(url: string): Promise<Fetched> {
   const host = new URL(url).host
   let lastError = ""
+  let lastStatus: number | undefined
+  let lastCode: string | undefined
   for (let attempt = 0; attempt <= FETCH_RETRIES; attempt += 1) {
-    if (attempt > 0) await new Promise((resolve) => setTimeout(resolve, retryDelayMs(attempt)))
+    if (attempt > 0 && !NO_WAIT) await new Promise((resolve) => setTimeout(resolve, retryDelayMs(attempt)))
     await politeWait(host)
     try {
       const response = await fetch(url, {
@@ -87,14 +93,21 @@ export async function fetchPage(url: string): Promise<Fetched> {
       const body = await response.text().catch(() => "")
       const outcome = classifyResponse(response.status, body)
       if (outcome === "ok") return { ok: true, body, isPdfText: false }
-      if (outcome === "needs-browser") return { ok: false, error: `HTTP ${response.status}: the site sent a bot check`, needsBrowser: true }
-      if (outcome === "dead") return { ok: false, error: `HTTP ${response.status}: the link looks dead; fix the rule's URL` }
+      if (outcome === "needs-browser") return { ok: false, error: `HTTP ${response.status}: the site sent a bot check`, status: response.status, needsBrowser: true }
+      if (outcome === "dead") return { ok: false, error: `HTTP ${response.status}: the link looks dead; fix the rule's URL`, status: response.status }
       lastError = `HTTP ${response.status}`
+      lastStatus = response.status
+      lastCode = undefined
     } catch (error) {
       lastError = error instanceof Error ? (error.name === "TimeoutError" ? `timed out after ${TIMEOUT_MS / 1000}s` : error.message) : String(error)
+      // Node's fetch puts the network error's code (ENOTFOUND, UNABLE_TO_VERIFY_LEAF_SIGNATURE, ...) on `cause`.
+      const cause = error instanceof Error ? (error.cause as { code?: unknown } | undefined) : undefined
+      lastCode = typeof cause?.code === "string" ? cause.code : undefined
+      lastStatus = undefined
+      if (lastCode) lastError = `${lastError} (${lastCode})`
     }
   }
-  return { ok: false, error: `${lastError || "fetch failed"} (after ${FETCH_RETRIES} retries)` }
+  return { ok: false, error: `${lastError || "fetch failed"} (after ${FETCH_RETRIES} retries)`, status: lastStatus, errorCode: lastCode }
 }
 
 /** A PDF's text. `layout` keeps the printed layout (good for one-column statutes); off, columns come out in reading order. */

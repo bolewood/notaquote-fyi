@@ -2,6 +2,7 @@ import assert from "node:assert/strict"
 import test from "node:test"
 import { renderToStaticMarkup } from "react-dom/server"
 import WhatWeDontAskPage from "../app/what-we-dont-ask/page"
+import StatePage, { generateStaticParams as stateParams } from "../app/states/[state]/page"
 import { FACTOR_BUNDLE } from "./factor-engine"
 import {
   compareLine,
@@ -335,4 +336,52 @@ test("the page opens with a plain note that it's a guide, not legal advice", () 
   assert.match(note, /not legal advice/)
   assert.match(note, /from a summary/)
   assert.match(note, /insurance department/)
+})
+
+test("pinned: Colorado limits credit (renewal price and turning you down), from C.R.S. 10-4-116", () => {
+  const rule = ratingRule("CO", "credit")
+  assert.equal(rule?.status, "limited")
+  assert.match(rule?.source.label ?? "", /10-4-116/)
+  assert.equal(fromSummary(rule), false, "it rests on the law itself")
+  assert.equal(ratingRule("CO", "priorInsurance")?.status, "limited")
+})
+
+test("comparisons say which side rests on a summary, in either order", () => {
+  for (const state of ["NJ", "TX"]) assert.equal(fromSummary(ratingRule(state, state === "NJ" ? "gender" : "educationOccupation")), true)
+  assert.equal(
+    compareLine("gender", "CA", "NJ", "California", "New Jersey"),
+    "Gender: insurers in California can't use it; insurers in New Jersey can use it (from a summary).",
+  )
+  assert.equal(
+    compareLine("gender", "NJ", "CA", "New Jersey", "California"),
+    "Gender: insurers in New Jersey can use it (from a summary); insurers in California can't use it.",
+  )
+  assert.equal(
+    compareLine("educationOccupation", "CA", "TX", "California", "Texas"),
+    "Education or job: insurers in California can use it, with limits; insurers in Texas can use it (from a summary).",
+  )
+  assert.equal(
+    compareLine("educationOccupation", "TX", "CA", "Texas", "California"),
+    "Education or job: insurers in Texas can use it (from a summary); insurers in California can use it, with limits.",
+  )
+  // Both limit it: each state's own sentence is shown, and the summary-based one is labeled.
+  const base = { source: { label: "Law", url: "https://example.gov" }, quote: "a quote from the law", checkedOn: "2026-11-15" }
+  const law = { ...base, status: "limited" as const, summary: "Insurers can use credit, but not alone." }
+  const summary = { ...law, evidence: "summary" as const, summary: "Insurers can't use it to cancel, according to the department." }
+  assert.equal(
+    compareRules("credit", law, summary, "Ohio", "New Jersey"),
+    "Credit: both states limit it, in different ways. Ohio: Insurers can use credit, but not alone. New Jersey (from a summary): Insurers can't use it to cancel, according to the department.",
+  )
+  assert.equal(compareRules("credit", law, law, "Ohio", "Illinois")?.includes("(from a summary)"), false, "law-based answers carry no label")
+})
+
+test("a state page's rules box labels a summary-based answer", async () => {
+  const slug = stateParams().find((item) => /jersey/.test(item.state))?.state
+  assert.ok(slug, "New Jersey has a state page")
+  const html = renderToStaticMarkup(await StatePage({ params: Promise.resolve({ state: slug }) } as never))
+  const at = html.indexOf('data-testid="state-rating-rules"')
+  assert.ok(at > 0)
+  const box = visibleText(html.slice(at, html.indexOf("</div>", at)))
+  assert.match(box, /Gender: allowed \(from a summary\)\./)
+  assert.doesNotMatch(box, /Credit: allowed \(from a summary\)/)
 })

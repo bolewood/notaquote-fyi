@@ -236,14 +236,17 @@ test("a Colorado title PDF is cut to the cited section, and a #fragment picks wh
     "information in insurance underwriting or rating shall notify applicants or policyholders.",
     "        (2) A second subsection that mentions section 10-4-617 in passing, long enough to count.",
     "",
+    "                                           ANNOTATION",
+    "   Law reviews. Court-case notes that aren't the statute's text.",
+    "",
     "        10-4-617. Insurers - biannual fee. (1) Each insurer pays a fee.",
   ].join("\n")
-  const url = "https://leg.colorado.gov/sites/default/files/images/olls/crs2024-title-10.pdf#10-4-616"
+  const url = "https://olls.info/crs/crs2026-title-10.pdf#10-4-616"
   const got = extractSection(url, pdf, "C.R.S. § 10-4-616(1)(a)", true)
   assert.ok("text" in got, "error" in got ? got.error : "")
   assert.match(got.text, /^10-4-616\. Disclosure of credit reports\./)
   assert.match(got.text, /in passing/, "a cross-reference inside the section doesn't end it")
-  assert.doesNotMatch(got.text, /Earlier section|biannual fee/)
+  assert.doesNotMatch(got.text, /Earlier section|biannual fee|Court-case notes/, "nor the next section, nor the annotations")
 })
 
 test("a consumer guide is cut to the part a rule cites", () => {

@@ -237,10 +237,20 @@ export function compareLine(factor: RatingFactor, a: string, b: string, aName: s
  */
 function stateClause(rule: RatingRule, name: string): string {
   const group = ratingGroup(rule)
-  if (group === "banned") return `insurers in ${name} can't use it`
-  if (group === "limited") return `insurers in ${name} can use it, with limits`
-  if (group === "not-on-list") return `${name}'s rating law doesn't list it as banned`
-  return `insurers in ${name} can use it`
+  const clause =
+    group === "banned"
+      ? `insurers in ${name} can't use it`
+      : group === "limited"
+        ? `insurers in ${name} can use it, with limits`
+        : group === "not-on-list"
+          ? `${name}'s rating law doesn't list it as banned`
+          : `insurers in ${name} can use it`
+  return fromSummary(rule) ? `${clause} (from a summary)` : clause
+}
+
+/** A state's name in a comparison sentence, with "(from a summary)" when its answer rests on one. */
+function labeledName(rule: RatingRule, name: string): string {
+  return fromSummary(rule) ? `${name} (from a summary)` : name
 }
 
 /** compareLine for two rules already looked up. */
@@ -250,7 +260,7 @@ export function compareRules(factor: RatingFactor, ra: RatingRule, rb: RatingRul
   if (ga !== gb) return `${FACTOR_NAMES[factor]}: ${stateClause(ra, aName)}; ${stateClause(rb, bName)}.`
   // Both limit it, but limits differ from state to state: say what each one does.
   if (ga === "limited") {
-    return `${FACTOR_NAMES[factor]}: both states limit it, in different ways. ${aName}: ${ra.summary} ${bName}: ${rb.summary}`
+    return `${FACTOR_NAMES[factor]}: both states limit it, in different ways. ${labeledName(ra, aName)}: ${ra.summary} ${labeledName(rb, bName)}: ${rb.summary}`
   }
   return null
 }
