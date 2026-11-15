@@ -156,7 +156,7 @@ Most states follow a common package: credit can't be the only reason for a price
 - **Utah** lets auto insurers use credit only to lower rates, or alongside other factors.
 - **Maryland** allows it only to price a new policy, not to raise a renewal.
 - **Oregon** and **Rhode Island** give you a re-rate on request; **Texas** (from Sept. 2025) re-scores every 36 months and re-rates yearly on request; **DC** gives an annual re-rate right.
-- **Virginia** (from July 1, 2026): credit can't be the sole basis for a refusal or a different rate.
+- **Virginia:** current law bars counting things like medical debt in collections against you (Va. Code § 38.2-2234(D)) [V]. *Correction:* an earlier research pass said 2026's SB 693 made credit unable to be the sole basis for a rate from July 1, 2026; the bill was narrowed into a study instead [V, statute pass of Nov. 15, 2026].
 
 ### Other notable rules
 - **California:** besides credit and gender, education, occupation, and homeownership aren't allowed; having no prior insurance can't by itself be held against you; 15 optional factors include marital status, which the commissioner proposed removing in October 2026 [V for the regulation, L for the proposal]. Rates need prior approval.
