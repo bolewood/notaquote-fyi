@@ -8,6 +8,7 @@ import { UnaskedFactorsChart } from "@/components/unasked-factors-chart"
 import { nationalTypicalStart } from "@/lib/factor-engine"
 import {
   FACTOR_NAMES,
+  fromSummary,
   RATING_RULES_CHECKED_ON,
   ratingGroup,
   ratingRule,
@@ -47,8 +48,14 @@ const FACTOR_TEXT: Record<RatingFactor, string> = {
     "Going without insurance for a while can raise your price when you start again. Some states limit how much that can count.",
 }
 
-function stateNames(codes: string[]): string {
-  const names = codes.map((code) => STATES.find((item) => item.code === code)?.name ?? code)
+/** A state's name, with "(from a summary)" when its answer for this factor rests on one. */
+function stateLabel(code: string, factor: RatingFactor): string {
+  const name = STATES.find((item) => item.code === code)?.name ?? code
+  return fromSummary(ratingRule(code, factor)) ? `${name} (from a summary)` : name
+}
+
+function listStates(codes: string[], factor: RatingFactor): string {
+  const names = codes.map((code) => stateLabel(code, factor))
   if (names.length <= 1) return names.join("")
   return `${names.slice(0, -1).join(", ")} and ${names.at(-1)}`
 }
@@ -89,6 +96,14 @@ export default function WhatWeDontAskPage() {
       />
       <RecordTrustView />
 
+      <div className="grid gap-1 rounded-2xl bg-sun-soft p-5" data-testid="rating-rules-disclaimer" role="note">
+        <p className="font-semibold">A plain-language guide, not legal advice</p>
+        <p>
+          Laws change, and some answers below come from a summary of the law rather than the law itself. Those are marked
+          &ldquo;from a summary&rdquo;. Before a big decision, check with your state&apos;s insurance department.
+        </p>
+      </div>
+
       <p>
         We keep the calculator short on purpose, and we never ask for anything personal. That means a real quote can come
         out higher or lower than ours. This page shows the biggest reasons why, with a source for every number, or a plain
@@ -123,8 +138,9 @@ export default function WhatWeDontAskPage() {
         a move, it&apos;s worth a look.
       </p>
       <p className="text-sm text-muted-foreground">
-        Every answer below links to the law it comes from, and each state&apos;s line in the sections below shows the
-        words of that law. We&apos;re reviewing states a few at a time; one we haven&apos;t
+        Every answer below links to its source, and each state&apos;s line in the sections below shows that source&apos;s
+        own words. Most come straight from the law; a few come from a summary of it, such as the state insurance
+        department&apos;s guide, and say so. We&apos;re reviewing states a few at a time; one we haven&apos;t
         reviewed yet says so, which never means anything goes. Last checked {formatVerifiedDate(RATING_RULES_CHECKED_ON)}.
       </p>
       <p className="text-sm text-muted-foreground">
@@ -144,22 +160,22 @@ export default function WhatWeDontAskPage() {
             <p>{FACTOR_TEXT[factor]}</p>
             {banned.length > 0 ? (
               <p>
-                <strong>Not allowed for car insurance in:</strong> {stateNames(banned)}.
+                <strong>Not allowed for car insurance in:</strong> {listStates(banned, factor)}.
               </p>
             ) : null}
             {limited.length > 0 ? (
               <p>
-                <strong>Allowed with limits in:</strong> {stateNames(limited)}.
+                <strong>Allowed with limits in:</strong> {listStates(limited, factor)}.
               </p>
             ) : null}
             {allowed.length > 0 ? (
               <p>
-                <strong>Allowed, and we&apos;ve checked the law, in:</strong> {stateNames(allowed)}.
+                <strong>Allowed in:</strong> {listStates(allowed, factor)}.
               </p>
             ) : null}
             {notOnList.length > 0 ? (
               <p>
-                <strong>No ban in the state&apos;s rating law:</strong> {stateNames(notOnList)}.
+                <strong>No ban in the state&apos;s rating law:</strong> {listStates(notOnList, factor)}.
               </p>
             ) : null}
             {banned.length + limited.length + allowed.length + notOnList.length > 0 ? (
@@ -168,14 +184,21 @@ export default function WhatWeDontAskPage() {
                   const rule = ratingRule(code, factor)
                   if (!rule) return null
                   const name = STATES.find((item) => item.code === code)?.name ?? code
+                  const summaryBased = fromSummary(rule)
                   return (
                     <li key={code}>
-                      <strong>{name}:</strong> {rule.summary}{" "}
+                      <strong>
+                        {name}
+                        {summaryBased ? " (from a summary)" : ""}:
+                      </strong>{" "}
+                      {rule.summary}{" "}
                       <a href={rule.source.url} rel="noreferrer">
                         {rule.source.label}
                       </a>
                       <details className="text-sm text-muted-foreground">
-                        <summary className="cursor-pointer">What the law says</summary>
+                        <summary className="cursor-pointer">
+                          {summaryBased ? "What the summary says" : "What the law says"}
+                        </summary>
                         <blockquote className="mt-1 border-l-2 border-border pl-3">&ldquo;{rule.quote}&rdquo;</blockquote>
                         {(rule.moreSources ?? []).map((more) => (
                           <div key={more.url + more.label} className="mt-2">

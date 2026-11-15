@@ -236,6 +236,11 @@ export type SiteRule = {
   mirror?: string
   /** The site often answers a plain fetch with a bot check, or builds the page with JavaScript, so a browser may be needed. */
   needsBrowser?: boolean
+  /**
+   * The site's PDFs are laid out in columns (consumer guides, mostly). Read them in reading order
+   * instead of keeping the printed layout, which would interleave the columns line by line.
+   */
+  pdfColumns?: boolean
   /** The element that holds the law's text. */
   container?: { id?: string; className?: string; tag?: string }
   /** Where the section starts and stops inside that text, worked out from the page's address. */
@@ -304,6 +309,88 @@ export const SITE_RULES: Record<string, SiteRule> = {
     needsBrowser: true,
     // The page holds the whole chapter; the label's section number picks the part we cite.
   },
+  "www.flsenate.gov": {
+    site: "The Florida Senate, Florida Statutes",
+    terms: "The page says the information on the system is unverified and that the journals or printed bills of each chamber should be consulted for official purposes.",
+    container: { tag: "body" },
+    start: (url) => new RegExp(`^${escapeRegExp(url.pathname.split("/").pop() ?? "")} [A-Z]`, "m"),
+    end: () => /^History\.—/m,
+  },
+  "www.ilga.gov": {
+    site: "Illinois General Assembly, Illinois Compiled Statutes",
+    container: { tag: "body" },
+    start: () => /^\(\d+ ILCS /m,
+    end: () => /^\(Source:/m,
+  },
+  "codes.ohio.gov": {
+    site: "Ohio Laws and Administrative Rules (Legislative Service Commission)",
+    container: { className: "laws-body" },
+  },
+  "www.azleg.gov": {
+    site: "Arizona State Legislature, Arizona Revised Statutes",
+    container: { tag: "body" },
+  },
+  "www.oscn.net": {
+    site: "Oklahoma State Courts Network (OSCN), Oklahoma Statutes",
+    container: { id: "oscn-content" },
+    start: () => /^Cite as:/m,
+    end: () => /^Historical Data$/m,
+  },
+  "difi.az.gov": {
+    site: "Arizona Department of Insurance and Financial Institutions",
+    pdfColumns: true,
+    start: (url) => guideCut(url).start,
+    end: (url) => guideCut(url).end,
+  },
+  "olls.info": {
+    // The legislature's 2026 titles page (leg.colorado.gov/agencies/office-legislative-legal-services/2026-crs-titles-download) links here.
+    site: "Colorado Office of Legislative Legal Services (Colorado Revised Statutes)",
+    // The PDF holds the whole title; the label's section number picks the part we cite.
+  },
+  // Insurance departments' consumer pages: summaries of the law, cited with "evidence": "summary".
+  "www.tdi.texas.gov": {
+    site: "Texas Department of Insurance",
+    container: { tag: "main" },
+    start: () => /^Insurance companies determine premiums and rates by looking at you$/m,
+    end: () => /^But it’s not just you$/m,
+  },
+  "www.oid.ok.gov": {
+    site: "Oklahoma Insurance Department",
+    container: { tag: "main" },
+    start: () => /^Factors Affecting Premiums and Rates$/m,
+    end: () => /^Additional Factors Influencing Insurance Costs$/m,
+  },
+  "oci.georgia.gov": {
+    site: "Georgia Office of Commissioner of Insurance and Safety Fire",
+    container: { tag: "main" },
+    start: () => /^Several Factors Will Affect Risk Rating$/m,
+    end: () => /^Ask Your Agent About Discounts$/m,
+  },
+  "idoi.illinois.gov": {
+    site: "Illinois Department of Insurance",
+    container: { tag: "main" },
+    start: () => /^Factors That May Affect The Premium$/m,
+    end: () => /^Discounts That May Be Available$/m,
+  },
+  "insurance.ohio.gov": {
+    site: "Ohio Department of Insurance",
+    container: { tag: "main" },
+    start: () => /^What factors do companies use to set rates\?$/m,
+    end: () => /^About Rate Regulation$/m,
+  },
+  "www.nj.gov": {
+    site: "New Jersey Department of Banking and Insurance",
+    pdfColumns: true,
+    start: (url) => guideCut(url).start,
+    end: (url) => guideCut(url).end,
+  },
+  "www.myfloridacfo.com": {
+    site: "Florida Department of Financial Services",
+    pdfColumns: true,
+    container: { tag: "main" },
+    start: (url) => guideCut(url).start,
+    end: (url) => guideCut(url).end,
+  },
   "le.utah.gov": {
     site: "Utah State Legislature",
     container: { id: "secdiv" },
@@ -318,6 +405,37 @@ export const SITE_RULES: Record<string, SiteRule> = {
     terms: "The site links a Disclaimer and a Copyright page; we copy only the statute's text, which is public.",
     container: { id: "contentWrapper" },
   },
+}
+
+/**
+ * Consumer guides run many pages; we keep only the part a rule cites. Keyed by host and path.
+ * A guide that isn't listed here is kept whole.
+ */
+const GUIDE_CUTS: Record<string, { start: RegExp; end: RegExp }> = {
+  "difi.az.gov/sites/default/files/2026-08/2025_Auto_Premium_Comparison.pdf": {
+    start: /^NOTES TO THE HYPOTHETICALS/m,
+    end: /^ABBREVIATIONS USED IN THIS PUBLICATION/m,
+  },
+  "www.nj.gov/dobi/division_consumers/pdf/autoshopguide2026.pdf": {
+    start: /^What Affects the Cost of Auto Insurance\?/m,
+    end: /^Check If You Are Eligible for Discounts/m,
+  },
+  "www.nj.gov/dobi/division_consumers/pdf/insurescore.pdf": {
+    start: /^What about those individuals for whom a score cannot be/m,
+    end: /^How to Protect or Improve Your Credit History/m,
+  },
+  "www.myfloridacfo.com/docs-sf/consumer-services-libraries/consumerservices-documents/understanding-coverage/consumer-guides/english---automobile-insurance-toolkit.pdf": {
+    start: /^Underwriting Factors That Affect Your Insurance Policy Premium/m,
+    end: /^Other Factors Affecting/m,
+  },
+  "www.myfloridacfo.com/division/consumers/understanding-insurance/personal-automobile-insurance-overview": {
+    start: /^Ask for car insurance discounts/m,
+    end: /^Request your CLUE Report/m,
+  },
+}
+
+function guideCut(url: URL): { start: RegExp; end: RegExp } {
+  return GUIDE_CUTS[`${url.host}${url.pathname}`] ?? { start: /^/, end: /$(?![\s\S])/ }
 }
 
 /** "Tex. Ins. Code § 559.052(a)(2)" → "559.052", the section a label cites. */
@@ -335,11 +453,23 @@ const CHAPTER_CUTS: Record<string, (section: string) => { start: RegExp; end: Re
     start: new RegExp(`^Sec\\.\\s+${escapeRegExp(section)}\\.`, "m"),
     end: /^(?:Sec\. \d+\.\d+\.|SUBCHAPTER [A-Z]\.)/m,
   }),
+  "olls.info": (section) => coloradoCut(section),
   "adminrules.idaho.gov": (section) => ({
     // The heading is in capitals ("100. USE OF CREDIT FACTORS."); the table of contents isn't.
     start: new RegExp(`^${escapeRegExp(section)}\\.\\s+[A-Z][A-Z ,'’-]*\\.\\s*$`, "m"),
     end: /^\d{3}\.(?:\s|\s*[–-]\s*\d{3}\.)/m,
   }),
+}
+
+/** A Colorado section starts a paragraph with its number and a heading ("10-4-616. Disclosure of credit reports."). */
+function coloradoCut(section: string): { start: RegExp; end: RegExp } {
+  return {
+    start: new RegExp(`^${escapeRegExp(section)}\\.\\s+[A-Z]`, "m"),
+    // The next section's heading, or the "ANNOTATION" block of court-case notes that follows some
+    // sections (not the statute's text, so we leave it out). The lookbehind keeps the search, which
+    // starts one character into this section's own number, from matching the rest of that number ("0-4-616.").
+    end: /(?<=\n)(?:\d+-\d+(?:\.\d+)?-\d+(?:\.\d+)?\.\s+[A-Z]|ANNOTATION\b)/,
+  }
 }
 
 /** The section an IDAPA label cites: "IDAPA 18.02.01.100.01.b" → "100". */
@@ -356,6 +486,12 @@ export function extractSection(urlText: string, page: string, label: string, isP
   const rule = SITE_RULES[url.host]
   if (!rule) return { error: `no rule for ${url.host} in SITE_RULES (scripts/rating-quotes/law.ts)` }
   if (!isPdfText && looksLikeBotCheck(page)) return { error: "the site sent a bot check instead of the page", needsBrowser: true }
+  // Only a real JavaScript shell (or a bot check, above) means "open it in a browser". Any other
+  // page we can't cut is a fatal problem: the site's layout moved, or the link points somewhere else.
+  // Only on sites known to build pages with JavaScript: elsewhere a thin page with a script is more
+  // likely a "page not found" served as 200, which must fail.
+  const shell = !isPdfText && rule.needsBrowser === true && looksLikeJsShell(page)
+  const shellNote = shell ? "the page is a JavaScript shell; " : ""
   let text: string
   if (isPdfText) {
     text = reflowPdfText(page)
@@ -365,8 +501,8 @@ export function extractSection(urlText: string, page: string, label: string, isP
       const inner = elementHtml(page, rule.container)
       if (inner === null) {
         return {
-          error: `couldn't find the law's text on the page (looked for ${JSON.stringify(rule.container)})`,
-          needsBrowser: rule.needsBrowser,
+          error: `${shellNote}couldn't find the law's text on the page (looked for ${JSON.stringify(rule.container)})`,
+          needsBrowser: shell,
         }
       }
       html = inner
@@ -379,14 +515,14 @@ export function extractSection(urlText: string, page: string, label: string, isP
     if (!section) return { error: `couldn't read a section number from "${label}"` }
     const { start, end } = chapterCut(section)
     const cut = cutText(text, start, end)
-    if (!cut) return { error: `couldn't find section ${section} on the page`, needsBrowser: rule.needsBrowser }
+    if (!cut) return { error: `${shellNote}couldn't find section ${section} on the page`, needsBrowser: shell }
     text = cut
   } else if (rule.start || rule.end) {
     const cut = cutText(text, rule.start?.(url), rule.end?.(url))
-    if (!cut) return { error: "couldn't find where the section starts on the page", needsBrowser: rule.needsBrowser }
+    if (!cut) return { error: `${shellNote}couldn't find where the section starts on the page`, needsBrowser: shell }
     text = cut
   }
-  if (text.length < 80) return { error: "the page came back nearly empty", needsBrowser: true }
+  if (text.length < 80) return { error: "the page came back nearly empty", needsBrowser: shell }
   return { text }
 }
 
@@ -402,6 +538,14 @@ export function reflowPdfText(text: string): string {
     else out[out.length - 1] = `${out[out.length - 1]} ${line}`
   }
   return tidyLines(out.join("\n"))
+}
+
+/**
+ * A page that's built by JavaScript: it has scripts and almost no text of its own (Texas's
+ * statutes site sends about 1,400 characters of menus and headings to a plain fetch).
+ */
+export function looksLikeJsShell(html: string): boolean {
+  return /<script\b/i.test(html) && htmlToText(html).length < 3000
 }
 
 /** A Cloudflare-style "check your browser" page, or one that only works with JavaScript. */
@@ -535,6 +679,73 @@ export function classifyResponse(status: number, body = ""): FetchOutcome {
 export const FETCH_RETRIES = 3
 export function retryDelayMs(retry: number): number {
   return 2000 * 2 ** (retry - 1) // 2 s, 4 s, 8 s
+}
+
+/**
+ * Why a live fetch failed: the HTTP status, or the network error's code (from Node's fetch), plus
+ * whether the site sent a bot check.
+ */
+export type FetchFailure = { error: string; status?: number; errorCode?: string; needsBrowser?: boolean }
+
+/**
+ * A single page we know fails a plain fetch in one specific way but opens in a browser. Each
+ * exception names the exact failure it excuses, when someone last opened the page in a browser,
+ * and when it expires. After that date the failure is fatal again, so the page can't go
+ * unchecked forever: open it in a browser, re-save it if it changed, and move both dates.
+ */
+export type BrowserException = {
+  reason: string
+  /** YYYY-MM-DD: the day someone last opened the page in a browser and found the cited text. */
+  lastVerified: string
+  /** YYYY-MM-DD: the last day this exception applies. */
+  expires: string
+  /** The one failure it excuses: an HTTP status, or a network error code. */
+  when: { status: number } | { errorCode: string }
+}
+
+/** Exact URLs only, never a whole site: any other failure on the same site stays fatal. */
+export const BROWSER_EXCEPTIONS: Record<string, BrowserException> = {
+  "https://www.ilga.gov/legislation/ilcs/documents/021501570K20.htm": {
+    reason: "the Illinois General Assembly's server sends an incomplete certificate chain, which Node's fetch rejects; browsers complete the chain and show the page",
+    lastVerified: "2026-11-15",
+    expires: "2027-02-15",
+    when: { errorCode: "UNABLE_TO_VERIFY_LEAF_SIGNATURE" },
+  },
+  "https://insurance.ohio.gov/consumers/automobile/automobile-insurance-guide": {
+    reason: "the Ohio Department of Insurance answers our checker's user agent with a 404 page (its PDF copy of the guide does the same); a browser gets the guide",
+    lastVerified: "2026-11-15",
+    expires: "2027-02-15",
+    when: { status: 404 },
+  },
+}
+
+/**
+ * What a failed live fetch counts as. A bot check needs a browser. A failure that an exact-URL
+ * exception names, before it expires, needs a browser too. Everything else is FETCH_FAILED,
+ * which is fatal: a dead link (404, 410), a server that keeps failing, a DNS or network error.
+ */
+export function fetchFailureStatus(
+  url: string,
+  failure: FetchFailure,
+  today: string,
+  exceptions: Record<string, BrowserException> = BROWSER_EXCEPTIONS,
+): { status: "NEEDS_BROWSER" | "FETCH_FAILED"; note: string } {
+  if (failure.needsBrowser) return { status: "NEEDS_BROWSER", note: failure.error }
+  const exception = exceptions[url]
+  const matches =
+    exception !== undefined &&
+    ("status" in exception.when ? failure.status === exception.when.status : failure.errorCode === exception.when.errorCode)
+  if (!exception || !matches) return { status: "FETCH_FAILED", note: failure.error }
+  if (today > exception.expires) {
+    return {
+      status: "FETCH_FAILED",
+      note: `browser exception expired ${exception.expires}: open the page in a browser, re-save it if it changed, and renew the exception in BROWSER_EXCEPTIONS (${failure.error})`,
+    }
+  }
+  return {
+    status: "NEEDS_BROWSER",
+    note: `browser exception until ${exception.expires}: ${exception.reason} (last opened in a browser ${exception.lastVerified}; ${failure.error})`,
+  }
 }
 
 /** Results that fail the check. Live, a dead link or a site that keeps failing counts: otherwise it would quietly stop being checked. */

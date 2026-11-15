@@ -2,10 +2,12 @@ import assert from "node:assert/strict"
 import test from "node:test"
 import { renderToStaticMarkup } from "react-dom/server"
 import WhatWeDontAskPage from "../app/what-we-dont-ask/page"
+import StatePage, { generateStaticParams as stateParams } from "../app/states/[state]/page"
 import { FACTOR_BUNDLE } from "./factor-engine"
 import {
   compareLine,
   compareRules,
+  fromSummary,
   isBanned,
   RATING_FACTORS,
   ratingGroup,
@@ -13,6 +15,9 @@ import {
   reviewProgressLine,
   reviewedStates,
   statusWords,
+  SUMMARY_MARK,
+  SUMMARY_NOTE,
+  TABLE_FACTORS,
   validateRatingRules,
 } from "./rating-rules"
 import { STATES } from "./scenario"
@@ -272,4 +277,116 @@ test("comparing a not-on-list state never says insurers there may use the factor
     }
   }
   assert.equal(compareRules("credit", notOnList, notOnList, "Texas", "Ohio"), null)
+})
+
+test('"evidence" is "law" or "summary", and a summary can\'t stand in for the state\'s list', () => {
+  const good = { version: "rating-rules-2026-11-15", checkedOn: "2026-11-15", about: "x", states: {} }
+  const rule = {
+    status: "no-ban-found",
+    summary: "Insurers may use your age, according to the state insurance department.",
+    source: { label: "Insurance department guide", url: "https://example.gov" },
+    quote: "Insurers may consider your age",
+  }
+  const withRule = (extra: object) => ({ ...good, states: { OH: { age: { ...rule, ...extra } } } }) as never
+  assert.doesNotThrow(() => validateRatingRules(withRule({})))
+  assert.doesNotThrow(() => validateRatingRules(withRule({ evidence: "law" })))
+  assert.doesNotThrow(() => validateRatingRules(withRule({ evidence: "summary" })))
+  assert.throws(() => validateRatingRules(withRule({ evidence: "rumor" })), /evidence/)
+  assert.throws(() => validateRatingRules(withRule({ evidence: "summary", basis: "not-on-list" })), /summary/)
+
+  const base = { ...rule, status: "no-ban-found" as const, checkedOn: "2026-11-15" }
+  assert.equal(fromSummary({ ...base, evidence: "summary" }), true)
+  assert.equal(fromSummary({ ...base, evidence: "law" }), false)
+  assert.equal(fromSummary(base), false, "left out means the law itself")
+  assert.equal(fromSummary(undefined), false)
+  // The table words don't change; the mark sits beside them.
+  assert.equal(statusWords({ ...base, evidence: "summary" }), statusWords(base))
+})
+
+test("summary-based answers are marked everywhere they show, and only those", () => {
+  const summaryRules = STATES.flatMap((state) =>
+    TABLE_FACTORS.filter((factor) => fromSummary(ratingRule(state.code, factor))).map((factor) => ({ state, factor })),
+  )
+  const html = renderToStaticMarkup(WhatWeDontAskPage())
+  const marks = html.match(/data-testid="summary-mark"/g)?.length ?? 0
+  // Every summary-based cell in the big table gets the mark; the comparison box adds its own for the two states it shows.
+  assert.ok(marks >= summaryRules.length, `expected at least ${summaryRules.length} marks, found ${marks}`)
+  if (summaryRules.length === 0) {
+    assert.equal(marks, 0)
+    assert.doesNotMatch(html, /data-testid="summary-footnote"/)
+    return
+  }
+  assert.match(html, /data-testid="summary-footnote"/)
+  const text = visibleText(html)
+  assert.ok(text.includes(SUMMARY_NOTE), "the footnote explains the mark")
+  assert.ok(text.includes(SUMMARY_MARK))
+  for (const { state, factor } of summaryRules) {
+    const section = html.slice(html.indexOf(`id="rules-${factor}"`))
+    const line = section.slice(0, section.indexOf("</section>"))
+    assert.ok(line.includes(`${state.name} (from a summary)`), `${state.code} ${factor}: its line says "(from a summary)"`)
+  }
+})
+
+test("the page opens with a plain note that it's a guide, not legal advice", () => {
+  const html = renderToStaticMarkup(WhatWeDontAskPage())
+  const at = html.indexOf('data-testid="rating-rules-disclaimer"')
+  assert.ok(at > 0, "the note is on the page")
+  assert.ok(at < html.indexOf('id="what-moves-the-price"'), "the note comes before the first section")
+  const note = visibleText(html.slice(at, html.indexOf("</div>", at)))
+  assert.match(note, /not legal advice/)
+  assert.match(note, /from a summary/)
+  assert.match(note, /insurance department/)
+})
+
+test("pinned: Colorado limits credit (renewal price and turning you down), from C.R.S. 10-4-116, and age through the 55+ discount", () => {
+  const rule = ratingRule("CO", "credit")
+  assert.equal(rule?.status, "limited")
+  assert.match(rule?.source.label ?? "", /10-4-116/)
+  assert.equal(fromSummary(rule), false, "it rests on the law itself")
+  assert.equal(ratingRule("CO", "priorInsurance")?.status, "limited")
+  // Age rests only on the required 55+ course discount, which limits age pricing; it doesn't show age is allowed in general.
+  const age = ratingRule("CO", "age")
+  assert.equal(age?.status, "limited")
+  assert.match(age?.source.label ?? "", /10-4-632/)
+  assert.match(age?.summary ?? "", /haven't found other limits/)
+})
+
+test("comparisons say which side rests on a summary, in either order", () => {
+  for (const state of ["NJ", "TX"]) assert.equal(fromSummary(ratingRule(state, state === "NJ" ? "gender" : "educationOccupation")), true)
+  assert.equal(
+    compareLine("gender", "CA", "NJ", "California", "New Jersey"),
+    "Gender: insurers in California can't use it; insurers in New Jersey can use it (from a summary).",
+  )
+  assert.equal(
+    compareLine("gender", "NJ", "CA", "New Jersey", "California"),
+    "Gender: insurers in New Jersey can use it (from a summary); insurers in California can't use it.",
+  )
+  assert.equal(
+    compareLine("educationOccupation", "CA", "TX", "California", "Texas"),
+    "Education or job: insurers in California can use it, with limits; insurers in Texas can use it (from a summary).",
+  )
+  assert.equal(
+    compareLine("educationOccupation", "TX", "CA", "Texas", "California"),
+    "Education or job: insurers in Texas can use it (from a summary); insurers in California can use it, with limits.",
+  )
+  // Both limit it: each state's own sentence is shown, and the summary-based one is labeled.
+  const base = { source: { label: "Law", url: "https://example.gov" }, quote: "a quote from the law", checkedOn: "2026-11-15" }
+  const law = { ...base, status: "limited" as const, summary: "Insurers can use credit, but not alone." }
+  const summary = { ...law, evidence: "summary" as const, summary: "Insurers can't use it to cancel, according to the department." }
+  assert.equal(
+    compareRules("credit", law, summary, "Ohio", "New Jersey"),
+    "Credit: both states limit it, in different ways. Ohio: Insurers can use credit, but not alone. New Jersey (from a summary): Insurers can't use it to cancel, according to the department.",
+  )
+  assert.equal(compareRules("credit", law, law, "Ohio", "Illinois")?.includes("(from a summary)"), false, "law-based answers carry no label")
+})
+
+test("a state page's rules box labels a summary-based answer", async () => {
+  const slug = stateParams().find((item) => /jersey/.test(item.state))?.state
+  assert.ok(slug, "New Jersey has a state page")
+  const html = renderToStaticMarkup(await StatePage({ params: Promise.resolve({ state: slug }) } as never))
+  const at = html.indexOf('data-testid="state-rating-rules"')
+  assert.ok(at > 0)
+  const box = visibleText(html.slice(at, html.indexOf("</div>", at)))
+  assert.match(box, /Gender: allowed \(from a summary\)\./)
+  assert.doesNotMatch(box, /Credit: allowed \(from a summary\)/)
 })

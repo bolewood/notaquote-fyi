@@ -3,6 +3,47 @@
   "checkedOn": "2026-11-15",
   "about": "What each state lets car insurers use to set a price. Every entry quotes the law it comes from. A factor that isn't listed for a state hasn't been reviewed yet; it is never read as allowed.",
   "states": {
+    "AZ": {
+      "credit": {
+        "status": "limited",
+        "summary": "Insurers can use your credit, but can't count medical debt in collections, bankruptcies more than seven years old, or your total available credit against you.",
+        "source": {
+          "label": "Ariz. Rev. Stat. § 20-2110(F)",
+          "url": "https://www.azleg.gov/ars/20/02110.htm"
+        },
+        "quote": "F. An insurer shall not use the following types of credit history to calculate an insurance score to determine property or casualty premiums for insurance transactions that are subject to this article and shall not knowingly use an insurance score developed by a third party if the score is calculated using any of the following types of credit history: 1. The absence of credit history or the inability to determine the consumer's credit history unless the insurer's action is actuarially justified or the insurer treats the consumer as if the consumer had neutral credit information, as defined by the insurer. 2. Credit history or an insurance score based on collection accounts identified with a medical industry code. 3. A bankruptcy or a lien satisfaction that is more than seven years old."
+      },
+      "gender": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may use gender, though many stop counting it after a certain age, according to the Arizona insurance department.",
+        "source": {
+          "label": "Arizona Department of Insurance and Financial Institutions, 2025 Auto Premium Comparison, \"Notes to the Hypotheticals\"",
+          "url": "https://difi.az.gov/sites/default/files/2026-08/2025_Auto_Premium_Comparison.pdf"
+        },
+        "quote": "The driver's marital status and gender, after a certain age, are not even considered by many insurers for the purpose of determining the driver's premium. However, at some point, age (e.g. age 70, etc.) may become an even more important factor than previously."
+      },
+      "maritalStatus": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may use marital status, though many stop counting it after a certain age, according to the Arizona insurance department.",
+        "source": {
+          "label": "Arizona Department of Insurance and Financial Institutions, 2025 Auto Premium Comparison, \"Notes to the Hypotheticals\"",
+          "url": "https://difi.az.gov/sites/default/files/2026-08/2025_Auto_Premium_Comparison.pdf"
+        },
+        "quote": "The driver's marital status and gender, after a certain age, are not even considered by many insurers for the purpose of determining the driver's premium. However, at some point, age (e.g. age 70, etc.) may become an even more important factor than previously."
+      },
+      "age": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may use your age, and it can matter even more around 70, according to the Arizona insurance department.",
+        "source": {
+          "label": "Arizona Department of Insurance and Financial Institutions, 2025 Auto Premium Comparison, \"Notes to the Hypotheticals\"",
+          "url": "https://difi.az.gov/sites/default/files/2026-08/2025_Auto_Premium_Comparison.pdf"
+        },
+        "quote": "The driver's marital status and gender, after a certain age, are not even considered by many insurers for the purpose of determining the driver's premium. However, at some point, age (e.g. age 70, etc.) may become an even more important factor than previously."
+      }
+    },
     "CA": {
       "credit": {
         "status": "banned",
@@ -92,6 +133,217 @@
         "quote": "may utilize the following optional rating factors (the \"Optional Factors\"): (1) Type of vehicle; (2) Vehicle performance capabilities, including alterations made subsequent to original manufacture; (3) Type of use of vehicle (pleasure only, commute, business, farm, commute mileage, etc.); (4) Percentage use of the vehicle by the rated driver; (5) Multi-vehicle households; (6) Academic standing of the rated driver; (7) Completion of driver training or defensive driving courses by the rated driver; (8) Vehicle characteristics, including engine size, safety and protective devices, damageability, repairability, and theft deterrent devices; (9) Marital status of the rated driver;"
       }
     },
+    "CO": {
+      "credit": {
+        "status": "limited",
+        "summary": "Insurers can use your credit, but can't set your renewal price or turn you down based on credit alone.",
+        "source": {
+          "label": "C.R.S. § 10-4-116(1)(c)",
+          "url": "https://olls.info/crs/crs2026-title-10.pdf#10-4-116"
+        },
+        "quote": "Base an insured's renewal rates for personal lines of property and casualty insurance upon credit information, without consideration of any other applicable factor independent of credit information;",
+        "moreSources": [
+          {
+            "label": "C.R.S. § 10-4-116(1)(b)",
+            "url": "https://olls.info/crs/crs2026-title-10.pdf#10-4-116",
+            "quote": "Deny, cancel, or fail to renew a policy of personal lines of property and casualty insurance on the basis of credit information, without consideration of any other applicable underwriting factor that is independent of credit information"
+          },
+          {
+            "label": "C.R.S. § 10-4-116(1)(h), credit details that can't count against you",
+            "url": "https://olls.info/crs/crs2026-title-10.pdf#10-4-116",
+            "quote": "Use the following as a negative factor in an insurance scoring methodology or in reviewing credit information for the purpose of underwriting or rating a policy of personal lines of property and casualty insurance:"
+          },
+          {
+            "label": "C.R.S. § 10-4-616(1)(a)",
+            "url": "https://olls.info/crs/crs2026-title-10.pdf#10-4-616",
+            "quote": "Insurers using new or updated credit information in insurance underwriting or rating shall notify applicants or policyholders that their credit information will be used for underwriting or rating."
+          }
+        ]
+      },
+      "gender": {
+        "status": "limited",
+        "summary": "Insurers can't set prices on gender alone unless claims data backs up the difference.",
+        "source": {
+          "label": "C.R.S. § 10-3-1104(1)(f)(III)",
+          "url": "https://olls.info/crs/crs2026-title-10.pdf#10-3-1104"
+        },
+        "quote": "Making or permitting to be made any classification solely on the basis of marital status or sex, unless such classification is for the purpose of insuring family units or is justified by actuarial statistics;"
+      },
+      "maritalStatus": {
+        "status": "limited",
+        "summary": "Insurers can't set prices on marital status alone unless they're insuring a family together or claims data backs it up.",
+        "source": {
+          "label": "C.R.S. § 10-3-1104(1)(f)(III)",
+          "url": "https://olls.info/crs/crs2026-title-10.pdf#10-3-1104"
+        },
+        "quote": "Making or permitting to be made any classification solely on the basis of marital status or sex, unless such classification is for the purpose of insuring family units or is justified by actuarial statistics;"
+      },
+      "age": {
+        "status": "limited",
+        "summary": "Colorado law requires a lower price for drivers 55 and older who finish an approved driver's course; we haven't found other limits on age.",
+        "source": {
+          "label": "C.R.S. § 10-4-632(2)",
+          "url": "https://olls.info/crs/crs2026-title-10.pdf#10-4-632"
+        },
+        "quote": "shall provide for an appropriate reduction in premium charges based on justifiable data when the vehicle is a covered vehicle and when the principal operator is fifty-five years of age or older and has successfully completed a driver's education course"
+      },
+      "territory": {
+        "status": "limited",
+        "summary": "Insurers can price by area, but can't charge neighborhoods in the same city different rates when the risk there is the same.",
+        "source": {
+          "label": "C.R.S. § 10-3-1104(1)(f)(II)",
+          "url": "https://olls.info/crs/crs2026-title-10.pdf#10-3-1104"
+        },
+        "quote": "Making or permitting any unfair discrimination between individuals of the same class or between neighborhoods within a municipality and of essentially the same hazard in the amount of premium, policy fees, or rates charged for any policy or contract of insurance"
+      },
+      "priorInsurance": {
+        "status": "limited",
+        "summary": "Insurers can't charge more just for a gap when you weren't required to be insured; other gaps need claims data filed with the state.",
+        "source": {
+          "label": "C.R.S. § 10-4-628(2)(a)(II)",
+          "url": "https://olls.info/crs/crs2026-title-10.pdf#10-4-628"
+        },
+        "quote": "Unless actuarial justification in support of the insurer's action that has been filed with the commissioner demonstrates that there is an increase in risk, no insurer shall refuse to write a policy for a new applicant, surcharge the premium of a new applicant, or place a new applicant in a higher-priced program or plan based solely upon: (A) The fact that the applicant had no prior insurance;",
+        "moreSources": [
+          {
+            "label": "C.R.S. § 10-4-628(2)(a)(IV), when you weren't required to be insured",
+            "url": "https://olls.info/crs/crs2026-title-10.pdf#10-4-628",
+            "quote": "An insurer shall not refuse to write a policy for a new applicant, surcharge the premium of a new applicant, or place a new applicant in a higher-priced program or plan solely because the applicant had no prior insurance if the applicant was not required to have insurance under section 10-4-620 or under a similar law in another state."
+          },
+          {
+            "label": "C.R.S. § 10-4-628(2)(a)(V), gaps during military deployment",
+            "url": "https://olls.info/crs/crs2026-title-10.pdf#10-4-628",
+            "quote": "An insurer shall not reduce or cancel insurance coverage except for nonpayment, refuse to issue or renew a policy, or surcharge a newly issued or renewed policy due to a covered person's failure to maintain coverage during a period in which the covered person was deployed by or called to active duty in the United States military"
+          }
+        ]
+      }
+    },
+    "FL": {
+      "credit": {
+        "status": "limited",
+        "summary": "Insurers can use your credit, but can't raise your price or turn you down based on credit alone.",
+        "source": {
+          "label": "Fla. Stat. § 626.9741(4)(b)",
+          "url": "https://www.flsenate.gov/Laws/Statutes/2026/626.9741"
+        },
+        "quote": "An insurer may not make an adverse decision solely because of information contained in a credit report or score without consideration of any other underwriting or rating factor.",
+        "moreSources": [
+          {
+            "label": "Fla. Stat. § 626.9741(2)(a), what an \"adverse decision\" is",
+            "url": "https://www.flsenate.gov/Laws/Statutes/2026/626.9741",
+            "quote": "“Adverse decision” means a decision to refuse to issue or renew a policy of insurance; to issue a policy with exclusions or restrictions; to increase the rates or premium charged for a policy of insurance;"
+          }
+        ]
+      },
+      "gender": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may charge men more, especially under 25, according to Florida's Department of Financial Services.",
+        "source": {
+          "label": "Florida Department of Financial Services, Automobile Insurance Toolkit",
+          "url": "https://www.myfloridacfo.com/docs-sf/consumer-services-libraries/consumerservices-documents/understanding-coverage/consumer-guides/english---automobile-insurance-toolkit.pdf"
+        },
+        "quote": "Insurance companies typically charge higher premiums for males, especially those younger than 25."
+      },
+      "age": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may charge drivers under 25 or over 65 more, according to Florida's Department of Financial Services.",
+        "source": {
+          "label": "Florida Department of Financial Services, Automobile Insurance Toolkit",
+          "url": "https://www.myfloridacfo.com/docs-sf/consumer-services-libraries/consumerservices-documents/understanding-coverage/consumer-guides/english---automobile-insurance-toolkit.pdf"
+        },
+        "quote": "Statistically, Florida drivers younger than 25 or older than 65 make up a larger share of people involved in accidents, and this is factored into the decision to charge higher premiums.",
+        "moreSources": [
+          {
+            "label": "Fla. Stat. § 627.0652(1), the discount for drivers 55 and older",
+            "url": "https://www.flsenate.gov/Laws/Statutes/2026/627.0652",
+            "quote": "shall provide for an appropriate reduction in premium charges as to such coverages when the principal operator on the covered vehicle is an insured 55 years of age or older who has successfully completed a motor vehicle accident prevention course"
+          }
+        ]
+      },
+      "maritalStatus": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Getting married can lower your price, according to Florida's Department of Financial Services.",
+        "source": {
+          "label": "Florida Department of Financial Services, Personal Automobile Insurance Overview",
+          "url": "https://www.myfloridacfo.com/division/consumers/understanding-insurance/personal-automobile-insurance-overview"
+        },
+        "quote": "The following life events may result in discounted rates: Getting married - Statistics have shown that single drivers are twice as likely to be involved in an accident as married drivers."
+      },
+      "educationOccupation": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Some insurers give discounts for certain jobs, like teachers and nurses, according to Florida's Department of Financial Services.",
+        "source": {
+          "label": "Florida Department of Financial Services, Personal Automobile Insurance Overview",
+          "url": "https://www.myfloridacfo.com/division/consumers/understanding-insurance/personal-automobile-insurance-overview"
+        },
+        "quote": "Occupational discounts - If you are employed as a teacher, nurse, accountant, or if you serve in the armed forces, you may be eligible for discounts."
+      },
+      "territory": {
+        "status": "limited",
+        "summary": "Insurers can price by area, but can't use a single ZIP code as an area unless the state reviews it first and claims data backs it up.",
+        "source": {
+          "label": "Fla. Stat. § 627.0651(8)",
+          "url": "https://www.flsenate.gov/Laws/Statutes/2026/627.0651"
+        },
+        "quote": "Use of a single United States Postal Service zip code as a rating territory shall be deemed unfairly discriminatory unless filed pursuant to paragraph (1)(a) and the justification for its rate incorporates sufficient actual or expected loss and loss adjustment expense experience so as to be actuarially sound."
+      }
+    },
+    "GA": {
+      "gender": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may use your gender to set your price, according to Georgia's insurance commissioner.",
+        "source": {
+          "label": "Georgia Office of Commissioner of Insurance and Safety Fire, Auto Insurance",
+          "url": "https://oci.georgia.gov/insurance-resources/auto"
+        },
+        "quote": "Your driving record, area in which you live, gender and age, marital status, prior insurance coverage, vehicle use and make and model of your vehicle are common factors that can affect the price you will pay for your auto insurance."
+      },
+      "age": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may use your age to set your price, according to Georgia's insurance commissioner.",
+        "source": {
+          "label": "Georgia Office of Commissioner of Insurance and Safety Fire, Auto Insurance",
+          "url": "https://oci.georgia.gov/insurance-resources/auto"
+        },
+        "quote": "Your driving record, area in which you live, gender and age, marital status, prior insurance coverage, vehicle use and make and model of your vehicle are common factors that can affect the price you will pay for your auto insurance."
+      },
+      "maritalStatus": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may use your marital status to set your price, according to Georgia's insurance commissioner.",
+        "source": {
+          "label": "Georgia Office of Commissioner of Insurance and Safety Fire, Auto Insurance",
+          "url": "https://oci.georgia.gov/insurance-resources/auto"
+        },
+        "quote": "Your driving record, area in which you live, gender and age, marital status, prior insurance coverage, vehicle use and make and model of your vehicle are common factors that can affect the price you will pay for your auto insurance."
+      },
+      "territory": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may use where you live to set your price, according to Georgia's insurance commissioner.",
+        "source": {
+          "label": "Georgia Office of Commissioner of Insurance and Safety Fire, Auto Insurance",
+          "url": "https://oci.georgia.gov/insurance-resources/auto"
+        },
+        "quote": "Your driving record, area in which you live, gender and age, marital status, prior insurance coverage, vehicle use and make and model of your vehicle are common factors that can affect the price you will pay for your auto insurance."
+      },
+      "priorInsurance": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may use your past insurance coverage to set your price, according to Georgia's insurance commissioner.",
+        "source": {
+          "label": "Georgia Office of Commissioner of Insurance and Safety Fire, Auto Insurance",
+          "url": "https://oci.georgia.gov/insurance-resources/auto"
+        },
+        "quote": "Your driving record, area in which you live, gender and age, marital status, prior insurance coverage, vehicle use and make and model of your vehicle are common factors that can affect the price you will pay for your auto insurance."
+      }
+    },
     "HI": {
       "credit": {
         "status": "banned",
@@ -139,6 +391,64 @@
           "url": "https://adminrules.idaho.gov/rules/current/18/180201.pdf"
         },
         "quote": "the insurer is to ensure the premium rate using the highest credit factor does not exceed twice the premium using the lowest credit factor, all noncredit factors being unchanged"
+      }
+    },
+    "IL": {
+      "credit": {
+        "status": "limited",
+        "summary": "Insurers can use your credit, but can't set your renewal price, or turn you down, based on credit alone.",
+        "source": {
+          "label": "215 ILCS 157/20(a)(3)",
+          "url": "https://www.ilga.gov/legislation/ilcs/documents/021501570K20.htm"
+        },
+        "quote": "Base an insured's renewal rates for personal insurance solely upon credit information, without consideration of any other applicable factor independent of credit information.",
+        "moreSources": [
+          {
+            "label": "215 ILCS 157/20(a)(2)",
+            "url": "https://www.ilga.gov/legislation/ilcs/documents/021501570K20.htm",
+            "quote": "Deny, cancel, or nonrenew a policy of personal insurance solely on the basis of credit information, without consideration of any other applicable underwriting factor independent of credit information"
+          }
+        ]
+      },
+      "gender": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may use your gender to set your price, according to the Illinois Department of Insurance.",
+        "source": {
+          "label": "Illinois Department of Insurance, Auto Insurance Shopping Guide",
+          "url": "https://idoi.illinois.gov/consumers/consumerinsurance/auto-insurance-shopping-guide.html"
+        },
+        "quote": "Some factors companies use to set the cost include: Age, gender, and marital status – Statistics show certain groups of drivers (for example, young unmarried males) have more accidents. A higher chance of loss means more premium."
+      },
+      "age": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may use your age to set your price, according to the Illinois Department of Insurance.",
+        "source": {
+          "label": "Illinois Department of Insurance, Auto Insurance Shopping Guide",
+          "url": "https://idoi.illinois.gov/consumers/consumerinsurance/auto-insurance-shopping-guide.html"
+        },
+        "quote": "Some factors companies use to set the cost include: Age, gender, and marital status – Statistics show certain groups of drivers (for example, young unmarried males) have more accidents. A higher chance of loss means more premium."
+      },
+      "maritalStatus": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may use your marital status to set your price, according to the Illinois Department of Insurance.",
+        "source": {
+          "label": "Illinois Department of Insurance, Auto Insurance Shopping Guide",
+          "url": "https://idoi.illinois.gov/consumers/consumerinsurance/auto-insurance-shopping-guide.html"
+        },
+        "quote": "Some factors companies use to set the cost include: Age, gender, and marital status – Statistics show certain groups of drivers (for example, young unmarried males) have more accidents. A higher chance of loss means more premium."
+      },
+      "territory": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may charge more in cities than in the country, according to the Illinois Department of Insurance.",
+        "source": {
+          "label": "Illinois Department of Insurance, Auto Insurance Shopping Guide",
+          "url": "https://idoi.illinois.gov/consumers/consumerinsurance/auto-insurance-shopping-guide.html"
+        },
+        "quote": "Location – Since heavily populated areas have more traffic, thefts, and vandalism, city drivers may pay higher premiums than rural drivers."
       }
     },
     "MA": {
@@ -302,6 +612,68 @@
         "quote": "insurers shall not use credit scoring as the sole basis for terminating an existing policy or any coverage in an existing policy or subjecting a policy to consent to rate as specified in G.S. 58-36-30(b) without consideration of any other risk factors, but insurers may use credit scoring as the sole basis for discounting rates. For purposes of this subsection only, \"existing policy\" means a policy that has been in effect for more than 60 days."
       }
     },
+    "NJ": {
+      "credit": {
+        "status": "limited",
+        "evidence": "summary",
+        "summary": "Insurers can use your credit to set your price, but can't use it to turn you down, cancel, or refuse to renew, according to the New Jersey insurance department.",
+        "source": {
+          "label": "New Jersey Department of Banking and Insurance, Auto Insurance Shopping Guide (2026)",
+          "url": "https://www.nj.gov/dobi/division_consumers/pdf/autoshopguide2026.pdf"
+        },
+        "quote": "In New Jersey, insurers are prohibited from using your insurance score to deny, cancel or non-renew coverage."
+      },
+      "gender": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may use your gender to set your price, according to the New Jersey insurance department.",
+        "source": {
+          "label": "New Jersey Department of Banking and Insurance, Auto Insurance Shopping Guide (2026)",
+          "url": "https://www.nj.gov/dobi/division_consumers/pdf/autoshopguide2026.pdf"
+        },
+        "quote": "Statistics show that males and young adults have a higher incidence of accidents and claims; therefore, your gender and age can affect your rate."
+      },
+      "age": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may use your age to set your price, according to the New Jersey insurance department.",
+        "source": {
+          "label": "New Jersey Department of Banking and Insurance, Auto Insurance Shopping Guide (2026)",
+          "url": "https://www.nj.gov/dobi/division_consumers/pdf/autoshopguide2026.pdf"
+        },
+        "quote": "Statistics show that males and young adults have a higher incidence of accidents and claims; therefore, your gender and age can affect your rate."
+      },
+      "maritalStatus": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Married drivers often pay less than single drivers, according to the New Jersey insurance department.",
+        "source": {
+          "label": "New Jersey Department of Banking and Insurance, Auto Insurance Shopping Guide (2026)",
+          "url": "https://www.nj.gov/dobi/division_consumers/pdf/autoshopguide2026.pdf"
+        },
+        "quote": "Statistically, young married couples tend to have a lower incidence of accidents and claims; therefore, they generally pay lower premiums than single people."
+      },
+      "territory": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may price by area, based on claims there, according to the New Jersey insurance department.",
+        "source": {
+          "label": "New Jersey Department of Banking and Insurance, Auto Insurance Shopping Guide (2026)",
+          "url": "https://www.nj.gov/dobi/division_consumers/pdf/autoshopguide2026.pdf"
+        },
+        "quote": "The number of claims filed by policyholders in your territory will affect the rates charged by insurance companies."
+      },
+      "priorInsurance": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Going without required insurance can raise your price, according to the New Jersey insurance department.",
+        "source": {
+          "label": "New Jersey Department of Banking and Insurance, Auto Insurance Shopping Guide (2026)",
+          "url": "https://www.nj.gov/dobi/division_consumers/pdf/autoshopguide2026.pdf"
+        },
+        "quote": "Any time period in which you had a vehicle that was required to be insured but did not have auto insurance can affect your premium as well."
+      }
+    },
     "NY": {
       "educationOccupation": {
         "status": "limited",
@@ -324,6 +696,124 @@
         "effective": "2026-11-23"
       }
     },
+    "OH": {
+      "credit": {
+        "status": "limited",
+        "summary": "Insurers can use your credit, but it can't be the only thing that sets your price.",
+        "source": {
+          "label": "Ohio Adm. Code 3901-1-55(E)",
+          "url": "https://codes.ohio.gov/ohio-administrative-code/rule-3901-1-55"
+        },
+        "quote": "Credit history or a credit score or any aspect thereof, either individually or collectively, may not be used without consideration of any other applicable underwriting or rating factor as the sole basis for: (1) Any underwriting decision; (2) Any total premium determination; or (3) Any adverse action."
+      },
+      "gender": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may use your gender to set your price, according to the Ohio Department of Insurance.",
+        "source": {
+          "label": "Ohio Department of Insurance, Automobile Insurance Guide",
+          "url": "https://insurance.ohio.gov/consumers/automobile/automobile-insurance-guide"
+        },
+        "quote": "Your age, sex & marital status: Young, single, male drivers generally have the highest accident rates and pay the most; after age 26 (or so), the differences are usually smaller"
+      },
+      "age": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may use your age to set your price, according to the Ohio Department of Insurance.",
+        "source": {
+          "label": "Ohio Department of Insurance, Automobile Insurance Guide",
+          "url": "https://insurance.ohio.gov/consumers/automobile/automobile-insurance-guide"
+        },
+        "quote": "Your age, sex & marital status: Young, single, male drivers generally have the highest accident rates and pay the most; after age 26 (or so), the differences are usually smaller"
+      },
+      "maritalStatus": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may use your marital status to set your price, according to the Ohio Department of Insurance.",
+        "source": {
+          "label": "Ohio Department of Insurance, Automobile Insurance Guide",
+          "url": "https://insurance.ohio.gov/consumers/automobile/automobile-insurance-guide"
+        },
+        "quote": "Your age, sex & marital status: Young, single, male drivers generally have the highest accident rates and pay the most; after age 26 (or so), the differences are usually smaller"
+      },
+      "territory": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may charge more where claims are higher, according to the Ohio Department of Insurance.",
+        "source": {
+          "label": "Ohio Department of Insurance, Automobile Insurance Guide",
+          "url": "https://insurance.ohio.gov/consumers/automobile/automobile-insurance-guide"
+        },
+        "quote": "In general, you will pay more if you live in an area where claims are higher"
+      },
+      "priorInsurance": {
+        "status": "limited",
+        "summary": "Insurers can't charge you more for having no car insurance when you apply, unless they can show it really predicts claims.",
+        "source": {
+          "label": "Ohio Rev. Code § 3937.021",
+          "url": "https://codes.ohio.gov/ohio-revised-code/section-3937.021"
+        },
+        "quote": "In determining rates for motor vehicle insurance, an insurer shall not consider the fact that an applicant does not have motor vehicle insurance covering the applicant's motor vehicle at the time of his application for such insurance, unless the insurer has an actuarial justification."
+      }
+    },
+    "OK": {
+      "credit": {
+        "status": "limited",
+        "summary": "Insurers can use your credit, but can't set your renewal price, or turn you down, based on credit alone.",
+        "source": {
+          "label": "36 Okla. Stat. § 953(3)",
+          "url": "https://www.oscn.net/applications/oscn/DeliverDocument.asp?CiteID=436228"
+        },
+        "quote": "Base renewal rates for personal insurance of an insured solely upon credit information, without consideration of any other applicable factor independent of credit information;",
+        "moreSources": [
+          {
+            "label": "36 Okla. Stat. § 953(2)",
+            "url": "https://www.oscn.net/applications/oscn/DeliverDocument.asp?CiteID=436228",
+            "quote": "Deny, cancel or fail to renew a policy of personal insurance solely on the basis of credit information, without consideration of any other applicable underwriting factor independent of credit information"
+          }
+        ]
+      },
+      "gender": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may use your gender to set your price, according to the Oklahoma Insurance Department.",
+        "source": {
+          "label": "Oklahoma Insurance Department, Insurance Rate Calculation",
+          "url": "https://www.oid.ok.gov/insurance-rate-calculation/"
+        },
+        "quote": "Auto Insurance Factors: ... Your age, gender and marital status"
+      },
+      "age": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may use your age to set your price, according to the Oklahoma Insurance Department.",
+        "source": {
+          "label": "Oklahoma Insurance Department, Insurance Rate Calculation",
+          "url": "https://www.oid.ok.gov/insurance-rate-calculation/"
+        },
+        "quote": "Auto Insurance Factors: ... Your age, gender and marital status"
+      },
+      "maritalStatus": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may use your marital status to set your price, according to the Oklahoma Insurance Department.",
+        "source": {
+          "label": "Oklahoma Insurance Department, Insurance Rate Calculation",
+          "url": "https://www.oid.ok.gov/insurance-rate-calculation/"
+        },
+        "quote": "Auto Insurance Factors: ... Your age, gender and marital status"
+      },
+      "territory": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may use where you live and park your car to set your price, according to the Oklahoma Insurance Department.",
+        "source": {
+          "label": "Oklahoma Insurance Department, Insurance Rate Calculation",
+          "url": "https://www.oid.ok.gov/insurance-rate-calculation/"
+        },
+        "quote": "Auto Insurance Factors: ... Where you live and garage your car"
+      }
+    },
     "PA": {
       "gender": {
         "status": "banned",
@@ -344,6 +834,80 @@
           "url": "https://statutes.capitol.texas.gov/Docs/IN/htm/IN.559.htm"
         },
         "quote": "deny, cancel, or nonrenew a policy of personal insurance solely on the basis of credit information without considering any other applicable underwriting factor independent of credit information"
+      },
+      "gender": {
+        "status": "limited",
+        "summary": "Insurers can use your gender only when the price difference is backed by real differences in claims.",
+        "source": {
+          "label": "Tex. Ins. Code § 544.002(a)",
+          "url": "https://statutes.capitol.texas.gov/Docs/IN/htm/IN.544.htm#544.002"
+        },
+        "quote": "A person may not ... charge an individual a rate that is different from the rate charged to other individuals for the same coverage because of the individual's: ... (2) age, gender, marital status, or geographic location; or",
+        "moreSources": [
+          {
+            "label": "Tex. Ins. Code § 544.003(b)",
+            "url": "https://statutes.capitol.texas.gov/Docs/IN/htm/IN.544.htm#544.003",
+            "quote": "A person does not violate Section 544.002(a)(2) or (3) if the refusal, limitation, or charge is based on sound underwriting or actuarial principles reasonably related to actual or anticipated loss experience."
+          }
+        ]
+      },
+      "age": {
+        "status": "limited",
+        "summary": "Insurers can use your age only when the price difference is backed by real differences in claims.",
+        "source": {
+          "label": "Tex. Ins. Code § 544.002(a)",
+          "url": "https://statutes.capitol.texas.gov/Docs/IN/htm/IN.544.htm#544.002"
+        },
+        "quote": "A person may not ... charge an individual a rate that is different from the rate charged to other individuals for the same coverage because of the individual's: ... (2) age, gender, marital status, or geographic location; or",
+        "moreSources": [
+          {
+            "label": "Tex. Ins. Code § 544.003(b)",
+            "url": "https://statutes.capitol.texas.gov/Docs/IN/htm/IN.544.htm#544.003",
+            "quote": "A person does not violate Section 544.002(a)(2) or (3) if the refusal, limitation, or charge is based on sound underwriting or actuarial principles reasonably related to actual or anticipated loss experience."
+          }
+        ]
+      },
+      "maritalStatus": {
+        "status": "limited",
+        "summary": "Insurers can use marital status, but can't charge a widowed person more than they'd charge someone who's married.",
+        "source": {
+          "label": "Tex. Ins. Code § 544.002(d)(2)",
+          "url": "https://statutes.capitol.texas.gov/Docs/IN/htm/IN.544.htm#544.002"
+        },
+        "quote": "Notwithstanding Section 544.003, an insurer may not: ... (2) charge an individual who is widowed or whose marital status otherwise reflects the death of a spouse a rate that is different from the rate that would be charged if the individual's marital status was married.",
+        "moreSources": [
+          {
+            "label": "Tex. Ins. Code § 544.003(b)",
+            "url": "https://statutes.capitol.texas.gov/Docs/IN/htm/IN.544.htm#544.003",
+            "quote": "A person does not violate Section 544.002(a)(2) or (3) if the refusal, limitation, or charge is based on sound underwriting or actuarial principles reasonably related to actual or anticipated loss experience."
+          }
+        ]
+      },
+      "educationOccupation": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may use your job to set your price, according to the Texas Department of Insurance.",
+        "source": {
+          "label": "Texas Department of Insurance, \"How are your auto and homeowners insurance costs calculated?\"",
+          "url": "https://www.tdi.texas.gov/consumer/how-are-your-auto-and-homeowners-insurance-costs-calculated.html"
+        },
+        "quote": "For auto insurance, common factors include: ... Your occupation."
+      },
+      "territory": {
+        "status": "limited",
+        "summary": "Insurers can use where you live only when the price difference is backed by real differences in claims.",
+        "source": {
+          "label": "Tex. Ins. Code § 544.002(a)",
+          "url": "https://statutes.capitol.texas.gov/Docs/IN/htm/IN.544.htm#544.002"
+        },
+        "quote": "A person may not ... charge an individual a rate that is different from the rate charged to other individuals for the same coverage because of the individual's: ... (2) age, gender, marital status, or geographic location; or",
+        "moreSources": [
+          {
+            "label": "Tex. Ins. Code § 544.003(b)",
+            "url": "https://statutes.capitol.texas.gov/Docs/IN/htm/IN.544.htm#544.003",
+            "quote": "A person does not violate Section 544.002(a)(2) or (3) if the refusal, limitation, or charge is based on sound underwriting or actuarial principles reasonably related to actual or anticipated loss experience."
+          }
+        ]
       }
     },
     "UT": {

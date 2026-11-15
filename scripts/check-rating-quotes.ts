@@ -12,11 +12,15 @@
  *
  * Exits non-zero on MISSING or NO_SNAPSHOT (offline), or MISSING, CHANGED, or
  * FETCH_FAILED (live: a dead link, a page whose layout no longer matches its
- * site rule, or a site still failing after retries). NEEDS_BROWSER (a bot
- * check) is reported, never fatal.
+ * site rule, or a site still failing after retries). NEEDS_BROWSER is
+ * reported, never fatal: a bot check, a JavaScript-only page, or the one
+ * failure an unexpired exact-URL entry in BROWSER_EXCEPTIONS names
+ * (scripts/rating-quotes/law.ts). RATING_CHECK_TODAY=YYYY-MM-DD overrides
+ * today's date, for testing an exception's expiry.
  */
-import { citations, extractSection, fatalStatuses, quoteFound, shortDiff, summaryTable, type CheckStatus, type Citation } from "./rating-quotes/law"
+import { citations, extractSection, fatalStatuses, fetchFailureStatus, quoteFound, shortDiff, summaryTable, type CheckStatus, type Citation } from "./rating-quotes/law"
 import { fetchPage, flagValue, loadSnapshots, readRulesFile } from "./rating-quotes/store"
+import { todayIso } from "../src/lib/state-rules"
 
 type Row = { status: CheckStatus; state: string; what: string; note?: string }
 
@@ -53,8 +57,11 @@ async function main(): Promise<void> {
       let problem: Row["status"] | null = null
       let note = ""
       if (!fetched.ok) {
-        problem = fetched.needsBrowser ? "NEEDS_BROWSER" : "FETCH_FAILED"
-        note = fetched.error
+        // A bot check, or the one failure an unexpired exact-URL exception names, needs a browser.
+        // Anything else (404, 410, a server that keeps failing, a network error) is fatal.
+        const judged = fetchFailureStatus(url, fetched, process.env.RATING_CHECK_TODAY ?? todayIso())
+        problem = judged.status
+        note = judged.note
       } else {
         const extracted = extractSection(url, fetched.body, cites[0].label, fetched.isPdfText)
         if ("error" in extracted) {
