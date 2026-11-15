@@ -32,12 +32,12 @@ test("limited (Texas): with limits, then the survey's figures, labeled inline", 
   assert.equal(ratingRule("TX", "credit")?.status, "limited")
   assert.equal(fromSummary(ratingRule("TX", "credit")), false)
   assert.equal(TEXAS_SENTENCE, TX_LINE)
-  assert.equal(creditLine("TX"), `In Texas, insurers can use your credit with limits. ${TX_LINE}`)
+  assert.equal(creditLine("TX"), `In Texas, insurers can use your credit (with limits). ${TX_LINE}`)
 })
 
 test("summary-based (New Jersey): says so in words, without stacked brackets", () => {
   assert.equal(fromSummary(ratingRule("NJ", "credit")), true)
-  assert.equal(creditLine("NJ"), `In New Jersey, insurers can use your credit with limits, according to a summary of the law. ${TX_LINE}`)
+  assert.equal(creditLine("NJ"), `In New Jersey, insurers can use your credit (with limits), according to a summary of the law. ${TX_LINE}`)
 })
 
 const fixture = { summary: "A plain sentence about the rule.", source: { label: "Law", url: "https://example.gov" }, quote: "a quote from the law", checkedOn: "2026-11-15" }

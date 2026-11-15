@@ -28,7 +28,7 @@ export function creditLine(state: string, rule: RatingRule | undefined = ratingR
   if (rule.status === "banned") return `In ${name}, insurers can't use your credit to set your price, so it won't move your quote.`
   // Mirrors compareLine: a state whose rating law just doesn't list credit never reads as "can use".
   if (rule.status === "no-ban-found" && rule.basis === "not-on-list") return `${name}'s rating law doesn't list credit as banned. ${TEXAS_SENTENCE}`
-  const limits = rule.status === "limited" ? " with limits" : ""
+  const limits = rule.status === "limited" ? " (with limits)" : ""
   const summary = fromSummary(rule) ? ", according to a summary of the law" : ""
   return `In ${name}, insurers can use your credit${limits}${summary}. ${TEXAS_SENTENCE}`
 }
