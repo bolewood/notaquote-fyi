@@ -7,7 +7,7 @@ import { execFileSync } from "node:child_process"
 import { mkdtempSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
 import path from "node:path"
-import { classifyResponse, FETCH_RETRIES, parseSnapshot, retryDelayMs, SITE_RULES, type FetchFailure, type SnapshotMeta } from "./law"
+import { classifyResponse, decodePage, FETCH_RETRIES, parseSnapshot, retryDelayMs, SITE_RULES, type FetchFailure, type SnapshotMeta } from "./law"
 
 export const ROOT = path.resolve(__dirname, "../..")
 export const RULES_PATH = path.join(ROOT, "data/state-rules/rating-rules.json")
@@ -88,9 +88,13 @@ export async function fetchPage(url: string): Promise<Fetched> {
         signal: AbortSignal.timeout(TIMEOUT_MS),
       })
       const type = response.headers.get("content-type") ?? ""
-      const isPdf = type.includes("pdf") || url.toLowerCase().endsWith(".pdf")
+      // Kentucky's statute pages answer "application/PDF".
+      const isPdf = type.toLowerCase().includes("pdf") || url.toLowerCase().endsWith(".pdf")
       if (response.ok && isPdf) return pdfToText(Buffer.from(await response.arrayBuffer()), !SITE_RULES[host]?.pdfColumns)
-      const body = await response.text().catch(() => "")
+      const body = await response
+        .arrayBuffer()
+        .then((bytes) => decodePage(new Uint8Array(bytes), type))
+        .catch(() => "")
       const outcome = classifyResponse(response.status, body)
       if (outcome === "ok") return { ok: true, body, isPdfText: false }
       if (outcome === "needs-browser") return { ok: false, error: `HTTP ${response.status}: the site sent a bot check`, status: response.status, needsBrowser: true }

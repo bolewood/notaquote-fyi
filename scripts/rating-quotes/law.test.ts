@@ -6,6 +6,7 @@ import {
   citations,
   classifyResponse,
   cutText,
+  decodePage,
   fatalStatuses,
   FETCH_RETRIES,
   retryDelayMs,
@@ -26,6 +27,7 @@ import {
   sectionTitle,
   shortDiff,
   snapshotSlug,
+  stripPdfLineNumbers,
   summaryTable,
 } from "./law"
 
@@ -260,4 +262,68 @@ test("a consumer guide is cut to the part a rule cites", () => {
   assert.match(got.text, /^Ask for car insurance discounts/)
   assert.match(got.text, /Getting married/)
   assert.doesNotMatch(got.text, /Verify before you buy|CLUE|Later text/)
+})
+
+test("a page is decoded in its own character set, falling back to Windows-1252 when it isn't UTF-8", () => {
+  const cp1252 = Uint8Array.from([0x70, 0x6f, 0x6c, 0x69, 0x63, 0x79, 0x92, 0x73, 0x20, 0xa7, 0xa0, 0x31]) // policy’s §\u00a01
+  assert.equal(decodePage(cp1252), "policy\u2019s \u00a7\u00a01", "no charset anywhere, not valid UTF-8: Windows-1252")
+  assert.equal(decodePage(new TextEncoder().encode("policy’s § 1")), "policy’s § 1", "valid UTF-8 stays UTF-8")
+  const latin = Uint8Array.from([...new TextEncoder().encode('<meta charset="windows-1252"><p>'), 0x93, 0x61, 0x94])
+  assert.equal(decodePage(latin), '<meta charset="windows-1252"><p>\u201ca\u201d', "a <meta> charset is honored")
+  assert.equal(decodePage(Uint8Array.from([0xe9]), "text/html; charset=ISO-8859-1"), "é", "the header's charset wins")
+})
+
+test("a chapter page that opens with a table of contents is cut at the section itself, not its contents line", () => {
+  const page = `<body><p>NRS 686A.680 Consumer credit reports: Uses; limitations.</p><p>NRS 686A.685 Exceptions.</p>
+    <p>NRS 686A.680 Consumer credit reports: Uses; limitations.</p><p>1. An insurer that uses information from a consumer credit report shall not base renewal rates upon credit information alone, and so on.</p>
+    <p>NRS 686A.685 Exceptions.</p><p>1. Not this section.</p></body>`
+  const cut = extractSection("https://www.leg.state.nv.us/NRS/NRS-686A.html#NRS686ASec680", page, "Nev. Rev. Stat. § 686A.680(1)(c)")
+  assert.ok("text" in cut, JSON.stringify(cut))
+  assert.match(cut.text, /^NRS 686A\.680 Consumer credit reports: Uses; limitations\.\n+1\. An insurer/)
+  assert.doesNotMatch(cut.text, /686A\.685|Not this section/)
+  // Oregon's next heading looks like "746.662 ...": the search for it must not start inside this section's own number.
+  const oregon = `<body><p>746.661 Use of credit history.</p><p>746.662 Filing.</p><p>746.661 Use of credit history. (1) An insurer that issues personal insurance policies in this state may only use other rating factors at renewal, and more words.</p><p>(2) A second subsection.</p><p>746.662 Filing. (1) Not this one.</p></body>`
+  const or = extractSection("https://www.oregonlegislature.gov/bills_laws/ors/ors746.html#746.661", oregon, "Or. Rev. Stat. § 746.661(6)")
+  assert.ok("text" in or, JSON.stringify(or))
+  assert.match(or.text, /^746\.661 Use of credit history\. \(1\)/)
+  assert.doesNotMatch(or.text, /746\.662/)
+})
+
+test("an Alabama rule is cut from its chapter PDF by the rule number in the label", () => {
+  const pdf = [
+    "482-1-127-.05    Requirements",
+    "482-1-127-.06    Prohibited Procedures",
+    "",
+    "482-1-127-.05    Requirements.",
+    "(1) Not this rule, which says other things about requirements and filings at length.",
+    "",
+    "482-1-127-.06    Prohibited Procedures.",
+    "(3) Insurers shall not refuse to insure an applicant based solely on the applicant’s credit history.",
+    "",
+    "482-1-127-.07    Protection Of Fair Credit Reporting Act.",
+    "(1) Not this one either.",
+  ].join("\n")
+  const cut = extractSection("https://admincode.legislature.state.al.us/api/chapter/482-1-127#482-1-127-.06", pdf, "Ala. Admin. Code r. 482-1-127-.06(3)-(4)", true)
+  assert.ok("text" in cut, JSON.stringify(cut))
+  assert.match(cut.text, /^482-1-127-\.06 Prohibited Procedures\.\n\(3\) Insurers shall not refuse/)
+  assert.doesNotMatch(cut.text, /Not this/)
+  assert.equal(sectionTitle("Ala. Admin. Code r. 482-1-127-.06(3)-(4)"), "Ala. Admin. Code r. 482-1-127-.06")
+})
+
+test("an Arkansas act's margin line numbers and page headers are dropped before the text is joined", () => {
+  const layout = [
+    "30          23-67-405.       Use of credit information.",
+    "31          An insurer authorized to do business in Arkansas that uses credit",
+    "36                  (2)    Deny, cancel, or nonrenew a policy of personal insurance",
+    "",
+    "                                              4                   03082003LDH0841.JMB294",
+    "     As Engrossed: S3/19/03 H4/10/03                                                    SB846",
+    "",
+    " 1   solely on the basis of credit information, without consideration of any other",
+    " 2   applicable underwriting factor independent of credit information;",
+  ].join("\n")
+  const header = /^(?:As Engrossed:.*|\d+\s+\d{8}[A-Z]{3}\d{4}\.[A-Z]{3}\d+|\*[A-Z0-9]+\*.*)$/
+  const stripped = stripPdfLineNumbers(layout, header)
+  assert.doesNotMatch(stripped, /JMB294|Engrossed|^\d+\s/m)
+  assert.ok(quoteFound("Deny, cancel, or nonrenew a policy of personal insurance solely on the basis of credit information, without consideration of any other applicable underwriting factor", reflowPdfText(stripped)))
 })
