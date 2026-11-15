@@ -46,10 +46,27 @@ export const RATING_BASES = ["named", "not-on-list"] as const
 
 export type RatingBasis = (typeof RATING_BASES)[number]
 
+/**
+ * What an entry rests on.
+ * - "law" (the default when it's left out): the statute, regulation, or court opinion itself.
+ * - "summary": a reputable summary of the law, such as the state insurance department's
+ *   consumer page, used only when the law itself couldn't be fetched or quoted. The page
+ *   marks these, and the summary sentence says whose summary it is.
+ */
+export const EVIDENCE_LEVELS = ["law", "summary"] as const
+
+export type EvidenceLevel = (typeof EVIDENCE_LEVELS)[number]
+
+/** The mark a summary-based answer gets in the tables, and the footnote that explains it. */
+export const SUMMARY_MARK = "†"
+export const SUMMARY_NOTE = "From a summary of the law, not the law itself."
+
 export type RatingRule = {
   status: RatingStatus
   /** Optional. "not-on-list" is only for "no-ban-found": the quote is the state's list of what insurers can't use. */
   basis?: RatingBasis
+  /** Optional, "law" when left out. "summary" when the entry rests on a summary of the law, not the law itself. */
+  evidence?: EvidenceLevel
   /** One plain sentence for visitors. */
   summary: string
   /** The law it comes from. */
@@ -106,6 +123,14 @@ export function validateRatingRules(data: RawFile): void {
           throw new Error(`${at}: "basis": "not-on-list" only goes with "status": "no-ban-found"`)
         }
       }
+      if (rule.evidence !== undefined) {
+        if (!(EVIDENCE_LEVELS as readonly string[]).includes(rule.evidence)) {
+          throw new Error(`${at}: "evidence" must be ${EVIDENCE_LEVELS.join(" or ")}`)
+        }
+        if (rule.evidence === "summary" && rule.basis === "not-on-list") {
+          throw new Error(`${at}: "basis": "not-on-list" needs the state's list itself, so it can't rest on a summary`)
+        }
+      }
       if (typeof rule.summary !== "string" || rule.summary.length < 10 || rule.summary.length > 200) {
         throw new Error(`${at}: "summary" must be one plain sentence (10–200 characters)`)
       }
@@ -144,6 +169,11 @@ export function ratingRule(state: string, factor: RatingFactor): RatingRule | un
   const rule = file.states[state]?.[factor]
   if (!rule) return undefined
   return { ...rule, checkedOn: rule.checkedOn ?? file.checkedOn }
+}
+
+/** True when the entry rests on a summary of the law rather than the law itself. */
+export function fromSummary(rule: RatingRule | undefined): boolean {
+  return rule?.evidence === "summary"
 }
 
 /** True where the state bars insurers from using the factor for car insurance. */

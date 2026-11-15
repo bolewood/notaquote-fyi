@@ -1,7 +1,17 @@
 "use client"
 
 import { SelectField } from "@/components/fields"
-import { compareLine, FACTOR_NAMES, ratingRule, statusWords, TABLE_FACTORS, type RatingRule } from "@/lib/rating-rules"
+import {
+  compareLine,
+  FACTOR_NAMES,
+  fromSummary,
+  ratingRule,
+  statusWords,
+  SUMMARY_MARK,
+  SUMMARY_NOTE,
+  TABLE_FACTORS,
+  type RatingRule,
+} from "@/lib/rating-rules"
 import { STATES, type StateCode } from "@/lib/scenario"
 import { useSituation } from "@/lib/use-stored"
 import { useState } from "react"
@@ -9,9 +19,31 @@ import { useState } from "react"
 function Cell({ rule }: { rule: RatingRule | undefined }) {
   if (!rule) return <span className="text-muted-foreground">Not reviewed yet</span>
   return (
-    <a href={rule.source.url} rel="noreferrer" title={rule.summary}>
-      {statusWords(rule)}
-    </a>
+    <>
+      <a href={rule.source.url} rel="noreferrer" title={rule.summary}>
+        {statusWords(rule)}
+      </a>
+      {fromSummary(rule) ? <SummaryMark /> : null}
+    </>
+  )
+}
+
+/** The dagger on a summary-based answer. Screen readers hear the footnote's words instead. */
+function SummaryMark() {
+  return (
+    <sup className="ml-0.5 text-muted-foreground" data-testid="summary-mark" title={SUMMARY_NOTE}>
+      <span aria-hidden="true">{SUMMARY_MARK}</span>
+      <span className="sr-only"> ({SUMMARY_NOTE})</span>
+    </sup>
+  )
+}
+
+/** The footnote under a table with at least one summary-based answer. */
+function SummaryFootnote() {
+  return (
+    <p className="mt-2 text-xs text-muted-foreground" data-testid="summary-footnote">
+      <span aria-hidden="true">{SUMMARY_MARK}</span> {SUMMARY_NOTE}
+    </p>
   )
 }
 
@@ -27,7 +59,8 @@ export function RatingRulesTable() {
     <div className="overflow-x-auto" data-testid="rating-rules-table">
       <table className="w-full border-collapse text-left text-sm">
         <caption className="py-2 text-left text-sm text-muted-foreground">
-          What car insurers may use to set a price, by state. Each answer links to the law it comes from.
+          What car insurers may use to set a price, by state. Each answer links to its source: the law itself, or a summary
+          of it where marked {SUMMARY_MARK}.
         </caption>
         <thead>
           <tr className="border-b border-border text-muted-foreground">
@@ -61,6 +94,9 @@ export function RatingRulesTable() {
           ))}
         </tbody>
       </table>
+      {STATES.some((state) => TABLE_FACTORS.some((factor) => fromSummary(ratingRule(state.code, factor)))) ? (
+        <SummaryFootnote />
+      ) : null}
     </div>
   )
 }
@@ -139,6 +175,9 @@ export function CompareStateRules() {
               ))}
             </tbody>
           </table>
+          {TABLE_FACTORS.some((factor) => fromSummary(ratingRule(a, factor)) || fromSummary(ratingRule(b, factor))) ? (
+            <SummaryFootnote />
+          ) : null}
         </div>
       </div>
     </div>

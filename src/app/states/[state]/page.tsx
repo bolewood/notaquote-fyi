@@ -39,7 +39,7 @@ import {
 import { inSentence, STATE_SLUGS, stateBySlug, stateFigures, statePath, TEEN_TOP } from "@/lib/state-pages"
 import { STATE_BASELINE_SOURCES } from "@/lib/state-baselines"
 import { flagCell, noFaultCell, type StateRule } from "@/lib/state-rules"
-import { FACTOR_NAMES, RATING_FACTORS, ratingRule, statusWords } from "@/lib/rating-rules"
+import { FACTOR_NAMES, fromSummary, RATING_FACTORS, ratingRule, statusWords } from "@/lib/rating-rules"
 import type { StateSurveySection } from "@/lib/state-surveys"
 import { TEEN_LIST_YEAR } from "@/lib/teen-cars"
 
@@ -504,7 +504,8 @@ function RatingRulesBox({ code, short }: { code: string; short: string }) {
           {reviewed.map(({ factor, rule }) => (
             <li key={factor}>
               <strong>
-                {FACTOR_NAMES[factor]}: {statusWords(rule).charAt(0).toLowerCase() + statusWords(rule).slice(1)}.
+                {FACTOR_NAMES[factor]}: {statusWords(rule).charAt(0).toLowerCase() + statusWords(rule).slice(1)}
+                {fromSummary(rule) ? " (from a summary)" : ""}.
               </strong>{" "}
               {rule.summary}{" "}
               <a href={rule.source.url} rel="noreferrer">

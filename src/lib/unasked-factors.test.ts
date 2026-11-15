@@ -6,6 +6,7 @@ import { FACTOR_BUNDLE } from "./factor-engine"
 import {
   compareLine,
   compareRules,
+  fromSummary,
   isBanned,
   RATING_FACTORS,
   ratingGroup,
@@ -13,6 +14,9 @@ import {
   reviewProgressLine,
   reviewedStates,
   statusWords,
+  SUMMARY_MARK,
+  SUMMARY_NOTE,
+  TABLE_FACTORS,
   validateRatingRules,
 } from "./rating-rules"
 import { STATES } from "./scenario"
@@ -272,4 +276,63 @@ test("comparing a not-on-list state never says insurers there may use the factor
     }
   }
   assert.equal(compareRules("credit", notOnList, notOnList, "Texas", "Ohio"), null)
+})
+
+test('"evidence" is "law" or "summary", and a summary can\'t stand in for the state\'s list', () => {
+  const good = { version: "rating-rules-2026-11-15", checkedOn: "2026-11-15", about: "x", states: {} }
+  const rule = {
+    status: "no-ban-found",
+    summary: "Insurers may use your age, according to the state insurance department.",
+    source: { label: "Insurance department guide", url: "https://example.gov" },
+    quote: "Insurers may consider your age",
+  }
+  const withRule = (extra: object) => ({ ...good, states: { OH: { age: { ...rule, ...extra } } } }) as never
+  assert.doesNotThrow(() => validateRatingRules(withRule({})))
+  assert.doesNotThrow(() => validateRatingRules(withRule({ evidence: "law" })))
+  assert.doesNotThrow(() => validateRatingRules(withRule({ evidence: "summary" })))
+  assert.throws(() => validateRatingRules(withRule({ evidence: "rumor" })), /evidence/)
+  assert.throws(() => validateRatingRules(withRule({ evidence: "summary", basis: "not-on-list" })), /summary/)
+
+  const base = { ...rule, status: "no-ban-found" as const, checkedOn: "2026-11-15" }
+  assert.equal(fromSummary({ ...base, evidence: "summary" }), true)
+  assert.equal(fromSummary({ ...base, evidence: "law" }), false)
+  assert.equal(fromSummary(base), false, "left out means the law itself")
+  assert.equal(fromSummary(undefined), false)
+  // The table words don't change; the mark sits beside them.
+  assert.equal(statusWords({ ...base, evidence: "summary" }), statusWords(base))
+})
+
+test("summary-based answers are marked everywhere they show, and only those", () => {
+  const summaryRules = STATES.flatMap((state) =>
+    TABLE_FACTORS.filter((factor) => fromSummary(ratingRule(state.code, factor))).map((factor) => ({ state, factor })),
+  )
+  const html = renderToStaticMarkup(WhatWeDontAskPage())
+  const marks = html.match(/data-testid="summary-mark"/g)?.length ?? 0
+  // Every summary-based cell in the big table gets the mark; the comparison box adds its own for the two states it shows.
+  assert.ok(marks >= summaryRules.length, `expected at least ${summaryRules.length} marks, found ${marks}`)
+  if (summaryRules.length === 0) {
+    assert.equal(marks, 0)
+    assert.doesNotMatch(html, /data-testid="summary-footnote"/)
+    return
+  }
+  assert.match(html, /data-testid="summary-footnote"/)
+  const text = visibleText(html)
+  assert.ok(text.includes(SUMMARY_NOTE), "the footnote explains the mark")
+  assert.ok(text.includes(SUMMARY_MARK))
+  for (const { state, factor } of summaryRules) {
+    const section = html.slice(html.indexOf(`id="rules-${factor}"`))
+    const line = section.slice(0, section.indexOf("</section>"))
+    assert.ok(line.includes(`${state.name} (from a summary)`), `${state.code} ${factor}: its line says "(from a summary)"`)
+  }
+})
+
+test("the page opens with a plain note that it's a guide, not legal advice", () => {
+  const html = renderToStaticMarkup(WhatWeDontAskPage())
+  const at = html.indexOf('data-testid="rating-rules-disclaimer"')
+  assert.ok(at > 0, "the note is on the page")
+  assert.ok(at < html.indexOf('id="what-moves-the-price"'), "the note comes before the first section")
+  const note = visibleText(html.slice(at, html.indexOf("</div>", at)))
+  assert.match(note, /not legal advice/)
+  assert.match(note, /from a summary/)
+  assert.match(note, /insurance department/)
 })
