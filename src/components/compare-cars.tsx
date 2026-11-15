@@ -1,6 +1,7 @@
 "use client"
 
 import { CarPicker } from "@/components/car-picker"
+import { CreditLine } from "@/components/credit-line"
 import { DisclaimerText } from "@/components/disclaimer-text"
 import {
   AgeField,
@@ -67,7 +68,7 @@ import {
   startingPoint,
   startLine,
 } from "@/lib/pricing"
-import { AGE_BANDS, situationSentence, shortVehicleLabel, stateName, withTeenFlag, type Scenario } from "@/lib/scenario"
+import { AGE_BANDS, situationSentence, shortVehicleLabel, stateName, withTeenFlag, type Scenario, type StateCode } from "@/lib/scenario"
 import { encodeSharePath, SHARE_INVALID_NOTE, shareArrivalNotes } from "@/lib/share-link"
 import { readShareArrival, useClearShareFromAddress, useMounted } from "@/lib/use-share-arrival"
 import { DEFAULT_SITUATION } from "@/lib/situation"
@@ -900,7 +901,7 @@ function CompareCarsReady() {
                             <tr className="no-print border-b border-border bg-muted/50">
                               <td />
                               <td colSpan={6} className="py-3 pr-4">
-                                <RowDetails row={row} gap={gapWords(row)} />
+                                <RowDetails row={row} gap={gapWords(row)} state={driver.state} />
                               </td>
                             </tr>
                           ) : null}
@@ -941,7 +942,7 @@ function CompareCarsReady() {
                       </div>
                       {openRow === row.key ? (
                         <div className="mt-2 grid gap-3 pb-2 pl-11">
-                          <RowDetails row={row} gap={gapWords(row)} />
+                          <RowDetails row={row} gap={gapWords(row)} state={driver.state} />
                           <button type="button" className="btn justify-self-start" onClick={() => remove(row, visible)}>
                             <Trash2 className="size-4" aria-hidden="true" /> Remove from list
                           </button>
@@ -1215,7 +1216,7 @@ function SortHeader({
   )
 }
 
-function RowDetails({ row, gap }: { row: CompareRow; gap: string | null }) {
+function RowDetails({ row, gap, state }: { row: CompareRow; gap: string | null; state: StateCode }) {
   const page = useCarPagePath(row.car.make, row.car.model)
   return (
     <div className="grid gap-2 text-sm leading-relaxed">
@@ -1236,6 +1237,7 @@ function RowDetails({ row, gap }: { row: CompareRow; gap: string | null }) {
             What we don&apos;t ask, and how much it can matter
           </Link>
         </p>
+        <CreditLine state={state} />
       </div>
       {page ? (
         <p>
