@@ -907,7 +907,7 @@
     "ND": {
       "credit": {
         "status": "limited",
-        "summary": "Insurers must re-rate you on a fresh credit report at renewal if you ask, and can't turn you down or drop you on credit alone.",
+        "summary": "You can generally ask for a re-rate on fresh credit at renewal, with exceptions such as already being in the best tier, and insurers can't turn you down or drop you on credit alone.",
         "source": {
           "label": "N.D. Cent. Code § 26.1-25.1-03(6)(a)",
           "url": "https://ndlegis.gov/cencode/t26-1c25-1.pdf#26.1-25.1-03"
@@ -918,12 +918,17 @@
             "label": "N.D. Cent. Code § 26.1-25.1-03(2)",
             "url": "https://ndlegis.gov/cencode/t26-1c25-1.pdf#26.1-25.1-03",
             "quote": "Deny, cancel, or nonrenew a policy of personal insurance solely on the basis of credit information, without consideration of any other applicable underwriting factor independent of credit information"
+          },
+          {
+            "label": "N.D. Cent. Code § 26.1-25.1-03(6)(c)(2)",
+            "url": "https://ndlegis.gov/cencode/t26-1c25-1.pdf#26.1-25.1-03",
+            "quote": "The insured is in the most favorably priced tier of the insurer, within a group of affiliated insurers."
           }
         ]
       },
       "age": {
         "status": "limited",
-        "summary": "North Dakota requires a discount for any driver who finishes an approved accident prevention course, and drivers 55 and older keep it three years instead of at least two.",
+        "summary": "North Dakota requires a discount for drivers of any age who finish an approved accident prevention course, kept three years at 55 and older instead of at least two.",
         "source": {
           "label": "N.D. Cent. Code § 26.1-25-04.1",
           "url": "https://ndlegis.gov/cencode/t26-1c25.pdf#26.1-25-04.1"
@@ -941,7 +946,7 @@
     "NE": {
       "credit": {
         "status": "limited",
-        "summary": "Insurers can't set your renewal price on credit alone, and must re-rate you on a fresh credit report at renewal if you ask.",
+        "summary": "Insurers can't set your renewal price on credit alone, and you can generally ask for a re-rate on fresh credit at renewal, with exceptions such as already being in the best tier.",
         "source": {
           "label": "Neb. Rev. Stat. § 44-7705(3)",
           "url": "https://nebraskalegislature.gov/laws/statutes.php?statute=44-7705"
@@ -952,6 +957,11 @@
             "label": "Neb. Rev. Stat. § 44-7705(7)(a)",
             "url": "https://nebraskalegislature.gov/laws/statutes.php?statute=44-7705",
             "quote": "At annual renewal, upon the request of a consumer or the consumer's agent, the insurer shall reunderwrite and rerate the policy based upon a current credit report or insurance score."
+          },
+          {
+            "label": "Neb. Rev. Stat. § 44-7705(7)(c)(ii)",
+            "url": "https://nebraskalegislature.gov/laws/statutes.php?statute=44-7705",
+            "quote": "The insured is in the most favorably-priced tier of the insurer, within a group of affiliated insurers."
           }
         ]
       }
@@ -1039,7 +1049,7 @@
     "NM": {
       "credit": {
         "status": "limited",
-        "summary": "Insurers can't set your price on credit alone, and must pull fresh credit and recalculate your score at renewal if you ask.",
+        "summary": "Insurers can't set your price on credit alone, and you can generally ask them to recalculate your score at renewal, unless a better score couldn't lower your price.",
         "source": {
           "label": "N.M. Stat. Ann. § 59A-17A-4(B)",
           "url": "https://nmonesource.com/nmos/nmsa/en/4438/1/document.do#59A-17A-4"
@@ -1050,6 +1060,11 @@
             "label": "N.M. Stat. Ann. § 59A-17A-4(E)",
             "url": "https://nmonesource.com/nmos/nmsa/en/4438/1/document.do#59A-17A-4",
             "quote": "Upon the request of a consumer, an insurer that uses credit information upon renewal shall obtain current credit information and recalculate an insurance score."
+          },
+          {
+            "label": "N.M. Stat. Ann. § 59A-17A-4(E)(1)",
+            "url": "https://nmonesource.com/nmos/nmsa/en/4438/1/document.do#59A-17A-4",
+            "quote": "an improved insurance score would not cause the consumer to be placed in a more favorably priced company or tier of the insurer"
           }
         ]
       },
@@ -1262,17 +1277,22 @@
     "RI": {
       "credit": {
         "status": "limited",
-        "summary": "Insurers must update your score every two years if you ask and pass on any lower rate; a worse score alone can raise your rate only if confirmed or tied to a bankruptcy or lien.",
+        "summary": "A worse score alone can raise your rate only after a bankruptcy, tax lien, garnishment, foreclosure, or judgment, or if a new score 6+ months later confirms it.",
         "source": {
           "label": "R.I. Gen. Laws § 27-9-56(a)(2)",
           "url": "https://webserver.rilegislature.gov/Statutes/TITLE27/27-9/27-9-56.htm"
         },
-        "quote": "If, after obtaining the insurance score, the customer has improved the customer’s credit rating, the user of the information shall afford the customer any decrease in rates that are available due to the improved rating.",
+        "quote": "The user may not increase the rate of an existing customer based solely on a worsening in the customer’s insurance score unless: (i) The worsening is due to a bankruptcy, tax lien, garnishment, foreclosure, or judgment; or (ii) If a subsequent insurance score no sooner than six (6) months later confirms the worsening in score.",
         "moreSources": [
           {
             "label": "R.I. Gen. Laws § 27-9-56(a)(2)",
             "url": "https://webserver.rilegislature.gov/Statutes/TITLE27/27-9/27-9-56.htm",
-            "quote": "The user may not increase the rate of an existing customer based solely on a worsening in the customer’s insurance score unless"
+            "quote": "If, after obtaining the insurance score, the customer has improved the customer’s credit rating, the user of the information shall afford the customer any decrease in rates that are available due to the improved rating."
+          },
+          {
+            "label": "R.I. Gen. Laws § 27-9-56(a)(4)",
+            "url": "https://webserver.rilegislature.gov/Statutes/TITLE27/27-9/27-9-56.htm",
+            "quote": "No insurer is obligated to obtain a current credit report or insurance score for an insured if: the insured is in the most favorably-priced tier of the insurer, within a group of affiliated insurers; or credit was not used for the insured when the policy was initially written."
           }
         ]
       },
@@ -1380,6 +1400,25 @@
           "url": "https://www.scstatehouse.gov/code/t38c077.php#38-77-122"
         },
         "quote": "In determining the premium rates to be charged for an automobile insurance policy as defined in Section 38-77-30, it is unlawful to consider race, color, creed, religion, national origin, ancestry, location of residence in this State, economic status, or income level."
+      }
+    },
+    "SD": {
+      "credit": {
+        "status": "limited",
+        "evidence": "summary",
+        "summary": "Insurers can't count a missing credit history against your score unless they show it's tied to risk, according to the South Dakota Division of Insurance.",
+        "source": {
+          "label": "South Dakota Division of Insurance, Bulletin 2002-3 (Credit Scoring)",
+          "url": "https://dlr.sd.gov/insurance/bulletins/bulletin_02_03_credit_scoring.pdf"
+        },
+        "quote": "Using the absence of credit history or an inability to determine a credit history as a negative value on a consumer’s insurance credit score, but not until the insurer can demonstrate to the Director’s satisfaction that the absence or inability relates to increased risk for the insurance company.",
+        "moreSources": [
+          {
+            "label": "South Dakota Division of Insurance, Bulletin 2002-3 (Credit Scoring)",
+            "url": "https://dlr.sd.gov/insurance/bulletins/bulletin_02_03_credit_scoring.pdf",
+            "quote": "No insurer shall deny, cancel, or nonrenew a policy of personal insurance based on credit information as the sole determining factor."
+          }
+        ]
       }
     },
     "TN": {
@@ -1552,12 +1591,12 @@
       "credit": {
         "status": "no-ban-found",
         "evidence": "summary",
-        "summary": "Insurers may use your credit to set your price, according to the state's insurance commissioner; the law bars turning you down for credit alone.",
+        "summary": "Your credit-based insurance score directly affects your price, according to the state's insurance commissioner; the law bars turning you down for credit alone.",
         "source": {
-          "label": "West Virginia Offices of the Insurance Commissioner, 2022 Automobile Survey (Consumer Guide)",
-          "url": "https://www.wvlegislature.gov/legisdocs/reports/agency/I02_CY_2022_15593.pdf"
+          "label": "West Virginia Offices of the Insurance Commissioner, 2024 Automobile Survey (Consumer Guide)",
+          "url": "https://www.wvinsurance.gov/Portals/0/pdf/reports/2024_Auto_Survey.pdf"
         },
-        "quote": "an insurer can use your credit history in the determination of rates and premium calculation for your insurance",
+        "quote": "Insurance premiums are directly affected by insurance scoring. Higher insurance scores may lower premium while lower scores can increase premium.",
         "moreSources": [
           {
             "label": "W. Va. Code § 33-6B-3(j)",
@@ -1579,17 +1618,17 @@
     "WY": {
       "credit": {
         "status": "no-ban-found",
-        "summary": "Wyoming's law has the state set rules letting insurers use your credit only alongside other factors, never as the sole reason to refuse or drop you.",
+        "summary": "Wyoming's law allows insurers to use credit and authorizes the commissioner to set rules limiting it, such as on dropping you for credit alone; we found none adopted.",
         "source": {
-          "label": "Wyo. Stat. Ann. § 26-2-134(a)(i)",
+          "label": "Wyo. Stat. Ann. § 26-2-134(a)",
           "url": "https://wyoleg.gov/statutes/compress/title26.pdf#26-2-134"
         },
-        "quote": "That a person's credit history or scoring shall not be the sole basis to cancel, deny or nonrenew an insurance policy. An insurer may use credit history only in combination with other valid underwriting factors independent of credit history or score",
+        "quote": "The commissioner is authorized to adopt rules as necessary to govern the practices of all persons licensed under this code with respect to the use of credit scoring in the underwriting of personal lines, motor vehicles and homeowner policies. The rules shall provide",
         "moreSources": [
           {
-            "label": "Wyo. Stat. Ann. § 26-2-134(a)",
+            "label": "Wyo. Stat. Ann. § 26-2-134(a)(i)",
             "url": "https://wyoleg.gov/statutes/compress/title26.pdf#26-2-134",
-            "quote": "The commissioner is authorized to adopt rules as necessary to govern the practices of all persons licensed under this code with respect to the use of credit scoring in the underwriting of personal lines, motor vehicles and homeowner policies. The rules shall provide"
+            "quote": "That a person's credit history or scoring shall not be the sole basis to cancel, deny or nonrenew an insurance policy. An insurer may use credit history only in combination with other valid underwriting factors independent of credit history or score"
           }
         ]
       }

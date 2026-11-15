@@ -418,3 +418,21 @@ test("a Mississippi rule is picked by the #rule- fragment, and an Alaska print p
   assert.ok("text" in ak, JSON.stringify(ak))
   assert.match(ak.text, /^Sec\. 21\.36\.460\. Uses of and restrictions/)
 })
+
+test("a Cloudflare Turnstile page served with HTTP 200 needs a browser; a page that's really missing its text still fails", () => {
+  const turnstile = `<html><head><title>OSCN Turnstile</title><script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script></head>
+    <body><form method="POST"><div class="cf-turnstile" data-sitekey="x"></div><input type="submit" value="Submit"></form>
+    <p>Why am I seeing this?</p><p>To protect our site from automated traffic, we sometimes ask visitors to verify they are human.</p></body></html>`
+  assert.equal(looksLikeBotCheck(turnstile), true)
+  const blocked = extractSection("https://www.oscn.net/applications/oscn/DeliverDocument.asp?CiteID=436228", turnstile, "Okla. Stat. tit. 36, § 950")
+  assert.deepEqual(blocked, { error: "the site sent a bot check instead of the page", needsBrowser: true })
+  assert.equal(classifyResponse(200, turnstile), "ok", "a 200 still reaches the site rule, which then reports the bot check")
+
+  const missing = `<html><head><title>OSCN</title></head><body><p>Document not found.</p></body></html>`
+  assert.equal(looksLikeBotCheck(missing), false)
+  const gone = extractSection("https://www.oscn.net/applications/oscn/DeliverDocument.asp?CiteID=1", missing, "Okla. Stat. tit. 36, § 950")
+  assert.ok("error" in gone && !gone.needsBrowser, "a page without its text is still a hard failure")
+
+  const lawWithWidget = `<html><body><div class="cf-turnstile"></div><p>${"The insurer shall not base rates solely on credit information. ".repeat(60)}</p></body></html>`
+  assert.equal(looksLikeBotCheck(lawWithWidget), false, "a full page that embeds a widget isn't a challenge")
+})

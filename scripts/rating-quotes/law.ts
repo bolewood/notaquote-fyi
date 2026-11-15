@@ -609,11 +609,14 @@ export const SITE_RULES: Record<string, SiteRule> = {
     start: () => /^§\d+-\d+[A-Z]?-\d+[a-z]?\. /m,
     end: () => /^Previous/m,
   },
-  "www.wvlegislature.gov": {
-    // The Offices of the Insurance Commissioner file their yearly automobile survey with the Legislature.
-    site: "West Virginia Legislature (a report of the Offices of the Insurance Commissioner)",
+  "www.wvinsurance.gov": {
+    site: "West Virginia Offices of the Insurance Commissioner",
     start: (url) => guideCut(url).start,
     end: (url) => guideCut(url).end,
+  },
+  "dlr.sd.gov": {
+    site: "South Dakota Department of Labor and Regulation, Division of Insurance",
+    // A bulletin is a page or two, so it's kept whole.
   },
   "oci.wi.gov": {
     site: "Wisconsin Office of the Commissioner of Insurance",
@@ -661,9 +664,9 @@ const GUIDE_CUTS: Record<string, { start: RegExp; end: RegExp }> = {
     start: /^Ask for car insurance discounts/m,
     end: /^Request your CLUE Report/m,
   },
-  "www.wvlegislature.gov/legisdocs/reports/agency/I02_CY_2022_15593.pdf": {
-    start: /Check your credit report\./,
-    end: /(?<=as soon as possible\.)/,
+  "www.wvinsurance.gov/Portals/0/pdf/reports/2024_Auto_Survey.pdf": {
+    start: /What is an insurance score and does it affect my premium\?/,
+    end: /(?<=lower scores can increase premium\.)/,
   },
   "oci.wi.gov/Pages/Consumers/PI-330.aspx": {
     start: /^Claims history: /m,
@@ -869,7 +872,21 @@ export function looksLikeJsShell(html: string): boolean {
 
 /** A Cloudflare-style "check your browser" page, or one that only works with JavaScript. */
 export function looksLikeBotCheck(html: string): boolean {
-  return /Just a moment\.\.\.|Enable JavaScript and cookies to continue|cf-browser-verification|_cf_chl_opt|Sorry, you have been blocked|Attention Required! \| Cloudflare|Please enable JavaScript to view/i.test(html)
+  return (
+    /Just a moment\.\.\.|Enable JavaScript and cookies to continue|cf-browser-verification|_cf_chl_opt|Sorry, you have been blocked|Attention Required! \| Cloudflare|Please enable JavaScript to view/i.test(html) ||
+    looksLikeTurnstile(html)
+  )
+}
+
+/**
+ * A Cloudflare Turnstile "verify you are human" page, served with HTTP 200 in place of the law
+ * (OSCN does this, titled "OSCN Turnstile"). It loads Turnstile's script or widget, or names it in
+ * the title, and has almost no text of its own. A full page that only embeds a Turnstile widget
+ * somewhere (a contact form, say) isn't one.
+ */
+function looksLikeTurnstile(html: string): boolean {
+  const marker = /challenges\.cloudflare\.com\/turnstile\/|class\s*=\s*["'][^"']*\bcf-turnstile\b|<title>[^<]*\bTurnstile\b[^<]*<\/title>/i.test(html)
+  return marker && htmlToText(html).length < 3000
 }
 
 // ---------------------------------------------------------------------------
