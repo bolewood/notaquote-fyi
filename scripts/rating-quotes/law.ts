@@ -545,6 +545,86 @@ export const SITE_RULES: Record<string, SiteRule> = {
     container: { tag: "body" },
     // The page holds the whole chapter; the label's section number picks the part we cite.
   },
+  "www.akleg.gov": {
+    site: "Alaska State Legislature, Alaska Statutes",
+    container: { className: "statute" },
+    // The print view of one section, named by the address's secStart.
+    start: (url) => new RegExp(`^Sec\\. ${escapeRegExp(url.searchParams.get("secStart") ?? "")}\\. `, "m"),
+  },
+  "delcode.delaware.gov": {
+    site: "Delaware Code Online",
+    container: { tag: "body" },
+    // The page holds the whole chapter; the label's section number picks the part we cite.
+  },
+  "legislature.maine.gov": {
+    site: "Maine Legislature, Maine Revised Statutes",
+    terms: "The page links a \"Maine Law & Disclaimer\" page and says the Revisor's Office can't give legal advice or interpret Maine law; we copy only the statute's text, which is public.",
+    container: { tag: "body" },
+    start: (url) => new RegExp(`^§${escapeRegExp(/sec([0-9A-Z-]+)\.html$/.exec(url.pathname)?.[1] ?? "")}\\. `, "m"),
+    end: () => /^(?:SECTION HISTORY$|The Revisor's Office cannot provide legal advice)/m,
+  },
+  "www.mid.ms.gov": {
+    site: "Mississippi Insurance Department",
+    // A regulation's PDF holds every rule of its chapter; the address's #rule-NN.NN picks the one we cite.
+    start: (url) => new RegExp(`^Rule ${escapeRegExp(url.hash.replace(/^#rule-/, ""))}:`, "m"),
+    // Each rule ends with its "Source:" line, which PDF reflow can join to the rule's last paragraph.
+    end: () => /\bSource: Miss\. Code Ann\./,
+  },
+  "nebraskalegislature.gov": {
+    site: "Nebraska Legislature, Nebraska Revised Statutes",
+    container: { tag: "body" },
+    start: (url) => new RegExp(`^${escapeRegExp(url.searchParams.get("statute") ?? "")}\\.$`, "m"),
+    end: () => /^Source$/m,
+  },
+  "gc.nh.gov": {
+    site: "New Hampshire General Court, Revised Statutes Online",
+    container: { tag: "body" },
+    // "417:4 Unfair Methods, ..." or "417-A:3-c Underwriting ...", after the title and chapter headings.
+    start: () => /^\d+(?:-[A-Z])?:\d+(?:-[a-z])? [A-Z]/m,
+    end: () => /^Source\. /m,
+  },
+  "nmonesource.com": {
+    site: "NMOneSource.com (New Mexico Compilation Commission), New Mexico Statutes Annotated",
+    // The PDF holds the whole chapter; the label's section number picks the part we cite.
+  },
+  "ndlegis.gov": {
+    site: "North Dakota Legislative Branch, North Dakota Century Code",
+    // The PDF holds the whole chapter; the label's section number picks the part we cite.
+  },
+  "webserver.rilegislature.gov": {
+    site: "State of Rhode Island General Assembly, Rhode Island General Laws",
+    container: { tag: "body" },
+    start: () => /^§ \d+-[\d.]+-[\d.]+\. /m,
+    end: () => /^History of Section\./m,
+  },
+  "legislature.vermont.gov": {
+    site: "Vermont General Assembly, Vermont Statutes Online",
+    container: { tag: "body" },
+    start: () => /^§ \d+[a-z]?\. /m,
+    end: () => /^Statutes$/m,
+  },
+  "code.wvlegislature.gov": {
+    site: "West Virginia Legislature, West Virginia Code",
+    container: { tag: "body" },
+    start: () => /^§\d+-\d+[A-Z]?-\d+[a-z]?\. /m,
+    end: () => /^Previous/m,
+  },
+  "www.wvlegislature.gov": {
+    // The Offices of the Insurance Commissioner file their yearly automobile survey with the Legislature.
+    site: "West Virginia Legislature (a report of the Offices of the Insurance Commissioner)",
+    start: (url) => guideCut(url).start,
+    end: (url) => guideCut(url).end,
+  },
+  "oci.wi.gov": {
+    site: "Wisconsin Office of the Commissioner of Insurance",
+    container: { tag: "body" },
+    start: (url) => guideCut(url).start,
+    end: (url) => guideCut(url).end,
+  },
+  "wyoleg.gov": {
+    site: "Wyoming Legislature, Wyoming Statutes",
+    // The PDF holds the whole title; the label's section number picks the part we cite.
+  },
 }
 
 /**
@@ -580,6 +660,14 @@ const GUIDE_CUTS: Record<string, { start: RegExp; end: RegExp }> = {
   "www.myfloridacfo.com/division/consumers/understanding-insurance/personal-automobile-insurance-overview": {
     start: /^Ask for car insurance discounts/m,
     end: /^Request your CLUE Report/m,
+  },
+  "www.wvlegislature.gov/legisdocs/reports/agency/I02_CY_2022_15593.pdf": {
+    start: /Check your credit report\./,
+    end: /(?<=as soon as possible\.)/,
+  },
+  "oci.wi.gov/Pages/Consumers/PI-330.aspx": {
+    start: /^Claims history: /m,
+    end: /^Your Policy Choices/m,
   },
 }
 
@@ -622,6 +710,20 @@ const CHAPTER_CUTS: Record<string, (section: string) => { start: RegExp; end: Re
   "www.leg.state.nv.us": (section) => headingCut(`NRS ${escapeRegExp(section)} `, "NRS ", /(?<=\n)NRS \d+[A-Z]?\.\d+ /),
   "www.oregonlegislature.gov": (section) => headingCut(`${escapeRegExp(section)} `, "\\d+\\.\\d+ ", /(?<=\n)\d+\.\d+ [A-Z]/),
   "www.scstatehouse.gov": (section) => headingCut(`SECTION ${escapeRegExp(section)}\\. `, "SECTION ", /(?<=\n)SECTION \d+-\d+-\d+\. /),
+  "delcode.delaware.gov": (section) => ({
+    // The contents list at the top names each section without the period ("§ 8304").
+    start: new RegExp(`^§ ${escapeRegExp(section)}\\. `, "m"),
+    end: /(?<=\n)§ \d+[A-Z]?\. /,
+  }),
+  // Ends before the Compilation Commission's "ANNOTATIONS" (notes and case summaries, not the law).
+  "nmonesource.com": (section) =>
+    headingCut(`${escapeRegExp(section)}\\. `, "\\d+[A-Z]?-", /(?<=\n)(?:\d+[A-Z]?-\d+[A-Z]?-\d+(?:\.\d+)?\. [A-Z]|ANNOTATIONS\b)/),
+  // A chapter PDF has no contents list. A page footer ("Page No. 5") can run into the next heading.
+  "ndlegis.gov": (section) => ({
+    start: new RegExp(`^${escapeRegExp(section)}\\. [A-Z]`, "m"),
+    end: /(?<=\n)(?:Page No\. \d+ )?\d+(?:\.\d+)?-\d+(?:\.\d+)?-\d+(?:\.\d+)?\. [A-Z]/,
+  }),
+  "wyoleg.gov": (section) => headingCut(`${escapeRegExp(section)}\\. `, "\\d+-\\d+-", /(?<=\n)(?:\d+-\d+(?:\.\d+)?-\d+(?:\.\d+)?\. [A-Z]|ARTICLE \d+|CHAPTER \d+)/),
   "iga.in.gov": (section) => headingCut(`IC ${escapeRegExp(section)}(?![\\d.-])`, "IC ", /(?<=\n)IC \d+(?:\.\d+)?-\d+(?:\.\d+)?-\d+(?:\.\d+)?-\d+(?:\.\d+)?(?![\d.-])/),
   "adminrules.idaho.gov": (section) => ({
     // The heading is in capitals ("100. USE OF CREDIT FACTORS."); the table of contents isn't.

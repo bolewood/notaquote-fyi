@@ -351,3 +351,70 @@ test("a scanned PDF with no text layer needs a person, not a failure; a Tennesse
   assert.doesNotMatch(cut.text, /SECTION 4/)
   assert.ok(quoteFound("Base an insured's renewal rates for personal insurance solely upon credit information.", cut.text))
 })
+
+test("batch 3 chapter cuts: Delaware's contents list, New Mexico's annotations, North Dakota's page footers", () => {
+  const delaware = `<body><p>§ 8304</p><p>§ 8305</p><p>§ 8304. Use of credit information [For applicability of this section, see 81 Del. Laws, c. 108, § 3].</p>
+    <p>(a)(3) Base an insured’s renewal rates for personal insurance solely upon credit information, and so on at some length.</p>
+    <p>§ 8305. Extraordinary life circumstances.</p><p>(a) Not this section.</p></body>`
+  const de = extractSection("https://delcode.delaware.gov/title18/c083/index.html#8304", delaware, "Del. Code Ann. tit. 18, § 8304(a)(3)")
+  assert.ok("text" in de, JSON.stringify(de))
+  assert.match(de.text, /^§ 8304\. Use of credit information/)
+  assert.doesNotMatch(de.text, /8305|Not this section/)
+
+  const newMexico = [
+    "59A-17A-4. Use of credit information; limits on use.",
+    "59A-17A-5. Exception procedures.",
+    "",
+    "59A-17A-4. Use of credit information; limits on use.",
+    "An insurer that uses credit information to underwrite, rate or renew personal insurance coverage shall not:",
+    "",
+    "B. base a consumer's rates on the basis of credit information without consideration of other underwriting factors;",
+    "",
+    "History: Laws 2005, ch. 275, § 4.",
+    "",
+    "ANNOTATIONS",
+    "",
+    "Effective dates. — The commission's note, not the law.",
+    "",
+    "59A-17A-5. Exception procedures.",
+    "A. Not this one.",
+  ].join("\n")
+  const nm = extractSection("https://nmonesource.com/nmos/nmsa/en/4438/1/document.do#59A-17A-4", newMexico, "N.M. Stat. Ann. § 59A-17A-4(B)", true)
+  assert.ok("text" in nm, JSON.stringify(nm))
+  assert.match(nm.text, /^59A-17A-4\. Use of credit information; limits on use\. An insurer/)
+  assert.match(nm.text, /History: Laws 2005/)
+  assert.doesNotMatch(nm.text, /ANNOTATIONS|commission's note|Not this one/)
+
+  const northDakota = [
+    "26.1-25-04.1. Motor vehicle insurance rate filings - Premium reduction. All rate filings must provide for a",
+    "reduction. A driver fifty-five years of age or older is entitled to a three-year insurance premium reduction.",
+    "",
+    "Page No. 5",
+    "26.1-25-04.3. Disclosure of accident surcharge. Not this section.",
+  ].join("\n")
+  const nd = extractSection("https://ndlegis.gov/cencode/t26-1c25.pdf#26.1-25-04.1", northDakota, "N.D. Cent. Code § 26.1-25-04.1", true)
+  assert.ok("text" in nd, JSON.stringify(nd))
+  assert.match(nd.text, /three-year insurance premium reduction\.$/)
+  assert.doesNotMatch(nd.text, /Page No|04\.3/)
+})
+
+test("a Mississippi rule is picked by the #rule- fragment, and an Alaska print page by its secStart", () => {
+  const reg = [
+    "Rule 31.05: Requirements",
+    "A. Not this rule, which has requirements that run on at some length here.",
+    "Source: Miss. Code Ann. §83-5-29 (Rev. 2011)",
+    "",
+    "Rule 31.06: Prohibited Procedures",
+    "H. Insurers shall not base an insured’s initial or renewal rates for personal insurance solely upon credit history.",
+    "Source: Miss. Code Ann. §83-5-29 (Rev. 2011)",
+  ].join("\n")
+  const ms = extractSection("https://www.mid.ms.gov/wp-content/uploads/2025/05/20031reg.pdf#rule-31.06", reg, "19 Miss. Admin. Code Pt. 1, R. 31.06(H)", true)
+  assert.ok("text" in ms, JSON.stringify(ms))
+  assert.match(ms.text, /^Rule 31\.06: Prohibited Procedures/)
+  assert.doesNotMatch(ms.text, /31\.05|Source:/)
+
+  const alaska = `<html><div class="statute"><b>Sec. 21.36.460. Uses of and restrictions on credit history. <BR></b>(c) An insurer may use a consumer's credit history only in combination with other substantive underwriting factors.</div></html>`
+  const ak = extractSection("https://www.akleg.gov/basis/statutes.asp?media=print&secStart=21.36.460&secEnd=21.36.460", alaska, "Alaska Stat. § 21.36.460(c)")
+  assert.ok("text" in ak, JSON.stringify(ak))
+  assert.match(ak.text, /^Sec\. 21\.36\.460\. Uses of and restrictions/)
+})

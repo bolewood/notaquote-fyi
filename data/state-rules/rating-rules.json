@@ -3,6 +3,24 @@
   "checkedOn": "2026-11-15",
   "about": "What each state lets car insurers use to set a price. Every entry quotes the law it comes from. A factor that isn't listed for a state hasn't been reviewed yet; it is never read as allowed.",
   "states": {
+    "AK": {
+      "credit": {
+        "status": "limited",
+        "summary": "Insurers can use your credit only alongside other factors, and must re-rate you on fresh information at least every two years.",
+        "source": {
+          "label": "Alaska Stat. § 21.36.460(c)",
+          "url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=21.36.460&secEnd=21.36.460"
+        },
+        "quote": "An insurer may use a consumer's credit history or insurance score to cancel, deny, nonrenew, underwrite, or rate personal insurance only in combination with other substantive underwriting factors.",
+        "moreSources": [
+          {
+            "label": "Alaska Stat. § 21.36.460(c)",
+            "url": "https://www.akleg.gov/basis/statutes.asp?media=print&secStart=21.36.460&secEnd=21.36.460",
+            "quote": "not later than 24 months after the insurer most recently used the consumer's credit history or insurance score to underwrite or rate a policy, the insurer shall reunderwrite and rerate the policy"
+          }
+        ]
+      }
+    },
     "AL": {
       "credit": {
         "status": "limited",
@@ -296,6 +314,24 @@
           "url": "https://disb.dc.gov/sites/default/files/dc/sites/disb/publication/attachments/Bulletin15-IB-01-02_03.pdf"
         },
         "quote": "If an insurer opts to use credit scores as factors to rate policies and the insurer does not review credit scores at least annually, then the insurer must afford every policyholder, once a year at any renewal, the right to request and to receive a rate determination that considers the most recent credit score. Insurers must also notify every policyholder of these rights."
+      }
+    },
+    "DE": {
+      "credit": {
+        "status": "limited",
+        "summary": "Insurers can't set your renewal price on credit alone, and must make rate exceptions if you ask after a hardship like illness, divorce, or job loss.",
+        "source": {
+          "label": "Del. Code Ann. tit. 18, § 8304(a)(3)",
+          "url": "https://delcode.delaware.gov/title18/c083/index.html#8304"
+        },
+        "quote": "Base an insured’s renewal rates for personal insurance solely upon credit information, without consideration of any other applicable factor independent of credit information.",
+        "moreSources": [
+          {
+            "label": "Del. Code Ann. tit. 18, § 8305(a)",
+            "url": "https://delcode.delaware.gov/title18/c083/index.html#8305",
+            "quote": "an insurer that uses credit information shall, on written request from an applicant for insurance coverage or an insured, provide reasonable exceptions to the insurer’s rates, rating classifications, company or tier placement"
+          }
+        ]
       }
     },
     "FL": {
@@ -679,6 +715,33 @@
         "quote": "refuse to underwrite, cancel, refuse to renew, or increase the renewal premium based, in whole or in part, on the credit history of the insured or applicant"
       }
     },
+    "ME": {
+      "credit": {
+        "status": "limited",
+        "summary": "Insurers can't set your renewal price on credit alone, or count a missing credit history against you unless the state approves how they do it.",
+        "source": {
+          "label": "Me. Rev. Stat. tit. 24-A, § 2169-B(2)(C)",
+          "url": "https://legislature.maine.gov/statutes/24-A/title24-Asec2169-B.html"
+        },
+        "quote": "Base an insured's renewal rates for personal insurance solely upon credit information, without consideration of any other applicable factor independent of credit information",
+        "moreSources": [
+          {
+            "label": "Me. Rev. Stat. tit. 24-A, § 2169-B(2)(E)",
+            "url": "https://legislature.maine.gov/statutes/24-A/title24-Asec2169-B.html",
+            "quote": "Consider an absence of credit information, the number of inquiries or an inability to calculate an insurance score in underwriting or rating personal insurance unless the insurer has demonstrated to the superintendent"
+          }
+        ]
+      },
+      "age": {
+        "status": "limited",
+        "summary": "Maine requires a discount for drivers 55 and older who finish an approved accident prevention course; we haven't found other limits on age.",
+        "source": {
+          "label": "Me. Rev. Stat. tit. 24-A, § 2902-G(1)",
+          "url": "https://legislature.maine.gov/statutes/24-A/title24-Asec2902-G.html"
+        },
+        "quote": "must provide for an appropriate discount in premium charges for such coverages for a 3-year period when the principal operator of the covered vehicle is an insured 55 years of age or older who successfully completes a motor vehicle accident prevention course"
+      }
+    },
     "MI": {
       "credit": {
         "status": "limited",
@@ -774,6 +837,24 @@
         ]
       }
     },
+    "MS": {
+      "credit": {
+        "status": "limited",
+        "summary": "Insurers can't set your price on credit alone, or only because you have no credit history, under a Mississippi Insurance Department rule.",
+        "source": {
+          "label": "19 Miss. Admin. Code Pt. 1, R. 31.06(H)",
+          "url": "https://www.mid.ms.gov/wp-content/uploads/2025/05/20031reg.pdf#rule-31.06"
+        },
+        "quote": "Insurers shall not base an insured’s initial or renewal rates for personal insurance or make a determination on an insured’s application for another line of personal insurance solely upon credit history or insurance score",
+        "moreSources": [
+          {
+            "label": "19 Miss. Admin. Code Pt. 1, R. 31.06(B)",
+            "url": "https://www.mid.ms.gov/wp-content/uploads/2025/05/20031reg.pdf#rule-31.06",
+            "quote": "Insurers shall not deny, cancel or non-renew personal insurance coverage, determine personal insurance premiums, or place an applicant in a tier based solely on a lack of credit history or insurance score"
+          }
+        ]
+      }
+    },
     "MT": {
       "gender": {
         "status": "no-ban-found",
@@ -821,6 +902,76 @@
           "url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_58/GS_58-36-90.html"
         },
         "quote": "insurers shall not use credit scoring as the sole basis for terminating an existing policy or any coverage in an existing policy or subjecting a policy to consent to rate as specified in G.S. 58-36-30(b) without consideration of any other risk factors, but insurers may use credit scoring as the sole basis for discounting rates. For purposes of this subsection only, \"existing policy\" means a policy that has been in effect for more than 60 days."
+      }
+    },
+    "ND": {
+      "credit": {
+        "status": "limited",
+        "summary": "Insurers must re-rate you on a fresh credit report at renewal if you ask, and can't turn you down or drop you on credit alone.",
+        "source": {
+          "label": "N.D. Cent. Code § 26.1-25.1-03(6)(a)",
+          "url": "https://ndlegis.gov/cencode/t26-1c25-1.pdf#26.1-25.1-03"
+        },
+        "quote": "At annual renewal, upon the request of a consumer or the consumer's agent, the insurer shall reunderwrite and rerate the policy based upon a current credit report or insurance score.",
+        "moreSources": [
+          {
+            "label": "N.D. Cent. Code § 26.1-25.1-03(2)",
+            "url": "https://ndlegis.gov/cencode/t26-1c25-1.pdf#26.1-25.1-03",
+            "quote": "Deny, cancel, or nonrenew a policy of personal insurance solely on the basis of credit information, without consideration of any other applicable underwriting factor independent of credit information"
+          }
+        ]
+      },
+      "age": {
+        "status": "limited",
+        "summary": "North Dakota requires a discount for any driver who finishes an approved accident prevention course, and drivers 55 and older keep it three years instead of at least two.",
+        "source": {
+          "label": "N.D. Cent. Code § 26.1-25-04.1",
+          "url": "https://ndlegis.gov/cencode/t26-1c25.pdf#26.1-25-04.1"
+        },
+        "quote": "A driver fifty-five years of age or older who successfully completes an approved motor vehicle accident prevention course is entitled to a three-year insurance premium reduction.",
+        "moreSources": [
+          {
+            "label": "N.D. Cent. Code § 26.1-25-04.1",
+            "url": "https://ndlegis.gov/cencode/t26-1c25.pdf#26.1-25-04.1",
+            "quote": "must provide for an appropriate reduction in premium charges for the principal operators of motor vehicles for at least a two-year period following their successful completion of a motor vehicle accident prevention course"
+          }
+        ]
+      }
+    },
+    "NE": {
+      "credit": {
+        "status": "limited",
+        "summary": "Insurers can't set your renewal price on credit alone, and must re-rate you on a fresh credit report at renewal if you ask.",
+        "source": {
+          "label": "Neb. Rev. Stat. § 44-7705(3)",
+          "url": "https://nebraskalegislature.gov/laws/statutes.php?statute=44-7705"
+        },
+        "quote": "Base an insured's renewal rates for personal insurance solely upon credit information, without consideration of any other applicable factor independent of credit information",
+        "moreSources": [
+          {
+            "label": "Neb. Rev. Stat. § 44-7705(7)(a)",
+            "url": "https://nebraskalegislature.gov/laws/statutes.php?statute=44-7705",
+            "quote": "At annual renewal, upon the request of a consumer or the consumer's agent, the insurer shall reunderwrite and rerate the policy based upon a current credit report or insurance score."
+          }
+        ]
+      }
+    },
+    "NH": {
+      "credit": {
+        "status": "limited",
+        "summary": "Insurers can't charge you more based solely on your credit, or turn you down or drop you on credit alone.",
+        "source": {
+          "label": "N.H. Rev. Stat. Ann. § 417:4(VIII)(g)",
+          "url": "https://gc.nh.gov/rsa/html/XXXVII/417/417-4.htm"
+        },
+        "quote": "Charging a higher premium for private passenger automobile or homeowner insurance solely on the basis of information obtained from a credit rating, a credit history, or a credit scoring model.",
+        "moreSources": [
+          {
+            "label": "N.H. Rev. Stat. Ann. § 417-A:3-c",
+            "url": "https://gc.nh.gov/rsa/html/XXXVII/417-A/417-A-3-c.htm",
+            "quote": "No insurer shall cancel, refuse to write, or refuse to renew a policy of automobile insurance solely on the basis of credit information obtained from a credit rating, a credit history, or a credit scoring model"
+          }
+        ]
       }
     },
     "NJ": {
@@ -883,6 +1034,33 @@
           "url": "https://www.nj.gov/dobi/division_consumers/pdf/autoshopguide2026.pdf"
         },
         "quote": "Any time period in which you had a vehicle that was required to be insured but did not have auto insurance can affect your premium as well."
+      }
+    },
+    "NM": {
+      "credit": {
+        "status": "limited",
+        "summary": "Insurers can't set your price on credit alone, and must pull fresh credit and recalculate your score at renewal if you ask.",
+        "source": {
+          "label": "N.M. Stat. Ann. § 59A-17A-4(B)",
+          "url": "https://nmonesource.com/nmos/nmsa/en/4438/1/document.do#59A-17A-4"
+        },
+        "quote": "deny, cancel or fail to renew coverage, or base a consumer's company placement, tier placement or rates, on the basis of credit information or an insurance score without consideration of other underwriting factors permitted by state law",
+        "moreSources": [
+          {
+            "label": "N.M. Stat. Ann. § 59A-17A-4(E)",
+            "url": "https://nmonesource.com/nmos/nmsa/en/4438/1/document.do#59A-17A-4",
+            "quote": "Upon the request of a consumer, an insurer that uses credit information upon renewal shall obtain current credit information and recalculate an insurance score."
+          }
+        ]
+      },
+      "age": {
+        "status": "limited",
+        "summary": "New Mexico requires a discount for drivers 55 and older who finish an approved accident prevention course; we haven't found other limits on age.",
+        "source": {
+          "label": "N.M. Stat. Ann. § 59A-32-14(A)",
+          "url": "https://nmonesource.com/nmos/nmsa/en/4438/1/document.do#59A-32-14"
+        },
+        "quote": "shall provide for an appropriate reduction in premium charges for a three-year consecutive period for such coverages when the principal operator of the covered vehicle: ... is an insured driver fifty-five years or older"
       }
     },
     "NV": {
@@ -1079,6 +1257,33 @@
           "url": "https://static.case.law/pa/505/html/0571-01.html"
         },
         "quote": "we conclude that the Commissioner's disapproval of Hartford's discriminatory sex-based rates on the ground they were \"unfair\" and contrary to established public policy was in conformity with section 3(d) of the Rate Act"
+      }
+    },
+    "RI": {
+      "credit": {
+        "status": "limited",
+        "summary": "Insurers must update your score every two years if you ask and pass on any lower rate; a worse score alone can raise your rate only if confirmed or tied to a bankruptcy or lien.",
+        "source": {
+          "label": "R.I. Gen. Laws § 27-9-56(a)(2)",
+          "url": "https://webserver.rilegislature.gov/Statutes/TITLE27/27-9/27-9-56.htm"
+        },
+        "quote": "If, after obtaining the insurance score, the customer has improved the customer’s credit rating, the user of the information shall afford the customer any decrease in rates that are available due to the improved rating.",
+        "moreSources": [
+          {
+            "label": "R.I. Gen. Laws § 27-9-56(a)(2)",
+            "url": "https://webserver.rilegislature.gov/Statutes/TITLE27/27-9/27-9-56.htm",
+            "quote": "The user may not increase the rate of an existing customer based solely on a worsening in the customer’s insurance score unless"
+          }
+        ]
+      },
+      "age": {
+        "status": "limited",
+        "summary": "Rhode Island requires a discount for drivers 55 and older who finish an approved accident prevention course; we haven't found other limits on age.",
+        "source": {
+          "label": "R.I. Gen. Laws § 27-9-7.1(a)",
+          "url": "https://webserver.rilegislature.gov/Statutes/TITLE27/27-9/27-9-7.1.htm"
+        },
+        "quote": "shall provide for a reduction in premium charges for those persons fifty-five (55) years of age and older who successfully complete a motor vehicle accident prevention course approved by the division of motor vehicles"
       }
     },
     "SC": {
@@ -1302,6 +1507,24 @@
         "quote": "The following factors shall not be used as credit criteria or to determine an insurance credit score for underwriting, tier placement, or rating purposes for a policy of motor vehicle insurance"
       }
     },
+    "VT": {
+      "credit": {
+        "status": "limited",
+        "summary": "Insurers can't set your renewal price, or turn you down or drop you, based on credit alone.",
+        "source": {
+          "label": "Vt. Stat. Ann. tit. 8, § 4727(d)(3)",
+          "url": "https://legislature.vermont.gov/statutes/section/08/129/04727"
+        },
+        "quote": "Base an insured’s renewal rates for personal insurance solely upon credit information without consideration of any other applicable factor independent of credit information.",
+        "moreSources": [
+          {
+            "label": "Vt. Stat. Ann. tit. 8, § 4727(d)(2)",
+            "url": "https://legislature.vermont.gov/statutes/section/08/129/04727",
+            "quote": "Deny, cancel, or nonrenew a policy of personal insurance solely on the basis of credit information without consideration of any other applicable underwriting factor independent of credit information"
+          }
+        ]
+      }
+    },
     "WA": {
       "credit": {
         "status": "limited",
@@ -1311,6 +1534,64 @@
           "url": "https://app.leg.wa.gov/RCW/default.aspx?cite=48.18.545"
         },
         "quote": "An insurer shall not cancel or nonrenew personal insurance based in whole or in part on a consumer's credit history or insurance score."
+      }
+    },
+    "WI": {
+      "credit": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may use a credit-based score to help judge your risk, according to Wisconsin's Office of the Commissioner of Insurance.",
+        "source": {
+          "label": "Wisconsin Office of the Commissioner of Insurance, Fact Sheet on Insurance Premiums (PI-330)",
+          "url": "https://oci.wi.gov/Pages/Consumers/PI-330.aspx"
+        },
+        "quote": "In Wisconsin, insurers may use this score—based on elements of your credit report—to help assess risk."
+      }
+    },
+    "WV": {
+      "credit": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may use your credit to set your price, according to the state's insurance commissioner; the law bars turning you down for credit alone.",
+        "source": {
+          "label": "West Virginia Offices of the Insurance Commissioner, 2022 Automobile Survey (Consumer Guide)",
+          "url": "https://www.wvlegislature.gov/legisdocs/reports/agency/I02_CY_2022_15593.pdf"
+        },
+        "quote": "an insurer can use your credit history in the determination of rates and premium calculation for your insurance",
+        "moreSources": [
+          {
+            "label": "W. Va. Code § 33-6B-3(j)",
+            "url": "https://code.wvlegislature.gov/33-6B-3/",
+            "quote": "Based solely upon an adverse credit report or adverse credit scoring."
+          }
+        ]
+      },
+      "age": {
+        "status": "limited",
+        "summary": "West Virginia requires a discount for drivers 55 and older who finish an approved accident prevention course; we haven't found other limits on age.",
+        "source": {
+          "label": "W. Va. Code § 33-20-18(a)",
+          "url": "https://code.wvlegislature.gov/33-20-18/"
+        },
+        "quote": "shall provide for an appropriate reduction in premium charges as to such coverages when the principal operator and spouse on the covered vehicle is an insured who is fifty-five years of age or older and who has successfully completed a motor vehicle accident prevention course"
+      }
+    },
+    "WY": {
+      "credit": {
+        "status": "no-ban-found",
+        "summary": "Wyoming's law has the state set rules letting insurers use your credit only alongside other factors, never as the sole reason to refuse or drop you.",
+        "source": {
+          "label": "Wyo. Stat. Ann. § 26-2-134(a)(i)",
+          "url": "https://wyoleg.gov/statutes/compress/title26.pdf#26-2-134"
+        },
+        "quote": "That a person's credit history or scoring shall not be the sole basis to cancel, deny or nonrenew an insurance policy. An insurer may use credit history only in combination with other valid underwriting factors independent of credit history or score",
+        "moreSources": [
+          {
+            "label": "Wyo. Stat. Ann. § 26-2-134(a)",
+            "url": "https://wyoleg.gov/statutes/compress/title26.pdf#26-2-134",
+            "quote": "The commissioner is authorized to adopt rules as necessary to govern the practices of all persons licensed under this code with respect to the use of credit scoring in the underwriting of personal lines, motor vehicles and homeowner policies. The rules shall provide"
+          }
+        ]
       }
     }
   }
