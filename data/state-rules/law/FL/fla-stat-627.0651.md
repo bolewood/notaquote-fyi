@@ -1,5 +1,5 @@
 ---
-url: "https://www.flsenate.gov/Laws/Statutes/2025/627.0651"
+url: "https://www.flsenate.gov/Laws/Statutes/2026/627.0651"
 title: "Fla. Stat. § 627.0651"
 retrieved: "2026-11-15"
 fetchedWith: "fetch"

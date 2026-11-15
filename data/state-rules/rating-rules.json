@@ -129,13 +129,13 @@
         "summary": "Insurers can use your credit, but can't raise your price or turn you down based on credit alone.",
         "source": {
           "label": "Fla. Stat. § 626.9741(4)(b)",
-          "url": "https://www.flsenate.gov/Laws/Statutes/2025/626.9741"
+          "url": "https://www.flsenate.gov/Laws/Statutes/2026/626.9741"
         },
         "quote": "An insurer may not make an adverse decision solely because of information contained in a credit report or score without consideration of any other underwriting or rating factor.",
         "moreSources": [
           {
             "label": "Fla. Stat. § 626.9741(2)(a), what an \"adverse decision\" is",
-            "url": "https://www.flsenate.gov/Laws/Statutes/2025/626.9741",
+            "url": "https://www.flsenate.gov/Laws/Statutes/2026/626.9741",
             "quote": "“Adverse decision” means a decision to refuse to issue or renew a policy of insurance; to issue a policy with exclusions or restrictions; to increase the rates or premium charged for a policy of insurance;"
           }
         ]
@@ -162,7 +162,7 @@
         "moreSources": [
           {
             "label": "Fla. Stat. § 627.0652(1), the discount for drivers 55 and older",
-            "url": "https://www.flsenate.gov/Laws/Statutes/2025/627.0652",
+            "url": "https://www.flsenate.gov/Laws/Statutes/2026/627.0652",
             "quote": "shall provide for an appropriate reduction in premium charges as to such coverages when the principal operator on the covered vehicle is an insured 55 years of age or older who has successfully completed a motor vehicle accident prevention course"
           }
         ]
@@ -192,7 +192,7 @@
         "summary": "Insurers can price by area, but can't use a single ZIP code as an area unless the state reviews it first and claims data backs it up.",
         "source": {
           "label": "Fla. Stat. § 627.0651(8)",
-          "url": "https://www.flsenate.gov/Laws/Statutes/2025/627.0651"
+          "url": "https://www.flsenate.gov/Laws/Statutes/2026/627.0651"
         },
         "quote": "Use of a single United States Postal Service zip code as a rating territory shall be deemed unfairly discriminatory unless filed pursuant to paragraph (1)(a) and the justification for its rate incorporates sufficient actual or expected loss and loss adjustment expense experience so as to be actuarially sound."
       }
@@ -231,7 +231,7 @@
       "territory": {
         "status": "no-ban-found",
         "evidence": "summary",
-        "summary": "Insurers may use your area you live in to set your price, according to Georgia's insurance commissioner.",
+        "summary": "Insurers may use where you live to set your price, according to Georgia's insurance commissioner.",
         "source": {
           "label": "Georgia Office of Commissioner of Insurance and Safety Fire, Auto Insurance",
           "url": "https://oci.georgia.gov/insurance-resources/auto"
@@ -614,7 +614,7 @@
       "gender": {
         "status": "no-ban-found",
         "evidence": "summary",
-        "summary": "Insurers may use your sex to set your price, according to the Ohio Department of Insurance.",
+        "summary": "Insurers may use your gender to set your price, according to the Ohio Department of Insurance.",
         "source": {
           "label": "Ohio Department of Insurance, Automobile Insurance Guide",
           "url": "https://insurance.ohio.gov/consumers/automobile/automobile-insurance-guide"
@@ -741,34 +741,34 @@
         "quote": "deny, cancel, or nonrenew a policy of personal insurance solely on the basis of credit information without considering any other applicable underwriting factor independent of credit information"
       },
       "gender": {
-        "status": "no-ban-found",
-        "summary": "Texas lets insurers use your gender when the price difference is backed by real differences in claims.",
+        "status": "limited",
+        "summary": "Insurers can use your gender only when the price difference is backed by real differences in claims.",
         "source": {
-          "label": "Tex. Ins. Code § 544.003(b)",
-          "url": "https://statutes.capitol.texas.gov/Docs/IN/htm/IN.544.htm#544.003"
+          "label": "Tex. Ins. Code § 544.002(a)",
+          "url": "https://statutes.capitol.texas.gov/Docs/IN/htm/IN.544.htm#544.002"
         },
-        "quote": "A person does not violate Section 544.002(a)(2) or (3) if the refusal, limitation, or charge is based on sound underwriting or actuarial principles reasonably related to actual or anticipated loss experience.",
+        "quote": "A person may not ... charge an individual a rate that is different from the rate charged to other individuals for the same coverage because of the individual's: ... (2) age, gender, marital status, or geographic location; or",
         "moreSources": [
           {
-            "label": "Tex. Ins. Code § 544.002(a)",
-            "url": "https://statutes.capitol.texas.gov/Docs/IN/htm/IN.544.htm#544.002",
-            "quote": "charge an individual a rate that is different from the rate charged to other individuals for the same coverage because of the individual's: ... (2) age, gender, marital status, or geographic location; or"
+            "label": "Tex. Ins. Code § 544.003(b)",
+            "url": "https://statutes.capitol.texas.gov/Docs/IN/htm/IN.544.htm#544.003",
+            "quote": "A person does not violate Section 544.002(a)(2) or (3) if the refusal, limitation, or charge is based on sound underwriting or actuarial principles reasonably related to actual or anticipated loss experience."
           }
         ]
       },
       "age": {
-        "status": "no-ban-found",
-        "summary": "Texas lets insurers use your age when the price difference is backed by real differences in claims.",
+        "status": "limited",
+        "summary": "Insurers can use your age only when the price difference is backed by real differences in claims.",
         "source": {
-          "label": "Tex. Ins. Code § 544.003(b)",
-          "url": "https://statutes.capitol.texas.gov/Docs/IN/htm/IN.544.htm#544.003"
+          "label": "Tex. Ins. Code § 544.002(a)",
+          "url": "https://statutes.capitol.texas.gov/Docs/IN/htm/IN.544.htm#544.002"
         },
-        "quote": "A person does not violate Section 544.002(a)(2) or (3) if the refusal, limitation, or charge is based on sound underwriting or actuarial principles reasonably related to actual or anticipated loss experience.",
+        "quote": "A person may not ... charge an individual a rate that is different from the rate charged to other individuals for the same coverage because of the individual's: ... (2) age, gender, marital status, or geographic location; or",
         "moreSources": [
           {
-            "label": "Tex. Ins. Code § 544.002(a)",
-            "url": "https://statutes.capitol.texas.gov/Docs/IN/htm/IN.544.htm#544.002",
-            "quote": "charge an individual a rate that is different from the rate charged to other individuals for the same coverage because of the individual's: ... (2) age, gender, marital status, or geographic location; or"
+            "label": "Tex. Ins. Code § 544.003(b)",
+            "url": "https://statutes.capitol.texas.gov/Docs/IN/htm/IN.544.htm#544.003",
+            "quote": "A person does not violate Section 544.002(a)(2) or (3) if the refusal, limitation, or charge is based on sound underwriting or actuarial principles reasonably related to actual or anticipated loss experience."
           }
         ]
       },
@@ -799,18 +799,18 @@
         "quote": "For auto insurance, common factors include: ... Your occupation."
       },
       "territory": {
-        "status": "no-ban-found",
-        "summary": "Texas lets insurers price by where you live when the price difference is backed by real differences in claims.",
+        "status": "limited",
+        "summary": "Insurers can use where you live only when the price difference is backed by real differences in claims.",
         "source": {
-          "label": "Tex. Ins. Code § 544.003(b)",
-          "url": "https://statutes.capitol.texas.gov/Docs/IN/htm/IN.544.htm#544.003"
+          "label": "Tex. Ins. Code § 544.002(a)",
+          "url": "https://statutes.capitol.texas.gov/Docs/IN/htm/IN.544.htm#544.002"
         },
-        "quote": "A person does not violate Section 544.002(a)(2) or (3) if the refusal, limitation, or charge is based on sound underwriting or actuarial principles reasonably related to actual or anticipated loss experience.",
+        "quote": "A person may not ... charge an individual a rate that is different from the rate charged to other individuals for the same coverage because of the individual's: ... (2) age, gender, marital status, or geographic location; or",
         "moreSources": [
           {
-            "label": "Tex. Ins. Code § 544.002(a)",
-            "url": "https://statutes.capitol.texas.gov/Docs/IN/htm/IN.544.htm#544.002",
-            "quote": "charge an individual a rate that is different from the rate charged to other individuals for the same coverage because of the individual's: ... (2) age, gender, marital status, or geographic location; or"
+            "label": "Tex. Ins. Code § 544.003(b)",
+            "url": "https://statutes.capitol.texas.gov/Docs/IN/htm/IN.544.htm#544.003",
+            "quote": "A person does not violate Section 544.002(a)(2) or (3) if the refusal, limitation, or charge is based on sound underwriting or actuarial principles reasonably related to actual or anticipated loss experience."
           }
         ]
       }

@@ -1,5 +1,5 @@
 ---
-url: "https://www.flsenate.gov/Laws/Statutes/2025/626.9741"
+url: "https://www.flsenate.gov/Laws/Statutes/2026/626.9741"
 title: "Fla. Stat. § 626.9741"
 retrieved: "2026-11-15"
 fetchedWith: "fetch"
