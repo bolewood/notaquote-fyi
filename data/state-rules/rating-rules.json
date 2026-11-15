@@ -162,7 +162,7 @@
       },
       "gender": {
         "status": "limited",
-        "summary": "Insurers can't set prices on sex alone unless claims data backs up the difference.",
+        "summary": "Insurers can't set prices on gender alone unless claims data backs up the difference.",
         "source": {
           "label": "C.R.S. § 10-3-1104(1)(f)(III)",
           "url": "https://olls.info/crs/crs2026-title-10.pdf#10-3-1104"

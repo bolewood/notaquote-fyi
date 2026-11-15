@@ -488,7 +488,10 @@ export function extractSection(urlText: string, page: string, label: string, isP
   if (!isPdfText && looksLikeBotCheck(page)) return { error: "the site sent a bot check instead of the page", needsBrowser: true }
   // Only a real JavaScript shell (or a bot check, above) means "open it in a browser". Any other
   // page we can't cut is a fatal problem: the site's layout moved, or the link points somewhere else.
-  const shell = !isPdfText && looksLikeJsShell(page)
+  // Only on sites known to build pages with JavaScript: elsewhere a thin page with a script is more
+  // likely a "page not found" served as 200, which must fail.
+  const shell = !isPdfText && rule.needsBrowser === true && looksLikeJsShell(page)
+  const shellNote = shell ? "the page is a JavaScript shell; " : ""
   let text: string
   if (isPdfText) {
     text = reflowPdfText(page)
@@ -498,7 +501,7 @@ export function extractSection(urlText: string, page: string, label: string, isP
       const inner = elementHtml(page, rule.container)
       if (inner === null) {
         return {
-          error: `couldn't find the law's text on the page (looked for ${JSON.stringify(rule.container)})`,
+          error: `${shellNote}couldn't find the law's text on the page (looked for ${JSON.stringify(rule.container)})`,
           needsBrowser: shell,
         }
       }
@@ -512,11 +515,11 @@ export function extractSection(urlText: string, page: string, label: string, isP
     if (!section) return { error: `couldn't read a section number from "${label}"` }
     const { start, end } = chapterCut(section)
     const cut = cutText(text, start, end)
-    if (!cut) return { error: `couldn't find section ${section} on the page`, needsBrowser: shell }
+    if (!cut) return { error: `${shellNote}couldn't find section ${section} on the page`, needsBrowser: shell }
     text = cut
   } else if (rule.start || rule.end) {
     const cut = cutText(text, rule.start?.(url), rule.end?.(url))
-    if (!cut) return { error: "couldn't find where the section starts on the page", needsBrowser: shell }
+    if (!cut) return { error: `${shellNote}couldn't find where the section starts on the page`, needsBrowser: shell }
     text = cut
   }
   if (text.length < 80) return { error: "the page came back nearly empty", needsBrowser: shell }

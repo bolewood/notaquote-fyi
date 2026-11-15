@@ -37,6 +37,14 @@ for (const status of [404, 410]) {
   })
 }
 
+test("live: a thin \"page not found\" served as 200 is fatal, not a JavaScript shell", () => {
+  const body = "<html><body><script></script><p>Page not found</p></body></html>"
+  const run = liveCheck("IL", { "www.ilga.gov": { status: 200, body } })
+  assert.equal(run.code, 1, run.out)
+  const ilga = run.rows.filter((row) => row.includes("215 ILCS 157/20"))
+  assert.ok(ilga.length > 0 && ilga.every((row) => row.startsWith("FETCH_FAILED")), run.out)
+})
+
 test("live: a DNS failure is fatal", () => {
   const run = liveCheck("IL", { "www.ilga.gov": { errorCode: "ENOTFOUND" } })
   assert.equal(run.code, 1, run.out)

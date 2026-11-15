@@ -71,7 +71,7 @@ These are the places where a careful reader could reasonably disagree. If you kn
 - **Georgia UM.** The official Georgia code is also only on LexisNexis. Unofficial copies say uninsured motorist coverage is included unless you reject it in writing, but we don't cite unofficial copies, so the flags are blank. The 25/50/25 limits come from the state insurance department's page.
 - **Tennessee.** The limits are confirmed on the Department of Revenue's page. The T.C.A. 56-7-1201 link is Lexis public access (search for the section). The 2022 public chapter that raised them (and names the $65,000 combined limit) blocks scripts, so its quote comes from a browser read during the first pass. Whether Tennessee's UM definition covers underinsured drivers wasn't confirmed, so UIM is blank.
 - **Mississippi and New Mexico.** The official code sites wouldn't load for us. Figures come from the state insurance department or MVD pages, plus legislature bill documents that reproduce current law.
-- **Colorado.** The minimums above were checked against the 2024 statute PDF. The rating rules cite the official 2026 edition (olls.info, linked from the legislature's 2026 titles page).
+- **Colorado.** The minimums were checked against the 2024 statute PDF, so a 2025–2026 change can't be fully ruled out (none was found). The official 2026 edition now exists (olls.info, linked from the legislature's 2026 titles page) and the rating rules cite it, but it hasn't been compared for the minimums yet.
 - **Massachusetts.** mass.gov blocked every request, so the UM minimum comes from the statute's cross-reference rather than the insurance department's own page.
 
 ## Scheduled changes
