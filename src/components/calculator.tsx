@@ -16,11 +16,13 @@ import {
   StateField,
   YearsField,
 } from "@/components/driver-fields"
+import { AskYourInsurer, AskYourInsurerPrint } from "@/components/ask-your-insurer"
 import { HowWeGotThis, VehicleFixLink } from "@/components/how-we-got-this"
 import { RangeBar } from "@/components/money"
 import { HomeSkeleton, StarterCards, STARTERS_PLACEMENT, TABS, type Tab } from "@/components/page-skeleton"
 import { ShareBox } from "@/components/share-box"
 import { BridgeChart } from "@/components/charts/bridge-chart"
+import { askContext, type AskContext } from "@/lib/ask-your-insurer"
 import { bridgeRows, type Bridge } from "@/lib/bridge"
 import { carName, modelTrims, resolveCar, WHAT_IF_CARS } from "@/lib/car-search"
 import { vehicleFacts } from "@/lib/catalog-class"
@@ -716,6 +718,7 @@ function CalculatorReady() {
                     </div>
                   </details>
                 ) : null}
+                {nowEstimate && !result ? <AskYourInsurer context={askContext(now, situation.teenOnParentPolicy)} /> : null}
               </div>
             </div>
           </section>
@@ -954,6 +957,7 @@ function CalculatorReady() {
                     cars: [nowCar, nextCar].map((car) => ({ ...car, starred: false })),
                     via: "whatif",
                   })}
+                  ask={askContext(next, situation.teenOnParentPolicy)}
                   versionPicker={
                     changed.includes("vehicle") ? (
                       <VersionPicker idPrefix="next-car" pick={nextCar} catalog={catalog} onChange={(pick) => patchNext(pick)} compact />
@@ -1051,6 +1055,7 @@ function CalculatorReady() {
             : null
         }
         changes={shown.map((key) => chipLabel(key, now, next))}
+        ask={askContext(result ? next : now, situation.teenOnParentPolicy)}
       />
 
       <CarPicker
@@ -1196,7 +1201,7 @@ function splitReason(label: string): { main: string; reason: string | null } {
   return match ? { main: match[1], reason: capital(match[2]) } : { main: label, reason: null }
 }
 
-function WhatIfResult({
+export function WhatIfResult({
   headingRef,
   mode,
   parts,
@@ -1224,6 +1229,7 @@ function WhatIfResult({
   carPage,
   carPageName,
   versionPicker,
+  ask,
 }: {
   headingRef: React.RefObject<HTMLHeadingElement | null>
   mode: WhatIfMode
@@ -1261,6 +1267,8 @@ function WhatIfResult({
   /** "Tesla Model Y" */
   carPageName: string
   versionPicker: React.ReactNode
+  /** What the "Questions to ask your insurer" list is picked for. */
+  ask: AskContext
 }) {
   const min = Math.round(Math.min(current.low, next.low) * 0.92)
   const max = Math.round(Math.max(current.high, next.high) * 1.04)
@@ -1462,6 +1470,7 @@ function WhatIfResult({
           ) : null}
         </div>
       </details>
+      <AskYourInsurer context={ask} className="-mt-6 -mb-2" />
     </div>
   )
 }
@@ -1536,6 +1545,7 @@ function PrintSummary({
   result,
   changes,
   bridge,
+  ask,
 }: {
   situation: Situation
   nowEstimate: Estimate | null
@@ -1545,6 +1555,8 @@ function PrintSummary({
   /** The bridge chart, drawn wide for paper. */
   bridge: Bridge | null
   changes: string[]
+  /** What the printed "Questions to ask your insurer" are picked for. */
+  ask: AskContext
 }) {
   const printed = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
   return (
@@ -1592,6 +1604,7 @@ function PrintSummary({
           </ul>
         </>
       ) : null}
+      <AskYourInsurerPrint context={ask} />
       <p style={{ marginTop: "14pt", borderTop: "0.75pt solid #999", paddingTop: "8pt" }}>
         Data updated {DATA_UPDATED}. Every source, and how the math works: notaquote.fyi/methodology
       </p>
