@@ -8,6 +8,7 @@ It's written so one person can do it in a weekend, and so you can hand it to an 
 
 - **Every September, the annual refresh.** A GitHub Action opens an issue titled "Annual data refresh (YEAR)" on September 22 with the checklist below. September works well because new model years are out, NAIC's report from the winter before is available, and it lands before DC's scheduled law change on October 1, 2027.
 - **Every January, HLDI's new results.** The Highway Loss Data Institute publishes a new model-year window each January. Follow [the HLDI annual refresh](#hldi-annual-refresh) below; it doesn't wait for September.
+- **Every month, the law behind each rating rule.** On the 3rd, a GitHub Action fetches every law quoted in `data/state-rules/rating-rules.json` and compares it with the saved copy. If a quote is gone or a law's text moved, it opens (or comments on) an issue titled "Rating rule quotes need a look".
 - **Every month, tripwires.** CI also runs on the 1st of each month. It fails if a state's scheduled law change has taken effect without the row being updated, or if anything else has drifted. GitHub emails the failure to the maintainers.
 - **Any time, community fixes.** Someone reports a number through "Suggest a fix", and we fix that one thing in a small PR, following CONTRIBUTING.md. That doesn't have to wait for September.
 
@@ -49,6 +50,7 @@ Work on a branch named `data-refresh-YEAR`. Commit after each step, so the histo
 - For each state, re-open the cited source and check for new legislation. A fast way is to search "[state] minimum auto liability insurance [year] law change". This is a good job for an AI assistant with web access. Give it `data/state-rules/README.md` and ask it to report changes with quotes, not to edit.
 - Update `checkedOn` on every row you re-checked, then bump the file's `version` and `checkedOn`.
 - Run `npx tsx --test src/lib/state-rules.test.ts`.
+- **What insurers may use to set a price** (`data/state-rules/rating-rules.json`): run `npm run rules:check-quotes` (against the saved copies in `data/state-rules/law/`), then `npm run rules:check-quotes -- --live`. The live run fetches each cited law and compares it with the saved copy in `data/state-rules/law/`. Fix anything MISSING (the quote is no longer in the law: re-read the law, then update the entry and its quote). For anything CHANGED, read the diff; if the law really changed, run `npm run rules:snapshot -- --state XX` and check the entry still holds. NEEDS_BROWSER sources have to be checked by hand or re-saved with a browser (see `data/state-rules/README.md`).
 
 ### 6. Driver and coverage factors
 - For each survey in `data/factors/sources/sources.json`, check for a newer edition. California's scripts live in `scripts/research/ca-2026/`. Copy them to a folder for the new year rather than editing the old ones, so past pulls stay reproducible.

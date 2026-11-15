@@ -6,7 +6,16 @@ import { RecordTrustView } from "@/components/record-trust-view"
 import { TrustArticle } from "@/components/trust-article"
 import { UnaskedFactorsChart } from "@/components/unasked-factors-chart"
 import { nationalTypicalStart } from "@/lib/factor-engine"
-import { FACTOR_NAMES, RATING_RULES_CHECKED_ON, ratingRule, TABLE_FACTORS, type RatingFactor } from "@/lib/rating-rules"
+import {
+  FACTOR_NAMES,
+  RATING_RULES_CHECKED_ON,
+  ratingGroup,
+  ratingRule,
+  reviewProgressLine,
+  TABLE_FACTORS,
+  type RatingFactor,
+  type RatingGroup,
+} from "@/lib/rating-rules"
 import { DEFAULT_SCENARIO, STATES } from "@/lib/scenario"
 import { articleJsonLd, pageMetadata, WHAT_WE_DONT_ASK_UPDATED } from "@/lib/site-meta"
 import { formatVerifiedDate } from "@/lib/state-rules"
@@ -44,8 +53,11 @@ function stateNames(codes: string[]): string {
   return `${names.slice(0, -1).join(", ")} and ${names.at(-1)}`
 }
 
-function statesWith(factor: RatingFactor, status: "banned" | "limited" | "no-ban-found"): string[] {
-  return STATES.map((item) => item.code).filter((code) => ratingRule(code, factor)?.status === status)
+function statesWith(factor: RatingFactor, group: RatingGroup): string[] {
+  return STATES.map((item) => item.code).filter((code) => {
+    const rule = ratingRule(code, factor)
+    return rule !== undefined && ratingGroup(rule) === group
+  })
 }
 
 export default function WhatWeDontAskPage() {
@@ -115,11 +127,15 @@ export default function WhatWeDontAskPage() {
         words of that law. We&apos;re reviewing states a few at a time; one we haven&apos;t
         reviewed yet says so, which never means anything goes. Last checked {formatVerifiedDate(RATING_RULES_CHECKED_ON)}.
       </p>
+      <p className="text-sm text-muted-foreground">
+        {reviewProgressLine(STATES.map((item) => item.code))}.
+      </p>
 
       {TABLE_FACTORS.map((factor) => {
         const banned = statesWith(factor, "banned")
         const limited = statesWith(factor, "limited")
-        const allowed = statesWith(factor, "no-ban-found")
+        const allowed = statesWith(factor, "allowed")
+        const notOnList = statesWith(factor, "not-on-list")
         return (
           <section key={factor} aria-labelledby={`rules-${factor}`}>
             <h3 id={`rules-${factor}`} className="scroll-mt-4">
@@ -141,9 +157,14 @@ export default function WhatWeDontAskPage() {
                 <strong>Allowed, and we&apos;ve checked the law, in:</strong> {stateNames(allowed)}.
               </p>
             ) : null}
-            {banned.length + limited.length + allowed.length > 0 ? (
+            {notOnList.length > 0 ? (
+              <p>
+                <strong>No ban in the state&apos;s rating law:</strong> {stateNames(notOnList)}.
+              </p>
+            ) : null}
+            {banned.length + limited.length + allowed.length + notOnList.length > 0 ? (
               <ul className="bullets">
-                {[...banned, ...limited, ...allowed].map((code) => {
+                {[...banned, ...limited, ...allowed, ...notOnList].map((code) => {
                   const rule = ratingRule(code, factor)
                   if (!rule) return null
                   const name = STATES.find((item) => item.code === code)?.name ?? code

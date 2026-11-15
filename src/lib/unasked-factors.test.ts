@@ -5,14 +5,18 @@ import WhatWeDontAskPage from "../app/what-we-dont-ask/page"
 import { FACTOR_BUNDLE } from "./factor-engine"
 import {
   compareLine,
+  compareRules,
   isBanned,
   RATING_FACTORS,
+  ratingGroup,
   ratingRule,
+  reviewProgressLine,
   reviewedStates,
   statusWords,
   validateRatingRules,
 } from "./rating-rules"
 import { STATES } from "./scenario"
+import { todayIso } from "./state-rules"
 import { maskDollars, visibleText } from "./rendered-text"
 import { chartAxis, insurerSpread, northCarolinaDui, pairedRatios, percentWords, stateInsurerSpreads, unaskedFactors } from "./unasked-factors"
 
@@ -181,4 +185,91 @@ test("every reviewed rule, including allowed ones and extra sources, shows its q
   }
   assert.equal(quotes, expected)
   assert.match(html, /id="rules-territory"/)
+})
+
+test('"not-on-list" means no ban in the state\'s rating law, and only goes with "no-ban-found"', () => {
+  const good = { version: "rating-rules-2026-11-15", checkedOn: "2026-11-15", about: "x", states: {} }
+  const rule = {
+    summary: "Ohio's rating law lists what insurers can't use, and credit isn't on it.",
+    source: { label: "Law", url: "https://example.gov" },
+    quote: "No insurer shall use race, religion, or national origin",
+  }
+  const withRule = (extra: object) => ({ ...good, states: { OH: { credit: { ...rule, ...extra } } } }) as never
+  assert.doesNotThrow(() => validateRatingRules(withRule({ status: "no-ban-found", basis: "not-on-list" })))
+  assert.doesNotThrow(() => validateRatingRules(withRule({ status: "no-ban-found", basis: "named" })))
+  assert.doesNotThrow(() => validateRatingRules(withRule({ status: "banned", basis: "named" })))
+  assert.throws(() => validateRatingRules(withRule({ status: "banned", basis: "not-on-list" })), /not-on-list/)
+  assert.throws(() => validateRatingRules(withRule({ status: "limited", basis: "not-on-list" })), /not-on-list/)
+  assert.throws(() => validateRatingRules(withRule({ status: "no-ban-found", basis: "maybe" })), /basis/)
+
+  const base = { ...rule, checkedOn: "2026-11-15" }
+  const notOnList = { ...base, status: "no-ban-found" as const, basis: "not-on-list" as const }
+  const named = { ...base, status: "no-ban-found" as const, basis: "named" as const }
+  const plain = { ...base, status: "no-ban-found" as const }
+  assert.equal(statusWords(notOnList), "No ban in state law")
+  assert.equal(statusWords(named), "Allowed")
+  assert.equal(statusWords(plain), "Allowed")
+  assert.equal(statusWords({ ...base, status: "banned" }), "Not allowed")
+  assert.equal(ratingGroup(notOnList), "not-on-list")
+  assert.equal(ratingGroup(named), "allowed")
+  assert.equal(ratingGroup(plain), "allowed")
+  assert.equal(ratingGroup({ ...base, status: "limited" }), "limited")
+})
+
+test("the page says how many states we've reviewed so far, worked out from the data", () => {
+  const codes = STATES.map((item) => item.code)
+  assert.equal(codes.length, 51)
+  assert.equal(reviewProgressLine(["AA", "BB", "CC"], ["BB", "ZZ"]), "Reviewed so far: 1 of 3 (the 50 states and DC)")
+  const reviewed = reviewedStates().filter((code) => codes.includes(code)).length
+  assert.ok(reviewed > 0)
+  const line = reviewProgressLine(codes)
+  assert.equal(line, `Reviewed so far: ${reviewed} of 51 (the 50 states and DC)`)
+  const text = visibleText(renderToStaticMarkup(WhatWeDontAskPage()))
+  assert.ok(text.includes(line), "the progress line is on the page")
+})
+
+test("tripwire: a rule's start date stops showing within 30 days of it passing", () => {
+  const today = todayIso()
+  const cutoff = new Date(`${today}T00:00:00Z`)
+  cutoff.setUTCDate(cutoff.getUTCDate() - 30)
+  const oldest = cutoff.toISOString().slice(0, 10)
+  for (const state of reviewedStates()) {
+    for (const factor of RATING_FACTORS) {
+      const rule = ratingRule(state, factor)
+      if (!rule?.effective) continue
+      assert.ok(
+        rule.effective >= oldest,
+        `${state} ${factor} started on ${rule.effective}, more than 30 days ago. Remove "effective" from that entry in data/state-rules/rating-rules.json so the page stops showing "(from ...)".`,
+      )
+    }
+  }
+})
+
+test("comparing a not-on-list state never says insurers there may use the factor, in either order", () => {
+  const base = { summary: "A plain sentence about the rule.", source: { label: "Law", url: "https://example.gov" }, quote: "a quote from the law", checkedOn: "2026-11-15" }
+  const notOnList = { ...base, status: "no-ban-found" as const, basis: "not-on-list" as const }
+  const others = {
+    banned: { ...base, status: "banned" as const },
+    limited: { ...base, status: "limited" as const },
+    allowed: { ...base, status: "no-ban-found" as const },
+  }
+  const expected = {
+    banned: "insurers in Hawaii can't use it",
+    limited: "insurers in Hawaii can use it, with limits",
+    allowed: "insurers in Hawaii can use it",
+  }
+  for (const [group, other] of Object.entries(others) as [keyof typeof others, (typeof others)[keyof typeof others]][]) {
+    assert.equal(
+      compareRules("credit", notOnList, other, "Texas", "Hawaii"),
+      `Credit: Texas's rating law doesn't list it as banned; ${expected[group]}.`,
+    )
+    assert.equal(
+      compareRules("credit", other, notOnList, "Hawaii", "Texas"),
+      `Credit: ${expected[group]}; Texas's rating law doesn't list it as banned.`,
+    )
+    for (const line of [compareRules("credit", notOnList, other, "Texas", "Hawaii"), compareRules("credit", other, notOnList, "Hawaii", "Texas")]) {
+      assert.doesNotMatch(line ?? "", /insurers in Texas can use/)
+    }
+  }
+  assert.equal(compareRules("credit", notOnList, notOnList, "Texas", "Ohio"), null)
 })
