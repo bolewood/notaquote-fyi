@@ -198,8 +198,12 @@ export function compareLine(factor: RatingFactor, a: string, b: string, aName: s
   const ra = ratingRule(a, factor)
   const rb = ratingRule(b, factor)
   if (!ra || !rb) return null
-  const words = (rule: RatingRule) =>
-    rule.status === "banned" ? "can't use it" : rule.status === "limited" ? "can use it, with limits" : "can use it"
+  const words = (rule: RatingRule) => {
+    const group = ratingGroup(rule)
+    if (group === "banned") return "can't use it"
+    if (group === "limited") return "can use it, with limits"
+    return group === "not-on-list" ? "can use it (no ban in state law)" : "can use it"
+  }
   if (ra.status !== rb.status) {
     return `${FACTOR_NAMES[factor]}: insurers in ${aName} ${words(ra)}; in ${bName} they ${words(rb)}.`
   }

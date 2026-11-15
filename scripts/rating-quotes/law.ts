@@ -226,6 +226,8 @@ export const SITE_RULES: Record<string, SiteRule> = {
     site: "Hawaii State Legislature",
     needsBrowser: true,
     container: { className: "WordSection1" },
+    // The page adds "Case Notes" (court summaries) after the section; they aren't the law.
+    end: () => /^Case Notes$/m,
   },
   "adminrules.idaho.gov": {
     site: "Idaho Office of the Administrative Rules Coordinator",
@@ -274,10 +276,12 @@ export const SITE_RULES: Record<string, SiteRule> = {
   },
   "law.lis.virginia.gov": {
     site: "Virginia Law, Legislative Information System",
+    terms: "The site carries a Commonwealth of Virginia copyright notice; we copy only the statute's text, which is public.",
     container: { id: "va_code" },
   },
   "app.leg.wa.gov": {
     site: "Washington State Legislature",
+    terms: "The site links a Disclaimer and a Copyright page; we copy only the statute's text, which is public.",
     container: { id: "contentWrapper" },
   },
 }

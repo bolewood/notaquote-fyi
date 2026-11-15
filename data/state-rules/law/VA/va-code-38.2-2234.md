@@ -4,6 +4,7 @@ title: "Va. Code § 38.2-2234"
 retrieved: "2026-11-15"
 fetchedWith: "fetch"
 site: "Virginia Law, Legislative Information System"
+sourceTerms: "The site carries a Commonwealth of Virginia copyright notice; we copy only the statute's text, which is public."
 ---
 
 § 38.2-2234. Insurance credit score disclosure; use of credit information.

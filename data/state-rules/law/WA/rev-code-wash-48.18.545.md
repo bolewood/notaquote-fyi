@@ -4,6 +4,7 @@ title: "Rev. Code Wash. § 48.18.545"
 retrieved: "2026-11-15"
 fetchedWith: "fetch"
 site: "Washington State Legislature"
+sourceTerms: "The site links a Disclaimer and a Copyright page; we copy only the statute's text, which is public."
 ---
 
 (1) For the purposes of this section:
