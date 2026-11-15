@@ -1,5 +1,5 @@
 name: A state rule is missing or wrong
-description: A state's minimum liability limits or required coverages are missing, wrong, or out of date.
+description: A state rule is missing, wrong, or out of date. That covers minimum liability limits, required coverages, and what insurers may use to set a price (credit, gender, age, …).
 title: "State rule: "
 labels: ["data", "state-rules"]
 body:
@@ -20,7 +20,7 @@ body:
     id: rule
     attributes:
       label: Which rule?
-      placeholder: "e.g. minimum liability limits, or whether uninsured motorist coverage is required"
+      placeholder: "e.g. minimum liability limits, whether uninsured motorist coverage is required, or what insurers may use to set a price (credit, gender, age, …)"
     validations:
       required: true
   - type: input

@@ -1,0 +1,60 @@
+name: Rating rule quotes
+
+# Once a month, fetch every law that data/state-rules/rating-rules.json quotes
+# and compare it with the saved copy in data/state-rules/law. If a quote is
+# gone or a law's text moved, open an issue (or comment on the open one).
+# Not run on pull requests: there, `npm test` checks the quotes offline.
+
+on:
+  schedule:
+    - cron: "0 16 3 * *" # 3rd of each month, 16:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: rating-quotes
+  cancel-in-progress: false
+
+jobs:
+  check-quotes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          cache: npm
+      - run: npm ci
+      - name: Install pdftotext (for laws published as PDFs)
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils
+      - name: Check the quotes against today's laws
+        id: check
+        shell: bash # adds pipefail, so a failing check isn't hidden by tee
+        run: npm run -s rules:check-quotes -- --live | tee /tmp/report.txt # progress and errors go to the log, not the report
+        continue-on-error: true
+      - name: Open or update the issue
+        if: steps.check.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="Rating rule quotes need a look"
+          {
+            echo "The monthly check of rating rule quotes found something on $(date -u +%Y-%m-%d). See \"Checking the quotes\" in data/state-rules/README.md for what each result means."
+            echo
+            echo "Run log: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            echo
+            echo '```'
+            if [ -s /tmp/report.txt ]; then head -c 60000 /tmp/report.txt; else echo "The checker stopped before writing a report. See the run log."; fi
+            echo '```'
+          } > /tmp/body.md
+          number=$(gh issue list --state open --search "\"$title\" in:title" --json number,title --jq ".[] | select(.title == \"$title\") | .number" | head -n 1)
+          if [ -n "$number" ]; then
+            gh issue comment "$number" --body-file /tmp/body.md
+          else
+            gh issue create --title "$title" --body-file /tmp/body.md --label data
+          fi
+          exit 1

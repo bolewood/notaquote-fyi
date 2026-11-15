@@ -36,8 +36,20 @@ export const RATING_STATUSES = ["banned", "limited", "no-ban-found"] as const
 
 export type RatingStatus = (typeof RATING_STATUSES)[number]
 
+/**
+ * How a "no-ban-found" answer was reached.
+ * - "named": a law names the factor and allows it (or a ban on it was repealed).
+ * - "not-on-list": the state's rating or anti-discrimination law lists what insurers can't use,
+ *   and this factor isn't on that list. The quote is that list.
+ */
+export const RATING_BASES = ["named", "not-on-list"] as const
+
+export type RatingBasis = (typeof RATING_BASES)[number]
+
 export type RatingRule = {
   status: RatingStatus
+  /** Optional. "not-on-list" is only for "no-ban-found": the quote is the state's list of what insurers can't use. */
+  basis?: RatingBasis
   /** One plain sentence for visitors. */
   summary: string
   /** The law it comes from. */
@@ -85,6 +97,14 @@ export function validateRatingRules(data: RawFile): void {
       }
       if (!rule || !(RATING_STATUSES as readonly string[]).includes(rule.status)) {
         throw new Error(`${at}: "status" must be ${RATING_STATUSES.join(", ")}`)
+      }
+      if (rule.basis !== undefined) {
+        if (!(RATING_BASES as readonly string[]).includes(rule.basis)) {
+          throw new Error(`${at}: "basis" must be ${RATING_BASES.join(" or ")}`)
+        }
+        if (rule.basis === "not-on-list" && rule.status !== "no-ban-found") {
+          throw new Error(`${at}: "basis": "not-on-list" only goes with "status": "no-ban-found"`)
+        }
       }
       if (typeof rule.summary !== "string" || rule.summary.length < 10 || rule.summary.length > 200) {
         throw new Error(`${at}: "summary" must be one plain sentence (10–200 characters)`)
@@ -136,10 +156,33 @@ export function reviewedStates(): string[] {
   return Object.keys(file.states).filter((state) => Object.keys(file.states[state] ?? {}).length > 0)
 }
 
+/** "Reviewed so far: 14 of 51 states and DC", counting only codes in `allCodes` (the 50 states and DC). */
+export function reviewProgressLine(allCodes: readonly string[], reviewed: readonly string[] = reviewedStates()): string {
+  const count = allCodes.filter((code) => reviewed.includes(code)).length
+  return `Reviewed so far: ${count} of ${allCodes.length} states and DC`
+}
+
+/** How the page groups a reviewed rule: the three statuses, with "no ban in state law" kept apart from "allowed". */
+export type RatingGroup = "banned" | "limited" | "allowed" | "not-on-list"
+
+export function ratingGroup(rule: RatingRule): RatingGroup {
+  if (rule.status === "banned") return "banned"
+  if (rule.status === "limited") return "limited"
+  return rule.basis === "not-on-list" ? "not-on-list" : "allowed"
+}
+
 /** Short words for a table cell. */
 export function statusWords(rule: RatingRule | undefined): string {
   if (!rule) return "Not reviewed yet"
-  const words = rule.status === "banned" ? "Not allowed" : rule.status === "limited" ? "Allowed, with limits" : "Allowed"
+  const group = ratingGroup(rule)
+  const words =
+    group === "banned"
+      ? "Not allowed"
+      : group === "limited"
+        ? "Allowed, with limits"
+        : group === "not-on-list"
+          ? "No ban in state law"
+          : "Allowed"
   return rule.effective ? `${words} (from ${effectiveWords(rule.effective)})` : words
 }
 
