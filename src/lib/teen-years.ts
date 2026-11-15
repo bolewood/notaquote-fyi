@@ -10,10 +10,11 @@
  *   factor is Texas's age-18 point, so year 3 (age 18) is today's estimate
  *   exactly, and year 1 (age 16) is higher.
  * - Added to a parent's policy: only the teen's increase moves. Year 1 is
- *   today's increase; later years keep a share of it (our estimate).
+ *   the engine's after − before, with a range from both figures' ranges;
+ *   later years keep a share of it (our estimate).
  *
- * Ranges: each year swaps the band's spread for its own age's spread, combined
- * the way the engine combines spreads (in quadrature). The four-year total
+ * Ranges (own policy): each year swaps the band's spread for its own age's
+ * spread, combined the way the engine combines spreads (in quadrature). The four-year total
  * adds the lows, the likely figures, and the highs, as if the years move
  * together, which gives a wider, more cautious total.
  */
@@ -146,27 +147,29 @@ export function ownPolicyYears(today: Estimate, state: Place): TeenFourYears {
 
 /**
  * A new 16-year-old added to a parent's policy, years 1–4: the household's
- * increase each year. `added` is the engine's `teenAddedToPolicy` result.
+ * increase each year. `added` is the engine's `teenAddedToPolicy` result for
+ * the scenario as entered; later years keep a share of year 1's increase.
  */
 export function addedToPolicyYears(added: TeenAdded, state: Place): TeenFourYears {
-  const factor = ageCell("16-18-added")
-  // The increase's own spread: the household factor's edges, as a share of
-  // the part above 1.00 (what the teen adds), not of the whole bill.
-  const extra = factor.value - 100
-  const increaseDown = Math.floor(((factor.value - factor.low) * BP) / extra)
-  const increaseUp = Math.floor(((factor.high - factor.value) * BP) / extra)
-  const before = added.before.spread
+  const first = firstYearIncrease(added)
   const rows = FOUR_YEAR_AGES.map((age, index): TeenYearRow => {
     const cell = FACTOR_BUNDLE.teenYears.added[age]
-    const likely = times(added.increase, cell.value * 100)
-    const own = cell.basis === "indicative" ? { down: 0, up: 0 } : spreadOf(cell)
-    const down = Math.floor(Math.sqrt(before.down ** 2 + increaseDown ** 2 + own.down ** 2))
-    const up = Math.floor(Math.sqrt(before.up ** 2 + increaseUp ** 2 + own.up ** 2))
+    const likely = times(first.likely, cell.value * 100)
+    let edge: { low: number; high: number }
+    if (cell.value === 100) {
+      edge = { low: first.low, high: first.high }
+    } else {
+      // Year 1's own range, as a share of year 1, plus how unsure the later share is.
+      const share = spreadOf(cell)
+      const firstDown = first.likely > 0 ? ((first.likely - first.low) * BP) / first.likely : 0
+      const firstUp = first.likely > 0 ? ((first.high - first.likely) * BP) / first.likely : 0
+      edge = edges(likely, Math.floor(Math.hypot(firstDown, share.down)), Math.floor(Math.hypot(firstUp, share.up)))
+    }
     return {
       year: index + 1,
       age,
       likely,
-      ...edges(likely, down, up),
+      ...edge,
       basis: cell.basis,
       sources: cell.sources,
       basisWords: basisLabel(cell.basis, cell.sources, placeName(state)),
@@ -175,6 +178,41 @@ export function addedToPolicyYears(added: TeenAdded, state: Place): TeenFourYear
     }
   })
   return { kind: "added", rows, total: total(rows) }
+}
+
+/**
+ * Year 1: the engine's own after − before, with a range built from both
+ * figures' ranges as the engine worked them out (the parent's age, any
+ * discounts, the car, and the starting price, as entered). The part of each
+ * range that both share (the starting price, an unsure car version) moves
+ * them together, so it scales the increase rather than the whole bill; the
+ * rest of each range is independent and adds in quadrature. With your own
+ * premium and nothing else changed, the edges are after's edges minus it.
+ */
+export function firstYearIncrease(added: TeenAdded): { low: number; likely: number; high: number } {
+  const { before, after } = added
+  const likely = added.increase
+  // Dollars each figure can move, taken from the engine's edges. A figure
+  // with no range of its own (your premium, unchanged) moves by nothing.
+  const reach = (estimate: Estimate) => ({
+    down: estimate.spread.down === 0 ? 0 : estimate.likely - estimate.low,
+    up: estimate.spread.up === 0 ? 0 : estimate.high - estimate.likely,
+  })
+  const a = reach(after)
+  const b = reach(before)
+  const sharedPart = (amount: number, parts: number) => (amount * parts) / BP
+  const rest = (total: number, amount: number, parts: number) => Math.max(0, total ** 2 - sharedPart(amount, parts) ** 2)
+  const down = Math.sqrt(
+    sharedPart(likely, added.shared.down) ** 2 + rest(a.down, after.likely, added.shared.down) + rest(b.up, before.likely, added.shared.up),
+  )
+  const up = Math.sqrt(
+    sharedPart(likely, added.shared.up) ** 2 + rest(a.up, after.likely, added.shared.up) + rest(b.down, before.likely, added.shared.down),
+  )
+  let low = Math.round(likely - down)
+  let high = Math.round(likely + up)
+  if (low >= likely) low = likely - 1
+  if (high <= likely) high = likely + 1
+  return { low, likely, high }
 }
 
 /** "Year 1 (age 16)". */

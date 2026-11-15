@@ -17,7 +17,7 @@ import {
   YearsField,
 } from "@/components/driver-fields"
 import { AskYourInsurer, AskYourInsurerPrint } from "@/components/ask-your-insurer"
-import { NextFourYears } from "@/components/next-four-years"
+import { NextFourYears, NextFourYearsPrint } from "@/components/next-four-years"
 import { teenFourYears, type TeenFourYears } from "@/lib/teen-years"
 import { HowWeGotThis, VehicleFixLink } from "@/components/how-we-got-this"
 import { RangeBar } from "@/components/money"
@@ -420,6 +420,8 @@ function CalculatorReady() {
   const nextConfidence = catalog ? (trimRecord(catalog, next)?.confidence ?? null) : null
   const nowEstimate = priceNow(situation, nowFacts, nowConfidence)
   const result = changed.length > 0 ? priceWhatIf(situation, nowFacts, next, nextFacts, nextConfidence) : null
+  // A new 16-year-old: the next four years, shown under the result and printed.
+  const fourYears = result ? teenFourYears(result, now, next) : null
   const startKind: StartKind = situation.premium !== null ? "yours" : "typical"
   const start = startingPoint(situation, nowFacts)
   const startNote = start ? startLine(start) : undefined
@@ -962,7 +964,7 @@ function CalculatorReady() {
                     via: "whatif",
                   })}
                   ask={ask.result ?? ask.estimate}
-                  fourYears={teenFourYears(result, now, next)}
+                  fourYears={fourYears}
                   versionPicker={
                     changed.includes("vehicle") ? (
                       <VersionPicker idPrefix="next-car" pick={nextCar} catalog={catalog} onChange={(pick) => patchNext(pick)} compact />
@@ -1061,6 +1063,7 @@ function CalculatorReady() {
         }
         changes={shown.map((key) => chipLabel(key, now, next))}
         ask={ask.print}
+        fourYears={premiumInvalid ? null : fourYears}
       />
 
       <CarPicker
@@ -1547,7 +1550,7 @@ function VersionPicker({
 }
 
 /** The printed page: your situation, then only what changed. */
-function PrintSummary({
+export function PrintSummary({
   situation,
   nowEstimate,
   ownNumber,
@@ -1555,6 +1558,7 @@ function PrintSummary({
   changes,
   bridge,
   ask,
+  fourYears = null,
 }: {
   situation: Situation
   nowEstimate: Estimate | null
@@ -1566,6 +1570,8 @@ function PrintSummary({
   changes: string[]
   /** What the printed "Questions to ask your insurer" are picked for. */
   ask: AskContext
+  /** A new 16-year-old: the next four years, printed as a table. */
+  fourYears?: TeenFourYears | null
 }) {
   const printed = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
   return (
@@ -1613,6 +1619,7 @@ function PrintSummary({
           </ul>
         </>
       ) : null}
+      {result && changes.length > 0 && fourYears ? <NextFourYearsPrint years={fourYears} /> : null}
       <AskYourInsurerPrint context={ask} />
       <p style={{ marginTop: "14pt", borderTop: "0.75pt solid #999", paddingTop: "8pt" }}>
         Data updated {DATA_UPDATED}. Every source, and how the math works: notaquote.fyi/methodology

@@ -5,7 +5,7 @@ import test from "node:test"
 import { createElement, createRef } from "react"
 import { renderToStaticMarkup } from "react-dom/server"
 import { NextFourYears } from "../components/next-four-years"
-import { WhatIfResult } from "../components/calculator"
+import { PrintSummary, WhatIfResult } from "../components/calculator"
 import TeenCostGuide from "../app/guides/adding-a-teen-driver/page"
 import type { VehicleCatalog } from "./catalog"
 import { vehicleFacts } from "./catalog-class"
@@ -27,7 +27,9 @@ import {
   teenYearMethodRows,
   TEEN_YEARS_METHOD_PATH,
   type TeenFourYears,
+  yearName,
 } from "./teen-years"
+import { rangeDollars } from "./format"
 
 const SOURCES = "data/factors/sources"
 const committed = JSON.parse(readFileSync("src/data/model-factors.json", "utf8")) as FactorBundle
@@ -206,7 +208,8 @@ test("each year carries its own basis label and links to the method", () => {
     ["Worked out from public data in California (Texas may differ)", "Our best guess", "Our best guess", "Our best guess"],
   )
   const html = renderToStaticMarkup(createElement(NextFourYears, { years: own, open: true }))
-  assert.equal(html.split(`href="${TEEN_YEARS_METHOD_PATH}"`).length - 1, own.rows.length + 1, "every year, plus the method line")
+  // Every year links twice (under the year on phones, in its own column on wider screens), plus the method line.
+  assert.equal(html.split(`href="${TEEN_YEARS_METHOD_PATH}"`).length - 1, 2 * own.rows.length + 1)
   assert.equal(teenYearMethodRows().length, 5)
 })
 
@@ -305,4 +308,91 @@ test("the calculator's teen result shows the four years collapsed, before the ch
   assert.match(visibleText(teen), /The next four years on your policy/)
   const plain = renderCalculator(situation, { ...situation.scenario, incidents: "one" })
   assert.doesNotMatch(plain, /data-testid="next-four-years"/)
+})
+
+// ---------------------------------------------------------------------------
+// Year 1 follows the engine for the household as entered
+
+function addedResult(situation: Situation, teen: Partial<Scenario> = {}) {
+  const now = situation.scenario
+  const next: Scenario = { ...now, ...starter("adding-teen").change(now), ...teen }
+  const priced = priceWhatIf(situation, vehicleFacts(catalog, now), next, vehicleFacts(catalog, next))
+  assert.ok(priced?.teenAdded)
+  const years = teenFourYears(priced, now, next)
+  assert.ok(years)
+  return { added: priced.teenAdded, years, now, next, priced }
+}
+
+const ADDED: Situation = { ...DEFAULT_SITUATION, teenOnParentPolicy: true, scenario: { ...DEFAULT_SITUATION.scenario, state: "TX" } }
+const BOTH_DISCOUNTS = { goodStudent: true, driverTraining: true }
+
+test("a discounted teen: year 1 is the engine's after minus before, discounts and all", () => {
+  const plain = addedResult(ADDED)
+  const discounted = addedResult(ADDED, BOTH_DISCOUNTS)
+  const first = discounted.years.rows[0]
+  assert.equal(first.likely, discounted.added.after.likely - discounted.added.before.likely)
+  assert.ok(first.likely < plain.years.rows[0].likely, "the discounts lower the increase")
+  assert.ok(first.low > 0 && first.low < first.likely && first.likely < first.high)
+  // Later years keep their share of this year 1.
+  assert.deepEqual(
+    discounted.years.rows.map((row) => row.likely),
+    discounted.years.rows.map((row) => Math.floor((2 * first.likely * row.versusToday + 100) / 200)),
+  )
+})
+
+test("your own premium, unchanged: year 1's edges are the engine's after edges minus your premium", () => {
+  const situation: Situation = { ...ADDED, premium: 2000 }
+  const { added, years } = addedResult(situation, BOTH_DISCOUNTS)
+  assert.equal(added.before.likely, 2000)
+  const first = years.rows[0]
+  assert.deepEqual([first.low, first.likely, first.high], [added.after.low - 2000, added.after.likely - 2000, added.after.high - 2000])
+})
+
+test("a parent who isn't 40–64: year 1 follows the engine, and the shared range isn't counted twice", () => {
+  const situation: Situation = { ...ADDED, scenario: { ...ADDED.scenario, age: "26-39", yearsLicensed: "10+" } }
+  const { added, years } = addedResult(situation)
+  const first = years.rows[0]
+  assert.equal(first.likely, added.after.likely - added.before.likely)
+  // Narrower than treating before and after as unrelated, and never below zero.
+  assert.ok(first.low > Math.max(0, added.after.low - added.before.high))
+  assert.ok(first.high < added.after.high - added.before.low)
+  assert.ok(added.shared.down > 0 && added.shared.down <= added.before.spread.down)
+})
+
+// ---------------------------------------------------------------------------
+// Print and phones
+
+test("the printed summary carries the four years: each year, its range, the total, and the basis", () => {
+  const { years, priced, now } = addedResult(ADDED)
+  const html = renderToStaticMarkup(
+    createElement(PrintSummary, {
+      situation: ADDED,
+      nowEstimate: priced.current,
+      ownNumber: false,
+      result: { headline: priced.headline, next: priced.next, parts: priced.parts },
+      bridge: null,
+      changes: ["Teen added (16–18)"],
+      ask: calculatorAskContexts(now, { ...now, age: "16-18" }, priced).print,
+      fourYears: years,
+    }),
+  )
+  assert.match(html, /data-testid="next-four-years-print"/)
+  const text = visibleText(html)
+  for (const row of years.rows) {
+    assert.ok(text.includes(yearName(row)), yearName(row))
+    assert.ok(text.includes(rangeDollars(row.low, row.high)), `${yearName(row)} range`)
+    assert.ok(text.includes(row.basisWords), `${yearName(row)} basis`)
+  }
+  assert.ok(text.includes("All four years"))
+  assert.ok(text.includes(rangeDollars(years.total.low, years.total.high)))
+  assert.doesNotMatch(text, PLAIN_LANGUAGE_BANNED)
+  assert.ok(html.indexOf("next-four-years-print") < html.indexOf("Questions to ask"), "before the checklist")
+})
+
+test("phones see every range: each year's and the total's, under the figure", () => {
+  for (const years of [addedResult(ADDED).years, ownPolicyYears(typicalTeenCost({ kind: "state", state: "OK" }).own, "OK")]) {
+    const html = renderToStaticMarkup(createElement(NextFourYears, { years, open: true }))
+    const narrow = [...html.matchAll(/<span class="[^"]*sm:hidden[^"]*" data-testid="next-four-years-range-narrow">([^<]*)<\/span>/g)].map((match) => match[1])
+    assert.deepEqual(narrow, [...years.rows.map((row) => rangeDollars(row.low, row.high)), rangeDollars(years.total.low, years.total.high)])
+  }
 })

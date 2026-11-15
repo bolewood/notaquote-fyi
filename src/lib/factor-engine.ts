@@ -1701,6 +1701,41 @@ export type TeenAdded = {
   increaseRounded: number
   /** "Adding your teen to your policy: about $X more a year, on a policy that costs about $Y now." */
   headline: string
+  /**
+   * The part of both ranges that before and after share, in basis points:
+   * everything except the parent's and the teen's own driver cells (the
+   * starting price, the car, the coverage, the area). It moves both figures
+   * together, so it scales the increase rather than widening it.
+   */
+  shared: { down: number; up: number }
+}
+
+/**
+ * The part of `before`'s range that `after` shares, in basis points.
+ * `before` and `after` start from the same price and make the same changes,
+ * except for the groups that differ between the parent and the teen (the age
+ * cell and the teen's discounts). Those groups' spreads in `before` are its
+ * own; the rest of `before`'s range is shared.
+ */
+function sharedSpread(start: StartingPoint, parent: Scenario, teen: Scenario, before: Estimate): { down: number; up: number } {
+  const startKeys = selectionKeys(start.scenario)
+  const parentKeys = selectionKeys(parent)
+  const teenKeys = selectionKeys(teen, { teenOnParentPolicy: true })
+  let down = ZERO
+  let up = ZERO
+  for (const id of GROUP_IDS) {
+    if (parentKeys[id] === teenKeys[id] || startKeys[id] === parentKeys[id]) continue
+    for (const cell of [cellOf(id, startKeys[id]), cellOf(id, parentKeys[id])]) {
+      const spread = cellSpread(cell)
+      down += spread.down * spread.down
+      up += spread.up * spread.up
+    }
+  }
+  const rest = (total: number, own: bigint) => {
+    const left = BigInt(total) * BigInt(total) - own
+    return left > ZERO ? Number(isqrt(left)) : 0
+  }
+  return { down: rest(before.spread.down, down), up: rest(before.spread.up, up) }
 }
 
 /**
@@ -1729,6 +1764,7 @@ export function teenAddedToPolicy(
     after,
     increase,
     increaseRounded,
+    shared: sharedSpread(start, parent, teen, before),
     headline: `Adding your teen to your policy: about ${differenceWords(increase)}, for a car that costs about ${formatDollars(now)} a year to insure now.`,
   }
 }
