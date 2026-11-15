@@ -39,10 +39,10 @@ The page answers the question visitors most likely have after any estimate: *"Wh
 ## 4. Part 1: What moves the price
 
 ### The example driver
-The site's existing example: 45 years old, clean record, full coverage, at the national typical price (about $1,950 a year today for an average car), matching the car pages' example so numbers line up across the site.
+Most sourced bars come from paired comparisons in Texas's 2025 survey: one driver (a 30-year-old man, liability-only coverage) priced with one thing changed. So the chart shows **percentage changes**, with that driver and coverage stated next to it, not dollar amounts for a different driver. For scale it can say what 10% means on the national typical full-coverage price (computed from the site's own starting price, not typed here), labeled as scale only. Transferring a Texas ratio to another driver, coverage, or state is an assumption, and the chart says so.
 
 ### The chart
-One horizontal bar per factor, drawn from the example driver's price: the low end to the high end of what the factor can do, with a dot or tick at "typical." Each bar is labeled with its basis, using the site's existing basis wording ("From published prices", "Our best guess"), plus two new labels:
+One horizontal bar per factor, as a percentage change from "no change": the low end to the high end of what the factor did in its source, with a dot or tick at "typical." Each bar is labeled with its basis, using the site's existing basis wording ("From published prices", "Our best guess"), plus two new labels:
 
 - **"We ask this one"** for factors the calculator already uses (shown for contrast, in a lighter style).
 - **"No public number"** for factors insurers use but no public source measures. Drawn as an empty, outlined bar with a short note, not a guessed length.
@@ -55,7 +55,7 @@ Sorted widest first. Draft list:
 | **Credit-based insurance score** | Poor credit about +19%; good credit about −17% vs average | From published prices [V] | Texas 2025 sample rates, same driver, median across 180 comparisons each (`data/factors/README.md`). Zero where banned. |
 | **An at-fault accident** | about +52% (range +38% to +66%) | We ask this one [V] | `data/factors/README.md` (California, Texas, North Carolina's rule) |
 | **A speeding ticket** | to find | to source | North Dakota's survey has a ticket profile, combined with an accident; North Carolina's state rule assigns fixed points. Look for a clean single-ticket pair. |
-| **A DUI** | to find | to source | North Carolina's rule assigns fixed points; other surveys don't price it. |
+| **A DUI** | no survey ratio; North Carolina's state-set surcharge (12 points, 340%) | State rule [V] | `data/factors/sources/nc-sdip-2026.csv`. Shown as text, not a bar, since it's one state's fixed schedule rather than a same-driver comparison. |
 | **A gap in coverage** | to find | likely "No public number" | |
 | **Gender** | to find | to source | Texas's survey prices 18-year-old men and women separately (`tx-age18`, `tx-age18_female`). Zero where banned. |
 | **Marital status** | to find | to source | Oklahoma and Texas profiles differ by marital status; find a clean pair. |
@@ -95,7 +95,7 @@ A reference section further down the page, readable top to bottom like an encycl
 
 1. **An introduction:** states regulate what insurers may use, the main kinds of rules (outright bans, limits, state-set systems), and why states disagree (fairness vs. predicting risk).
 2. **A section per factor**: credit, gender, age and experience, marital status, education and occupation, where you live, prior insurance. Each says which states ban or limit it, with the law cited, and one or two notable stories. For example:
-   - **California** doesn't let insurers price on credit or gender, and age isn't a rating factor at all. Its regulations rank three mandatory factors first: your driving record, the miles you drive, and your years of driving experience (10 CCR 2632.5) [V].
+   - **California** doesn't let insurers price on credit or gender, and age isn't an approved rating factor, apart from a required discount for drivers 55 and older who take a mature-driver course (Ins. Code § 11628.3). Its regulations rank three mandatory factors first: your driving record, the miles you drive, and your years of driving experience (10 CCR 2632.5) [V].
    - **Texas** allows credit, with limits, and the difference it makes is measurable in the state's own sample rates [V for the measurement].
    - **North Carolina** sets the points for accidents and tickets in state law, so every insurer applies the same surcharge [V, `src/lib/state-surveys.ts`].
 3. **A full table**: one row per state and DC, with columns for credit, gender, age, other limits, and notes. Each cell links to its source, with the state picker highlighting the current state's row. Also a "compare two states" control: pick California and Texas and see the rows side by side, with a plain summary of what changes for you if you move.
@@ -148,7 +148,7 @@ Research pass of November 15, 2026. Rows marked [V] were read in the statute or 
 |---|---|---|
 | Credit | California, Hawaii, Massachusetts [V]; Michigan bans the credit score in auto rates by statute (MCL 500.2162) [V], though credit-based insurance scores reportedly still play a role [U] | Washington's regulator banned it in 2021–22; courts struck that down [L]. |
 | Gender | California, Hawaii, Massachusetts, Michigan, North Carolina [V]; Pennsylvania by court decision (*Hartford v. Insurance Commissioner*, 1984) [L] | **Montana repealed its ban** effective 2022, and a court upheld that in March 2026 [L]. It's the only state found to have reversed one. |
-| Age | Hawaii (age and driving experience both) [V]; North Carolina (a 55+ discount is allowed) [V]; Massachusetts (except a 65+ reduction) [V]; California: not a rating factor (years of experience instead) [V] | |
+| Age | Hawaii (age and driving experience both) [V]; North Carolina (a 55+ discount is allowed) [V]; Massachusetts (except a 65+ reduction) [V]; California: not an approved rating factor (years of experience instead), except a required discount for drivers 55+ who complete a mature-driver course (Ins. Code § 11628.3) [V] | |
 
 ### Limits on credit (most states)
 Most states follow a common package: credit can't be the only reason for a price, denial, or non-renewal; no credit history can't count against you; medical debt is excluded; scores are refreshed periodically; and you get notice of an adverse decision [L]. Notable variations [L]:
@@ -159,7 +159,7 @@ Most states follow a common package: credit can't be the only reason for a price
 - **Virginia:** current law bars counting things like medical debt in collections against you (Va. Code § 38.2-2234(D)) [V]. *Correction:* an earlier research pass said 2026's SB 693 made credit unable to be the sole basis for a rate from July 1, 2026; the bill was narrowed into a study instead [V, statute pass of Nov. 15, 2026].
 
 ### Other notable rules
-- **California:** besides credit and gender, education, occupation, and homeownership aren't allowed; having no prior insurance can't by itself be held against you; 15 optional factors include marital status, which the commissioner proposed removing in October 2026 [V for the regulation, L for the proposal]. Rates need prior approval.
+- **California:** besides credit and gender, education, occupation, and homeownership aren't approved rating factors on their own, though insurers may sell group plans by occupation (Ins. Code § 1861.12) and give good-student discounts; having no prior insurance can't by itself be held against you; 15 optional factors include marital status, which the commissioner proposed removing in October 2026 [V for the regulation, L for the proposal]. Rates need prior approval.
 - **Hawaii:** marital status, race, creed, ethnicity, and disability are also banned [V].
 - **Massachusetts:** marital status, occupation, income, education, homeownership, and sexual orientation banned; the state sets the driving-record point system (Safe Driver Insurance Plan) [V].
 - **Michigan:** marital status, homeownership, education, occupation, and "postal zone" banned, though territories are allowed [V].
@@ -171,7 +171,7 @@ Most states follow a common package: credit can't be the only reason for a price
 - **Illinois:** gains authority to review auto rates from July 1, 2027 [L].
 
 ### Teachable contrasts for the page
-- **California vs. Texas:** California ranks driving record, miles, and experience first and bars credit, gender, and age; Texas allows credit with consumer protections and lets insurers file rates and use them.
+- **California vs. Texas:** California ranks driving record, miles, and experience first and bars credit and gender (age only through a required senior-course discount); Texas allows credit with consumer protections and lets insurers file rates and use them.
 - **Hawaii vs. North Carolina:** both ban age; Hawaii bans driving experience too, while North Carolina can surcharge new drivers for years.
 - **Small dials:** Idaho's 2× cap, Utah's lower-only rule, Maryland's new-policy-only rule.
 - **Reversals:** Montana repealed a gender ban; Washington's credit ban was struck down in court.
