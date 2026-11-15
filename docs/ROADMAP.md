@@ -44,6 +44,7 @@ NotAQuote.FYI should make one kind of question easy: *"What would happen to my i
 ### 8. From a number to a plan (planned)
 - **Teen driver plan:** compare household setups for adding a teen, see four years of cost, and leave with questions to ask your insurer. The checklist ships first. See [prd-teen-driver-plan.md](prd-teen-driver-plan.md).
 - **Policy reader and rate commons:** read your declarations page in the browser, nothing uploaded; optionally add an anonymous summary to openly published aggregate tables. The commons has its own privacy gate. See [prd-policy-reader.md](prd-policy-reader.md).
+- **What we don't ask:** a long page on the things insurers use that we don't (credit, which insurer you pick, tickets, and more), how much each can move a price, and a state-by-state reference on what the law allows. See [prd-what-we-dont-ask.md](prd-what-we-dont-ask.md).
 - **Lot mode:** scan VINs on a phone and compare cars on the spot. A listing extension comes later, only if data terms allow. See [prd-lot-mode.md](prd-lot-mode.md).
 
 ## Status (September 22, 2026)
