@@ -1,5 +1,7 @@
 import type { Estimate, StartKind } from "@/lib/factor-engine"
+import type { StateCode } from "@/lib/scenario"
 import { HldiChip, HldiLegend } from "@/components/charts/hldi-chip"
+import { CreditLine } from "@/components/credit-line"
 import { hldiReport, hldiShortLine, priceMeaning } from "@/lib/hldi"
 import { basisLabel, sourceLinks } from "@/lib/pricing"
 import { suggestFixUrl } from "@/lib/suggest-fix"
@@ -12,6 +14,7 @@ export function HowWeGotThis({
   startKind,
   startNote,
   state,
+  stateCode,
   sender = false,
 }: {
   estimate: Estimate
@@ -20,6 +23,8 @@ export function HowWeGotThis({
   startNote?: string
   /** The state being priced, to say when a number comes from another state's prices. */
   state: string
+  /** The same state's two-letter code, for its credit rule. */
+  stateCode: StateCode
   /** The starting premium came from a shared link: say it's what the sender pays. */
   sender?: boolean
 }) {
@@ -122,6 +127,7 @@ export function HowWeGotThis({
             What we don&apos;t ask, and how much it can matter
           </Link>
         </p>
+        <CreditLine state={stateCode} />
       </div>
       {startNote ? (
         <p className="text-muted-foreground">

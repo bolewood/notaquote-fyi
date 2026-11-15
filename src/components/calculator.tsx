@@ -710,6 +710,7 @@ function CalculatorReady() {
                         startKind={startKind}
                         startNote={startNote}
                         state={state}
+                        stateCode={now.state}
                         sender={linked !== null && linked.premium !== null}
                       />
                     </div>
@@ -934,6 +935,7 @@ function CalculatorReady() {
                   sender={linked !== null && linked.premium !== null}
                   plural={shown.length > 1}
                   state={stateName(next.state)}
+                  stateCode={next.state}
                   chips={shown.map((key) => ({ key, label: chipLabel(key, now, next) }))}
                   onUndo={undo}
                   onReset={() => setChanges({})}
@@ -1209,6 +1211,7 @@ function WhatIfResult({
   sender,
   plural,
   state,
+  stateCode,
   chips,
   onUndo,
   onReset,
@@ -1239,6 +1242,8 @@ function WhatIfResult({
   /** More than one thing changed. */
   plural: boolean
   state: string
+  /** The priced state's code, for its credit rule. */
+  stateCode: StateCode
   chips: { key: ChangeKey; label: string }[]
   onUndo: (key: ChangeKey) => void
   onReset: () => void
@@ -1442,7 +1447,7 @@ function WhatIfResult({
           <ChevronDown className="size-4" aria-hidden="true" />
         </summary>
         <div className="grid gap-3 pb-4">
-          <HowWeGotThis estimate={next} startKind={startKind} startNote={startNote} state={state} sender={sender} />
+          <HowWeGotThis estimate={next} startKind={startKind} startNote={startNote} state={state} stateCode={stateCode} sender={sender} />
           {vehicleChanged && carPage ? (
             <p className="text-sm">
               <Link href={carPage} className="link">

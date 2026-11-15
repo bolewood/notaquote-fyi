@@ -1,0 +1,13 @@
+{
+  "about": "How much credit moved a price in Texas's 2025 sample rates: same company, same place, one thing changed (good or poor credit vs. average), the median ratio across comparisons. Explains the estimate; never used to price one. Regenerate from data/factors/sources/tx-2025-premiums.csv; src/lib/credit-line.test.ts fails if this drifts.",
+  "sourceId": "tx-2025",
+  "checkedOn": "2026-09-22",
+  "goodCredit": {
+    "median": 0.8255662267626105,
+    "n": 180
+  },
+  "poorCredit": {
+    "median": 1.1929638724380887,
+    "n": 180
+  }
+}
