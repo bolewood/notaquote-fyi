@@ -20,7 +20,7 @@ const SOURCES_DIR = join(process.cwd(), "data/factors/sources")
 export type UnaskedSource = { id: string; title: string; publisher: string; url: string; checkedOn: string }
 
 /** How a factor's figure was found. */
-export type UnaskedKind = "sourced" | "asked" | "no-public-number"
+export type UnaskedKind = "sourced" | "asked" | "no-public-number" | "state-rule"
 
 /** A ratio range from survey comparisons: same company, same place, one thing changed. */
 export type RatioSummary = {
@@ -161,6 +161,7 @@ export function unaskedFactors(): UnaskedFactor[] {
   const woman30 = pairedRatios(TX, "tx-female", "tx-base")
   const woman18 = pairedRatios(TX, "tx-age18_female", "tx-age18")
   const surveys = ["ok-2026", "nd-2026", "tx-2025", "ca-2026", "co-2023"].map(source)
+  const ncDui = northCarolinaDui()
 
   return [
     {
@@ -169,10 +170,10 @@ export function unaskedFactors(): UnaskedFactor[] {
       kind: "sourced",
       low: insurer.p25,
       high: insurer.p75,
-      reading: `${percentWords(insurer.p25)} to ${percentWords(insurer.p75)} than the middle company`,
+      reading: `${percentWords(insurer.p25)} to ${percentWords(insurer.p75)} than the middle company (five states' surveys)`,
       what:
         "Each company builds its own price from its own claims history, its own list of factors, and its own weights, and files it separately in each state. Companies also want different customers: one may see you as an ideal customer while another prices you high because you're not who they're looking for.",
-      howWorkedOut: `For the same driver, car, and place, each company's price ÷ the middle company's price, in five states' surveys (Oklahoma, North Dakota, Texas, California, Colorado). The bar is the middle half of companies; the cheapest and priciest companies sit well beyond it. ${insurer.n.toLocaleString("en-US")} prices.`,
+      howWorkedOut: `For the same driver, car, and place, each company's price ÷ the middle company's price, in five states' surveys (Oklahoma, North Dakota, Texas, California, Colorado). We take each state's middle half of companies (its 25th and 75th percentiles), then the middle of the five states' figures, so it's a summary of five surveys, not a national measurement. The cheapest and priciest companies sit well beyond it. ${insurer.n.toLocaleString("en-US")} prices.`,
       ruleFactor: null,
       whatYouCanDo: [
         "Get quotes from three or four companies. Of everything on this page, it's usually the biggest thing you control.",
@@ -266,24 +267,62 @@ export function unaskedFactors(): UnaskedFactor[] {
     {
       id: "dui",
       name: "A DUI",
-      kind: "no-public-number",
+      kind: "state-rule",
       low: null,
       high: null,
-      reading: "Insurers use this. No public source we use shows how much.",
+      reading: `No survey we use prices one. North Carolina's state rules set ${ncDui.surcharge}% more (${ncDui.points} points).`,
       what: "A DUI is among the most expensive things on a driving record, and in many states it means filing proof of insurance (an SR-22) for years.",
-      howWorkedOut: "None of the state surveys we use price a DUI for one driver, so we don't show a number.",
+      howWorkedOut: `None of the state surveys we use price a DUI, so it has no bar. North Carolina is different: the state sets the surcharge for every insurer. Driving while impaired is ${ncDui.points} points there, a ${ncDui.surcharge}% rate increase, under the Safe Driver Incentive Plan. Other states leave it to each insurer.`,
       ruleFactor: null,
       whatYouCanDo: ["Ask how long it will count, and compare companies: some specialize in drivers with a DUI."],
-      sources: [],
+      sources: [source("nc-sdip-2026")],
     },
   ]
 }
 
-/** Each survey state's own insurer spread, for the state picker. */
-export function stateInsurerSpreads(): Partial<Record<StateCode, RatioSummary & { sourceId: string }>> {
-  const out: Partial<Record<StateCode, RatioSummary & { sourceId: string }>> = {}
+/** North Carolina's state-set surcharge for driving while impaired, from the committed schedule. */
+export function northCarolinaDui(): { points: number; surcharge: number } {
+  const rows = parseCsv(readFileSync(join(SOURCES_DIR, "nc-sdip-2026.csv"), "utf8"))
+  const row = rows.find((item) => /driving while impaired/i.test(item.what_counts))
+  if (!row) throw new Error("nc-sdip-2026.csv: no driving-while-impaired row")
+  return { points: Number(row.points), surcharge: Number(row.surcharge_percent) }
+}
+
+/** One survey state's own insurer spread, with its own method, count, and source, for the state picker. */
+export type StateSpread = RatioSummary & { sourceId: string; howWorkedOut: string; source: UnaskedSource }
+
+/** Notes on a survey that change how to read its spread. */
+const SPREAD_NOTES: Partial<Record<string, string>> = {
+  "tx-2025":
+    "Texas's survey prices liability-only coverage and may include more companies that focus on higher-risk drivers, so its spread is wider than the others.",
+}
+
+export function stateInsurerSpreads(): Partial<Record<StateCode, StateSpread>> {
+  const out: Partial<Record<StateCode, StateSpread>> = {}
   for (const [code, sourceId] of Object.entries(SURVEY_SPREAD_SOURCES) as [StateCode, string][]) {
-    out[code] = { ...insurerSpread(sourceId), sourceId }
+    const spread = insurerSpread(sourceId)
+    const meta = source(sourceId)
+    const note = SPREAD_NOTES[sourceId]
+    out[code] = {
+      ...spread,
+      sourceId,
+      source: meta,
+      howWorkedOut: `For the same driver, car, and place, each company's price ÷ the middle company's price, in ${meta.publisher}'s survey (${meta.title}). The bar is its middle half of companies (25th to 75th percentile); the cheapest and priciest sit well beyond it. ${spread.n.toLocaleString("en-US")} prices.${note ? ` ${note}` : ""}`,
+    }
   }
   return out
+}
+
+/** A shared axis wide enough for every bar any state picker choice can show, padded to a round step. */
+export function chartAxis(): { low: number; high: number } {
+  const values: number[] = [1]
+  for (const factor of unaskedFactors()) {
+    if (factor.low !== null) values.push(factor.low)
+    if (factor.high !== null) values.push(factor.high)
+  }
+  for (const spread of Object.values(stateInsurerSpreads())) {
+    if (spread) values.push(spread.p25, spread.p75)
+  }
+  const step = 0.05
+  return { low: Math.floor((Math.min(...values) - 0.02) / step) * step, high: Math.ceil((Math.max(...values) + 0.02) / step) * step }
 }

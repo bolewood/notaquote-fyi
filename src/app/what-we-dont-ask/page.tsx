@@ -11,7 +11,7 @@ import { DEFAULT_SCENARIO, STATES } from "@/lib/scenario"
 import { articleJsonLd, pageMetadata, WHAT_WE_DONT_ASK_UPDATED } from "@/lib/site-meta"
 import { formatVerifiedDate } from "@/lib/state-rules"
 import { suggestFixUrl } from "@/lib/suggest-fix"
-import { stateInsurerSpreads, unaskedFactors } from "@/lib/unasked-factors"
+import { chartAxis, stateInsurerSpreads, unaskedFactors } from "@/lib/unasked-factors"
 
 const TITLE = "What we don't ask, and why it matters"
 const DESCRIPTION =
@@ -44,7 +44,7 @@ function stateNames(codes: string[]): string {
   return `${names.slice(0, -1).join(", ")} and ${names.at(-1)}`
 }
 
-function statesWith(factor: RatingFactor, status: "banned" | "limited"): string[] {
+function statesWith(factor: RatingFactor, status: "banned" | "limited" | "no-ban-found"): string[] {
   return STATES.map((item) => item.code).filter((code) => ratingRule(code, factor)?.status === status)
 }
 
@@ -84,7 +84,7 @@ export default function WhatWeDontAskPage() {
       </p>
 
       <h2 id="what-moves-the-price">What moves the price</h2>
-      <UnaskedFactorsChart factors={factors} examplePrice={examplePrice} spreads={spreads} />
+      <UnaskedFactorsChart factors={factors} examplePrice={examplePrice} spreads={spreads} axis={chartAxis()} />
 
       {insurer && insurer.low !== null && insurer.high !== null ? (
         <>
@@ -96,7 +96,7 @@ export default function WhatWeDontAskPage() {
             bring in about the same money overall and still disagree a lot about any one person.
           </p>
           <p>
-            In the state surveys we use, for the same driver, car, and place, the middle half of companies ranged from
+            Across the five states&apos; surveys we use, for the same driver, car, and place, the middle half of companies ranged from
             about {Math.round((1 - insurer.low) * 100)}% below the middle company to about{" "}
             {Math.round((insurer.high - 1) * 100)}% above it. <strong>Of everything on this page, getting quotes from
             three or four companies is usually the biggest thing you control.</strong>
@@ -119,6 +119,7 @@ export default function WhatWeDontAskPage() {
       {TABLE_FACTORS.map((factor) => {
         const banned = statesWith(factor, "banned")
         const limited = statesWith(factor, "limited")
+        const allowed = statesWith(factor, "no-ban-found")
         return (
           <section key={factor} aria-labelledby={`rules-${factor}`}>
             <h3 id={`rules-${factor}`} className="scroll-mt-4">
@@ -135,9 +136,14 @@ export default function WhatWeDontAskPage() {
                 <strong>Allowed with limits in:</strong> {stateNames(limited)}.
               </p>
             ) : null}
-            {banned.length + limited.length > 0 ? (
+            {allowed.length > 0 ? (
+              <p>
+                <strong>Allowed, and we&apos;ve checked the law, in:</strong> {stateNames(allowed)}.
+              </p>
+            ) : null}
+            {banned.length + limited.length + allowed.length > 0 ? (
               <ul className="bullets">
-                {[...banned, ...limited].map((code) => {
+                {[...banned, ...limited, ...allowed].map((code) => {
                   const rule = ratingRule(code, factor)
                   if (!rule) return null
                   const name = STATES.find((item) => item.code === code)?.name ?? code
@@ -150,6 +156,14 @@ export default function WhatWeDontAskPage() {
                       <details className="text-sm text-muted-foreground">
                         <summary className="cursor-pointer">What the law says</summary>
                         <blockquote className="mt-1 border-l-2 border-border pl-3">&ldquo;{rule.quote}&rdquo;</blockquote>
+                        {(rule.moreSources ?? []).map((more) => (
+                          <div key={more.url + more.label} className="mt-2">
+                            <a href={more.url} rel="noreferrer">
+                              {more.label}
+                            </a>
+                            <blockquote className="mt-1 border-l-2 border-border pl-3">&ldquo;{more.quote}&rdquo;</blockquote>
+                          </div>
+                        ))}
                       </details>
                     </li>
                   )

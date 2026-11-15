@@ -4,6 +4,7 @@ import { renderToStaticMarkup } from "react-dom/server"
 import WhatWeDontAskPage from "../app/what-we-dont-ask/page"
 import { FACTOR_BUNDLE } from "./factor-engine"
 import {
+  compareLine,
   isBanned,
   RATING_FACTORS,
   ratingRule,
@@ -13,7 +14,7 @@ import {
 } from "./rating-rules"
 import { STATES } from "./scenario"
 import { maskDollars, visibleText } from "./rendered-text"
-import { insurerSpread, pairedRatios, percentWords, stateInsurerSpreads, unaskedFactors } from "./unasked-factors"
+import { chartAxis, insurerSpread, northCarolinaDui, pairedRatios, percentWords, stateInsurerSpreads, unaskedFactors } from "./unasked-factors"
 
 test("credit reproduces the Texas figures in data/factors/README.md: poor about 19% more, good about 17% less", () => {
   const poor = pairedRatios("tx-2025", "tx-creditPoor", "tx-base")
@@ -54,6 +55,10 @@ test("every factor is either sourced, with a method and sources, or plainly has 
       assert.equal(factor.low, null)
       assert.equal(factor.high, null)
       assert.match(factor.reading, /No public source/)
+    } else if (factor.kind === "state-rule") {
+      // A state-set figure, not a survey ratio: no bar, but a source.
+      assert.equal(factor.low, null)
+      assert.ok(factor.sources.length > 0, `${factor.id} needs its state's source`)
     } else {
       assert.ok(factor.low !== null && factor.high !== null, `${factor.id} needs a range`)
       assert.ok(factor.sources.length > 0, `${factor.id} needs a source`)
@@ -124,4 +129,56 @@ test("pinned rows: California bans credit, gender, and age; Montana repealed its
   assert.equal(ratingRule("MT", "gender")?.status, "no-ban-found")
   for (const state of ["CA", "HI", "MA"]) assert.equal(isBanned(state, "credit"), true, `${state} credit`)
   assert.equal(isBanned("TX", "credit"), false)
+})
+
+test("the DUI row cites North Carolina's state-set surcharge instead of claiming no public figure", () => {
+  const dui = unaskedFactors().find((factor) => factor.id === "dui")
+  const nc = northCarolinaDui()
+  assert.ok(dui)
+  assert.equal(nc.points, 12)
+  assert.match(dui.reading, new RegExp(`${nc.surcharge}%`))
+  assert.doesNotMatch(dui.reading, /No public source/)
+})
+
+test("the chart's axis fits every bar any state choice can show, so nothing is clipped", () => {
+  const axis = chartAxis()
+  for (const spread of Object.values(stateInsurerSpreads())) {
+    assert.ok(spread && spread.p25 >= axis.low && spread.p75 <= axis.high, `${spread?.sourceId} fits`)
+  }
+  for (const factor of unaskedFactors()) {
+    if (factor.low !== null) assert.ok(factor.low >= axis.low)
+    if (factor.high !== null) assert.ok(factor.high <= axis.high)
+  }
+})
+
+test("a state's insurer spread carries its own method, count, and source", () => {
+  const spreads = stateInsurerSpreads()
+  for (const spread of Object.values(spreads)) {
+    assert.ok(spread)
+    assert.match(spread.howWorkedOut, new RegExp(spread.n.toLocaleString("en-US")))
+    assert.equal(spread.source.id, spread.sourceId)
+  }
+  assert.match(spreads.TX?.howWorkedOut ?? "", /liability-only/)
+})
+
+test("comparing two states that both limit a factor says how each one does", () => {
+  const line = compareLine("credit", "MD", "TX", "Maryland", "Texas")
+  assert.ok(line, "Maryland and Texas both limit credit, differently")
+  assert.match(line, /Maryland:/)
+  assert.match(line, /Texas:/)
+  assert.equal(compareLine("credit", "CA", "HI", "California", "Hawaii"), null)
+})
+
+test("every reviewed rule, including allowed ones and extra sources, shows its quote on the page", () => {
+  const html = renderToStaticMarkup(WhatWeDontAskPage())
+  const quotes = (html.match(/<blockquote/g) ?? []).length
+  let expected = 0
+  for (const state of reviewedStates()) {
+    for (const factor of RATING_FACTORS) {
+      const rule = ratingRule(state, factor)
+      if (rule) expected += 1 + (rule.moreSources?.length ?? 0)
+    }
+  }
+  assert.equal(quotes, expected)
+  assert.match(html, /id="rules-territory"/)
 })

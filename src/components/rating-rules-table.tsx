@@ -1,7 +1,7 @@
 "use client"
 
 import { SelectField } from "@/components/fields"
-import { FACTOR_NAMES, ratingRule, statusWords, TABLE_FACTORS, type RatingFactor, type RatingRule } from "@/lib/rating-rules"
+import { compareLine, FACTOR_NAMES, ratingRule, statusWords, TABLE_FACTORS, type RatingRule } from "@/lib/rating-rules"
 import { STATES, type StateCode } from "@/lib/scenario"
 import { useSituation } from "@/lib/use-stored"
 import { useState } from "react"
@@ -65,15 +65,6 @@ export function RatingRulesTable() {
   )
 }
 
-function compareLine(factor: RatingFactor, a: string, b: string, aName: string, bName: string): string | null {
-  const ra = ratingRule(a, factor)
-  const rb = ratingRule(b, factor)
-  if (!ra || !rb) return null
-  if (ra.status === rb.status) return null
-  const words = (rule: RatingRule) =>
-    rule.status === "banned" ? "can't use it" : rule.status === "limited" ? "can use it, with limits" : "can use it"
-  return `${FACTOR_NAMES[factor]}: insurers in ${aName} ${words(ra)}; in ${bName} they ${words(rb)}.`
-}
 
 /** Two states side by side, with a plain summary of what changes if you move. */
 export function CompareStateRules() {

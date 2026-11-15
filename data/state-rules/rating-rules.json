@@ -11,7 +11,14 @@
           "label": "Cal. Ins. Code § 1861.02(a)",
           "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=1861.02"
         },
-        "quote": "Those other factors that the commissioner may adopt by regulation and that have a substantial relationship to the risk of loss. ... Notwithstanding any other provision of law, the use of any criterion without approval shall constitute unfair discrimination."
+        "quote": "Those other factors that the commissioner may adopt by regulation and that have a substantial relationship to the risk of loss. ... Notwithstanding any other provision of law, the use of any criterion without approval shall constitute unfair discrimination.",
+        "moreSources": [
+          {
+            "label": "10 CCR § 2632.5(d), the list of optional factors",
+            "url": "https://www.law.cornell.edu/regulations/california/10-CCR-2632.5",
+            "quote": "In addition to the rating factors set forth in subdivision (c), an insurer's class plan, and all rates and premiums determined in accordance therewith, may utilize the following optional rating factors (the \"Optional Factors\"):"
+          }
+        ]
       },
       "gender": {
         "status": "banned",
@@ -20,25 +27,51 @@
           "label": "Cal. Ins. Code § 1861.02(a)",
           "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=1861.02"
         },
-        "quote": "Those other factors that the commissioner may adopt by regulation and that have a substantial relationship to the risk of loss. ... Notwithstanding any other provision of law, the use of any criterion without approval shall constitute unfair discrimination."
+        "quote": "Those other factors that the commissioner may adopt by regulation and that have a substantial relationship to the risk of loss. ... Notwithstanding any other provision of law, the use of any criterion without approval shall constitute unfair discrimination.",
+        "moreSources": [
+          {
+            "label": "10 CCR § 2632.5(d), the list of optional factors",
+            "url": "https://www.law.cornell.edu/regulations/california/10-CCR-2632.5",
+            "quote": "In addition to the rating factors set forth in subdivision (c), an insurer's class plan, and all rates and premiums determined in accordance therewith, may utilize the following optional rating factors (the \"Optional Factors\"):"
+          }
+        ]
       },
       "age": {
         "status": "banned",
-        "summary": "Age isn't an approved factor; California insurers must use your driving record, miles driven and years of driving experience instead.",
+        "summary": "Age isn't an approved factor; insurers use your driving record, miles, and experience instead, except a required discount for drivers 55 and older who take a mature-driver course.",
         "source": {
           "label": "Cal. Ins. Code § 1861.02(a)",
           "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=1861.02"
         },
-        "quote": "(1) The insured’s driving safety record. (2) The number of miles he or she drives annually. (3) The number of years of driving experience the insured has had."
+        "quote": "(1) The insured’s driving safety record. (2) The number of miles he or she drives annually. (3) The number of years of driving experience the insured has had.",
+        "moreSources": [
+          {
+            "label": "Cal. Ins. Code § 11628.3(a)",
+            "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=11628.3",
+            "quote": "every admitted insurer shall provide for an appropriate percentage of reduction in premium rates for motor vehicle liability insurance for principal operators who are 55 years of age or older and who produce proof of successful completion of the mature driver improvement course"
+          }
+        ]
       },
       "educationOccupation": {
-        "status": "banned",
-        "summary": "Your job and education level aren't on California's approved list; insurers may only give a good-student discount for grades.",
+        "status": "limited",
+        "summary": "Your job and education aren't approved pricing factors on their own, but insurers may sell group plans by occupation and give good-student discounts.",
         "source": {
-          "label": "Cal. Ins. Code § 1861.02(a)",
-          "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=1861.02"
+          "label": "Cal. Ins. Code § 1861.12",
+          "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=1861.12"
         },
-        "quote": "Those other factors that the commissioner may adopt by regulation and that have a substantial relationship to the risk of loss. ... Notwithstanding any other provision of law, the use of any criterion without approval shall constitute unfair discrimination."
+        "quote": "Any insurer may issue any insurance coverage on a group plan, without restriction as to the purpose of the group, occupation or type of group.",
+        "moreSources": [
+          {
+            "label": "Cal. Ins. Code § 1861.02(a)",
+            "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=1861.02",
+            "quote": "Notwithstanding any other provision of law, the use of any criterion without approval shall constitute unfair discrimination."
+          },
+          {
+            "label": "10 CCR § 2632.5",
+            "url": "https://www.law.cornell.edu/regulations/california/10-CCR-2632.5",
+            "quote": "Academic standing of the rated driver"
+          }
+        ]
       },
       "priorInsurance": {
         "status": "banned",
@@ -254,12 +287,12 @@
       },
       "credit": {
         "status": "limited",
-        "summary": "Insurers can't drop you or move you to a higher price on credit alone, but they can use credit by itself to give discounts.",
+        "summary": "Credit alone can't be used to cancel a policy in force over 60 days or to require you to accept a rate above the standard one, but credit alone can earn you a discount.",
         "source": {
           "label": "N.C. Gen. Stat. § 58-36-90(b)",
           "url": "https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_58/GS_58-36-90.html"
         },
-        "quote": "insurers shall not use credit scoring as the sole basis for terminating an existing policy ... without consideration of any other risk factors, but insurers may use credit scoring as the sole basis for discounting rates."
+        "quote": "insurers shall not use credit scoring as the sole basis for terminating an existing policy or any coverage in an existing policy or subjecting a policy to consent to rate as specified in G.S. 58-36-30(b) without consideration of any other risk factors, but insurers may use credit scoring as the sole basis for discounting rates. For purposes of this subsection only, \"existing policy\" means a policy that has been in effect for more than 60 days."
       }
     },
     "NY": {

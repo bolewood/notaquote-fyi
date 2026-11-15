@@ -28,6 +28,7 @@ export const TABLE_FACTORS: readonly RatingFactor[] = [
   "age",
   "maritalStatus",
   "educationOccupation",
+  "territory",
   "priorInsurance",
 ]
 
@@ -43,6 +44,8 @@ export type RatingRule = {
   source: { label: string; url: string }
   /** A short quote from that law, so anyone can check it. */
   quote: string
+  /** Other laws that qualify it (exceptions, the approved list), each with its own quote. */
+  moreSources?: { label: string; url: string; quote: string }[]
   /** YYYY-MM-DD. Only for rules that start in the future or started recently. */
   effective?: string
   checkedOn: string
@@ -92,6 +95,14 @@ export function validateRatingRules(data: RawFile): void {
       if (typeof rule.quote !== "string" || rule.quote.length < 10) {
         throw new Error(`${at}: needs a "quote" from the law`)
       }
+      if (rule.moreSources !== undefined) {
+        if (!Array.isArray(rule.moreSources)) throw new Error(`${at}: "moreSources" must be a list`)
+        rule.moreSources.forEach((more, index) => {
+          if (!more || typeof more.label !== "string" || !/^https:\/\//.test(more.url ?? "") || typeof more.quote !== "string" || more.quote.length < 10) {
+            throw new Error(`${at}: more source ${index + 1} needs a "label", an https "url", and a "quote"`)
+          }
+        })
+      }
       if (rule.effective !== undefined && !isIsoDate(rule.effective)) {
         throw new Error(`${at}: "effective" must be YYYY-MM-DD`)
       }
@@ -137,4 +148,21 @@ export function effectiveWords(date: string): string {
   const [year, month, day] = date.split("-").map(Number)
   const months = ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."]
   return `${months[month - 1]} ${day}, ${year}`
+}
+
+/** One plain line on how two states differ on a factor, or null if they don't (or one isn't reviewed). */
+export function compareLine(factor: RatingFactor, a: string, b: string, aName: string, bName: string): string | null {
+  const ra = ratingRule(a, factor)
+  const rb = ratingRule(b, factor)
+  if (!ra || !rb) return null
+  const words = (rule: RatingRule) =>
+    rule.status === "banned" ? "can't use it" : rule.status === "limited" ? "can use it, with limits" : "can use it"
+  if (ra.status !== rb.status) {
+    return `${FACTOR_NAMES[factor]}: insurers in ${aName} ${words(ra)}; in ${bName} they ${words(rb)}.`
+  }
+  // Both limit it, but limits differ from state to state: say what each one does.
+  if (ra.status === "limited") {
+    return `${FACTOR_NAMES[factor]}: both states limit it, in different ways. ${aName}: ${ra.summary} ${bName}: ${rb.summary}`
+  }
+  return null
 }
