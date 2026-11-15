@@ -273,6 +273,12 @@ export type SiteRule = {
    * is joined into paragraphs.
    */
   pdfLineNumbers?: { header: RegExp }
+  /**
+   * The site's PDF is a scan with no text layer (DC's bulletins). Its saved copy is read by OCR and
+   * checked against the page image by hand (fetchedWith "ocr"); live, an empty text layer is
+   * NEEDS_BROWSER, not a failure.
+   */
+  scannedPdf?: boolean
   /** The element that holds the law's text. */
   container?: { id?: string; className?: string; tag?: string }
   /** Where the section starts and stops inside that text, worked out from the page's address. */
@@ -494,6 +500,26 @@ export const SITE_RULES: Record<string, SiteRule> = {
     container: { tag: "body" },
     // The page holds the whole chapter; the label's section number picks the part we cite.
   },
+  "disb.dc.gov": {
+    site: "District of Columbia Department of Insurance, Securities and Banking",
+    scannedPdf: true,
+  },
+  "capitol.tn.gov": {
+    site: "Tennessee General Assembly",
+    // A public chapter (session law) holds several sections; the label's section number picks the part we cite.
+  },
+  "doi.sc.gov": {
+    site: "South Carolina Department of Insurance",
+    pdfColumns: true,
+    start: (url) => guideCut(url).start,
+    end: (url) => guideCut(url).end,
+  },
+  "insurance.arkansas.gov": {
+    site: "Arkansas Insurance Department",
+    pdfColumns: true,
+    start: (url) => guideCut(url).start,
+    end: (url) => guideCut(url).end,
+  },
   "www.scstatehouse.gov": {
     site: "South Carolina Legislature, South Carolina Code of Laws",
     container: { tag: "body" },
@@ -521,6 +547,15 @@ const GUIDE_CUTS: Record<string, { start: RegExp; end: RegExp }> = {
   "www.myfloridacfo.com/docs-sf/consumer-services-libraries/consumerservices-documents/understanding-coverage/consumer-guides/english---automobile-insurance-toolkit.pdf": {
     start: /^Underwriting Factors That Affect Your Insurance Policy Premium/m,
     end: /^Other Factors Affecting/m,
+  },
+  "doi.sc.gov/DocumentCenter/View/9508/Brochure-Auto-Shoppers-Guide-2016": {
+    // The guide's headings run into their paragraphs once the PDF's lines are joined.
+    start: /Education In South Carolina\b/,
+    end: /(?<=have higher insurance credit scores\.)/,
+  },
+  "insurance.arkansas.gov/documents/understanding-how-insurers-use-credit-information-brochure/": {
+    start: /^8\. Is my premium based entirely on my insurance credit score\?/m,
+    end: /^9\. /m,
   },
   "www.myfloridacfo.com/division/consumers/understanding-insurance/personal-automobile-insurance-overview": {
     start: /^Ask for car insurance discounts/m,
@@ -552,6 +587,10 @@ const CHAPTER_CUTS: Record<string, (section: string) => { start: RegExp; end: Re
     // The heading ends with a period ("482-1-127-.06 Prohibited Procedures."); the table of contents line doesn't.
     start: new RegExp(`^${escapeRegExp(rule)}\\s+[A-Z][^\\n]*\\.\\s*$`, "m"),
     end: /(?<=\n)\d+-\d+-\d+-\.\d+\s+[A-Z][^\n]*\.[ \t]*(?=\n|$)/,
+  }),
+  "capitol.tn.gov": (section) => ({
+    start: new RegExp(`^SECTION ${escapeRegExp(section)}\\.`, "m"),
+    end: /(?<=\n)SECTION \d+\./,
   }),
   "arkleg.state.ar.us": (section) => ({
     start: new RegExp(`^${escapeRegExp(section)}\\.\\s+[A-Z]`, "m"),
@@ -590,6 +629,12 @@ function coloradoCut(section: string): { start: RegExp; end: RegExp } {
  */
 function headingCut(heading: string, nextHeading: string, end: RegExp): { start: RegExp; end: RegExp } {
   return { start: new RegExp(`^${heading}[^\\n]*\\n+(?!\\n|${nextHeading})`, "m"), end }
+}
+
+/** The section of an act a label cites: "2004 Tenn. Pub. Acts ch. 527, § 3(5)" → "3". */
+function actSection(label: string): string | null {
+  const found = /§\s*(\d+)/.exec(label)
+  return found ? found[1] : null
 }
 
 /** The rule an Alabama label cites: "Ala. Admin. Code r. 482-1-127-.06(3)" → "482-1-127-.06". */
@@ -642,7 +687,9 @@ export function extractSection(urlText: string, page: string, label: string, isP
         ? idapaSection(label)
         : url.host === "admincode.legislature.state.al.us"
           ? alabamaRule(label)
-          : sectionNumber(label)
+          : url.host === "capitol.tn.gov"
+            ? actSection(label)
+            : sectionNumber(label)
     if (!section) return { error: `couldn't read a section number from "${label}"` }
     const { start, end } = chapterCut(section)
     const cut = cutText(text, start, end)
@@ -652,6 +699,9 @@ export function extractSection(urlText: string, page: string, label: string, isP
     const cut = cutText(text, rule.start?.(url), rule.end?.(url))
     if (!cut) return { error: `${shellNote}couldn't find where the section starts on the page`, needsBrowser: shell }
     text = cut
+  }
+  if (text.length < 80 && isPdfText && rule.scannedPdf) {
+    return { error: "a scanned PDF with no text layer: compare the saved (OCR) copy with the page by hand", needsBrowser: true }
   }
   if (text.length < 80) return { error: "the page came back nearly empty", needsBrowser: shell }
   return { text }
@@ -707,7 +757,8 @@ export type SnapshotMeta = {
   url: string
   title: string
   retrieved: string
-  fetchedWith: "fetch" | "browser"
+  /** "ocr": a scanned PDF, read by OCR and checked against the page image by hand. */
+  fetchedWith: "fetch" | "browser" | "ocr"
   site: string
   mirror?: string
   sourceTerms?: string
@@ -745,7 +796,7 @@ export function parseSnapshot(file: string): { meta: SnapshotMeta; body: string 
   for (const key of ["url", "title", "retrieved", "fetchedWith", "site"]) {
     if (!meta[key]) throw new Error(`front matter needs "${key}"`)
   }
-  if (meta.fetchedWith !== "fetch" && meta.fetchedWith !== "browser") throw new Error('"fetchedWith" must be "fetch" or "browser"')
+  if (!["fetch", "browser", "ocr"].includes(meta.fetchedWith)) throw new Error('"fetchedWith" must be "fetch", "browser", or "ocr"')
   if (!/^\d{4}-\d{2}-\d{2}$/.test(meta.retrieved)) throw new Error('"retrieved" must be YYYY-MM-DD')
   return { meta: meta as SnapshotMeta, body: found[2].trim() }
 }

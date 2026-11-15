@@ -327,3 +327,24 @@ test("an Arkansas act's margin line numbers and page headers are dropped before 
   assert.doesNotMatch(stripped, /JMB294|Engrossed|^\d+\s/m)
   assert.ok(quoteFound("Deny, cancel, or nonrenew a policy of personal insurance solely on the basis of credit information, without consideration of any other applicable underwriting factor", reflowPdfText(stripped)))
 })
+
+test("a scanned PDF with no text layer needs a person, not a failure; a Tennessee act is cut by its section", () => {
+  const scanned = extractSection("https://disb.dc.gov/sites/default/files/x/Bulletin.pdf", "\f", "D.C. Bulletin 15-IB-01-02/03", true)
+  assert.deepEqual(scanned, { error: "a scanned PDF with no text layer: compare the saved (OCR) copy with the page by hand", needsBrowser: true })
+  const empty = extractSection("https://www.legis.iowa.gov/docs/code/515.103.pdf", "\f", "Iowa Code § 515.103", true)
+  assert.ok("error" in empty && !empty.needsBrowser, "elsewhere an empty PDF is still a failure")
+  const act = [
+    "        SECTION 3. An insurer authorized to do business in Tennessee that uses credit",
+    "information to underwrite or rate risks for personal insurance, shall not:",
+    "",
+    "                (5) Base an insured's renewal rates for personal insurance solely upon",
+    "        credit information.",
+    "",
+    "         SECTION 4. If an insurer takes an adverse action, not this section.",
+  ].join("\n")
+  const cut = extractSection("https://capitol.tn.gov/Bills/103/Chapter/PC0527.pdf#section-3", act, "2004 Tenn. Pub. Acts ch. 527, § 3(5)", true)
+  assert.ok("text" in cut, JSON.stringify(cut))
+  assert.match(cut.text, /^SECTION 3\./)
+  assert.doesNotMatch(cut.text, /SECTION 4/)
+  assert.ok(quoteFound("Base an insured's renewal rates for personal insurance solely upon credit information.", cut.text))
+})

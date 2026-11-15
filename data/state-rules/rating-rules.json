@@ -6,12 +6,19 @@
     "AL": {
       "credit": {
         "status": "limited",
-        "summary": "Insurers can use your credit, but can't turn you down, cancel you, or drop you at renewal based on your credit alone.",
+        "summary": "Insurers can't price you on the kind of card you carry, and, unless the state approves, not on how many credit checks you have or on a missing or thin credit file.",
         "source": {
-          "label": "Ala. Admin. Code r. 482-1-127-.06(3)-(4)",
+          "label": "Ala. Admin. Code r. 482-1-127-.06(1)",
           "url": "https://admincode.legislature.state.al.us/api/chapter/482-1-127#482-1-127-.06"
         },
-        "quote": "Insurers shall not refuse to insure an applicant based solely on the applicant’s credit history. (4) Insurers shall not rely solely on an applicant’s credit history when electing to cancel or non-renew a policy."
+        "quote": "Insurers shall not deny personal insurance coverage, calculate an insurance score, determine personal insurance premiums or rates, or place an applicant in a tier based in whole or in part on the following types of credit history: (a) An applicant’s number of credit inquiries unless said insurer files and the Department concurs with actuarial documentation which supports other practices. (b) The type of credit card, charge card, or debit card used by an applicant.",
+        "moreSources": [
+          {
+            "label": "Ala. Admin. Code r. 482-1-127-.05(3)",
+            "url": "https://admincode.legislature.state.al.us/api/chapter/482-1-127#482-1-127-.05",
+            "quote": "If an applicant is eligible for a particular rate or tier, based on all other criteria, except for the fact that an applicant’s credit history is unavailable (“no-hit”) or incomplete (“thin file”) for that applicant, the applicant will be given that rate or tier unless said insurer files and the Department concurs with actuarial documentation which supports other practices."
+          }
+        ]
       }
     },
     "AR": {
@@ -28,6 +35,11 @@
             "label": "Ark. Code Ann. § 23-67-405(2), as enacted by Act 1452 of 2003",
             "url": "https://arkleg.state.ar.us/Acts/FTPDocument?path=%2FACTS%2F2003%2FPublic%2F&file=1452.pdf&ddBienniumSession=2003%2FR#23-67-405",
             "quote": "Deny, cancel, or nonrenew a policy of personal insurance solely on the basis of credit information, without consideration of any other applicable underwriting factor independent of credit information"
+          },
+          {
+            "label": "Arkansas Insurance Department, Understanding How Insurers Use Credit Information (question 8)",
+            "url": "https://insurance.arkansas.gov/documents/understanding-how-insurers-use-credit-information-brochure/",
+            "quote": "Credit history is only one of a number of factors insurers use to rate your policy."
           }
         ]
       }
@@ -272,6 +284,18 @@
             "quote": "provided with respect to private passenger nonfleet automobile insurance, any change in territorial classifications shall be subject to prior approval by the Insurance Commissioner"
           }
         ]
+      }
+    },
+    "DC": {
+      "credit": {
+        "status": "limited",
+        "evidence": "summary",
+        "summary": "Insurers may use credit, but if they don't recheck it yearly, they must let you ask once a year at renewal for a price based on your latest score, according to D.C.'s insurance department.",
+        "source": {
+          "label": "D.C. Department of Insurance, Securities and Banking, Bulletin 15-IB-01-02/03 (2015)",
+          "url": "https://disb.dc.gov/sites/default/files/dc/sites/disb/publication/attachments/Bulletin15-IB-01-02_03.pdf"
+        },
+        "quote": "If an insurer opts to use credit scores as factors to rate policies and the insurer does not review credit scores at least annually, then the insurer must afford every policyholder, once a year at any renewal, the right to request and to receive a rate determination that considers the most recent credit score. Insurers must also notify every policyholder of these rights."
       }
     },
     "FL": {
@@ -564,12 +588,19 @@
     "KY": {
       "credit": {
         "status": "limited",
-        "summary": "Insurers can use your credit, but can't turn you down or drop you because of your credit alone, or because you have no credit history.",
+        "summary": "Insurers must make reasonable rate exceptions if you ask after a hardship like illness, divorce, or job loss, and can't turn you down or drop you based solely on credit history or its absence.",
         "source": {
-          "label": "Ky. Rev. Stat. § 304.20-042(1)",
-          "url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=40553"
+          "label": "Ky. Rev. Stat. § 304.13-075(1)",
+          "url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=40550"
         },
-        "quote": "No insurer shall decline to issue, cancel, nonrenew, or otherwise terminate property and casualty insurance contracts covering personal risks solely because of credit history, lack of credit history"
+        "quote": "An insurer that uses credit information shall, on written request from an applicant or an insured, provide reasonable exceptions to the insurer's rates, rating classifications, company or tier placement, or underwriting rules or guidelines for an applicant or insured who has experienced and whose credit information has been directly influenced by any of the following events",
+        "moreSources": [
+          {
+            "label": "Ky. Rev. Stat. § 304.20-042(1)",
+            "url": "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=40553",
+            "quote": "No insurer shall decline to issue, cancel, nonrenew, or otherwise terminate property and casualty insurance contracts covering personal risks solely because of credit history, lack of credit history"
+          }
+        ]
       }
     },
     "LA": {
@@ -705,23 +736,42 @@
     "MN": {
       "credit": {
         "status": "limited",
-        "summary": "Insurers can use your credit, but can't turn you down or drop you based on credit alone.",
+        "summary": "Insurers must recheck your score when you ask (any price change starts at renewal), can't count insurance shopping against you, and can't turn you down or drop you on credit alone.",
         "source": {
-          "label": "Minn. Stat. § 72A.20, subd. 36(a)",
+          "label": "Minn. Stat. § 72A.20, subd. 36(e)",
           "url": "https://www.revisor.mn.gov/statutes/cite/72A.20#stat.72A.20.36"
         },
-        "quote": "No insurer or group of affiliated insurers may reject, cancel, or nonrenew a policy of private passenger motor vehicle insurance as defined under section 65B.01 or a policy of homeowner's insurance as defined under section 65A.27, for any person in whole or in part on the basis of credit information, including a credit reporting product known as a \"credit score\" or \"insurance score,\" without consideration and inclusion of any other applicable underwriting factor."
+        "quote": "Insurers must upon the request of a policyholder reevaluate the policyholder's score. Any change in premium resulting from the reevaluation must be effective upon the renewal of the policy.",
+        "moreSources": [
+          {
+            "label": "Minn. Stat. § 72A.20, subd. 36(c)",
+            "url": "https://www.revisor.mn.gov/statutes/cite/72A.20#stat.72A.20.36",
+            "quote": "Insurance inquiries and non-consumer-initiated inquiries must not be used as part of the credit scoring or insurance scoring process."
+          },
+          {
+            "label": "Minn. Stat. § 72A.20, subd. 36(a)",
+            "url": "https://www.revisor.mn.gov/statutes/cite/72A.20#stat.72A.20.36",
+            "quote": "No insurer or group of affiliated insurers may reject, cancel, or nonrenew a policy of private passenger motor vehicle insurance as defined under section 65B.01 or a policy of homeowner's insurance as defined under section 65A.27, for any person in whole or in part on the basis of credit information, including a credit reporting product known as a \"credit score\" or \"insurance score,\" without consideration and inclusion of any other applicable underwriting factor."
+          }
+        ]
       }
     },
     "MO": {
       "credit": {
         "status": "limited",
-        "summary": "Insurers can use your credit, but can't turn you down, drop you, or cut your coverage based on credit alone.",
+        "summary": "Insurers can use your credit, but shopping for insurance can't count against your credit-based score, and they can't turn you down, drop you, or cut your coverage based on credit alone.",
         "source": {
-          "label": "Mo. Rev. Stat. § 375.918(2)",
+          "label": "Mo. Rev. Stat. § 375.918(10)",
           "url": "https://revisor.mo.gov/main/OneSection.aspx?section=375.918"
         },
-        "quote": "An insurer using a credit report or insurance credit score as a factor in underwriting shall not take an adverse action based on such factor without consideration of another noncredit-related underwriting factor."
+        "quote": "Insurance inquiries shall not directly or indirectly be used as a negative factor in any insurance credit scoring formula or in the use of a credit report in underwriting.",
+        "moreSources": [
+          {
+            "label": "Mo. Rev. Stat. § 375.918(2)",
+            "url": "https://revisor.mo.gov/main/OneSection.aspx?section=375.918",
+            "quote": "An insurer using a credit report or insurance credit score as a factor in underwriting shall not take an adverse action based on such factor without consideration of another noncredit-related underwriting factor."
+          }
+        ]
       }
     },
     "MT": {
@@ -1009,6 +1059,15 @@
             "quote": "May not cancel or nonrenew personal insurance that has been in effect for more than 60 days based in whole or in part on a consumer’s credit history or insurance score."
           }
         ]
+      },
+      "age": {
+        "status": "limited",
+        "summary": "Insurers can't set your price based only on your turning 65 or older, unless sound risk math or their actual or expected claims clearly back it up.",
+        "source": {
+          "label": "Or. Rev. Stat. § 746.015(3)",
+          "url": "https://www.oregonlegislature.gov/bills_laws/ors/ors746.html#746.015"
+        },
+        "quote": "Discrimination by an insurer in the application of its underwriting standards or rates based solely upon an insured’s or applicant’s attaining or exceeding 65 years of age is prohibited, unless such discrimination is clearly based on sound actuarial principles or is related to actual or reasonably anticipated experience."
       }
     },
     "PA": {
@@ -1024,13 +1083,21 @@
     },
     "SC": {
       "credit": {
-        "status": "limited",
-        "summary": "Insurers can use your credit, but can't hold a missing credit history against you when deciding whether to insure you, unless they show the state it's tied to risk.",
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may use credit as a rating factor, according to South Carolina's insurance department; a missing credit history counts against you in deciding to insure you only if tied to risk.",
         "source": {
-          "label": "S.C. Code Ann. § 38-73-425",
-          "url": "https://www.scstatehouse.gov/code/t38c073.php#38-73-425"
+          "label": "South Carolina Department of Insurance, Auto Shoppers Guide",
+          "url": "https://doi.sc.gov/DocumentCenter/View/9508/Brochure-Auto-Shoppers-Guide-2016?bidId="
         },
-        "quote": "Absence of credit information may be used by an insurer for underwriting purposes only if the insurer presents information satisfactory to the director that the absence is related to the risk."
+        "quote": "South Carolina state law allows insurers to use an insurance credit score as a rating factor.",
+        "moreSources": [
+          {
+            "label": "S.C. Code Ann. § 38-73-425",
+            "url": "https://www.scstatehouse.gov/code/t38c073.php#38-73-425",
+            "quote": "Absence of credit information may be used by an insurer for underwriting purposes only if the insurer presents information satisfactory to the director that the absence is related to the risk."
+          }
+        ]
       },
       "gender": {
         "status": "no-ban-found",
@@ -1043,14 +1110,25 @@
         "quote": "In determining the premium rates to be charged for an automobile insurance policy as defined in Section 38-77-30, it is unlawful to consider race, color, creed, religion, national origin, ancestry, location of residence in this State, economic status, or income level."
       },
       "age": {
-        "status": "no-ban-found",
-        "basis": "not-on-list",
-        "summary": "Age isn't on South Carolina's list of things insurers can't use to set your car insurance price.",
+        "status": "limited",
+        "summary": "South Carolina requires a lower price for drivers who finish an approved driver course, under different rules for drivers under 25 and drivers 25 and older; we haven't found other limits on age.",
         "source": {
-          "label": "S.C. Code Ann. § 38-77-122(B)",
-          "url": "https://www.scstatehouse.gov/code/t38c077.php#38-77-122"
+          "label": "S.C. Code Ann. § 38-73-737(G)",
+          "url": "https://www.scstatehouse.gov/code/t38c073.php#38-73-737"
         },
-        "quote": "In determining the premium rates to be charged for an automobile insurance policy as defined in Section 38-77-30, it is unlawful to consider race, color, creed, religion, national origin, ancestry, location of residence in this State, economic status, or income level."
+        "quote": "A schedule of rates, rate classification, or rating plan for private passenger automobile insurance must provide for an appropriate reduction in premium charges for an insured person who is a youthful operator and who qualifies as provided in this section.",
+        "moreSources": [
+          {
+            "label": "S.C. Code Ann. § 38-73-737(A)(3)",
+            "url": "https://www.scstatehouse.gov/code/t38c073.php#38-73-737",
+            "quote": "\"Youthful operator\" means a person under the age of twenty-five"
+          },
+          {
+            "label": "S.C. Code Ann. § 38-73-736(G)",
+            "url": "https://www.scstatehouse.gov/code/t38c073.php#38-73-736",
+            "quote": "A schedule of rates, rate classification, or rating plan for private passenger automobile insurance must provide for an appropriate reduction in premium charges for an insured person who is not a youthful operator and who qualifies as provided in this section."
+          }
+        ]
       },
       "maritalStatus": {
         "status": "no-ban-found",
@@ -1061,6 +1139,16 @@
           "url": "https://www.scstatehouse.gov/code/t38c077.php#38-77-122"
         },
         "quote": "In determining the premium rates to be charged for an automobile insurance policy as defined in Section 38-77-30, it is unlawful to consider race, color, creed, religion, national origin, ancestry, location of residence in this State, economic status, or income level."
+      },
+      "educationOccupation": {
+        "status": "no-ban-found",
+        "evidence": "summary",
+        "summary": "Insurers may use your highest level of education to set your price, according to the South Carolina Department of Insurance.",
+        "source": {
+          "label": "South Carolina Department of Insurance, Auto Shoppers Guide",
+          "url": "https://doi.sc.gov/DocumentCenter/View/9508/Brochure-Auto-Shoppers-Guide-2016?bidId="
+        },
+        "quote": "In South Carolina, insurers may use the highest level of education achieved as a rating factor."
       },
       "territory": {
         "status": "limited",
@@ -1087,6 +1175,24 @@
           "url": "https://www.scstatehouse.gov/code/t38c077.php#38-77-122"
         },
         "quote": "In determining the premium rates to be charged for an automobile insurance policy as defined in Section 38-77-30, it is unlawful to consider race, color, creed, religion, national origin, ancestry, location of residence in this State, economic status, or income level."
+      }
+    },
+    "TN": {
+      "credit": {
+        "status": "limited",
+        "summary": "Insurers can use your credit, but can't set your renewal price, or turn you down or drop you, on credit alone, under a 2004 law now at Tenn. Code § 56-5-202.",
+        "source": {
+          "label": "2004 Tenn. Pub. Acts ch. 527, § 3(5)",
+          "url": "https://capitol.tn.gov/Bills/103/Chapter/PC0527.pdf#section-3"
+        },
+        "quote": "Base an insured's renewal rates for personal insurance solely upon credit information, without consideration of any other applicable factor independent of credit information.",
+        "moreSources": [
+          {
+            "label": "2004 Tenn. Pub. Acts ch. 527, § 3(4)",
+            "url": "https://capitol.tn.gov/Bills/103/Chapter/PC0527.pdf#section-3",
+            "quote": "Deny, cancel or nonrenew a policy of personal insurance solely on the basis of credit information, without consideration of any other applicable underwriting factor independent of credit information."
+          }
+        ]
       }
     },
     "TX": {
