@@ -19,6 +19,7 @@ const GROUPS: { heading: string; links: { href: string; label: string; external?
     links: [
       { href: "/methodology", label: "How the math works" },
       { href: "/sources", label: "Where the numbers come from" },
+      { href: "/what-we-dont-ask", label: "What we don't ask" },
       { href: "/model-version", label: "What's changed" },
     ],
   },

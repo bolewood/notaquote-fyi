@@ -1231,6 +1231,11 @@ function RowDetails({ row, gap }: { row: CompareRow; gap: string | null }) {
             <li key={point}>{point}</li>
           ))}
         </ul>
+        <p className="mt-1">
+          <Link href="/what-we-dont-ask" className="link">
+            What we don&apos;t ask, and how much it can matter
+          </Link>
+        </p>
       </div>
       {page ? (
         <p>

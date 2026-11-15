@@ -117,6 +117,11 @@ export function HowWeGotThis({
             <li key={point}>{words(point)}</li>
           ))}
         </ul>
+        <p className="mt-1">
+          <Link href="/what-we-dont-ask" className="link">
+            What we don&apos;t ask, and how much it can matter
+          </Link>
+        </p>
       </div>
       {startNote ? (
         <p className="text-muted-foreground">

@@ -532,6 +532,7 @@ const STATIC_PAGES = [
   "about/page",
   "disclaimer/page",
   "data-licenses/page",
+  "what-we-dont-ask/page",
   "photo-credits/page",
   "corrections/page",
   "model-version/page",
