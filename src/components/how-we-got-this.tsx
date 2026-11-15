@@ -1,5 +1,6 @@
 import type { Estimate, StartKind } from "@/lib/factor-engine"
 import { HldiChip, HldiLegend } from "@/components/charts/hldi-chip"
+import { CreditLine } from "@/components/credit-line"
 import { hldiReport, hldiShortLine, priceMeaning } from "@/lib/hldi"
 import { basisLabel, sourceLinks } from "@/lib/pricing"
 import { suggestFixUrl } from "@/lib/suggest-fix"
@@ -122,6 +123,7 @@ export function HowWeGotThis({
             What we don&apos;t ask, and how much it can matter
           </Link>
         </p>
+        <CreditLine state={state} />
       </div>
       {startNote ? (
         <p className="text-muted-foreground">

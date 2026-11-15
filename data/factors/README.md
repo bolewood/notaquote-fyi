@@ -58,6 +58,8 @@ Every row in `sources/` keeps a `locator`: where you'll find it in the original 
 
 The exact numbers, counts, and percentiles are in `src/data/model-factors.json` next to each factor, in its `derivation` field.
 
+Credit is never a factor. `credit-effect.json` holds the two Texas medians (good and poor credit vs. average) that the estimate's credit line quotes, so the browser doesn't read the CSVs. A test recomputes them from `sources/tx-2025-premiums.csv` and fails if the file drifts.
+
 | Factor | Value | Range | Kind | Where it comes from |
 | --- | --- | --- | --- | --- |
 | Age 16–18, own policy | 2.87 | 2.57–3.81 | From public prices | Texas: age 18 ÷ 30, then × the 26–39 factor |
