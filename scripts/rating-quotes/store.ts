@@ -7,7 +7,7 @@ import { execFileSync } from "node:child_process"
 import { mkdtempSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
 import path from "node:path"
-import { parseSnapshot, type SnapshotMeta } from "./law"
+import { classifyResponse, FETCH_RETRIES, parseSnapshot, retryDelayMs, type SnapshotMeta } from "./law"
 
 export const ROOT = path.resolve(__dirname, "../..")
 export const RULES_PATH = path.join(ROOT, "data/state-rules/rating-rules.json")
@@ -63,11 +63,17 @@ async function politeWait(host: string): Promise<void> {
 
 export type Fetched = { ok: true; body: string; isPdfText: boolean } | { ok: false; error: string; needsBrowser?: boolean }
 
-/** One page: HTML as text, or a PDF's text (through pdftotext). One retry on a network error or a 5xx. */
+/**
+ * One page: HTML as text, or a PDF's text (through pdftotext). A network error
+ * or a 5xx is retried FETCH_RETRIES times with growing pauses; a bot check
+ * (403, 429, or a challenge page) comes back as needsBrowser; anything else
+ * that fails is an error the live check treats as fatal.
+ */
 export async function fetchPage(url: string): Promise<Fetched> {
   const host = new URL(url).host
   let lastError = ""
-  for (let attempt = 0; attempt < 2; attempt += 1) {
+  for (let attempt = 0; attempt <= FETCH_RETRIES; attempt += 1) {
+    if (attempt > 0) await new Promise((resolve) => setTimeout(resolve, retryDelayMs(attempt)))
     await politeWait(host)
     try {
       const response = await fetch(url, {
@@ -76,30 +82,19 @@ export async function fetchPage(url: string): Promise<Fetched> {
         signal: AbortSignal.timeout(TIMEOUT_MS),
       })
       const type = response.headers.get("content-type") ?? ""
-      if (response.status === 403 || response.status === 429 || response.status === 503) {
-        // Bot checks answer 403/503 with a challenge page.
-        const body = await response.text().catch(() => "")
-        if (/Just a moment|_cf_chl_opt|you have been blocked|Enable JavaScript/i.test(body)) {
-          return { ok: false, error: `HTTP ${response.status}: the site sent a bot check`, needsBrowser: true }
-        }
-        lastError = `HTTP ${response.status}`
-        if (response.status !== 503) break
-        continue
-      }
-      if (response.status >= 500) {
-        lastError = `HTTP ${response.status}`
-        continue
-      }
-      if (!response.ok) return { ok: false, error: `HTTP ${response.status}` }
-      if (type.includes("pdf") || url.toLowerCase().endsWith(".pdf")) {
-        return pdfToText(Buffer.from(await response.arrayBuffer()))
-      }
-      return { ok: true, body: await response.text(), isPdfText: false }
+      const isPdf = type.includes("pdf") || url.toLowerCase().endsWith(".pdf")
+      if (response.ok && isPdf) return pdfToText(Buffer.from(await response.arrayBuffer()))
+      const body = await response.text().catch(() => "")
+      const outcome = classifyResponse(response.status, body)
+      if (outcome === "ok") return { ok: true, body, isPdfText: false }
+      if (outcome === "needs-browser") return { ok: false, error: `HTTP ${response.status}: the site sent a bot check`, needsBrowser: true }
+      if (outcome === "dead") return { ok: false, error: `HTTP ${response.status}: the link looks dead; fix the rule's URL` }
+      lastError = `HTTP ${response.status}`
     } catch (error) {
       lastError = error instanceof Error ? (error.name === "TimeoutError" ? `timed out after ${TIMEOUT_MS / 1000}s` : error.message) : String(error)
     }
   }
-  return { ok: false, error: lastError || "fetch failed" }
+  return { ok: false, error: `${lastError || "fetch failed"} (after ${FETCH_RETRIES} retries)` }
 }
 
 function pdfToText(bytes: Buffer): Fetched {

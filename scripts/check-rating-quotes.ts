@@ -10,10 +10,12 @@
  * text no longer matches the saved copy), FETCH_FAILED, and NEEDS_BROWSER (the
  * site sent a bot check or builds the page with JavaScript, so check it by hand).
  *
- * Exits non-zero on MISSING or NO_SNAPSHOT (offline), or MISSING or CHANGED
- * (live). FETCH_FAILED and NEEDS_BROWSER are reported, never fatal.
+ * Exits non-zero on MISSING or NO_SNAPSHOT (offline), or MISSING, CHANGED, or
+ * FETCH_FAILED (live: a dead link, a page whose layout no longer matches its
+ * site rule, or a site still failing after retries). NEEDS_BROWSER (a bot
+ * check) is reported, never fatal.
  */
-import { citations, extractSection, quoteFound, shortDiff, summaryTable, type CheckStatus, type Citation } from "./rating-quotes/law"
+import { citations, extractSection, fatalStatuses, quoteFound, shortDiff, summaryTable, type CheckStatus, type Citation } from "./rating-quotes/law"
 import { fetchPage, flagValue, loadSnapshots, readRulesFile } from "./rating-quotes/store"
 
 type Row = { status: CheckStatus; state: string; what: string; note?: string }
@@ -84,7 +86,7 @@ async function main(): Promise<void> {
   console.log(`Rating rule quotes, ${live ? "live" : "offline, against data/state-rules/law"}${onlyState ? `, ${onlyState} only` : ""}\n`)
   console.log(summaryTable(rows))
   if (diffs.length > 0) console.log(`\nWhat changed:\n\n${diffs.join("\n\n")}`)
-  const fatal: CheckStatus[] = live ? ["MISSING", "CHANGED"] : ["MISSING", "NO_SNAPSHOT"]
+  const fatal = fatalStatuses(live)
   if (rows.some((row) => fatal.includes(row.status))) {
     console.log(`\nSomething needs a look: ${fatal.join(" or ")} above. See data/state-rules/README.md.`)
     process.exitCode = 1

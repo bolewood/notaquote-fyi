@@ -20,6 +20,8 @@ concurrency:
 
 jobs:
   check-quotes:
+    # Only in the main repository, never in a fork.
+    if: github.repository == 'bolewood/notaquote-fyi'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:

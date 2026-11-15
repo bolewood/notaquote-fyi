@@ -102,18 +102,53 @@ export function quoteParts(quote: string): string[] {
     .filter((part) => part.length > 0)
 }
 
-/** True when the quote appears in the text. With "...", each piece must appear, in order. */
+/** The most text one "..." may stand for. Longer, and the quote is stitching together separate passages. */
+export const MAX_OMITTED_CHARS = 600
+
+/** Words that change what a law means. A "..." may never leave one out. */
+export const MEANING_WORDS = ["not", "no", "never", "except", "unless", "without", "notwithstanding", "only", "provided"] as const
+const MEANING_PATTERN = new RegExp(`\\b(?:${MEANING_WORDS.join("|")})\\b|n't\\b`, "i")
+
+/** Why "..." can't stand for this omitted text, or null when it can. */
+export function omissionProblem(omitted: string): string | null {
+  if (omitted.length > MAX_OMITTED_CHARS) return `leaves out ${omitted.length} characters (at most ${MAX_OMITTED_CHARS})`
+  const word = MEANING_PATTERN.exec(omitted)
+  return word ? `leaves out "${word[0]}"` : null
+}
+
+const isWordChar = (char: string | undefined) => char !== undefined && /[\p{L}\p{N}_]/u.test(char)
+
+/** Every place `part` starts in `text`, on word boundaries at both edges ("fair" never matches inside "unfair"). */
+function wholeMatches(text: string, part: string, from: number, to: number): number[] {
+  const out: number[] = []
+  for (let at = text.indexOf(part, from); at >= 0 && at <= to; at = text.indexOf(part, at + 1)) {
+    const startsOk = !isWordChar(part[0]) || !isWordChar(text[at - 1])
+    const endsOk = !isWordChar(part[part.length - 1]) || !isWordChar(text[at + part.length])
+    if (startsOk && endsOk) out.push(at)
+  }
+  return out
+}
+
+/**
+ * True when the quote appears in the text, as whole words. With "...", the
+ * pieces must appear in order, each gap at most MAX_OMITTED_CHARS long and
+ * never leaving out a word like "not", "except", or "only".
+ */
 export function quoteFound(quote: string, text: string): boolean {
   const parts = quoteParts(quote)
   if (parts.length === 0) return false
   const haystack = normalizeText(text)
-  let from = 0
-  for (const part of parts) {
-    const at = haystack.indexOf(part, from)
-    if (at < 0) return false
-    from = at + part.length
+  const placeRest = (index: number, from: number): boolean => {
+    if (index === parts.length) return true
+    const part = parts[index]
+    const latest = index === 0 ? haystack.length : from + 1 + MAX_OMITTED_CHARS
+    for (const at of wholeMatches(haystack, part, from, latest)) {
+      if (index > 0 && omissionProblem(haystack.slice(from, at).trim())) continue
+      if (placeRest(index + 1, at + part.length)) return true
+    }
+    return false
   }
-  return true
+  return placeRest(0, 0)
 }
 
 /**
@@ -257,12 +292,11 @@ export const SITE_RULES: Record<string, SiteRule> = {
     needsBrowser: true,
     container: { className: "nys-openleg-result-text" },
   },
-  "law.justia.com": {
-    site: "Justia",
-    mirror: "law.justia.com is a free mirror run by Justia, not the court's own site",
-    terms: "Justia links a Terms of Service page from every page; we copy only the court's opinion, which is public.",
-    needsBrowser: true,
-    container: { id: "opinion" },
+  "static.case.law": {
+    site: "Caselaw Access Project, Harvard Law School Library",
+    mirror: "static.case.law is Harvard Law School Library's scan of the official reporter, not the court's own site",
+    terms: "https://case.law/terms/ (effective March 13, 2024): the case data is released under CC0 1.0, with no conditions on reuse. Harvard asks for credit to the Caselaw Access Project.",
+    container: { className: "casebody" },
   },
   "statutes.capitol.texas.gov": {
     site: "Texas Legislature, Texas Constitution and Statutes",
@@ -478,6 +512,34 @@ export function citations(file: RulesFileLike, onlyState?: string): Citation[] {
     }
   }
   return out
+}
+
+/**
+ * What a fetch's answer means, before we read it as law.
+ * - "ok": read the page.
+ * - "needs-browser": a bot check (any 403 or 429, or a challenge page). Not a dead link; check by hand.
+ * - "retry": a server error (5xx). Try again with a pause, then give up as "dead".
+ * - "dead": the page is gone or refused (404, 410, any other 4xx). The rule's link needs fixing.
+ */
+export type FetchOutcome = "ok" | "needs-browser" | "retry" | "dead"
+
+export function classifyResponse(status: number, body = ""): FetchOutcome {
+  if (looksLikeBotCheck(body) && status >= 400) return "needs-browser"
+  if (status === 403 || status === 429) return "needs-browser"
+  if (status >= 500) return "retry"
+  if (status >= 400) return "dead"
+  return "ok"
+}
+
+/** How many times a network error or a 5xx is retried, and the pause before each try. */
+export const FETCH_RETRIES = 3
+export function retryDelayMs(retry: number): number {
+  return 2000 * 2 ** (retry - 1) // 2 s, 4 s, 8 s
+}
+
+/** Results that fail the check. Live, a dead link or a site that keeps failing counts: otherwise it would quietly stop being checked. */
+export function fatalStatuses(live: boolean): CheckStatus[] {
+  return live ? ["MISSING", "CHANGED", "FETCH_FAILED"] : ["MISSING", "NO_SNAPSHOT"]
 }
 
 export type CheckStatus = "OK" | "MISSING" | "NO_SNAPSHOT" | "CHANGED" | "FETCH_FAILED" | "NEEDS_BROWSER"

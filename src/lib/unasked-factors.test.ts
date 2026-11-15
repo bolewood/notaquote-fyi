@@ -5,6 +5,7 @@ import WhatWeDontAskPage from "../app/what-we-dont-ask/page"
 import { FACTOR_BUNDLE } from "./factor-engine"
 import {
   compareLine,
+  compareRules,
   isBanned,
   RATING_FACTORS,
   ratingGroup,
@@ -218,11 +219,11 @@ test('"not-on-list" means no ban in the state\'s rating law, and only goes with 
 test("the page says how many states we've reviewed so far, worked out from the data", () => {
   const codes = STATES.map((item) => item.code)
   assert.equal(codes.length, 51)
-  assert.equal(reviewProgressLine(["AA", "BB", "CC"], ["BB", "ZZ"]), "Reviewed so far: 1 of 3 states and DC")
+  assert.equal(reviewProgressLine(["AA", "BB", "CC"], ["BB", "ZZ"]), "Reviewed so far: 1 of 3 (the 50 states and DC)")
   const reviewed = reviewedStates().filter((code) => codes.includes(code)).length
   assert.ok(reviewed > 0)
   const line = reviewProgressLine(codes)
-  assert.equal(line, `Reviewed so far: ${reviewed} of 51 states and DC`)
+  assert.equal(line, `Reviewed so far: ${reviewed} of 51 (the 50 states and DC)`)
   const text = visibleText(renderToStaticMarkup(WhatWeDontAskPage()))
   assert.ok(text.includes(line), "the progress line is on the page")
 })
@@ -242,4 +243,33 @@ test("tripwire: a rule's start date stops showing within 30 days of it passing",
       )
     }
   }
+})
+
+test("comparing a not-on-list state never says insurers there may use the factor, in either order", () => {
+  const base = { summary: "A plain sentence about the rule.", source: { label: "Law", url: "https://example.gov" }, quote: "a quote from the law", checkedOn: "2026-11-15" }
+  const notOnList = { ...base, status: "no-ban-found" as const, basis: "not-on-list" as const }
+  const others = {
+    banned: { ...base, status: "banned" as const },
+    limited: { ...base, status: "limited" as const },
+    allowed: { ...base, status: "no-ban-found" as const },
+  }
+  const expected = {
+    banned: "insurers in Hawaii can't use it",
+    limited: "insurers in Hawaii can use it, with limits",
+    allowed: "insurers in Hawaii can use it",
+  }
+  for (const [group, other] of Object.entries(others) as [keyof typeof others, (typeof others)[keyof typeof others]][]) {
+    assert.equal(
+      compareRules("credit", notOnList, other, "Texas", "Hawaii"),
+      `Credit: Texas's rating law doesn't list it as banned; ${expected[group]}.`,
+    )
+    assert.equal(
+      compareRules("credit", other, notOnList, "Hawaii", "Texas"),
+      `Credit: ${expected[group]}; Texas's rating law doesn't list it as banned.`,
+    )
+    for (const line of [compareRules("credit", notOnList, other, "Texas", "Hawaii"), compareRules("credit", other, notOnList, "Hawaii", "Texas")]) {
+      assert.doesNotMatch(line ?? "", /insurers in Texas can use/)
+    }
+  }
+  assert.equal(compareRules("credit", notOnList, notOnList, "Texas", "Ohio"), null)
 })

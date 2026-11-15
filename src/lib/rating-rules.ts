@@ -156,10 +156,10 @@ export function reviewedStates(): string[] {
   return Object.keys(file.states).filter((state) => Object.keys(file.states[state] ?? {}).length > 0)
 }
 
-/** "Reviewed so far: 14 of 51 states and DC", counting only codes in `allCodes` (the 50 states and DC). */
+/** "Reviewed so far: 14 of 51 (the 50 states and DC)", counting only codes in `allCodes`, which already includes DC. */
 export function reviewProgressLine(allCodes: readonly string[], reviewed: readonly string[] = reviewedStates()): string {
   const count = allCodes.filter((code) => reviewed.includes(code)).length
-  return `Reviewed so far: ${count} of ${allCodes.length} states and DC`
+  return `Reviewed so far: ${count} of ${allCodes.length} (the 50 states and DC)`
 }
 
 /** How the page groups a reviewed rule: the three statuses, with "no ban in state law" kept apart from "allowed". */
@@ -198,17 +198,28 @@ export function compareLine(factor: RatingFactor, a: string, b: string, aName: s
   const ra = ratingRule(a, factor)
   const rb = ratingRule(b, factor)
   if (!ra || !rb) return null
-  const words = (rule: RatingRule) => {
-    const group = ratingGroup(rule)
-    if (group === "banned") return "can't use it"
-    if (group === "limited") return "can use it, with limits"
-    return group === "not-on-list" ? "can use it (no ban in state law)" : "can use it"
-  }
-  if (ra.status !== rb.status) {
-    return `${FACTOR_NAMES[factor]}: insurers in ${aName} ${words(ra)}; in ${bName} they ${words(rb)}.`
-  }
+  return compareRules(factor, ra, rb, aName, bName)
+}
+
+/**
+ * What one state does with a factor, as a clause that reads the same first or second.
+ * "Not on the list" never says insurers may use it: the law just doesn't name it.
+ */
+function stateClause(rule: RatingRule, name: string): string {
+  const group = ratingGroup(rule)
+  if (group === "banned") return `insurers in ${name} can't use it`
+  if (group === "limited") return `insurers in ${name} can use it, with limits`
+  if (group === "not-on-list") return `${name}'s rating law doesn't list it as banned`
+  return `insurers in ${name} can use it`
+}
+
+/** compareLine for two rules already looked up. */
+export function compareRules(factor: RatingFactor, ra: RatingRule, rb: RatingRule, aName: string, bName: string): string | null {
+  const ga = ratingGroup(ra)
+  const gb = ratingGroup(rb)
+  if (ga !== gb) return `${FACTOR_NAMES[factor]}: ${stateClause(ra, aName)}; ${stateClause(rb, bName)}.`
   // Both limit it, but limits differ from state to state: say what each one does.
-  if (ra.status === "limited") {
+  if (ga === "limited") {
     return `${FACTOR_NAMES[factor]}: both states limit it, in different ways. ${aName}: ${ra.summary} ${bName}: ${rb.summary}`
   }
   return null

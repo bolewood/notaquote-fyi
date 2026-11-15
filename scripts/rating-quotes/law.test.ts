@@ -1,15 +1,23 @@
 import assert from "node:assert/strict"
 import test from "node:test"
+import { readFileSync } from "node:fs"
+import path from "node:path"
 import {
   citations,
+  classifyResponse,
   cutText,
+  fatalStatuses,
+  FETCH_RETRIES,
+  retryDelayMs,
   decodeEntities,
   elementHtml,
   extractSection,
   formatSnapshot,
   htmlToText,
   looksLikeBotCheck,
+  MAX_OMITTED_CHARS,
   normalizeText,
+  omissionProblem,
   parseSnapshot,
   quoteFound,
   quoteParts,
@@ -36,7 +44,8 @@ test("a quote is found once normalized; with '...' its parts must appear in orde
   assert.equal(quoteFound("Those other factors that the commissioner may adopt by regulation.", law), true)
   assert.equal(quoteFound("Those  other factors\nthat the commissioner", law), true)
   assert.equal(quoteFound("Those other factors that the commissioner may adopt by regulation. ... Notwithstanding any other provision of law", law), true)
-  assert.equal(quoteFound("Those other factors … unfair discrimination.", law), true)
+  assert.equal(quoteFound("(4) Those other factors … may adopt by regulation.", law), true)
+  assert.equal(quoteFound("Those other factors … unfair discrimination.", law), false, "that gap leaves out \"without\"")
   assert.equal(quoteFound("unfair discrimination. ... Those other factors", law), false, "parts out of order")
   assert.equal(quoteFound("the commissioner shall not adopt", law), false)
   assert.equal(quoteFound("...", law), false, "an empty quote never passes")
@@ -154,4 +163,65 @@ test("the summary table lists each result and the counts", () => {
   assert.match(table, /^Status\s+State\s+What\s+Note/)
   assert.match(table, /MISSING\s+TX\s+credit\s+x/)
   assert.match(table, /Total 3\. OK: 2, MISSING: 1/)
+})
+
+const michiganCredit = readFileSync(path.join(__dirname, "../../data/state-rules/law/MI/mich-comp-laws-500.2162.md"), "utf8")
+const californiaRates = readFileSync(path.join(__dirname, "../../data/state-rules/law/CA/cal-ins-code-1861.02.md"), "utf8")
+
+test("a '...' can't drop a 'not': Michigan's 'shall not use' never reads as 'shall use'", () => {
+  assert.match(normalizeText(michiganCredit), /shall not use an individual's credit score/)
+  assert.equal(
+    quoteFound("An insurer shall ... use an individual's credit score to establish or maintain rates or rating classifications for automobile insurance.", michiganCredit),
+    false,
+  )
+  assert.equal(quoteFound("An insurer shall use an individual's credit score", michiganCredit), false)
+  assert.equal(quoteFound("An insurer shall not use an individual's credit score", michiganCredit), true)
+})
+
+test("a quote matches whole words only: 'fair discrimination.' isn't found inside 'unfair discrimination.'", () => {
+  assert.match(normalizeText(californiaRates), /unfair discrimination\./)
+  assert.equal(quoteFound("fair discrimination.", californiaRates), false)
+  assert.equal(quoteFound("unfair discrimination.", californiaRates), true)
+  assert.equal(quoteFound("constitute unfair", "shall constitute unfairness"), false, "the end needs a word boundary too")
+  assert.equal(quoteFound("(a) sex;", "(a) sex; (b) marital status"), true, "punctuation at the edges is fine")
+})
+
+test("a '...' can't stitch together passages far apart", () => {
+  const far = `An insurer may offer a refund. ${"Other provisions and unrelated content. ".repeat(1000)}An insurer shall use credit information.`
+  assert.equal(quoteFound("An insurer may ... use credit information.", far), false)
+  const near = `An insurer may offer a refund. ${"x".repeat(MAX_OMITTED_CHARS - 40)} and use credit information.`
+  assert.equal(quoteFound("An insurer may offer a refund. ... use credit information.", near), true)
+  const tooFar = `An insurer may offer a refund. ${"x".repeat(MAX_OMITTED_CHARS + 10)} and use credit information.`
+  assert.equal(quoteFound("An insurer may offer a refund. ... use credit information.", tooFar), false)
+})
+
+test("a '...' can't leave out an exception or a qualifier", () => {
+  const law = "No risk classification shall be based upon age, except to produce the reduction for insureds 65 or older; or upon sex."
+  assert.equal(quoteFound("No risk classification shall be based upon age, ... or upon sex.", law), false, "leaves out \"except\"")
+  assert.equal(quoteFound("No risk classification shall be based upon age, except to produce the reduction", law), true)
+  for (const word of ["not", "no", "never", "except", "unless", "without", "notwithstanding", "only", "provided", "Except", "NOT"]) {
+    assert.ok(omissionProblem(`a rate ${word} here`), word)
+  }
+  assert.ok(omissionProblem("insurers can't"), "contractions count as a not")
+  assert.equal(omissionProblem("nothing, notice, provider, nobody, onlyness"), null, "whole words only")
+  assert.equal(omissionProblem("(b) marital status; (c) race;"), null)
+})
+
+test("a fetch's HTTP status maps to an outcome: bot checks aren't fatal, dead links are", () => {
+  assert.equal(classifyResponse(200), "ok")
+  assert.equal(classifyResponse(403), "needs-browser")
+  assert.equal(classifyResponse(429), "needs-browser")
+  assert.equal(classifyResponse(503, "<title>Just a moment...</title>"), "needs-browser", "a challenge page behind a 503")
+  assert.equal(classifyResponse(500), "retry")
+  assert.equal(classifyResponse(502), "retry")
+  assert.equal(classifyResponse(503), "retry")
+  assert.equal(classifyResponse(404), "dead")
+  assert.equal(classifyResponse(410), "dead")
+  assert.equal(classifyResponse(400), "dead")
+  assert.equal(classifyResponse(451), "dead")
+  assert.equal(FETCH_RETRIES, 3)
+  assert.deepEqual([1, 2, 3].map(retryDelayMs), [2000, 4000, 8000])
+  assert.ok(fatalStatuses(true).includes("FETCH_FAILED"), "live: a dead or failing link opens the monthly issue")
+  assert.ok(!fatalStatuses(true).includes("NEEDS_BROWSER"), "a bot check alone never does")
+  assert.deepEqual(fatalStatuses(false), ["MISSING", "NO_SNAPSHOT"])
 })

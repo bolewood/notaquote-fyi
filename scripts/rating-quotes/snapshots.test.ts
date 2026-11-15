@@ -39,7 +39,7 @@ test("every saved copy is cited by a rule, and says where it came from", () => {
   for (const [url, saved] of snapshots) {
     assert.ok(cited.has(url), `${saved.file} isn't cited by any rule any more. Delete it.`)
     assert.match(saved.meta.url, /^https:\/\//)
-    if (/law\.cornell\.edu|law\.justia\.com|public\.law|casetext\.com/.test(url)) {
+    if (/law\.cornell\.edu|law\.justia\.com|case\.law|public\.law|casetext\.com|courtlistener\.com/.test(url)) {
       assert.ok(saved.meta.mirror, `${saved.file} comes from a mirror; say so in "mirror"`)
     }
     assert.ok(saved.body.length >= 80, `${saved.file} is nearly empty`)

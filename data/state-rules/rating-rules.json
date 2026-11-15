@@ -89,7 +89,7 @@
           "label": "10 CCR § 2632.5(d)",
           "url": "https://www.law.cornell.edu/regulations/california/10-CCR-2632.5"
         },
-        "quote": "may utilize the following optional rating factors (the \"Optional Factors\"): ... (9) Marital status of the rated driver;"
+        "quote": "may utilize the following optional rating factors (the \"Optional Factors\"): (1) Type of vehicle; (2) Vehicle performance capabilities, including alterations made subsequent to original manufacture; (3) Type of use of vehicle (pleasure only, commute, business, farm, commute mileage, etc.); (4) Percentage use of the vehicle by the rated driver; (5) Multi-vehicle households; (6) Academic standing of the rated driver; (7) Completion of driver training or defensive driving courses by the rated driver; (8) Vehicle characteristics, including engine size, safety and protective devices, damageability, repairability, and theft deterrent devices; (9) Marital status of the rated driver;"
       }
     },
     "HI": {
@@ -158,7 +158,7 @@
           "label": "211 CMR 79.04(11)",
           "url": "https://www.law.cornell.edu/regulations/massachusetts/211-CMR-79-04"
         },
-        "quote": "Rates, rating plans or modification of any of the foregoing based in whole or in part on any of the following factors shall be deemed to violate public policy ... (a) sex; ... (l) gender identity"
+        "quote": "Rates, rating plans or modification of any of the foregoing based in whole or in part on any of the following factors shall be deemed to violate public policy and are subject to disapproval pursuant to 211 CMR 79.04(10): (a) sex; (b) marital status; (c) race; (d) creed; (e) national origin; (f) religion; (g) age, except to produce the reduction in Rates for insureds 65 years of age or older required by M.G.L. c. 175E, § 4; (h) occupation; (i) income; (j) education; (k) homeownership; (l) gender identity"
       },
       "age": {
         "status": "banned",
@@ -185,7 +185,7 @@
           "label": "211 CMR 79.04(11)",
           "url": "https://www.law.cornell.edu/regulations/massachusetts/211-CMR-79-04"
         },
-        "quote": "Rates, rating plans or modification of any of the foregoing based in whole or in part on any of the following factors shall be deemed to violate public policy ... (h) occupation; (i) income; (j) education; (k) homeownership"
+        "quote": "Rates, rating plans or modification of any of the foregoing based in whole or in part on any of the following factors shall be deemed to violate public policy and are subject to disapproval pursuant to 211 CMR 79.04(10): (a) sex; (b) marital status; (c) race; (d) creed; (e) national origin; (f) religion; (g) age, except to produce the reduction in Rates for insureds 65 years of age or older required by M.G.L. c. 175E, § 4; (h) occupation; (i) income; (j) education; (k) homeownership"
       }
     },
     "MD": {
@@ -240,10 +240,17 @@
         "status": "limited",
         "summary": "Insurers can price by larger territory, but can't price by the postal zone where you live.",
         "source": {
-          "label": "Mich. Comp. Laws § 500.2111(4)-(5)",
+          "label": "Mich. Comp. Laws § 500.2111(4)",
           "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-500-2111"
         },
-        "quote": "(f) The postal zone in which the insured resides. ... (5) Notwithstanding other provisions of this chapter, automobile insurance risks may be grouped by territory."
+        "quote": "(4) An insurer shall not establish or maintain rates or rating classifications for automobile insurance based on any of the following: (a) Sex. (b) Marital status. (c) Home ownership. (d) Educational level attained. (e) Occupation. (f) The postal zone in which the insured resides. (g) Credit score as provided in section 2162.",
+        "moreSources": [
+          {
+            "label": "Mich. Comp. Laws § 500.2111(5)",
+            "url": "https://www.legislature.mi.gov/Laws/MCL?objectName=mcl-500-2111",
+            "quote": "(5) Notwithstanding other provisions of this chapter, automobile insurance risks may be grouped by territory."
+          }
+        ]
       }
     },
     "MT": {
@@ -323,7 +330,7 @@
         "summary": "Pennsylvania's top court upheld the state's ban on charging different car insurance prices based on gender.",
         "source": {
           "label": "Hartford Accident & Indemnity Co. v. Insurance Commissioner, 505 Pa. 571 (1984)",
-          "url": "https://law.justia.com/cases/pennsylvania/supreme-court/1984/505-pa-571-1.html"
+          "url": "https://static.case.law/pa/505/html/0571-01.html"
         },
         "quote": "we conclude that the Commissioner's disapproval of Hartford's discriminatory sex-based rates on the ground they were \"unfair\" and contrary to established public policy was in conformity with section 3(d) of the Rate Act"
       }
