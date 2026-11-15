@@ -19,11 +19,11 @@ const lower = Math.round((1 - CREDIT_EFFECT.goodCredit.median) * 100)
 const higher = Math.round((CREDIT_EFFECT.poorCredit.median - 1) * 100)
 
 /** The Texas figures, always named as Texas's, so they're never read as the visitor's own state's. */
-export const TEXAS_SENTENCE = `In Texas's survey, credit moved the same driver's price about ${lower}% down or ${higher}% up.`
+export const TEXAS_SENTENCE = `In Texas's survey, the same driver paid about ${higher}% more with poor credit and ${lower}% less with good credit than with average credit.`
 
 /** The line for a state, from its credit rule (or a rule passed in, for tests): what the law says, then the Texas figures. */
-export function creditLine(state: string, rule: RatingRule | undefined = ratingRule(state, "credit")): string {
-  const name = stateName(state as StateCode)
+export function creditLine(state: StateCode, rule: RatingRule | undefined = ratingRule(state, "credit")): string {
+  const name = stateName(state)
   if (!rule) return `Where it's allowed, insurers can use your credit. ${TEXAS_SENTENCE}`
   if (rule.status === "banned") return `In ${name}, insurers can't use your credit to set your price, so it won't move your quote.`
   // Mirrors compareLine: a state whose rating law just doesn't list credit never reads as "can use".

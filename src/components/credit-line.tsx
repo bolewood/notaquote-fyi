@@ -1,8 +1,9 @@
 import { CREDIT_RULES_HREF, creditLine } from "@/lib/credit-line"
+import type { StateCode } from "@/lib/scenario"
 import Link from "next/link"
 
 /** One plain line about credit in the visitor's state, linking to the credit rules. */
-export function CreditLine({ state }: { state: string }) {
+export function CreditLine({ state }: { state: StateCode }) {
   return (
     <p className="mt-1" data-testid="credit-line">
       {creditLine(state)}{" "}

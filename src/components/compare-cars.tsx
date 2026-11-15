@@ -68,7 +68,7 @@ import {
   startingPoint,
   startLine,
 } from "@/lib/pricing"
-import { AGE_BANDS, situationSentence, shortVehicleLabel, stateName, withTeenFlag, type Scenario } from "@/lib/scenario"
+import { AGE_BANDS, situationSentence, shortVehicleLabel, stateName, withTeenFlag, type Scenario, type StateCode } from "@/lib/scenario"
 import { encodeSharePath, SHARE_INVALID_NOTE, shareArrivalNotes } from "@/lib/share-link"
 import { readShareArrival, useClearShareFromAddress, useMounted } from "@/lib/use-share-arrival"
 import { DEFAULT_SITUATION } from "@/lib/situation"
@@ -1216,7 +1216,7 @@ function SortHeader({
   )
 }
 
-function RowDetails({ row, gap, state }: { row: CompareRow; gap: string | null; state: string }) {
+function RowDetails({ row, gap, state }: { row: CompareRow; gap: string | null; state: StateCode }) {
   const page = useCarPagePath(row.car.make, row.car.model)
   return (
     <div className="grid gap-2 text-sm leading-relaxed">
