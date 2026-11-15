@@ -7,6 +7,7 @@ import {
   classifyResponse,
   cutText,
   decodePage,
+  decodeWindows1252,
   fatalStatuses,
   FETCH_RETRIES,
   retryDelayMs,
@@ -271,6 +272,8 @@ test("a page is decoded in its own character set, falling back to Windows-1252 w
   const latin = Uint8Array.from([...new TextEncoder().encode('<meta charset="windows-1252"><p>'), 0x93, 0x61, 0x94])
   assert.equal(decodePage(latin), '<meta charset="windows-1252"><p>\u201ca\u201d', "a <meta> charset is honored")
   assert.equal(decodePage(Uint8Array.from([0xe9]), "text/html; charset=ISO-8859-1"), "é", "the header's charset wins")
+  assert.equal(decodePage(Uint8Array.from([0x93, 0x80, 0x94]), "text/html; charset=ISO-8859-1"), "\u201c\u20ac\u201d", "ISO-8859-1 is read as Windows-1252, as browsers do")
+  assert.equal(decodeWindows1252(Uint8Array.from([0x41, 0x81, 0x9f, 0xff])), "A\u0081\u0178\u00ff")
 })
 
 test("a chapter page that opens with a table of contents is cut at the section itself, not its contents line", () => {

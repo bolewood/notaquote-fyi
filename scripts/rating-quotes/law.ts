@@ -58,22 +58,42 @@ export function decodeEntities(text: string): string {
 export function decodePage(bytes: Uint8Array, contentType = ""): string {
   const named = (label: string | undefined): string | null => {
     if (!label) return null
+    const name = label.trim().toLowerCase()
+    // Decoded by hand: Node 20's TextDecoder reads "windows-1252" as plain Latin-1, so curly quotes
+    // (0x91-0x94) would come out as control characters. The web treats all three labels as Windows-1252.
+    if (["windows-1252", "cp1252", "iso-8859-1", "latin1", "us-ascii", "ascii"].includes(name)) return decodeWindows1252(bytes)
     try {
-      return new TextDecoder(label.trim().toLowerCase()).decode(bytes)
+      return new TextDecoder(name).decode(bytes)
     } catch {
       return null
     }
   }
   const fromHeader = named(/charset\s*=\s*["']?([\w-]+)/i.exec(contentType)?.[1])
   if (fromHeader !== null) return fromHeader
-  const head = new TextDecoder("latin1").decode(bytes.subarray(0, 4096))
+  const head = decodeWindows1252(bytes.subarray(0, 4096))
   const fromMeta = named(/<meta[^>]+charset\s*=\s*["']?([\w-]+)/i.exec(head)?.[1])
   if (fromMeta !== null) return fromMeta
   try {
     return new TextDecoder("utf-8", { fatal: true }).decode(bytes)
   } catch {
-    return new TextDecoder("windows-1252").decode(bytes)
+    return decodeWindows1252(bytes)
   }
+}
+
+/** Windows-1252's characters for bytes 0x80-0x9F (the rest match Latin-1). Unassigned bytes keep their code. */
+const WINDOWS_1252_HIGH = [
+  0x20ac, 0x81, 0x201a, 0x0192, 0x201e, 0x2026, 0x2020, 0x2021, 0x02c6, 0x2030, 0x0160, 0x2039, 0x0152, 0x8d, 0x017d, 0x8f,
+  0x90, 0x2018, 0x2019, 0x201c, 0x201d, 0x2022, 0x2013, 0x2014, 0x02dc, 0x2122, 0x0161, 0x203a, 0x0153, 0x9d, 0x017e, 0x0178,
+]
+
+/** Windows-1252 bytes as text, the same on every Node version. */
+export function decodeWindows1252(bytes: Uint8Array): string {
+  let out = ""
+  for (let start = 0; start < bytes.length; start += 8192) {
+    const chunk = Array.from(bytes.subarray(start, start + 8192), (byte) => (byte >= 0x80 && byte <= 0x9f ? WINDOWS_1252_HIGH[byte - 0x80] : byte))
+    out += String.fromCharCode(...chunk)
+  }
+  return out
 }
 
 const BLOCK_TAGS =
