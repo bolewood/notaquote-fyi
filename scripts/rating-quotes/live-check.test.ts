@@ -73,6 +73,7 @@ test("fetchFailureStatus: exceptions are per URL and per failure, and every one 
   assert.equal(judge("https://example.gov/other", { status: 404 }), "FETCH_FAILED", "the same site's other pages aren't excused")
   assert.equal(judge("https://example.gov/law", { status: 404 }, "2027-01-01"), "FETCH_FAILED", "expired")
   assert.equal(judge("https://example.gov/x", { needsBrowser: true }), "NEEDS_BROWSER", "a bot check")
+  assert.equal(judge("https://example.gov/law#sec-1", { status: 404 }), "NEEDS_BROWSER", "a #fragment cites a section of the same page")
   for (const [url, exception] of Object.entries(BROWSER_EXCEPTIONS)) {
     assert.match(url, /^https:\/\/[^#]+$/, "an exact URL")
     assert.ok(exception.reason.length > 20, url)

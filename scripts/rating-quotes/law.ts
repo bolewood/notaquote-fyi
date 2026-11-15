@@ -50,6 +50,52 @@ export function decodeEntities(text: string): string {
   })
 }
 
+/**
+ * A page's bytes as text, in the page's own character set: the one the server names, else the one
+ * a <meta> tag names, else UTF-8, and Windows-1252 when the bytes aren't valid UTF-8 (Nevada's and
+ * Oregon's statute pages are Windows-1252 and say so nowhere).
+ */
+export function decodePage(bytes: Uint8Array, contentType = ""): string {
+  const named = (label: string | undefined): string | null => {
+    if (!label) return null
+    const name = label.trim().toLowerCase()
+    // Decoded by hand: Node 20's TextDecoder reads "windows-1252" as plain Latin-1, so curly quotes
+    // (0x91-0x94) would come out as control characters. The web treats all three labels as Windows-1252.
+    if (["windows-1252", "cp1252", "iso-8859-1", "latin1", "us-ascii", "ascii"].includes(name)) return decodeWindows1252(bytes)
+    try {
+      return new TextDecoder(name).decode(bytes)
+    } catch {
+      return null
+    }
+  }
+  const fromHeader = named(/charset\s*=\s*["']?([\w-]+)/i.exec(contentType)?.[1])
+  if (fromHeader !== null) return fromHeader
+  const head = decodeWindows1252(bytes.subarray(0, 4096))
+  const fromMeta = named(/<meta[^>]+charset\s*=\s*["']?([\w-]+)/i.exec(head)?.[1])
+  if (fromMeta !== null) return fromMeta
+  try {
+    return new TextDecoder("utf-8", { fatal: true }).decode(bytes)
+  } catch {
+    return decodeWindows1252(bytes)
+  }
+}
+
+/** Windows-1252's characters for bytes 0x80-0x9F (the rest match Latin-1). Unassigned bytes keep their code. */
+const WINDOWS_1252_HIGH = [
+  0x20ac, 0x81, 0x201a, 0x0192, 0x201e, 0x2026, 0x2020, 0x2021, 0x02c6, 0x2030, 0x0160, 0x2039, 0x0152, 0x8d, 0x017d, 0x8f,
+  0x90, 0x2018, 0x2019, 0x201c, 0x201d, 0x2022, 0x2013, 0x2014, 0x02dc, 0x2122, 0x0161, 0x203a, 0x0153, 0x9d, 0x017e, 0x0178,
+]
+
+/** Windows-1252 bytes as text, the same on every Node version. */
+export function decodeWindows1252(bytes: Uint8Array): string {
+  let out = ""
+  for (let start = 0; start < bytes.length; start += 8192) {
+    const chunk = Array.from(bytes.subarray(start, start + 8192), (byte) => (byte >= 0x80 && byte <= 0x9f ? WINDOWS_1252_HIGH[byte - 0x80] : byte))
+    out += String.fromCharCode(...chunk)
+  }
+  return out
+}
+
 const BLOCK_TAGS =
   "address|article|aside|blockquote|br|dd|div|dl|dt|fieldset|figcaption|figure|footer|form|h[1-6]|header|hr|li|main|nav|ol|p|pre|section|table|tbody|td|tfoot|th|thead|tr|ul"
 
@@ -241,6 +287,18 @@ export type SiteRule = {
    * instead of keeping the printed layout, which would interleave the columns line by line.
    */
   pdfColumns?: boolean
+  /**
+   * The site's PDFs print a line number in the margin of every line, plus a running header and
+   * footer (Arkansas's acts). These lines are dropped, and the numbers stripped, before the text
+   * is joined into paragraphs.
+   */
+  pdfLineNumbers?: { header: RegExp }
+  /**
+   * The site's PDF is a scan with no text layer (DC's bulletins). Its saved copy is read by OCR and
+   * checked against the page image by hand (fetchedWith "ocr"); live, an empty text layer is
+   * NEEDS_BROWSER, not a failure.
+   */
+  scannedPdf?: boolean
   /** The element that holds the law's text. */
   container?: { id?: string; className?: string; tag?: string }
   /** Where the section starts and stops inside that text, worked out from the page's address. */
@@ -405,6 +463,88 @@ export const SITE_RULES: Record<string, SiteRule> = {
     terms: "The site links a Disclaimer and a Copyright page; we copy only the statute's text, which is public.",
     container: { id: "contentWrapper" },
   },
+  "admincode.legislature.state.al.us": {
+    site: "Alabama Legislative Services Agency, Alabama Administrative Code",
+    // The PDF holds the whole chapter; the label's rule number picks the part we cite.
+  },
+  "arkleg.state.ar.us": {
+    site: "Arkansas State Legislature",
+    // An act's PDF numbers every line in the margin and repeats a header on each page.
+    pdfLineNumbers: { header: /^(?:As Engrossed:.*|\d+\s+\d{8}[A-Z]{3}\d{4}\.[A-Z]{3}\d+|\*[A-Z0-9]+\*.*)$/ },
+    // The act holds several sections; the label's section number picks the part we cite.
+  },
+  "www.cga.ct.gov": {
+    site: "Connecticut General Assembly, General Statutes of Connecticut",
+    container: { tag: "body" },
+    // The page holds the whole chapter; the label's section number picks the part we cite.
+  },
+  "iga.in.gov": {
+    site: "Indiana General Assembly, Indiana Code",
+    // The code viewer is built by JavaScript, and the title file behind it only answers a browser.
+    needsBrowser: true,
+    container: { tag: "body" },
+    // The page holds the whole title; the label's section number picks the part we cite.
+  },
+  "www.legis.iowa.gov": {
+    site: "Iowa Legislature, Iowa Code",
+  },
+  "www.ksrevisor.gov": {
+    site: "Kansas Office of Revisor of Statutes",
+    container: { className: "ksa" },
+    start: () => /^\d+-\d+[a-z]?\. /m,
+    end: () => /^Previous \| Next$/m,
+  },
+  "apps.legislature.ky.gov": {
+    site: "Kentucky General Assembly, Kentucky Revised Statutes",
+  },
+  "www.legis.la.gov": {
+    site: "Louisiana State Legislature",
+    container: { id: "ctl00_PageBody_divLaw" },
+    start: () => /^§\s*\d+(?:\.\d+)?\. /m,
+  },
+  "www.revisor.mn.gov": {
+    site: "Minnesota Office of the Revisor of Statutes",
+    container: { id: "xtend" },
+  },
+  "revisor.mo.gov": {
+    site: "Missouri Revisor of Statutes",
+    container: { className: "norm", tag: "div" },
+  },
+  "www.leg.state.nv.us": {
+    site: "Nevada Legislature, Nevada Revised Statutes",
+    container: { tag: "body" },
+    // The page holds the whole chapter; the label's section number picks the part we cite.
+  },
+  "www.oregonlegislature.gov": {
+    site: "Oregon State Legislature, Oregon Revised Statutes",
+    container: { tag: "body" },
+    // The page holds the whole chapter; the label's section number picks the part we cite.
+  },
+  "disb.dc.gov": {
+    site: "District of Columbia Department of Insurance, Securities and Banking",
+    scannedPdf: true,
+  },
+  "capitol.tn.gov": {
+    site: "Tennessee General Assembly",
+    // A public chapter (session law) holds several sections; the label's section number picks the part we cite.
+  },
+  "doi.sc.gov": {
+    site: "South Carolina Department of Insurance",
+    pdfColumns: true,
+    start: (url) => guideCut(url).start,
+    end: (url) => guideCut(url).end,
+  },
+  "insurance.arkansas.gov": {
+    site: "Arkansas Insurance Department",
+    pdfColumns: true,
+    start: (url) => guideCut(url).start,
+    end: (url) => guideCut(url).end,
+  },
+  "www.scstatehouse.gov": {
+    site: "South Carolina Legislature, South Carolina Code of Laws",
+    container: { tag: "body" },
+    // The page holds the whole chapter; the label's section number picks the part we cite.
+  },
 }
 
 /**
@@ -427,6 +567,15 @@ const GUIDE_CUTS: Record<string, { start: RegExp; end: RegExp }> = {
   "www.myfloridacfo.com/docs-sf/consumer-services-libraries/consumerservices-documents/understanding-coverage/consumer-guides/english---automobile-insurance-toolkit.pdf": {
     start: /^Underwriting Factors That Affect Your Insurance Policy Premium/m,
     end: /^Other Factors Affecting/m,
+  },
+  "doi.sc.gov/DocumentCenter/View/9508/Brochure-Auto-Shoppers-Guide-2016": {
+    // The guide's headings run into their paragraphs once the PDF's lines are joined.
+    start: /Education In South Carolina\b/,
+    end: /(?<=have higher insurance credit scores\.)/,
+  },
+  "insurance.arkansas.gov/documents/understanding-how-insurers-use-credit-information-brochure/": {
+    start: /^8\. Is my premium based entirely on my insurance credit score\?/m,
+    end: /^9\. /m,
   },
   "www.myfloridacfo.com/division/consumers/understanding-insurance/personal-automobile-insurance-overview": {
     start: /^Ask for car insurance discounts/m,
@@ -454,6 +603,26 @@ const CHAPTER_CUTS: Record<string, (section: string) => { start: RegExp; end: Re
     end: /^(?:Sec\. \d+\.\d+\.|SUBCHAPTER [A-Z]\.)/m,
   }),
   "olls.info": (section) => coloradoCut(section),
+  "admincode.legislature.state.al.us": (rule) => ({
+    // The heading ends with a period ("482-1-127-.06 Prohibited Procedures."); the table of contents line doesn't.
+    start: new RegExp(`^${escapeRegExp(rule)}\\s+[A-Z][^\\n]*\\.\\s*$`, "m"),
+    end: /(?<=\n)\d+-\d+-\d+-\.\d+\s+[A-Z][^\n]*\.[ \t]*(?=\n|$)/,
+  }),
+  "capitol.tn.gov": (section) => ({
+    start: new RegExp(`^SECTION ${escapeRegExp(section)}\\.`, "m"),
+    end: /(?<=\n)SECTION \d+\./,
+  }),
+  "arkleg.state.ar.us": (section) => ({
+    start: new RegExp(`^${escapeRegExp(section)}\\.\\s+[A-Z]`, "m"),
+    end: /(?<=\n)(?:\d+-\d+-\d+\.\s+[A-Z]|SECTION \d+\.)/,
+  }),
+  // Chapter pages that open with a table of contents: a heading there is followed by the next
+  // heading, while the section itself is followed by its text.
+  "www.cga.ct.gov": (section) => headingCut(`Sec\\. ${escapeRegExp(section)}\\. `, "Sec\\. ", /(?<=\n)(?:Sec\. \d+[a-z]*-\d+[a-z]*\. |\(Return to Chapter$)/m),
+  "www.leg.state.nv.us": (section) => headingCut(`NRS ${escapeRegExp(section)} `, "NRS ", /(?<=\n)NRS \d+[A-Z]?\.\d+ /),
+  "www.oregonlegislature.gov": (section) => headingCut(`${escapeRegExp(section)} `, "\\d+\\.\\d+ ", /(?<=\n)\d+\.\d+ [A-Z]/),
+  "www.scstatehouse.gov": (section) => headingCut(`SECTION ${escapeRegExp(section)}\\. `, "SECTION ", /(?<=\n)SECTION \d+-\d+-\d+\. /),
+  "iga.in.gov": (section) => headingCut(`IC ${escapeRegExp(section)}(?![\\d.-])`, "IC ", /(?<=\n)IC \d+(?:\.\d+)?-\d+(?:\.\d+)?-\d+(?:\.\d+)?-\d+(?:\.\d+)?(?![\d.-])/),
   "adminrules.idaho.gov": (section) => ({
     // The heading is in capitals ("100. USE OF CREDIT FACTORS."); the table of contents isn't.
     start: new RegExp(`^${escapeRegExp(section)}\\.\\s+[A-Z][A-Z ,'’-]*\\.\\s*$`, "m"),
@@ -470,6 +639,28 @@ function coloradoCut(section: string): { start: RegExp; end: RegExp } {
     // starts one character into this section's own number, from matching the rest of that number ("0-4-616.").
     end: /(?<=\n)(?:\d+-\d+(?:\.\d+)?-\d+(?:\.\d+)?\.\s+[A-Z]|ANNOTATION\b)/,
   }
+}
+
+/**
+ * A section that starts with its heading (`heading`, a pattern), skipping a table-of-contents line
+ * with the same words: there the next line is another heading (`nextHeading`), not the section's text.
+ * (So a one-paragraph section printed on its heading's line can't be told from its contents line.
+ * Every section cited so far runs past its first paragraph.)
+ */
+function headingCut(heading: string, nextHeading: string, end: RegExp): { start: RegExp; end: RegExp } {
+  return { start: new RegExp(`^${heading}[^\\n]*\\n+(?!\\n|${nextHeading})`, "m"), end }
+}
+
+/** The section of an act a label cites: "2004 Tenn. Pub. Acts ch. 527, § 3(5)" → "3". */
+function actSection(label: string): string | null {
+  const found = /§\s*(\d+)/.exec(label)
+  return found ? found[1] : null
+}
+
+/** The rule an Alabama label cites: "Ala. Admin. Code r. 482-1-127-.06(3)" → "482-1-127-.06". */
+function alabamaRule(label: string): string | null {
+  const found = /\br\.\s*(\d+-\d+-\d+-\.\d+)/.exec(label)
+  return found ? found[1] : null
 }
 
 /** The section an IDAPA label cites: "IDAPA 18.02.01.100.01.b" → "100". */
@@ -494,7 +685,7 @@ export function extractSection(urlText: string, page: string, label: string, isP
   const shellNote = shell ? "the page is a JavaScript shell; " : ""
   let text: string
   if (isPdfText) {
-    text = reflowPdfText(page)
+    text = reflowPdfText(rule.pdfLineNumbers ? stripPdfLineNumbers(page, rule.pdfLineNumbers.header) : page)
   } else {
     let html = page
     if (rule.container) {
@@ -511,7 +702,14 @@ export function extractSection(urlText: string, page: string, label: string, isP
   }
   const chapterCut = CHAPTER_CUTS[url.host]
   if (chapterCut) {
-    const section = url.host === "adminrules.idaho.gov" ? idapaSection(label) : sectionNumber(label)
+    const section =
+      url.host === "adminrules.idaho.gov"
+        ? idapaSection(label)
+        : url.host === "admincode.legislature.state.al.us"
+          ? alabamaRule(label)
+          : url.host === "capitol.tn.gov"
+            ? actSection(label)
+            : sectionNumber(label)
     if (!section) return { error: `couldn't read a section number from "${label}"` }
     const { start, end } = chapterCut(section)
     const cut = cutText(text, start, end)
@@ -522,8 +720,27 @@ export function extractSection(urlText: string, page: string, label: string, isP
     if (!cut) return { error: `${shellNote}couldn't find where the section starts on the page`, needsBrowser: shell }
     text = cut
   }
+  if (text.length < 80 && isPdfText && rule.scannedPdf) {
+    return { error: "a scanned PDF with no text layer: compare the saved (OCR) copy with the page by hand", needsBrowser: true }
+  }
   if (text.length < 80) return { error: "the page came back nearly empty", needsBrowser: shell }
   return { text }
+}
+
+/**
+ * A PDF (kept in its printed layout) whose lines carry a margin number: drop the number from each
+ * line, and drop the running header and footer lines. A page break may still split a paragraph,
+ * which doesn't matter to a quote: line breaks count as spaces.
+ */
+export function stripPdfLineNumbers(text: string, header: RegExp): string {
+  return text
+    .replace(/\r\n?/g, "\n")
+    .replace(/\f/g, "\n")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => !header.test(line))
+    .map((line) => line.replace(/^\d{1,2}(?:\s+|$)/, ""))
+    .join("\n")
 }
 
 /**
@@ -560,7 +777,8 @@ export type SnapshotMeta = {
   url: string
   title: string
   retrieved: string
-  fetchedWith: "fetch" | "browser"
+  /** "ocr": a scanned PDF, read by OCR and checked against the page image by hand. */
+  fetchedWith: "fetch" | "browser" | "ocr"
   site: string
   mirror?: string
   sourceTerms?: string
@@ -598,7 +816,7 @@ export function parseSnapshot(file: string): { meta: SnapshotMeta; body: string 
   for (const key of ["url", "title", "retrieved", "fetchedWith", "site"]) {
     if (!meta[key]) throw new Error(`front matter needs "${key}"`)
   }
-  if (meta.fetchedWith !== "fetch" && meta.fetchedWith !== "browser") throw new Error('"fetchedWith" must be "fetch" or "browser"')
+  if (!["fetch", "browser", "ocr"].includes(meta.fetchedWith)) throw new Error('"fetchedWith" must be "fetch", "browser", or "ocr"')
   if (!/^\d{4}-\d{2}-\d{2}$/.test(meta.retrieved)) throw new Error('"retrieved" must be YYYY-MM-DD')
   return { meta: meta as SnapshotMeta, body: found[2].trim() }
 }
@@ -703,10 +921,16 @@ export type BrowserException = {
   when: { status: number } | { errorCode: string }
 }
 
-/** Exact URLs only, never a whole site: any other failure on the same site stays fatal. */
+/** Exact page URLs (without a #fragment) only, never a whole site: any other failure on the same site stays fatal. */
 export const BROWSER_EXCEPTIONS: Record<string, BrowserException> = {
   "https://www.ilga.gov/legislation/ilcs/documents/021501570K20.htm": {
     reason: "the Illinois General Assembly's server sends an incomplete certificate chain, which Node's fetch rejects; browsers complete the chain and show the page",
+    lastVerified: "2026-11-15",
+    expires: "2027-02-15",
+    when: { errorCode: "UNABLE_TO_VERIFY_LEAF_SIGNATURE" },
+  },
+  "https://www.cga.ct.gov/current/pub/chap_701.htm": {
+    reason: "the Connecticut General Assembly's server sends an incomplete certificate chain, which Node's fetch rejects; browsers (and curl) complete the chain and show the page",
     lastVerified: "2026-11-15",
     expires: "2027-02-15",
     when: { errorCode: "UNABLE_TO_VERIFY_LEAF_SIGNATURE" },
@@ -731,7 +955,8 @@ export function fetchFailureStatus(
   exceptions: Record<string, BrowserException> = BROWSER_EXCEPTIONS,
 ): { status: "NEEDS_BROWSER" | "FETCH_FAILED"; note: string } {
   if (failure.needsBrowser) return { status: "NEEDS_BROWSER", note: failure.error }
-  const exception = exceptions[url]
+  // A #fragment never reaches the server, so the page is the URL without it.
+  const exception = exceptions[url.split("#")[0]]
   const matches =
     exception !== undefined &&
     ("status" in exception.when ? failure.status === exception.when.status : failure.errorCode === exception.when.errorCode)

@@ -57,12 +57,13 @@ async function main(): Promise<void> {
 
     let page: string
     let isPdfText = false
-    let fetchedWith: "fetch" | "browser"
+    let fetchedWith: "fetch" | "browser" | "ocr"
     if (pageFile) {
       const raw = readFileSync(pageFile, "utf8")
       // A page saved by a browser tool may arrive as one JSON string.
       page = raw.trimStart().startsWith('"') ? (JSON.parse(raw) as string) : raw
-      fetchedWith = "browser"
+      // A scanned PDF's copy is OCR text (see scannedPdf in SITE_RULES); anything else came from a browser.
+      fetchedWith = site.scannedPdf ? "ocr" : "browser"
     } else {
       const fetched = await fetchPage(url)
       if (!fetched.ok) {
@@ -118,7 +119,7 @@ function keepOrAsk(url: string, state: string, savedOn: string | undefined, resu
       url,
       state,
       result: savedOn ? "KEPT" : result,
-      note: `${error}. ${savedOn ? `Kept the copy saved on ${savedOn}.` : "Open it in a browser, save the HTML, then rerun with --url and --page."}`,
+      note: `${error}. ${savedOn ? `Kept the copy saved on ${savedOn}.` : "Open it in a browser, save the HTML (or, for a scanned PDF, its OCR text as HTML paragraphs), then rerun with --url and --page."}`,
     }
   }
   return { url, state, result: savedOn && result === "FETCH_FAILED" ? "KEPT" : result, note: savedOn ? `${error}. Kept the copy saved on ${savedOn}.` : error }
