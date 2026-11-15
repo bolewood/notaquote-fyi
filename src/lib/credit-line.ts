@@ -18,28 +18,17 @@ export const CREDIT_RULES_HREF = "/what-we-dont-ask#rules-credit"
 const lower = Math.round((1 - CREDIT_EFFECT.goodCredit.median) * 100)
 const higher = Math.round((CREDIT_EFFECT.poorCredit.median - 1) * 100)
 
-/** Where the percentages come from, shown on hover. */
-export const CREDIT_FIGURES_NOTE = `From Texas's survey: the middle of ${CREDIT_EFFECT.goodCredit.n} comparisons each, same company and same place, good or poor credit vs. average.`
+/** The Texas figures, always named as Texas's, so they're never read as the visitor's own state's. */
+export const TEXAS_SENTENCE = `In Texas's survey, credit moved the same driver's price about ${lower}% down or ${higher}% up.`
 
-export type CreditLine = {
-  text: string
-  /** True when the text quotes the Texas figures, so the page can say where they come from. */
-  usesFigures: boolean
-}
-
-/** The sentence for a state, from its credit rule (or a rule passed in, for tests). */
-export function creditLine(state: string, rule: RatingRule | undefined = ratingRule(state, "credit")): CreditLine {
+/** The line for a state, from its credit rule (or a rule passed in, for tests): what the law says, then the Texas figures. */
+export function creditLine(state: string, rule: RatingRule | undefined = ratingRule(state, "credit")): string {
   const name = stateName(state as StateCode)
-  if (!rule) {
-    return { text: `Where it's allowed, credit can move a quote about ${lower}% down or ${higher}% up.`, usesFigures: true }
-  }
-  if (rule.status === "banned") {
-    return { text: `In ${name}, insurers can't use your credit to set your price, so it won't move your quote.`, usesFigures: false }
-  }
-  const limits = rule.status === "limited" ? " (with limits)" : ""
-  const summary = fromSummary(rule) ? " (from a summary)" : ""
-  return {
-    text: `In ${name}, insurers can use your credit${limits}, so a real quote could be about ${lower}% lower or ${higher}% higher than ours${summary}.`,
-    usesFigures: true,
-  }
+  if (!rule) return `Where it's allowed, insurers can use your credit. ${TEXAS_SENTENCE}`
+  if (rule.status === "banned") return `In ${name}, insurers can't use your credit to set your price, so it won't move your quote.`
+  // Mirrors compareLine: a state whose rating law just doesn't list credit never reads as "can use".
+  if (rule.status === "no-ban-found" && rule.basis === "not-on-list") return `${name}'s rating law doesn't list credit as banned. ${TEXAS_SENTENCE}`
+  const limits = rule.status === "limited" ? " with limits" : ""
+  const summary = fromSummary(rule) ? ", according to a summary of the law" : ""
+  return `In ${name}, insurers can use your credit${limits}${summary}. ${TEXAS_SENTENCE}`
 }
