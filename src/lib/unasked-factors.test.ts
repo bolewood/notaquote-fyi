@@ -338,12 +338,17 @@ test("the page opens with a plain note that it's a guide, not legal advice", () 
   assert.match(note, /insurance department/)
 })
 
-test("pinned: Colorado limits credit (renewal price and turning you down), from C.R.S. 10-4-116", () => {
+test("pinned: Colorado limits credit (renewal price and turning you down), from C.R.S. 10-4-116, and age through the 55+ discount", () => {
   const rule = ratingRule("CO", "credit")
   assert.equal(rule?.status, "limited")
   assert.match(rule?.source.label ?? "", /10-4-116/)
   assert.equal(fromSummary(rule), false, "it rests on the law itself")
   assert.equal(ratingRule("CO", "priorInsurance")?.status, "limited")
+  // Age rests only on the required 55+ course discount, which limits age pricing; it doesn't show age is allowed in general.
+  const age = ratingRule("CO", "age")
+  assert.equal(age?.status, "limited")
+  assert.match(age?.source.label ?? "", /10-4-632/)
+  assert.match(age?.summary ?? "", /haven't found other limits/)
 })
 
 test("comparisons say which side rests on a summary, in either order", () => {

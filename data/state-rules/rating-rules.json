@@ -179,8 +179,8 @@
         "quote": "Making or permitting to be made any classification solely on the basis of marital status or sex, unless such classification is for the purpose of insuring family units or is justified by actuarial statistics;"
       },
       "age": {
-        "status": "no-ban-found",
-        "summary": "Colorado law requires a lower price for drivers 55 and older who finish an approved driver's education course.",
+        "status": "limited",
+        "summary": "Colorado law requires a lower price for drivers 55 and older who finish an approved driver's course; we haven't found other limits on age.",
         "source": {
           "label": "C.R.S. § 10-4-632(2)",
           "url": "https://olls.info/crs/crs2026-title-10.pdf#10-4-632"
