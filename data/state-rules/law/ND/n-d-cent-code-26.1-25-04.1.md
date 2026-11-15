@@ -1,0 +1,9 @@
+---
+url: "https://ndlegis.gov/cencode/t26-1c25.pdf#26.1-25-04.1"
+title: "N.D. Cent. Code § 26.1-25-04.1"
+retrieved: "2026-11-15"
+fetchedWith: "fetch"
+site: "North Dakota Legislative Branch, North Dakota Century Code"
+---
+
+26.1-25-04.1. Motor vehicle insurance rate filings - Premium reduction for accident prevention course completion. All rate filings with the commissioner for motor vehicle liability and physical damage insurance must provide for an appropriate reduction in premium charges for the principal operators of motor vehicles for at least a two-year period following their successful completion of a motor vehicle accident prevention course. The reduction in premium charges must be separately disclosed. The premium billing must disclose the reduction in premium charges with respect to the person eligible for the reduction. The reduction in premium charges does not apply to an operator who is subject to an experience rating or a driver education premium reduction. If a policy insures two or more motor vehicles, the premium reduction applies only to the motor vehicle principally operated by the person who has satisfactorily completed the motor vehicle accident prevention course. The course must be approved by the superintendent of the state highway patrol. The course sponsor shall provide each successful participant a certificate that is the basis for the insurance discount. A driver fifty-five years of age or older who successfully completes an approved motor vehicle accident prevention course is entitled to a three-year insurance premium reduction. The reduction may be applied only to a private passenger motor vehicle or a pickup truck or van that has a gross vehicle weight of less than ten thousand pounds [4535.92 kilograms] and which is not used for delivering or transporting goods or materials unless the delivery and transport is incidental to an operator's business.
