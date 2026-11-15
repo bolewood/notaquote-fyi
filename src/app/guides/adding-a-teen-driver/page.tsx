@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
+import { AskYourInsurer } from "@/components/ask-your-insurer"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import { JsonLdScript } from "@/components/json-ld"
 import { TrustArticle } from "@/components/trust-article"
@@ -91,6 +92,13 @@ export default function TeenCostGuide() {
           yearly bill, and means paying more yourself after a crash. Try it on the Try a change page.
         </li>
       </ul>
+
+      <h2 id="questions">What to ask your insurer</h2>
+      <p>
+        Once you have a rough number, the next step is a conversation with your insurer. These questions cover the choices
+        that move a teen&apos;s price the most, and they work with any company.
+      </p>
+      <AskYourInsurer context={{ teen: "added" }} open intro="For a new 16-year-old joining your policy." />
 
       <h2 id="by-state">By state</h2>
       <p>

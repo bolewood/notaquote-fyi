@@ -49,3 +49,10 @@ export function withoutShared(html: string): string {
     out = `${out.slice(0, open.index)} ${out.slice(end)}`
   }
 }
+
+/**
+ * Words docs/VOICE.md keeps out of the interface. A test guard: run it over
+ * new copy, or over a page's visibleText.
+ */
+export const PLAIN_LANGUAGE_BANNED =
+  /\b(anchor|baseline|thin|lawful|sensitivity|cleared|relativit\w*|counsel|famil(y|ies)|factor engine|not cleared|for counsel)\b/i

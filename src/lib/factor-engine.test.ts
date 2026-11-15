@@ -34,6 +34,7 @@ import type { Scenario } from "./scenario"
 import { JAYDEN, MOLLY } from "./test-fixtures"
 import { assertManifestSafe, MANIFEST_VERSION, NAIC_PARAPHRASE, naicPublicationRows } from "./source-manifest"
 import { MANIFEST_VERSION as COPY_MANIFEST } from "./copy"
+import { PLAIN_LANGUAGE_BANNED } from "./rendered-text"
 
 const catalog = JSON.parse(readFileSync("public/catalog/vehicle-catalog.json", "utf8")) as VehicleCatalog
 
@@ -58,7 +59,7 @@ const CIVIC = car(2024, "Honda", "Civic", "Civic 4Dr")
 const MOLLY_F150 = on(MOLLY, F150)
 const YOURS: StartingPoint = { annual: 1800, scenario: MOLLY_F150, vehicle: F150, kind: "yours" }
 
-const JARGON = /\b(anchor|baseline|thin|lawful|sensitivity|cleared|relativit|counsel|family|factor engine)\b/i
+const JARGON = PLAIN_LANGUAGE_BANNED
 
 test("bundle versions line up and the guardrails pass", () => {
   assertFactorBundleSafe()
