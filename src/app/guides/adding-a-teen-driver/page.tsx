@@ -4,12 +4,14 @@ import { ArrowRight } from "lucide-react"
 import { AskYourInsurer } from "@/components/ask-your-insurer"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import { JsonLdScript } from "@/components/json-ld"
+import { NextFourYears } from "@/components/next-four-years"
 import { TrustArticle } from "@/components/trust-article"
 import { differenceWords, estimateDollars, monthlyDollars, rangeDollars, rangeWords, signedDollars } from "@/lib/format"
 import { addTeenHref, guideModified, nationalTeenCost, shareWords, TEEN_CARS_GUIDE, TEEN_COST_GUIDE, teenCostByState } from "@/lib/guides"
 import { HELP_WANTED, helpWantedUrl } from "@/lib/help-wanted"
 import { articleJsonLd, GUIDES_IMAGE, pageMetadata } from "@/lib/site-meta"
 import { statePath } from "@/lib/state-pages"
+import { addedToPolicyYears, ownPolicyYears } from "@/lib/teen-years"
 
 const GUIDE = TEEN_COST_GUIDE
 
@@ -22,6 +24,8 @@ export default function TeenCostGuide() {
   const cheapest = sorted[0]
   const priciest = sorted.at(-1)!
   const teenHelp = HELP_WANTED.find((item) => item.id === "teen-added")
+  const addedYears = addedToPolicyYears(national.added, "national")
+  const ownYears = ownPolicyYears(national.own, "national")
 
   return (
     <TrustArticle
@@ -69,6 +73,16 @@ export default function TeenCostGuide() {
         same kind of car ({rangeWords(national.own.low, national.own.high)}). That&apos;s why many families add a new driver
         to the policy they already have.
       </p>
+
+      <h2 id="next-four-years">The next four years</h2>
+      <p>
+        A new driver costs the most in the first year, and less after that. For the same typical policy, adding your teen
+        comes to about {estimateDollars(addedYears.total.likely)} more over four years, and the yearly increase in year 4 is
+        about {Math.round(100 - addedYears.rows[3].versusToday)}% smaller than in year 1. On their own policy, the drop is bigger in
+        dollars, because the bill starts higher.
+      </p>
+      <NextFourYears years={addedYears} open />
+      <NextFourYears years={ownYears} />
 
       <h2 id="what-changes-it">What changes it</h2>
       <ul className="bullets">

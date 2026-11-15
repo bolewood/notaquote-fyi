@@ -4,6 +4,14 @@ Every release that changes the data or the math goes here, newest first. The sit
 
 Data versions are date-stamped (`factors-YYYY-MM-DD`, `state-rules-YYYY-MM-DD`, `state-baselines-YYYY-MM-DD`, `catalog-YYYY-MM-DD`, `manifest-YYYY-MM-DD`). Annual refreshes are tagged `data-YYYY.MM`.
 
+## 2026-11-15: The next four years for a new teen (`factors-2026-11-15`)
+
+### Data
+- New `teenYears` block in `src/data/model-factors.json`: single-age factors for ages 16–20 (Oklahoma's 16, Texas's 18, and Oklahoma's 21 as published points; 17, 19, and 20 filled in between), and our estimate of how much of a teen's added cost is left in each later year. Used only by the four-year view. No existing factor or price changed; the bundle version moves from `factors-2026-09-22` to `factors-2026-11-15`. Details in `data/factors/README.md`, "The next four years".
+
+### Site
+- **The next four years**: a chart and table of years 1–4 of driving for a new 16-year-old, with each year's range, basis label, and a link to the method. It's collapsed under the calculator's teen result (added to your policy, or their own policy) and open on `/guides/adding-a-teen-driver`. How it works has a new section with the single-age numbers.
+
 ## 2026-10-30: Answer-first, state-specific state pages
 
 ### Site

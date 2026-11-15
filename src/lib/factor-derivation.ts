@@ -24,6 +24,7 @@ import type {
   FactorCell,
   FactorGroup,
   FactorSource,
+  TeenYearsData,
   VehicleClassRow,
   VehicleCompactModelTuple,
   VehicleLossRow,
@@ -31,7 +32,7 @@ import type {
   VehicleWindow,
 } from "./factor-types"
 
-export const DERIVATION_VERSION = "factors-2026-09-22"
+export const DERIVATION_VERSION = "factors-2026-11-15"
 export const EFFECTIVE_DATE = "2026-09-22"
 export const CHECKED_ON = "2026-09-22"
 
@@ -639,8 +640,91 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
     },
   }
 
+  // --- Single teen ages, for the four-year view only. The bands above are
+  // unchanged. Published single ages: Oklahoma's 16 and 21, and Texas's 18
+  // (the 16–18 cell). Ages in between are filled in on a multiplying scale.
+  const okAB = summarize(ratios(ok, okPairs("A", "B"), "same"))
+  const teen16Summary = chain(okAB, okBD)
+  const teen16 = cellFrom(
+    "Age 16",
+    teen16Summary,
+    "indicative",
+    ["ok-2026"],
+    `Oklahoma 2026, Scenario A (age 16) ÷ Scenario B (age 21), both single, same company, city, sex, car, and coverage: ${pct(okAB)} over ${okAB.n} comparisons. Times the 19–21 factor (Oklahoma's 21 ÷ 55). Rough because the two drivers also differ in how they use the car: the 16-year-old drives to school, under 7,500 miles a year, and the 21-year-old commutes, 12,000 miles. Less driving costs less, so this probably understates the 16-year-old; the top of the range reaches the direct 16 ÷ 55 comparison's upper quarter (${pct(okAD)}, ${okAD.n} comparisons; marital status differs there too). Both State Farm companies price the 16-year-old below the 21-year-old; the median absorbs that.`,
+  )
+  teen16.high = Math.max(teen16.high, toHundredths(okAD.p75))
+  // Fill in between two published ages on a multiplying scale.
+  const between = (label: string, from: FactorCell, to: FactorCell, t: number, words: string): FactorCell => {
+    const fill = (a: number, b: number) => Math.round(Math.pow(a, 1 - t) * Math.pow(b, t))
+    const value = fill(from.value, to.value)
+    return {
+      label,
+      value,
+      low: Math.min(value, fill(from.low, to.low)),
+      high: Math.max(value, fill(from.high, to.high)),
+      basis: "indicative",
+      sources: [...new Set([...from.sources, ...to.sources])],
+      derivation: `Filled in between the published ages, not published itself. ${words} We take the point ${t === 0.5 ? "halfway" : `${Math.round(t * 3)} of 3 steps`} between them on a multiplying scale (so each year drops by the same share), and do the same for the low and high edges.`,
+      n: (from.n ?? 0) + (to.n ?? 0),
+    }
+  }
+  const teen18: FactorCell = {
+    ...age1618,
+    label: "Age 18",
+    derivation: `The 16–18 factor itself, which is Texas's age-18 point. ${age1618.derivation}`,
+  }
+  const teen17 = between(
+    "Age 17",
+    teen16,
+    teen18,
+    0.5,
+    `Between Oklahoma's 16-year-old (${(teen16.value / 100).toFixed(2)}) and Texas's 18-year-old (${(teen18.value / 100).toFixed(2)}).`,
+  )
+  const bandWords = `Between Texas's 18-year-old (${(teen18.value / 100).toFixed(2)}) and Oklahoma's 21-year-old (the 19–21 factor, ${(age1921.value / 100).toFixed(2)}).`
+  const teen19 = between("Age 19", teen18, age1921, 1 / 3, bandWords)
+  const teen20 = between("Age 20", teen18, age1921, 2 / 3, bandWords)
+  const ownYears = { "16": teen16, "17": teen17, "18": teen18, "19": teen19, "20": teen20 }
+  // Added to a parent's policy: the teen's share of the bill (the increase)
+  // falls the way their own price does. No public source prices a family
+  // before and after a teen's later years, so this is our estimate, with the
+  // drop allowed to be half as big or half again as big.
+  const addedYear = (age: "17" | "18" | "19" | "20"): FactorCell => {
+    const value = Math.round((100 * ownYears[age].value) / teen16.value)
+    const drop = 100 - value
+    return {
+      label: `Age ${age}, added to a parent's policy (share of the first year's increase)`,
+      value,
+      low: Math.max(1, Math.round(value - drop / 2)),
+      high: Math.min(100, Math.round(value + drop / 2)),
+      basis: "assumed",
+      sources: [],
+      derivation: `Our estimate. No public source yet; help wanted. No survey we found prices the same family before and after a teen's later years. We assume the increase from adding the teen falls the way a teen's own price does: age ${age} ÷ age 16 on the teen's own-policy curve (${(ownYears[age].value / 100).toFixed(2)} ÷ ${(teen16.value / 100).toFixed(2)}). Only the increase falls, not the parents' part of the bill. The range lets the drop be half as big or half again as big. The first-year increase comes from California's family with a 17-year-old licensed 1 year; California rates by years licensed, not age, so that family stands for a first-year driver.`,
+      n: null,
+    }
+  }
+  const teenYears: TeenYearsData = {
+    note: "Single teen ages for the next four years. Used only by the four-year view; the age bands are unchanged.",
+    own: ownYears,
+    added: {
+      "16": {
+        label: "Age 16, added to a parent's policy (the first year's increase)",
+        value: 100,
+        low: 100,
+        high: 100,
+        basis: "indicative",
+        sources: ["ca-2026"],
+        derivation: `The first year is the increase from the 16–18 added-to-a-parent's-policy factor, unchanged. ${age1618Added.derivation}`,
+        n: age1618Added.n,
+      },
+      "17": addedYear("17"),
+      "18": addedYear("18"),
+      "19": addedYear("19"),
+      "20": addedYear("20"),
+    },
+  }
+
   // --- Driving record.
-  const sdip = parseCsv(need(files, "sources/nc-sdip-2026.csv"))
+  const sdip =parseCsv(need(files, "sources/nc-sdip-2026.csv"))
   const surcharge = (points: string) => {
     const row = sdip.find((item) => item.points === points)
     if (!row) throw new Error(`NC SDIP row ${points} missing`)
@@ -1774,5 +1858,6 @@ export function deriveFactors(files: FactorFiles): FactorBundle {
       },
     },
     typicalStart: typicalStartData,
+    teenYears,
   }
 }

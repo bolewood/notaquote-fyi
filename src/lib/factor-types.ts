@@ -234,4 +234,26 @@ export type FactorBundle = {
   groups: Record<string, FactorGroup>
   vehicle: VehicleData
   typicalStart: TypicalStartData
+  /** Single-year teen factors, used only by the four-year view. The age bands in `groups` are unchanged. */
+  teenYears: TeenYearsData
+}
+
+/** The teen ages the four-year view prices: years 1–4 of driving start at 16, and 20 is where year 4 ends. */
+export const TEEN_YEAR_AGES = ["16", "17", "18", "19", "20"] as const
+export type TeenYearAge = (typeof TEEN_YEAR_AGES)[number]
+
+export type TeenYearsData = {
+  note: string
+  /**
+   * The driver's own policy: each age's factor against age 40–64, on the same
+   * scale as the "driver-age" cells. Age 18 is the 16–18 cell itself (Texas's
+   * age-18 point); the four-year view multiplies the 16–18 estimate by
+   * age ÷ the 16–18 cell.
+   */
+  own: Record<TeenYearAge, FactorCell>
+  /**
+   * A teen added to a parent's policy: how much of the year-1 increase is left
+   * in later years (hundredths of the year-1 increase). Age 16 is 1.00.
+   */
+  added: Record<TeenYearAge, FactorCell>
 }

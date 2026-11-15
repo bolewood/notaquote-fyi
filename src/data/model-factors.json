@@ -1,5 +1,5 @@
 {
-  "version": "factors-2026-09-22",
+  "version": "factors-2026-11-15",
   "effectiveDate": "2026-09-22",
   "checkedOn": "2026-09-22",
   "scale": 100,
@@ -15990,5 +15990,124 @@
       "bls-cpi-sete",
       "naic-auto-db-2022-2023"
     ]
+  },
+  "teenYears": {
+    "note": "Single teen ages for the next four years. Used only by the four-year view; the age bands are unchanged.",
+    "own": {
+      "16": {
+        "label": "Age 16",
+        "value": 422,
+        "low": 279,
+        "high": 541,
+        "basis": "indicative",
+        "sources": [
+          "ok-2026"
+        ],
+        "derivation": "Oklahoma 2026, Scenario A (age 16) ÷ Scenario B (age 21), both single, same company, city, sex, car, and coverage: +120% (median ratio 2.201; middle half of companies +50% to +174%) over 200 comparisons. Times the 19–21 factor (Oklahoma's 21 ÷ 55). Rough because the two drivers also differ in how they use the car: the 16-year-old drives to school, under 7,500 miles a year, and the 21-year-old commutes, 12,000 miles. Less driving costs less, so this probably understates the 16-year-old; the top of the range reaches the direct 16 ÷ 55 comparison's upper quarter (+351% (median ratio 4.507; middle half of companies +221% to +441%), 200 comparisons; marital status differs there too). Both State Farm companies price the 16-year-old below the 21-year-old; the median absorbs that.",
+        "n": 400
+      },
+      "17": {
+        "label": "Age 17",
+        "value": 348,
+        "low": 268,
+        "high": 454,
+        "basis": "indicative",
+        "sources": ["ok-2026",
+          "tx-2025"
+        ],
+        "derivation": "Filled in between the published ages, not published itself. Between Oklahoma's 16-year-old (4.22) and Texas's 18-year-old (2.87). We take the point halfway between them on a multiplying scale (so each year drops by the same share), and do the same for the low and high edges.",
+        "n": 960
+      },
+      "18": {
+        "label": "Age 18",
+        "value": 287,
+        "low": 257,
+        "high": 381,
+        "basis": "sourced",
+        "sources": ["tx-2025",
+          "ok-2026"
+        ],
+        "derivation": "The 16–18 factor itself, which is Texas's age-18 point. Texas 2025 (HelpInsure sample rates, liability only), age 18 ÷ age 30, single, same company, ZIP, car, use, and credit; male and female; +159% (median ratio 2.591; middle half of companies +135% to +241%) over 360 comparisons. Times the 26–39 factor above, because 30 is in that band. The site shows ages as bands (16–24, 25–64, 65+); TDI's data call rates them at 18, 30, and 65. The teen is the only driver on their own policy; adding a teen to a parent's policy is priced differently. For comparison, Oklahoma 2026's 16-year-old ÷ 55-year-old (who also differ in marital status, use, and mileage) is +351% (median ratio 4.507; middle half of companies +221% to +441%) over 200 comparisons.",
+        "n": 560
+      },
+      "19": {
+        "label": "Age 19",
+        "value": 251,
+        "low": 223,
+        "high": 310,
+        "basis": "indicative",
+        "sources": ["tx-2025",
+          "ok-2026"
+        ],
+        "derivation": "Filled in between the published ages, not published itself. Between Texas's 18-year-old (2.87) and Oklahoma's 21-year-old (the 19–21 factor, 1.92). We take the point 1 of 3 steps between them on a multiplying scale (so each year drops by the same share), and do the same for the low and high edges.",
+        "n": 760
+      },
+      "20": {
+        "label": "Age 20",
+        "value": 220,
+        "low": 194,
+        "high": 253,
+        "basis": "indicative",
+        "sources": ["tx-2025",
+          "ok-2026"
+        ],
+        "derivation": "Filled in between the published ages, not published itself. Between Texas's 18-year-old (2.87) and Oklahoma's 21-year-old (the 19–21 factor, 1.92). We take the point 2 of 3 steps between them on a multiplying scale (so each year drops by the same share), and do the same for the low and high edges.",
+        "n": 760
+      }
+    },
+    "added": {
+      "16": {
+        "label": "Age 16, added to a parent's policy (the first year's increase)",
+        "value": 100,
+        "low": 100,
+        "high": 100,
+        "basis": "indicative",
+        "sources": [
+          "ca-2026"
+        ],
+        "derivation": "The first year is the increase from the 16–18 added-to-a-parent's-policy factor, unchanged. How much the whole household's policy goes up when a teen is added. California 2026, profile 2565 (married couple licensed 28 and 25 years, plus a 17-year-old licensed 1 year who \"drives pleasure use only\"; Camry 20,000 miles and Highlander 12,000 miles) ÷ profile 2555 (married couple licensed 13 and 10 years; Camry and Sienna, 15,000 miles each), with and without a multi-policy discount, same company and place: +51% (median ratio 1.511; middle half of companies +30% to +77%), 235 comparisons. That understates the teen, because the teen family's parents are more experienced and so cheaper. California's single drivers licensed 25 years ÷ 13 years (same company, place, car, and record) cost 9% less (median ratio 0.908; middle half of companies 13% less to 6% less), 247 comparisons, so we divide by that: +66%. This assumes the parents' experience credit works like a single driver's; it may be smaller on a two-driver policy, which would make the true figure lower, so the low edge goes down to the unadjusted figure. The second car and mileage also differ, and both are two-car households. It's the whole household's premium, not the teen's share, and it isn't a price for a teen's own car.",
+        "n": 482
+      },
+      "17": {
+        "label": "Age 17, added to a parent's policy (share of the first year's increase)",
+        "value": 82,
+        "low": 73,
+        "high": 91,
+        "basis": "assumed",
+        "sources": [],
+        "derivation": "Our estimate. No public source yet; help wanted. No survey we found prices the same family before and after a teen's later years. We assume the increase from adding the teen falls the way a teen's own price does: age 17 ÷ age 16 on the teen's own-policy curve (3.48 ÷ 4.22). Only the increase falls, not the parents' part of the bill. The range lets the drop be half as big or half again as big. The first-year increase comes from California's family with a 17-year-old licensed 1 year; California rates by years licensed, not age, so that family stands for a first-year driver.",
+        "n": null
+      },
+      "18": {
+        "label": "Age 18, added to a parent's policy (share of the first year's increase)",
+        "value": 68,
+        "low": 52,
+        "high": 84,
+        "basis": "assumed",
+        "sources": [],
+        "derivation": "Our estimate. No public source yet; help wanted. No survey we found prices the same family before and after a teen's later years. We assume the increase from adding the teen falls the way a teen's own price does: age 18 ÷ age 16 on the teen's own-policy curve (2.87 ÷ 4.22). Only the increase falls, not the parents' part of the bill. The range lets the drop be half as big or half again as big. The first-year increase comes from California's family with a 17-year-old licensed 1 year; California rates by years licensed, not age, so that family stands for a first-year driver.",
+        "n": null
+      },
+      "19": {
+        "label": "Age 19, added to a parent's policy (share of the first year's increase)",
+        "value": 59,
+        "low": 39,
+        "high": 80,
+        "basis": "assumed",
+        "sources": [],
+        "derivation": "Our estimate. No public source yet; help wanted. No survey we found prices the same family before and after a teen's later years. We assume the increase from adding the teen falls the way a teen's own price does: age 19 ÷ age 16 on the teen's own-policy curve (2.51 ÷ 4.22). Only the increase falls, not the parents' part of the bill. The range lets the drop be half as big or half again as big. The first-year increase comes from California's family with a 17-year-old licensed 1 year; California rates by years licensed, not age, so that family stands for a first-year driver.",
+        "n": null
+      },
+      "20": {
+        "label": "Age 20, added to a parent's policy (share of the first year's increase)",
+        "value": 52,
+        "low": 28,
+        "high": 76,
+        "basis": "assumed",
+        "sources": [],
+        "derivation": "Our estimate. No public source yet; help wanted. No survey we found prices the same family before and after a teen's later years. We assume the increase from adding the teen falls the way a teen's own price does: age 20 ÷ age 16 on the teen's own-policy curve (2.20 ÷ 4.22). Only the increase falls, not the parents' part of the bill. The range lets the drop be half as big or half again as big. The first-year increase comes from California's family with a 17-year-old licensed 1 year; California rates by years licensed, not age, so that family stands for a first-year driver.",
+        "n": null
+      }
+    }
   }
 }

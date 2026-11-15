@@ -43,6 +43,7 @@ import type {
   VehicleLossRow,
   VehicleWindow,
 } from "@/lib/factor-types"
+import { TEEN_YEAR_AGES } from "@/lib/factor-types"
 import { MODEL_VERSION } from "@/lib/copy"
 import { differenceWords, monthlyDollars, percentRangeWords, percentWords } from "@/lib/format"
 import { BASELINE_STATE_CODES, countrywideBaseline, stateBaseline, STATE_BASELINE_ATTRIBUTION } from "@/lib/state-baselines"
@@ -1700,6 +1701,41 @@ export type TeenAdded = {
   increaseRounded: number
   /** "Adding your teen to your policy: about $X more a year, on a policy that costs about $Y now." */
   headline: string
+  /**
+   * The part of both ranges that before and after share, in basis points:
+   * everything except the parent's and the teen's own driver cells (the
+   * starting price, the car, the coverage, the area). It moves both figures
+   * together, so it scales the increase rather than widening it.
+   */
+  shared: { down: number; up: number }
+}
+
+/**
+ * The part of `before`'s range that `after` shares, in basis points.
+ * `before` and `after` start from the same price and make the same changes,
+ * except for the groups that differ between the parent and the teen (the age
+ * cell and the teen's discounts). Those groups' spreads in `before` are its
+ * own; the rest of `before`'s range is shared.
+ */
+function sharedSpread(start: StartingPoint, parent: Scenario, teen: Scenario, before: Estimate): { down: number; up: number } {
+  const startKeys = selectionKeys(start.scenario)
+  const parentKeys = selectionKeys(parent)
+  const teenKeys = selectionKeys(teen, { teenOnParentPolicy: true })
+  let down = ZERO
+  let up = ZERO
+  for (const id of GROUP_IDS) {
+    if (parentKeys[id] === teenKeys[id] || startKeys[id] === parentKeys[id]) continue
+    for (const cell of [cellOf(id, startKeys[id]), cellOf(id, parentKeys[id])]) {
+      const spread = cellSpread(cell)
+      down += spread.down * spread.down
+      up += spread.up * spread.up
+    }
+  }
+  const rest = (total: number, own: bigint) => {
+    const left = BigInt(total) * BigInt(total) - own
+    return left > ZERO ? Number(isqrt(left)) : 0
+  }
+  return { down: rest(before.spread.down, down), up: rest(before.spread.up, up) }
 }
 
 /**
@@ -1728,6 +1764,7 @@ export function teenAddedToPolicy(
     after,
     increase,
     increaseRounded,
+    shared: sharedSpread(start, parent, teen, before),
     headline: `Adding your teen to your policy: about ${differenceWords(increase)}, for a car that costs about ${formatDollars(now)} a year to insure now.`,
   }
 }
@@ -2126,6 +2163,18 @@ export function assertFactorBundleSafe(candidate: FactorBundle = bundle): void {
   for (let index = 1; index < calibration.damageCurve.length; index += 1) {
     if (calibration.damageCurve[index] < calibration.damageCurve[index - 1]) throw new Error("The damage curve must not go down")
   }
+  if (!candidate.teenYears) throw new Error("Missing teenYears")
+  for (const kind of ["own", "added"] as const) {
+    let previous = Infinity
+    for (const age of TEEN_YEAR_AGES) {
+      const cell = candidate.teenYears[kind][age]
+      if (!cell) throw new Error(`teenYears.${kind}.${age} missing`)
+      checkCell(`teenYears.${kind}.${age}`, cell)
+      if (cell.value > previous) throw new Error(`teenYears.${kind}: age ${age} costs more than the year before`)
+      previous = cell.value
+    }
+  }
+  if (candidate.teenYears.added["16"].value !== 100) throw new Error("teenYears.added: age 16 is the first year's increase, 1.00")
   checkCell("typicalStart.trend", candidate.typicalStart.trend.cell)
   for (const id of candidate.typicalStart.sources) {
     if (!sourceIds.has(id)) throw new Error(`typicalStart: unknown source ${id}`)

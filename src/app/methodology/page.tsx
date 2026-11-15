@@ -18,6 +18,7 @@ import { SERVER_CATALOG } from "@/lib/agent-catalog"
 import { carFigures } from "@/lib/car-pages"
 import { EXAMPLE_DRIVER_NOTE } from "@/lib/car-content"
 import { hldiReport, premiumWeights, priceMeaning } from "@/lib/hldi"
+import { teenYearMethodRows } from "@/lib/teen-years"
 
 export const metadata: Metadata = pageMetadata({
   title: "How the math works",
@@ -263,6 +264,59 @@ export default function MethodologyPage() {
           made a careful guess and widened the range. These are the best places to help.
         </li>
       </ul>
+
+      <h2 id="next-four-years" className="scroll-mt-4">The next four years for a new teen</h2>
+      <p>
+        For a new 16-year-old, we also show each of the first four years of driving. Everywhere else, we price young drivers in
+        three age groups (16–18, 19–21, and 22–25). For this view we use single ages where a state publishes them:
+        Oklahoma prices a 16-year-old and a 21-year-old, and Texas an 18-year-old. Ages 17, 19, and 20 are filled in
+        between those, with each year dropping by the same share. The age groups, and every other price on the site,
+        stay as they are.
+      </p>
+      <p>
+        Oklahoma&apos;s 16-year-old drives to school and fewer miles than its 21-year-old, who commutes, so age 16 is
+        rough, and its range reaches higher. When a teen joins your policy, we assume the increase shrinks the way a
+        teen&apos;s own price does. That&apos;s our best guess, so those years carry a wider range. Each year&apos;s range
+        is its own; the four-year range adds them up, which makes it wider than it&apos;s likely to be.
+      </p>
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse text-left text-sm" data-testid="teen-years-method">
+          <caption className="pb-2 text-left text-sm text-muted-foreground">
+            Their own policy: compared with a 40–64-year-old (1.00). Added to your policy: how much of the first
+            year&apos;s increase is left.
+          </caption>
+          <thead>
+            <tr className="border-b border-border text-muted-foreground">
+              <th scope="col" className="py-2 pr-3 font-medium">Age</th>
+              <th scope="col" className="py-2 pr-3 font-medium">Their own policy</th>
+              <th scope="col" className="py-2 pr-3 font-medium">Where it comes from</th>
+              <th scope="col" className="py-2 pr-3 font-medium">Added to your policy</th>
+              <th scope="col" className="py-2 font-medium">Where it comes from</th>
+            </tr>
+          </thead>
+          <tbody>
+            {teenYearMethodRows().map((row) => (
+              <tr key={row.age} className="border-b border-border/60 align-top">
+                <th scope="row" className="py-2 pr-3 font-normal">{row.age}</th>
+                <td className="py-2 pr-3 whitespace-nowrap tabular-nums">{row.own}</td>
+                <td className="py-2 pr-3">
+                  {row.ownBasis}
+                  <span className="block text-xs text-muted-foreground">{row.ownHow}</span>
+                </td>
+                <td className="py-2 pr-3 whitespace-nowrap tabular-nums">{row.added}</td>
+                <td className="py-2">{row.addedBasis}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p>
+        The worked details, with every comparison, are in the{" "}
+        <a href="https://github.com/bolewood/notaquote-fyi/blob/main/data/factors/README.md#the-next-four-years" rel="noreferrer">
+          factors notes on GitHub
+        </a>
+        .
+      </p>
 
       <h2>What we don&apos;t do</h2>
       <p>
